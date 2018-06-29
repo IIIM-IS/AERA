@@ -82,7 +82,7 @@
 #include	"../../r_exec/overlay.h"
 
 // switch to use WinEpi instead of LSTM for finding correlations
-#define USE_WINEPI
+//#define USE_WINEPI -- jm
 
 
 extern	"C"{
@@ -171,8 +171,9 @@ public:
 
 #ifdef USE_WINEPI
 
-//typedef uint64 timestamp_t;
-//typedef P<r_code::Code> event_t;
+// uncommented --jm
+typedef uint64 timestamp_t;
+typedef P<r_code::Code> event_t;
 typedef std::vector<std::pair<timestamp_t,event_t> > Episode;
 
 class	Correlator{

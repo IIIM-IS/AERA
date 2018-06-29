@@ -216,11 +216,11 @@ r_exec::Controller	*correlator(r_code::View	*view){
 #include	<ctime>
 
 #ifdef USE_WINEPI
-
+/* -- jm moved to winepi.h
 bool operator< (const P<r_code::Code>& x, const P<r_code::Code>& y) {
 	return x->get_oid() < y->get_oid();
 }
-
+*/
 Correlator::Correlator() : episode(), episode_start(0), winepi() {
 	// no-op
 }

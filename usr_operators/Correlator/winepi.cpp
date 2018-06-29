@@ -247,12 +247,12 @@ void WinEpi::algorithm_3(std::vector<Candidate>& F, int el, std::vector<Candidat
 
 void WinEpi::algorithm_4(std::vector<Candidate>& C, double min_fr, std::vector<Candidate>& F) {
 
-	std::map<event_t,int> count;
-	std::map<std::pair<event_t,size_t>, std::vector<Candidate*> > contains;
+	std::map<event_t,int,event_compare> count;
+	std::map<std::pair<event_t,size_t>, std::vector<Candidate*>,event_pair > contains;
 
 	for(std::vector<Candidate>::iterator it = C.begin(); it != C.end(); ++it) {
 		Candidate& a = *it;
-		for(std::map<event_t,size_t>::iterator it2 = a.type_count.begin(); it2 != a.type_count.end(); ++it2) {
+		for(std::map<event_t,size_t,event_compare>::iterator it2 = a.type_count.begin(); it2 != a.type_count.end(); ++it2) {
 			contains[*it2].push_back(&a);
 		}
 		a.event_count = 0;

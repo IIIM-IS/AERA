@@ -102,7 +102,7 @@ void	dll_export	GetCallbackName(char	*callback_name);
 
 #include	"./Operators/operators.h"
 #include	"./TestProgram/test_program.h"
-#include	"./Correlator/correlator.h"
+//#include	"./Correlator/correlator.h" -- jm
 #include	"./Callbacks/callbacks.h"
 
 

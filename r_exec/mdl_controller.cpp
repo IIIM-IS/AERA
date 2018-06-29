@@ -981,10 +981,12 @@ namespace	r_exec{
 		}
 	}
 
+
+	// jm Replaced template definition with make_pair
 	void	MDLController::register_requirement(_Fact	*f_pred,RequirementsPair	&r_p){
 
 		if(r_p.first.controllers.size()>0	||	r_p.second.controllers.size()>0)
-			active_requirements.insert(std::pair<P<Code>,RequirementsPair>(f_pred,r_p));
+			active_requirements.insert(std::make_pair(f_pred,r_p));
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

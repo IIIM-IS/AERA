@@ -1,8 +1,8 @@
 <TestConfiguration>
   <Load
     usr_operator_path="./usr_operators.dll"
-    usr_class_path="C:/Work/Replicode/Test/V1.2/user.classes.replicode"
-    source_file_name="C:/Work/Replicode/Test/V1.2/main.replicode"
+    usr_class_path="../Test/V1.2/user.classes.replicode"
+    source_file_name="../Test/V1.2/main.replicode"
   />
   <Init
     base_period="50000"

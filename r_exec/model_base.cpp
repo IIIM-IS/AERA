@@ -245,18 +245,32 @@ namespace	r_exec{
 	Code	*ModelBase::check_existence(Code	*mdl){
 
 		MEntry	e(mdl,false);
+		MEntry copy;
 		mdlCS.enter();
 		MdlSet::iterator	m=black_list.find(e);
+
+		// jm: iterator's on sets are now immutable because of hash keey issues
+		// solution is to remove and re-add
 		if(m!=black_list.end()){
 
-			(*m).touch_time=Now();
+			copy = *m;
+			copy.touch_time = Now();
+			black_list.erase(*m);
+			black_list.insert(copy);
+			
+			//(*m).touch_time=Now();
 			mdlCS.leave();
 			return	NULL;
 		}
 		m=white_list.find(e);
-		if(m!=white_list.end()){
+		if(m!=white_list.end())
+		{
+			copy = *m;
+			copy.touch_time = Now();
+			black_list.erase(*m);
+			black_list.insert(copy);
 
-			(*m).touch_time=Now();
+			//(*m).touch_time=Now();   // jm
 			mdlCS.leave();
 			return	(*m).mdl;
 		}
@@ -269,11 +283,17 @@ namespace	r_exec{
 	void	ModelBase::check_existence(Code	*m0,Code	*m1,Code	*&_m0,Code	*&_m1){	// m0 and m1 unpacked.
 
 		MEntry	e_m0(m0,false);
+		MEntry copy;
 		mdlCS.enter();
 		MdlSet::iterator	m=black_list.find(e_m0);
-		if(m!=black_list.end()){
+		if(m!=black_list.end())
+		{
+			copy = *m;
+			copy.touch_time = Now();
+			black_list.erase(*m);
+			black_list.insert(copy);
 
-			(*m).touch_time=Now();
+			// (*m).touch_time=Now();  jm
 			mdlCS.leave();
 			_m0=_m1=NULL;
 			return;
@@ -281,7 +301,12 @@ namespace	r_exec{
 		m=white_list.find(e_m0);
 		if(m!=white_list.end()){
 
-			(*m).touch_time=Now();
+			copy = *m;
+			copy.touch_time = Now();
+			black_list.erase(*m);
+			black_list.insert(copy);
+
+			//(*m).touch_time=Now();  //jm
 			_m0=(*m).mdl;
 			Code	*rhs=m1->get_reference(m1->code(m1->code(MDL_OBJS).asIndex()+2).asIndex());
 			Code	*im0=rhs->get_reference(0);
@@ -291,16 +316,24 @@ namespace	r_exec{
 		MEntry	e_m1(m1,false);
 		m=black_list.find(e_m1);
 		if(m!=black_list.end()){
+			copy = *m;
+			copy.touch_time = Now();
+			black_list.erase(*m);
+			black_list.insert(copy);
 
-			(*m).touch_time=Now();
+			//(*m).touch_time=Now();
 			mdlCS.leave();
 			_m1=NULL;
 			return;
 		}
 		m=white_list.find(e_m1);
 		if(m!=white_list.end()){
+			copy = *m;
+			copy.touch_time = Now();
+			black_list.erase(*m);
+			black_list.insert(copy);
 
-			(*m).touch_time=Now();
+			//(*m).touch_time=Now();  //jm
 			mdlCS.leave();
 			_m1=(*m).mdl;
 			return;
