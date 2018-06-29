@@ -115,6 +115,9 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
+    <PostBuildEvent>
+      <Command>cp $(SolutionDir)$(Configuration)\usr_operators.dll $(SolutionDir)..\mBrane\trunk\$(Configuration)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugVisualizer|Win32'">
     <ClCompile>
