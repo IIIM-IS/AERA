@@ -83,7 +83,7 @@
 #include	"list.h"
 #include	"replicode_defs.h"
 
-#include	"../../CoreLibrary/trunk/CoreLibrary/base.h"
+#include	"../submodules/CoreLibrary/CoreLibrary/base.h"
 #include	"../r_code/utils.h"
 
 

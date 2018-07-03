@@ -76,7 +76,7 @@
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
 #include	"view.h"
-#include	"../../CoreLibrary/trunk/CoreLibrary/utils.h"
+#include	"../submodules/CoreLibrary/CoreLibrary/utils.h"
 #include	"group.h"
 #include	"mem.h"
 

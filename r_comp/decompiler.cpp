@@ -76,7 +76,7 @@
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
 #include	"decompiler.h"
-#include	"../../CoreLibrary/trunk/CoreLibrary/utils.h"
+#include	"../submodules/CoreLibrary/CoreLibrary/utils.h"
 
 
 namespace	r_comp{

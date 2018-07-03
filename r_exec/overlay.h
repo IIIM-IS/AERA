@@ -78,8 +78,8 @@
 #ifndef	overlay_h
 #define	overlay_h
 
-#include	"../../CoreLibrary/trunk/CoreLibrary/base.h"
-#include	"../../CoreLibrary/trunk/CoreLibrary/utils.h"
+#include	"../submodules/CoreLibrary/CoreLibrary/base.h"
+#include	"../submodules/CoreLibrary/CoreLibrary/utils.h"
 #include	"../r_code/object.h"
 #include	"dll.h"
 

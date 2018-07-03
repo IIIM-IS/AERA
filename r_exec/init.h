@@ -78,7 +78,7 @@
 #ifndef	init_h
 #define	init_h
 
-#include	"../../CoreLibrary/trunk/CoreLibrary/utils.h"
+#include	"../submodules/CoreLibrary/CoreLibrary/utils.h"
 
 #include	"../r_code/list.h"
 

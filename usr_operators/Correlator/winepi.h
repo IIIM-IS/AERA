@@ -93,7 +93,7 @@
 #include <iostream> // cout
 #include <ctime> // clock_t
 
-#include	<../../CoreLibrary/trunk/CoreLibrary/base.h>
+#include	<../submodules/CoreLibrary/CoreLibrary/base.h>
 #include	<../r_code/object.h>
 
 //#include "correlator.h"

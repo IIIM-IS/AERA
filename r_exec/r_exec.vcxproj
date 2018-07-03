@@ -107,7 +107,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>CoreLibrary.lib;r_code.lib;r_comp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(OutDir);$(SolutionDir)\..\CoreLibrary\trunk\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir);$(SolutionDir)\submodules\CoreLibrary\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -115,7 +115,7 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>cp $(SolutionDir)$(Configuration)\r_exec.dll $(SolutionDir)..\mBrane\trunk\$(Configuration)</Command>
+      <Command>cp $(SolutionDir)$(Configuration)\r_exec.dll $(SolutionDir)..\mBrane\$(Configuration)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugVisualizer|Win32'">
