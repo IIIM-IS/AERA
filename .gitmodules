@@ -1,0 +1,3 @@
+[submodule "submodules/CoreLibrary"]
+	path = submodules/CoreLibrary
+	url = git@github.com:IIIM-IS/CoreLibrary.git
