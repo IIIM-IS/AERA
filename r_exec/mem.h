@@ -89,7 +89,7 @@
 #include	"../r_code/list.h"
 #include	"../r_comp/segments.h"
 
-#include	"../submodules/CoreLibrary/CoreLibrary/pipe.h"
+#include	"../../CoreLibrary/CoreLibrary/pipe.h"
 
 
 namespace	r_exec{

@@ -78,7 +78,7 @@
 #ifndef	image_impl_h
 #define	image_impl_h
 
-#include	"../submodules/CoreLibrary/CoreLibrary/types.h"
+#include	"../../CoreLibrary/CoreLibrary/types.h"
 
 
 using	namespace	core;

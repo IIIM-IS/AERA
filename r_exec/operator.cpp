@@ -81,7 +81,7 @@
 #include	"init.h"
 #include	"opcodes.h"
 #include	"group.h"
-#include	"../submodules/CoreLibrary/CoreLibrary/utils.h"
+#include	"../../CoreLibrary/CoreLibrary/../../CoreLibrary/CoreLibrary/utils.h"
 #include	"../r_code/utils.h"
 #include	<math.h>
 

@@ -77,7 +77,7 @@
 
 #include	"preprocessor.h"
 #include	"compiler.h"
-#include	"../submodules/CoreLibrary/CoreLibrary/utils.h"
+#include	"../../CoreLibrary/CoreLibrary/../../CoreLibrary/CoreLibrary/utils.h"
 
 
 namespace	r_comp{

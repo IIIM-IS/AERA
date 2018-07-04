@@ -78,7 +78,7 @@
 #ifndef	test_correlator_settings_h
 #define	test_correlator_settings_h
 
-#include	<../submodules/CoreLibrary/CoreLibrary/xml_parser.h>
+#include	<../../CoreLibrary/CoreLibrary/../../CoreLibrary/CoreLibrary/xml_parser.h>
 
 
 class	CorrelatorTestSettings{

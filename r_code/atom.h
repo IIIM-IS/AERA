@@ -78,7 +78,7 @@
 #ifndef	r_code_atom_h
 #define	r_code_atom_h
 
-#include	"../submodules/CoreLibrary/CoreLibrary/types.h"
+#include	"../../CoreLibrary/CoreLibrary/types.h"
 
 #undef	THIS
 

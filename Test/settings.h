@@ -78,7 +78,7 @@
 #ifndef	settings_h
 #define	settings_h
 
-#include	<../submodules/CoreLibrary/CoreLibrary/xml_parser.h>
+#include	<../../CoreLibrary/CoreLibrary/../../CoreLibrary/CoreLibrary/xml_parser.h>
 
 
 class	Settings{
