@@ -13,7 +13,6 @@ blue_color:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
 b_is_blue:(mk.val b color blue_color 1) |[]
 f_b_is_blue:(fact b_is_blue 0us MAX_TIME 1 1) [[SYNC_HOLD now 1 forever stdin nil]]
 
-
 ; top-level model and drive injectors.
 
 m_run_0:(mdl |[] []
@@ -23,6 +22,22 @@ m_run_0:(mdl |[] []
 |[]
 [stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Additional test models ;;
+
+m_speak:(mdl |[] []
+   (fact (cmd speak ["Hello" 2] 1) t2: t3: ::)
+   (fact (mk.val b: position_y : :) t0: t1: ::)
+[]
+   t0:(+ t2 sampling_period)
+   t1:(+ t3 sampling_period)
+[]
+   t2:(- t0 sampling_period)
+   t3:(- t1 sampling_period)
+[stdin] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+;; End of additional models ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 init_run_pgm:(pgm |[] |[] |[] []
    (inj []
@@ -37,6 +52,7 @@ init_run_pgm:(pgm |[] |[] |[] []
       (fact g t1:(now) t1 1 1)
       [SYNC_ONCE t1 1 forever primary nil]
    )
+   (prb [1 "print" "init_run_pgm" |[]])
 1) |[]
 
 init_run_ipgm:(ipgm init_run_pgm |[] RUN_ONCE 50000us VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 drives nil 1]]
@@ -56,6 +72,7 @@ success_run_pgm:(pgm |[] []
       (fact g t1:(now) t1 1 1)
       [SYNC_ONCE t1 1 forever primary nil]
    )
+   (prb [1 "print" "success_run_pgm" |[]])
 1) |[]
 
 success_run_ipgm:(ipgm success_run_pgm |[] RUN_ALWAYS 0us VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever drives nil 1]]
@@ -75,14 +92,16 @@ failure_run_pgm:(pgm |[] []
       (fact g t1:(now) t1 1 1)
       [SYNC_ONCE t1 1 forever primary nil]
    )
+   (prb [1 "print" "failure_run_pgm" |[]])
 1) |[]
 
 failure_run_ipgm:(ipgm failure_run_pgm |[] RUN_ALWAYS 0us VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever drives nil 1]]
 
-
-; input generators.
+;;;;;;;;;;;;;;;;;;;;;;
+;; input generators ;;
 
 start:(pgm |[] |[] |[] []
+   (prb [1 "print" "starting..." |[]])
    (inj []
       p:(mk.val b position_y 0 1)
       |[]
@@ -115,6 +134,7 @@ pgm0:(pgm |[] []
       (fact p (+ after sampling_period) (+ before sampling_period) 1 1)
       [SYNC_PERIODIC (+ f.vw.ijt sampling_period) 1 1 stdin nil]
    )
+   (prb [1 "print" "updated the position..." |[]])
 1) |[]
 
 ipgm0:(ipgm pgm0 |[] RUN_ALWAYS 20000us VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]

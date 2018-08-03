@@ -1,9 +1,7 @@
 ; debug
 
 !load C:/IIIM/AERA/Replicode/Test/V1.2/test.domain.replicode
-; !load C:/IIIM/AERA/Replicode/Test/V1.2/drives.replicode
-
-
+!load C:/IIIM/AERA/Replicode/Test/V1.2/drives.replicode
 
 s0:(cst |[] []
    (fact (mk.val h: position_z z0: :) t0: t1: ::)

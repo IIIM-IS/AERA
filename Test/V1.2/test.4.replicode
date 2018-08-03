@@ -47,7 +47,7 @@ pgm2:(pgm |[] []
    )
 1) |[]
 
-ipgm2:(ipgm pgm2 |[] RUN_ONCE 0us VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 2 stdin nil 1]]
+ipgm2:(ipgm pgm2 |[] RUN_ONCE 100000us VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 2 stdin nil 1]]
 
 ; ---------------------------------------
 

@@ -1,15 +1,76 @@
 ; debug
 
 !load C:/IIIM/AERA/Replicode/Test/V1.2/test.domain.replicode
-; !load C:/IIIM/AERA/Replicode/Test/V1.2/drives.replicode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; !load C:/IIIM/AERA/Replicode/Test/V1.2/drives.replicode ;;
 
+init_run_pgm:(pgm |[] |[] |[] []
+   (inj []
+      f_run:(fact run t0:(+ now 50000us) (+ t0 sampling_period) 1 1)
+      |[]
+   )
+   (inj []
+      g:(goal f_run self 1)
+      |[]
+   )
+   (inj []
+      (fact g t1:(now) t1 1 1)
+      [SYNC_ONCE t1 1 forever primary nil]
+   )
+   (prb [1 "print" "init_run_pgm" |[]])
+1) |[]
+
+init_run_ipgm:(ipgm init_run_pgm |[] RUN_ONCE 50000us VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 drives nil 1]]
+
+success_run_pgm:(pgm |[] []
+   s:(ptn (fact (success (fact (goal (fact run after: before: ::) ::) ::) ::) ::) |[])
+|[] []
+   (inj []
+      f_run:(fact run (+ after sampling_period) (+ before sampling_period) 1 1)
+      |[]
+   )
+   (inj []
+      g:(goal f_run self 1)
+      |[]
+   )
+   (inj []
+      (fact g t1:(now) t1 1 1)
+      [SYNC_ONCE t1 1 forever primary nil]
+   )
+   (prb [1 "print" "success_run_pgm" |[]])
+1) |[]
+
+success_run_ipgm:(ipgm success_run_pgm |[] RUN_ALWAYS 0us VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever drives nil 1]]
+
+failure_run_pgm:(pgm |[] []
+   s:(ptn (|fact (success (fact (goal (fact run after: before: ::) ::) ::) ::) ::) |[])
+|[] []
+   (inj []
+      f_run:(fact run (+ after sampling_period) (+ before sampling_period) 1 1)
+      |[]
+   )
+   (inj []
+      g:(goal f_run self 1)
+      |[]
+   )
+   (inj []
+      (fact g t1:(now) t1 1 1)
+      [SYNC_ONCE t1 1 forever primary nil]
+   )
+   (prb [1 "print" "failure_run_pgm" |[]])
+1) |[]
+
+failure_run_ipgm:(ipgm failure_run_pgm |[] RUN_ALWAYS 0us VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever drives nil 1]]
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 s0:(cst |[] []
    (fact (mk.val h: position_z z0: :) t0: t1: ::)
    (fact (mk.val h: essence hand :) t0: t1: ::)
 |[]
 |[]
-[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 0]]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 m0:(mdl [p0: t0: t1:] []
    (fact (cmd lift_hand [h: delta_z:] :) t2: t3: ::)
@@ -19,8 +80,10 @@ m0:(mdl [p0: t0: t1:] []
    t4:(+ t0 sampling_period)
    t5:(+ t1 sampling_period)
 []
+   t2:(- t4 sampling_period)
+   t3:(- t5 sampling_period)
    delta_z:(- p1 p0)
-[stdin] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 0]]
+[stdin] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 m1:(mdl |[] []
    (fact (icst s0 |[] [h: p0:] ::) t0: t1: ::)
@@ -28,8 +91,9 @@ m1:(mdl |[] []
 []
    t2:(+ t0 sampling_period); domain of validity of the lhs, as enforced by the input generators.
 []
-   t0:(- t2 sampling_period)
-[stdin] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 0]]
+   t1:(- t2 sampling_period)
+   t0:(- t0 sampling_period)
+[stdin] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 
 ; top-level models.
@@ -41,7 +105,7 @@ m_run_0:(mdl |[] []
 []
    t0:(now)
    t1:(+ t0 100000us)
-[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 0]]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 
 ; input generators.
@@ -55,6 +119,7 @@ pgm0:(pgm |[] |[] |[] []
       (fact p now (+ now sampling_period) 1 1)
       [SYNC_PERIODIC now 1 1 stdin nil]
    )
+   (prb [1 "print" "pgm0 running (set position)" |[]])
 1) |[]
 
 ipgm0:(ipgm pgm0 |[] RUN_ONCE sampling_period VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
@@ -68,6 +133,7 @@ pgm1:(pgm |[] |[] |[] []
       (fact c now 200000us 1 1)
       [SYNC_ONCE now 1 1 stdin nil]
    )
+   (prb [1 "print" "pgm1 running (lifting hand)" |[]])
 1) |[]
 
 ipgm1:(ipgm pgm1 |[] RUN_ONCE 150000us VOLATILE SILENT 1) [[SYNC_ONCE now 0 2 stdin nil 1]]
@@ -85,6 +151,7 @@ pgm2:(pgm |[] []
       (fact new_p (+ t2 sampling_period) (+ t3 sampling_period) 1 1)
       [SYNC_PERIODIC t3 1 1 stdin nil]
    )
+   (prb [1 "print" "pgm2 running (updating position)" |[]])
 1) |[]
 
 ipgm2:(ipgm pgm2 |[] RUN_ONCE 0us VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 2 stdin nil 1]]
