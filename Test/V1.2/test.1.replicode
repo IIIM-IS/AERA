@@ -75,15 +75,21 @@ s0:(cst |[] []
 m0:(mdl [p0: t0: t1:] []
    (fact (cmd lift_hand [h: delta_z:] :) t2: t3: ::)
    (fact (mk.val h: position_z p1: 1) t4: t5: : 1)
-[]
+[]; forward guards
    p1:(+ p0 delta_z)
    t4:(+ t0 sampling_period)
    t5:(+ t1 sampling_period)
-[]
+[]; backward guards
    t2:(- t4 sampling_period)
    t3:(- t5 sampling_period)
    delta_z:(- p1 p0)
-[stdin] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+[stdin]; output groups
+1; strength of the model
+1; number of evidences
+1; success rate
+0; derivative of the success rate
+1; psln_tr
+) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 m1:(mdl |[] []
    (fact (icst s0 |[] [h: p0:] ::) t0: t1: ::)
