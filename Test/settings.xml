@@ -23,27 +23,27 @@
     primary_thz="3600000"
     secondary_thz="7200000"
   />
-  <Debug debug="yes" debug_windows="1" trace_levels="CC">
+  <Debug debug="yes" debug_windows="1" trace_levels="FF"> <!--FF sets all Debug Streams to the std::cout-->
     <Resilience
       ntf_mk_resilience="1"
       goal_pred_success_resilience="1000"
     />
     <Objects
-      get_objects="no"
-      decompile_objects="no"
-      decompile_to_file="no"
-      decompilation_file_path=""
+      get_objects="yes"
+      decompile_objects="yes"
+      decompile_to_file="yes"
+      decompilation_file_path="decompiled_objects.txt"
       ignore_named_objects="yes"
       write_objects="no"
       objects_path="../Test/objects.replicode.image"
       test_objects="no"
     />
   </Debug>
-  <Run run_time="1080" probe_level="2">
+  <Run run_time="10080" probe_level="2">
     <Models
-      get_models="no"
-      decompile_models="no"
-      ignore_named_models="yes"
+      get_models="yes"
+      decompile_models="yes"
+      ignore_named_models="no"
       write_models="no"
       models_path="../Test/models.replicode.image"
       test_models="no"

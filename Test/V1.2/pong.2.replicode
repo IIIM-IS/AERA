@@ -1,8 +1,18 @@
 ; as pong, debug combinations of CTPX, GTPX and PTPX; goal-driven.
+; a ball travels without walls.
 
 ;;;;;;;;;;;;;
 ;; objects ;;
-b:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+b:(ent 1)
+[
+[]; view
+   SYNC_ONCE; sync (synchronization mode)
+   now;       injection time
+   1;         saliency
+   forever;   resilience
+   root;      group
+   nil;       origin
+]; Set of views
 ball:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 b_is_a_ball:(mk.val b essence ball 1) |[]
 f_b_is_a_ball:(fact b_is_a_ball 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
@@ -21,21 +31,29 @@ m_run_0:(mdl |[] []
    (fact run t0: t1: ::); drive.
 |[]
 |[]
-[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 1 forever primary nil 1]]
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Additional test models ;;
 
-m_speak:(mdl |[] []
-   (fact (cmd speak ["Hello"] 1) t2: t3: ::)
-   (fact (mk.val b: position_y : :) t0: t1: ::)
-[]
+m_speak:(mdl
+|[]; template arguments
+[]; LHS and RHS patterns of the model
+   (fact (cmd speak ["Hello"] 1) t2: t3: ::);    LHS
+   (fact (mk.val b: position_y : :) t0: t1: ::); RHS
+[]; forward guards
    t0:(+ t2 sampling_period)
    t1:(+ t3 sampling_period)
-[]
+[]; backward guards
    t2:(- t0 sampling_period)
    t3:(- t1 sampling_period)
-[stdin] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+[stdin]; output groups
+1; strength of the model
+1; number of evidences
+1; success rate
+0; derivative of the success rate
+1; psln_tr (saliency change propagation threshold)
+) [[SYNC_ONCE now 1 forever primary nil 1]]
 
 ;; End of additional models ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -120,16 +138,19 @@ start:(pgm |[] |[] |[] []
    )
    (inj []
       (fact s now MAX_TIME 1 1)
-      [SYNC_HOLD now 1 forever stdin nil]
+      [SYNC_ONCE now 1 forever stdin nil]
    )
 1) |[]
 
 istart:(ipgm start |[] RUN_ONCE sampling_period VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
 
-pgm0:(pgm |[] []
+pgm0:(pgm
+|[]; template arguments
+[];  patterns defining the inputs
    (ptn f:(fact (mk.val b position_y py: :) after: before: ::) |[])
    (ptn (fact (mk.val b speed_y sy: :) ::) |[])
-|[] []
+|[]; guards
+[];  productions
    (inj []
       p:(mk.val b position_y (+ py (* sy sampling_period)) 1)
       |[]
@@ -138,7 +159,14 @@ pgm0:(pgm |[] []
       (fact p (+ after sampling_period) (+ before sampling_period) 1 1)
       [SYNC_PERIODIC (+ f.vw.ijt sampling_period) 1 1 stdin nil]
    )
-   (prb [1 "print" "updated the position..." |[]])
+   (prb [1 "print" "updated the position..." [p]])
 1) |[]
 
-ipgm0:(ipgm pgm0 |[] RUN_ALWAYS 20000us VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+ipgm0:(ipgm
+pgm0;       the code
+|[];        instantiation values
+RUN_ALWAYS; boolean RUN_ALWAYS/ONCE
+MAX_TIME;    time scope (this small time scope has the effect that this program will most likely only run once)
+VOLATILE;
+NOTIFY;     notify flag
+1) [[SYNC_ONCE now 0 forever stdin nil 1]]

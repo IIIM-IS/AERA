@@ -105,7 +105,7 @@ namespace	r_exec{
 
 	Overlay	*PrimaryMDLOverlay::reduce(_Fact *input,Fact	*f_p_f_imdl,MDLController	*req_controller){
 		
-		OUTPUT(MDL_IN)<<Utils::RelativeTime(Now())<<" mdl "<<controller->getObject()->get_oid()<<" <- "<<input->get_oid()<<std::endl;
+		OUTPUT(MDL_IN) << Utils::RelativeTime(Now()) << " mdl: " << controller->getObject()->get_oid() << " <- input: " << input->get_oid() << std::endl;
 		_Fact	*input_object;
 		Pred	*prediction=input->get_pred();
 		bool	simulation;
@@ -121,7 +121,7 @@ namespace	r_exec{
 
 		P<HLPBindingMap>	bm=new	HLPBindingMap(bindings);
 		bm->reset_fwd_timings(input_object);
-		switch(bm->match_fwd_lenient(input_object,((MDLController	*)controller)->get_lhs())){
+		switch(bm->match_fwd_lenient(input_object, ((MDLController	*)controller)->get_lhs())){
 		case	MATCH_SUCCESS_POSITIVE:{
 
 			load_code();
@@ -1282,8 +1282,8 @@ namespace	r_exec{
 		}
 
 		register_drive_outcome(goal->get_goal()->sim->super_goal,success);
-		if(success)	OUTPUT(GOAL_MON)<<Utils::RelativeTime(Now())<<" "<<goal->get_oid()<<" goal success\n";
-		else		OUTPUT(GOAL_MON)<<Utils::RelativeTime(Now())<<" "<<goal->get_oid()<<" goal failure\n";
+		if(success)	OUTPUT(GOAL_MON)<<Utils::RelativeTime(Now())<<" "<<goal->get_oid()<<" goal success (TopLevel)\n";
+		else		OUTPUT(GOAL_MON)<<Utils::RelativeTime(Now())<<" "<<goal->get_oid()<<" goal failure (TopLevel)\n";
 	}
 
 	void	TopLevelMDLController::register_drive_outcome(Fact	*drive,bool	success)	const{
@@ -1707,9 +1707,21 @@ namespace	r_exec{
 				add_g_monitor(new	GMonitor(this,bm,bound_lhs->get_before(),0,f_sub_goal,f_imdl,evidence));
 				
 				if(!evidence){
+					if (_is_cmd){ // ThorT: This is a temporary hack to get models to activate commands
+						Code    *object = get_unpacked_object();
+						uint16  obj_set_index = object->code(MDL_OBJS).asIndex();
+						lhs = object->get_reference(object->code(obj_set_index + 1).asIndex());
+						Code    *lhs_ihlp = lhs->get_reference(0);
 
+						Code    *command = _Mem::Get()->build_object(lhs_ihlp->code(0));
+						command->resize_code(lhs_ihlp->code_size());
+						for (int i = 1; i < lhs_ihlp->code_size(); i++) {
+							command->code(i) = lhs_ihlp->code(i);
+						}
+						_Mem::Get()->eject(command);
+					}
 					inject_goal(bm,f_sub_goal,f_imdl);
-					OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<" "<<getObject()->get_oid()<<" -> "<<f_sub_goal->get_oid()<<" goal ["<<Utils::RelativeTime(sub_goal->get_target()->get_after())<<","<<Utils::RelativeTime(sub_goal->get_target()->get_before())<<"[\n";
+					OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<"				mdl "<<getObject()->get_oid()<<" -> "<<f_sub_goal->get_oid()<<" goal ["<<Utils::RelativeTime(sub_goal->get_target()->get_after())<<","<<Utils::RelativeTime(sub_goal->get_target()->get_before())<<"[\n";
 				}
 				break;
 			}

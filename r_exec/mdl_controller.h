@@ -346,7 +346,7 @@ namespace	r_exec{
 		CriticalSection		last_match_timeCS;
 
 		CriticalSection		assumptionsCS;
-		r_code::list<P<Code> >	assumptions;	// produced by the model; garbage collection at reduce(9 time..
+		r_code::list<P<Code> >	assumptions;	// produced by the model; garbage collection at reduce() time..
 
 		void	rate_model(bool	success);
 		void	kill_views();	// force res in both primary/secondary to 0.

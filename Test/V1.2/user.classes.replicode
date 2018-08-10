@@ -54,6 +54,7 @@ essence:(ont 1) [[SYNC_ONCE now 0 forever root nil]]; usage: (mk.val x essence "
 color:(ont 1) [[SYNC_ONCE now 0 forever root nil]]; usage: (mk.val x color "green" 1) or (mk.val x color green 1) if green is defined as an entity.
 role:(ont 1) [[SYNC_ONCE now 0 forever root nil]]; usage (mk.val self role interviewer 1)
 
+position:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 position_x:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 position_y:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 position_z:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
