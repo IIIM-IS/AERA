@@ -157,17 +157,19 @@ namespace	r_exec{
 	}
 
 	void	InputLessPGMOverlay::patch_tpl_args(){	// no rollback on that part of the code.
-//getObject()->trace();
+		//getObject()->trace();
 		uint16	tpl_arg_set_index=code[PGM_TPL_ARGS].asIndex();			// index to the set of all tpl patterns.
 		uint16	arg_count=code[tpl_arg_set_index].getAtomCount();
 		uint16	ipgm_arg_set_index=getObject()->code(IPGM_ARGS).asIndex();	// index to the set of all ipgm tpl args.
 		for(uint16	i=1;i<=arg_count;++i){									// pgm_code[tpl_arg_set_index+i] is an iptr to a pattern.
 
 			Atom	&skel_iptr=code[code[tpl_arg_set_index+i].asIndex()+1];
-			patch_tpl_code(skel_iptr.asIndex(),getObject()->code(ipgm_arg_set_index+i).asIndex());
+			uint16 pgm_code_index = code[tpl_arg_set_index + i].asIndex();
+
+			patch_tpl_code(pgm_code_index, getObject()->code(ipgm_arg_set_index+i).asIndex());
 			skel_iptr=Atom::IPGMPointer(ipgm_arg_set_index+i);				// patch the pgm code with ptrs to the tpl args' actual location in the ipgm code.
 		}
-//Atom::Trace(pgm_code,getObject()->get_reference(0)->code_size());
+		//Atom::Trace(code, getObject()->get_reference(0)->code_size());
 	}
 
 	void	InputLessPGMOverlay::patch_tpl_code(uint16	pgm_code_index,uint16	ipgm_code_index){	// patch recursively : in pgm_code[index] with IPGM_PTRs until ::.
