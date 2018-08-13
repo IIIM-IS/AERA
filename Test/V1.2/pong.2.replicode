@@ -166,7 +166,7 @@ ipgm0:(ipgm
 pgm0;       the code
 |[];        instantiation values
 RUN_ALWAYS; boolean RUN_ALWAYS/ONCE
-MAX_TIME;    time scope (this small time scope has the effect that this program will most likely only run once)
+MAX_TIME;   time scope
 VOLATILE;
 NOTIFY;     notify flag
 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
