@@ -19,21 +19,19 @@ last_known:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; P1 and P2 are the main programs for keeping track of the last position for each ball ;;
 P1:(pgm
-[]; (ptn f:(fact (mk.val ref_b: position ref_pos: :) ref_t: ::) |[])
-   (ptn ref_b:(ent ::) |[])
-   (ptn ref_pos: |[])
-   (ptn ref_t: |[])
+[]; These ref_X items are not like expected thus the guards for the input do not work (the objects are not comparable)
+   (ptn ref_f:(fact (mk.val ref_b: position ref_pos: :) ref_t: before: ::) |[])
 []; inputs
-   (ptn (fact m:(mk.val b: position pos: :) t: ::) [(= b ref_b) (> t ref_t) (<> pos ref_pos)])
+   (ptn f:(fact m:(mk.val b: position pos: :) t: ::) [(<> pos ref_pos)]); [(= b ref_b) (> t ref_t) (<> pos ref_pos)]); These should work, but they don't
 |[]; guards
 []; productions
    (prb [1 "print" "P1" [pos]]); Can be useful to change usr_operators\Callbacks\callbacks.cpp to print only objects[0]->code(3).asFloat()
    (inj []
-      p:(mk.val b last_known m 1); TODO: Fix b and init last_known
+      p:(mk.val b last_known m 1)
       |[]
    )
-   (inj []; This injection sometimes causes "read access violation"
-      (ins P1 [b pos t] RUN_ONCE now VOLATILE SILENT)
+   (inj []
+      (ins P1 [f] RUN_ONCE now VOLATILE SILENT)
       [SYNC_ONCE now 0 forever stdin nil 1]
    )
    (set [this.vw.res 0]); kills the original
@@ -47,13 +45,13 @@ P2:(pgm
 []; productions
    (prb [1 "print" "P2" [pos]])
    (inj []
-      (ins P1 [b pos after] RUN_ONCE 0us VOLATILE SILENT)
+      (ins P1 [f] RUN_ONCE 0us VOLATILE SILENT)
       [SYNC_ONCE now 0 forever stdin nil 1]
    )
    (set [this.vw.res 0])
 1) |[]
 
-iP2:(ipgm P2 |[] RUN_ONCE 1000000us VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+iP2:(ipgm P2 |[] RUN_ONCE 500000us VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; input generators ;;

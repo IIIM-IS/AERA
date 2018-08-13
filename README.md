@@ -15,7 +15,7 @@ There are quite a few places that use absolute paths, spare yourself the headach
 
 ## Building
 
-Open the solution file at `Integration_OpenAI/Integration_OpenAI.sln` in Visual Studio 2017 and select the `Debug Win32` or `Release Win32` configuration.
+Open the solution file at `replicode/Replicode.sln` in Visual Studio 2017 and select the `Debug Win32` or `Release Win32` configuration.
 
 ## Running
 
