@@ -29,10 +29,10 @@ P1:(pgm
 []; productions
    (prb [1 "print" "P1" [pos]]); Can be useful to change usr_operators\Callbacks\callbacks.cpp to print only objects[0]->code(3).asFloat()
    (inj []
-      p:(mk.val b last_known m 1); TODO: Fix b and init last_known
+      p:(mk.val b last_known m 1)
       |[]
    )
-   (inj []; This injection sometimes causes "read access violation"
+   (inj []
       (ins P1 [b pos t] RUN_ONCE now VOLATILE SILENT)
       [SYNC_ONCE now 0 forever stdin nil 1]
    )
@@ -40,9 +40,9 @@ P1:(pgm
 1) |[]
 
 P2:(pgm
-|[]; [(ptn ref_b: |[])]
+[(ptn ref_b: |[])]
 []; inputs
-   (ptn f:(fact m:(mk.val b: position pos: :) after: before: ::) |[]); [(<> b ref_b)])
+   (ptn f:(fact m:(mk.val b: position pos: :) after: before: ::) [(<> b ref_b)]); This setup can at most handle two different balls
 |[]; guards
 []; productions
    (prb [1 "print" "P2" [pos]])
@@ -53,7 +53,7 @@ P2:(pgm
    (set [this.vw.res 0])
 1) |[]
 
-iP2:(ipgm P2 |[] RUN_ONCE 500000us VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+iP2:(ipgm P2 [nil] RUN_ONCE 500000us VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; input generators ;;

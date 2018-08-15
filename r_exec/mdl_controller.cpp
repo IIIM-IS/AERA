@@ -1712,13 +1712,7 @@ namespace	r_exec{
 						uint16  obj_set_index = object->code(MDL_OBJS).asIndex();
 						lhs = object->get_reference(object->code(obj_set_index + 1).asIndex());
 						Code    *lhs_ihlp = lhs->get_reference(0);
-
-						Code    *command = _Mem::Get()->build_object(lhs_ihlp->code(0));
-						command->resize_code(lhs_ihlp->code_size());
-						for (int i = 1; i < lhs_ihlp->code_size(); i++) {
-							command->code(i) = lhs_ihlp->code(i);
-						}
-						_Mem::Get()->eject(command);
+						_Mem::Get()->eject(lhs_ihlp);
 					}
 					inject_goal(bm,f_sub_goal,f_imdl);
 					OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<"				mdl "<<getObject()->get_oid()<<" -> "<<f_sub_goal->get_oid()<<" goal ["<<Utils::RelativeTime(sub_goal->get_target()->get_after())<<","<<Utils::RelativeTime(sub_goal->get_target()->get_before())<<"[\n";
