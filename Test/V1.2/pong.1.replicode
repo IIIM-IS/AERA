@@ -9,24 +9,9 @@ ball:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 b_is_a_ball:(mk.val b essence ball 1) |[]
 f_b_is_a_ball:(fact b_is_a_ball 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 
-; w_top:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
-; w_top_py:(mk.val w_top position_y 50 1) |[]
-; f_w_top_py:(fact w_top_py 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+wall_detected:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 
-; w_bottom:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
-; w_bottom_py:(mk.val w_bottom position_y 0 1) |[]
-; f_w_bottom_py:(fact w_bottom_py 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
-
-;;;;;;;;;;;;;;;;
-;; same pos_y ;;
-
-s0:(cst |[] []
-   (fact (mk.val h: position_y py: :) t0: t1: ::)
-   (fact (mk.val w: position_y py: :) t0: t1: ::)
-|[]
-|[]
-[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 0]]
-
+!def speed 0.0001
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; input generators ;;
@@ -40,61 +25,88 @@ start:(pgm |[] |[] |[] []
    )
    (inj []
       (fact p after:(now) (+ after sampling_period) 1 1)
-      [SYNC_ONCE now 1 1 stdin nil]
+      [SYNC_ONCE after 1 1 stdin nil]
    )
 1) |[]
 
 istart:(ipgm start |[] RUN_ONCE sampling_period VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
 
-; TODO: These programs do not function correctly, the input patterns seem to reused too often
 ; The main loop, updates the position_y
-pgm0:(pgm |[] []
+pgm_loop:(pgm
+[(ptn direction: |[])]
+[]
    (ptn f:(fact (mk.val b position_y py: :) after: before: ::) |[])
-   (ptn (fact (mk.val b speed_y sy: :) ::) |[])
 |[] []
    (inj []
-      p:(mk.val b position_y (+ py (* sy sampling_period)) 1)
+      p:(mk.val b position_y (+ py (* (* speed direction) sampling_period)) 1)
       |[]
    )
    (inj []
       (fact p (+ after sampling_period) (+ before sampling_period) 1 1)
       [SYNC_ONCE (+ f.vw.ijt sampling_period) 1 1 stdin nil]
    )
-   (prb [1 "print" "Position updated" [p]])
+   (prb [1 "print" "Position updated" |[]]); [p direction]])
 1) |[]
 
-ipgm0:(ipgm pgm0 |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+ipgm_loop:(ipgm pgm_loop [1] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
 
-; Turns the ball around when position_y>45
-pgm1:(pgm |[] []
+pgm_main:(pgm
+[]
+   (ptn prev_direction: |[])
+   (ptn ipgm_prev_loop:(ipgm pgm_loop ::) |[])
+[]; inputs
+   (ptn (fact (mk.val b wall_detected val: :) after: before: ::) |[])
+|[]; guards
+[]; productions
+   (prb [1 "print" "pgm_main" |[]])
+   ;(inj []
+   ;   ipgm_loop:(ins pgm_loop [(* prev_direction -1)] RUN_ALWAYS MAX_TIME VOLATILE SILENT)
+   ;   [SYNC_ONCE now 0 forever stdin nil 1]
+   ;)
+   ;(inj []
+   ;   (ins pgm_main [(* prev_direction -1) ipgm_loop] RUN_ONCE now VOLATILE SILENT)
+   ;   [SYNC_ONCE now 0 forever stdin nil 1]
+   ;)
+   ; See issue #2 on github
+   ;v#view:(fvw ipgm_prev_loop stdin);        Any one of these should work, but they don't
+   ;(set [v.res 0]);                          kills the previous loop
+   ;(set [(fvw ipgm_prev_loop stdin).res 0]); kills the previous loop
+   ;(set [ipgm_prev_loop.vw.res 0]);          kills the previous loop
+   (set [this.vw.res 0]); kills the original (maybe not needed since this is only RUN_ONCE)
+1) |[]
+
+ipgm_main:(ipgm pgm_main [1 ipgm_loop] RUN_ONCE sampling_period VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+
+; These programs detect the walls at y=0 and y=50
+pgm_right_wall:(pgm |[] []
    (ptn (fact (mk.val b position_y py: :) ::) [(< py 55) (> py 45)])
 |[] []
    (inj []
-      s:(mk.val b speed_y -0.0001 1)
+      w:(mk.val b wall_detected 0 1)
       |[]
    )
    (inj []
-      (fact s now MAX_TIME 1 1)
-      [SYNC_ONCE now 1 forever stdin nil]
+      (fact w after:(now) (+ after sampling_period) 1 1)
+      [SYNC_ONCE after 1 1 stdin nil]
    )
-   (prb [1 "print" "Speed -0.0001" |[]])
+   (prb [1 "print" "Wall detected" |[]])
 1) |[]
 
-ipgm1:(ipgm pgm1 |[] RUN_ALWAYS MAX_TIME VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+ipgm_right_wall:(ipgm pgm_right_wall |[] RUN_ALWAYS MAX_TIME VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
 
-; Sets the initial speed and turns the ball around when position_y==0
-pgm2:(pgm |[] []
-   (ptn f:(fact (mk.val b position_y py: :) ::) [(< py 5)])
-|[] []
-   (inj []
-      s:(mk.val b speed_y 0.0001 1)
-      |[]
-   )
-   (inj []
-      (fact s now MAX_TIME 1 1)
-      [SYNC_ONCE now 1 forever stdin nil]
-   )
-   (prb [1 "print" "Speed +0.0001" |[]])
-1) |[]
-
-ipgm2:(ipgm pgm2 |[] RUN_ALWAYS MAX_TIME VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+;; Sets the initial speed and turns the ball around when position_y==0
+;pgm_left_wall:(pgm |[] []
+;   (ptn f:(fact (mk.val b position_y py: :) ::) [(< py 5)])
+;|[] []
+;   (inj []
+;      w:(mk.val b wall_detected 0 1)
+;      |[]
+;   )
+;   (inj []
+;      (fact w after:(now) (+ after sampling_period) 1 1)
+;      [SYNC_ONCE after 1 1 stdin nil]
+;   )
+;   (prb [1 "print" "Wall detected" |[]])
+;1) |[]
+;
+;ipgm_left_wall:(ipgm pgm_left_wall |[] RUN_ALWAYS MAX_TIME VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]

@@ -493,6 +493,14 @@ namespace	r_exec{
 	}
 
 	void	_Mem::eject(Code	*command){
+		// This is only for debugging
+		/*
+		uint16	function = (command->code(CMD_FUNCTION).atom >> 8) & 0x000000FF;
+		if (function == r_exec::GetOpcode("speak")) {
+			std::cout << "Speak" << std::endl;
+			//command->trace();
+		}
+		*/
 	}
 
 	////////////////////////////////////////////////////////////////

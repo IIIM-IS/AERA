@@ -54,6 +54,7 @@ pgm0:(pgm |[] |[] |[] []
       (fact p now MAX_TIME 1 1)
       [SYNC_HOLD now 1 1 stdin nil]
    )
+   (prb [1 "print" "pgm0" |[]])
 1) |[]
 
 ipgm0:(ipgm pgm0 |[] RUN_ONCE sampling_period VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
@@ -75,6 +76,7 @@ pgm1:(pgm |[] |[] |[] []
       (|fact p now MAX_TIME 1 1)
       [SYNC_HOLD now 1 1 stdin nil]
    )
+   (prb [1 "print" "pgm1" |[]])
 1) |[]
 
 ipgm1:(ipgm pgm1 |[] RUN_ONCE 160000us VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 2 stdin nil 1]]

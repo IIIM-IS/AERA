@@ -353,6 +353,7 @@
     <None Include="V1.2\drives.replicode" />
     <None Include="V1.2\hello.world.replicode" />
     <None Include="V1.2\main.replicode" />
+    <None Include="V1.2\pattern.replicode" />
     <None Include="V1.2\pong.2.replicode" />
     <None Include="V1.2\pong.1.replicode" />
     <None Include="V1.2\std.replicode" />
@@ -362,6 +363,7 @@
     <None Include="V1.2\test.3.replicode" />
     <None Include="V1.2\test.4.replicode" />
     <None Include="V1.2\test.domain.replicode" />
+    <None Include="V1.2\test.pong.1.replicode" />
     <None Include="V1.2\user.classes.replicode" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,0 +1,73 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; This replicode script is not finished. This script is missing the goal and it's drive system ;;
+; AERA should figure out the systems pattern
+; The pattern here is that when A is positive then B is true otherwise false
+; We set the goal to B=true, to guide the system
+
+;;;;;;;;;;;;;
+;; objects ;;
+
+A:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+B:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+data:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+
+A_is_data:(mk.val A essence data 1) |[]; (mk.val an_object a_property a_value)
+f_A_is_data:(fact A_is_data 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+B_is_data:(mk.val B essence data 1) |[]
+f_B_is_data:(fact B_is_data 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+;;;;;;;;;;;;;;;;
+;; attributes ;;
+
+A_value:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+B_value:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; input generators ;;
+
+; Start program, sets the initial values
+start:(pgm |[] |[] |[] []
+   (inj []
+      a_mkval:(mk.val A A_value 1 1); A starts at A_value=1
+      |[]
+   )
+   (inj []
+      (fact a_mkval after:(now) (+ after sampling_period) 1 1); a_mkval is a fact from now until "now + sampling_period"
+      [SYNC_PERIODIC now 1 1 stdin nil]
+   )
+1) |[]
+
+istart:(ipgm start |[] RUN_ONCE sampling_period VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+
+; The main loops, updates all values
+pgm_loop_1:(pgm |[] []
+   (ptn f:(fact (mk.val A A_value av: :) after: before: ::) |[])
+|[] []
+   (inj []
+      a_mkval:(mk.val A A_value (- (rnd 2) 1) 1); A takes a random value on the interval [-1, 1]
+      |[]
+   )
+   (inj []
+      (fact a_mkval (+ after sampling_period) (+ before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ f.vw.ijt sampling_period) 1 1 stdin nil]
+   )
+   (prb [1 "print" "Loop 1" [a_mkval]])
+1) |[]
+
+ipgm_loop_1:(ipgm pgm_loop_1 |[] RUN_ALWAYS MAX_TIME VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+
+pgm_loop_2:(pgm |[] []
+   (ptn f:(fact (mk.val A A_value av: :) after: before: ::) |[])
+|[] []
+   (inj []
+      b_mkval:(mk.val B B_value (> av 0) 1); B is true if A_value > 0 else false
+      |[]
+   )
+   (inj []
+      (fact b_mkval (+ after sampling_period) (+ before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ f.vw.ijt sampling_period) 1 1 stdin nil]
+   )
+   (prb [1 "print" "Loop 2" [b_mkval]])
+1) |[]
+
+ipgm_loop_2:(ipgm pgm_loop_2 |[] RUN_ALWAYS MAX_TIME VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]

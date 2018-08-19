@@ -1711,8 +1711,8 @@ namespace	r_exec{
 						Code    *object = get_unpacked_object();
 						uint16  obj_set_index = object->code(MDL_OBJS).asIndex();
 						lhs = object->get_reference(object->code(obj_set_index + 1).asIndex());
-						Code    *lhs_ihlp = lhs->get_reference(0);
-						_Mem::Get()->eject(lhs_ihlp);
+						Code    *lhs_command = lhs->get_reference(0);
+						_Mem::Get()->eject(lhs_command);
 					}
 					inject_goal(bm,f_sub_goal,f_imdl);
 					OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<"				mdl "<<getObject()->get_oid()<<" -> "<<f_sub_goal->get_oid()<<" goal ["<<Utils::RelativeTime(sub_goal->get_target()->get_after())<<","<<Utils::RelativeTime(sub_goal->get_target()->get_before())<<"[\n";
@@ -1959,12 +1959,12 @@ namespace	r_exec{
 
 				absentee=goal->get_goal()->get_target()->get_absentee();
 				success_object=new	Success(goal,absentee,1);
-				OUTPUT(PRED_MON)<<Utils::RelativeTime(now)<<" "<<getObject()<<goal->get_oid()<<" goal success"<<std::endl;
+				OUTPUT(PRED_MON)<<Utils::RelativeTime(now)<<" "<<goal->get_oid()<<" goal success (Primary)"<<std::endl;
 			}else{
 
 				absentee=NULL;
 				success_object=new	Success(goal,evidence,1);
-				OUTPUT(PRED_MON)<<Utils::RelativeTime(now)<<" "<<getObject()<<goal->get_oid()<<" goal failure"<<std::endl;
+				OUTPUT(PRED_MON)<<Utils::RelativeTime(now)<<" "<<goal->get_oid()<<" goal failure (Primary)"<<std::endl;
 			}
 			f_success_object=new	AntiFact(success_object,now,now,1,1);
 		}

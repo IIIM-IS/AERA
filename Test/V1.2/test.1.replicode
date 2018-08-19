@@ -1,69 +1,10 @@
-; debug
+;;;;;;;;;;;;;;;;;;;
+;; Model Control ;;
+;; This example should demonstrate how a model can control the activation of another model
+;; See Replicode_A_constructivist_programming_paradigm_and_language_2013.pdf at page 31
 
 !load C:/IIIM/AERA/Replicode/Test/V1.2/test.domain.replicode
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; !load C:/IIIM/AERA/Replicode/Test/V1.2/drives.replicode ;;
-
-init_run_pgm:(pgm |[] |[] |[] []
-   (inj []
-      f_run:(fact run t0:(+ now 50000us) (+ t0 sampling_period) 1 1)
-      |[]
-   )
-   (inj []
-      g:(goal f_run self 1)
-      |[]
-   )
-   (inj []
-      (fact g t1:(now) t1 1 1)
-      [SYNC_ONCE t1 1 forever primary nil]
-   )
-   (prb [1 "print" "init_run_pgm" |[]])
-1) |[]
-
-init_run_ipgm:(ipgm init_run_pgm |[] RUN_ONCE 50000us VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 drives nil 1]]
-
-success_run_pgm:(pgm |[] []
-   s:(ptn (fact (success (fact (goal (fact run after: before: ::) ::) ::) ::) ::) |[])
-|[] []
-   (inj []
-      f_run:(fact run (+ after sampling_period) (+ before sampling_period) 1 1)
-      |[]
-   )
-   (inj []
-      g:(goal f_run self 1)
-      |[]
-   )
-   (inj []
-      (fact g t1:(now) t1 1 1)
-      [SYNC_ONCE t1 1 forever primary nil]
-   )
-   (prb [1 "print" "success_run_pgm" |[]])
-1) |[]
-
-success_run_ipgm:(ipgm success_run_pgm |[] RUN_ALWAYS 0us VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever drives nil 1]]
-
-failure_run_pgm:(pgm |[] []
-   s:(ptn (|fact (success (fact (goal (fact run after: before: ::) ::) ::) ::) ::) |[])
-|[] []
-   (inj []
-      f_run:(fact run (+ after sampling_period) (+ before sampling_period) 1 1)
-      |[]
-   )
-   (inj []
-      g:(goal f_run self 1)
-      |[]
-   )
-   (inj []
-      (fact g t1:(now) t1 1 1)
-      [SYNC_ONCE t1 1 forever primary nil]
-   )
-   (prb [1 "print" "failure_run_pgm" |[]])
-1) |[]
-
-failure_run_ipgm:(ipgm failure_run_pgm |[] RUN_ALWAYS 0us VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever drives nil 1]]
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+!load C:/IIIM/AERA/Replicode/Test/V1.2/drives.replicode
 
 s0:(cst |[] []
    (fact (mk.val h: position_z z0: :) t0: t1: ::)
@@ -128,7 +69,7 @@ pgm0:(pgm |[] |[] |[] []
    (prb [1 "print" "pgm0 running (set position)" |[]])
 1) |[]
 
-ipgm0:(ipgm pgm0 |[] RUN_ONCE sampling_period VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+ipgm0:(ipgm pgm0 |[] RUN_ONCE sampling_period VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
 
 pgm1:(pgm |[] |[] |[] []
    (inj []
@@ -142,7 +83,7 @@ pgm1:(pgm |[] |[] |[] []
    (prb [1 "print" "pgm1 running (lifting hand)" |[]])
 1) |[]
 
-ipgm1:(ipgm pgm1 |[] RUN_ONCE 150000us VOLATILE SILENT 1) [[SYNC_ONCE now 0 2 stdin nil 1]]
+ipgm1:(ipgm pgm1 |[] RUN_ONCE 150000us VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
 
 pgm2:(pgm |[] []
    (ptn (fact (cmd lift_hand [h: z:] :) t0: t1: ::) |[])
@@ -160,4 +101,22 @@ pgm2:(pgm |[] []
    (prb [1 "print" "pgm2 running (updating position)" |[]])
 1) |[]
 
-ipgm2:(ipgm pgm2 |[] RUN_ONCE 0us VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 2 stdin nil 1]]
+ipgm2:(ipgm pgm2 |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+
+pgm3:(pgm |[] []
+   (ptn (fact (cmd lift_hand ::) ::) |[])
+|[]
+[]
+   (prb [1 "print" "pgm3 cmd->lift_hand" |[]])
+1) |[]
+
+ipgm3:(ipgm pgm3 |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+
+pgm4:(pgm |[] []
+   (ptn p:(fact (mk.val h: position_z ::) ::) |[])
+|[]
+[]
+   (prb [1 "print" "pgm4 mk.val" |[]])
+1) |[]
+
+ipgm4:(ipgm pgm4 |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
