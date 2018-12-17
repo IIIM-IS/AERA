@@ -2,14 +2,14 @@
 ; Be careful not to have extra spaces before starting the comment, that is not allowed.
 
 ; Method 1: locked on timer.
-;    (pgm tpl:[::ptn] inputs:[] guards:[::xpr] prods:)
+;    (pgm tpl:[::ptn] inputs:[] guards:[::xpr] prods: psln_thr:nb)
 pgm0:(pgm |[] |[] |[] []
    (prb [1 "print" "hello world 1" |[]])
 1) |[]; This following empty set (denoted with "|[]") is the programs view
 
 ; Set act to 1 or 0 in the ipgm view (instantiated program) to either activate or deactivate the program
 ;                                                         [sync:SYNC_ONCE ijt:now sln:0 res:1 grp:stdin org:nil act:1]
-;     (ipgm code:pgm0 args:[] run:bl tsc:us res:bl nfr:bl) ; bl is boolean and us is timestamp
+;     (ipgm code:pgm0 args:[] run:bl tsc:us res:bl nfr:bl psln_thr:nb) ; bl is boolean, us is timestamp and nb is number
 ipgm0:(ipgm pgm0 |[] RUN_ONCE 50000us VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
 
 
