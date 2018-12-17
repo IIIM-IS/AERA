@@ -675,6 +675,8 @@ int32	RepliStruct::process(){
 				tempStruct = (*iter); 
 				// insert new structures 
 				args.insert(++iter, newStruct->args.begin(), newStruct->args.end());
+				// The args have been copied out of newStruct. We are finished with it.
+				delete newStruct;
 				// reinit iterator and find location again
 				iter = args.begin();
 				iterEnd = args.end();
