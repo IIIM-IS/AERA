@@ -1,11 +1,13 @@
 ; debug
 
-; !load C:/IIIM/AERA/Replicode/Test/V1.2/hello.world.replicode
+!load C:/IIIM/AERA/Replicode/Test/V1.2/hello.world.1.replicode
+; !load C:/IIIM/AERA/Replicode/Test/V1.2/hello.world.2.replicode
+; !load C:/IIIM/AERA/Replicode/Test/V1.2/hello.world.3.replicode
 ; !load C:/IIIM/AERA/Replicode/Test/V1.2/test.1.replicode
 ; !load C:/IIIM/AERA/Replicode/Test/V1.2/test.2.replicode
 ; !load C:/IIIM/AERA/Replicode/Test/V1.2/test.3.replicode
 ; !load C:/IIIM/AERA/Replicode/Test/V1.2/test.4.replicode
 ; !load C:/IIIM/AERA/Replicode/Test/V1.2/pong.1.replicode
-!load C:/IIIM/AERA/Replicode/Test/V1.2/pong.2.replicode
+; !load C:/IIIM/AERA/Replicode/Test/V1.2/pong.2.replicode
 ; !load C:/IIIM/AERA/Replicode/Test/V1.2/pong.3.replicode
 ; !load C:/IIIM/AERA/Replicode/Test/V1.2/pattern.replicode
