@@ -1,0 +1,21 @@
+; This is a comment, everything following the ";" symbol is a comment.
+; Be careful not to have extra spaces before starting the comment, that is not allowed.
+
+; Method 2: one object injected at a point in time, caught by another program.
+
+pgm1:(pgm |[] |[] |[] []
+   (inj []
+      (ent 1)
+      [SYNC_ONCE now 1 1 stdin nil]
+   )
+1) |[]
+
+ipgm1:(ipgm pgm1 |[] RUN_ONCE 50000us VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+
+pgm2:(pgm |[] []
+   (ptn (ent ::) |[])
+|[] []
+   (prb [1 "print" "hello world 2" |[]])
+1) |[]
+
+ipgm2:(ipgm pgm2 |[] RUN_ONCE 0us VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]

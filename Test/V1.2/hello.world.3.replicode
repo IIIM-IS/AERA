@@ -1,0 +1,14 @@
+; This is a comment, everything following the ";" symbol is a comment.
+; Be careful not to have extra spaces before starting the comment, that is not allowed.
+
+; Method 3: one program that injects a new instance of itself.
+
+pgm3:(pgm |[] |[] |[] []
+   (inj []
+      (ins pgm3 |[] RUN_ONCE 50000us VOLATILE SILENT)
+      [SYNC_ONCE now 0 forever stdin nil 1]
+   )
+   (prb [1 "print" "hello world 3" |[]])
+1) |[]
+
+ipgm3:(ipgm pgm3 |[] RUN_ONCE 50000us VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
