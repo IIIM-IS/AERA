@@ -354,6 +354,7 @@
     <None Include="V1.2\hello.world.1.replicode" />
     <None Include="V1.2\hello.world.2.replicode" />
     <None Include="V1.2\hello.world.3.replicode" />
+    <None Include="V1.2\hello.world.replicode" />
     <None Include="V1.2\main.replicode" />
     <None Include="V1.2\pattern.replicode" />
     <None Include="V1.2\pong.2.replicode" />
