@@ -106,10 +106,10 @@ namespace	r_exec{
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 
-	bool	Compile(std::istream	&source_code,std::string	&error,bool	compile_metadata){
+	bool	Compile(std::istream	&source_code,const std::string& filePath,std::string	&error,bool	compile_metadata){
 
 		std::ostringstream	preprocessed_code_out;
-		if(!r_exec::Preprocessor.process(&source_code,&preprocessed_code_out,error,compile_metadata?&Metadata:NULL))
+		if(!r_exec::Preprocessor.process(&source_code,filePath,&preprocessed_code_out,error,compile_metadata?&Metadata:NULL))
 			return	false;
 
 		std::istringstream	preprocessed_code_in(preprocessed_code_out.str());
@@ -135,7 +135,7 @@ namespace	r_exec{
 			return	false;
 		}
 
-		bool	r=Compile(source_code,error,compile_metadata);
+		bool	r=Compile(source_code,filename,error,compile_metadata);
 		source_code.close();
 		return	r;
 	}
@@ -145,9 +145,9 @@ namespace	r_exec{
 		return	Compile(filename,error,false);
 	}
 
-	bool	Compile(std::istream	&source_code,std::string	&error){
+	bool	Compile(std::istream	&source_code,const std::string& filePath,std::string	&error){
 
-		return	Compile(source_code,error,false);
+		return	Compile(source_code,filePath,error,false);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
