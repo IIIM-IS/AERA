@@ -3,8 +3,8 @@
 ;; This example should demonstrate how a model can control the activation of another model
 ;; See Replicode_A_constructivist_programming_paradigm_and_language_2013.pdf at page 31
 
-!load C:/IIIM/AERA/Replicode/Test/V1.2/test.domain.replicode
-!load C:/IIIM/AERA/Replicode/Test/V1.2/drives.replicode
+!load test.domain.replicode
+!load drives.replicode
 
 s0:(cst |[] []
    (fact (mk.val h: position_z z0: :) t0: t1: ::)
