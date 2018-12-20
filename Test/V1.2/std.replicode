@@ -149,3 +149,26 @@
 ; system internal constants.
 !def MAX_TIME 18446744073709551615us; 2^64-1.
 
+; initial groups.
+
+root:(std_grp 0 0 0 0 [nil]) [[SYNC_ONCE now 0 forever nil nil COV_OFF 0]]
+stdout:(std_grp 0 0 0 0 |[]) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]
+stdin:(std_grp 2 0 0 0 [stdout]) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]; ensure stdin.upr=sampling_period.
+
+primary:(std_grp 2 0 0.4 0 |[]) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]; ensure primary.upr=stdin.upr.
+secondary:(std_grp 2 0 0.3 0 |[]) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]; ensure secondary.upr=primary.upr.
+grp_pair:(mk.grp_pair primary secondary 1) [[SYNC_ONCE now 0 forever root nil]]
+drives:(std_grp 40 0 0 0 [stdout]) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]; holds pgm that inject drives periodically; drive priority=pgm.act; ensure ipgm.tsc>primary.upr.
+
+; extensions.
+
+; args: pass_through, ctpx_on, gtpx_on, ptpx_on, trace injections, decompile_models, primary group, other output groups.
+auto_focus:(icpp_pgm "auto_focus" [true true false false true true primary] RUN_ALWAYS 0us VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+
+; initial application objects.
+
+self:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+; (mk.val self essence actor 1) [[SYNC_STATE now 1 forever stdin nil]]
+
+; drive targets; drives are goals whose target fact points to an entity.
+run:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
