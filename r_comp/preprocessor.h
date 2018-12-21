@@ -105,6 +105,7 @@ namespace	r_comp{
 		uint32	line;
 		std::list<RepliStruct	*>	args;
 		RepliStruct	*parent;
+		std::string filePath_;
 
 		RepliStruct(RepliStruct::Type type);
 		~RepliStruct();
@@ -112,11 +113,17 @@ namespace	r_comp{
 		void	reset();	//	remove rags that are objects.
 
 		uint32	getIndent(std::istream *stream);
-		int32	parse(std::istream	*stream,uint32	&curIndent,uint32	&prevIndent,int32	paramExpect=0);
-		bool	parseDirective(std::istream *stream,uint32	&curIndent, uint32	&prevIndent);
+		int32	parse(std::istream	*stream,const std::string& filePath,uint32	&curIndent,uint32	&prevIndent,int32	paramExpect=0);
+		bool	parseDirective(std::istream *stream,const std::string& filePath,uint32	&curIndent, uint32	&prevIndent);
 		int32	process();
 
 		RepliStruct	*findAtom(const	std::string &name);
+		/**
+		 * Load the Replicode file from the filename and call parse, which will store the
+		 * filename in any !load directives for later use.
+		 * @param filename The file path which is already combined with the directory of the code with the !load directive.
+		 * @return The parsed code.
+		 */
 		RepliStruct	*loadReplicodeFile(const std::string &filename);
 
 		RepliStruct	*clone()	const;
@@ -175,6 +182,7 @@ namespace	r_comp{
 		Preprocessor();
 		~Preprocessor();
 		bool	process(std::istream		*stream,			//	if an ifstream, stream must be open.
+						const std::string& filePath,				//	the file path of the ifstream.
 						std::ostringstream	*outstream,			//	output stream=input stream where macros are expanded.
 						std::string			&error,				//	set when function fails, e.g. returns false.
 						Metadata			*metadata=NULL);	//	process will fill class_image, or use the exiting one if NULL.

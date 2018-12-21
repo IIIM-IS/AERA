@@ -1,7 +1,7 @@
 ; test 1,2 and 3 together.
 
-!load C:/IIIM/AERA/Replicode/Test/V1.2/test.domain.replicode
-; !load C:/IIIM/AERA/Replicode/Test/V1.2/drives.replicode
+!load test.domain.replicode
+; !load drives.replicode
 
 
 ; input generators.

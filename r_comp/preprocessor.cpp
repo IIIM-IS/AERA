@@ -75,9 +75,11 @@
 //_/_/
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
+#include	<experimental/filesystem>
 #include	"preprocessor.h"
 #include	"compiler.h"
 #include	"../../CoreLibrary/CoreLibrary/../../CoreLibrary/CoreLibrary/utils.h"
+namespace fs = std::experimental::filesystem;
 
 
 namespace	r_comp{
@@ -136,7 +138,7 @@ uint32	RepliStruct::getIndent(std::istream	*stream){
 	return	count/3;
 }
 
-int32	RepliStruct::parse(std::istream *stream,uint32	&curIndent,uint32	&prevIndent,int32	paramExpect){
+int32	RepliStruct::parse(std::istream *stream,const std::string& filePath,uint32	&curIndent,uint32	&prevIndent,int32	paramExpect){
 
 	char c = 0, lastc = 0, lastcc, tc;
 	std::string str, label;
@@ -165,8 +167,11 @@ int32	RepliStruct::parse(std::istream *stream,uint32	&curIndent,uint32	&prevInde
 					subStruct = new RepliStruct(Directive);
 					subStruct->parent = this;
 					args.push_back(subStruct);
-					if (!subStruct->parseDirective(stream, curIndent, prevIndent))
+					if (!subStruct->parseDirective(stream, filePath, curIndent, prevIndent))
 						return -1;
+					if (subStruct->cmd.compare("!load") == 0)
+						// Save the filePath of the containing file for later.
+						subStruct->filePath_ = filePath;
 				}
 				else {
 					error += "Directive not allowed inside a structure. ";
@@ -200,7 +205,7 @@ int32	RepliStruct::parse(std::istream *stream,uint32	&curIndent,uint32	&prevInde
 						subStruct->label = label;
 						label = "";
 						args.push_back(subStruct);
-						returnIndent = subStruct->parse(stream, curIndent, prevIndent);
+						returnIndent = subStruct->parse(stream, filePath, curIndent, prevIndent);
 						expectSet = false;
 						if (returnIndent < 0)
 							return -1;
@@ -213,7 +218,7 @@ int32	RepliStruct::parse(std::istream *stream,uint32	&curIndent,uint32	&prevInde
 					else {
 						subStruct = new RepliStruct(Structure);
 						args.push_back(subStruct);
-						returnIndent = subStruct->parse(stream, curIndent, prevIndent);
+						returnIndent = subStruct->parse(stream, filePath, curIndent, prevIndent);
 						expectSet = false;
 						if (returnIndent < 0)
 							return -1;
@@ -310,7 +315,7 @@ int32	RepliStruct::parse(std::istream *stream,uint32	&curIndent,uint32	&prevInde
 				label = "";
 				subStruct->parent = this;
 				args.push_back(subStruct);
-				returnIndent = subStruct->parse(stream, curIndent, prevIndent);
+				returnIndent = subStruct->parse(stream, filePath, curIndent, prevIndent);
 				if (returnIndent < 0)
 					return -1;
 				if ((paramExpect > 0) && (++paramCount == paramExpect))
@@ -370,7 +375,7 @@ int32	RepliStruct::parse(std::istream *stream,uint32	&curIndent,uint32	&prevInde
 				label = "";
 				subStruct->parent = this;
 				args.push_back(subStruct);
-				returnIndent = subStruct->parse(stream, curIndent, prevIndent);
+				returnIndent = subStruct->parse(stream, filePath, curIndent, prevIndent);
 				if (returnIndent < 0)
 					return -1;
 				if ((paramExpect > 0) && (++paramCount == paramExpect))
@@ -460,7 +465,7 @@ int32	RepliStruct::parse(std::istream *stream,uint32	&curIndent,uint32	&prevInde
 					subStruct->label = label;
 					label = "";
 					args.push_back(subStruct);
-					returnIndent = subStruct->parse(stream, curIndent, prevIndent);
+					returnIndent = subStruct->parse(stream, filePath, curIndent, prevIndent);
 					if (returnIndent < 0)
 						return -1;
 					if ((paramExpect > 0) && (++paramCount == paramExpect))
@@ -498,7 +503,7 @@ int32	RepliStruct::parse(std::istream *stream,uint32	&curIndent,uint32	&prevInde
 }
 
 
-bool	RepliStruct::parseDirective(std::istream	*stream,uint32	&curIndent,uint32	&prevIndent){
+bool	RepliStruct::parseDirective(std::istream	*stream,const std::string& filePath,uint32	&curIndent,uint32	&prevIndent){
 
 	std::string str = "!";
 //	RepliStruct* subStruct;
@@ -561,7 +566,7 @@ bool	RepliStruct::parseDirective(std::istream	*stream,uint32	&curIndent,uint32	&
 		return true;
 	}
 
-	if (parse(stream, curIndent, prevIndent, paramCount) != 0) {
+	if (parse(stream, filePath, curIndent, prevIndent, paramCount) != 0) {
 		error += "Error parsing the arguments for directive '" + cmd + "'. ";
 		return false;
 	}
@@ -660,9 +665,16 @@ int32	RepliStruct::process(){
 			}
 			else if (structure->cmd.compare("!load") == 0) {
 				// Check for a load directive...
-				newStruct = loadReplicodeFile(structure->args.front()->cmd);
+				fs::path loadPath = fs::path(structure->args.front()->cmd);
+				if (loadPath.is_relative()) {
+					// Combine the relative path with the directory of the containing file.
+					fs::path containingDirectory = fs::path(structure->filePath_).parent_path();
+					loadPath = containingDirectory / loadPath;
+				}
+
+				newStruct = loadReplicodeFile(loadPath.string());
 				if (newStruct == NULL) {
-					structure->error += "Load: File '" + structure->args.front()->cmd + "' cannot be read! ";
+					structure->error += "Load: File '" + loadPath.string() + "' cannot be read! ";
 					return -1;
 				}
 				else if ( (loadError = newStruct->printError()).size() > 0 ) {
@@ -741,7 +753,7 @@ RepliStruct	*RepliStruct::loadReplicodeFile(const	std::string	&filename){
 	}
 	// create new Root structure
 	uint32	a=0,b=0;
-	if (newRoot->parse(&loadStream, a, b) < 0) {
+	if (newRoot->parse(&loadStream, filename, a, b) < 0) {
 		// error is already recorded in newRoot
 	}
 	if (!loadStream.eof())
@@ -1013,6 +1025,7 @@ bool	RepliCondition::isActive(UNORDERED_MAP<std::string,RepliMacro	*>	&RepliMacr
 	}
 
 	bool	Preprocessor::process(std::istream			*stream,
+									const std::string& filePath,
 								  std::ostringstream	*outstream,
 								  std::string			&error,
 								  Metadata				*metadata){
@@ -1020,7 +1033,7 @@ bool	RepliCondition::isActive(UNORDERED_MAP<std::string,RepliMacro	*>	&RepliMacr
 		root->reset();	//	trims root from previously preprocessed objects.
 
 		uint32	a=0, b=0;
-		if(root->parse(stream,a,b)<0){
+		if(root->parse(stream,filePath,a,b)<0){
 
 			error=root->printError();
 			return	false;

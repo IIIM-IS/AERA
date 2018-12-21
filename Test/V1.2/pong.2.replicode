@@ -1,7 +1,7 @@
 ; Similar to pong.1.replicode a debug combinations of CTPX, GTPX and PTPX; goal-driven
 ; Here the ball travels without walls at a constant speed
 
-!load C:/IIIM/AERA/Replicode/Test/V1.2/drives.replicode
+!load drives.replicode
 
 ;;;;;;;;;;;;;
 ;; objects ;;
