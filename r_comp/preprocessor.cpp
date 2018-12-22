@@ -696,11 +696,13 @@ int32	RepliStruct::process(){
 				// we want to remove the !load line, so get the next line
 				iter++;
 				args.remove(tempStruct);
-				// and because we changed the list, repeat
-				tempStruct = (*iter); 
-				iter = args.begin();
-				iterEnd = args.end();
-				while ((*iter) != tempStruct) iter++;
+				if (iter != iterEnd) {
+					// and because we changed the list, repeat
+					tempStruct = (*iter);
+					iter = args.begin();
+					iterEnd = args.end();
+					while ((*iter) != tempStruct) iter++;
+				}
 				// now we have replaced the !load line with the loaded lines
 				changes++;
 			}
@@ -737,6 +739,10 @@ int32	RepliStruct::process(){
 			structure->cmd = String::Int2String(Counters[structure->cmd]++);
 			changes++;
 		}
+
+		// The iter may already be moved to the end, so check here before the for loop increments it.
+		if (iter == iterEnd)
+			break;
 	}
 	
 	return changes;
