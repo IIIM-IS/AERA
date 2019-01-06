@@ -95,6 +95,7 @@ namespace	r_comp{
 		static	UNORDERED_MAP<std::string,int32>			Counters;
 		static	std::list<RepliCondition	*>				Conditions;
 		static	uint32										GlobalLine;
+		static	std::vector<std::string> LoadedFilePaths;
 
 		enum Type {Root,Structure,Set,Atom,Directive,Condition,Development};
 		Type type;
@@ -125,6 +126,15 @@ namespace	r_comp{
 		 * @return The parsed code.
 		 */
 		RepliStruct	*loadReplicodeFile(const std::string &filename);
+		/**
+		 * Search RepliStruct::LoadedFilePaths to check if the filePath is already loaded. This checks for
+		 * for equivalent file paths. So, for example, "Test/file.replicode" will match with
+		 * "/work/AERA/Test/file.replicode" and "Test/../Test/file.replicode" if they all
+		 * refer to the same file.
+		 * @param filePath The file path to check.
+		 * @return True if an equivalend file path is already loaded, otherwise false.
+		 */
+		static bool isFileLoaded(const std::string& filePath);
 
 		RepliStruct	*clone()	const;
 		std::string	print()	const;
