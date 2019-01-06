@@ -127,7 +127,7 @@ namespace	r_comp{
 		 */
 		RepliStruct	*loadReplicodeFile(const std::string &filename);
 		/**
-		 * Search RepliStruct::LoadedFilePaths to check if the filePath is already loaded. This checks for
+		 * Search RepliStruct::LoadedFilePaths to check if the filePath is already loaded. This checks
 		 * for equivalent file paths. So, for example, "Test/file.replicode" will match with
 		 * "/work/AERA/Test/file.replicode" and "Test/../Test/file.replicode" if they all
 		 * refer to the same file.
