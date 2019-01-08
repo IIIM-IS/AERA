@@ -752,9 +752,10 @@ int32	RepliStruct::process(){
 RepliStruct	*RepliStruct::loadReplicodeFile(const	std::string	&filename){
 
 	RepliStruct* newRoot = new RepliStruct(Root);
-	if (isFileLoaded(filename))
+	if (isFileLoaded(filename)) {
 		// This file was already loaded. Skip it by returning an empty newRoot.
 		return newRoot;
+	}
 
 	// Mark this file as loaded.
 	LoadedFilePaths.push_back(filename);
@@ -780,8 +781,8 @@ bool RepliStruct::isFileLoaded(const std::string& filePath) {
 	for (auto loadedFilePath = LoadedFilePaths.begin();
 			 loadedFilePath != LoadedFilePaths.end();
 			 ++loadedFilePath) {
-    if (fs::equivalent(filePath, *loadedFilePath))
-      return true;
+		if (fs::equivalent(filePath, *loadedFilePath))
+		  return true;
 	}
 
   return false;
