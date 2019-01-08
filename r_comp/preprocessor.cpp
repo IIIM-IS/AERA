@@ -88,6 +88,7 @@ UNORDERED_MAP<std::string,RepliMacro	*>	RepliStruct::RepliMacros;
 UNORDERED_MAP<std::string,int32>			RepliStruct::Counters;
 std::list<RepliCondition	*>				RepliStruct::Conditions;
 uint32										RepliStruct::GlobalLine=1;
+std::vector<std::string> RepliStruct::LoadedFilePaths;
 
 RepliStruct::RepliStruct(RepliStruct::Type type) {
 	this->type = type;
@@ -751,6 +752,14 @@ int32	RepliStruct::process(){
 RepliStruct	*RepliStruct::loadReplicodeFile(const	std::string	&filename){
 
 	RepliStruct* newRoot = new RepliStruct(Root);
+	if (isFileLoaded(filename)) {
+		// This file was already loaded. Skip it by returning an empty newRoot.
+		return newRoot;
+	}
+
+	// Mark this file as loaded.
+	LoadedFilePaths.push_back(filename);
+
 	std::ifstream loadStream(filename.c_str());
 	if (loadStream.bad() || loadStream.fail() || loadStream.eof()) {
 		newRoot->error += "Load: File '" + filename + "' cannot be read! ";
@@ -768,6 +777,16 @@ RepliStruct	*RepliStruct::loadReplicodeFile(const	std::string	&filename){
 	return newRoot;
 }
 
+bool RepliStruct::isFileLoaded(const std::string& filePath) {
+	for (auto loadedFilePath = LoadedFilePaths.begin();
+			 loadedFilePath != LoadedFilePaths.end();
+			 ++loadedFilePath) {
+		if (fs::equivalent(filePath, *loadedFilePath))
+		  return true;
+	}
+
+  return false;
+}
 
 std::string	RepliStruct::print()	const{
 
@@ -1035,6 +1054,11 @@ bool	RepliCondition::isActive(UNORDERED_MAP<std::string,RepliMacro	*>	&RepliMacr
 								  std::ostringstream	*outstream,
 								  std::string			&error,
 								  Metadata				*metadata){
+
+		// Mark this file as loaded. We don't check if it is already loaded because
+		// this is called from the top level Init (not from a !load directive) and we
+		// assume that it won't call this twice for the same file.
+		RepliStruct::LoadedFilePaths.push_back(filePath);
 
 		root->reset();	//	trims root from previously preprocessed objects.
 
