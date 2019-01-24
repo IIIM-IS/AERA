@@ -19,12 +19,20 @@ b:(ent 1)
 ;;;;;;;;;;;;;;;;;;;;;
 ;; Top-level model ;;
 
-m_run_0:(mdl |[] []
-   (fact (mk.val b: position_y : :) t0: t1: ::)
-   (fact run t0: t1: ::); drive.
-|[]
-|[]
-[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 1 forever primary nil 1]]
+m_run_0:(mdl 
+|[]; template arguments
+[]; LHS and RHS patterns of the model
+   (fact (mk.val b: position_y : :) t0: t1: ::); LHS
+   (fact run t0: t1: ::);                 drive. RHS
+|[]; forward guards
+|[]; backward guards
+[stdin drives]; output groups
+1; strength of the model
+1; number of evidences
+1; success rate
+0; derivative of the success rate
+1; psln_tr (saliency change propagation threshold)
+) [[SYNC_ONCE now 1 forever primary nil 1]]
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; input generators ;;
