@@ -760,7 +760,7 @@ RepliStruct	*RepliStruct::loadReplicodeFile(const	std::string	&filename){
 	// Mark this file as loaded.
 	LoadedFilePaths.push_back(filename);
 
-	std::ifstream loadStream(filename.c_str());
+	std::ifstream loadStream(filename.c_str(), std::ios::binary | ios::in);
 	if (loadStream.bad() || loadStream.fail() || loadStream.eof()) {
 		newRoot->error += "Load: File '" + filename + "' cannot be read! ";
 		loadStream.close();
