@@ -127,7 +127,7 @@ namespace	r_exec{
 
 	bool	Compile(const	char	*filename,std::string	&error,bool	compile_metadata){
 
-		std::ifstream	source_code(filename);
+		std::ifstream	source_code(filename, std::ios::binary | ios::in);
 		if(!source_code.good()){
 
 			error="unable to load file ";
