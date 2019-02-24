@@ -24,12 +24,35 @@ typedef uint64 timestamp_t;
 typedef P<r_code::Code> event_t;
 
 
+// Added to handle operator overloading and map references 
+inline bool operator<(event_t lhs, event_t rhs) { return (r_code::Code*)lhs < (r_code::Code*)rhs; }
+inline bool operator>(event_t lhs, event_t rhs) { return lhs < rhs; }
+
+
+struct event_less
+{
+	bool operator()(const event_t lhs, const event_t rhs)  const { return lhs < rhs; }
+};
+
+struct event_pair
+{
+	bool operator()(std::pair<event_t, size_t> lhs, std::pair<event_t, size_t> rhs) const { return lhs.first < rhs.first; }
+};
+
+struct event_compare
+{
+	bool operator() (const event_t e1, const event_t e2) const
+	{
+		return e1->getOID() < e2->getOID();
+	}
+};
+
 struct Candidate {
 	std::map<int,event_t> G; // mapping from [1..] to event_types
 #ifdef WINEPI_SERIAL
 	std::multimap<int,int> R; // list of tuples of type (int,int)
 #endif
-	std::map<event_t,size_t> type_count;
+	std::map<event_t,size_t,event_less> type_count;
 	int block_start;
 	int event_count;
 	int freq_count;
@@ -180,7 +203,7 @@ struct Sequence {
 		std::stringstream ss;
 		ss << "<{";
 		bool comma = false;
-		for(std::multimap<timestamp_t,event_t>::iterator it = seq.begin(); it != seq.end(); ++it) {
+		for(std::multimap<timestamp_t,event_t,event_compare>::iterator it = seq.begin(); it != seq.end(); ++it) {
 			if(comma)
 				ss << ", ";
 			else
@@ -204,7 +227,7 @@ public:
 	double min_conf;
 	int max_size;
 
-	std::set<event_t> event_types;
+	std::set<event_t, event_compare> event_types;
 
 	WinEpi(/*std::multimap<timestamp_t,event_t>& seq, int win, double min_fr, double min_conf, int max_size = -1*/);
 
