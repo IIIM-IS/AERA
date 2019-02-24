@@ -74,9 +74,9 @@ struct Candidate {
 	bool operator<(const Candidate& e) const {
 		std::map<int,event_t>::const_iterator it = G.begin(), it2 = e.G.begin();
 		for(; it != G.end() && it2 != e.G.end(); ++it, ++it2)
-			if(it->second < it2->second)
+			if(it->second->getOID() < it2->second->getOID())
 				return true;
-			else if(it->second > it2->second)
+			else if(it->second->getOID() > it2->second->getOID())
 				return false;
 		return (it2 != e.G.end());
 	}
