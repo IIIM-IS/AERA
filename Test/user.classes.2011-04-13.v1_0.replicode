@@ -1,0 +1,44 @@
+!load c:/work/replicode/Test/Demo1/std.replicode
+
+
+; utilities.
+
+!def (std_grp _upr _sln_thr _act_thr _vis_thr _ntf_grps) (grp _upr _sln_thr _act_thr _vis_thr 1 0 1 0 0 1 0 0 1 1 1 1 0 0 0 0 0 0 1 0 1 1 0 1 0 0 _ntf_grps 1); c-salient and c-active.
+
+
+; classes.
+!class (vec3 x:nb y:nb z:nb)
+
+
+; device functions.
+
+!dfn (grab [:ent :us]); arg0 hand, deadline
+
+; initial groups.
+
+root:(std_grp 0 0 0 0 [nil]) [[SYNC_FRONT now 0 forever nil nil COV_OFF 0]]
+
+stdout:(std_grp 0 0 0 0 |[]) [[SYNC_FRONT now 0 forever root nil COV_OFF 0]]
+
+stdin:(std_grp 1 0 0 0 [stdout]) [[SYNC_FRONT now 0 forever root nil COV_OFF 1]]
+
+
+; application ontology.
+
+; attributes.
+
+position:(ont 1) [[SYNC_FRONT now 0 forever root nil]]
+
+attachment:(ont 1) [[SYNC_FRONT now 0 forever root nil]]
+
+; values.
+
+self:(ent 1) [[SYNC_FRONT now 0 forever root nil]]
+
+a_cup:(ent 1) [[SYNC_FRONT now 0 forever root nil]]
+
+the_right_hand:(ent 1) [[SYNC_FRONT now 0 forever root nil]]
+
+; initial application objects.
+
+
