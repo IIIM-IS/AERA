@@ -90,7 +90,11 @@ void WinEpi::algorithm_2(std::vector<std::vector<Candidate> >& F) {
 	int el = 1;
 	std::vector<std::vector<Candidate> > C(2);
 
+#if 0
 	C[el].assign(event_types.begin(), event_types.end());
+#else
+  printf("******************Error: WinEpi::algorithm_2: Using C[el].assign\n");
+#endif
 	
 	while(!C[el].empty()) {
 #		ifdef WINEPI_DEBUG
