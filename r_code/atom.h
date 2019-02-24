@@ -187,6 +187,15 @@ namespace	r_code{
 	};
 }
 
+namespace std {
+
+	template<>
+	struct hash<r_code::Atom>
+	{
+		size_t operator()(const r_code::Atom& a) const { return a.atom; }
+	};
+
+} // namespace std
 
 #include	"atom.inline.cpp"
 
