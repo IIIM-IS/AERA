@@ -1,0 +1,28 @@
+# Ignore files without extensions
+*
+!/**/
+!*.*
+
+# Release folders
+/Release/*
+*/Release/*
+*/*/Release/*
+*/*/*/Release/*
+
+# Debug folders
+/Debug/*
+*/Debug/*
+*/*/Debug/*
+*/*/*/Debug/*
+
+# Visual Studio user files
+*.vs/
+*.filters
+*.user
+*.sdf
+*.suo
+
+# Ignore log files
+*.log
+/Test/decompiled.txt
+/Test/decompiled_objects.txt
