@@ -27,7 +27,9 @@ Install on Windows
 * If you are running Windows in VirtualBox, launch VirtualBox. In the main screen, click Windows 10 and click Start.
 * Launch the Microsoft Edge browser and go to https://github.com/IIIM-IS/replicode . Sign in. Change the branch to june2011. Now you can copy/paste these instructions from the README. 
 * To install Git command line, use the Microsoft Edge browser to download and install from https://git-scm.com/download/win .
-* Click the Windows Start icon. In the search window, type Command Prompt. In the command prompt screen, enter:
+* Click the Windows Start icon. In the search window, type Command Prompt. In the command prompt screen, enter
+
+
 
     cd \
     mkdir work
@@ -40,6 +42,8 @@ Install on Windows
     cd replicode
     git checkout june2011
     cd ..
+
+
 
 * Download and run the Visual Studio Community 2017 installer from https://visualstudio.microsoft.com/downloads .
 * Click "Desktop development with C++". In details, click "Windows 8.1 SDK and UCRT SDK". Click Install.
