@@ -24,12 +24,13 @@ Windows virtual machine (or are running directly on Windows), skip to "Install o
 Install on Windows
 ==================
 
-* If you are running Windows in VirtualBox, launch VirtualBox. In the main screen, click Windows 10 and click Start.
-* Launch the Microsoft Edge browser and go to https://github.com/IIIM-IS/replicode . Sign in. Change the branch to june2011. Now you can copy/paste these instructions from the README. 
-* To install Git command line, use the Microsoft Edge browser to download and install from https://git-scm.com/download/win .
-* Click the Windows Start icon. In the search window, type Command Prompt. In the command prompt screen, enter
+If you are running Windows in VirtualBox, launch VirtualBox. In the main screen, click Windows 10 and click Start.
 
+Launch the Microsoft Edge browser and go to https://github.com/IIIM-IS/replicode . Sign in. Change the branch to june2011. Now you can copy/paste these instructions from the README. 
 
+To install Git command line, use the Microsoft Edge browser to download and install from https://git-scm.com/download/win .
+
+Click the Windows Start icon. In the search window, type Command Prompt. In the command prompt screen, enter:
 
     cd \
     mkdir work
@@ -43,14 +44,17 @@ Install on Windows
     git checkout june2011
     cd ..
 
+Download and run the Visual Studio Community 2017 installer from https://visualstudio.microsoft.com/downloads .
 
+Click "Desktop development with C++". In details, click "Windows 8.1 SDK and UCRT SDK". Click Install.
 
-* Download and run the Visual Studio Community 2017 installer from https://visualstudio.microsoft.com/downloads .
-* Click "Desktop development with C++". In details, click "Windows 8.1 SDK and UCRT SDK". Click Install.
-* In Visual Studio, open the solution c:\work\replicode\Replicode.sln . Right-click on the Test project and click Properties. In Debugging, set "Command Arguments" to settings.xml .
-* In the Build menu, click "Build Solution".
-* In settings.xml , use source_file_name to set the file to run. The default is to run the following annotated example which creates goals to move a hand to grasp an object: https://github.com/IIIM-IS/replicode/blob/june2011/Test/test.1.2011-04-13.v1_0.replicode
-* In the Debug menu, click "Start Without Debugging".
+In Visual Studio, open the solution c:\work\replicode\Replicode.sln . Right-click on the Test project and click Properties. In Debugging, set "Command Arguments" to settings.xml .
+
+In the Build menu, click "Build Solution".
+
+In settings.xml , use source_file_name to set the file to run. The default is to run the following annotated example which creates goals to move a hand to grasp an object: https://github.com/IIIM-IS/replicode/blob/june2011/Test/test.1.2011-04-13.v1_0.replicode
+
+In the Debug menu, click "Start Without Debugging".
 
 
 
