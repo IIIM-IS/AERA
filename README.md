@@ -10,7 +10,7 @@ Install Windows on macOS in VirtualBox
 These are instructions to set up a Windows virtual machine on macOS. If you already have a
 Windows virtual machine (or are running directly on Windows), skip to "Install on Windows" below.
 
-* Open the web page https://www.microsoft.com/en-us/software-download/windows10 .
+* Open the web page https://www.microsoft.com/en-us/software-download/windows10 . 
 * Under "Select Edition", select the latest Windows 10 edition and click Confirm.
 * Under "Select the product language", select English and click Confirm.
 * Click 64-bit download. This is a big file and will take several minutes to download.
