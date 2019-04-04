@@ -204,5 +204,8 @@
     <None Include="V1.1\user.classes.replicode">
       <Filter>V1.1</Filter>
     </None>
+    <None Include="V1.1\test.1.2011-04-13.v1_0.replicode">
+      <Filter>V1.1</Filter>
+    </None>
   </ItemGroup>
 </Project>

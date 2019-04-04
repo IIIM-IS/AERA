@@ -180,6 +180,7 @@
     <None Include="V1.1\helgi.replicode" />
     <None Include="V1.1\rgrp.user.classes.replicode" />
     <None Include="V1.1\std.replicode" />
+    <None Include="V1.1\test.1.2011-04-13.v1_0.replicode" />
     <None Include="V1.1\test.1.replicode" />
     <None Include="V1.1\test.10.replicode" />
     <None Include="V1.1\test.11.replicode" />
