@@ -17,7 +17,6 @@
 
 # Visual Studio user files
 *.vs/
-*.filters
 *.user
 *.sdf
 *.suo
