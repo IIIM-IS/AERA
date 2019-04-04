@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Test.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="settings.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="settings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="V1.1">
+      <UniqueIdentifier>{f5385e29-5d95-44b3-8746-2717f2bebb72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="V1.2">
+      <UniqueIdentifier>{608407f2-f9e0-445f-9570-9c960b19fe7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Demo1">
+      <UniqueIdentifier>{f0310363-2f34-4eea-b9b7-d96fa1abfeec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Correlator.Data.Generation">
+      <UniqueIdentifier>{77df19dd-fc6b-441d-86df-6bb74ccc89a6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Demo1\initial.HLP.replicode">
+      <Filter>Demo1</Filter>
+    </None>
+    <None Include="Demo1\main.replicode">
+      <Filter>Demo1</Filter>
+    </None>
+    <None Include="Demo1\sim.devices.replicode">
+      <Filter>Demo1</Filter>
+    </None>
+    <None Include="Demo1\std.replicode">
+      <Filter>Demo1</Filter>
+    </None>
+    <None Include="Demo1\test.1.replicode">
+      <Filter>Demo1</Filter>
+    </None>
+    <None Include="Demo1\user.classes.replicode">
+      <Filter>Demo1</Filter>
+    </None>
+    <None Include="Correlator.Data.Generation\motor.babbling.replicode">
+      <Filter>Correlator.Data.Generation</Filter>
+    </None>
+    <None Include="Correlator.Data.Generation\user.classes.replicode">
+      <Filter>Correlator.Data.Generation</Filter>
+    </None>
+    <None Include="V1.2\drives.replicode">
+      <Filter>V1.2</Filter>
+    </None>
+    <None Include="V1.2\hello.world.1.replicode">
+      <Filter>V1.2</Filter>
+    </None>
+    <None Include="V1.2\hello.world.2.replicode">
+      <Filter>V1.2</Filter>
+    </None>
+    <None Include="V1.2\hello.world.3.replicode">
+      <Filter>V1.2</Filter>
+    </None>
+    <None Include="V1.2\hello.world.replicode">
+      <Filter>V1.2</Filter>
+    </None>
+    <None Include="V1.2\main.replicode">
+      <Filter>V1.2</Filter>
+    </None>
+    <None Include="V1.2\pattern.replicode">
+      <Filter>V1.2</Filter>
+    </None>
+    <None Include="V1.2\pong.1.replicode">
+      <Filter>V1.2</Filter>
+    </None>
+    <None Include="V1.2\pong.2.replicode">
+      <Filter>V1.2</Filter>
+    </None>
+    <None Include="V1.2\pong.3.replicode">
+      <Filter>V1.2</Filter>
+    </None>
+    <None Include="V1.2\std.replicode">
+      <Filter>V1.2</Filter>
+    </None>
+    <None Include="V1.2\test.1.replicode">
+      <Filter>V1.2</Filter>
+    </None>
+    <None Include="V1.2\test.2.replicode">
+      <Filter>V1.2</Filter>
+    </None>
+    <None Include="V1.2\test.3.replicode">
+      <Filter>V1.2</Filter>
+    </None>
+    <None Include="V1.2\test.4.replicode">
+      <Filter>V1.2</Filter>
+    </None>
+    <None Include="V1.2\test.domain.replicode">
+      <Filter>V1.2</Filter>
+    </None>
+    <None Include="V1.2\user.classes.replicode">
+      <Filter>V1.2</Filter>
+    </None>
+    <None Include="V1.1\helgi.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\rgrp.user.classes.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\std.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.1.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.2.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.3.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.4.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.5.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.6.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.7.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.8.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.9.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.10.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.11.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.12.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.13.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.14.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.15.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.16.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.17.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.18.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.19.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.20.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.21.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.22.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.23.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.24.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.25.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.26.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.helgi.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.integration.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.pm.var.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.rgrp.1.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\test.visualizer.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+    <None Include="V1.1\user.classes.replicode">
+      <Filter>V1.1</Filter>
+    </None>
+  </ItemGroup>
+</Project>
