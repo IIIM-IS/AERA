@@ -112,7 +112,7 @@ i_test_fwd_same_pos:(ipgm test_fwd_same_pos |[] RUN_ONCE 150000us VOLATILE NOTIF
 ;   2. make a fact that indicates this relation should hold true 30000 microseconds in the future
 ;   3. make a goal marker that references (2) - the state tha is described in 2 is in fact the goal
 ;   4. make a fact that indicates this goal exists and is valid NOW
-inj_goal:(pgm |[] |[] []
+inj_goal:(pgm |[] |[] |[] []
    (inj []
       v0:(mk.val the_right_hand attachment a_cup 1)
       [SYNC_ONCE now 0 1 stdin nil]
@@ -122,7 +122,7 @@ inj_goal:(pgm |[] |[] []
       [SYNC_ONCE now 0 1 stdin nil]
    )
    (inj []
-      v2:(mk.goal v1 self 1)
+      v2:(goal v1 self 1)
       [SYNC_ONCE now 0 1 stdin nil]
    )
    (inj []
@@ -132,7 +132,7 @@ inj_goal:(pgm |[] |[] []
 1) |[]
 
 ; This program has ACTIVATION=1 and will thus run.
-i_inj_goal:(ipgm inj_goal |[] RUN_ONCE 150000us SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+i_inj_goal:(ipgm inj_goal |[] RUN_ONCE 150000us VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
 
 ;----------------------------------------------------------------------
 
@@ -144,14 +144,12 @@ i_inj_goal:(ipgm inj_goal |[] RUN_ONCE 150000us SILENT 1) [[SYNC_ONCE now 0 fore
 ; Essentially, this program creates the results of the grab command.
 
 environment_resp:(pgm |[] []
-   []
-      (ptn (fact (mk.goal (fact c:(cmd grab_hand [the_right_hand] ::) ::) ::) ::) |[])
-      (ptn (fact (mk.val the_right_hand position pos1: ::) ::) |[])
-      (ptn (fact (mk.val something: position pos2: ::) ::) |[])
-   |[]
-   []
-      (<> something the_right_hand)
-      (= pos1 pos2)
+   (ptn (fact (goal (fact c:(cmd grab_hand [the_right_hand] ::) ::) ::) ::) |[])
+   (ptn (fact (mk.val the_right_hand position pos1: ::) ::) |[])
+   (ptn (fact (mk.val something: position pos2: ::) ::) |[])
+[]
+   (<> something the_right_hand)
+   (= pos1 pos2)
 []
    (inj []
       (fact c now now 1 1)
@@ -168,14 +166,14 @@ environment_resp:(pgm |[] []
 1) |[]
 
 ; This program has ACTIVATION=1 and thus run.
-i_environment_resp:(ipgm environment_resp |[] RUN_ALWAYS 0us NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+i_environment_resp:(ipgm environment_resp |[] RUN_ALWAYS 0us VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
 
 ;----------------------------------------------------------------------
 
 ; This program injects the grab command and a fact indicating that it has 30000us as its deadline.
 ; Only present for testing - we do not need this if have the inj_goal program running.
 
-inj_cmd:(pgm |[] |[] []
+inj_cmd:(pgm |[] |[] |[] []
    (inj []
       v0:(cmd grab_hand [the_right_hand] 1)
       [SYNC_ONCE now 0 1 stdin nil]
@@ -187,4 +185,4 @@ inj_cmd:(pgm |[] |[] []
 1) |[]
 
 ; Note that this instansiated program has ACTIVATION=0 and thus does nothing
-i_inj_cmd:(ipgm inj_cmd |[] RUN_ONCE 150000us NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 0]]
+i_inj_cmd:(ipgm inj_cmd |[] RUN_ONCE 150000us VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 0]]
