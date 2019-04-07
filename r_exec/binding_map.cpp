@@ -1128,7 +1128,9 @@ namespace	r_exec{
 
 	void	HLPBindingMap::reset_bwd_timings(_Fact	*reference_fact){	// valuate at after_index and after_index+1 from the timings of the reference fact.
 
+      if (bwd_after_index >= 0 && bwd_after_index < map.size())
 		map[bwd_after_index]=new	StructureValue(this,reference_fact,reference_fact->code(FACT_AFTER).asIndex());
+      if (bwd_before_index >= 0 && bwd_before_index < map.size())
 		map[bwd_before_index]=new	StructureValue(this,reference_fact,reference_fact->code(FACT_BEFORE).asIndex());
 	}
 
