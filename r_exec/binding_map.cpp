@@ -696,7 +696,9 @@ namespace	r_exec{
 
 	void	BindingMap::reset_fwd_timings(_Fact	*reference_fact){	// valuate at after_index and after_index+1 from the timings of the reference object.
 
+      if (fwd_after_index >= 0 && fwd_after_index < map.size())
 		map[fwd_after_index]=new	StructureValue(this,reference_fact,reference_fact->code(FACT_AFTER).asIndex());
+      if (fwd_before_index >= 0 && fwd_before_index < map.size())
 		map[fwd_before_index]=new	StructureValue(this,reference_fact,reference_fact->code(FACT_BEFORE).asIndex());
 	}
 
