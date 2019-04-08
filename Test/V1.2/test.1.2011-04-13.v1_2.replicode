@@ -86,7 +86,7 @@ req_grab_mdl:(mdl |[] [f_i_same_pos_cst f_i_grab_mdl] |[] |[] [stdin] 1 1 1 0 1)
 test_fwd_same_pos:(pgm |[] |[] |[] []
    (inj []
       v0:(mk.val the_right_hand position (vec3 0 0 0) 1)
-      [SYNC_ONCE now 1 forever stdin nil]
+      [SYNC_ONCE now 0 forever stdin nil]
    )
    (inj []
       (fact v0 now now 1 1)
