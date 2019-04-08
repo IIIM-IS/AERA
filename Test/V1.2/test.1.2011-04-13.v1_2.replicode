@@ -86,19 +86,19 @@ req_grab_mdl:(mdl |[] [f_i_same_pos_cst f_i_grab_mdl] |[] |[] [stdin] 1 1 1 0 1)
 test_fwd_same_pos:(pgm |[] |[] |[] []
    (inj []
       v0:(mk.val the_right_hand position (vec3 0 0 0) 1)
-      [SYNC_ONCE now 1 10 stdin nil]
+      [SYNC_ONCE now 1 forever stdin nil]
    )
    (inj []
       (fact v0 now now 1 1)
-      [SYNC_ONCE now 1 10 stdin nil]
+      [SYNC_ONCE now 1 forever stdin nil]
    )
    (inj []
       v1:(mk.val a_cup position (vec3 0 0 0) 1)
-      [SYNC_ONCE now 0 1 stdin nil]
+      [SYNC_ONCE now 0 forever stdin nil]
    )
    (inj []
       (fact v1 now now 1 1)
-      [SYNC_ONCE now 1 10 stdin nil]
+      [SYNC_ONCE now 1 forever stdin nil]
    )
 1) |[]
 
@@ -115,19 +115,19 @@ i_test_fwd_same_pos:(ipgm test_fwd_same_pos |[] RUN_ONCE 150000us VOLATILE NOTIF
 inj_goal:(pgm |[] |[] |[] []
    (inj []
       v0:(mk.val the_right_hand attachment a_cup 1)
-      [SYNC_ONCE now 0 1 stdin nil]
+      [SYNC_ONCE now 0 forever stdin nil]
    )
    (inj []
       v1:(fact v0 (+ now 30000) (+ now 30000) 1 1)
-      [SYNC_ONCE now 0 1 stdin nil]
+      [SYNC_ONCE now 0 forever stdin nil]
    )
    (inj []
       v2:(goal v1 self 1)
-      [SYNC_ONCE now 0 1 stdin nil]
+      [SYNC_ONCE now 0 forever stdin nil]
    )
    (inj []
       (fact v2 now now 1 1)
-      [SYNC_ONCE now 1 1 stdin nil]
+      [SYNC_ONCE now 1 forever stdin nil]
    )
 1) |[]
 
@@ -153,15 +153,15 @@ environment_resp:(pgm |[] []
 []
    (inj []
       (fact c now now 1 1)
-      [SYNC_ONCE now 1 2 stdin nil]
+      [SYNC_ONCE now 1 forever stdin nil]
    )
    (inj []
       a:(mk.val the_right_hand attachment something 1)
-      [SYNC_ONCE now 0 1 stdin nil]
+      [SYNC_ONCE now 0 forever stdin nil]
    )
    (inj []
       (fact a now now 1 1)
-      [SYNC_ONCE now 1 2 stdin nil]
+      [SYNC_ONCE now 1 forever stdin nil]
    )
 1) |[]
 
@@ -176,11 +176,11 @@ i_environment_resp:(ipgm environment_resp |[] RUN_ALWAYS 0us VOLATILE NOTIFY 1) 
 inj_cmd:(pgm |[] |[] |[] []
    (inj []
       v0:(cmd grab_hand [the_right_hand] 1)
-      [SYNC_ONCE now 0 1 stdin nil]
+      [SYNC_ONCE now 0 forever stdin nil]
    )
    (inj []
       v1:(fact v0 (+ now 30000) (+ now 30000) 1 1)
-      [SYNC_ONCE now 1 1 stdin nil]
+      [SYNC_ONCE now 1 forever stdin nil]
    )
 1) |[]
 
