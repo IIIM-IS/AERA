@@ -118,7 +118,7 @@ inj_goal:(pgm |[] |[] |[] []
       [SYNC_ONCE now 0 forever stdin nil]
    )
    (inj []
-      v1:(fact v0 (+ now 30000) (+ now 30000) 1 1)
+      v1:(fact v0 (+ now 30000us) (+ now 30000us) 1 1)
       [SYNC_ONCE now 0 forever stdin nil]
    )
    (inj []
@@ -179,7 +179,7 @@ inj_cmd:(pgm |[] |[] |[] []
       [SYNC_ONCE now 0 forever stdin nil]
    )
    (inj []
-      v1:(fact v0 (+ now 30000) (+ now 30000) 1 1)
+      v1:(fact v0 (+ now 30000us) (+ now 30000us) 1 1)
       [SYNC_ONCE now 1 forever stdin nil]
    )
 1) |[]
