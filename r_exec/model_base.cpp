@@ -267,12 +267,12 @@ namespace	r_exec{
 		{
 			copy = *m;
 			copy.touch_time = Now();
-			black_list.erase(*m);
-			black_list.insert(copy);
+			white_list.erase(*m);
+			white_list.insert(copy);
 
 			//(*m).touch_time=Now();   // jm
 			mdlCS.leave();
-			return	(*m).mdl;
+			return	copy.mdl;
 		}
 		_Mem::Get()->pack_hlp(e.mdl);
 		white_list.insert(e);
@@ -303,11 +303,11 @@ namespace	r_exec{
 
 			copy = *m;
 			copy.touch_time = Now();
-			black_list.erase(*m);
-			black_list.insert(copy);
+			white_list.erase(*m);
+			white_list.insert(copy);
 
 			//(*m).touch_time=Now();  //jm
-			_m0=(*m).mdl;
+			_m0=copy.mdl;
 			Code	*rhs=m1->get_reference(m1->code(m1->code(MDL_OBJS).asIndex()+2).asIndex());
 			Code	*im0=rhs->get_reference(0);
 			im0->set_reference(0,_m0);	// change imdl m0 into imdl _m0.
@@ -330,12 +330,12 @@ namespace	r_exec{
 		if(m!=white_list.end()){
 			copy = *m;
 			copy.touch_time = Now();
-			black_list.erase(*m);
-			black_list.insert(copy);
+			white_list.erase(*m);
+			white_list.insert(copy);
 
 			//(*m).touch_time=Now();  //jm
 			mdlCS.leave();
-			_m1=(*m).mdl;
+			_m1=copy.mdl;
 			return;
 		}
 		if(_m0==m0){
