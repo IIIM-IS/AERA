@@ -15,6 +15,10 @@ b:(ent 1)
    root;      group
    nil;       origin
 ]; Set of views
+ball:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+b_is_a_ball:(mk.val b essence ball 1) |[]
+; Even though (fact b_is_a_ball ::) is not used in this file, the pattern extractor needs it.
+f_b_is_a_ball:(fact b_is_a_ball 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; Top-level model ;;
