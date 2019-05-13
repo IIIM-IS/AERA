@@ -57,7 +57,7 @@ start:(pgm |[] |[] |[] []
    )
    (inj []
       (fact s now MAX_TIME 1 1)
-      [SYNC_ONCE now 1 forever stdin nil]
+      [SYNC_HOLD now 1 forever stdin nil]
    )
 1) |[]
 
