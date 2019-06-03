@@ -1,7 +1,7 @@
 ; Similar to pong.1.replicode a debug combinations of CTPX, GTPX and PTPX; goal-driven
 ; Here the ball travels without walls at a constant speed
 
-!load drives.replicode
+;(apparently unnecessary) !load drives.replicode
 
 ;;;;;;;;;;;;;
 ;; objects ;;
@@ -32,23 +32,23 @@ m_run_k:(mdl |[] []
 |[]
 [stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
-;;;;;;;;;;;;;;;;;;;;;
-;; Top-level model ;;
-
-m_run_0:(mdl 
-|[]; template arguments
-[]; LHS and RHS patterns of the model
-   (fact (mk.val b: position_y : :) t0: t1: ::); LHS
-   (fact run t0: t1: ::);                 drive. RHS
-|[]; forward guards
-|[]; backward guards
-[stdin drives]; output groups
-1; strength of the model
-1; number of evidences
-1; success rate
-0; derivative of the success rate
-1; psln_tr (saliency change propagation threshold)
-) [[SYNC_ONCE now 1 forever primary nil 1]]
+;(apparently unnecessary) ;;;;;;;;;;;;;;;;;;;;;
+;(apparently unnecessary) ;; Top-level model ;;
+;(apparently unnecessary) 
+;(apparently unnecessary) m_run_0:(mdl 
+;(apparently unnecessary) |[]; template arguments
+;(apparently unnecessary) []; LHS and RHS patterns of the model
+;(apparently unnecessary)    (fact (mk.val b: position_y : :) t0: t1: ::); LHS
+;(apparently unnecessary)    (fact run t0: t1: ::);                 drive. RHS
+;(apparently unnecessary) |[]; forward guards
+;(apparently unnecessary) |[]; backward guards
+;(apparently unnecessary) [stdin drives]; output groups
+;(apparently unnecessary) 1; strength of the model
+;(apparently unnecessary) 1; number of evidences
+;(apparently unnecessary) 1; success rate
+;(apparently unnecessary) 0; derivative of the success rate
+;(apparently unnecessary) 1; psln_tr (saliency change propagation threshold)
+;(apparently unnecessary) ) [[SYNC_ONCE now 1 forever primary nil 1]]
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; input generators ;;
