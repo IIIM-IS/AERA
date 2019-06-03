@@ -127,7 +127,7 @@ ipgm0:(ipgm
 pgm0;       the code
 |[];        instantiation values
 RUN_ALWAYS; boolean RUN_ALWAYS/ONCE
-MAX_TIME;   time scope
+20000us;   time scope
 VOLATILE;
 NOTIFY;     notify flag
 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
