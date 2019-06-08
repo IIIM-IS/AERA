@@ -25,30 +25,47 @@ b2:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
 b2_is_a_ball:(mk.val b2 essence ball 1) |[]
 f_b2_is_a_ball:(fact b2_is_a_ball 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 
-m_run_k:(mdl |[] []
-   (fact (cmd grab_hand [b:] ::) t0: t1: ::)
-   (fact (mk.val b: position_y : :) t0: t1: ::)
+cst_ball_position:(cst |[]
+[]
+   (fact (mk.val v0: position_y v1: :) v2: v3: : :)
+   (fact (mk.val v0: essence ball :) v2: v3: : :)
+|[]
+|[]
+[stdin]
+1
+) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+;m_run_k:(mdl |[] []
+;   (fact (cmd grab_hand [b: y:] ::) t0: t1: ::)
+;   ;(fact (icst cst_ball_position |[] [b: :] : :) t0: t1: : :)
+;   (fact (mk.val b: position_y y: :) t0: t1: ::)
+;|[]
+;|[]
+;[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_run_k_template:(mdl |[]
+[]
+   (fact (cmd grab_hand [b: y:] ::) t0: t1: ::)
+   ;(fact (icst cst_ball_position |[] [b: :] : :) t0: t1: : :)
+   (fact (mk.val b: position_y y: :) t0: t1: ::)
 |[]
 |[]
 [stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
-;(apparently unnecessary) ;;;;;;;;;;;;;;;;;;;;;
-;(apparently unnecessary) ;; Top-level model ;;
-;(apparently unnecessary) 
-;(apparently unnecessary) m_run_0:(mdl 
-;(apparently unnecessary) |[]; template arguments
-;(apparently unnecessary) []; LHS and RHS patterns of the model
-;(apparently unnecessary)    (fact (mk.val b: position_y : :) t0: t1: ::); LHS
-;(apparently unnecessary)    (fact run t0: t1: ::);                 drive. RHS
-;(apparently unnecessary) |[]; forward guards
-;(apparently unnecessary) |[]; backward guards
-;(apparently unnecessary) [stdin drives]; output groups
-;(apparently unnecessary) 1; strength of the model
-;(apparently unnecessary) 1; number of evidences
-;(apparently unnecessary) 1; success rate
-;(apparently unnecessary) 0; derivative of the success rate
-;(apparently unnecessary) 1; psln_tr (saliency change propagation threshold)
-;(apparently unnecessary) ) [[SYNC_ONCE now 1 forever primary nil 1]]
+m_goal_position:(mdl
+|[]; template arguments
+[]; LHS and RHS patterns of the model
+   (fact (mk.val b2 position_y 111 :) t0: t1: ::); LHS
+   (fact run t0: t1: ::);                 drive. RHS
+|[]; forward guards
+|[]; backward guards
+[stdin drives]; output groups
+1; strength of the model
+1; number of evidences
+1; success rate
+0; derivative of the success rate
+1; psln_tr (saliency change propagation threshold)
+) [[SYNC_ONCE now 1 forever primary nil 1]]
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; input generators ;;
@@ -97,28 +114,23 @@ pgm0:(pgm
    )
    (prb [1 "print" "updated the position..." [p]]); Can be useful to change usr_operators\Callbacks\callbacks.cpp to print only objects[0]->code(3).asFloat()
    (inj []
-      position2_now:(mk.val b2 position_y py 1)
+      imdl_m_run_k_template:(imdl m_run_k_template [456] |[] false 1) |[]
+   )
+   (inj []
+      (fact imdl_m_run_k_template after before 1 1)
+      [SYNC_ONCE now 1 forever primary nil]
+   )
+   (inj []
+      f_run:(fact run after before 1 1)
       |[]
    )
    (inj []
-      (fact position2_now after before 1 1); The current position of b2 is the same as b.
-      [SYNC_PERIODIC now 1 1 stdin nil]
-   )
-   (inj []
-      position2_desired:(mk.val b2 position_y (+ py (* sy sampling_period)) 1); The desired position for b2, increased the same was as b.
+      g:(goal f_run self 1)
       |[]
    )
    (inj []
-      f_position2_desired:(fact position2_desired (+ after sampling_period) (+ before sampling_period) 1 1); The desired position for b2 as a fact at the current time plus the sampling_period.
-      |[]
-   )
-   (inj []
-      position2_goal:(goal f_position2_desired self 1); A goal for the desired position of b2.
-      |[]
-   )
-   (inj []
-      (fact position2_goal now now 1 1); It is a goal now.
-      [SYNC_ONCE now 1 1 stdin nil]
+      (fact g t1:(now) t1 1 1)
+      [SYNC_ONCE t1 1 forever primary nil]
    )
 1) |[]
 
