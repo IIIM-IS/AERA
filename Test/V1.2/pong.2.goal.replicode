@@ -25,28 +25,18 @@ b2:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
 b2_is_a_ball:(mk.val b2 essence ball 1) |[]
 f_b2_is_a_ball:(fact b2_is_a_ball 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 
-cst_ball_position:(cst |[]
-[]
-   (fact (mk.val v0: position_y v1: :) v2: v3: : :)
-   (fact (mk.val v0: essence ball :) v2: v3: : :)
-|[]
-|[]
-[stdin]
-1
-) [[SYNC_ONCE now 0 forever primary nil 1]]
-
-;m_run_k:(mdl |[] []
-;   (fact (cmd grab_hand [b: y:] ::) t0: t1: ::)
-;   ;(fact (icst cst_ball_position |[] [b: :] : :) t0: t1: : :)
-;   (fact (mk.val b: position_y y: :) t0: t1: ::)
+;cst_ball_position:(cst |[]
+;[]
+;   (fact (mk.val v0: position_y v1: :) v2: v3: : :)
+;   (fact (mk.val v0: essence ball :) v2: v3: : :)
 ;|[]
 ;|[]
-;[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+;[stdin]
+;1
+;) [[SYNC_ONCE now 0 forever primary nil 1]]
 
-m_run_k_template:(mdl |[]
-[]
+m_run_k:(mdl |[] []
    (fact (cmd grab_hand [b: y:] ::) t0: t1: ::)
-   ;(fact (icst cst_ball_position |[] [b: :] : :) t0: t1: : :)
    (fact (mk.val b: position_y y: :) t0: t1: ::)
 |[]
 |[]
@@ -97,7 +87,7 @@ istart:(ipgm start |[] RUN_ONCE sampling_period VOLATILE SILENT 1) [[SYNC_ONCE n
 
 ; This program simulates the environment where b moves at constant speed changing position_y every sampling_period.
 ; If AERA were connected through I/O to the environment, this would not be necessary.
-pgm0:(pgm
+pgm_position:(pgm
 |[]; template arguments
 [];  patterns defining the inputs
    (ptn f:(fact (mk.val b position_y py: :) after: before: ::) |[])
@@ -114,13 +104,6 @@ pgm0:(pgm
    )
    (prb [1 "print" "updated the position..." [p]]); Can be useful to change usr_operators\Callbacks\callbacks.cpp to print only objects[0]->code(3).asFloat()
    (inj []
-      imdl_m_run_k_template:(imdl m_run_k_template [456] |[] false 1) |[]
-   )
-   (inj []
-      (fact imdl_m_run_k_template after before 1 1)
-      [SYNC_ONCE now 1 forever primary nil]
-   )
-   (inj []
       f_run:(fact run after before 1 1)
       |[]
    )
@@ -135,8 +118,8 @@ pgm0:(pgm
 1) |[]
 
 ; This program has ACTIVATION=1 and will thus run.
-ipgm0:(ipgm
-pgm0;       the code
+i_pgm_position:(ipgm
+pgm_position; the code
 |[];        instantiation values
 RUN_ALWAYS; boolean RUN_ALWAYS/ONCE
 20000us;   time scope
