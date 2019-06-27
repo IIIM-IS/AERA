@@ -14,8 +14,8 @@
 
 ; device functions.
 
-!dfn (grab_hand :); arg0: a hand, arg1: deadline.
-!dfn (release_hand :); arg0: a hand, arg1: deadline.
+;!dfn (grab_hand :); arg0: a hand, arg1: deadline.
+;!dfn (release_hand :); arg0: a hand, arg1: deadline.
 !dfn (move_hand :); arg0: a hand, arg1: target position, arg2: deadline.
 !dfn (speak :); arg0: a word, arg1: deadline.
 !dfn (look_at :); arg0: a vec3, arg1: deadline.
@@ -24,6 +24,7 @@
 !dfn (lift_hand :); arg0: a hand, arg1: a distance.
 !dfn (grab_hand :); arg0: a hand.
 !dfn (release_hand :); arg0: a hand.
+!dfn (set_speed_y :); arg0: an object, arg1: speed.
 
 !def sampling_period 100000us
 
