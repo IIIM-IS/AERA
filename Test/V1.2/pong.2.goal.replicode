@@ -35,17 +35,17 @@ f_b2_is_a_ball:(fact b2_is_a_ball 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever s
 ;1
 ;) [[SYNC_ONCE now 0 forever primary nil 1]]
 
-m_run_k:(mdl |[] []
-   (fact (cmd grab_hand [b: y:] ::) t0: t1: ::)
-   (fact (mk.val b: position_y y: :) t0: t1: ::)
+m_run_cmd:(mdl |[] []
+   (fact (cmd set_speed_y [b: speed_y:] 1) t0: t1: 1 1)
+   (fact (mk.val b: speed_y speed_y: :) t0: t1: ::)
 |[]
 |[]
 [stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
-m_goal_position:(mdl
+m_run_drive:(mdl
 |[]; template arguments
 []; LHS and RHS patterns of the model
-   (fact (mk.val b2 position_y 111 :) t0: t1: ::); LHS
+   (fact (mk.val b2 speed_y 0.000101 1) t0: t1: 1 1); LHS
    (fact run t0: t1: ::);                 drive. RHS
 |[]; forward guards
 |[]; backward guards
@@ -77,9 +77,13 @@ start:(pgm |[] |[] |[] []
       s:(mk.val b speed_y 0.0001 1)
       |[]
    )
+   ;(inj []
+   ;   (fact s now MAX_TIME 1 1)
+   ;   [SYNC_HOLD now 1 forever stdin nil]
+   ;)
    (inj []
-      (fact s now MAX_TIME 1 1)
-      [SYNC_HOLD now 1 forever stdin nil]
+      (fact s after (+ after sampling_period) 1 1)
+      [SYNC_HOLD now 1 1 stdin nil]
    )
 1) |[]
 
@@ -123,6 +127,60 @@ pgm_position; the code
 |[];        instantiation values
 RUN_ALWAYS; boolean RUN_ALWAYS/ONCE
 20000us;   time scope
+VOLATILE;
+NOTIFY;     notify flag
+1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+
+pgm_same_speed:(pgm
+|[]; template arguments
+[];  patterns defining the inputs
+   (ptn f:(fact (mk.val b speed_y sy: :) after: before: ::) |[])
+   ;(ptn (|fact (cmd set_speed_y [b sy:] :) after: before: ::) |[])
+|[]; guards
+[];  productions
+   (inj []
+      s:(mk.val b speed_y sy 1); The new speed_y is the same.
+      |[]
+   )
+   (inj []
+      (fact s (+ after sampling_period) (+ before sampling_period) 1 1); The new speed_y is a fact at some time as the new position.
+      [SYNC_PERIODIC (+ f.vw.ijt sampling_period) 1 1 stdin nil]
+   )
+   (prb [1 "print" "updated the same speed..." [s]])
+1) |[]
+
+i_pgm_same_speed:(ipgm
+pgm_same_speed;       the code
+|[];        instantiation values
+RUN_ALWAYS; boolean RUN_ALWAYS/ONCE
+20000us;   time scope
+VOLATILE;
+NOTIFY;     notify flag
+1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+
+pgm_change_speed:(pgm
+|[]; template arguments
+[];  patterns defining the inputs
+   (ptn (fact (cmd set_speed_y [b2 sy:] ::) after: before: ::) |[])
+   ;(ptn (fact (goal f:(fact (cmd set_speed_y [b2 sy:] ::) after: before: ::) ::) ::) |[])
+|[]; guards
+[];  productions
+   (inj []
+      s:(mk.val b2 speed_y sy 1); The new speed_y is from the command.
+      |[]
+   )
+   (inj []
+      (fact s (+ after sampling_period) (+ before sampling_period) 1 1); The new speed_y is a fact at some time as the new position.
+      [SYNC_PERIODIC before 1 1 stdin nil]
+   )
+   (prb [1 "print" "changed the speed..." [s]])
+1) |[]
+
+i_pgm_change_speed:(ipgm
+pgm_change_speed;       the code
+|[];        instantiation values
+RUN_ALWAYS; boolean RUN_ALWAYS/ONCE
+MAX_TIME;   time scope
 VOLATILE;
 NOTIFY;     notify flag
 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
