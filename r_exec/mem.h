@@ -257,9 +257,9 @@ namespace	r_exec{
 
 		// Internal core processing	////////////////////////////////////////////////////////////////
 
-		P<_ReductionJob>	popReductionJob();
+		P<_ReductionJob>	popReductionJob(bool waitForItem = true);
 		void			pushReductionJob(_ReductionJob	*j);
-		P<TimeJob>		popTimeJob();
+		P<TimeJob>		popTimeJob(bool waitForItem = true);
 		void			pushTimeJob(TimeJob	*j);
 
 		// Called upon successful reduction.

@@ -454,11 +454,11 @@ namespace	r_exec{
 
 	////////////////////////////////////////////////////////////////
 
-	P<_ReductionJob>	_Mem::popReductionJob(){
+	P<_ReductionJob>	_Mem::popReductionJob(bool waitForItem){
 
 		if(state==STOPPED)
 			return	NULL;
-		return reduction_job_queue->pop();
+		return reduction_job_queue->pop(waitForItem);
 	}
 
 	void	_Mem::pushReductionJob(_ReductionJob	*j){
@@ -470,11 +470,11 @@ namespace	r_exec{
 		reduction_job_queue->push(_j);
 	}
 
-	P<TimeJob>	_Mem::popTimeJob(){
+	P<TimeJob>	_Mem::popTimeJob(bool waitForItem){
 
 		if(state==STOPPED)
 			return	NULL;
-		return	time_job_queue->pop();
+		return	time_job_queue->pop(waitForItem);
 	}
 
 	void	_Mem::pushTimeJob(TimeJob	*j){
