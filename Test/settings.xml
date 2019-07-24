@@ -56,6 +56,8 @@ Init
   base_period: in us.
   reduction_core_count: number of threads processing reduction jobs.
   time_core_count: number of thread processing update jobs.
+  (If reduction_core_count and time_core_count are zero, then run in "diagnostic time". See:
+   https://github.com/IIIM-IS/replicode/pull/30 )
 System
   mdl_inertia_sr_thr: in [0,1].
   mdl_inertia_cnt_thr: in instance count.
