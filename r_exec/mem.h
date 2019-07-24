@@ -85,6 +85,7 @@
 #include	"dll.h"
 
 #include	<list>
+#include	<deque>
 
 #include	"../r_code/list.h"
 #include	"../r_comp/segments.h"
@@ -144,6 +145,10 @@ namespace	r_exec{
 		PipeNN<P<TimeJob>,1024>			*time_job_queue;
 		ReductionCore					**reduction_cores;
 		TimeCore						**time_cores;
+		// Use a deque so we can efficiently remove from the front.
+		// Only used if reduction and time core count == 0.
+		std::deque<P<TimeJob>> ordered_time_job_queue;
+		TimeJob::Compare timeJobCompare_;
 
 		// Performance stats.
 		uint32	reduction_job_count;
@@ -253,6 +258,22 @@ namespace	r_exec{
 		bool	load(std::vector<r_code::Code	*>	*objects,uint32	stdin_oid,uint32	stdout_oid,uint32	self_oid);	// call before start; no mod/set/eje will be executed (only inj);
 																														// return false on error.
 		uint64	start();	// return the starting time.
+		/**
+		 * When reduction and core count == 0, start() does not start
+		 * any core threads, so call this instead of Thread::Sleep(runTimeMilliseconds) 
+		 * to run in the current thread using "diagnostic time". As opposed to
+		 * real time which uses Time::Get, diagnostic time uses getDiagnosticTimeNow()
+		 * which simply returns DiagnosticTimeNow. (The main() function should call
+		 * r_exec::Init where time_base is getDiagnosticTimeNow.) So, runInDiagnosticTime
+		 * updates DiagnosticTimeNow based on the next time job (which always
+		 * runs on time). This way, the return value of Now() does not move with real time, but moves
+		 * step-by-step when DiagnosticTimeNow is updated, making it possible to set
+		 * break points and diagnose the program.
+		 * @param runTimeMilliseconds The number of milliseconds (in diagnostic time) to run for.
+		 */
+		void	runInDiagnosticTime(uint32 runTimeMilliseconds);
+		static	uint64 DiagnosticTimeNow;
+		static	uint64 getDiagnosticTimeNow();
 		void	stop();		// after stop() the content is cleared and one has to call load() and start() again.
 
 		// Internal core processing	////////////////////////////////////////////////////////////////

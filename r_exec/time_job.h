@@ -93,6 +93,19 @@ namespace	r_exec{
 		virtual	bool	update(uint64	&next_target)=0;	// next_target: absolute deadline; 0 means no more waiting; return false to shutdown the time core.
 		virtual	bool	is_alive()	const;
 		virtual	void	report(int64	lag)	const;
+
+		/**
+		 * Compare P<TimeJob> based only on target_time.
+		 */
+		class Compare {
+		public:
+			bool
+				operator()
+				(const P<TimeJob>& x, const P<TimeJob>& y) const
+			{
+				return x->target_time < y->target_time;
+			}
+		};
 	};
 
 	class	r_exec_dll	UpdateJob:
