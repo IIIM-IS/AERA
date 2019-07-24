@@ -75,6 +75,7 @@
 //_/_/
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
+#include	<algorithm>
 #include	"mem.h"
 #include	"mdl_controller.h"
 #include	"model_base.h"
@@ -420,6 +421,94 @@ namespace	r_exec{
 
 		return	now;
 	}
+
+	void	_Mem::runInDiagnosticTime(uint32 runTimeMilliseconds) {
+		if (!(reduction_core_count == 0 && time_core_count == 0))
+			// This should only be called if there are no running core threads.
+			return;
+
+		uint64 endTime = Now() + ((uint64)runTimeMilliseconds * 1000);
+
+		// Loop until the runTimeMilliseconds expires.
+		while (true) {
+			if (state == STOPPED)
+				break;
+
+			// Transfer all reduction jobs to a local queue and run only these.
+			// Below, we only run one time job, so any extra jobs that these reduction
+			// jobs add will be run on the next pass after running the time job.
+			std::vector<P<_ReductionJob>> reductionJobQueue;
+			while (true) {
+				P<_ReductionJob> reductionJob = popReductionJob(false);
+				if (reductionJob == NULL)
+					// No more reduction jobs.
+					break;
+				reductionJobQueue.push_back(reductionJob);
+			}
+			for (size_t i = 0; i < reductionJobQueue.size(); ++i) {
+				reductionJobQueue[i]->update(Now());
+				reductionJobQueue[i] = NULL;
+			}
+
+			// Transfer all time jobs to ordered_time_job_queue,
+			// sorted on target_time.
+			while (true) {
+				P<TimeJob> timeJob = popTimeJob(false);
+				if (timeJob == NULL)
+					// No more time jobs.
+					break;
+
+				ordered_time_job_queue.insert
+				  (upper_bound(ordered_time_job_queue.begin(), 
+					 ordered_time_job_queue.end(), timeJob, timeJobCompare_),
+				   timeJob);
+			}
+
+			if (ordered_time_job_queue.size() == 0)
+				// Nothing more to do. Skip to the end time so that we finish.
+				DiagnosticTimeNow = endTime;
+
+			if (Now() >= endTime)
+				// Finished.
+				break;
+
+			// The entry at the front is the earliest.
+			if (ordered_time_job_queue.front()->target_time > Now())
+				// Increase the diagnostic time to the job's target time.
+				DiagnosticTimeNow = ordered_time_job_queue.front()->target_time;
+
+			// Only process one job in case it adds more jobs.
+			P<TimeJob> timeJob = ordered_time_job_queue.front();
+			ordered_time_job_queue.erase(ordered_time_job_queue.begin());
+
+			if (!timeJob->is_alive()) {
+				timeJob = NULL;
+				continue;
+			}
+
+			uint64	next_target = 0;
+			if (!timeJob->update(next_target)) {
+				// update() says to stop running.
+				timeJob = NULL;
+				break;
+			}
+
+			if (next_target != 0) {
+				// The job wants to run again, so re-insert into the queue.
+				timeJob->target_time = next_target;
+				ordered_time_job_queue.insert
+				  (upper_bound(ordered_time_job_queue.begin(),
+					 ordered_time_job_queue.end(), timeJob, timeJobCompare_),
+				   timeJob);
+			}
+			else
+				timeJob = NULL;
+		}
+	}
+
+	uint64 _Mem::DiagnosticTimeNow = 1;
+	
+	uint64 _Mem::getDiagnosticTimeNow() { return DiagnosticTimeNow;	}
 
 	void	_Mem::stop(){
 
