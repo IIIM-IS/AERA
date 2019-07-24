@@ -77,7 +77,7 @@ pgm1:(pgm |[] |[] |[] []
       |[]
    )
    (inj []
-      (fact c now 200000us 1 1)
+      (fact c now (+ now 200000us) 1 1)
       [SYNC_ONCE now 1 1 stdin nil]
    )
    (prb [1 "print" "pgm1 running (lifting hand)" |[]])
