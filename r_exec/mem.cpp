@@ -464,13 +464,13 @@ namespace	r_exec{
 				   timeJob);
 			}
 
-			if (ordered_time_job_queue.size() == 0)
-				// Nothing more to do. Skip to the end time so that we finish.
-				DiagnosticTimeNow = endTime;
-
 			if (Now() >= endTime)
 				// Finished.
 				break;
+
+			if (ordered_time_job_queue.size() == 0)
+				// No time jobs. Loop again in case a reduction job will add one.
+				continue;
 
 			// The entry at the front is the earliest.
 			if (ordered_time_job_queue.front()->target_time > Now())
