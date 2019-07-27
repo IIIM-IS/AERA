@@ -110,22 +110,22 @@ namespace	r_code{
 		case	VWS:					std::cout<<"vws";return;
 		case	NODE:					std::cout<<"nid: "<<std::dec<<(uint32)getNodeID();return;
 		case	DEVICE:					std::cout<<"did: "<<std::dec<<(uint32)getNodeID()<<" "<<(uint32)getClassID()<<" "<<(uint32)getDeviceID();return;
-		case	DEVICE_FUNCTION:		std::cout<<"fid: "<<std::dec<<asOpcode();return;
+		case	DEVICE_FUNCTION:		std::cout<<"fid: "<<std::dec<< asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ")";return;
 		case	C_PTR:					std::cout<<"cptr: "<<std::dec<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
 		case	SET:					std::cout<<"set: "<<std::dec<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
-		case	OBJECT:					std::cout<<"obj: "<<std::dec<<asOpcode()<<" "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
-		case	S_SET:					std::cout<<"s_set: "<<std::dec<<asOpcode()<<" "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
-		case	MARKER:					std::cout<<"mk: "<<std::dec<<asOpcode()<<" "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
-		case	OPERATOR:				std::cout<<"op: "<<std::dec<<asOpcode()<<" "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
+		case	OBJECT:					std::cout<<"obj: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
+		case	S_SET:					std::cout<<"s_set: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
+		case	MARKER:					std::cout<<"mk: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
+		case	OPERATOR:				std::cout<<"op: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
 		case	STRING:					std::cout<<"st: "<<std::dec<<(uint16)getAtomCount();Members_to_go=String_data=getAtomCount();Char_count=(atom	&	0x000000FF);return;
 		case	TIMESTAMP:				std::cout<<"us";Members_to_go=Timestamp_data=2;return;
-		case	GROUP:					std::cout<<"grp: "<<std::dec<<asOpcode()<<" "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
+		case	GROUP:					std::cout<<"grp: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
 		case	INSTANTIATED_PROGRAM:
 		case	INSTANTIATED_ANTI_PROGRAM:
 		case	INSTANTIATED_INPUT_LESS_PROGRAM:
-										std::cout<<"ipgm: "<<std::dec<<asOpcode()<<" "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
-		case	COMPOSITE_STATE:		std::cout<<"cst: "<<std::dec<<asOpcode()<<" "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
-		case	MODEL:					std::cout<<"mdl: "<<std::dec<<asOpcode()<<" "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
+										std::cout<<"ipgm: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
+		case	COMPOSITE_STATE:		std::cout<<"cst: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
+		case	MODEL:					std::cout<<"mdl: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
 		case	NULL_PROGRAM:			std::cout<<"null pgm "<<takesPastInputs()?"all inputs":"new inputs";return;
 		default:
 			if(Timestamp_data){
@@ -173,5 +173,33 @@ namespace	r_code{
 			base[i].trace();
 			std::cout<<std::endl;
 		}
+	}
+
+	// These are filled by r_exec::Init().
+	UNORDERED_MAP<uint16, std::string> ClassesOpcodeNames;
+	UNORDERED_MAP<uint16, std::string> SysClassesOpcodeNames;
+
+	std::string GetOpcodeName(uint16 opcode) {
+		// First search SysClassesOpcodeNames.
+		UNORDERED_MAP<uint16, std::string>::iterator it = 
+		  SysClassesOpcodeNames.find(opcode);
+		if (it != SysClassesOpcodeNames.end())
+			return it->second;
+
+		it = ClassesOpcodeNames.find(opcode);
+		if (it != ClassesOpcodeNames.end())
+			return it->second;
+		
+		return "unknown";
+	}
+
+	void AddClassesOpcodeName(uint16 opcode, const char* name) {
+		// This copies the char* name.
+		ClassesOpcodeNames[opcode] = name;
+	}
+
+	void AddSysClassesOpcodeName(uint16 opcode, const char* name) {
+		// This copies the char* name.
+		SysClassesOpcodeNames[opcode] = name;
 	}
 }
