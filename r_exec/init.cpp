@@ -338,11 +338,13 @@ namespace	r_exec{
 		for(it=Metadata.classes.begin();it!=Metadata.classes.end();++it){
 
 			_Opcodes[it->first]=it->second.atom.asOpcode();
+			r_code::AddClassesOpcodeName(it->second.atom.asOpcode(), it->first.c_str());
 			//std::cout<<it->first<<":"<<it->second.atom.asOpcode()<<std::endl;
 		}
 		for(it=Metadata.sys_classes.begin();it!=Metadata.sys_classes.end();++it){
 
 			_Opcodes[it->first]=it->second.atom.asOpcode();
+			r_code::AddSysClassesOpcodeName(it->second.atom.asOpcode(), it->first.c_str());
 			//std::cout<<it->first<<":"<<it->second.atom.asOpcode()<<std::endl;
 		}
 
