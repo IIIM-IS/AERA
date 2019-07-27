@@ -78,6 +78,7 @@
 #include	"atom.h"
 
 #include	<iostream>
+#include	<set>
 
 
 namespace	r_code{
@@ -176,30 +177,33 @@ namespace	r_code{
 	}
 
 	// These are filled by r_exec::Init().
-	UNORDERED_MAP<uint16, std::string> ClassesOpcodeNames;
-	UNORDERED_MAP<uint16, std::string> SysClassesOpcodeNames;
+	UNORDERED_MAP<uint16, std::set<std::string>> OpcodeNames;
 
 	std::string GetOpcodeName(uint16 opcode) {
-		// First search SysClassesOpcodeNames.
-		UNORDERED_MAP<uint16, std::string>::iterator it = 
-		  SysClassesOpcodeNames.find(opcode);
-		if (it != SysClassesOpcodeNames.end())
-			return it->second;
+		UNORDERED_MAP<uint16, std::set<std::string>>::iterator names = 
+		  OpcodeNames.find(opcode);
+		if (names == OpcodeNames.end())
+			return "unknown";
 
-		it = ClassesOpcodeNames.find(opcode);
-		if (it != ClassesOpcodeNames.end())
-			return it->second;
-		
-		return "unknown";
+		std::string result;
+		for (std::set<std::string>::iterator it = names->second.begin();
+			 it != names->second.end(); ++it) {
+			if (result.size() != 0)
+				result += "/";
+			result += *it;
+		}
+
+		return result;
 	}
 
-	void AddClassesOpcodeName(uint16 opcode, const char* name) {
-		// This copies the char* name.
-		ClassesOpcodeNames[opcode] = name;
-	}
+	void AddOpcodeName(uint16 opcode, const char* name) {
+		UNORDERED_MAP<uint16, std::set<std::string>>::iterator it = 
+		  OpcodeNames.find(opcode);
+		if (it == OpcodeNames.end())
+			// No existing entry for the opcode.
+			OpcodeNames[opcode] = std::set<std::string>();
 
-	void AddSysClassesOpcodeName(uint16 opcode, const char* name) {
-		// This copies the char* name.
-		SysClassesOpcodeNames[opcode] = name;
+		// This copies the char* .
+		OpcodeNames[opcode].insert(name);
 	}
 }

@@ -232,26 +232,19 @@ namespace	r_code{
 	};
 
 	/**
-	 * Add to the ClassesOpcodeName map, which is searched by GetOpcodeName.
+	 * Add to the names for the opcode. This is searched by GetOpcodeName.
 	 * @param opcode The opcode.
-	 * @param name The opcode name, which is copied. We pass a char* because we
-	 * don't want to export a DLL function with std::string.
+	 * @param name The opcode name, which is copied. (We pass a char*
+	 * because we don't want to export a DLL function with std::string.)
 	 */
-	void __declspec(dllexport) AddClassesOpcodeName(uint16 opcode, const char* name);
+	void __declspec(dllexport) AddOpcodeName(uint16 opcode, const char* name);
 
 	/**
-	 * Add to the SysClassesOpcodeName map, which is searched by GetOpcodeName.
+	 * Get the name or set of names of the opcode. (The same opcode can be
+	 * re-used for different purposes.)
 	 * @param opcode The opcode.
-	 * @param name The opcode name, which is copied. We pass a char* because we
-	 * don't want to export a DLL function with std::string.
-	 */
-	void __declspec(dllexport) AddSysClassesOpcodeName(uint16 opcode, const char* name);
-
-	/**
-	 * Get the name of the opcode. First search the opcodes added with AddSysClassesOpcodeName.
-	 * If not found, search the opcodes added with AddClassesOpcodeName.
-	 * @param opcode The opcode.
-	 * @return The opcode name, or "unknown" if not found.
+	 * @return The opcode name, or a set of names separated by a slash. 
+	 * If not found, return "unknown".
 	 */
 	std::string GetOpcodeName(uint16 opcode);
 }
