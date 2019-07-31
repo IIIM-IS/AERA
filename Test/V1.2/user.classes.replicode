@@ -11,6 +11,8 @@
 !class (vec3 x:nb y:nb z:nb)
 !class (speech_context (_obj {speaker:ent listener:ent}))
 
+!class (Ping (_obj {object:}))
+!class (Pong (_obj {object:}))
 
 ; device functions.
 
