@@ -307,6 +307,7 @@ namespace	r_comp{
 		}else
 			*out_stream<<" |[]";
 		write_indent(0);
+		*out_stream << "; OID: " << sys_object->oid << NEWLINE;
 		write_indent(0);
 	}
 
