@@ -118,6 +118,7 @@ public:
 	bool			decompile_to_file;
 	std::string		decompilation_file_path;
 	bool			ignore_named_objects;
+	bool			decompiled_show_oid;
 	bool			write_objects;
 	std::string		objects_path;
 	bool			test_objects;
@@ -235,6 +236,7 @@ public:
 				const	char	*_decompile_to_file=objects.getAttribute("decompile_to_file");
 				decompilation_file_path=objects.getAttribute("decompilation_file_path");
 				const	char	*_ignore_named_objects=objects.getAttribute("ignore_named_objects");
+				const	char	*_decompiled_show_oid=objects.getAttribute("decompiled_show_oid");
 				const	char	*_write_objects=objects.getAttribute("write_objects");
 				const	char	*_test_objects=objects.getAttribute("test_objects");
 
@@ -242,6 +244,7 @@ public:
 				decompile_objects=(strcmp(_decompile_objects,"yes")==0);
 				decompile_to_file=(strcmp(_decompile_to_file,"yes")==0);
 				ignore_named_objects=(strcmp(_ignore_named_objects,"yes")==0);
+				decompiled_show_oid=(_decompiled_show_oid==NULL ? false : strcmp(_decompiled_show_oid,"yes")==0);
 				write_objects=(strcmp(_write_objects,"yes")==0);
 				if(write_objects){
 

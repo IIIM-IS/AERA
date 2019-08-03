@@ -136,6 +136,7 @@ namespace	r_comp{
 
 		bool						partial_decompilation;	// used when decompiling on-the-fly.
 		bool						ignore_named_objects;
+		bool						decompiled_show_oid;
 		UNORDERED_SET<uint16>		named_objects;
 		std::vector<SysObject	*>	imported_objects;	// referenced objects added to the image that were not in the original list of objects to be decompiled.
 	public:
@@ -146,7 +147,8 @@ namespace	r_comp{
 		uint32	decompile(	r_comp::Image		*image,
 							std::ostringstream	*stream,
 							uint64				time_offset,
-							bool				ignore_named_objects);		// decompiles the whole image; returns the number of objects.
+							bool				ignore_named_objects,
+							bool				decompiled_show_oid);		// decompiles the whole image; returns the number of objects.
 		uint32	decompile(	r_comp::Image				*image,
 							std::ostringstream			*stream,
 							uint64						time_offset,
