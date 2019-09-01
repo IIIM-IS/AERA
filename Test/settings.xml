@@ -34,7 +34,6 @@
       decompile_to_file="yes"
       decompilation_file_path="decompiled_objects.txt"
       ignore_named_objects="yes"
-      decompiled_show_oid="no"
       write_objects="no"
       objects_path="../Test/objects.replicode.image"
       test_objects="no"
@@ -82,7 +81,6 @@ Debug
     decompile_image: yes or no.
     decompile_to_file: yes or no.
     ignore_named_objects: yes or no; if yes, objects provided by the deveoper are not decompiled.
-    decompiled_show_oid: yes or no; if yes, after the decompiled object, show its OID as a comment.
     write_image: yes or no.
     test_image: yes or no (yes: reads back and decompiles).
 Run

@@ -141,7 +141,6 @@ namespace	r_comp{
 
 		partial_decompilation=false;
 		ignore_named_objects=false;
-		decompiled_show_oid=false;
 
 		//	Load the renderers;
 		for(uint16	i=0;i<metadata->classes_by_opcodes.size();++i){
@@ -172,10 +171,9 @@ namespace	r_comp{
 		}
 	}
 
-	uint32	Decompiler::decompile(r_comp::Image		*image,std::ostringstream	*stream,uint64	time_offset,bool	ignore_named_objects, bool	decompiled_show_oid){
+	uint32	Decompiler::decompile(r_comp::Image		*image,std::ostringstream	*stream,uint64	time_offset,bool	ignore_named_objects){
 
 		this->ignore_named_objects=ignore_named_objects;
-		this->decompiled_show_oid=decompiled_show_oid;
 
 		uint32	object_count=decompile_references(image);
 
@@ -189,7 +187,6 @@ namespace	r_comp{
 
 		partial_decompilation=true;
 		ignore_named_objects=true;
-		decompiled_show_oid=false;
 		this->imported_objects=imported_objects;
 
 		uint32	object_count=decompile_references(image);
@@ -310,8 +307,6 @@ namespace	r_comp{
 		}else
 			*out_stream<<" |[]";
 		write_indent(0);
-		if (decompiled_show_oid)
-			*out_stream << "; OID: " << sys_object->oid << NEWLINE;
 		write_indent(0);
 	}
 

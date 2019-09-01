@@ -213,7 +213,7 @@ void test_many_injections(r_exec::_Mem	*mem, uint32 sampling_period_ms, uint32 n
 	}
 }
 
-void	decompile(Decompiler	&decompiler,r_comp::Image	*image,uint64	time_offset,bool	ignore_named_objects, bool	decompiled_show_oid){
+void	decompile(Decompiler	&decompiler,r_comp::Image	*image,uint64	time_offset,bool	ignore_named_objects){
 
 #ifdef	DECOMPILE_ONE_BY_ONE
 	uint32	object_count=decompiler.decompile_references(image);
@@ -235,7 +235,7 @@ void	decompile(Decompiler	&decompiler,r_comp::Image	*image,uint64	time_offset,bo
 	}
 #else
 	std::ostringstream	decompiled_code;
-	uint32	object_count=decompiler.decompile(image,&decompiled_code,time_offset,ignore_named_objects,decompiled_show_oid);
+	uint32	object_count=decompiler.decompile(image,&decompiled_code,time_offset,ignore_named_objects);
 	//uint32	object_count=image->code_segment.objects.size();
 	std::cout<<"\n\n> DECOMPILATION\n\n"<<decompiled_code.str()<<std::endl;
 	std::cout<<"> image taken at: "<<Time::ToString_year(image->timestamp)<<std::endl;
@@ -264,7 +264,7 @@ void	write_to_file(r_comp::Image	*image,std::string	&image_path,Decompiler	*deco
 		r_comp::Image			*_i=new	r_comp::Image();
 		_i->load(img);
 
-		decompile(*decompiler,_i,time_offset,false,false);
+		decompile(*decompiler,_i,time_offset,false);
 		delete	_i;
 
 		delete	img;
@@ -401,12 +401,12 @@ int32	main(int	argc,char	**argv){
 					outfile.open(settings.decompilation_file_path.c_str(),std::ios_base::trunc);
 					std::streambuf	*coutbuf=std::cout.rdbuf(outfile.rdbuf()); 
 
-					decompile(decompiler,image,starting_time,settings.ignore_named_objects,settings.decompiled_show_oid);
+					decompile(decompiler,image,starting_time,settings.ignore_named_objects);
 					
 					std::cout.rdbuf(coutbuf);
 					outfile.close(); 
 				}else
-					decompile(decompiler,image,starting_time,settings.ignore_named_objects,settings.decompiled_show_oid);
+					decompile(decompiler,image,starting_time,settings.ignore_named_objects);
 			}
 			delete	image;
 			//std::cout<<"get_image(): "<<probe.us()<<"us"<<std::endl;
@@ -430,12 +430,12 @@ int32	main(int	argc,char	**argv){
 					outfile.open(argv[2],std::ios_base::trunc);
 					std::streambuf	*coutbuf=std::cout.rdbuf(outfile.rdbuf()); 
 
-					decompile(decompiler,image,starting_time,settings.ignore_named_models,settings.decompiled_show_oid);
+					decompile(decompiler,image,starting_time,settings.ignore_named_models);
 					
 					std::cout.rdbuf(coutbuf);
 					outfile.close(); 
 				}else
-					decompile(decompiler,image,starting_time,settings.ignore_named_models,settings.decompiled_show_oid);
+					decompile(decompiler,image,starting_time,settings.ignore_named_models);
 			}
 			delete	image;
 			//std::cout<<"get_models(): "<<probe.us()<<"us"<<std::endl;
