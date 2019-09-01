@@ -93,6 +93,7 @@ namespace	r_exec{
 		virtual	bool	update(uint64	&next_target)=0;	// next_target: absolute deadline; 0 means no more waiting; return false to shutdown the time core.
 		virtual	bool	is_alive()	const;
 		virtual	void	report(int64	lag)	const;
+		uint32 get_job_id() { return job_id_; }
 
 		/**
 		 * Compare P<TimeJob> based only on target_time.
@@ -106,6 +107,10 @@ namespace	r_exec{
 				return x->target_time < y->target_time;
 			}
 		};
+
+	private:
+		static uint32 job_count_;
+		int job_id_;
 	};
 
 	class	r_exec_dll	UpdateJob:

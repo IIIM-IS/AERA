@@ -92,6 +92,10 @@ namespace	r_exec{
 		uint64	ijt;	// time of injection of the job in the pipe.
 		virtual	bool	update(uint64	now)=0;	//	return false to shutdown the reduction core.
 		virtual	void	debug(){}
+		uint32 get_job_id() { return job_id_; }
+	private:
+		static uint32 job_count_;
+		int job_id_;
 	};
 
 	template<class	_P>	class	ReductionJob:
