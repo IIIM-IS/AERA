@@ -96,7 +96,7 @@ namespace	r_code{
 		static	uint8	Timestamp_data;
 		static	uint8	String_data;
 		static	uint8	Char_count;
-		void	write_indents()	const;
+		void	write_indents(std::ostream& out)	const;
 	public:
 		typedef	enum{
 			NIL=0x80,
@@ -227,8 +227,9 @@ namespace	r_code{
 		bool	takesPastInputs()	const;	// applicable to NULL_PROGRAM.
 		template<class	C>	C	*asRawPointer()	const{	return	(C	*)atom;	}
 
-		void	trace()	const;
-		static	void	Trace(Atom	*base,uint16	count);
+		void	trace(std::ostream& out)	const;
+		static	void	Trace(Atom	*base, uint16	count, std::ostream& out);
+		static	void	Trace(Atom	*base, uint16	count);
 	};
 
 	/**

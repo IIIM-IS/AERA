@@ -109,28 +109,28 @@ namespace	r_exec{
 		return	overlay->values.size()-1;
 	}
 
-	void	_Context::trace()	const{
+	void	_Context::trace(std::ostream& out)	const{
 
-		std::cout<<"======== CONTEXT ========\n";
+		out<<"======== CONTEXT ========\n";
 		switch(data){
 		case	UNDEFINED:
-			std::cout<<"undefined\n";
+			out<<"undefined\n";
 			return;
 		case	MKS:
-			std::cout<<"--> mks\n";
+			out<<"--> mks\n";
 			return;
 		case	VWS:
-			std::cout<<"--> vws\n";
+			out<<"--> vws\n";
 			return;
 		}
 
 		for(uint16	i=0;i<get_object_code_size();++i){
 
 			if(index==i)
-				std::cout<<">>";
-			std::cout<<i<<"\t";
-			code[i].trace();
-			std::cout<<std::endl;
+				out<<">>";
+			out<<i<<"\t";
+			code[i].trace(out);
+			out<<std::endl;
 		}
 	}
 }

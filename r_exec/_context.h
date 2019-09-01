@@ -133,7 +133,7 @@ namespace	r_exec{
 		uint16	setCompoundResultHead(Atom	a)	const;
 		uint16	addCompoundResultPart(Atom	a)	const;
 
-		void	trace()	const;
+		void	trace(std::ostream& out)	const;
 	};
 }
 
