@@ -161,8 +161,7 @@ NOTIFY;     notify flag
 pgm_change_speed:(pgm
 |[]; template arguments
 [];  patterns defining the inputs
-   (ptn (fact (cmd set_speed_y [b2 sy:] ::) after: before: ::) |[])
-   ;(ptn (fact (goal f:(fact (cmd set_speed_y [b2 sy:] ::) after: before: ::) ::) ::) |[])
+   (ptn (fact (goal f:(fact (cmd set_speed_y [b2 sy:] ::) after: before: ::) ::) ::) |[])
 |[]; guards
 [];  productions
    (inj []
@@ -183,4 +182,4 @@ RUN_ALWAYS; boolean RUN_ALWAYS/ONCE
 MAX_TIME;   time scope
 VOLATILE;
 NOTIFY;     notify flag
-1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+1) [[SYNC_ONCE now 0 forever primary nil 1]]
