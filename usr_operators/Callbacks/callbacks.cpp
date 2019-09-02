@@ -75,17 +75,27 @@
 //_/_/
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
+#include	<sstream>
 #include	"callbacks.h"
 
 #include	"../r_exec/mem.h"
 
+static CriticalSection printCS;
 
 bool	print(uint64	t,bool	suspended,const	char	*msg,uint8	object_count,Code	**objects){	//	return true to resume the executive (applies when called from a suspend call, i.e. suspended==true).
 
-	std::cout<<Time::ToString_seconds(t)<<": "<<msg<<std::endl;
+	// Construct the string before blocking other threads in the CS.
+	ostringstream out;
+	out<<Time::ToString_seconds(t)<<": "<<msg<<std::endl;
 	for(uint8	i=0;i<object_count;++i) {
-		objects[i]->trace();
-		//std::cout << objects[0]->code(3).asFloat() << std::endl;
+		objects[i]->trace(out);
+		//out << objects[0]->code(3).asFloat() << std::endl;
 	}
+	string outString(out.str());
+
+	// Print in a critical section so the output isn't interleaved.
+	printCS.enter();
+	std::cout << outString;
+	printCS.leave();
 	return	true;
 }
