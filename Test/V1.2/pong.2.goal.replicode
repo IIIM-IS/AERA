@@ -149,14 +149,8 @@ pgm_same_speed:(pgm
    (prb [1 "print" "updated the same speed..." [s]])
 1) |[]
 
-i_pgm_same_speed:(ipgm
-pgm_same_speed;       the code
-|[];        instantiation values
-RUN_ALWAYS; boolean RUN_ALWAYS/ONCE
-20000us;   time scope
-VOLATILE;
-NOTIFY;     notify flag
-1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+i_pgm_same_speed:(ipgm pgm_same_speed |[] RUN_ALWAYS 20000us VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever stdin nil 1]
 
 pgm_change_speed:(pgm
 |[]; template arguments
@@ -175,11 +169,5 @@ pgm_change_speed:(pgm
    (prb [1 "print" "changed the speed..." [s]])
 1) |[]
 
-i_pgm_change_speed:(ipgm
-pgm_change_speed;       the code
-|[];        instantiation values
-RUN_ALWAYS; boolean RUN_ALWAYS/ONCE
-MAX_TIME;   time scope
-VOLATILE;
-NOTIFY;     notify flag
-1) [[SYNC_ONCE now 0 forever primary nil 1]]
+i_pgm_change_speed:(ipgm pgm_change_speed |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]; Use primary since abduced goals go in there.
