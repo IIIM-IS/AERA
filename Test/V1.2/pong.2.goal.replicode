@@ -107,6 +107,25 @@ pgm_position:(pgm
       [SYNC_PERIODIC (+ f.vw.ijt sampling_period) 1 1 stdin nil]; f.vw.ijt gets the inject time of the fact f.
    )
    (prb [1 "print" "updated the position..." [p]]); Can be useful to change usr_operators\Callbacks\callbacks.cpp to print only objects[0]->code(3).asFloat()
+1) |[]
+
+; This program has ACTIVATION=1 and will thus run.
+i_pgm_position:(ipgm
+pgm_position; the code
+|[];        instantiation values
+RUN_ALWAYS; boolean RUN_ALWAYS/ONCE
+20000us;   time scope
+VOLATILE;
+NOTIFY;     notify flag
+1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+
+pgm_set_speed:(pgm
+|[]; template arguments
+[];  patterns defining the inputs
+   (ptn f:(fact (mk.val b position_y py: :) after: before: ::) |[])
+[]; guards
+   (> py 19); Don't run until py is 20.
+[];  productions
    (inj []
       f_run:(fact run after before 1 1)
       |[]
@@ -119,17 +138,11 @@ pgm_position:(pgm
       (fact g t1:(now) t1 1 1)
       [SYNC_ONCE t1 1 forever primary nil]
    )
+   (prb [1 "print" "injected run" [f py f_run]])
 1) |[]
 
-; This program has ACTIVATION=1 and will thus run.
-i_pgm_position:(ipgm
-pgm_position; the code
-|[];        instantiation values
-RUN_ALWAYS; boolean RUN_ALWAYS/ONCE
-20000us;   time scope
-VOLATILE;
-NOTIFY;     notify flag
-1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+i_pgm_set_speed:(ipgm pgm_set_speed |[] RUN_ONCE 20000us VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever stdin nil 1]
 
 pgm_same_speed:(pgm
 |[]; template arguments
