@@ -165,21 +165,6 @@ namespace	r_code{
 		}
 	}
 
-	void	Atom::Trace(Atom	*base,uint16	count, std::ostream& out){
-
-		out<<"--------\n";
-		for(uint16	i=0;i<count;++i){
-
-			out<<i<<"\t";
-			base[i].trace(out);
-			out<<std::endl;
-		}
-	}
-
-	void	Atom::Trace(Atom	*base, uint16	count) {
-		Trace(base, count, std::cout);
-	}
-
 	// These are filled by r_exec::Init().
 	UNORDERED_MAP<uint16, std::set<std::string>> OpcodeNames;
 

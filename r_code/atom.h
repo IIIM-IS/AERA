@@ -228,8 +228,6 @@ namespace	r_code{
 		template<class	C>	C	*asRawPointer()	const{	return	(C	*)atom;	}
 
 		void	trace(std::ostream& out)	const;
-		static	void	Trace(Atom	*base, uint16	count, std::ostream& out);
-		static	void	Trace(Atom	*base, uint16	count);
 	};
 
 	/**
