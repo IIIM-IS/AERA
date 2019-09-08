@@ -80,8 +80,6 @@
 
 #include	"../r_exec/mem.h"
 
-static CriticalSection printCS;
-
 bool	print(uint64	t,bool	suspended,const	char	*msg,uint8	object_count,Code	**objects){	//	return true to resume the executive (applies when called from a suspend call, i.e. suspended==true).
 
 	// Construct the string before blocking other threads in the CS.
@@ -91,11 +89,8 @@ bool	print(uint64	t,bool	suspended,const	char	*msg,uint8	object_count,Code	**obj
 		objects[i]->trace(out);
 		//out << objects[0]->code(3).asFloat() << std::endl;
 	}
-	string outString(out.str());
 
-	// Print in a critical section so the output isn't interleaved.
-	printCS.enter();
-	std::cout << outString;
-	printCS.leave();
+	// Assume that printing a single string is more-or-less atomic.
+	std::cout << out.str();
 	return	true;
 }
