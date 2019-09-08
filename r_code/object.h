@@ -284,8 +284,6 @@ namespace	r_code{
 			}
 			out<<"OID: "<<get_oid()<<std::endl;
 		}
-
-		void	trace() { trace(std::cout); }
 	};
 
 	//	Implementation for local objects (non distributed).
