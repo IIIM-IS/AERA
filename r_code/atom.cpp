@@ -83,96 +83,88 @@
 
 namespace	r_code{
 
-	uint8	Atom::Members_to_go=0;
-	uint8	Atom::Timestamp_data=0;
-	uint8	Atom::String_data=0;
-	uint8	Atom::Char_count=0;
-	void	Atom::trace()	const{
+	Atom::TraceContext::TraceContext() {
+		Members_to_go = 0;
+		Timestamp_data = 0;
+		String_data = 0;
+		Char_count = 0;
+	}
 
-		write_indents();
+	void	Atom::trace(TraceContext& context, std::ostream& out)	const{
+
+		context.write_indents(out);
 		switch(getDescriptor()){
-		case	NIL:					std::cout<<"nil";return;
-		case	BOOLEAN_:				std::cout<<"bl: "<<std::boolalpha<<asBoolean();return;
-		case	WILDCARD:				std::cout<<":";return;
-		case	T_WILDCARD:				std::cout<<"::";return;
-		case	I_PTR:					std::cout<<"iptr: "<<std::dec<<asIndex();return;
-		case	VL_PTR:					std::cout<<"vlptr: "<<std::dec<<asIndex();return;
-		case	R_PTR:					std::cout<<"rptr: "<<std::dec<<asIndex();return;
-		case	IPGM_PTR:				std::cout<<"ipgm_ptr: "<<std::dec<<asIndex();return;
-		case	IN_OBJ_PTR:				std::cout<<"in_obj_ptr: "<<std::dec<<(uint32)asInputIndex()<<" "<<asIndex();return;
-		case	D_IN_OBJ_PTR:			std::cout<<"d_in_obj_ptr: "<<std::dec<<(uint32)asRelativeIndex()<<" "<<asIndex();return;
-		case	OUT_OBJ_PTR:			std::cout<<"out_obj_ptr: "<<std::dec<<asIndex();return;
-		case	VALUE_PTR:				std::cout<<"value_ptr: "<<std::dec<<asIndex();return;
-		case	PROD_PTR:				std::cout<<"prod_ptr: "<<std::dec<<asIndex();return;
-		case	ASSIGN_PTR:				std::cout<<"assign_ptr: "<<std::dec<<(uint16)asAssignmentIndex()<<" "<<asIndex();return;
-		case	THIS:					std::cout<<"this";return;
-		case	VIEW:					std::cout<<"view";return;
-		case	MKS:					std::cout<<"mks";return;
-		case	VWS:					std::cout<<"vws";return;
-		case	NODE:					std::cout<<"nid: "<<std::dec<<(uint32)getNodeID();return;
-		case	DEVICE:					std::cout<<"did: "<<std::dec<<(uint32)getNodeID()<<" "<<(uint32)getClassID()<<" "<<(uint32)getDeviceID();return;
-		case	DEVICE_FUNCTION:		std::cout<<"fid: "<<std::dec<< asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ")";return;
-		case	C_PTR:					std::cout<<"cptr: "<<std::dec<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
-		case	SET:					std::cout<<"set: "<<std::dec<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
-		case	OBJECT:					std::cout<<"obj: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
-		case	S_SET:					std::cout<<"s_set: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
-		case	MARKER:					std::cout<<"mk: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
-		case	OPERATOR:				std::cout<<"op: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
-		case	STRING:					std::cout<<"st: "<<std::dec<<(uint16)getAtomCount();Members_to_go=String_data=getAtomCount();Char_count=(atom	&	0x000000FF);return;
-		case	TIMESTAMP:				std::cout<<"us";Members_to_go=Timestamp_data=2;return;
-		case	GROUP:					std::cout<<"grp: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
+		case	NIL:					out<<"nil";return;
+		case	BOOLEAN_:				out<<"bl: "<<std::boolalpha<<asBoolean();return;
+		case	WILDCARD:				out<<":";return;
+		case	T_WILDCARD:				out<<"::";return;
+		case	I_PTR:					out<<"iptr: "<<std::dec<<asIndex();return;
+		case	VL_PTR:					out<<"vlptr: "<<std::dec<<asIndex();return;
+		case	R_PTR:					out<<"rptr: "<<std::dec<<asIndex();return;
+		case	IPGM_PTR:				out<<"ipgm_ptr: "<<std::dec<<asIndex();return;
+		case	IN_OBJ_PTR:				out<<"in_obj_ptr: "<<std::dec<<(uint32)asInputIndex()<<" "<<asIndex();return;
+		case	D_IN_OBJ_PTR:			out<<"d_in_obj_ptr: "<<std::dec<<(uint32)asRelativeIndex()<<" "<<asIndex();return;
+		case	OUT_OBJ_PTR:			out<<"out_obj_ptr: "<<std::dec<<asIndex();return;
+		case	VALUE_PTR:				out<<"value_ptr: "<<std::dec<<asIndex();return;
+		case	PROD_PTR:				out<<"prod_ptr: "<<std::dec<<asIndex();return;
+		case	ASSIGN_PTR:				out<<"assign_ptr: "<<std::dec<<(uint16)asAssignmentIndex()<<" "<<asIndex();return;
+		case	THIS:					out<<"this";return;
+		case	VIEW:					out<<"view";return;
+		case	MKS:					out<<"mks";return;
+		case	VWS:					out<<"vws";return;
+		case	NODE:					out<<"nid: "<<std::dec<<(uint32)getNodeID();return;
+		case	DEVICE:					out<<"did: "<<std::dec<<(uint32)getNodeID()<<" "<<(uint32)getClassID()<<" "<<(uint32)getDeviceID();return;
+		case	DEVICE_FUNCTION:		out<<"fid: "<<std::dec<< asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ")";return;
+		case	C_PTR:					out<<"cptr: "<<std::dec<<(uint16)getAtomCount();context.Members_to_go=getAtomCount();return;
+		case	SET:					out<<"set: "<<std::dec<<(uint16)getAtomCount();context.Members_to_go=getAtomCount();return;
+		case	OBJECT:					out<<"obj: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();context.Members_to_go=getAtomCount();return;
+		case	S_SET:					out<<"s_set: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();context.Members_to_go=getAtomCount();return;
+		case	MARKER:					out<<"mk: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();context.Members_to_go=getAtomCount();return;
+		case	OPERATOR:				out<<"op: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();context.Members_to_go=getAtomCount();return;
+		case	STRING:					out<<"st: "<<std::dec<<(uint16)getAtomCount();context.Members_to_go=context.String_data=getAtomCount(); context.Char_count=(atom	&	0x000000FF);return;
+		case	TIMESTAMP:				out<<"us";context.Members_to_go= context.Timestamp_data=2;return;
+		case	GROUP:					out<<"grp: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();context.Members_to_go=getAtomCount();return;
 		case	INSTANTIATED_PROGRAM:
 		case	INSTANTIATED_ANTI_PROGRAM:
 		case	INSTANTIATED_INPUT_LESS_PROGRAM:
-										std::cout<<"ipgm: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
-		case	COMPOSITE_STATE:		std::cout<<"cst: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
-		case	MODEL:					std::cout<<"mdl: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();Members_to_go=getAtomCount();return;
-		case	NULL_PROGRAM:			std::cout<<"null pgm "<<takesPastInputs()?"all inputs":"new inputs";return;
+										out<<"ipgm: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();context.Members_to_go=getAtomCount();return;
+		case	COMPOSITE_STATE:		out<<"cst: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();context.Members_to_go=getAtomCount();return;
+		case	MODEL:					out<<"mdl: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();context.Members_to_go=getAtomCount();return;
+		case	NULL_PROGRAM:			out<<"null pgm "<<takesPastInputs()?"all inputs":"new inputs";return;
 		default:
-			if(Timestamp_data){
+			if(context.Timestamp_data){
 				
-				--Timestamp_data;
-				std::cout<<atom;
-			}else	if(String_data){
+				--context.Timestamp_data;
+				out<<atom;
+			}else	if(context.String_data){
 
-				--String_data;
+				--context.String_data;
 				std::string	s;
 				char	*content=(char	*)&atom;
 				for(uint8	i=0;i<4;++i){
 
-					if(Char_count-->0)
+					if(context.Char_count-->0)
 						s+=content[i];
 					else
 						break;
 				}
-				std::cout<<s.c_str();
+				out<<s.c_str();
 			}else	if(isFloat()){
 
-				std::cout<<"nb: "<<std::scientific<<asFloat();
+				out<<"nb: "<<std::scientific<<asFloat();
 				return;
 			}else
-				std::cout<<"undef";
+				out<<"undef";
 			return;
 		}
 	}
 
-	void	Atom::write_indents()	const{
+	void	Atom::TraceContext::write_indents(std::ostream& out) {
 
 		if(Members_to_go){
 
-			std::cout<<"   ";
+			out<<"   ";
 			--Members_to_go;
-		}
-	}
-
-	void	Atom::Trace(Atom	*base,uint16	count){
-
-		std::cout<<"--------\n";
-		for(uint16	i=0;i<count;++i){
-
-			std::cout<<i<<"\t";
-			base[i].trace();
-			std::cout<<std::endl;
 		}
 	}
 

@@ -117,7 +117,7 @@ namespace	r_exec{
 		uint16	setCompoundResultHead(Atom	a)	const{	return	implementation->setCompoundResultHead(a);	}
 		uint16	addCompoundResultPart(Atom	a)	const{	return	implementation->addCompoundResultPart(a);	}
 
-		void	trace()	const{	return	implementation->trace();	}
+		void	trace(std::ostream& out)	const{	return	implementation->trace(out);	}
 	};
 
 	bool	red(const	Context	&context,uint16	&index);	//	executive-dependent.

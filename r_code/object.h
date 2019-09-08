@@ -78,6 +78,7 @@
 #ifndef	r_code_object_h
 #define	r_code_object_h
 
+#include	<ostream>
 #include	"atom.h"
 #include	"vector.h"
 #include	"list.h"
@@ -100,7 +101,7 @@ namespace	r_code{
 
 		virtual	void	write(word32	*data)=0;
 		virtual	void	read(word32		*data)=0;
-		virtual	void	trace()=0;
+		virtual	void	trace(std::ostream& out)=0;
 	};
 
 	class	View;
@@ -114,7 +115,7 @@ namespace	r_code{
 		void	write(word32	*data);
 		void	read(word32		*data);
 		uint32	get_size()	const;
-		void	trace();
+		void	trace(std::ostream& out);
 	};
 
 	class	Code;
@@ -136,6 +137,7 @@ namespace	r_code{
 		void	write(word32	*data);
 		void	read(word32		*data);
 		uint32	get_size();
+		void	trace(std::ostream& out);
 		void	trace();
 	};
 
@@ -271,16 +273,17 @@ namespace	r_code{
 			rel_markers();
 		}
 
-		void	trace()	const{
+		void	trace(std::ostream& out)	const{
 
-			std::cout<<"--------\n";
+			out<<"--------\n";
+			Atom::TraceContext context;
 			for(uint16	i=0;i<code_size();++i){
 
-				std::cout<<i<<"\t";
-				code(i).trace();
-				std::cout<<std::endl;
+				out<<i<<"\t";
+				code(i).trace(context, out);
+				out<<std::endl;
 			}
-			std::cout<<"OID: "<<get_oid()<<std::endl;
+			out<<"OID: "<<get_oid()<<std::endl;
 		}
 	};
 

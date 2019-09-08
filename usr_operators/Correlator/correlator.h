@@ -113,7 +113,7 @@ class	State:
 public	core::_Object{
 public:
 	float32 confidence;
-	virtual	void	trace()=0;
+	virtual	void	trace(std::ostream& out)=0;
 };
 
 //	Set of time-invariant objects.
@@ -124,16 +124,18 @@ public:
 	std::vector<P<r_code::Code> >	objects;
 	std::vector<P<State> >			states;
 
-	void	trace(){
+	void	trace(std::ostream& out){
 
-		std::cout<<"IPGMContext\n";
-		std::cout<<"Objects\n";
+		out<<"IPGMContext\n";
+		out<<"Objects\n";
 		for(uint32	i=0;i<objects.size();++i)
-			objects[i]->trace();
-		std::cout<<"States\n";
+			objects[i]->trace(out);
+		out<<"States\n";
 		for(uint32	i=0;i<states.size();++i)
-			states[i]->trace();
+			states[i]->trace(out);
 	}
+
+	void	trace() { trace(std::cout); }
 };
 
 //	Pattern that hold under some context.
@@ -144,28 +146,32 @@ public:
 	std::vector<P<r_code::Code> >	left;
 	std::vector<P<r_code::Code> >	right;
 
-	void	trace(){
+	void	trace(std::ostream& out){
 
-		std::cout<<"Pattern\n";
-		std::cout<<"Left\n";
+		out<<"Pattern\n";
+		out<<"Left\n";
 		for(uint32	i=0;i<left.size();++i)
-			left[i]->trace();
-		std::cout<<"Right\n";
+			left[i]->trace(out);
+		out<<"Right\n";
 		for(uint32	i=0;i<right.size();++i)
-			right[i]->trace();
+			right[i]->trace(out);
 	}
+
+	void	trace() { trace(std::cout); }
 };
 
 class	CorrelatorOutput{
 public:
 	std::vector<P<State> >	states; // changed from vector<P<IPGMContext>>
 
-	void	trace(){
+	void	trace(std::ostream& out){
 
-		std::cout<<"CorrelatorOutput: " << states.size() << " states" << std::endl;
+		out<<"CorrelatorOutput: " << states.size() << " states" << std::endl;
 		for(uint32	i=0;i<states.size();++i)
-			states[i]->trace();
+			states[i]->trace(out);
 	}
+
+	void	trace() { trace(std::cout); }
 };
 
 

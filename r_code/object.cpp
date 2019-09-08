@@ -124,19 +124,20 @@ namespace	r_code{
 		return	2+code.size()+references.size();
 	}
 
-	void	SysView::trace(){
+	void	SysView::trace(std::ostream& out){
 
-		std::cout<<" code size: "<<code.size()<<std::endl;
-		std::cout<<" reference set size: "<<references.size()<<std::endl;
-		std::cout<<"---code---"<<std::endl;
+		out<<" code size: "<<code.size()<<std::endl;
+		out<<" reference set size: "<<references.size()<<std::endl;
+		out<<"---code---"<<std::endl;
+		Atom::TraceContext context;
 		for(uint32	i=0;i<code.size();++i){
 
-			code[i].trace();
-			std::cout<<std::endl;
+			code[i].trace(context, out);
+			out<<std::endl;
 		}
-		std::cout<<"---reference set---"<<std::endl;
+		out<<"---reference set---"<<std::endl;
 		for(uint32	i=0;i<references.size();++i)
-			std::cout<<references[i]<<std::endl;
+			out<<references[i]<<std::endl;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -230,46 +231,49 @@ namespace	r_code{
 		return	5+code.size()+references.size()+markers.size()+view_set_size;
 	}
 
-	void	SysObject::trace(){
+	void	SysObject::trace(std::ostream& out){
 
-		std::cout<<"\n---object---\n";
-		std::cout<<oid<<std::endl;
-		std::cout<<"code size: "<<code.size()<<std::endl;
-		std::cout<<"reference set size: "<<references.size()<<std::endl;
-		std::cout<<"marker set size: "<<markers.size()<<std::endl;
-		std::cout<<"view set size: "<<views.size()<<std::endl;
-		std::cout<<"\n---code---\n";
+		out<<"\n---object---\n";
+		out<<oid<<std::endl;
+		out<<"code size: "<<code.size()<<std::endl;
+		out<<"reference set size: "<<references.size()<<std::endl;
+		out<<"marker set size: "<<markers.size()<<std::endl;
+		out<<"view set size: "<<views.size()<<std::endl;
+		out<<"\n---code---\n";
 		uint32	i;
+		Atom::TraceContext context;
 		for(i=0;i<code.size();++i){
 
-			std::cout<<i<<" ";
-			code[i].trace();
-			std::cout<<std::endl;
+			out<<i<<" ";
+			code[i].trace(context, out);
+			out<<std::endl;
 		}
-		std::cout<<"\n---reference set---\n";
+		out<<"\n---reference set---\n";
 		for(i=0;i<references.size();++i)
-			std::cout<<i<<" "<<references[i]<<std::endl;
-		std::cout<<"\n---marker set---\n";
+			out<<i<<" "<<references[i]<<std::endl;
+		out<<"\n---marker set---\n";
 		for(i=0;i<markers.size();++i)
-			std::cout<<i<<" "<<markers[i]<<std::endl;
-		std::cout<<"\n---view set---\n";
+			out<<i<<" "<<markers[i]<<std::endl;
+		out<<"\n---view set---\n";
 		for(uint32	k=0;k<views.size();++k){
 
-			std::cout<<"view["<<k<<"]"<<std::endl;
-			std::cout<<"reference set size: "<<views[k]->references.size()<<std::endl;
-			std::cout<<"-code-"<<std::endl;
+			out<<"view["<<k<<"]"<<std::endl;
+			out<<"reference set size: "<<views[k]->references.size()<<std::endl;
+			out<<"-code-"<<std::endl;
 			uint32	j;
 			for(j=0;j<views[k]->code.size();++i,++j){
 
-				std::cout<<j<<" ";
-				views[k]->code[j].trace();
-				std::cout<<std::endl;
+				out<<j<<" ";
+				views[k]->code[j].trace(context, out);
+				out<<std::endl;
 			}
-			std::cout<<"-reference set-"<<std::endl;
+			out<<"-reference set-"<<std::endl;
 			for(j=0;j<views[k]->references.size();++i,++j)
-				std::cout<<j<<" "<<views[k]->references[j]<<std::endl;
+				out<<j<<" "<<views[k]->references[j]<<std::endl;
 		}
 	}
+
+	void	SysObject::trace() { trace(std::cout); }
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
