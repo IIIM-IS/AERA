@@ -276,10 +276,11 @@ namespace	r_code{
 		void	trace(std::ostream& out)	const{
 
 			out<<"--------\n";
+			Atom::TraceContext context;
 			for(uint16	i=0;i<code_size();++i){
 
 				out<<i<<"\t";
-				code(i).trace(out);
+				code(i).trace(context, out);
 				out<<std::endl;
 			}
 			out<<"OID: "<<get_oid()<<std::endl;

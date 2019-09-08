@@ -124,12 +124,13 @@ namespace	r_exec{
 			return;
 		}
 
+		Atom::TraceContext context;
 		for(uint16	i=0;i<get_object_code_size();++i){
 
 			if(index==i)
 				out<<">>";
 			out<<i<<"\t";
-			code[i].trace(out);
+			code[i].trace(context, out);
 			out<<std::endl;
 		}
 	}

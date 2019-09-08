@@ -129,9 +129,10 @@ namespace	r_code{
 		out<<" code size: "<<code.size()<<std::endl;
 		out<<" reference set size: "<<references.size()<<std::endl;
 		out<<"---code---"<<std::endl;
+		Atom::TraceContext context;
 		for(uint32	i=0;i<code.size();++i){
 
-			code[i].trace(out);
+			code[i].trace(context, out);
 			out<<std::endl;
 		}
 		out<<"---reference set---"<<std::endl;
@@ -240,10 +241,11 @@ namespace	r_code{
 		out<<"view set size: "<<views.size()<<std::endl;
 		out<<"\n---code---\n";
 		uint32	i;
+		Atom::TraceContext context;
 		for(i=0;i<code.size();++i){
 
 			out<<i<<" ";
-			code[i].trace(out);
+			code[i].trace(context, out);
 			out<<std::endl;
 		}
 		out<<"\n---reference set---\n";
@@ -262,7 +264,7 @@ namespace	r_code{
 			for(j=0;j<views[k]->code.size();++i,++j){
 
 				out<<j<<" ";
-				views[k]->code[j].trace(out);
+				views[k]->code[j].trace(context, out);
 				out<<std::endl;
 			}
 			out<<"-reference set-"<<std::endl;
