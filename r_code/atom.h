@@ -91,13 +91,24 @@ namespace	r_code{
 	//	Element count on 8 bits.
 	//	To define bigger constructs (e.g. large matrices), define hooks to RAM (and derive classes from Object).
 	class	dll_export	Atom{
-	private:	//	trace utilities.
-		static	uint8	Members_to_go;
-		static	uint8	Timestamp_data;
-		static	uint8	String_data;
-		static	uint8	Char_count;
-		void	write_indents(std::ostream& out)	const;
 	public:
+		/**
+		 * Atom::TraceContext holds the indentation level and other context info
+		 * for the trace method. Before iterating over Atom objects (which may have
+		 * different indentation levels or other details), create an
+		 * Atom::TraceContext and pass it to Atom::trace.
+		 */
+		class dll_export TraceContext {
+		public:
+			uint8	Members_to_go;
+			uint8	Timestamp_data;
+			uint8	String_data;
+			uint8	Char_count;
+
+			TraceContext();
+			void write_indents(std::ostream& out);
+		};
+
 		typedef	enum{
 			NIL=0x80,
 			BOOLEAN_=0x81,
@@ -227,7 +238,7 @@ namespace	r_code{
 		bool	takesPastInputs()	const;	// applicable to NULL_PROGRAM.
 		template<class	C>	C	*asRawPointer()	const{	return	(C	*)atom;	}
 
-		void	trace(std::ostream& out)	const;
+		void	trace(TraceContext& context, std::ostream& out)	const;
 	};
 
 	/**
