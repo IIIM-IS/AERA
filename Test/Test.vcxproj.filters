@@ -216,5 +216,8 @@
     <None Include="V1.2\pong.2.simplified.replicode">
       <Filter>V1.2</Filter>
     </None>
+    <None Include="V1.2\helgi.replicode">
+      <Filter>V1.2</Filter>
+    </None>
   </ItemGroup>
 </Project>

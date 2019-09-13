@@ -148,6 +148,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugVisualizer|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <SubType>Designer</SubType>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +215,7 @@
     <None Include="V1.1\test.visualizer.replicode" />
     <None Include="V1.1\user.classes.replicode" />
     <None Include="V1.2\drives.replicode" />
+    <None Include="V1.2\helgi.replicode" />
     <None Include="V1.2\hello.world.1.replicode" />
     <None Include="V1.2\hello.world.2.replicode" />
     <None Include="V1.2\hello.world.3.replicode" />
