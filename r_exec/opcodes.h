@@ -78,7 +78,7 @@
 #ifndef	opcodes_h
 #define	opcodes_h
 
-#include	"../../CoreLibrary/CoreLibrary/types.h"
+#include	"../submodules/CoreLibrary/CoreLibrary/types.h"
 #include	"dll.h"
 
 

@@ -78,7 +78,7 @@
 #ifndef	r_code_vector_h
 #define	r_code_vector_h
 
-#include	"../../CoreLibrary/CoreLibrary/types.h"
+#include	"../submodules/CoreLibrary/CoreLibrary/types.h"
 
 
 using	namespace	core;

@@ -78,7 +78,7 @@
 #include	<experimental/filesystem>
 #include	"preprocessor.h"
 #include	"compiler.h"
-#include	"../../CoreLibrary/CoreLibrary/../../CoreLibrary/CoreLibrary/utils.h"
+#include	"../submodules/CoreLibrary/CoreLibrary/utils.h"
 namespace fs = std::experimental::filesystem;
 
 

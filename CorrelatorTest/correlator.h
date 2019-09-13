@@ -78,7 +78,7 @@
 #ifndef	correlator_h
 #define	correlator_h
 
-#include	<../../CoreLibrary/CoreLibrary/base.h>
+#include	"../submodules/CoreLibrary/CoreLibrary/base.h"
 #include	<../r_code/object.h>
 
 
