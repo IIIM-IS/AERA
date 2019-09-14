@@ -276,7 +276,8 @@ int32	main(int	argc,char	**argv){
 	core::Time::Init(1000);
 
 	Settings	settings;
-	if(!settings.load(argv[1]))
+	const char* file_name = (argc >= 2 ? argv[1] : "settings.xml");
+	if(!settings.load(file_name))
 		return	1;
 
 	std::cout<<"> compiling ...\n";
