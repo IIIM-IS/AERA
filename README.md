@@ -8,10 +8,13 @@ This README file documents general setup instructions.
 
 - Visual Studio 2017 (Community works fine)
 
-### Side note
+## Preparation
 
-Save yourself a lot of trouble, and keep the code in `C:/IIIM/AERA/replicode`. 
-There are quite a few places that use absolute paths, spare yourself the headache of hunting them all down.
+Check the code out from the IIIM github:
+
+`git clone --recursive https://github.com/IIIM-IS/replicode`
+
+(We use `--recursive` to include the CoreLibrary submodule.)
 
 ## Building
 

@@ -100,7 +100,7 @@ r_exec::Controller	dll_export	*correlator(r_code::View	*view);
 #include	<iterator>
 #include	<utility> // pair
 #include	<math.h>
-#include	<../../CoreLibrary/CoreLibrary/base.h>
+#include	"../submodules/CoreLibrary/CoreLibrary/base.h"
 #include	<../r_code/object.h>
 
 #ifdef USE_WINEPI

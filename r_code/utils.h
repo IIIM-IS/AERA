@@ -79,8 +79,8 @@
 #define	r_code_utils_h
 
 #include	"atom.h"
-#include	"../../CoreLibrary/CoreLibrary/base.h"
-#include	"../../CoreLibrary/CoreLibrary/utils.h"
+#include	"../submodules/CoreLibrary/CoreLibrary/base.h"
+#include	"../submodules/CoreLibrary/CoreLibrary/utils.h"
 
 
 namespace	r_code{

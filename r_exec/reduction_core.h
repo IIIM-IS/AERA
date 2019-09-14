@@ -78,7 +78,7 @@
 #ifndef	reduction_core_h
 #define	reduction_core_h
 
-#include	"../../CoreLibrary/CoreLibrary/../../CoreLibrary/CoreLibrary/utils.h"
+#include	"../submodules/CoreLibrary/CoreLibrary/utils.h"
 #include	"reduction_job.h"
 
 

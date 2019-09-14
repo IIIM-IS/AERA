@@ -80,7 +80,7 @@
 
 #include	<set>
 
-#include	"../../CoreLibrary/CoreLibrary/../../CoreLibrary/CoreLibrary/utils.h"
+#include	"../submodules/CoreLibrary/CoreLibrary/utils.h"
 #include	"object.h"
 #include	"view.h"
 

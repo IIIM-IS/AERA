@@ -78,7 +78,7 @@
 #ifndef	r_comp_h
 #define	r_comp_h
 
-#include	"../../CoreLibrary/CoreLibrary/types.h"
+#include	"../submodules/CoreLibrary/CoreLibrary/types.h"
 
 
 extern	"C"{
