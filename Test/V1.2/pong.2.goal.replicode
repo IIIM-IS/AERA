@@ -184,3 +184,16 @@ pgm_change_speed:(pgm
 
 i_pgm_change_speed:(ipgm pgm_change_speed |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]; Use primary since abduced goals go in there.
+
+; This program intercepts an abduced goal to run a command and directly
+; calls the command, which will call the override of _Mem::eject().
+pgm_cmd_set_speed_y:(pgm |[]
+[]
+   (ptn (fact (goal (fact (cmd set_speed_y [obj: sy:] ::) ::) ::) ::) |[])
+|[]
+[]
+   (cmd set_speed_y [obj sy] 1)
+1) |[]
+
+i_pgm_cmd_set_speed_y:(ipgm pgm_cmd_set_speed_y |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]; Use primary since abduced goals go in there.
