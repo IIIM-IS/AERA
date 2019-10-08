@@ -274,6 +274,8 @@ namespace	r_exec{
 		void	runInDiagnosticTime(uint32 runTimeMilliseconds);
 		static	uint64 DiagnosticTimeNow;
 		static	uint64 getDiagnosticTimeNow();
+		// Tell an inheriting class (with inject) when the time is changed.
+		virtual void onDiagnosticTimeUpdate();
 		void	stop();		// after stop() the content is cleared and one has to call load() and start() again.
 
 		// Internal core processing	////////////////////////////////////////////////////////////////

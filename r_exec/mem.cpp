@@ -427,6 +427,7 @@ namespace	r_exec{
 			// This should only be called if there are no running core threads.
 			return;
 
+		onDiagnosticTimeUpdate();
 		uint64 endTime = Now() + ((uint64)runTimeMilliseconds * 1000);
 
 		// Loop until the runTimeMilliseconds expires.
@@ -473,9 +474,12 @@ namespace	r_exec{
 				continue;
 
 			// The entry at the front is the earliest.
-			if (ordered_time_job_queue.front()->target_time > Now())
+			if (ordered_time_job_queue.front()->target_time > Now()) {
 				// Increase the diagnostic time to the job's target time.
 				DiagnosticTimeNow = ordered_time_job_queue.front()->target_time;
+				// Tell an inheriting class that the time has changed.
+				onDiagnosticTimeUpdate();
+			}
 
 			// Only process one job in case it adds more jobs.
 			P<TimeJob> timeJob = ordered_time_job_queue.front();
@@ -509,6 +513,8 @@ namespace	r_exec{
 	uint64 _Mem::DiagnosticTimeNow = 1;
 	
 	uint64 _Mem::getDiagnosticTimeNow() { return DiagnosticTimeNow;	}
+
+	void _Mem::onDiagnosticTimeUpdate() {}
 
 	void	_Mem::stop(){
 
