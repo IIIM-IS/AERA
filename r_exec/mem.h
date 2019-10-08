@@ -255,7 +255,7 @@ namespace	r_exec{
 		void	start_core();			// called upon creation of a delegate.
 		void	shutdown_core();		// called upon completion of a delegate's task.
 
-		bool	load(std::vector<r_code::Code	*>	*objects,uint32	stdin_oid,uint32	stdout_oid,uint32	self_oid);	// call before start; no mod/set/eje will be executed (only inj);
+		virtual bool	load(std::vector<r_code::Code	*>	*objects,uint32	stdin_oid,uint32	stdout_oid,uint32	self_oid);	// call before start; no mod/set/eje will be executed (only inj);
 																														// return false on error.
 		uint64	start();	// return the starting time.
 		/**
