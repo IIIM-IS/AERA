@@ -1,8 +1,6 @@
 ; Similar to pong.1.replicode a debug combinations of CTPX, GTPX and PTPX; goal-driven
 ; Here the ball travels without walls at a constant speed
 
-!load drives.replicode
-
 ;;;;;;;;;;;;;
 ;; objects ;;
 b:(ent 1)
@@ -41,19 +39,12 @@ m_run_0:(mdl
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; input generators ;;
 
-; This program runs once to set the initial position_y at 0, and speed_y at 0.0001.
-; The initial position_y is a fact at some time from now until now plus the sampling_period.
-; The initial speed_y is a fact at any time from now until MAX_TIME.
+; This program runs once to set the initial speed_y at 0.0001.
 start:(pgm |[] |[] |[] []
    (prb [1 "print" "starting..." |[]])
-   (inj []
-      p:(mk.val b position_y 0 1)
-      |[]
-   )
-   (inj []
-      (fact p after:(now) (+ after sampling_period) 1 1)
-      [SYNC_PERIODIC now 1 1 stdin nil]
-   )
+   ; Set the initial speed in the external environment.
+   (cmd set_speed_y [b 0.0001] 1)
+   ; Debug: Inject a speed_y for b with SYNC_HOLD. This shouldn't be necessary.
    (inj []
       s:(mk.val b speed_y 0.0001 1)
       |[]
@@ -65,33 +56,3 @@ start:(pgm |[] |[] |[] []
 1) |[]
 
 istart:(ipgm start |[] RUN_ONCE sampling_period VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
-
-; This program simulates the environment where b moves at constant speed changing position_y every sampling_period.
-; If AERA were connected through I/O to the environment, this would not be necessary.
-pgm0:(pgm
-|[]; template arguments
-[];  patterns defining the inputs
-   (ptn f:(fact (mk.val b position_y py: :) after: before: ::) |[])
-   (ptn (fact (mk.val b speed_y sy: :) ::) |[])
-|[]; guards
-[];  productions
-   (inj []
-      p:(mk.val b position_y (+ py (* sy sampling_period)) 1); The new position_y is the starting position plus speed times the sampling_period.
-      |[]
-   )
-   (inj []
-      (fact p (+ after sampling_period) (+ before sampling_period) 1 1); The new position_y is a fact at some time as the starting position plus the sampling_period.
-      [SYNC_PERIODIC (+ f.vw.ijt sampling_period) 1 1 stdin nil]; f.vw.ijt gets the inject time of the fact f.
-   )
-   (prb [1 "print" "updated the position..." [p]]); Can be useful to change usr_operators\Callbacks\callbacks.cpp to print only objects[0]->code(3).asFloat()
-1) |[]
-
-; This program has ACTIVATION=1 and will thus run.
-ipgm0:(ipgm
-pgm0;       the code
-|[];        instantiation values
-RUN_ALWAYS; boolean RUN_ALWAYS/ONCE
-20000us;   time scope
-VOLATILE;
-NOTIFY;     notify flag
-1) [[SYNC_ONCE now 0 forever stdin nil 1]]
