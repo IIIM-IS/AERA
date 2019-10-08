@@ -1,5 +1,8 @@
-; Similar to pong.1.replicode a debug combinations of CTPX, GTPX and PTPX; goal-driven
-; Here the ball travels without walls at a constant speed
+; Similar to pong.2.replicode, but use the external environment in the TestMem class to
+; intercept ejection of (cmd set_speed_y ...), simulate the motion of the ball, and inject
+; a new (mk.val b: position_y ...) every sampling period.
+; The model m_run_cmd abduces the goal to run a command to set the speed, and the program
+; pgm_set_speed is called once to inject the drive to set a new speed.
 
 ;;;;;;;;;;;;;
 ;; objects ;;
@@ -20,11 +23,18 @@ f_b_is_a_ball:(fact b_is_a_ball 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever std
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; Top-level model ;;
+; From a RHS goal to have a speed, abduce the LHS goal to run a command to set the speed.
+m_run_cmd:(mdl |[] []
+   (fact (cmd set_speed_y [b: speed_y:] 1) t0: t1: 1 1)
+   (fact (mk.val b: speed_y speed_y: :) t0: t1: ::); In abduction, matched as (fact (goal (fact ...)))
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 m_run_0:(mdl 
 |[]; template arguments
 []; LHS and RHS patterns of the model
-   (fact (mk.val b: position_y : :) t0: t1: ::); LHS
+   (fact (mk.val b speed_y 0.0002 1) t0: t1: 1 1); LHS
    (fact run t0: t1: ::);                 drive. RHS
 |[]; forward guards
 |[]; backward guards
@@ -56,3 +66,42 @@ start:(pgm |[] |[] |[] []
 1) |[]
 
 istart:(ipgm start |[] RUN_ONCE sampling_period VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+
+; Run once to inject the drive that will abduce a goal to set a new speed.
+pgm_set_speed:(pgm
+|[]; template arguments
+[];  patterns defining the inputs
+   (ptn (fact (mk.val b position_y py: :) after: before: ::) |[])
+[]; guards
+   (> py 29); Don't run until py is 30.
+[];  productions
+   (inj []
+      f_run:(fact run after before 1 1)
+      |[]
+   )
+   (inj []
+      g:(goal f_run self 1)
+      |[]
+   )
+   (inj []
+      (fact g t1:(now) t1 1 1)
+      [SYNC_ONCE t1 1 forever primary nil]
+   )
+   (prb [1 "print" "injected run" |[]])
+1) |[]
+
+i_pgm_set_speed:(ipgm pgm_set_speed |[] RUN_ONCE 20000us VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever stdin nil 1]
+
+; This program intercepts an abduced goal to run a command and directly
+; calls the command, which will call the override of _Mem::eject().
+pgm_cmd_set_speed_y:(pgm |[]
+[]
+   (ptn (fact (goal (fact (cmd set_speed_y [obj: sy:] ::) ::) ::) ::) |[])
+|[]
+[]
+   (cmd set_speed_y [obj sy] 1)
+1) |[]
+
+i_pgm_cmd_set_speed_y:(ipgm pgm_cmd_set_speed_y |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]; Use primary since abduced goals go in there.
