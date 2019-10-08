@@ -139,9 +139,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Test.cpp" />
+    <ClCompile Include="test_mem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="settings.h" />
+    <ClInclude Include="test_mem.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="settings.xml">
