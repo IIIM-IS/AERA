@@ -76,7 +76,7 @@
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
 #include	"decompiler.h"
-#include	"mem.h"
+#include	"test_mem.h"
 #include	"init.h"
 #include	"image_impl.h"
 #include	"settings.h"
@@ -316,9 +316,9 @@ int32	main(int	argc,char	**argv){
 
 		r_exec::_Mem	*mem;
 		if(settings.get_objects)
-			mem=new	r_exec::Mem<r_exec::LObject,r_exec::MemStatic>();
+			mem=new	TestMem<r_exec::LObject,r_exec::MemStatic>();
 		else
-			mem=new	r_exec::Mem<r_exec::LObject,r_exec::MemVolatile>();
+			mem=new	TestMem<r_exec::LObject,r_exec::MemVolatile>();
 
 		r_code::vector<r_code::Code	*>	ram_objects;
 		r_exec::Seed.get_objects(mem,ram_objects);
