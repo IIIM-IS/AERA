@@ -197,7 +197,6 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
     // We need to wait for the first call to eject set_speed_y.
     return;
 
-  const uint64 sampling_period = 100000;
   uint64 now = r_exec::Now();
   if (now >= lastInjectTime_ + sampling_period) {
     // Enough time has elapsed to inject a new position.

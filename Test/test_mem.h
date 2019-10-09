@@ -108,6 +108,9 @@ public:
    */
   virtual void onDiagnosticTimeUpdate() { onTimeTick(); }
 
+  // Note: This should match the definition in user.classes.replicode.
+  static const uint64 sampling_period = 100000;
+
 protected:
   void inject_position_y
     (Code* entity, float position_y, uint64 after, uint64 before);
