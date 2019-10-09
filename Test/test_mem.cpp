@@ -124,21 +124,21 @@ template<class O, class S> bool TestMem<O, S>::load
   return true;
 }
 
-template<class O, class S> void TestMem<O, S>::inject_position_y
-  (Code* obj, float position_y, uint64 after, uint64 before) {
-  if (!position_y_property_)
+template<class O, class S> void TestMem<O, S>::injectMarkerValue
+  (Code* obj, Code* prop, Atom val, uint64 after, uint64 before) {
+  if (!obj || !prop)
     // We don't expect this, but sanity check.
     return;
 
   Code *object = new r_exec::LObject(this);
   object->code(0) = Atom::Marker(r_exec::GetOpcode("mk.val"), 4); // Caveat: arity does not include the opcode.
-  object->code(1) = Atom::RPointer(0);
-  object->code(2) = Atom::RPointer(1);
-  object->code(3) = Atom::Float(position_y);
+  object->code(1) = Atom::RPointer(0); // object
+  object->code(2) = Atom::RPointer(1); // prooerty
+  object->code(3) = val;
   object->code(4) = Atom::Float(1); // psln_thr.
 
   object->set_reference(0, obj);
-  object->set_reference(1, position_y_property_);
+  object->set_reference(1, prop);
 
   // Build a fact.
   const uint64 sampling_period = 100000;
@@ -207,7 +207,8 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
       position_y_ += speed_y_ * (now - lastInjectTime_);
 
     lastInjectTime_ = now;
-    inject_position_y(obj_, position_y_, now, now + sampling_period);
+    injectMarkerValue
+      (obj_, position_y_property_, Atom::Float(position_y_), now, now + sampling_period);
   }
 }
 

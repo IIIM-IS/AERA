@@ -112,8 +112,12 @@ public:
   static const uint64 sampling_period = 100000;
 
 protected:
-  void inject_position_y
-    (Code* entity, float position_y, uint64 after, uint64 before);
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1) 
+   * [SYNC_PERIODIC now 1 1 stdin nil]
+   */
+  void injectMarkerValue
+    (Code* obj, Code* prop, Atom val, uint64 after, uint64 before);
 
   void onTimeTick();
 
