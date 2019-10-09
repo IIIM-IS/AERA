@@ -84,6 +84,7 @@ template<class O, class S> TestMem<O, S>::TestMem()
   position_y_ = 0;
   obj_ = 0;
   position_y_property_ = 0;
+  set_speed_y_opcode_ = 0xFFFF;
 }
 
 template<class O, class S> bool TestMem<O, S>::load
@@ -93,6 +94,11 @@ template<class O, class S> bool TestMem<O, S>::load
   if (!r_exec::Mem<O, S>::load(objects, stdin_oid, stdout_oid, self_oid))
     return false;
 
+  // Find the opcodes we need.
+  set_speed_y_opcode_ = r_exec::GetOpcode("set_speed_y");
+  if (set_speed_y_opcode_ == 0xFFFF)
+    cout << "WARNING: Can't find the set_speed_y opcode" << endl;
+
   // Find the OIDs of ontology objects we need. (Imitate the code in main().)
   uint32 position_y_oid = 0;
   for (UNORDERED_MAP<uint32, std::string>::const_iterator it = r_exec::Seed.object_names.symbols.begin();
@@ -101,10 +107,8 @@ template<class O, class S> bool TestMem<O, S>::load
       position_y_oid = it->first;
   }
 
-  if (position_y_oid == 0) {
+  if (position_y_oid == 0)
     cout << "WARNING: Can't find the position_y OID" << endl;
-    return true;
-  }
 
   // Find the objects we need. (Imitate the code in 
   for (uint32 i = 0; i < objects->size(); ++i) {
@@ -114,10 +118,8 @@ template<class O, class S> bool TestMem<O, S>::load
       position_y_property_ = (*objects)[i];
   }
 
-  if (!position_y_property_) {
+  if (!position_y_property_)
     cout << "WARNING: Can't find the position_y property" << endl;
-    return true;
-  }
 
   return true;
 }
@@ -167,12 +169,12 @@ template<class O, class S> void TestMem<O, S>::inject_position_y
 
 template<class O, class S> void TestMem<O, S>::eject(Code *command) {
   uint16 function = (command->code(CMD_FUNCTION).atom >> 8) & 0x000000FF;
-  if (function == r_exec::GetOpcode("set_speed_y")) {
+  if (function == set_speed_y_opcode_) {
     uint16 args_set_index = command->code(CMD_ARGS).asIndex();
     Code* obj = command->get_reference
       (command->code(args_set_index + 1).asIndex());
     if (!obj_) {
-      // This is the first call. Remember the object whose speed we're stting.
+      // This is the first call. Remember the object whose speed we're setting.
       obj_ = obj;
 
       if (!(reduction_core_count == 0 && time_core_count == 0)) {
