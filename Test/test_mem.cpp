@@ -84,6 +84,7 @@ template<class O, class S> TestMem<O, S>::TestMem()
   position_y_ = 0;
   obj_ = 0;
   position_y_property_ = 0;
+  speed_y_property_ = 0;
   set_speed_y_opcode_ = 0xFFFF;
 }
 
@@ -101,10 +102,13 @@ template<class O, class S> bool TestMem<O, S>::load
 
   // Find the OIDs of ontology objects we need. (Imitate the code in main().)
   uint32 position_y_oid = 0;
+  uint32 speed_y_oid = 0;
   for (UNORDERED_MAP<uint32, std::string>::const_iterator it = r_exec::Seed.object_names.symbols.begin();
     it != r_exec::Seed.object_names.symbols.end(); ++it) {
     if (it->second == "position_y")
       position_y_oid = it->first;
+    else if (it->second == "speed_y")
+      speed_y_oid = it->first;
   }
 
   if (position_y_oid == 0)
@@ -116,10 +120,14 @@ template<class O, class S> bool TestMem<O, S>::load
 
     if (object->get_oid() == position_y_oid)
       position_y_property_ = (*objects)[i];
+    if (object->get_oid() == speed_y_oid)
+      speed_y_property_ = (*objects)[i];
   }
 
   if (!position_y_property_)
     cout << "WARNING: Can't find the position_y property" << endl;
+  if (!speed_y_property_)
+    cout << "WARNING: Can't find the speed_y property" << endl;
 
   return true;
 }
@@ -189,6 +197,10 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
     }
 
     speed_y_ = command->code(args_set_index + 2).asFloat();
+    // Inject the new speed as a fact.
+    uint64 now = r_exec::Now();
+    injectMarkerValue
+      (obj_, speed_y_property_, Atom::Float(speed_y_), now, now + sampling_period);
   }
 }
 
