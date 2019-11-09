@@ -181,6 +181,8 @@ namespace	r_exec{
 		}
 
 		Code	*lhs_0=mdl->get_reference(mdl->references_size()-1)->get_reference(0);	// payload of the fact.
+		if (e.mdl->get_reference(0)->references_size() < 1)
+		  return false;
 		Code	*lhs_1=e.mdl->get_reference(0)->get_reference(0);	// payload of the fact.
 		if(!Match(lhs_0,lhs_1))
 			return	false;
