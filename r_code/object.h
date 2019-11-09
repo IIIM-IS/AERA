@@ -79,6 +79,7 @@
 #define	r_code_object_h
 
 #include	<ostream>
+#include	<sstream>
 #include	"atom.h"
 #include	"vector.h"
 #include	"list.h"
@@ -287,6 +288,16 @@ namespace	r_code{
 		}
 
 		void	trace()	const {	trace(std::cout); }
+
+        /**
+         * Return the trace as a string.
+         * For debugging purposes only (can be inefficient).
+         */
+		std::string traceString() const {
+          std::ostringstream out;
+          trace(out);
+          return out.str();
+		}
 	};
 
 	//	Implementation for local objects (non distributed).
