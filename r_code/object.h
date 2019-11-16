@@ -281,7 +281,10 @@ namespace	r_code{
 			for(uint16	i=0;i<code_size();++i){
 
 				out<<i<<"\t";
-				code(i).trace(context, out);
+				Atom& atom = code(i);
+				atom.trace(context, out);
+                if (atom.getDescriptor() == Atom::R_PTR)
+                  out << " -> " << get_reference(atom.asIndex())->get_oid();
 				out<<std::endl;
 			}
 			out<<"OID: "<<get_oid()<<std::endl;
