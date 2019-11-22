@@ -281,9 +281,13 @@ namespace	r_comp{
 				if(named_objects.find(sys_object->oid)!=named_objects.end())
 					return;
 				else
-					*out_stream<<"imported ";
+					*out_stream<<"imported";
 			}else	if(sys_object->oid!=0xFFFFFFFF)
-				*out_stream<<sys_object->oid<<" ";
+				*out_stream<<sys_object->oid;
+#ifdef WITH_DEBUG_OID
+			*out_stream << ":" << sys_object->debug_oid;
+#endif
+            *out_stream << " ";
 		}
 
 		std::string	s=object_names[object_index];

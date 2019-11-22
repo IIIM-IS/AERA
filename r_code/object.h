@@ -130,6 +130,9 @@ namespace	r_code{
 		r_code::vector<SysView	*>	views;
 
 		uint32	oid;
+#ifdef WITH_DEBUG_OID
+		uint32	debug_oid;
+#endif
 
 		SysObject();
 		SysObject(Code	*source);
@@ -283,12 +286,19 @@ namespace	r_code{
 				out<<i<<"\t";
 				Atom& atom = code(i);
 				atom.trace(context, out);
-                if (atom.getDescriptor() == Atom::R_PTR)
-                  out << " -> " << get_reference(atom.asIndex())->get_oid();
+				if (atom.getDescriptor() == Atom::R_PTR) {
+				  out << " -> " << get_reference(atom.asIndex())->get_oid();
+#ifdef WITH_DEBUG_OID
+				  out << ":" << get_reference(atom.asIndex())->get_debug_oid();
+#endif
+				}
 				out<<std::endl;
 			}
-			out<<"OID: "<<get_oid()<<std::endl;
-		}
+			out<<"OID: "<<get_oid();
+#ifdef WITH_DEBUG_OID
+            out<<":"<<get_debug_oid()<<std::endl;
+#endif
+        }
 
 		void	trace()	const {	trace(std::cout); }
 
