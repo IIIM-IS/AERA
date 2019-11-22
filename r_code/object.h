@@ -289,15 +289,16 @@ namespace	r_code{
 				if (atom.getDescriptor() == Atom::R_PTR) {
 				  out << " -> " << get_reference(atom.asIndex())->get_oid();
 #ifdef WITH_DEBUG_OID
-				  out << ":" << get_reference(atom.asIndex())->get_debug_oid();
+				  out << "(" << get_reference(atom.asIndex())->get_debug_oid() << ")";
 #endif
 				}
 				out<<std::endl;
 			}
 			out<<"OID: "<<get_oid();
 #ifdef WITH_DEBUG_OID
-            out<<":"<<get_debug_oid()<<std::endl;
+			out<<"("<<get_debug_oid()<<")";
 #endif
+			out<<std::endl;
         }
 
 		void	trace()	const {	trace(std::cout); }

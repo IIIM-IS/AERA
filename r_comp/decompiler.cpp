@@ -285,7 +285,7 @@ namespace	r_comp{
 			}else	if(sys_object->oid!=0xFFFFFFFF)
 				*out_stream<<sys_object->oid;
 #ifdef WITH_DEBUG_OID
-			*out_stream << ":" << sys_object->debug_oid;
+			*out_stream << "(" << sys_object->debug_oid << ")";
 #endif
             *out_stream << " ";
 		}
