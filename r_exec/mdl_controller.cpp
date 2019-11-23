@@ -713,7 +713,7 @@ namespace	r_exec{
 
 				Code	*imdl=(*e).evidence->get_pred()->get_target()->get_reference(0);
 				uint16	tpl_index=imdl->code(I_HLP_TPL_ARGS).asIndex();
-				//std::cout<<"IMDL: "<<imdl->code(tpl_index+1).asFloat()<<" ["<<Time::ToString_seconds((*e).after-Utils::GetTimeReference())<<" "<<Time::ToString_seconds((*e).before-Utils::GetTimeReference())<<"["<<std::endl;
+				//std::cout<<"IMDL: "<<imdl->code(tpl_index+1).asFloat()<<" ["<<Time::ToString_seconds((*e).after-Utils::GetTimeReference())<<" "<<Time::ToString_seconds((*e).before-Utils::GetTimeReference())<<"]"<<std::endl;
 
 				if((*e).is_too_old(now))	// garbage collection.
 					e=requirements.positive_evidences.erase(e);
@@ -732,7 +732,7 @@ namespace	r_exec{
 							r=WR_ENABLED;
 							bm->load(&_original);
 							ground=(*e).evidence;
-							//std::cout<<"Chosen IMDL: "<<imdl->code(tpl_index+1).asFloat()<<" ["<<Time::ToString_seconds((*e).after-Utils::GetTimeReference())<<" "<<Time::ToString_seconds((*e).before-Utils::GetTimeReference())<<"["<<std::endl;
+							//std::cout<<"Chosen IMDL: "<<imdl->code(tpl_index+1).asFloat()<<" ["<<Time::ToString_seconds((*e).after-Utils::GetTimeReference())<<" "<<Time::ToString_seconds((*e).before-Utils::GetTimeReference())<<"]"<<std::endl;
 						}
 						
 						r_p.first.controllers.push_back((*e).controller);
@@ -1228,7 +1228,7 @@ namespace	r_exec{
 		if(!evidence)
 			inject_goal(bm,f_sub_goal,f_imdl);
 		add_g_monitor(new	GMonitor(this,bm,deadline,now+sim_thz,f_sub_goal,f_imdl,evidence));
-		OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<"				mdl "<<getObject()->get_oid()<<" -> fact "<<f_sub_goal->get_oid()<<" goal["<<Utils::RelativeTime(sub_goal_target->get_after())<<","<<Utils::RelativeTime(sub_goal_target->get_before())<<"[\n";
+		OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<"				mdl "<<getObject()->get_oid()<<" -> fact "<<f_sub_goal->get_oid()<<" goal ["<<Utils::RelativeTime(sub_goal_target->get_after())<<","<<Utils::RelativeTime(sub_goal_target->get_before())<<"]\n";
 	}
 
 	void	TopLevelMDLController::predict(HLPBindingMap	*bm,_Fact	*input,Fact	*f_imdl,bool	chaining_was_allowed,RequirementsPair	&r_p,Fact	*ground){	// no prediction here.
@@ -1708,7 +1708,7 @@ namespace	r_exec{
 				
 				if(!evidence){
 					inject_goal(bm,f_sub_goal,f_imdl);
-					OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<"				mdl "<<getObject()->get_oid()<<" -> fact "<<f_sub_goal->get_oid()<<" goal ["<<Utils::RelativeTime(sub_goal->get_target()->get_after())<<","<<Utils::RelativeTime(sub_goal->get_target()->get_before())<<"[\n";
+					OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<"				mdl "<<getObject()->get_oid()<<" -> fact "<<f_sub_goal->get_oid()<<" goal ["<<Utils::RelativeTime(sub_goal->get_target()->get_after())<<","<<Utils::RelativeTime(sub_goal->get_target()->get_before())<<"]\n";
 				}
 				break;
 			}
@@ -1727,7 +1727,7 @@ namespace	r_exec{
 		Fact	*f_sub_goal=new	Fact(sub_goal,now,now,1,1);
 		add_r_monitor(new	RMonitor(this,bm,super_goal->get_goal()->get_target()->get_before(),sim->thz,f_sub_goal,f_imdl));	// the monitor will wait until the deadline of the super-goal.
 		inject_goal(bm,f_sub_goal,f_imdl);
-		OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<" "<<getObject()->get_oid()<<" -> fact "<<f_sub_goal->get_oid()<<" goal imdl "<<f_sub_goal->get_reference(0)->get_reference(0)->get_oid()<<"["<<Utils::RelativeTime(sub_goal->get_target()->get_after())<<","<<Utils::RelativeTime(sub_goal->get_target()->get_before())<<"[\n";
+		OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<" "<<getObject()->get_oid()<<" -> fact "<<f_sub_goal->get_oid()<<" goal imdl "<<f_sub_goal->get_reference(0)->get_reference(0)->get_oid()<<"["<<Utils::RelativeTime(sub_goal->get_target()->get_after())<<","<<Utils::RelativeTime(sub_goal->get_target()->get_before())<<"]\n";
 	}
 
 	void	PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap	*bm,Fact	*super_goal,Fact	*f_imdl,bool	opposite,float32	confidence,Sim	*sim){	// goal is f->g->f->object or f->g->|f->object; called concurrently by redcue() and _GMonitor::update().
