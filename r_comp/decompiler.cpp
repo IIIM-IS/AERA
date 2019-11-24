@@ -285,10 +285,12 @@ namespace	r_comp{
 			}else	if(sys_object->oid!=0xFFFFFFFF)
 				*out_stream<<sys_object->oid;
 #ifdef WITH_DEBUG_OID
-			*out_stream << "(" << sys_object->debug_oid << ")";
+			*out_stream << "(" << sys_object->debug_oid << ") ";
+#else
+            if (sys_object->oid != 0xFFFFFFFF)
+				*out_stream << " ";
 #endif
-            *out_stream << " ";
-		}
+        }
 
 		std::string	s=object_names[object_index];
 		s+=":";
