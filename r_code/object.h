@@ -277,6 +277,31 @@ namespace	r_code{
 			rel_markers();
 		}
 
+        /**
+         * Print the trace of code(i) to the out stream, using the given TraceContext.
+         */
+		void	trace(uint16 i, std::ostream& out, Atom::TraceContext& context)	const{
+			Atom& atom = code(i);
+			atom.trace(context, out);
+			if (atom.getDescriptor() == Atom::R_PTR) {
+			  out << " -> " << get_reference(atom.asIndex())->get_oid();
+#ifdef WITH_DEBUG_OID
+			  out << "(" << get_reference(atom.asIndex())->get_debug_oid() << ")";
+#endif
+			}
+		}
+
+        /**
+         * Print the trace of code(i) to the out stream, using a default TraceContext (no indentation).
+         */
+		void	trace(uint16 i, std::ostream& out)	const{
+			Atom::TraceContext context;
+			trace(i, out, context);
+		}
+
+        /**
+         * Print the trace of this Code to the out stream.
+         */
 		void	trace(std::ostream& out)	const{
 
 			out<<"--------\n";
@@ -284,14 +309,7 @@ namespace	r_code{
 			for(uint16	i=0;i<code_size();++i){
 
 				out<<i<<"\t";
-				Atom& atom = code(i);
-				atom.trace(context, out);
-				if (atom.getDescriptor() == Atom::R_PTR) {
-				  out << " -> " << get_reference(atom.asIndex())->get_oid();
-#ifdef WITH_DEBUG_OID
-				  out << "(" << get_reference(atom.asIndex())->get_debug_oid() << ")";
-#endif
-				}
+				trace(i, out, context);
 				out<<std::endl;
 			}
 			out<<"OID: "<<get_oid();
