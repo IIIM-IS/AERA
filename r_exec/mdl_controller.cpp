@@ -1452,7 +1452,9 @@ namespace	r_exec{
 
 					Fact	*pred_f_imdl=new	Fact(new	Pred(f_imdl,1),now,now,1,1);
 					inject_prediction(production,pred_f_imdl,confidence,before-now,NULL);
-					OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<"				mdl "<<getObject()->get_oid()<<": "<<input->get_oid()<<" -> fact "<<production->get_oid()<<" pred fact mk.val="<<bound_rhs->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<std::endl;
+					OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<"				mdl "<<getObject()->get_oid()<<": "<<input->get_oid()<<" -> fact "<<production->get_oid()<<" pred fact mk.val VALUE ";
+					bound_rhs->get_reference(0)->trace(MK_VAL_VALUE, OUTPUT(MDL_OUT));
+					OUTPUT(MDL_OUT)<<std::endl;
 				}else{
 
 					Code		*mk_rdx=new	MkRdx(f_imdl,(Code	*)input,production,1,bindings);
@@ -1462,7 +1464,9 @@ namespace	r_exec{
 					Group	*secondary_host=secondary->getView()->get_host();	// inject f_imdl in secondary group.
 					View	*view=new	View(View::SYNC_ONCE,now,confidence,1,getView()->get_host(),secondary_host,f_imdl);	// SYNC_ONCE,res=resilience.
 					_Mem::Get()->inject(view);
-					OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<"				mdl "<<getObject()->get_oid()<<": "<<input->get_oid()<<" -> fact "<<production->get_oid()<<" pred fact mk.val="<<bound_rhs->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<std::endl;
+					OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<"				fact "<<f_imdl->get_oid()<<" imdl mdl "<<getObject()->get_oid()<<": "<<input->get_oid()<<" -> fact "<<production->get_oid()<<" pred fact mk.val VALUE ";
+					bound_rhs->get_reference(0)->trace(MK_VAL_VALUE, OUTPUT(MDL_OUT));
+					OUTPUT(MDL_OUT)<<std::endl;
 				}
 			}
 		}else{	// no monitoring for simulated predictions.
@@ -1881,11 +1885,11 @@ namespace	r_exec{
 		if(success){
 
 			f_success_object=new	Fact(success_object,now,now,confidence,1);
-			OUTPUT(PRED_MON)<<Utils::RelativeTime(now)<<evidence->get_oid()<<" -> "<<f_pred->get_oid()<<" pred success"<<std::endl;
+			OUTPUT(PRED_MON)<<Utils::RelativeTime(now)<<" "<<evidence->get_oid()<<" -> fact "<<f_pred->get_oid()<<" pred success"<<std::endl;
 		}else{
 
 			f_success_object=new	AntiFact(success_object,now,now,confidence,1);
-			OUTPUT(PRED_MON)<<Utils::RelativeTime(now)<<" "<<f_pred->get_oid()<<" pred failure"<<std::endl;
+			OUTPUT(PRED_MON)<<Utils::RelativeTime(now)<<" fact "<<f_pred->get_oid()<<" pred failure"<<std::endl;
 		}
 
 		Group	*primary_host=get_host();
