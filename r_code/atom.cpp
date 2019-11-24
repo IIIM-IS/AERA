@@ -151,7 +151,7 @@ namespace	r_code{
 				out<<s.c_str();
 			}else	if(isFloat()){
 
-				out<<"nb: "<<std::scientific<<asFloat();
+				out<<"nb: "<<std::scientific<<asFloat()<<std::defaultfloat;
 				return;
 			}else
 				out<<"undef";
