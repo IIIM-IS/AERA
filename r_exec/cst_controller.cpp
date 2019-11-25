@@ -138,14 +138,14 @@ namespace	r_exec{
 					prediction->grounds.push_back(*pred);
 				((CSTController	*)controller)->inject_prediction(f_p_f_icst,lowest_cfd,time_to_live);	// inject a f->pred->icst in the primary group, no rdx.
 
-				OUTPUT(CST_OUT)<<Utils::RelativeTime(Now())<<"				"<<f_p_f_icst->get_oid()<<" pred icst["<<controller->getObject()->get_oid()<<"][";
+				OUTPUT(CST_OUT)<<Utils::RelativeTime(Now())<<"				fact "<<f_p_f_icst->get_oid()<<" pred fact icst["<<controller->getObject()->get_oid()<<"][";
 				for(uint32	i=0;i<inputs.size();++i)
 					OUTPUT(CST_OUT)<<" "<<inputs[i]->get_oid();
 				OUTPUT(CST_OUT)<<"]"<<std::endl;
 			}else{
 				((CSTController	*)controller)->inject_icst(f_icst,lowest_cfd,time_to_live);	// inject f->icst in the primary and secondary groups, and in the output groups.
 
-				OUTPUT(CST_OUT)<<Utils::RelativeTime(Now())<<"				"<<f_icst->get_oid()<<" icst["<<controller->getObject()->get_oid()<<"][";
+				OUTPUT(CST_OUT)<<Utils::RelativeTime(Now())<<"				fact "<<f_icst->get_oid()<<" icst["<<controller->getObject()->get_oid()<<"][";
 				for(uint32	i=0;i<inputs.size();++i)
 					OUTPUT(CST_OUT)<<" "<<inputs[i]->get_oid();
 				OUTPUT(CST_OUT)<<"]"<<std::endl;
