@@ -227,10 +227,10 @@ namespace	r_exec{
 
 			std::cout<<Utils::RelativeTime(Now())<<" A/F -> "<<input->object->get_oid()<<"|"<<primary_view->object->get_oid();
 			switch(input->get_sync()){
-			case	View::SYNC_HOLD:std::cout<<" (h)";break;
-			case	View::SYNC_ONCE:std::cout<<" (o)";break;
-			case	View::SYNC_PERIODIC:std::cout<<" (p)";break;
-			case	View::SYNC_AXIOM:std::cout<<" (a)";break;
+			case	View::SYNC_HOLD:std::cout<<" (HOLD)";break;
+			case	View::SYNC_ONCE:std::cout<<" (ONCE)";break;
+			case	View::SYNC_PERIODIC:std::cout<<" (PERIODIC)";break;
+			case	View::SYNC_AXIOM:std::cout<<" (AXIOM)";break;
 			}std::cout<<std::endl;
 		}
 
