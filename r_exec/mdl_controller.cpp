@@ -1431,7 +1431,12 @@ namespace	r_exec{
 
 			PrimaryMDLController	*c=(PrimaryMDLController	*)controllers[RHSController];	// rhs controller: in the same view.
 			c->store_requirement(production,this,chaining_was_allowed,simulation);				// if not simulation, stores also in the secondary controller.
+#ifdef WITH_DEBUG_OID
+			OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<"				fact (" << f_imdl->get_debug_oid() << ") imdl mdl "<<getObject()->get_oid()<<
+			  ": "<<input->get_oid()<<" -> fact ("<<production->get_debug_oid()<<") pred fact imdl mdl "<<bound_rhs->get_reference(0)->get_reference(0)->get_oid()<<std::endl;
+#else
 			OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<"				mdl "<<getObject()->get_oid()<<": "<<input->get_oid()<<" -> fact pred fact imdl mdl "<<bound_rhs->get_reference(0)->get_reference(0)->get_oid()<<std::endl;
+#endif
 			return;
 		}
 
@@ -1452,7 +1457,12 @@ namespace	r_exec{
 
 					Fact	*pred_f_imdl=new	Fact(new	Pred(f_imdl,1),now,now,1,1);
 					inject_prediction(production,pred_f_imdl,confidence,before-now,NULL);
+#ifdef WITH_DEBUG_OID
+					OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<"				fact (" << f_imdl->get_debug_oid() << ") imdl mdl "<<getObject()->get_oid()<<
+					  ": "<<input->get_oid()<<" -> fact "<<production->get_oid()<<" pred fact mk.val VALUE ";
+#else
 					OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<"				mdl "<<getObject()->get_oid()<<": "<<input->get_oid()<<" -> fact "<<production->get_oid()<<" pred fact mk.val VALUE ";
+#endif
 					bound_rhs->get_reference(0)->trace(MK_VAL_VALUE, OUTPUT(MDL_OUT));
 					OUTPUT(MDL_OUT)<<std::endl;
 				}else{
