@@ -27,6 +27,8 @@
 !dfn (grab_hand :); arg0: a hand.
 !dfn (release_hand :); arg0: a hand.
 !dfn (set_speed_y :); arg0: an object, arg1: speed.
+!dfn (move_y_plus :); arg0: an object.
+!dfn (move_y_minus :); arg0: an object.
 
 !def sampling_period 100000us
 

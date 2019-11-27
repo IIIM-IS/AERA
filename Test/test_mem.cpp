@@ -88,6 +88,8 @@ template<class O, class S> TestMem<O, S>::TestMem()
   position_y_property_ = 0;
   speed_y_property_ = 0;
   set_speed_y_opcode_ = 0xFFFF;
+  move_y_plus_opcode_ = 0xFFFF;
+  move_y_minus_opcode_ = 0xFFFF;
 }
 
 template<class O, class S> TestMem<O, S>::~TestMem() {
@@ -105,9 +107,12 @@ template<class O, class S> bool TestMem<O, S>::load
     return false;
 
   // Find the opcodes we need.
-  set_speed_y_opcode_ = r_exec::GetOpcode("set_speed_y");
-  if (set_speed_y_opcode_ == 0xFFFF)
+  if ((set_speed_y_opcode_ = r_exec::GetOpcode("set_speed_y")) == 0xFFFF)
     cout << "WARNING: Can't find the set_speed_y opcode" << endl;
+  if ((move_y_plus_opcode_ = r_exec::GetOpcode("move_y_plus")) == 0xFFFF)
+    cout << "WARNING: Can't find the move_y_plus opcode" << endl;
+  if ((move_y_minus_opcode_ = r_exec::GetOpcode("move_y_minus")) == 0xFFFF)
+    cout << "WARNING: Can't find the move_y_minus opcode" << endl;
 
   // Find the OIDs of ontology objects we need. (Imitate the code in main().)
   uint32 position_y_oid = 0;

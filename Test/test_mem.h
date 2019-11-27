@@ -142,6 +142,8 @@ protected:
   Code* position_y_property_;
   Code* speed_y_property_;
   uint16 set_speed_y_opcode_;
+  uint16 move_y_plus_opcode_;
+  uint16 move_y_minus_opcode_;
 };
 
 #endif
