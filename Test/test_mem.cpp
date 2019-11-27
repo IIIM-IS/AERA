@@ -127,8 +127,10 @@ template<class O, class S> bool TestMem<O, S>::load
 
   if (position_y_oid == 0)
     cout << "WARNING: Can't find the position_y OID" << endl;
+  if (speed_y_oid == 0)
+    cout << "WARNING: Can't find the speed_y OID" << endl;
 
-  // Find the objects we need. (Imitate the code in 
+  // Find the objects we need. (Imitate the code in _Mem::load.)
   for (uint32 i = 0; i < objects->size(); ++i) {
     Code *object = (*objects)[i];
 
