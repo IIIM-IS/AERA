@@ -92,6 +92,8 @@ template<class O, class S> class TestMem :
 public:
   TestMem();
 
+  ~TestMem();
+
   /**
    * Call the parent class load(), then set up the objects for the external environment.
    */
@@ -112,6 +114,9 @@ public:
   static const uint64 sampling_period = 100000;
 
 protected:
+  class	_Thread : public Thread {
+  };
+
   /**
    * Inject (fact (mk.val obj prop val 1) after before 1 1) 
    * [SYNC_PERIODIC now 1 1 stdin nil]
@@ -121,6 +126,15 @@ protected:
 
   void onTimeTick();
 
+  /**
+   * This runs in the timeTickThread_ to periodicaly call onTimeTick().
+   * (Only used if not running in diagnostic time.)
+   */
+  static thread_ret thread_function_call timeTickRun(void *args);
+
+  Thread* timeTickThread_;
+  bool timeTickThreadEnabled_;
+  static const uint64 sampling_period_us = 100000;
   uint64 lastInjectTime_;
   float speed_y_;
   float position_y_;

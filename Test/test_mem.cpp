@@ -79,6 +79,8 @@
 
 template<class O, class S> TestMem<O, S>::TestMem() 
 : r_exec::Mem<O, S>() {
+  timeTickThread_ = 0;
+  timeTickThreadEnabled_ = false;
   lastInjectTime_ = 0;
   speed_y_ = 0;
   position_y_ = 0;
@@ -86,6 +88,13 @@ template<class O, class S> TestMem<O, S>::TestMem()
   position_y_property_ = 0;
   speed_y_property_ = 0;
   set_speed_y_opcode_ = 0xFFFF;
+}
+
+template<class O, class S> TestMem<O, S>::~TestMem() {
+  if (timeTickThread_) {
+    timeTickThreadEnabled_ = false;
+    delete timeTickThread_;
+  }
 }
 
 template<class O, class S> bool TestMem<O, S>::load
@@ -149,7 +158,6 @@ template<class O, class S> void TestMem<O, S>::injectMarkerValue
   object->set_reference(1, prop);
 
   // Build a fact.
-  const uint64 sampling_period = 100000;
   uint64 now = r_exec::Now();
   Code* fact = new r_exec::Fact(object, after, before, 1, 1);
 
@@ -187,7 +195,11 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
 
       if (!(reduction_core_count == 0 && time_core_count == 0)) {
         // We are running in real time. onDiagnosticTimeUpdate() will not be called.
-        // TODO: Set up a timer thread to call onTimeTick().
+        // Set up a timer thread to call onTimeTick().
+        if (!timeTickThread_) {
+          timeTickThreadEnabled_ = true;
+          timeTickThread_ = Thread::New<_Thread>(timeTickRun, this);
+        }
       }
     }
     else {
@@ -200,7 +212,7 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
     // Inject the new speed as a fact.
     uint64 now = r_exec::Now();
     injectMarkerValue
-      (obj_, speed_y_property_, Atom::Float(speed_y_), now, now + sampling_period);
+      (obj_, speed_y_property_, Atom::Float(speed_y_), now, now + sampling_period_us);
   }
 }
 
@@ -210,7 +222,7 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
     return;
 
   uint64 now = r_exec::Now();
-  if (now >= lastInjectTime_ + sampling_period) {
+  if (now >= lastInjectTime_ + sampling_period_us) {
     // Enough time has elapsed to inject a new position.
     if (lastInjectTime_ == 0) {
       // This is the first call, so leave the initial position.
@@ -220,8 +232,21 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
 
     lastInjectTime_ = now;
     injectMarkerValue
-      (obj_, position_y_property_, Atom::Float(position_y_), now, now + sampling_period);
+      (obj_, position_y_property_, Atom::Float(position_y_), now, now + sampling_period_us);
   }
+}
+
+template<class O, class S> thread_ret thread_function_call
+TestMem<O, S>::timeTickRun(void *args) {
+  TestMem<O, S>* self = (TestMem *)args;
+
+  // Call onTimeTick at twice the rate of the sampling period.
+  while (self->timeTickThreadEnabled_) {
+    self->onTimeTick();
+    Thread::Sleep((sampling_period_us / 2) / 1000);
+  }
+
+  thread_ret_val(0);
 }
 
 // Instatiate this template class as needed by main(). (Needs C++11.)
