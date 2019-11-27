@@ -75,6 +75,7 @@
 //_/_/
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
+#include	"utils.h"
 #include	"atom.h"
 
 #include	<iostream>
@@ -136,6 +137,15 @@ namespace	r_code{
 				
 				--context.Timestamp_data;
 				out<<atom;
+
+				if (context.Timestamp_data == 1)
+				  // Save for the next step.
+				  context.Timestamp_high = atom;
+				else {
+				  // Imitate Utils::GetTimestamp.
+				  uint64 timestamp = context.Timestamp_high << 32 | atom;
+				  out << " " << Utils::RelativeTime(timestamp);
+				}
 			}else	if(context.String_data){
 
 				--context.String_data;

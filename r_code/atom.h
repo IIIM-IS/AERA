@@ -104,6 +104,7 @@ namespace	r_code{
 			uint8	Timestamp_data;
 			uint8	String_data;
 			uint8	Char_count;
+			uint64	Timestamp_high;
 
 			TraceContext();
 			void write_indents(std::ostream& out);
