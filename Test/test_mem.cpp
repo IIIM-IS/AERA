@@ -115,16 +115,21 @@ template<class O, class S> bool TestMem<O, S>::load
     cout << "WARNING: Can't find the move_y_minus opcode" << endl;
 
   // Find the OIDs of ontology objects we need. (Imitate the code in main().)
+  uint32 position_oid = 0;
   uint32 position_y_oid = 0;
   uint32 speed_y_oid = 0;
   for (UNORDERED_MAP<uint32, std::string>::const_iterator it = r_exec::Seed.object_names.symbols.begin();
     it != r_exec::Seed.object_names.symbols.end(); ++it) {
-    if (it->second == "position_y")
+    if (it->second == "position")
+      position_oid = it->first;
+    else if (it->second == "position_y")
       position_y_oid = it->first;
     else if (it->second == "speed_y")
       speed_y_oid = it->first;
   }
 
+  if (position_oid == 0)
+    cout << "WARNING: Can't find the position OID" << endl;
   if (position_y_oid == 0)
     cout << "WARNING: Can't find the position_y OID" << endl;
   if (speed_y_oid == 0)
@@ -134,12 +139,16 @@ template<class O, class S> bool TestMem<O, S>::load
   for (uint32 i = 0; i < objects->size(); ++i) {
     Code *object = (*objects)[i];
 
+    if (object->get_oid() == position_oid)
+      position_property_ = (*objects)[i];
     if (object->get_oid() == position_y_oid)
       position_y_property_ = (*objects)[i];
     if (object->get_oid() == speed_y_oid)
       speed_y_property_ = (*objects)[i];
   }
 
+  if (!position_property_)
+    cout << "WARNING: Can't find the position property" << endl;
   if (!position_y_property_)
     cout << "WARNING: Can't find the position_y property" << endl;
   if (!speed_y_property_)

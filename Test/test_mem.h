@@ -139,6 +139,7 @@ protected:
   float speed_y_;
   float position_y_;
   Code* obj_;
+  Code* position_property_;
   Code* position_y_property_;
   Code* speed_y_property_;
   uint16 set_speed_y_opcode_;
