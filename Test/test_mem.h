@@ -118,6 +118,15 @@ protected:
   };
 
   /**
+   * Find the object in r_exec::Seed and objects with the given name.
+   * @param objects The objects array from load().
+   * @param name The name of the symbol.
+   * @return The object, or NULL if not found.
+   */
+  static Code* findObject
+    (std::vector<r_code::Code *> *objects, const char* name);
+
+  /**
    * Inject (fact (mk.val obj prop val 1) after before 1 1) 
    * [SYNC_PERIODIC now 1 1 stdin nil]
    */
