@@ -84,7 +84,8 @@ template<class O, class S> TestMem<O, S>::TestMem()
   lastInjectTime_ = 0;
   speed_y_ = 0;
   position_y_ = 0;
-  obj_ = 0;
+  position_y_obj_ = 0;
+  position_property_ = 0;
   position_y_property_ = 0;
   speed_y_property_ = 0;
   set_speed_y_opcode_ = 0xFFFF;
@@ -107,12 +108,9 @@ template<class O, class S> bool TestMem<O, S>::load
     return false;
 
   // Find the opcodes we need.
-  if ((set_speed_y_opcode_ = r_exec::GetOpcode("set_speed_y")) == 0xFFFF)
-    cout << "WARNING: Can't find the set_speed_y opcode" << endl;
-  if ((move_y_plus_opcode_ = r_exec::GetOpcode("move_y_plus")) == 0xFFFF)
-    cout << "WARNING: Can't find the move_y_plus opcode" << endl;
-  if ((move_y_minus_opcode_ = r_exec::GetOpcode("move_y_minus")) == 0xFFFF)
-    cout << "WARNING: Can't find the move_y_minus opcode" << endl;
+  set_speed_y_opcode_ = r_exec::GetOpcode("set_speed_y");
+  move_y_plus_opcode_ = r_exec::GetOpcode("move_y_plus");
+  move_y_minus_opcode_ = r_exec::GetOpcode("move_y_minus");
 
   // Find the objects we need.
   position_property_ = findObject(objects, "position");
@@ -193,12 +191,21 @@ template<class O, class S> void TestMem<O, S>::injectMarkerValue
 template<class O, class S> void TestMem<O, S>::eject(Code *command) {
   uint16 function = (command->code(CMD_FUNCTION).atom >> 8) & 0x000000FF;
   if (function == set_speed_y_opcode_) {
+    if (!speed_y_property_) {
+      cout << "WARNING: Can't find the speed_y property" << endl;
+      return;
+    }
+    if (!position_y_property_) {
+      cout << "WARNING: Can't find the position_y property" << endl;
+      return;
+    }
+
     uint16 args_set_index = command->code(CMD_ARGS).asIndex();
     Code* obj = command->get_reference
       (command->code(args_set_index + 1).asIndex());
-    if (!obj_) {
+    if (!position_y_obj_) {
       // This is the first call. Remember the object whose speed we're setting.
-      obj_ = obj;
+      position_y_obj_ = obj;
 
       if (!(reduction_core_count == 0 && time_core_count == 0)) {
         // We are running in real time. onDiagnosticTimeUpdate() will not be called.
@@ -210,7 +217,7 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
       }
     }
     else {
-      if (obj_ != obj)
+      if (position_y_obj_ != obj)
         // For now, don't allow tracking the speed of multiple objects.
         return;
     }
@@ -219,12 +226,13 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
     // Inject the new speed as a fact.
     uint64 now = r_exec::Now();
     injectMarkerValue
-      (obj_, speed_y_property_, Atom::Float(speed_y_), now, now + sampling_period_us);
+      (position_y_obj_, speed_y_property_, Atom::Float(speed_y_),
+       now, now + sampling_period_us);
   }
 }
 
 template<class O, class S> void TestMem<O, S>::onTimeTick() {
-  if (!obj_)
+  if (!position_y_obj_)
     // We need to wait for the first call to eject set_speed_y.
     return;
 
@@ -239,7 +247,8 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
 
     lastInjectTime_ = now;
     injectMarkerValue
-      (obj_, position_y_property_, Atom::Float(position_y_), now, now + sampling_period_us);
+      (position_y_obj_, position_y_property_, Atom::Float(position_y_),
+       now, now + sampling_period_us);
   }
 }
 

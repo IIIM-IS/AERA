@@ -147,7 +147,7 @@ protected:
   uint64 lastInjectTime_;
   float speed_y_;
   float position_y_;
-  Code* obj_;
+  Code* position_y_obj_;
   Code* position_property_;
   Code* position_y_property_;
   Code* speed_y_property_;
