@@ -91,6 +91,12 @@ template<class O, class S> TestMem<O, S>::TestMem()
   set_speed_y_opcode_ = 0xFFFF;
   move_y_plus_opcode_ = 0xFFFF;
   move_y_minus_opcode_ = 0xFFFF;
+
+  y0_ent_ = 0;
+  y1_ent_ = 0;
+  y2_ent_ = 0;
+  discrete_position_obj_ = 0;
+  discrete_position_ = 0;
 }
 
 template<class O, class S> TestMem<O, S>::~TestMem() {
@@ -116,6 +122,11 @@ template<class O, class S> bool TestMem<O, S>::load
   position_property_ = findObject(objects, "position");
   position_y_property_ = findObject(objects, "position_y");
   speed_y_property_ = findObject(objects, "speed_y");
+
+  // Find the entities we need.
+  y0_ent_ = findObject(objects, "y0");
+  y1_ent_ = findObject(objects, "y1");
+  y2_ent_ = findObject(objects, "y2");
 
   return true;
 }
@@ -154,14 +165,39 @@ template<class O, class S> void TestMem<O, S>::injectMarkerValue
 
   Code *object = new r_exec::LObject(this);
   object->code(0) = Atom::Marker(r_exec::GetOpcode("mk.val"), 4); // Caveat: arity does not include the opcode.
-  object->code(1) = Atom::RPointer(0); // object
-  object->code(2) = Atom::RPointer(1); // prooerty
+  object->code(1) = Atom::RPointer(0); // obj
+  object->code(2) = Atom::RPointer(1); // prop
   object->code(3) = val;
   object->code(4) = Atom::Float(1); // psln_thr.
 
   object->set_reference(0, obj);
   object->set_reference(1, prop);
 
+  injectFact(object, after, before, get_stdin());
+}
+
+template<class O, class S> void TestMem<O, S>::injectMarkerValue
+  (Code* obj, Code* prop, Code* val, uint64 after, uint64 before) {
+  if (!obj || !prop)
+    // We don't expect this, but sanity check.
+    return;
+
+  Code *object = new r_exec::LObject(this);
+  object->code(0) = Atom::Marker(r_exec::GetOpcode("mk.val"), 4); // Caveat: arity does not include the opcode.
+  object->code(1) = Atom::RPointer(0); // obj
+  object->code(2) = Atom::RPointer(1); // prop
+  object->code(3) = Atom::RPointer(2); // val
+  object->code(4) = Atom::Float(1); // psln_thr.
+
+  object->set_reference(0, obj);
+  object->set_reference(1, prop);
+  object->set_reference(2, val);
+
+  injectFact(object, after, before, get_stdin());
+}
+
+template<class O, class S> void TestMem<O, S>::injectFact
+  (Code* object, uint64 after, uint64 before, Code* group) {
   // Build a fact.
   uint64 now = r_exec::Now();
   Code* fact = new r_exec::Fact(object, after, before, 1, 1);
@@ -176,12 +212,12 @@ template<class O, class S> void TestMem<O, S>::injectMarkerValue
   view->code(VIEW_IJT) = Atom::IPointer(extent_index);  // iptr to injection time.
   view->code(VIEW_SLN) = Atom::Float(1);      // sln.
   view->code(VIEW_RES) = Atom::Float(1);      // res is set to 1 upr of the destination group.
-  view->code(VIEW_HOST) = Atom::RPointer(0);  // stdin/stdout is the only reference.
+  view->code(VIEW_HOST) = Atom::RPointer(0);  // group is the only reference.
   view->code(VIEW_ORG) = Atom::Nil();         // orgin.
 
   Utils::SetTimestamp(&view->code(extent_index), now);
 
-  view->references[0] = get_stdin();
+  view->references[0] = group;
 
   // Inject the view.
   view->set_object(fact);
@@ -190,6 +226,7 @@ template<class O, class S> void TestMem<O, S>::injectMarkerValue
 
 template<class O, class S> void TestMem<O, S>::eject(Code *command) {
   uint16 function = (command->code(CMD_FUNCTION).atom >> 8) & 0x000000FF;
+
   if (function == set_speed_y_opcode_) {
     if (!speed_y_property_) {
       cout << "WARNING: Can't find the speed_y property" << endl;
@@ -206,15 +243,7 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
     if (!position_y_obj_) {
       // This is the first call. Remember the object whose speed we're setting.
       position_y_obj_ = obj;
-
-      if (!(reduction_core_count == 0 && time_core_count == 0)) {
-        // We are running in real time. onDiagnosticTimeUpdate() will not be called.
-        // Set up a timer thread to call onTimeTick().
-        if (!timeTickThread_) {
-          timeTickThreadEnabled_ = true;
-          timeTickThread_ = Thread::New<_Thread>(timeTickRun, this);
-        }
-      }
+      startTimeTickThread();
     }
     else {
       if (position_y_obj_ != obj)
@@ -229,27 +258,93 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
       (position_y_obj_, speed_y_property_, Atom::Float(speed_y_),
        now, now + sampling_period_us);
   }
+  else if (function == move_y_plus_opcode_ ||
+           function == move_y_minus_opcode_) {
+    if (!position_property_) {
+      cout << "WARNING: Can't find the position property" << endl;
+      return;
+    }
+    if (!y0_ent_ || !y1_ent_ || !y2_ent_) {
+      cout << "WARNING: Can't find the entities y0, y1 and y2" << endl;
+      return;
+    }
+
+    uint16 args_set_index = command->code(CMD_ARGS).asIndex();
+    Code* obj = command->get_reference
+      (command->code(args_set_index + 1).asIndex());
+    if (!discrete_position_obj_) {
+      // This is the first call. Remember the object whose position we're setting.
+      discrete_position_obj_ = obj;
+      discrete_position_ = y0_ent_;
+      startTimeTickThread();
+    }
+    else {
+      if (discrete_position_obj_ != obj)
+        // For now, don't allow tracking the speed of multiple objects.
+        return;
+    }
+
+    if (function == move_y_plus_opcode_) {
+      if (discrete_position_ == y0_ent_)
+        discrete_position_ = y1_ent_;
+      else if (discrete_position_ == y1_ent_)
+        discrete_position_ = y2_ent_;
+    }
+    else if (function == move_y_minus_opcode_) {
+      if (discrete_position_ == y2_ent_)
+        discrete_position_ = y1_ent_;
+      else if (discrete_position_ == y1_ent_)
+        discrete_position_ = y0_ent_;
+    }
+    // Let onTimeTick inject the new position.
+  }
 }
 
 template<class O, class S> void TestMem<O, S>::onTimeTick() {
-  if (!position_y_obj_)
-    // We need to wait for the first call to eject set_speed_y.
+  if (position_y_obj_) {
+    // We are updating the continuous position_y_.
+    uint64 now = r_exec::Now();
+    if (now >= lastInjectTime_ + sampling_period_us) {
+      // Enough time has elapsed to inject a new position.
+      if (lastInjectTime_ == 0) {
+        // This is the first call, so leave the initial position.
+      }
+      else
+        position_y_ += speed_y_ * (now - lastInjectTime_);
+
+      lastInjectTime_ = now;
+      injectMarkerValue
+        (position_y_obj_, position_y_property_, Atom::Float(position_y_),
+          now, now + sampling_period_us);
+    }
+  }
+
+  if (discrete_position_obj_) {
+    // We are updating the discrete_position_.
+    uint64 now = r_exec::Now();
+    if (now >= lastInjectTime_ + sampling_period_us) {
+      // Enough time has elapsed to inject a new position.
+      lastInjectTime_ = now;
+      injectMarkerValue
+        (discrete_position_obj_, position_property_, discrete_position_,
+          now, now + sampling_period_us);
+    }
+  }
+}
+
+template<class O, class S> void
+TestMem<O, S>::startTimeTickThread() {
+  if (reduction_core_count == 0 && time_core_count == 0)
+    // We don't need a timeTickThread for diagnostic time.
+    return;
+  if (timeTickThread_)
+    // We already started the thread.
     return;
 
-  uint64 now = r_exec::Now();
-  if (now >= lastInjectTime_ + sampling_period_us) {
-    // Enough time has elapsed to inject a new position.
-    if (lastInjectTime_ == 0) {
-      // This is the first call, so leave the initial position.
-    }
-    else
-      position_y_ += speed_y_ * (now - lastInjectTime_);
-
-    lastInjectTime_ = now;
-    injectMarkerValue
-      (position_y_obj_, position_y_property_, Atom::Float(position_y_),
-       now, now + sampling_period_us);
-  }
+  // We are running in real time. onDiagnosticTimeUpdate() will not be called.
+  // Set up a timer thread to call onTimeTick().
+  timeTickThreadEnabled_ = true;
+  timeTickThread_ = Thread::New<_Thread>(timeTickRun, this);
 }
 
 template<class O, class S> thread_ret thread_function_call

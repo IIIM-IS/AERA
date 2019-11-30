@@ -129,11 +129,32 @@ protected:
   /**
    * Inject (fact (mk.val obj prop val 1) after before 1 1) 
    * [SYNC_PERIODIC now 1 1 stdin nil]
+   * where val is a simple Atom.
    */
   void injectMarkerValue
     (Code* obj, Code* prop, Atom val, uint64 after, uint64 before);
 
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * [SYNC_PERIODIC now 1 1 stdin nil]
+   * where value is an object to reference.
+   */
+  void injectMarkerValue
+    (Code* obj, Code* prop, Code* val, uint64 after, uint64 before);
+
+  /**
+   * Inject (fact object after before 1 1)
+   * [SYNC_PERIODIC now 1 1 group nil]
+   */
+  void injectFact(Code* object, uint64 after, uint64 before, Code* group);
+
   void onTimeTick();
+
+  /**
+   * If not running in diagnostic time, start the timeTickThread_.
+   * If it is already started, do nothing.
+   */
+  void startTimeTickThread();
 
   /**
    * This runs in the timeTickThread_ to periodicaly call onTimeTick().
@@ -154,6 +175,12 @@ protected:
   uint16 set_speed_y_opcode_;
   uint16 move_y_plus_opcode_;
   uint16 move_y_minus_opcode_;
+
+  Code* y0_ent_;
+  Code* y1_ent_;
+  Code* y2_ent_;
+  Code* discrete_position_obj_;
+  Code* discrete_position_;
 };
 
 #endif
