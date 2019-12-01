@@ -88,9 +88,11 @@ template<class O, class S> TestMem<O, S>::TestMem()
   position_property_ = 0;
   position_y_property_ = 0;
   speed_y_property_ = 0;
+  primary_group_ = 0,
   set_speed_y_opcode_ = 0xFFFF;
   move_y_plus_opcode_ = 0xFFFF;
   move_y_minus_opcode_ = 0xFFFF;
+  last_command_opcode_ = 0xFFFF;
 
   y0_ent_ = 0;
   y1_ent_ = 0;
@@ -122,6 +124,7 @@ template<class O, class S> bool TestMem<O, S>::load
   position_property_ = findObject(objects, "position");
   position_y_property_ = findObject(objects, "position_y");
   speed_y_property_ = findObject(objects, "speed_y");
+  primary_group_ = findObject(objects, "primary");
 
   // Find the entities we need.
   y0_ent_ = findObject(objects, "y0");
@@ -203,29 +206,16 @@ template<class O, class S> void TestMem<O, S>::injectFact
   Code* fact = new r_exec::Fact(object, after, before, 1, 1);
 
   // Build a default view for the fact.
-  r_exec::View *view = new r_exec::View();
-  const uint32 arity = VIEW_ARITY; // reminder: opcode not included in the arity.
-  uint16 extent_index = arity + 1;
-
-  view->code(VIEW_OPCODE) = Atom::SSet(r_exec::View::ViewOpcode, arity);
-  view->code(VIEW_SYNC) = Atom::Float(View::SYNC_PERIODIC);
-  view->code(VIEW_IJT) = Atom::IPointer(extent_index);  // iptr to injection time.
-  view->code(VIEW_SLN) = Atom::Float(1);      // sln.
-  view->code(VIEW_RES) = Atom::Float(1);      // res is set to 1 upr of the destination group.
-  view->code(VIEW_HOST) = Atom::RPointer(0);  // group is the only reference.
-  view->code(VIEW_ORG) = Atom::Nil();         // orgin.
-
-  Utils::SetTimestamp(&view->code(extent_index), now);
-
-  view->references[0] = group;
+  r_exec::View *view = new r_exec::View
+    (r_exec::View::SYNC_PERIODIC, now, 1, 1, group, NULL, fact);
 
   // Inject the view.
-  view->set_object(fact);
   ((_Mem *)this)->inject(view);
 }
 
 template<class O, class S> void TestMem<O, S>::eject(Code *command) {
   uint16 function = (command->code(CMD_FUNCTION).atom >> 8) & 0x000000FF;
+  last_command_opcode_ = function;
 
   if (function == set_speed_y_opcode_) {
     if (!speed_y_property_) {

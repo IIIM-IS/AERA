@@ -172,9 +172,11 @@ protected:
   Code* position_property_;
   Code* position_y_property_;
   Code* speed_y_property_;
+  Code* primary_group_;
   uint16 set_speed_y_opcode_;
   uint16 move_y_plus_opcode_;
   uint16 move_y_minus_opcode_;
+  uint16 last_command_opcode_;
 
   Code* y0_ent_;
   Code* y1_ent_;
