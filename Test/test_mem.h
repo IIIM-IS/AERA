@@ -183,6 +183,7 @@ protected:
   Code* y2_ent_;
   Code* discrete_position_obj_;
   Code* discrete_position_;
+  Code* next_discrete_position_;
 };
 
 #endif

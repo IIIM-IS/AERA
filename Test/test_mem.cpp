@@ -99,6 +99,7 @@ template<class O, class S> TestMem<O, S>::TestMem()
   y2_ent_ = 0;
   discrete_position_obj_ = 0;
   discrete_position_ = 0;
+  next_discrete_position_ = 0;
 }
 
 template<class O, class S> TestMem<O, S>::~TestMem() {
@@ -266,25 +267,28 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
       // This is the first call. Remember the object whose position we're setting.
       discrete_position_obj_ = obj;
       discrete_position_ = y0_ent_;
+      next_discrete_position_ = y0_ent_;
       startTimeTickThread();
     }
     else {
       if (discrete_position_obj_ != obj)
-        // For now, don't allow tracking the speed of multiple objects.
+        // For now, don't allow tracking multiple objects.
         return;
     }
 
+    // The discrete_position_ will become next_discrete_position_ at the
+    // next sampling period.
     if (function == move_y_plus_opcode_) {
       if (discrete_position_ == y0_ent_)
-        discrete_position_ = y1_ent_;
+        next_discrete_position_ = y1_ent_;
       else if (discrete_position_ == y1_ent_)
-        discrete_position_ = y2_ent_;
+        next_discrete_position_ = y2_ent_;
     }
     else if (function == move_y_minus_opcode_) {
       if (discrete_position_ == y2_ent_)
-        discrete_position_ = y1_ent_;
+        next_discrete_position_ = y1_ent_;
       else if (discrete_position_ == y1_ent_)
-        discrete_position_ = y0_ent_;
+        next_discrete_position_ = y0_ent_;
     }
     // Let onTimeTick inject the new position.
   }
@@ -313,11 +317,42 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
     // We are updating the discrete_position_.
     uint64 now = r_exec::Now();
     if (now >= lastInjectTime_ + sampling_period_us) {
-      // Enough time has elapsed to inject a new position.
+      // Enough time has elapsed to inject another position.
       lastInjectTime_ = now;
       injectMarkerValue
         (discrete_position_obj_, position_property_, discrete_position_,
           now, now + sampling_period_us);
+
+      // This will be injected the next time.
+      discrete_position_ = next_discrete_position_;
+
+#if 0 // Babble.
+      uint16 nextCommand;
+      if (discrete_position_ == y0_ent_)
+        nextCommand = move_y_plus_opcode_;
+      else if (discrete_position_ == y1_ent_)
+        nextCommand = (last_command_opcode_ == move_y_plus_opcode_ ?
+                       move_y_plus_opcode_ : move_y_minus_opcode_);
+      else // discrete_position_ == y0_ent_
+        nextCommand = move_y_minus_opcode_;
+
+      // Inject (fact (goal (fact (cmd ...))))
+      Code *cmd = new r_exec::LObject(this);
+      cmd->code(0) = Atom::Marker(r_exec::GetOpcode("cmd"), 3);
+      cmd->code(1) = Atom::DeviceFunction(nextCommand);
+      cmd->code(2) = Atom::IPointer(4);
+      cmd->code(3) = Atom::Float(1); // psln_thr.
+      cmd->code(4) = Atom::Set(1);
+      cmd->code(5) = Atom::RPointer(0); // obj
+      cmd->set_reference(0, discrete_position_obj_);
+
+      r_exec::Fact* factCmd = new r_exec::Fact
+        (cmd, now, now + sampling_period_us, 1, 1);
+      r_exec::Goal* goal = new r_exec::Goal(factCmd, get_self(), 1);
+      cout << "Debug inject command " << (nextCommand == move_y_plus_opcode_ ?
+        "move_y_plus" : "move_y_minus") << endl;
+      injectFact(goal, now, now, get_stdin());
+#endif
     }
   }
 }
@@ -341,10 +376,10 @@ template<class O, class S> thread_ret thread_function_call
 TestMem<O, S>::timeTickRun(void *args) {
   TestMem<O, S>* self = (TestMem *)args;
 
-  // Call onTimeTick at twice the rate of the sampling period.
+  // Call onTimeTick at a faster rate than the sampling period.
   while (self->timeTickThreadEnabled_) {
     self->onTimeTick();
-    Thread::Sleep((sampling_period_us / 2) / 1000);
+    Thread::Sleep((sampling_period_us / 10) / 1000);
   }
 
   thread_ret_val(0);
