@@ -94,6 +94,23 @@ namespace	r_code{
 	void	Atom::trace(TraceContext& context, std::ostream& out)	const{
 
 		context.write_indents(out);
+		if (context.Timestamp_data){
+			// Output the timestamp value now. Otherwise, it could be interpreted
+			// as an op code, etc.
+			--context.Timestamp_data;
+			out<<atom;
+
+			if (context.Timestamp_data == 1)
+			  // Save for the next step.
+			  context.Timestamp_high = atom;
+			else {
+			  // Imitate Utils::GetTimestamp.
+			  uint64 timestamp = context.Timestamp_high << 32 | atom;
+			  out << " " << Utils::RelativeTime(timestamp);
+			}
+			return;
+		}
+
 		switch(getDescriptor()){
 		case	NIL:					out<<"nil";return;
 		case	BOOLEAN_:				out<<"bl: "<<std::boolalpha<<asBoolean();return;
@@ -133,20 +150,7 @@ namespace	r_code{
 		case	MODEL:					out<<"mdl: "<<std::dec<<asOpcode()<<" ("<<GetOpcodeName(asOpcode()).c_str()<<") "<<(uint16)getAtomCount();context.Members_to_go=getAtomCount();return;
 		case	NULL_PROGRAM:			out<<"null pgm "<<takesPastInputs()?"all inputs":"new inputs";return;
 		default:
-			if(context.Timestamp_data){
-				
-				--context.Timestamp_data;
-				out<<atom;
-
-				if (context.Timestamp_data == 1)
-				  // Save for the next step.
-				  context.Timestamp_high = atom;
-				else {
-				  // Imitate Utils::GetTimestamp.
-				  uint64 timestamp = context.Timestamp_high << 32 | atom;
-				  out << " " << Utils::RelativeTime(timestamp);
-				}
-			}else	if(context.String_data){
+			if(context.String_data){
 
 				--context.String_data;
 				std::string	s;
