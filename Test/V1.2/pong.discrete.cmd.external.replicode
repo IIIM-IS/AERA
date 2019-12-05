@@ -1,0 +1,254 @@
+;;;;;;;;;;;;;
+;; objects ;;
+p1:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+paddle:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+pad_is_a_paddle:(mk.val p1 essence paddle 1) |[]
+; Even though (fact pad_is_a_paddle ::) is not used in this file, the pattern extractor needs it.
+f_pad_is_a_paddle:(fact pad_is_a_paddle 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+discrete_position:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+discrete_position0:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+discrete_position1:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+discrete_position2:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+
+y0:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+y0_is_a_discrete_position:(mk.val y0 essence discrete_position 1) |[]
+f_y0_is_a_discrete_position:(fact y0_is_a_discrete_position 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+y0_position_0:(mk.val y0 position_y 0 1) |[]
+f_y0_position_0:(fact y0_position_0 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+y1:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+y1_is_a_discrete_position:(mk.val y1 essence discrete_position 1) |[]
+f_y1_is_a_discrete_position:(fact y1_is_a_discrete_position 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+y1_position_1:(mk.val y1 position_y 1 1) |[]
+f_y1_position_1:(fact y1_position_1 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+y2:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+y2_is_a_discrete_position:(mk.val y2 essence discrete_position 1) |[]
+f_y2_is_a_discrete_position:(fact y2_is_a_discrete_position 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+y2_position_2:(mk.val y2 position_y 2 1) |[]
+f_y2_position_2:(fact y2_position_2 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+!def babbling_stop_time 2000000us
+!def inject_drive_time 3000000us
+
+m_run_position:(mdl |[] []
+   (fact (mk.val p1 position y2 1) t0: t1: 1 1)
+   (fact run t0: t1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; input generators ;;
+
+start:(pgm |[] |[] |[] []
+   ; Issue the command directly to inject the initial position.
+   (cmd move_y_plus [p1] 1)
+   ; (fact (goal (fact (cmd move_y_plus [p1]))) ::)
+   (inj []
+      c:(cmd move_y_plus [p1] 1)
+      |[]
+   )
+   (inj []
+      f_c:(fact c after:(now) (+ after sampling_period) 1 1)
+      |[]
+   )
+   (inj []
+      g_f_c:(goal f_c self 1)
+      |[]
+   )
+   (inj []
+      (fact g_f_c after after 1 1)
+      [SYNC_PERIODIC after 1 1 stdin nil]
+   )
+   ; Setting speed_x shouldn't be necessary.
+   (inj []
+      s:(mk.val p1 speed_x 123 1)
+      |[]
+   )
+   (inj []
+      (fact s now MAX_TIME 1 1)
+      [SYNC_HOLD now 1 forever stdin nil]
+   )
+   (prb [1 "print" "started..." |[]])
+1) |[]
+istart:(ipgm start |[] RUN_ONCE sampling_period VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+
+; This program intercepts an abduced goal to run a command and directly
+; calls the command, which will call the override of _Mem::eject().
+pgm_cmd_move_y_plus:(pgm |[]
+[]
+   (ptn f:(fact (mk.val obj: position : :) after: before: ::) |[])
+   (ptn (fact (goal (fact (cmd move_y_plus [obj:] ::) c_after: c_before: ::) ::) ::) |[])
+[]
+   (< c_after before)
+   (> c_before after)
+[]
+   (prb [1 "print" "cmd move_y_plus..." |[]])
+   (cmd move_y_plus [obj] 1)
+1) |[]
+i_pgm_cmd_move_y_plus:(ipgm pgm_cmd_move_y_plus |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever stdin nil 1]
+
+; This program intercepts an abduced goal to run a command and directly
+; calls the command, which will call the override of _Mem::eject().
+pgm_cmd_move_y_minus:(pgm |[]
+[]
+   (ptn f:(fact (mk.val obj: position : :) after: before: ::) |[])
+   (ptn (fact (goal (fact (cmd move_y_minus [obj:] ::) c_after: c_before: ::) ::) ::) |[])
+[]
+   (< c_after before)
+   (> c_before after)
+[]
+   (prb [1 "print" "cmd move_y_minus..." |[]])
+   (cmd move_y_minus [obj] 1)
+1) |[]
+i_pgm_cmd_move_y_minus:(ipgm pgm_cmd_move_y_minus |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever stdin nil 1]
+
+pgm_babble_y0_plus:(pgm |[]
+[]
+   (ptn f:(fact (mk.val p1 position y0 :) after: before: ::) |[])
+   (ptn (fact (goal (fact (cmd move_y_plus [obj:] ::) c_after: c_before: ::) ::) ::) |[])
+[]
+   (< after (+ this.vw.ijt babbling_stop_time))
+   (< c_after before)
+   (> c_before after)
+[]
+   (inj []
+      c:(cmd move_y_plus [p1] 1)
+      |[]
+   )
+   (inj []
+      f_c:(fact c (+ after sampling_period) (+ before sampling_period) 1 1)
+      |[]
+   )
+   (inj []
+      g_f_c:(goal f_c self 1)
+      |[]
+   )
+   (inj []
+      (fact g_f_c now now 1 1)
+      [SYNC_PERIODIC (+ after sampling_period) 1 1 stdin nil]
+   )
+   (prb [1 "print" "babble move_y_plus y0->y1..." [f]])
+1) |[]
+i_pgm_babble_y0_plus:(ipgm pgm_babble_y0_plus |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever stdin nil 1]
+
+pgm_babble_y1_plus:(pgm |[]
+[]
+   (ptn f:(fact (mk.val p1 position y1 :) after: before: ::) |[])
+   (ptn (fact (goal (fact (cmd move_y_plus [obj:] ::) c_after: c_before: ::) ::) ::) |[])
+[]
+   (< after (+ this.vw.ijt babbling_stop_time))
+   (< c_after before)
+   (> c_before after)
+[]
+   (inj []
+      c:(cmd move_y_minus [p1] 1)
+      |[]
+   )
+   (inj []
+      f_c:(fact c (+ after sampling_period) (+ before sampling_period) 1 1)
+      |[]
+   )
+   (inj []
+      g_f_c:(goal f_c self 1)
+      |[]
+   )
+   (inj []
+      (fact g_f_c (+ after sampling_period) (+ after sampling_period) 1 1)
+      [SYNC_PERIODIC (+ after sampling_period) 1 1 stdin nil]
+   )
+   (prb [1 "print" "babble move_y_plus y1->y2..." [f]])
+1) |[]
+i_pgm_babble_y1_plus:(ipgm pgm_babble_y1_plus |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever stdin nil 1]
+
+pgm_babble_y2_minus:(pgm |[]
+[]
+   (ptn f:(fact (mk.val p1 position y2 :) after: before: ::) |[])
+   (ptn (fact (goal (fact (cmd move_y_minus [obj:] ::) c_after: c_before: ::) ::) ::) |[])
+[]
+   (< after (+ this.vw.ijt babbling_stop_time))
+   (< c_after before)
+   (> c_before after)
+[]
+   (inj []
+      c:(cmd move_y_minus [p1] 1)
+      |[]
+   )
+   (inj []
+      f_c:(fact c (+ after sampling_period) (+ before sampling_period) 1 1)
+      |[]
+   )
+   (inj []
+      g_f_c:(goal f_c self 1)
+      |[]
+   )
+   (inj []
+      (fact g_f_c (+ after sampling_period) (+ after sampling_period) 1 1)
+      [SYNC_PERIODIC (+ after sampling_period) 1 1 stdin nil]
+   )
+   (prb [1 "print" "babble move_y_minus y2->y1..." [f]])
+1) |[]
+i_pgm_babble_y2_minus:(ipgm pgm_babble_y2_minus |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever stdin nil 1]
+
+pgm_babble_y1_minus:(pgm |[]
+[]
+   (ptn f:(fact (mk.val p1 position y1 :) after: before: ::) |[])
+   (ptn (fact (goal (fact (cmd move_y_minus [obj:] ::) c_after: c_before: ::) ::) ::) |[])
+[]
+   (< after (+ this.vw.ijt babbling_stop_time))
+   (< c_after before)
+   (> c_before after)
+[]
+   (inj []
+      c:(cmd move_y_plus [p1] 1)
+      |[]
+   )
+   (inj []
+      f_c:(fact c (+ after sampling_period) (+ before sampling_period) 1 1)
+      |[]
+   )
+   (inj []
+      g_f_c:(goal f_c self 1)
+      |[]
+   )
+   (inj []
+      (fact g_f_c (+ after sampling_period) (+ after sampling_period) 1 1)
+      [SYNC_PERIODIC (+ after sampling_period) 1 1 stdin nil]
+   )
+   (prb [1 "print" "babble move_y_minus y1->y0..." [f]])
+1) |[]
+i_pgm_babble_y1_minus:(ipgm pgm_babble_y1_minus |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever stdin nil 1]
+
+; Run once (when babbling is finished) to inject the drive that will abduce a goal 
+; to move p1 to y2.
+pgm_inject_drive:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val p1 essence paddle :) after: before: ::) |[])
+[]
+   (> after (+ this.vw.ijt inject_drive_time))
+[]
+   (inj []
+      f_run:(fact run after before 1 1)
+      |[]
+   )
+   (inj []
+      g:(goal f_run self 1)
+      |[]
+   )
+   (inj []
+      (fact g t1:(now) t1 1 1)
+      [SYNC_ONCE t1 1 forever primary nil]
+   )
+   (prb [1 "print" "injected drive" |[]])
+1) |[]
+i_pgm_inject_drive:(ipgm pgm_inject_drive |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
