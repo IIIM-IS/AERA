@@ -177,6 +177,7 @@ protected:
   uint16 move_y_plus_opcode_;
   uint16 move_y_minus_opcode_;
   uint16 last_command_opcode_;
+  uint64 last_command_time_;
 
   Code* y0_ent_;
   Code* y1_ent_;

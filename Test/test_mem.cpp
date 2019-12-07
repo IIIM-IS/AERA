@@ -93,6 +93,7 @@ template<class O, class S> TestMem<O, S>::TestMem()
   move_y_plus_opcode_ = 0xFFFF;
   move_y_minus_opcode_ = 0xFFFF;
   last_command_opcode_ = 0xFFFF;
+  last_command_time_ = 0;
 
   y0_ent_ = 0;
   y1_ent_ = 0;
@@ -215,7 +216,6 @@ template<class O, class S> void TestMem<O, S>::injectFact
 
 template<class O, class S> void TestMem<O, S>::eject(Code *command) {
   uint16 function = (command->code(CMD_FUNCTION).atom >> 8) & 0x000000FF;
-  last_command_opcode_ = function;
 
   if (function == set_speed_y_opcode_) {
     if (!speed_y_property_) {
@@ -227,6 +227,9 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
       return;
     }
 
+    uint64 now = r_exec::Now();
+    last_command_opcode_ = function;
+    last_command_time_ = now;
     uint16 args_set_index = command->code(CMD_ARGS).asIndex();
     Code* obj = command->get_reference
       (command->code(args_set_index + 1).asIndex());
@@ -243,7 +246,6 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
 
     speed_y_ = command->code(args_set_index + 2).asFloat();
     // Inject the new speed as a fact.
-    uint64 now = r_exec::Now();
     injectMarkerValue
       (position_y_obj_, speed_y_property_, Atom::Float(speed_y_),
        now, now + sampling_period_us);
@@ -259,6 +261,13 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
       return;
     }
 
+    uint64 now = r_exec::Now();
+    if (now - last_command_time_ < sampling_period * 9 / 10)
+      // Don't allow multiple move commands at the same time.
+      return;
+
+    last_command_opcode_ = function;
+    last_command_time_ = now;
     uint16 args_set_index = command->code(CMD_ARGS).asIndex();
     Code* obj = command->get_reference
       (command->code(args_set_index + 1).asIndex());
@@ -332,7 +341,7 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
       else if (discrete_position_ == y1_ent_)
         nextCommand = (last_command_opcode_ == move_y_plus_opcode_ ?
                        move_y_plus_opcode_ : move_y_minus_opcode_);
-      else // discrete_position_ == y0_ent_
+      else // discrete_position_ == y2_ent_
         nextCommand = move_y_minus_opcode_;
 
       // Inject (fact (goal (fact (cmd ...))))
@@ -348,7 +357,7 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
       r_exec::Fact* factCmd = new r_exec::Fact
         (cmd, now + sampling_period_us, now + 2*sampling_period_us, 1, 1);
       r_exec::Goal* goal = new r_exec::Goal(factCmd, get_self(), 1);
-      cout << "Debug inject command " << (nextCommand == move_y_plus_opcode_ ?
+      cout << " inject command " << (nextCommand == move_y_plus_opcode_ ?
         "move_y_plus" : "move_y_minus") << factCmd->traceString() << endl;
       injectFact(goal, now + sampling_period_us, now + sampling_period_us, get_stdin());
 #endif
