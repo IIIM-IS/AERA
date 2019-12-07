@@ -203,12 +203,11 @@ template<class O, class S> void TestMem<O, S>::injectMarkerValue
 template<class O, class S> void TestMem<O, S>::injectFact
   (Code* object, uint64 after, uint64 before, Code* group) {
   // Build a fact.
-  uint64 now = r_exec::Now();
   Code* fact = new r_exec::Fact(object, after, before, 1, 1);
 
   // Build a default view for the fact.
   r_exec::View *view = new r_exec::View
-    (r_exec::View::SYNC_PERIODIC, now, 1, 1, group, NULL, fact);
+    (r_exec::View::SYNC_PERIODIC, after, 1, 1, group, NULL, fact);
 
   // Inject the view.
   ((_Mem *)this)->inject(view);
@@ -347,11 +346,11 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
       cmd->set_reference(0, discrete_position_obj_);
 
       r_exec::Fact* factCmd = new r_exec::Fact
-        (cmd, now, now + sampling_period_us, 1, 1);
+        (cmd, now + sampling_period_us, now + 2*sampling_period_us, 1, 1);
       r_exec::Goal* goal = new r_exec::Goal(factCmd, get_self(), 1);
       cout << "Debug inject command " << (nextCommand == move_y_plus_opcode_ ?
-        "move_y_plus" : "move_y_minus") << endl;
-      injectFact(goal, now, now, get_stdin());
+        "move_y_plus" : "move_y_minus") << factCmd->traceString() << endl;
+      injectFact(goal, now + sampling_period_us, now + sampling_period_us, get_stdin());
 #endif
     }
   }

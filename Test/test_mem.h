@@ -128,7 +128,7 @@ protected:
 
   /**
    * Inject (fact (mk.val obj prop val 1) after before 1 1) 
-   * [SYNC_PERIODIC now 1 1 stdin nil]
+   * [SYNC_PERIODIC after 1 1 stdin nil]
    * where val is a simple Atom.
    */
   void injectMarkerValue
@@ -136,7 +136,7 @@ protected:
 
   /**
    * Inject (fact (mk.val obj prop val 1) after before 1 1)
-   * [SYNC_PERIODIC now 1 1 stdin nil]
+   * [SYNC_PERIODIC after 1 1 stdin nil]
    * where value is an object to reference.
    */
   void injectMarkerValue
@@ -144,7 +144,7 @@ protected:
 
   /**
    * Inject (fact object after before 1 1)
-   * [SYNC_PERIODIC now 1 1 group nil]
+   * [SYNC_PERIODIC after 1 1 group nil]
    */
   void injectFact(Code* object, uint64 after, uint64 before, Code* group);
 
