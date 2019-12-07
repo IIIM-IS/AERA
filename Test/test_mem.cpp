@@ -337,7 +337,7 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
 
       // Inject (fact (goal (fact (cmd ...))))
       Code *cmd = new r_exec::LObject(this);
-      cmd->code(0) = Atom::Marker(r_exec::GetOpcode("cmd"), 3);
+      cmd->code(0) = Atom::Object(r_exec::GetOpcode("cmd"), 3);
       cmd->code(1) = Atom::DeviceFunction(nextCommand);
       cmd->code(2) = Atom::IPointer(4);
       cmd->code(3) = Atom::Float(1); // psln_thr.
