@@ -175,14 +175,14 @@ protected:
   uint16 set_speed_y_opcode_;
   uint16 move_y_plus_opcode_;
   uint16 move_y_minus_opcode_;
-  uint64 last_command_time_;
+  uint64 lastCommandTime_;
 
-  Code* y0_ent_;
-  Code* y1_ent_;
-  Code* y2_ent_;
-  Code* discrete_position_obj_;
-  Code* discrete_position_;
-  Code* next_discrete_position_;
+  Code* y0Ent_;
+  Code* y1Ent_;
+  Code* y2Ent_;
+  Code* discretePositionObj_;
+  Code* discretePosition_;
+  Code* nextDiscretePosition_;
   int babbleState_;
 };
 

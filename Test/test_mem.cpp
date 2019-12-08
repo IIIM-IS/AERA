@@ -91,14 +91,14 @@ template<class O, class S> TestMem<O, S>::TestMem()
   set_speed_y_opcode_ = 0xFFFF;
   move_y_plus_opcode_ = 0xFFFF;
   move_y_minus_opcode_ = 0xFFFF;
-  last_command_time_ = 0;
+  lastCommandTime_ = 0;
 
-  y0_ent_ = NULL;
-  y1_ent_ = NULL;
-  y2_ent_ = NULL;
-  discrete_position_obj_ = NULL;
-  discrete_position_ = NULL;
-  next_discrete_position_ = NULL;
+  y0Ent_ = NULL;
+  y1Ent_ = NULL;
+  y2Ent_ = NULL;
+  discretePositionObj_ = NULL;
+  discretePosition_ = NULL;
+  nextDiscretePosition_ = NULL;
   babbleState_ = 0;
 }
 
@@ -126,9 +126,9 @@ template<class O, class S> bool TestMem<O, S>::load
   primary_group_ = findObject(objects, "primary");
 
   // Find the entities we need.
-  y0_ent_ = findObject(objects, "y0");
-  y1_ent_ = findObject(objects, "y1");
-  y2_ent_ = findObject(objects, "y2");
+  y0Ent_ = findObject(objects, "y0");
+  y1Ent_ = findObject(objects, "y1");
+  y2Ent_ = findObject(objects, "y2");
 
   return true;
 }
@@ -225,7 +225,7 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
     }
 
     uint64 now = r_exec::Now();
-    last_command_time_ = now;
+    lastCommandTime_ = now;
     uint16 args_set_index = command->code(CMD_ARGS).asIndex();
     Code* obj = command->get_reference
       (command->code(args_set_index + 1).asIndex());
@@ -252,7 +252,7 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
       cout << "WARNING: Can't find the position property" << endl;
       return;
     }
-    if (!y0_ent_ || !y1_ent_ || !y2_ent_) {
+    if (!y0Ent_ || !y1Ent_ || !y2Ent_) {
       cout << "WARNING: Can't find the entities y0, y1 and y2" << endl;
       return;
     }
@@ -262,36 +262,36 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
     uint16 args_set_index = command->code(CMD_ARGS).asIndex();
     Code* obj = command->get_reference
       (command->code(args_set_index + 1).asIndex());
-    if (!discrete_position_obj_) {
+    if (!discretePositionObj_) {
       // This is the first call. Remember the object whose position we're setting.
-      discrete_position_obj_ = obj;
-      discrete_position_ = y0_ent_;
+      discretePositionObj_ = obj;
+      discretePosition_ = y0Ent_;
       startTimeTickThread();
       return;
     }
     else {
-      if (discrete_position_obj_ != obj)
+      if (discretePositionObj_ != obj)
         // For now, don't allow tracking multiple objects.
         return;
     }
 
-    if (next_discrete_position_)
+    if (nextDiscretePosition_)
       // A previous move command is still pending execution.
       return;
 
-    // next_discrete_position_ will become the position at the next sampling period.
-    last_command_time_ = now;
+    // nextDiscretePosition_ will become the position at the next sampling period.
+    lastCommandTime_ = now;
     if (function == move_y_plus_opcode_) {
-      if (discrete_position_ == y0_ent_)
-        next_discrete_position_ = y1_ent_;
-      else if (discrete_position_ == y1_ent_)
-        next_discrete_position_ = y2_ent_;
+      if (discretePosition_ == y0Ent_)
+        nextDiscretePosition_ = y1Ent_;
+      else if (discretePosition_ == y1Ent_)
+        nextDiscretePosition_ = y2Ent_;
     }
     else if (function == move_y_minus_opcode_) {
-      if (discrete_position_ == y2_ent_)
-        next_discrete_position_ = y1_ent_;
-      else if (discrete_position_ == y1_ent_)
-        next_discrete_position_ = y0_ent_;
+      if (discretePosition_ == y2Ent_)
+        nextDiscretePosition_ = y1Ent_;
+      else if (discretePosition_ == y1Ent_)
+        nextDiscretePosition_ = y0Ent_;
     }
     // Let onTimeTick inject the new position.
   }
@@ -316,22 +316,22 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
     }
   }
 
-  if (discrete_position_obj_) {
-    // We are updating the discrete_position_.
+  if (discretePositionObj_) {
+    // We are updating the discretePosition_.
     uint64 now = r_exec::Now();
     if (now >= lastInjectTime_ + sampling_period_us * 8 / 10) {
       // Enough time has elapsed to inject another position.
-      if (next_discrete_position_ &&
-          now >= last_command_time_ + sampling_period_us * 5 / 10) {
+      if (nextDiscretePosition_ &&
+          now >= lastCommandTime_ + sampling_period_us * 5 / 10) {
         // Enough time has elapsed from the move command to update the position.
-        discrete_position_ = next_discrete_position_;
-        // Clear next_discrete_position_ to allow another move command.
-        next_discrete_position_ = NULL;
+        discretePosition_ = nextDiscretePosition_;
+        // Clear nextDiscretePosition_ to allow another move command.
+        nextDiscretePosition_ = NULL;
       }
 
       lastInjectTime_ = now;
       injectMarkerValue
-        (discrete_position_obj_, position_property_, discrete_position_,
+        (discretePositionObj_, position_property_, discretePosition_,
           now, now + sampling_period_us);
 
       const uint64 babbleStopTime_us = 3000000;
@@ -354,7 +354,7 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
         cmd->code(3) = Atom::Float(1); // psln_thr.
         cmd->code(4) = Atom::Set(1);
         cmd->code(5) = Atom::RPointer(0); // obj
-        cmd->set_reference(0, discrete_position_obj_);
+        cmd->set_reference(0, discretePositionObj_);
 
         r_exec::Fact* factCmd = new r_exec::Fact
           (cmd, now + sampling_period_us, now + 2*sampling_period_us, 1, 1);
