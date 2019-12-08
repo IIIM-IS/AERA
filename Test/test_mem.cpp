@@ -80,34 +80,31 @@
 template<class O, class S> TestMem<O, S>::TestMem() 
 : r_exec::Mem<O, S>() {
   timeTickThread_ = 0;
-  timeTickThreadEnabled_ = false;
   lastInjectTime_ = 0;
   speed_y_ = 0;
-  position_y_ = 0;
-  position_y_obj_ = 0;
-  position_property_ = 0;
-  position_y_property_ = 0;
-  speed_y_property_ = 0;
-  primary_group_ = 0,
+  position_y_ = NULL;
+  position_y_obj_ = NULL;
+  position_property_ = NULL;
+  position_y_property_ = NULL;
+  speed_y_property_ = NULL;
+  primary_group_ = NULL,
   set_speed_y_opcode_ = 0xFFFF;
   move_y_plus_opcode_ = 0xFFFF;
   move_y_minus_opcode_ = 0xFFFF;
-  last_command_opcode_ = 0xFFFF;
   last_command_time_ = 0;
 
-  y0_ent_ = 0;
-  y1_ent_ = 0;
-  y2_ent_ = 0;
-  discrete_position_obj_ = 0;
-  discrete_position_ = 0;
-  next_discrete_position_ = 0;
+  y0_ent_ = NULL;
+  y1_ent_ = NULL;
+  y2_ent_ = NULL;
+  discrete_position_obj_ = NULL;
+  discrete_position_ = NULL;
+  next_discrete_position_ = NULL;
+  babbleState_ = 0;
 }
 
 template<class O, class S> TestMem<O, S>::~TestMem() {
-  if (timeTickThread_) {
-    timeTickThreadEnabled_ = false;
+  if (timeTickThread_)
     delete timeTickThread_;
-  }
 }
 
 template<class O, class S> bool TestMem<O, S>::load
@@ -228,7 +225,6 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
     }
 
     uint64 now = r_exec::Now();
-    last_command_opcode_ = function;
     last_command_time_ = now;
     uint16 args_set_index = command->code(CMD_ARGS).asIndex();
     Code* obj = command->get_reference
@@ -262,12 +258,7 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
     }
 
     uint64 now = r_exec::Now();
-    if (now - last_command_time_ < sampling_period * 9 / 10)
-      // Don't allow multiple move commands at the same time.
-      return;
 
-    last_command_opcode_ = function;
-    last_command_time_ = now;
     uint16 args_set_index = command->code(CMD_ARGS).asIndex();
     Code* obj = command->get_reference
       (command->code(args_set_index + 1).asIndex());
@@ -275,8 +266,8 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
       // This is the first call. Remember the object whose position we're setting.
       discrete_position_obj_ = obj;
       discrete_position_ = y0_ent_;
-      next_discrete_position_ = y0_ent_;
       startTimeTickThread();
+      return;
     }
     else {
       if (discrete_position_obj_ != obj)
@@ -284,8 +275,12 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
         return;
     }
 
-    // The discrete_position_ will become next_discrete_position_ at the
-    // next sampling period.
+    if (next_discrete_position_)
+      // A previous move command is still pending execution.
+      return;
+
+    // next_discrete_position_ will become the position at the next sampling period.
+    last_command_time_ = now;
     if (function == move_y_plus_opcode_) {
       if (discrete_position_ == y0_ent_)
         next_discrete_position_ = y1_ent_;
@@ -306,7 +301,7 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
   if (position_y_obj_) {
     // We are updating the continuous position_y_.
     uint64 now = r_exec::Now();
-    if (now >= lastInjectTime_ + sampling_period_us) {
+    if (now >= lastInjectTime_ + sampling_period_us * 8 / 10) {
       // Enough time has elapsed to inject a new position.
       if (lastInjectTime_ == 0) {
         // This is the first call, so leave the initial position.
@@ -324,43 +319,48 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
   if (discrete_position_obj_) {
     // We are updating the discrete_position_.
     uint64 now = r_exec::Now();
-    if (now >= lastInjectTime_ + sampling_period_us) {
+    if (now >= lastInjectTime_ + sampling_period_us * 8 / 10) {
       // Enough time has elapsed to inject another position.
+      if (next_discrete_position_ &&
+          now >= last_command_time_ + sampling_period_us * 5 / 10) {
+        // Enough time has elapsed from the move command to update the position.
+        discrete_position_ = next_discrete_position_;
+        // Clear next_discrete_position_ to allow another move command.
+        next_discrete_position_ = NULL;
+      }
+
       lastInjectTime_ = now;
       injectMarkerValue
         (discrete_position_obj_, position_property_, discrete_position_,
           now, now + sampling_period_us);
 
-      // This will be injected the next time.
-      discrete_position_ = next_discrete_position_;
+      const uint64 babbleStopTime_us = 3000000;
+      if (now - Utils::GetTimeReference() < babbleStopTime_us) {
+        // Babble.
+        uint16 nextCommand;
+        ++babbleState_;
+        if (babbleState_ >= 4)
+          babbleState_ = 0;
+        if (babbleState_ == 0 || babbleState_ == 1)
+          nextCommand = move_y_plus_opcode_;
+        else
+          nextCommand = move_y_minus_opcode_;
 
-#if 0 // Babble.
-      uint16 nextCommand;
-      if (discrete_position_ == y0_ent_)
-        nextCommand = move_y_plus_opcode_;
-      else if (discrete_position_ == y1_ent_)
-        nextCommand = (last_command_opcode_ == move_y_plus_opcode_ ?
-                       move_y_plus_opcode_ : move_y_minus_opcode_);
-      else // discrete_position_ == y2_ent_
-        nextCommand = move_y_minus_opcode_;
+        // Inject (fact (goal (fact (cmd ...))))
+        Code *cmd = new r_exec::LObject(this);
+        cmd->code(0) = Atom::Object(r_exec::GetOpcode("cmd"), 3);
+        cmd->code(1) = Atom::DeviceFunction(nextCommand);
+        cmd->code(2) = Atom::IPointer(4);
+        cmd->code(3) = Atom::Float(1); // psln_thr.
+        cmd->code(4) = Atom::Set(1);
+        cmd->code(5) = Atom::RPointer(0); // obj
+        cmd->set_reference(0, discrete_position_obj_);
 
-      // Inject (fact (goal (fact (cmd ...))))
-      Code *cmd = new r_exec::LObject(this);
-      cmd->code(0) = Atom::Object(r_exec::GetOpcode("cmd"), 3);
-      cmd->code(1) = Atom::DeviceFunction(nextCommand);
-      cmd->code(2) = Atom::IPointer(4);
-      cmd->code(3) = Atom::Float(1); // psln_thr.
-      cmd->code(4) = Atom::Set(1);
-      cmd->code(5) = Atom::RPointer(0); // obj
-      cmd->set_reference(0, discrete_position_obj_);
-
-      r_exec::Fact* factCmd = new r_exec::Fact
-        (cmd, now + sampling_period_us, now + 2*sampling_period_us, 1, 1);
-      r_exec::Goal* goal = new r_exec::Goal(factCmd, get_self(), 1);
-      cout << " inject command " << (nextCommand == move_y_plus_opcode_ ?
-        "move_y_plus" : "move_y_minus") << factCmd->traceString() << endl;
-      injectFact(goal, now + sampling_period_us, now + sampling_period_us, get_stdin());
-#endif
+        r_exec::Fact* factCmd = new r_exec::Fact
+          (cmd, now + sampling_period_us, now + 2*sampling_period_us, 1, 1);
+        r_exec::Goal* goal = new r_exec::Goal(factCmd, get_self(), 1);
+        injectFact(goal, now + sampling_period_us, now + sampling_period_us, get_stdin());
+      }
     }
   }
 }
@@ -376,7 +376,6 @@ TestMem<O, S>::startTimeTickThread() {
 
   // We are running in real time. onDiagnosticTimeUpdate() will not be called.
   // Set up a timer thread to call onTimeTick().
-  timeTickThreadEnabled_ = true;
   timeTickThread_ = Thread::New<_Thread>(timeTickRun, this);
 }
 
@@ -384,10 +383,13 @@ template<class O, class S> thread_ret thread_function_call
 TestMem<O, S>::timeTickRun(void *args) {
   TestMem<O, S>* self = (TestMem *)args;
 
-  // Call onTimeTick at a faster rate than the sampling period.
-  while (self->timeTickThreadEnabled_) {
+  uint64 tickTime = r_exec::Now();
+  // Call onTimeTick at the sampling period.
+  while (self->state == RUNNING) {
     self->onTimeTick();
-    Thread::Sleep((sampling_period_us / 10) / 1000);
+
+    tickTime += sampling_period_us;
+    Thread::Sleep((tickTime - r_exec::Now()) / 1000);
   }
 
   thread_ret_val(0);

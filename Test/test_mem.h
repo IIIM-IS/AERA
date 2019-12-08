@@ -163,7 +163,6 @@ protected:
   static thread_ret thread_function_call timeTickRun(void *args);
 
   Thread* timeTickThread_;
-  bool timeTickThreadEnabled_;
   static const uint64 sampling_period_us = 100000;
   uint64 lastInjectTime_;
   float speed_y_;
@@ -176,7 +175,6 @@ protected:
   uint16 set_speed_y_opcode_;
   uint16 move_y_plus_opcode_;
   uint16 move_y_minus_opcode_;
-  uint16 last_command_opcode_;
   uint64 last_command_time_;
 
   Code* y0_ent_;
@@ -185,6 +183,7 @@ protected:
   Code* discrete_position_obj_;
   Code* discrete_position_;
   Code* next_discrete_position_;
+  int babbleState_;
 };
 
 #endif
