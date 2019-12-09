@@ -105,10 +105,10 @@ public:
   virtual void eject(Code *command);
 
   /**
-   * This is called when runInDiagnosticTime() updates the time. Just call
+   * This is called when runInDiagnosticTime() updates the tickTime. Just call
    * onTimeTick(), because there is no real-time timer thread to call it.
    */
-  virtual void onDiagnosticTimeUpdate() { onTimeTick(); }
+  virtual void onDiagnosticTimeTick() { onTimeTick(); }
 
 protected:
   class	_Thread : public Thread {
