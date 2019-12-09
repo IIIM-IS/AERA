@@ -108,7 +108,7 @@ template<class O, class S> TestMem<O, S>::~TestMem() {
 }
 
 template<class O, class S> bool TestMem<O, S>::load
-  (std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 stdout_oid,
+  (std::vector<Code*> *objects, uint32 stdin_oid, uint32 stdout_oid,
    uint32 self_oid) {
   // Call the method in the parent class.
   if (!r_exec::Mem<O, S>::load(objects, stdin_oid, stdout_oid, self_oid))
@@ -134,8 +134,7 @@ template<class O, class S> bool TestMem<O, S>::load
 }
 
 template<class O, class S> Code* 
-TestMem<O, S>::findObject
-  (std::vector<r_code::Code *> *objects, const char* name) {
+TestMem<O, S>::findObject(std::vector<Code*> *objects, const char* name) {
   // Find the object OID.
   uint32 oid = 0;
   for (UNORDERED_MAP<uint32, std::string>::const_iterator it = r_exec::Seed.object_names.symbols.begin();
@@ -160,7 +159,8 @@ TestMem<O, S>::findObject
 }
 
 template<class O, class S> void TestMem<O, S>::injectMarkerValue
-  (Code* obj, Code* prop, Atom val, uint64 after, uint64 before) {
+  (Code* obj, Code* prop, Atom val, uint64 after, uint64 before, 
+   r_exec::View::SyncMode syncMode) {
   if (!obj || !prop)
     // We don't expect this, but sanity check.
     return;
@@ -175,11 +175,12 @@ template<class O, class S> void TestMem<O, S>::injectMarkerValue
   object->set_reference(0, obj);
   object->set_reference(1, prop);
 
-  injectFact(object, after, before, get_stdin());
+  injectFact(object, after, before, syncMode, get_stdin());
 }
 
 template<class O, class S> void TestMem<O, S>::injectMarkerValue
-  (Code* obj, Code* prop, Code* val, uint64 after, uint64 before) {
+  (Code* obj, Code* prop, Code* val, uint64 after, uint64 before,
+    r_exec::View::SyncMode syncMode) {
   if (!obj || !prop)
     // We don't expect this, but sanity check.
     return;
@@ -195,17 +196,17 @@ template<class O, class S> void TestMem<O, S>::injectMarkerValue
   object->set_reference(1, prop);
   object->set_reference(2, val);
 
-  injectFact(object, after, before, get_stdin());
+  injectFact(object, after, before, syncMode, get_stdin());
 }
 
 template<class O, class S> void TestMem<O, S>::injectFact
-  (Code* object, uint64 after, uint64 before, Code* group) {
+  (Code* object, uint64 after, uint64 before, r_exec::View::SyncMode syncMode,
+   Code* group) {
   // Build a fact.
   Code* fact = new r_exec::Fact(object, after, before, 1, 1);
 
-  // Build a default view for the fact.
-  r_exec::View *view = new r_exec::View
-    (r_exec::View::SYNC_PERIODIC, after, 1, 1, group, NULL, fact);
+  // Build a view for the fact.
+  r_exec::View *view = new r_exec::View(syncMode, after, 1, 1, group, NULL, fact);
 
   // Inject the view.
   ((_Mem *)this)->inject(view);
@@ -241,10 +242,7 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
     }
 
     speed_y_ = command->code(args_set_index + 2).asFloat();
-    // Inject the new speed as a fact.
-    injectMarkerValue
-      (position_y_obj_, speed_y_property_, Atom::Float(speed_y_),
-       now, now + sampling_period_us);
+    // Let onTimeTick inject the new speed_y.
   }
   else if (function == move_y_plus_opcode_ ||
            function == move_y_minus_opcode_) {
@@ -310,6 +308,11 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
         position_y_ += speed_y_ * (now - lastInjectTime_);
 
       lastInjectTime_ = now;
+      // Inject the speed and position.
+      // It seems that speed_y needs SYNC_HOLD for building models.
+      injectMarkerValue
+        (position_y_obj_, speed_y_property_, Atom::Float(speed_y_),
+         now, now + sampling_period_us, r_exec::View::SYNC_HOLD);
       injectMarkerValue
         (position_y_obj_, position_y_property_, Atom::Float(position_y_),
           now, now + sampling_period_us);

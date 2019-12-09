@@ -128,11 +128,33 @@ protected:
 
   /**
    * Inject (fact (mk.val obj prop val 1) after before 1 1) 
+   * [syncMode after 1 1 stdin nil]
+   * where val is a simple Atom.
+   */
+  void injectMarkerValue
+    (Code* obj, Code* prop, Atom val, uint64 after, uint64 before, 
+     r_exec::View::SyncMode syncMode);
+
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
    * [SYNC_PERIODIC after 1 1 stdin nil]
    * where val is a simple Atom.
    */
   void injectMarkerValue
-    (Code* obj, Code* prop, Atom val, uint64 after, uint64 before);
+    (Code* obj, Code* prop, Atom val, uint64 after, uint64 before)
+  {
+    injectMarkerValue
+      (obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC);
+  }
+
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * [syncMode after 1 1 stdin nil]
+   * where value is an object to reference.
+   */
+  void injectMarkerValue
+    (Code* obj, Code* prop, Code* val, uint64 after, uint64 before,
+     r_exec::View::SyncMode syncMode);
 
   /**
    * Inject (fact (mk.val obj prop val 1) after before 1 1)
@@ -140,13 +162,28 @@ protected:
    * where value is an object to reference.
    */
   void injectMarkerValue
-    (Code* obj, Code* prop, Code* val, uint64 after, uint64 before);
+    (Code* obj, Code* prop, Code* val, uint64 after, uint64 before)
+  {
+    injectMarkerValue
+    (obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC);
+  }
+
+  /**
+   * Inject (fact object after before 1 1)
+   * [syncMode after 1 1 group nil]
+   */
+  void injectFact
+    (Code* object, uint64 after, uint64 before, r_exec::View::SyncMode syncMode,
+     Code* group);
 
   /**
    * Inject (fact object after before 1 1)
    * [SYNC_PERIODIC after 1 1 group nil]
    */
-  void injectFact(Code* object, uint64 after, uint64 before, Code* group);
+  void injectFact(Code* object, uint64 after, uint64 before, Code* group) {
+    injectFact
+      (object, after, before, r_exec::View::SYNC_PERIODIC, group);
+  }
 
   void onTimeTick();
 
