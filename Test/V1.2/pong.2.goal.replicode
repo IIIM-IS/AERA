@@ -52,17 +52,8 @@ m_run_0:(mdl
 ; This program runs once to set the initial speed_y at 0.0001.
 start:(pgm |[] |[] |[] []
    (prb [1 "print" "starting..." |[]])
-   ; Set the initial speed in the external environment.
+   ; Set the initial speed in the external environment. This will inject speed_y.
    (cmd set_speed_y [b 0.0001] 1)
-   ; Debug: Inject a speed_y for b with SYNC_HOLD. This shouldn't be necessary.
-   (inj []
-      s:(mk.val b speed_y 0.0001 1)
-      |[]
-   )
-   (inj []
-      (fact s now MAX_TIME 1 1)
-      [SYNC_HOLD now 1 forever stdin nil]
-   )
 1) |[]
 
 istart:(ipgm start |[] RUN_ONCE sampling_period VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
