@@ -110,9 +110,6 @@ public:
    */
   virtual void onDiagnosticTimeUpdate() { onTimeTick(); }
 
-  // Note: This should match the definition in user.classes.replicode.
-  static const uint64 sampling_period = 100000;
-
 protected:
   class	_Thread : public Thread {
   };
@@ -200,6 +197,7 @@ protected:
   static thread_ret thread_function_call timeTickRun(void *args);
 
   Thread* timeTickThread_;
+  // Note: This should match the definition in user.classes.replicode.
   static const uint64 sampling_period_us = 100000;
   uint64 lastInjectTime_;
   float speed_y_;
