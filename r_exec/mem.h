@@ -345,6 +345,9 @@ namespace	r_exec{
 			HLP_INJ=7
 		}TraceLevel;
 		static	std::ostream	&Output(TraceLevel	l);
+
+		// Note: This should match the definition in user.classes.replicode.
+		static const uint64 sampling_period_us = 100000;
 	};
 
 
