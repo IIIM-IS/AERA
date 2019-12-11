@@ -273,8 +273,8 @@ namespace	r_exec{
 
 		Atom	*get_code(uint16	i)	const{	return	map[i]->get_code();	}
 		Code	*get_object(uint16	i)	const{	return	map[i]->get_object();	}
-		uint16	get_fwd_after_index()	const{	return	fwd_after_index;	}
-		uint16	get_fwd_before_index()	const{	return	fwd_before_index;	}
+		int16	get_fwd_after_index()	const{	return	fwd_after_index;	}
+		int16	get_fwd_before_index()	const{	return	fwd_before_index;	}
 		bool	scan_variable(uint16	id)	const;	// return true if id<first_index or map[id] is not an UnboundValue.
 	};
 
