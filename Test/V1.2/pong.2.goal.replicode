@@ -34,7 +34,7 @@ m_run_cmd:(mdl |[] []
 m_run_0:(mdl 
 |[]; template arguments
 []; LHS and RHS patterns of the model
-   (fact (cmd set_speed_y [b 0.0002] 1) t0: t1: 1 1)
+   (fact (mk.val b speed_y 0.0002 1) t0: t1: 1 1); LHS
    (fact run t0: t1: ::);                 drive. RHS
 |[]; forward guards
 |[]; backward guards
