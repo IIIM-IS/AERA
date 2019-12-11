@@ -340,10 +340,19 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
       const uint64 babbleStopTime_us = 2800000;
       if (now - Utils::GetTimeReference() < babbleStopTime_us) {
         // Babble.
+        if (discretePosition_ == y0Ent_)
+          // Reset to the expected value.
+          babbleState_ = 1;
+        else if (discretePosition_ == y2Ent_)
+          // Reset to the expected value.
+          babbleState_ = 3;
+        else {
+          ++babbleState_;
+          if (babbleState_ >= 4)
+            babbleState_ = 0;
+        }
+
         uint16 nextCommand;
-        ++babbleState_;
-        if (babbleState_ >= 4)
-          babbleState_ = 0;
         if (babbleState_ == 0 || babbleState_ == 1)
           nextCommand = move_y_plus_opcode_;
         else
