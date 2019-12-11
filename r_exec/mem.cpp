@@ -470,23 +470,26 @@ namespace	r_exec{
 				// Finished.
 				break;
 
+			// The entry at the front is the earliest.
 			if (ordered_time_job_queue.size() == 0 ||
-                ordered_time_job_queue.front()->target_time >
+                ordered_time_job_queue.front()->target_time >=
                   tickTime + sampling_period_us) {
 				// There is no time job before the next tick time, so tick.
 				tickTime += sampling_period_us;
 				// Increase the diagnostic time to the tick time.
 				DiagnosticTimeNow = tickTime;
 				onDiagnosticTimeTick();
-				// Loop again in case a reduction job will add more time jobs.
-				continue;
+
+				if (ordered_time_job_queue.size() == 0 ||
+				    ordered_time_job_queue.front()->target_time > tickTime)
+					// Loop again in case a reduction job will add more time jobs.
+					continue;
 			}
 
 			if (ordered_time_job_queue.size() == 0)
 				// No time jobs. Loop again in case a reduction job will add one.
 				continue;
 
-			// The entry at the front is the earliest.
 			if (ordered_time_job_queue.front()->target_time > Now())
 				// Increase the diagnostic time to the job's target time.
 				DiagnosticTimeNow = ordered_time_job_queue.front()->target_time;
