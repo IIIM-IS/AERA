@@ -251,8 +251,10 @@ namespace	r_exec{
 		MatchResult	match_fwd_lenient(const	_Fact	*f_object,const	_Fact	*f_pattern);	// use for facts when we are lenient about fact vs |fact.
 		bool	match_fwd_strict(const	_Fact	*f_object,const	_Fact	*f_pattern);		// use for facts when we need sharp match.
 
-		bool has_fwd_after() { return map.size() > fwd_after_index && map[fwd_after_index]->get_code() != NULL; }
-		bool has_fwd_before() { return map.size() > fwd_before_index && map[fwd_before_index]->get_code() != NULL; }
+		bool has_fwd_after() { return fwd_after_index >= 0 && map.size() > fwd_after_index && 
+		  map[fwd_after_index]->get_code() != NULL; }
+		bool has_fwd_before() { return fwd_before_index >= 0 && map.size() > fwd_before_index && 
+		  map[fwd_before_index]->get_code() != NULL; }
 		uint64	get_fwd_after()		const;	// assumes the timings are valuated.
 		uint64	get_fwd_before()	const;	// idem.
 
