@@ -64,7 +64,7 @@ pgm_set_speed:(pgm
 [];  patterns defining the inputs
    (ptn (fact (mk.val b position_y py: :) after: before: ::) |[])
 []; guards
-   (> py 29); Don't run until py is 30.
+   (> py 99); Don't run until py is 100.
 [];  productions
    (inj []
       f_run:(fact run after before 1 1)
