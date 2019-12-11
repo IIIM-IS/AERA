@@ -337,7 +337,7 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
         (discretePositionObj_, position_property_, discretePosition_,
           now, now + sampling_period_us);
 
-      const uint64 babbleStopTime_us = 3000000;
+      const uint64 babbleStopTime_us = 2800000;
       if (now - Utils::GetTimeReference() < babbleStopTime_us) {
         // Babble.
         uint16 nextCommand;
@@ -377,7 +377,7 @@ TestMem<O, S>::startTimeTickThread() {
     // We already started the thread.
     return;
 
-  // We are running in real time. onDiagnosticTimeUpdate() will not be called.
+  // We are running in real time. onDiagnosticTimeTick() will not be called.
   // Set up a timer thread to call onTimeTick().
   timeTickThread_ = Thread::New<_Thread>(timeTickRun, this);
 }
