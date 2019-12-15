@@ -158,7 +158,7 @@ TestMem<O, S>::findObject(std::vector<Code*> *objects, const char* name) {
   return NULL;
 }
 
-template<class O, class S> r_exec::View TestMem<O, S>::injectMarkerValue
+template<class O, class S> r_exec::View* TestMem<O, S>::injectMarkerValue
   (Code* obj, Code* prop, Atom val, uint64 after, uint64 before, 
    r_exec::View::SyncMode syncMode) {
   if (!obj || !prop)
@@ -178,7 +178,7 @@ template<class O, class S> r_exec::View TestMem<O, S>::injectMarkerValue
   return injectFact(object, after, before, syncMode, get_stdin());
 }
 
-template<class O, class S> r_exec::View TestMem<O, S>::injectMarkerValue
+template<class O, class S> r_exec::View* TestMem<O, S>::injectMarkerValue
   (Code* obj, Code* prop, Code* val, uint64 after, uint64 before,
     r_exec::View::SyncMode syncMode) {
   if (!obj || !prop)
@@ -199,7 +199,7 @@ template<class O, class S> r_exec::View TestMem<O, S>::injectMarkerValue
   return injectFact(object, after, before, syncMode, get_stdin());
 }
 
-template<class O, class S> r_exec::View TestMem<O, S>::injectFact
+template<class O, class S> r_exec::View* TestMem<O, S>::injectFact
   (Code* object, uint64 after, uint64 before, r_exec::View::SyncMode syncMode,
    Code* group) {
   // Build a fact.

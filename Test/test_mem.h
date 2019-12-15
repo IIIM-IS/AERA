@@ -129,7 +129,7 @@ protected:
    * where val is a simple Atom.
    * @return The created View.
    */
-  r_exec::View injectMarkerValue
+  r_exec::View* injectMarkerValue
     (Code* obj, Code* prop, Atom val, uint64 after, uint64 before, 
      r_exec::View::SyncMode syncMode);
 
@@ -139,7 +139,7 @@ protected:
    * where val is a simple Atom.
    * @return The created View.
    */
-  r_exec::View injectMarkerValue
+  r_exec::View* injectMarkerValue
     (Code* obj, Code* prop, Atom val, uint64 after, uint64 before)
   {
     return injectMarkerValue
@@ -152,7 +152,7 @@ protected:
    * where value is an object to reference.
    * @return The created View.
    */
-  r_exec::View injectMarkerValue
+  r_exec::View* injectMarkerValue
     (Code* obj, Code* prop, Code* val, uint64 after, uint64 before,
      r_exec::View::SyncMode syncMode);
 
@@ -162,7 +162,7 @@ protected:
    * where value is an object to reference.
    * @return The created View.
    */
-  r_exec::View injectMarkerValue
+  r_exec::View* injectMarkerValue
     (Code* obj, Code* prop, Code* val, uint64 after, uint64 before)
   {
     return injectMarkerValue
@@ -174,7 +174,7 @@ protected:
    * [syncMode after 1 1 group nil]
    * @return The created View.
    */
-  r_exec::View injectFact
+  r_exec::View* injectFact
     (Code* object, uint64 after, uint64 before, r_exec::View::SyncMode syncMode,
      Code* group);
 
