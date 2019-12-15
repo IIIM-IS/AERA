@@ -427,6 +427,10 @@ namespace	r_exec{
 			// This should only be called if there are no running core threads.
 			return;
 
+        // The maximum number of reduction jobs to run before trying a time job.
+        const size_t maxReductionJobsPerCycle = 500;
+		std::vector<P<_ReductionJob>> reductionJobQueue;
+
 		uint64 tickTime = Now();
 		onDiagnosticTimeTick();
 		uint64 endTime = Now() + ((uint64)runTimeMilliseconds * 1000);
@@ -439,7 +443,6 @@ namespace	r_exec{
 			// Transfer all reduction jobs to a local queue and run only these.
 			// Below, we only run one time job, so any extra jobs that these reduction
 			// jobs add will be run on the next pass after running the time job.
-			std::vector<P<_ReductionJob>> reductionJobQueue;
 			while (true) {
 				P<_ReductionJob> reductionJob = popReductionJob(false);
 				if (reductionJob == NULL)
@@ -447,10 +450,17 @@ namespace	r_exec{
 					break;
 				reductionJobQueue.push_back(reductionJob);
 			}
-			for (size_t i = 0; i < reductionJobQueue.size(); ++i) {
+			for (size_t i = 0; 
+                 i < reductionJobQueue.size() && i < maxReductionJobsPerCycle; ++i) {
 				reductionJobQueue[i]->update(Now());
 				reductionJobQueue[i] = NULL;
 			}
+			if (reductionJobQueue.size() > maxReductionJobsPerCycle)
+				// There are remaining jobs to be run. Shift them to the front.
+				reductionJobQueue.erase
+				  (reductionJobQueue.begin(), reductionJobQueue.begin() + maxReductionJobsPerCycle);
+			else
+				reductionJobQueue.clear();
 
 			// Transfer all time jobs to ordered_time_job_queue,
 			// sorted on target_time.
