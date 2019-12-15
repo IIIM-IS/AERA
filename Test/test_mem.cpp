@@ -158,12 +158,12 @@ TestMem<O, S>::findObject(std::vector<Code*> *objects, const char* name) {
   return NULL;
 }
 
-template<class O, class S> void TestMem<O, S>::injectMarkerValue
+template<class O, class S> r_exec::View TestMem<O, S>::injectMarkerValue
   (Code* obj, Code* prop, Atom val, uint64 after, uint64 before, 
    r_exec::View::SyncMode syncMode) {
   if (!obj || !prop)
     // We don't expect this, but sanity check.
-    return;
+    return NULL;
 
   Code *object = new r_exec::LObject(this);
   object->code(0) = Atom::Marker(r_exec::GetOpcode("mk.val"), 4); // Caveat: arity does not include the opcode.
@@ -175,15 +175,15 @@ template<class O, class S> void TestMem<O, S>::injectMarkerValue
   object->set_reference(0, obj);
   object->set_reference(1, prop);
 
-  injectFact(object, after, before, syncMode, get_stdin());
+  return injectFact(object, after, before, syncMode, get_stdin());
 }
 
-template<class O, class S> void TestMem<O, S>::injectMarkerValue
+template<class O, class S> r_exec::View TestMem<O, S>::injectMarkerValue
   (Code* obj, Code* prop, Code* val, uint64 after, uint64 before,
     r_exec::View::SyncMode syncMode) {
   if (!obj || !prop)
     // We don't expect this, but sanity check.
-    return;
+    return NULL;
 
   Code *object = new r_exec::LObject(this);
   object->code(0) = Atom::Marker(r_exec::GetOpcode("mk.val"), 4); // Caveat: arity does not include the opcode.
@@ -196,10 +196,10 @@ template<class O, class S> void TestMem<O, S>::injectMarkerValue
   object->set_reference(1, prop);
   object->set_reference(2, val);
 
-  injectFact(object, after, before, syncMode, get_stdin());
+  return injectFact(object, after, before, syncMode, get_stdin());
 }
 
-template<class O, class S> void TestMem<O, S>::injectFact
+template<class O, class S> r_exec::View TestMem<O, S>::injectFact
   (Code* object, uint64 after, uint64 before, r_exec::View::SyncMode syncMode,
    Code* group) {
   // Build a fact.
@@ -210,6 +210,7 @@ template<class O, class S> void TestMem<O, S>::injectFact
 
   // Inject the view.
   ((_Mem *)this)->inject(view);
+  return view;
 }
 
 template<class O, class S> void TestMem<O, S>::eject(Code *command) {

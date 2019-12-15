@@ -127,8 +127,9 @@ protected:
    * Inject (fact (mk.val obj prop val 1) after before 1 1) 
    * [syncMode after 1 1 stdin nil]
    * where val is a simple Atom.
+   * @return The created View.
    */
-  void injectMarkerValue
+  r_exec::View injectMarkerValue
     (Code* obj, Code* prop, Atom val, uint64 after, uint64 before, 
      r_exec::View::SyncMode syncMode);
 
@@ -136,11 +137,12 @@ protected:
    * Inject (fact (mk.val obj prop val 1) after before 1 1)
    * [SYNC_PERIODIC after 1 1 stdin nil]
    * where val is a simple Atom.
+   * @return The created View.
    */
-  void injectMarkerValue
+  r_exec::View injectMarkerValue
     (Code* obj, Code* prop, Atom val, uint64 after, uint64 before)
   {
-    injectMarkerValue
+    return injectMarkerValue
       (obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC);
   }
 
@@ -148,8 +150,9 @@ protected:
    * Inject (fact (mk.val obj prop val 1) after before 1 1)
    * [syncMode after 1 1 stdin nil]
    * where value is an object to reference.
+   * @return The created View.
    */
-  void injectMarkerValue
+  r_exec::View injectMarkerValue
     (Code* obj, Code* prop, Code* val, uint64 after, uint64 before,
      r_exec::View::SyncMode syncMode);
 
@@ -157,19 +160,21 @@ protected:
    * Inject (fact (mk.val obj prop val 1) after before 1 1)
    * [SYNC_PERIODIC after 1 1 stdin nil]
    * where value is an object to reference.
+   * @return The created View.
    */
-  void injectMarkerValue
+  r_exec::View injectMarkerValue
     (Code* obj, Code* prop, Code* val, uint64 after, uint64 before)
   {
-    injectMarkerValue
-    (obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC);
+    return injectMarkerValue
+      (obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC);
   }
 
   /**
    * Inject (fact object after before 1 1)
    * [syncMode after 1 1 group nil]
+   * @return The created View.
    */
-  void injectFact
+  r_exec::View injectFact
     (Code* object, uint64 after, uint64 before, r_exec::View::SyncMode syncMode,
      Code* group);
 
