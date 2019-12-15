@@ -427,8 +427,9 @@ namespace	r_exec{
 			// This should only be called if there are no running core threads.
 			return;
 
-        // The maximum number of reduction jobs to run before trying a time job.
-        const size_t maxReductionJobsPerCycle = 500;
+		// The maximum number of reduction jobs to run before trying a time job.
+		// Average job time is 333us. 300 jobs is 100000us, which is the sampling period.
+		const size_t maxReductionJobsPerCycle = 300;
 		std::vector<P<_ReductionJob>> reductionJobQueue;
 
 		uint64 tickTime = Now();
