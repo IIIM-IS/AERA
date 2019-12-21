@@ -109,7 +109,6 @@ namespace	r_code{
 
 		if(l==r)
 			return	true;
-		float32	d=fabs(l-r);
 		return	fabs(l-r)<FloatTolerance;
 	}
 
