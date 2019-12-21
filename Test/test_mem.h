@@ -182,8 +182,8 @@ protected:
    * Inject (fact object after before 1 1)
    * [SYNC_PERIODIC after 1 1 group nil]
    */
-  void injectFact(Code* object, uint64 after, uint64 before, Code* group) {
-    injectFact
+  r_exec::View* injectFact(Code* object, uint64 after, uint64 before, Code* group) {
+    return injectFact
       (object, after, before, r_exec::View::SYNC_PERIODIC, group);
   }
 
