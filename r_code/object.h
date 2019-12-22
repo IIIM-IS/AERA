@@ -284,10 +284,14 @@ namespace	r_code{
 			Atom& atom = code(i);
 			atom.trace(context, out);
 			if (atom.getDescriptor() == Atom::R_PTR) {
-			  out << " -> " << get_reference(atom.asIndex())->get_oid();
+				if (atom.asIndex() < references_size()) {
+					out << " -> " << get_reference(atom.asIndex())->get_oid();
 #ifdef WITH_DEBUG_OID
-			  out << "(" << get_reference(atom.asIndex())->get_debug_oid() << ")";
+					out << "(" << get_reference(atom.asIndex())->get_debug_oid() << ")";
 #endif
+				}
+				else
+					out << " (unassigned) ";
 			}
 		}
 
