@@ -86,6 +86,15 @@ pgm_cmd_move_y_plus:(pgm |[]
 []
    (prb [1 "print" "cmd move_y_plus..." |[]])
    (cmd move_y_plus [obj] 1)
+   ; Inject the fact that the command was run into stdin.
+   (inj []
+      c:(cmd move_y_plus [obj] 1)
+      |[]
+   )
+   (inj []
+      f_c:(fact c c_after c_before 1 1)
+      [SYNC_ONCE c_after 1 forever stdin nil]
+   )
 1) |[]
 i_pgm_cmd_move_y_plus:(ipgm pgm_cmd_move_y_plus |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever stdin nil 1]
@@ -102,6 +111,15 @@ pgm_cmd_move_y_minus:(pgm |[]
 []
    (prb [1 "print" "cmd move_y_minus..." |[]])
    (cmd move_y_minus [obj] 1)
+   ; Inject the fact that the command was run into stdin.
+   (inj []
+      c:(cmd move_y_minus [obj] 1)
+      |[]
+   )
+   (inj []
+      f_c:(fact c c_after c_before 1 1)
+      [SYNC_ONCE c_after 1 forever stdin nil]
+   )
 1) |[]
 i_pgm_cmd_move_y_minus:(ipgm pgm_cmd_move_y_minus |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever stdin nil 1]
