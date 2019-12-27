@@ -240,7 +240,7 @@ namespace	r_exec{
 		return	false;
 	}
 
-	bool	_Fact::match_timings_sync(const	_Fact	*evidence)	const{	// intervals of the form [after,before[.
+	bool	_Fact::match_timings_sync(const	_Fact	*evidence)	const{	// intervals of the form [after,before].
 
 		uint64	after=get_after();
 		uint64	e_after=evidence->get_after();
@@ -249,7 +249,7 @@ namespace	r_exec{
 		return	!(e_after>after+Utils::GetTimeTolerance()	||	e_before<=after);
 	}
 
-	bool	_Fact::match_timings_overlap(const	_Fact	*evidence)	const{	// intervals of the form [after,before[.
+	bool	_Fact::match_timings_overlap(const	_Fact	*evidence)	const{	// intervals of the form [after,before].
 
 		uint64	after=get_after();
 		uint64	before=get_before();
@@ -259,7 +259,7 @@ namespace	r_exec{
 		return	!(e_after>=before	||	e_before<=after);
 	}
 
-	bool	_Fact::match_timings_inclusive(const	_Fact	*evidence)	const{	// intervals of the form [after,before[.
+	bool	_Fact::match_timings_inclusive(const	_Fact	*evidence)	const{	// intervals of the form [after,before].
 
 		uint64	after=get_after();
 		uint64	before=get_before();
