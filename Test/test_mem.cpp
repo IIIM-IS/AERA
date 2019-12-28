@@ -160,7 +160,7 @@ TestMem<O, S>::findObject(std::vector<Code*> *objects, const char* name) {
 
 template<class O, class S> r_exec::View* TestMem<O, S>::injectMarkerValue
   (Code* obj, Code* prop, Atom val, uint64 after, uint64 before, 
-   r_exec::View::SyncMode syncMode) {
+   r_exec::View::SyncMode syncMode, Code* group) {
   if (!obj || !prop)
     // We don't expect this, but sanity check.
     return NULL;
@@ -175,12 +175,12 @@ template<class O, class S> r_exec::View* TestMem<O, S>::injectMarkerValue
   object->set_reference(0, obj);
   object->set_reference(1, prop);
 
-  return injectFact(object, after, before, syncMode, get_stdin());
+  return injectFact(object, after, before, syncMode, group);
 }
 
 template<class O, class S> r_exec::View* TestMem<O, S>::injectMarkerValue
   (Code* obj, Code* prop, Code* val, uint64 after, uint64 before,
-    r_exec::View::SyncMode syncMode) {
+    r_exec::View::SyncMode syncMode, Code* group) {
   if (!obj || !prop)
     // We don't expect this, but sanity check.
     return NULL;
@@ -196,7 +196,7 @@ template<class O, class S> r_exec::View* TestMem<O, S>::injectMarkerValue
   object->set_reference(1, prop);
   object->set_reference(2, val);
 
-  return injectFact(object, after, before, syncMode, get_stdin());
+  return injectFact(object, after, before, syncMode, group);
 }
 
 template<class O, class S> r_exec::View* TestMem<O, S>::injectFact

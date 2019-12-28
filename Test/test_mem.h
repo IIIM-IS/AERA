@@ -125,13 +125,39 @@ protected:
 
   /**
    * Inject (fact (mk.val obj prop val 1) after before 1 1) 
+   * [syncMode after 1 1 group nil]
+   * where val is a simple Atom.
+   * @return The created View.
+   */
+  r_exec::View* injectMarkerValue
+    (Code* obj, Code* prop, Atom val, uint64 after, uint64 before, 
+     r_exec::View::SyncMode syncMode, Code* group);
+
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1) 
    * [syncMode after 1 1 stdin nil]
    * where val is a simple Atom.
    * @return The created View.
    */
   r_exec::View* injectMarkerValue
     (Code* obj, Code* prop, Atom val, uint64 after, uint64 before, 
-     r_exec::View::SyncMode syncMode);
+     r_exec::View::SyncMode syncMode)
+  {
+    return injectMarkerValue(obj, prop, val, after, before, syncMode, get_stdin());
+  }
+
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1) 
+   * [SYNC_PERIODIC after 1 1 group nil]
+   * where val is a simple Atom.
+   * @return The created View.
+   */
+  r_exec::View* injectMarkerValue
+    (Code* obj, Code* prop, Atom val, uint64 after, uint64 before, Code* group)
+  {
+    return injectMarkerValue
+      (obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, group);
+  }
 
   /**
    * Inject (fact (mk.val obj prop val 1) after before 1 1)
@@ -143,30 +169,56 @@ protected:
     (Code* obj, Code* prop, Atom val, uint64 after, uint64 before)
   {
     return injectMarkerValue
-      (obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC);
+      (obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, get_stdin());
   }
 
   /**
-   * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * Inject (fact (mk.val obj prop val 1) after before 1 1) 
+   * [syncMode after 1 1 group nil]
+   * where val is a simple Atom.
+   * @return The created View.
+   */
+  r_exec::View* injectMarkerValue
+    (Code* obj, Code* prop, Code* val, uint64 after, uint64 before, 
+     r_exec::View::SyncMode syncMode, Code* group);
+
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1) 
    * [syncMode after 1 1 stdin nil]
-   * where value is an object to reference.
+   * where val is a simple Atom.
    * @return The created View.
    */
   r_exec::View* injectMarkerValue
     (Code* obj, Code* prop, Code* val, uint64 after, uint64 before,
-     r_exec::View::SyncMode syncMode);
+     r_exec::View::SyncMode syncMode)
+  {
+    return injectMarkerValue(obj, prop, val, after, before, syncMode, get_stdin());
+  }
+
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1) 
+   * [SYNC_PERIODIC after 1 1 group nil]
+   * where val is a simple Atom.
+   * @return The created View.
+   */
+  r_exec::View* injectMarkerValue
+    (Code* obj, Code* prop, Code* val, uint64 after, uint64 before, Code* group)
+  {
+    return injectMarkerValue
+      (obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, group);
+  }
 
   /**
    * Inject (fact (mk.val obj prop val 1) after before 1 1)
    * [SYNC_PERIODIC after 1 1 stdin nil]
-   * where value is an object to reference.
+   * where val is a simple Atom.
    * @return The created View.
    */
   r_exec::View* injectMarkerValue
     (Code* obj, Code* prop, Code* val, uint64 after, uint64 before)
   {
     return injectMarkerValue
-      (obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC);
+      (obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, get_stdin());
   }
 
   /**
