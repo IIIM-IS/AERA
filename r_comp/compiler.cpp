@@ -115,14 +115,8 @@ namespace	r_comp{
 
 	void	Compiler::set_arity_error(uint16	expected,uint16	got){
 
-		char	buffer[255];
-		std::string	s="error: got ";
-		sprintf(buffer,"%d",got);
-		s+=buffer;
-		s+=" elements, expected ";
-		sprintf(buffer,"%d",expected);
-		s+=buffer;
-		set_error(s);
+		set_error("error: got " + std::to_string(got) + " elements, expected " +
+			std::to_string(expected));
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////

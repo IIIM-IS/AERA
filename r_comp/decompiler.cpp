@@ -92,14 +92,10 @@ namespace	r_comp{
 
 	std::string	Decompiler::get_variable_name(uint16	index,bool	postfix){
 
-		std::string	s;
 		UNORDERED_MAP<uint16,std::string>::iterator	it=variable_names.find(index);
 		if(it==variable_names.end()){
 
-			char	buffer[255];
-			s="v";
-			sprintf(buffer,"%d",last_variable_id++);
-			s+=buffer;
+			std::string	s="v" + std::to_string(last_variable_id++);
 			variable_names[index]=s;
 			if(postfix)
 				s+=':';
@@ -113,10 +109,7 @@ namespace	r_comp{
 
 	std::string	Decompiler::get_hlp_variable_name(uint16	index){
 
-		std::string	s("v");
-		char	buffer[255];
-		sprintf(buffer,"%d",index);
-		s+=buffer;
+		std::string	s = "v" + std::to_string(index);
 		if(hlp_postfix)
 			s+=':';
 		return	s;
@@ -204,7 +197,6 @@ namespace	r_comp{
 		for(it=metadata->sys_classes.begin();it!=metadata->sys_classes.end();++it)
 			object_ID_per_class[&(it->second)]=0;
 
-		char		buffer[255];
 		std::string	s;
 
 		this->image=image;
@@ -225,9 +217,7 @@ namespace	r_comp{
 				c=metadata->get_class(sys_object->code[0].asOpcode());
 				last_object_ID=object_ID_per_class[c];
 				object_ID_per_class[c]=last_object_ID+1;
-				sprintf(buffer,"%d",last_object_ID);
-				s=c->str_opcode;
-				s+=buffer;
+				s=c->str_opcode + std::to_string(last_object_ID);
 			}
 
 			object_names[i]=s;

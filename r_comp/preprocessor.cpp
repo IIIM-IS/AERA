@@ -587,7 +587,7 @@ int32	RepliStruct::process(){
 	// expand Counters in all structures
 	if (Counters.find(cmd) != Counters.end()) {
 		// expand the counter
-		cmd = String::Int2String(Counters[cmd]++);
+		cmd = std::to_string(Counters[cmd]++);
 		changes++;
 	}
 	// expand Macros in all structures
@@ -737,7 +737,7 @@ int32	RepliStruct::process(){
 		// expand Counters in all structures
 		if (Counters.find(structure->cmd) != Counters.end()) {
 			// expand the counter
-			structure->cmd = String::Int2String(Counters[structure->cmd]++);
+			structure->cmd = std::to_string(Counters[structure->cmd]++);
 			changes++;
 		}
 
@@ -950,7 +950,7 @@ RepliStruct	*RepliMacro::expandMacro(RepliStruct	*oldStruct){
 	}
 
 	if ( (src->args.size() > 0) && (src->args.size() != oldStruct->args.size()) ) {
-		error += "Macro '" + name + "' requires " + String::Int2String(src->args.size()) + " arguments, cannot expand structure with " + String::Int2String(oldStruct->args.size()) + " arguments. ";
+		error += "Macro '" + name + "' requires " + std::to_string(src->args.size()) + " arguments, cannot expand structure with " + std::to_string(oldStruct->args.size()) + " arguments. ";
 		return NULL;
 	}
 
@@ -1146,9 +1146,7 @@ bool	RepliCondition::isActive(UNORDERED_MAP<std::string,RepliMacro	*>	&RepliMacr
 		instantiated_class_name=tpl_class->cmd;
 		instantiated_class_name=instantiated_class_name.substr(0,instantiated_class_name.length()-sset.length());
 		//	append an ID to the tpl class name.
-		char	buffer[255];
-		sprintf(buffer,"%d",LastClassID++);
-		instantiated_class_name+=buffer;
+		instantiated_class_name += std::to_string(LastClassID++);
 
 		std::vector<StructureMember>	members;
 		std::list<RepliStruct	*>		_tpl_args;
