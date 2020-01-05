@@ -215,7 +215,7 @@ namespace	r_comp{
 			}else{
 			
 				c=metadata->get_class(sys_object->code[0].asOpcode());
-				if (sys_object->oid != 0xFFFFFFFF)
+				if (sys_object->oid != UNDEFINED_OID)
 					// Use the object's OID.
 					s = c->str_opcode + "_" + std::to_string(sys_object->oid);
 				else {
