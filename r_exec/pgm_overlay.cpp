@@ -455,8 +455,10 @@ namespace	r_exec{
 				cmd.copy(command,0);
 
 				_Mem::Get()->eject(command);
-				
-				Code	*fact=new	Fact(command,now,now,1,1);	// build a fact of the command and inject it in stdin.
+
+				// Build a fact of the command and inject it in stdin. Give the fact an uncertainty range since we don't know when
+				// it will be executed. Otherwise a fact with zero duration may not overlap a fact, making predictions fail.
+				Code	*fact=new	Fact(command,now,now + Utils::GetBasePeriod(),1,1);
 				View	*view=new	View(View::SYNC_ONCE,now,1,1,_Mem::Get()->get_stdin(),getView()->get_host(),fact);	//	SYNC_ONCE, sln=1, res=1,
 				_Mem::Get()->inject(view);
 
