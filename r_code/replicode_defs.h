@@ -264,4 +264,6 @@
 #define	PERF_D_TIME_LTCY	4
 #define	PERF_ARITY			5
 
+#define	UNDEFINED_OID	0xFFFFFFFF
+
 #endif
