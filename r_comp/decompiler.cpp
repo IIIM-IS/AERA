@@ -215,9 +215,15 @@ namespace	r_comp{
 			}else{
 			
 				c=metadata->get_class(sys_object->code[0].asOpcode());
-				last_object_ID=object_ID_per_class[c];
-				object_ID_per_class[c]=last_object_ID+1;
-				s=c->str_opcode + std::to_string(last_object_ID);
+				if (sys_object->oid != 0xFFFFFFFF)
+					// Use the object's OID.
+					s = c->str_opcode + "_" + std::to_string(sys_object->oid);
+				else {
+					// Create a name with a unique ID.
+					last_object_ID = object_ID_per_class[c];
+					object_ID_per_class[c] = last_object_ID + 1;
+					s = c->str_opcode + std::to_string(last_object_ID);
+				}
 			}
 
 			object_names[i]=s;
