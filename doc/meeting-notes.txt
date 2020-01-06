@@ -1,0 +1,36 @@
+2020-01-05
+* DONE? Solve real-time pong.2.goal crash.
+  PrimaryMDLController::predict:1430
+  PrimaryMDLController::assume_lhs:2113
+  CTPX::build_requirement:996
+  HLPOverlay::check_fwd_timings:180
+  (ModelBase::MEntry::ComputeHashCode:135) Trigger with pong.discrete.cmd.external, cst_y2_minus with grab_hand
+  BindingMap::match_fwd_timing:738
+* DONE Fix https://github.com/IIIM-IS/replicode/issues/42
+* DONE decompiled_objects "fact10" is different than fact with OID 10 in the trace.
+  https://github.com/IIIM-IS/replicode/pull/44
+* DONE Try temporarily disabling assumptions. PrimaryMDLController::assume:2080
+* DONE: pong.discrete.cmd.external: Why does m_y0_plus prediction fail?
+  InputLessPGMOverlay::inject_productions:459 injects a (fact (cmd) ...) of zero duration.
+  This is used as input to cst_y2_minus instead of the one injected by pgm_cmd_move_y_minus.
+  BindingMap::match_timings:712 reduces (fact (icst cst_y2_minus)) to zero duration to match it.
+  This makes the (fact (imdl m_y2_minus)) zero duration also.
+  Therefore the prediction from the RHS of the model is also zero duration.
+    (fact (pred (fact (mk.val p1 position y1 :) 0s:600ms:0us 0s:600ms:0us) ::) ::)
+  The PMonitor calls _Fact::match_timings_overlap which fails if no overlap.
+  Possible solutions:
+    * NO: Make mdl ignore LHS duration and predict RHS with explicit duration. (Requires changing pattern extractor)
+	* NO: Make inject_productions offset the instantaneous (fact (cmd ...)) into the future.
+	* YES: Make inject_productions give (fact (cmd ...)) a duration.
+	* NO: Move responsibility to inject (fact (cmd ...)) from inject_productions to the external environment.
+	* NO: In _Fact::match_timings_overlap, special case when one interval is zero duration.
+* DONE. Is the failed prediction from the assumption shielded from decreasing mdl confidence? No.
+
+TODO
+* Why does A/F choose the (fact (cmd ...)) injected by inject_productions over pgm_cmd_move_y_minus?
+* Add settings parameter "enable_assumption". Do pull request.
+* In replicode repository, create doc/meeting-notes.txt
+* Issue #2: Try to reproduce.
+* Issue #25: Reproduce running in real-time, and see if it happens in diagnostic time.
+* Run pong.2.goal.replicode in real time and reproduce/isolate crash. Post issue. Depends on SYNC_PERIODIC change to SYNC_HOLD.
+* pong.2.goal.replicode: Why does it need the initial speed_y?
