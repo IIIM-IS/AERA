@@ -115,7 +115,8 @@ namespace	r_exec{
 						uint32	ntf_mk_res,
 						uint32	goal_pred_success_res,
 						uint32	probe_level,
-						uint32	traces){
+						uint32	traces,
+						bool	enable_assumptions){
 
 		this->base_period=base_period;
 
@@ -143,6 +144,7 @@ namespace	r_exec{
 		this->goal_pred_success_res=goal_pred_success_res;
 
 		this->probe_level=probe_level;
+		this->enable_assumptions=enable_assumptions;
 
 		reduction_job_count=time_job_count=0;
 		reduction_job_avg_latency=_reduction_job_avg_latency=0;

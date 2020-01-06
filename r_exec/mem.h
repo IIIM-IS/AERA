@@ -140,6 +140,7 @@ namespace	r_exec{
 
 		// Parameters::Run.
 		uint32	probe_level;
+		bool	enable_assumptions;
 
 		PipeNN<P<_ReductionJob>,1024>	*reduction_job_queue;
 		PipeNN<P<TimeJob>,1024>			*time_job_queue;
@@ -222,9 +223,11 @@ namespace	r_exec{
 					uint32	ntf_mk_res,
 					uint32	goal_pred_success_res,
 					uint32	probe_level,
-					uint32	traces);
+					uint32	traces,
+					bool	enable_assumptions);
 
 		uint64	get_probe_level()						const{	return	probe_level;	}
+		bool	get_enable_assumptions()				const{	return	enable_assumptions;	}
 		float32	get_mdl_inertia_sr_thr()				const{	return	mdl_inertia_sr_thr;	}
 		uint32	get_mdl_inertia_cnt_thr()				const{	return	mdl_inertia_cnt_thr;	}
 		float32	get_tpx_dsr_thr()						const{	return	tpx_dsr_thr;	}
