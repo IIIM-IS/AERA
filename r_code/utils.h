@@ -129,6 +129,12 @@ namespace	r_code{
 		static	const	uint64	MaxTime=0xFFFFFFFFFFFFFFFF;
 		static	const	uint64	MaxTHZ=0xFFFFFFFF;
 
+		template<class	O> static bool HasTimestamp(const O *object, uint16 index) {
+			if (object->code_size() <= index)
+				return false;
+			uint16 t_index = object->code(index).asIndex();
+			return object->code_size() > t_index + 2;
+		}
 		template<class	O>	static	uint64	GetTimestamp(const	O	*object,uint16	index){
 
 			uint16	t_index=object->code(index).asIndex();
