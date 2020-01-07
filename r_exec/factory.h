@@ -171,6 +171,8 @@ namespace	r_exec{
 		MatchResult	is_evidence(const	_Fact	*target)	const;
 		MatchResult	is_timeless_evidence(const	_Fact	*target)	const;
 
+		bool has_after() const { return Utils::HasTimestamp<Code>(this, FACT_AFTER); }
+		bool has_before() const { return Utils::HasTimestamp<Code>(this, FACT_BEFORE); }
 		uint64	get_after()		const;
 		uint64	get_before()	const;
 		float32	get_cfd()		const;
