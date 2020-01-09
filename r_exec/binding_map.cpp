@@ -1005,8 +1005,9 @@ namespace	r_exec{
 			}
 		}
 
-		map[fwd_after_index]=new	StructureValue(this,f_ihlp,FACT_AFTER);	// valuate timings; fwd_after_index is already known.
-		map[fwd_before_index]=new	StructureValue(this,f_ihlp,FACT_BEFORE);
+		// Valuate timings; fwd_after_index is already known. We know that time stamps are I_PTR to the time stamp structure.
+		map[fwd_after_index]=new	StructureValue(this,f_ihlp,f_ihlp->code(FACT_AFTER).asIndex());
+		map[fwd_before_index]=new	StructureValue(this,f_ihlp,f_ihlp->code(FACT_BEFORE).asIndex());
 	}
 
 	Fact	*HLPBindingMap::build_f_ihlp(Code	*hlp,uint16	opcode,bool	wr_enabled)	const{
