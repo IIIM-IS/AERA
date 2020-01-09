@@ -6,11 +6,11 @@
   HLPOverlay::check_fwd_timings:180
   (ModelBase::MEntry::ComputeHashCode:135) Trigger with pong.discrete.cmd.external, cst_y2_minus with grab_hand
   BindingMap::match_fwd_timing:738
-* DONE Fix https://github.com/IIIM-IS/replicode/issues/42
-* DONE decompiled_objects "fact10" is different than fact with OID 10 in the trace.
+* DONE. Fix https://github.com/IIIM-IS/replicode/issues/42
+* DONE. decompiled_objects "fact10" is different than fact with OID 10 in the trace.
   https://github.com/IIIM-IS/replicode/pull/44
-* DONE Try temporarily disabling assumptions. PrimaryMDLController::assume:2080
-* DONE: pong.discrete.cmd.external: Why does m_y0_plus prediction fail?
+* DONE. Try temporarily disabling assumptions. PrimaryMDLController::assume:2080
+* DONE. pong.discrete.cmd.external: Why does m_y0_plus prediction fail?
   InputLessPGMOverlay::inject_productions:459 injects a (fact (cmd) ...) of zero duration.
   This is used as input to cst_y2_minus instead of the one injected by pgm_cmd_move_y_minus.
   BindingMap::match_timings:712 reduces (fact (icst cst_y2_minus)) to zero duration to match it.
@@ -26,11 +26,37 @@
 	* NO: In _Fact::match_timings_overlap, special case when one interval is zero duration.
 * DONE. Is the failed prediction from the assumption shielded from decreasing mdl confidence? No.
 
+2020-01-09
+* DONE. In replicode repository, create doc/meeting-notes.txt
+* DONE. Add settings parameter "enable_assumptions". https://github.com/IIIM-IS/replicode/pull/45
+* DONE. pong.discrete.cmd.external: From the drive, why doesn't m_y1_plus abduce goals for icst cst_y1_plus?
+  Feb 2012: Major update to CSTController::reduce
+  https://github.com/IIIM-IS/replicode/commit/3c5b9be5f935d6783fb1d35d74ca7d19ad4be186#diff-0ff725f0ae881cefbad0064fc2eac950R236
+  Changed:
+    Code *target = goal->get_reference(0)->get_reference(0);
+	if (target->code(0).asOpcode() == Opcodes::ICST ...
+  to:
+    _Fact *goal_target=goal->get_reference(0);
+	if (goal_target->code(0).asOpcode() == Opcodes::ICst ...
+  There is a missing get_reference(0), so it never matches.
+  Also, the following is clearly a bug, using the uninitialized bm:
+    P<BindingMap> bm = new BindingMap(bm);
+  Thus, the code to create goals from an abduced icst never ran after Feb 2012.
+* HLPBindingMap::init_from_f_ihlp:1011 Fix to get the time stamp structure.
+  https://github.com/IIIM-IS/replicode/pull/46
+* Need CSTController::inject_goal:449 new View saliency 9999
+  How does AERA choose among possible actions?
+
 TODO
+* Make a pull request for the fix to CSTController::reduce.
+* pong.2.goal.replicode: Why does it need the initial speed_y?
+* Is replicode now making simulations? Do we need to enable assumptions?
+* What was CSTController::inject_goal:449 saliency before the "big commmit" Feb 2012?
+* Workshop travel dates? https://leela-ai.com/iwssl/index.html
+* In drive for y1 200ms later, why does it also eject cmd move_y_minus?
+  Because extra move commands are ignored, but registered anyway, did a model learn wrongly from that?
+  Make move commands in the same time step accumulate?
 * Why does A/F choose the (fact (cmd ...)) injected by inject_productions over pgm_cmd_move_y_minus?
-* Add settings parameter "enable_assumption". Do pull request.
-* In replicode repository, create doc/meeting-notes.txt
 * Issue #2: Try to reproduce.
 * Issue #25: Reproduce running in real-time, and see if it happens in diagnostic time.
 * Run pong.2.goal.replicode in real time and reproduce/isolate crash. Post issue. Depends on SYNC_PERIODIC change to SYNC_HOLD.
-* pong.2.goal.replicode: Why does it need the initial speed_y?
