@@ -36,8 +36,8 @@ m_run_position:(mdl |[] []
    (fact run t2: t3: ::)
 |[]
 []
-   t0:(+ t2 (* 3 sampling_period))
-   t1:(+ t3 (* 3 sampling_period))
+   t0:(+ t2 (* 5 sampling_period))
+   t1:(+ t3 (* 5 sampling_period))
 [stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -80,7 +80,8 @@ istart:(ipgm start |[] RUN_ONCE sampling_period VOLATILE SILENT 1) [[SYNC_ONCE n
 ; calls the command, which will call the override of _Mem::eject().
 pgm_cmd_move_y_plus:(pgm |[]
 []
-   (ptn (fact (mk.val obj: position : :) after: before: ::) |[])
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val p1 essence paddle :) after: before: ::) |[])
    (ptn (fact (goal (fact (cmd move_y_plus [obj:] ::) c_after: c_before: ::) ::) ::) |[])
 []
    (< c_after before)
@@ -90,13 +91,14 @@ pgm_cmd_move_y_plus:(pgm |[]
    (cmd move_y_plus [obj] 1)
 1) |[]
 i_pgm_cmd_move_y_plus:(ipgm pgm_cmd_move_y_plus |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
-   [SYNC_ONCE now 0 forever stdin nil 1]
+   [SYNC_ONCE now 0 forever primary nil 1]
 
 ; This program intercepts an abduced goal to run a command and directly
 ; calls the command, which will call the override of _Mem::eject().
 pgm_cmd_move_y_minus:(pgm |[]
 []
-   (ptn (fact (mk.val obj: position : :) after: before: ::) |[])
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val p1 essence paddle :) after: before: ::) |[])
    (ptn (fact (goal (fact (cmd move_y_minus [obj:] ::) c_after: c_before: ::) ::) ::) |[])
 []
    (< c_after before)
@@ -106,7 +108,7 @@ pgm_cmd_move_y_minus:(pgm |[]
    (cmd move_y_minus [obj] 1)
 1) |[]
 i_pgm_cmd_move_y_minus:(ipgm pgm_cmd_move_y_minus |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
-   [SYNC_ONCE now 0 forever stdin nil 1]
+   [SYNC_ONCE now 0 forever primary nil 1]
 
 ; Run once (when babbling is finished) to inject the drive that will abduce a goal 
 ; to move p1 to y2.
