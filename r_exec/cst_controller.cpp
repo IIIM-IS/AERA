@@ -349,11 +349,12 @@ namespace	r_exec{
 		if(goal	&&	goal->is_self_goal()	&&	!goal->is_drive()){	// goal is g->f->target.
 
 			_Fact	*goal_target=goal->get_target();	// handle only icst.
-			if(goal_target->code(0).asOpcode()==Opcodes::ICst	&&	goal_target->get_reference(0)==getObject()){	// f is f->icst; produce as many sub-goals as there are patterns in the cst.
+			Code	*target_ihlp = goal_target->get_reference(0);
+			if(target_ihlp->code(0).asOpcode()==Opcodes::ICst	&&	target_ihlp->get_reference(0)==getObject()){	// f is f->icst; produce as many sub-goals as there are patterns in the cst.
 
 				if(!get_requirement_count()){	// models will attempt to produce the icst
 
-					P<HLPBindingMap>	bm=new	HLPBindingMap(bm);
+					P<HLPBindingMap>	bm=new	HLPBindingMap(bindings);
 					bm->init_from_f_ihlp(goal_target);
 					if(evaluate_bwd_guards(bm))	// leaves the controller constant: no need to protect; bm may be updated.
 						abduce(bm,input->object);
