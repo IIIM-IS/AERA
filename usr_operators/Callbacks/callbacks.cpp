@@ -82,13 +82,10 @@
 
 bool	print(uint64	t,bool	suspended,const	char	*msg,uint8	object_count,Code	**objects){	//	return true to resume the executive (applies when called from a suspend call, i.e. suspended==true).
 
-	// Construct the string before blocking other threads in the CS.
 	ostringstream out;
 	out<<Time::ToString_seconds(t)<<": "<<msg<<std::endl;
-	for(uint8	i=0;i<object_count;++i) {
+	for(uint8	i=0;i<object_count;++i)
 		objects[i]->trace(out);
-		//out << objects[0]->code(3).asFloat() << std::endl;
-	}
 
 	// Assume that printing a single string is more-or-less atomic.
 	std::cout << out.str();
