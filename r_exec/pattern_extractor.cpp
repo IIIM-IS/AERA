@@ -802,7 +802,7 @@ namespace	r_exec{
 		for(i=inputs.begin();i!=inputs.end();){
 
 			if(!end_bm->intersect(i->bindings)	||					// discard inputs that do not share values with the consequent.
-				i->input->get_after()>=consequent->get_after())	// discard inputs younger than the consequent.
+				i->input->get_after()>=consequent->get_after())	// discard inputs not younger than the consequent.
 				i=inputs.erase(i);
 			else
 				++i;
