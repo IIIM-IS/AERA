@@ -42,21 +42,36 @@
   Also, the following is clearly a bug, using the uninitialized bm:
     P<BindingMap> bm = new BindingMap(bm);
   Thus, the code to create goals from an abduced icst never ran after Feb 2012.
-* HLPBindingMap::init_from_f_ihlp:1011 Fix to get the time stamp structure.
+* DONE. HLPBindingMap::init_from_f_ihlp:1011 Fix to get the time stamp structure.
   https://github.com/IIIM-IS/replicode/pull/46
 * Need CSTController::inject_goal:449 new View saliency 9999
   How does AERA choose among possible actions?
 
+2020-01-17
+* DONE. Make a pull request for the fix to CSTController::reduce. Merged.
+  https://github.com/IIIM-IS/replicode/pull/47
+* DONE. What was CSTController::inject_goal:449 resilience before the "big commmit" Feb 2012?
+  There is code to compute the resilience, but seems to always use 1.
+  https://github.com/IIIM-IS/replicode/blob/8260dc91c441c5b586663332741bd85242f3d2d9/r_exec/cst_controller.cpp#L92
+  Should we try to use the duration until the goal's fact time stamp?
+* DONE. In drive for y1 200ms later, why does it also eject cmd move_y_minus?
+  Because extra move commands are ignored, but registered anyway, did a model learn wrongly from that? NO.
+  The goal for (mk.val p1 position y1) also matches m_y2_minus, and cst_y2_minus
+    abduces the goal (cmd move_y_minus [p1] :), even though position is not y2.
+* DONE. Is replicode now making simulations?
+  NO. In settings.xml, min_sim_time_horizon==max_sim_time_horizon==0.
+  Will change max_sim_time_horizon.
+* pong.2.goal.replicode model building.
+  ASTController<U>::ASTController:89 target is the premise, i.e. the tpx' target to be "defeated".
+  Fix typo in comment: https://github.com/IIIM-IS/replicode/commit/cde840d45a73c2826f7564d8a41b2732ed2ea88f
+  CTPX::find_guard_builder "5 forms"
+  InputLessPGMOverlay::inject_productions:461 Add GetTimeTolerance or use SYNC_HOLD so it can be a cause.
+
 TODO
-* Make a pull request for the fix to CSTController::reduce.
+* Set max_sim_time_horizon to 5000000 us. See how behavior changes.
 * pong.2.goal.replicode: Why does it need the initial speed_y?
-* Is replicode now making simulations? Do we need to enable assumptions?
-* What was CSTController::inject_goal:449 saliency before the "big commmit" Feb 2012?
-* Workshop travel dates? https://leela-ai.com/iwssl/index.html
-* In drive for y1 200ms later, why does it also eject cmd move_y_minus?
-  Because extra move commands are ignored, but registered anyway, did a model learn wrongly from that?
-  Make move commands in the same time step accumulate?
 * Why does A/F choose the (fact (cmd ...)) injected by inject_productions over pgm_cmd_move_y_minus?
+* Make move commands in the same time step accumulate?
 * Issue #2: Try to reproduce.
 * Issue #25: Reproduce running in real-time, and see if it happens in diagnostic time.
 * Run pong.2.goal.replicode in real time and reproduce/isolate crash. Post issue. Depends on SYNC_PERIODIC change to SYNC_HOLD.
