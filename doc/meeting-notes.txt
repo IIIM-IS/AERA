@@ -67,9 +67,17 @@
   CTPX::find_guard_builder "5 forms"
   InputLessPGMOverlay::inject_productions:461 Add GetTimeTolerance or use SYNC_HOLD so it can be a cause.
 
+2020-01-21
+* DONE pong.2.goal.replicode: Why does it need the initial speed_y?
+  Because the patterns extractor CTPX::reduce needs a "cause", and this is the only fact available.
+* CTPX::reduce: Discard inputs that don't share values with the consequent OR target.
+  https://github.com/IIIM-IS/replicode/pull/48
+
 TODO
+* Merge pull request https://github.com/IIIM-IS/replicode/pull/48 ?
+* Make pong.discrete.cmd.external build the same models in diagnostic time.
+* Does pong.discrete.cmd.external use the learned models to abduce from the drive?
 * Set max_sim_time_horizon to 5000000 us. See how behavior changes.
-* pong.2.goal.replicode: Why does it need the initial speed_y?
 * Why does A/F choose the (fact (cmd ...)) injected by inject_productions over pgm_cmd_move_y_minus?
 * Make move commands in the same time step accumulate?
 * Issue #2: Try to reproduce.
