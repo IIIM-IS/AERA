@@ -1433,7 +1433,8 @@ namespace	r_exec{
 			c->store_requirement(production,this,chaining_was_allowed,simulation);				// if not simulation, stores also in the secondary controller.
 #ifdef WITH_DEBUG_OID
 			OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<"				fact (" << f_imdl->get_debug_oid() << ") imdl mdl "<<getObject()->get_oid()<<
-			  ": "<<input->get_oid()<<" -> fact ("<<production->get_debug_oid()<<") pred fact imdl mdl "<<bound_rhs->get_reference(0)->get_reference(0)->get_oid()<<std::endl;
+			  ": "<<input->get_oid()<<" -> fact ("<<production->get_debug_oid()<<") pred fact (" <<
+              bound_rhs->get_debug_oid() << ") imdl mdl "<<bound_rhs->get_reference(0)->get_reference(0)->get_oid()<<std::endl;
 #else
 			OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<"				mdl "<<getObject()->get_oid()<<": "<<input->get_oid()<<" -> fact pred fact imdl mdl "<<bound_rhs->get_reference(0)->get_reference(0)->get_oid()<<std::endl;
 #endif
