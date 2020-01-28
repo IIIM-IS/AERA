@@ -73,9 +73,20 @@
 * CTPX::reduce: Discard inputs that don't share values with the consequent OR target.
   https://github.com/IIIM-IS/replicode/pull/48
 
+2020-01-28
+* DONE. Added "glue" output, e.g.
+  fact (4652) imdl mdl 106 matches evidence fact (3962) imdl mdl 106
+* Wrong: fact_130:(fact (icst cst_105 |[] [p1 y1 y1]) 0s:600ms:0us 0s:700ms:0us)
+  Starts from consequent (fact y1_is_a_discrete_position1 0s:600ms:0us 0s:700ms:0us)
+
 TODO
-* Merge pull request https://github.com/IIIM-IS/replicode/pull/48 ?
+* Finish gotcha "Documentation omits the 1 at the end of every assertion."
+* pong.discrete.cmd.external: When adding fact 119 to fact_127, why is patterns already down to 2 used members.
+    When building fact 113 icst[96][ 102 108 109 111], why does it use all 4 inputs?
+	  Why doesn't a prediction come from it?
+* Does replicode v1.1 instantiate a cst from partial inputs?
 * Make pong.discrete.cmd.external build the same models in diagnostic time.
+* Merge pull request https://github.com/IIIM-IS/replicode/pull/48 ?
 * Does pong.discrete.cmd.external use the learned models to abduce from the drive?
 * Set max_sim_time_horizon to 5000000 us. See how behavior changes.
 * Why does A/F choose the (fact (cmd ...)) injected by inject_productions over pgm_cmd_move_y_minus?
