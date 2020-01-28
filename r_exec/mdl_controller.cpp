@@ -727,11 +727,11 @@ namespace	r_exec{
 					HLPBindingMap	_original=original;	// matching updates the bm; always start afresh.
 					if(_original.match_fwd_strict(_f_imdl,f_imdl)){	// tpl args will be valuated in bm, but not in f_imdl yet.
 #ifdef WITH_DEBUG_OID
-                      OUTPUT(MDL_OUT) << Utils::RelativeTime(Now()) << " fact (" << f_imdl->get_debug_oid() << ") imdl mdl " <<
-                        f_imdl->get_reference(0)->get_reference(0)->get_oid() << " matches evidence fact (" <<
-                        _f_imdl->get_debug_oid() << ") imdl mdl " << _f_imdl->get_reference(0)->get_reference(0)->get_oid() << std::endl;
+						OUTPUT(MDL_OUT) << Utils::RelativeTime(Now()) << " fact (" << f_imdl->get_debug_oid() << ") imdl mdl " <<
+						  f_imdl->get_reference(0)->get_reference(0)->get_oid() << " matches evidence fact (" <<
+						  _f_imdl->get_debug_oid() <<  ") imdl mdl " << _f_imdl->get_reference(0)->get_reference(0)->get_oid() << std::endl;
 #endif
-                      if(r==WR_DISABLED	&&	(*e).chaining_was_allowed){	// first match.
+						if(r==WR_DISABLED	&&	(*e).chaining_was_allowed){	// first match.
 
 							r=WR_ENABLED;
 							bm->load(&_original);
