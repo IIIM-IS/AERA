@@ -79,18 +79,24 @@
 * Wrong: fact_130:(fact (icst cst_105 |[] [p1 y1 y1]) 0s:600ms:0us 0s:700ms:0us)
   Starts from consequent (fact y1_is_a_discrete_position1 0s:600ms:0us 0s:700ms:0us)
 
+2020-01-31
+* DONE. Finish gotcha: Documentation omits the 1 at the end of every object definition.
+* CSTController::reduce:380 should ++o ? https://github.com/IIIM-IS/replicode/commit/fc5961a4fa9f44d40298381bbdf86f314a9f26ab#diff-0ff725f0ae881cefbad0064fc2eac950R318
+* DONE: pong.discrete.cmd.external: When adding fact 119 to fact_127, why is patterns already down to 2 used members?
+    Because CSTOverlay::get_offspring transfers(?) from patterns to inputs.
+  When building fact 113 icst[96][ 102 108 109 111], why does it use all 4 inputs?
+    Because it comes from CSTOverlay(1331) which was never an offspring.
+    Why no prediction? Because job 466 deletes model 98, so fact_113 is not used.
+
 TODO
-* Finish gotcha "Documentation omits the 1 at the end of every assertion."
-* pong.discrete.cmd.external: When adding fact 119 to fact_127, why is patterns already down to 2 used members.
-    When building fact 113 icst[96][ 102 108 109 111], why does it use all 4 inputs?
-	  Why doesn't a prediction come from it?
+* Create pull request for CSTController::reduce:380 should ++o
 * Does replicode v1.1 instantiate a cst from partial inputs?
 * Make pong.discrete.cmd.external build the same models in diagnostic time.
 * Merge pull request https://github.com/IIIM-IS/replicode/pull/48 ?
 * Does pong.discrete.cmd.external use the learned models to abduce from the drive?
 * Set max_sim_time_horizon to 5000000 us. See how behavior changes.
 * Why does A/F choose the (fact (cmd ...)) injected by inject_productions over pgm_cmd_move_y_minus?
-* Make move commands in the same time step accumulate?
+* Treat move commands at the same time step as impulses and have them accumulate?
 * Issue #2: Try to reproduce.
 * Issue #25: Reproduce running in real-time, and see if it happens in diagnostic time.
 * Run pong.2.goal.replicode in real time and reproduce/isolate crash. Post issue. Depends on SYNC_PERIODIC change to SYNC_HOLD.
