@@ -1479,7 +1479,11 @@ namespace	r_exec{
 					Group	*secondary_host=secondary->getView()->get_host();	// inject f_imdl in secondary group.
 					View	*view=new	View(View::SYNC_ONCE,now,confidence,1,getView()->get_host(),secondary_host,f_imdl);	// SYNC_ONCE,res=resilience.
 					_Mem::Get()->inject(view);
-					OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<"				fact "<<f_imdl->get_oid()<<" imdl mdl "<<getObject()->get_oid()<<": "<<input->get_oid()<<" -> fact "<<production->get_oid()<<" pred fact mk.val VALUE ";
+					OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<"				fact "<<f_imdl->get_oid();
+#ifdef WITH_DEBUG_OID
+					OUTPUT(MDL_OUT) << "(" << f_imdl->get_debug_oid() << ")";
+#endif
+					OUTPUT(MDL_OUT)<<" imdl mdl "<<getObject()->get_oid()<<": "<<input->get_oid()<<" -> fact "<<production->get_oid()<<" pred fact mk.val VALUE ";
 					bound_rhs->get_reference(0)->trace(MK_VAL_VALUE, OUTPUT(MDL_OUT));
 					OUTPUT(MDL_OUT)<<std::endl;
 				}
