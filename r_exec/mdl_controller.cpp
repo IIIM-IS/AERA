@@ -1750,7 +1750,11 @@ namespace	r_exec{
 		Fact	*f_sub_goal=new	Fact(sub_goal,now,now,1,1);
 		add_r_monitor(new	RMonitor(this,bm,super_goal->get_goal()->get_target()->get_before(),sim->thz,f_sub_goal,f_imdl));	// the monitor will wait until the deadline of the super-goal.
 		inject_goal(bm,f_sub_goal,f_imdl);
-		OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<" "<<getObject()->get_oid()<<" -> fact "<<f_sub_goal->get_oid()<<" goal imdl "<<f_sub_goal->get_reference(0)->get_reference(0)->get_oid()<<"["<<Utils::RelativeTime(sub_goal->get_target()->get_after())<<","<<Utils::RelativeTime(sub_goal->get_target()->get_before())<<"]\n";
+		OUTPUT(MDL_OUT)<<Utils::RelativeTime(Now())<<" "<<getObject()->get_oid()<<" -> fact "<<f_sub_goal->get_oid()<<" goal fact "<< f_imdl->get_oid();
+#ifdef WITH_DEBUG_OID
+		OUTPUT(MDL_OUT)<<"("<<f_imdl->get_debug_oid()<<")";
+#endif
+		OUTPUT(MDL_OUT)<<" imdl["<< f_imdl->get_reference(0)->get_reference(0)->get_oid()<<"]["<<Utils::RelativeTime(sub_goal->get_target()->get_after())<<","<<Utils::RelativeTime(sub_goal->get_target()->get_before())<<"]\n";
 	}
 
 	void	PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap	*bm,Fact	*super_goal,Fact	*f_imdl,bool	opposite,float32	confidence,Sim	*sim){	// goal is f->g->f->object or f->g->|f->object; called concurrently by redcue() and _GMonitor::update().
