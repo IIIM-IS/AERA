@@ -88,12 +88,25 @@
     Because it comes from CSTOverlay(1331) which was never an offspring.
     Why no prediction? Because job 466 deletes model 98, so fact_113 is not used.
 
-TODO
-* Create pull request for CSTController::reduce:380 should ++o
-* Does replicode v1.1 instantiate a cst from partial inputs?
-* Make pong.discrete.cmd.external build the same models in diagnostic time.
-* Merge pull request https://github.com/IIIM-IS/replicode/pull/48 ?
+2020-02-07
+* DONE. Create pull request for CSTController::reduce:380 should ++o
+  https://github.com/IIIM-IS/replicode/pull/49
+* DEFER. Does replicode v1.1 instantiate a cst from partial inputs?
+  Don't know. The code is too different, and can't find tests that use pattern extractor.
+* DONE. Make pong.discrete.cmd.external build the same models in diagnostic time.
+  CSTOverlay::reduce:277 if (inputs.size() == original_patterns_size) inject_production();
+  Almost: mdl 122 makes unbound predictions, e.g. fact_171
 * Does pong.discrete.cmd.external use the learned models to abduce from the drive?
+  NO. PrimaryMDLController::abduce:1609 abduction_allowed(bm) == false
+  Maybe partly due to the bug in scan_variable: https://github.com/IIIM-IS/replicode/pull/50
+* DONE. Merge pull request https://github.com/IIIM-IS/replicode/pull/48
+
+TODO
+* In hand-coded model, why doesn't it (goal (fact (imdl)))?
+* In hand-coded model, try m_y1_plus with variables needing binding. Does it (goal (fact (imdl)))?
+* Is PTPX invoked when a prediction fails?
+* In babbling, issue random goals for positions and an early (fact (success)). Is GTPX invoked?
+* Merge pull request https://github.com/IIIM-IS/replicode/pull/50 ?
 * Set max_sim_time_horizon to 5000000 us. See how behavior changes.
 * Why does A/F choose the (fact (cmd ...)) injected by inject_productions over pgm_cmd_move_y_minus?
 * Treat move commands at the same time step as impulses and have them accumulate?
