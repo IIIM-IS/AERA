@@ -99,7 +99,6 @@
 * Does pong.discrete.cmd.external use the learned models to abduce from the drive?
   NO. PrimaryMDLController::abduce:1609 abduction_allowed(bm) == false
   Maybe partly due to the bug in scan_variable: https://github.com/IIIM-IS/replicode/pull/50
-* DONE. Merge pull request https://github.com/IIIM-IS/replicode/pull/48
 
 TODO
 * In hand-coded model, why doesn't it (goal (fact (imdl)))?
@@ -107,6 +106,7 @@ TODO
 * Is PTPX invoked when a prediction fails?
 * In babbling, issue random goals for positions and an early (fact (success)). Is GTPX invoked?
 * Merge pull request https://github.com/IIIM-IS/replicode/pull/50 ?
+* Merge pull request https://github.com/IIIM-IS/replicode/pull/48 ?
 * Set max_sim_time_horizon to 5000000 us. See how behavior changes.
 * Why does A/F choose the (fact (cmd ...)) injected by inject_productions over pgm_cmd_move_y_minus?
 * Treat move commands at the same time step as impulses and have them accumulate?
