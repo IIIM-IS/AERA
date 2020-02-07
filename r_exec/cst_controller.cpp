@@ -376,8 +376,10 @@ namespace	r_exec{
 				else{
 
 					match=((CSTOverlay	*)*o)->reduce(input,offspring);
-					if(offspring)
+					if(offspring) {
 						overlays.push_front(offspring);
+						++o;
+					}
 					else	if(match)	// full match: no offspring.
 						o=overlays.erase(o);
 					else
