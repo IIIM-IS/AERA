@@ -240,8 +240,8 @@ namespace	r_exec{
 		uint16	guard_count=code[guard_set_index].getAtomCount();
 		for(uint16	i=1;i<=guard_count;++i){
 
-			uint16	index=guard_set_index+i;
-			Atom	a=code[index];
+			uint16	guard_index=guard_set_index+i;
+			Atom	a=code[guard_index];
 			switch(a.getDescriptor()){
 			case	Atom::ASSIGN_PTR:
 				if(a.asIndex()==index)
