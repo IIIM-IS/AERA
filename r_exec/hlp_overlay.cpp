@@ -244,8 +244,8 @@ namespace	r_exec{
 			Atom	a=code[guard_index];
 			switch(a.getDescriptor()){
 			case	Atom::ASSIGN_PTR:
-				if(a.asIndex()==index)
-					return	scan_location(a.asAssignmentIndex());
+				if(a.asAssignmentIndex()==index)
+					return	scan_location(a.asIndex());
 				break;
 			}
 		}
