@@ -287,7 +287,7 @@ namespace	r_exec{
 			if(r!=ratings.end()){	// shall always be the case.
 
 				r->second.add_evidence(success);
-				if(Rating::DSR(r->second.dSR))	// target for which we don't see much improvement over time.
+				if(Rating::DeltaSuccessRate(r->second.delta_success_rate))	// target for which we don't see much improvement over time.
 					m->second=new	TPX(m->second);
 			}
 		}*/
