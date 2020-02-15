@@ -138,7 +138,15 @@ namespace	r_exec{
 					prediction->grounds.push_back(*pred);
 				((CSTController	*)controller)->inject_prediction(f_p_f_icst,lowest_cfd,time_to_live);	// inject a f->pred->icst in the primary group, no rdx.
 
-				OUTPUT(CST_OUT)<<Utils::RelativeTime(Now())<<"				fact "<<f_p_f_icst->get_oid()<<" pred fact icst["<<controller->getObject()->get_oid()<<"][";
+				OUTPUT(CST_OUT)<<Utils::RelativeTime(Now())<<"				fact "<<f_p_f_icst->get_oid();
+#ifdef WITH_DEBUG_OID
+				OUTPUT(CST_OUT)<<"("<< f_p_f_icst->get_debug_oid()<<")";
+#endif
+				OUTPUT(CST_OUT)<<" pred fact ";
+#ifdef WITH_DEBUG_OID
+				OUTPUT(CST_OUT)<<"("<< f_icst->get_debug_oid()<<") ";
+#endif
+				OUTPUT(CST_OUT)<<"icst["<<controller->getObject()->get_oid()<<"][";
 				for(uint32	i=0;i<inputs.size();++i)
 					OUTPUT(CST_OUT)<<" "<<inputs[i]->get_oid();
 				OUTPUT(CST_OUT)<<"]"<<std::endl;
