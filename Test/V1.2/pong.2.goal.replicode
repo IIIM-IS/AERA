@@ -88,10 +88,11 @@ i_pgm_set_speed:(ipgm pgm_set_speed |[] RUN_ONCE 20000us VOLATILE NOTIFY 1) []
 ; calls the command, which will call the override of _Mem::eject().
 pgm_cmd_set_speed_y:(pgm |[]
 []
-   (ptn (fact (goal (fact (cmd set_speed_y [obj: sy:] ::) ::) ::) ::) |[])
+   (ptn (fact (goal (fact c:(cmd set_speed_y [obj: sy:] ::) ::) ::) ::) |[])
 |[]
 []
    (cmd set_speed_y [obj sy] 1)
+   (prb [1 "print" "cmd set_speed_y" [c]])
 1) |[]
 
 i_pgm_cmd_set_speed_y:(ipgm pgm_cmd_set_speed_y |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
