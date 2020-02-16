@@ -455,7 +455,7 @@ namespace	r_exec{
 			abstract_member(object,I_HLP_OBJ,abstracted_object,I_HLP_OBJ,extent_index);
 			abstract_member(object,I_HLP_TPL_ARGS,abstracted_object,I_HLP_TPL_ARGS,extent_index);
 			abstract_member(object,I_HLP_ARGS,abstracted_object,I_HLP_ARGS,extent_index);
-			abstracted_object->code(I_HLP_WR_E)=Atom::Wildcard();
+			abstracted_object->code(I_HLP_WEAK_REQUIREMENT_ENABLED)=Atom::Wildcard();
 			abstracted_object->code(I_HLP_ARITY)=Atom::Wildcard();
 		}else
 			return	object;
@@ -1044,7 +1044,7 @@ namespace	r_exec{
 			++write_index;
 		}
 
-		ihlp->code(I_HLP_WR_E)=Atom::Boolean(wr_enabled);
+		ihlp->code(I_HLP_WEAK_REQUIREMENT_ENABLED)=Atom::Boolean(wr_enabled);
 		ihlp->code(I_HLP_ARITY)=Atom::Float(1);	// psln_thr.
 
 		Fact	*f_ihlp=new	Fact(ihlp,0,0,1,1);

@@ -135,7 +135,7 @@ namespace	r_exec{
 			bool				wr_enabled;
 			bool	stop=(req_controller!=NULL);
 			ChainingStatus		c_s=((MDLController	*)controller)->retrieve_imdl_fwd(bm,f_imdl,r_p,ground,req_controller,wr_enabled);
-			f_imdl->get_reference(0)->code(I_HLP_WR_E)=Atom::Boolean(wr_enabled);
+			f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED)=Atom::Boolean(wr_enabled);
 			bool				c_a=(c_s>=WEAK_REQUIREMENT_ENABLED);
 			switch(c_s){
 			case	WEAK_REQUIREMENT_DISABLED:
@@ -156,7 +156,7 @@ namespace	r_exec{
 					o=NULL;
 					break;
 				}else
-					f_imdl->get_reference(0)->code(I_HLP_WR_E)=Atom::Boolean(false);
+					f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED)=Atom::Boolean(false);
 			case	STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT:		// silent monitoring of a prediction that will not be injected.
 				if(simulation){	// if there is simulated imdl for the root of one sim in prediction, allow forward chaining.
 
@@ -236,7 +236,7 @@ namespace	r_exec{
 			Fact				*ground=f_p_f_imdl;
 			bool				wr_enabled;
 			ChainingStatus		c_s=((MDLController	*)controller)->retrieve_imdl_fwd(bm,f_imdl,r_p,ground,req_controller,wr_enabled);
-			f_imdl->get_reference(0)->code(I_HLP_WR_E)=Atom::Boolean(wr_enabled);
+			f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED)=Atom::Boolean(wr_enabled);
 			bool				c_a=(c_s>=NO_REQUIREMENT);
 			switch(c_s){
 			case	WEAK_REQUIREMENT_DISABLED:
@@ -247,7 +247,7 @@ namespace	r_exec{
 					o=NULL;
 					break;
 				}else
-					f_imdl->get_reference(0)->code(I_HLP_WR_E)=Atom::Boolean(false);
+					f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED)=Atom::Boolean(false);
 			case	STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT:
 			case	WEAK_REQUIREMENT_ENABLED:
 				if(evaluate_fwd_guards()){	// may update bindings.
@@ -1635,7 +1635,7 @@ namespace	r_exec{
 			Fact	*ground;
 			switch(retrieve_imdl_bwd(bm,f_imdl,ground)){
 			case	WEAK_REQUIREMENT_ENABLED:
-				f_imdl->get_reference(0)->code(I_HLP_WR_E)=Atom::Boolean(true);
+				f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED)=Atom::Boolean(true);
 			case	NO_REQUIREMENT:
 				if(sub_sim->mode==SIM_ROOT)
 					abduce_lhs(bm,super_goal,f_imdl,opposite,confidence,sub_sim,ground,true);
@@ -1645,7 +1645,7 @@ namespace	r_exec{
 			default:	// WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
 				switch(retrieve_simulated_imdl_bwd(bm,f_imdl,sim->root)){
 				case	WEAK_REQUIREMENT_ENABLED:
-					f_imdl->get_reference(0)->code(I_HLP_WR_E)=Atom::Boolean(true);
+					f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED)=Atom::Boolean(true);
 				case	NO_REQUIREMENT:
 					if(sub_sim->mode==SIM_ROOT)
 						abduce_lhs(bm,super_goal,f_imdl,opposite,confidence,sub_sim,NULL,true);
@@ -1670,7 +1670,7 @@ namespace	r_exec{
 				f_imdl->set_reference(0,bm->bind_pattern(f_imdl->get_reference(0)));	// valuate f_imdl from updated bm.
 				switch(retrieve_imdl_bwd(bm,f_imdl,ground)){
 				case	WEAK_REQUIREMENT_ENABLED:
-					f_imdl->get_reference(0)->code(I_HLP_WR_E)=Atom::Boolean(true);
+					f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED)=Atom::Boolean(true);
 				case	NO_REQUIREMENT:
 					sub_sim=new	Sim(SIM_ROOT,0,super_goal,opposite,this);
 					abduce_lhs(bm,super_goal,f_imdl,opposite,confidence,sub_sim,ground,false);
@@ -1825,7 +1825,7 @@ namespace	r_exec{
 		Fact	*ground;
 		switch(retrieve_imdl_bwd(bm,f_imdl,ground)){
 		case	WEAK_REQUIREMENT_ENABLED:
-			f_imdl->get_reference(0)->code(I_HLP_WR_E)=Atom::Boolean(true);
+			f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED)=Atom::Boolean(true);
 		case	NO_REQUIREMENT:
 			if(evaluate_bwd_guards(bm)){	// bm may be updated.
 
@@ -1855,7 +1855,7 @@ namespace	r_exec{
 		Sim	*sim=g->sim;
 		switch(c_s){
 		case	WEAK_REQUIREMENT_ENABLED:
-			f_imdl->get_reference(0)->code(I_HLP_WR_E)=Atom::Boolean(true);
+			f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED)=Atom::Boolean(true);
 		case	NO_REQUIREMENT:
 			if(evaluate_bwd_guards(bm)){	// bm may be updated.
 
