@@ -433,6 +433,7 @@ namespace	r_exec{
 		// The maximum number of reduction jobs to run before trying a time job.
 		// Average job time is 333us. 300 jobs is 100000us, which is the sampling period.
 		const size_t maxReductionJobsPerCycle = 300;
+        size_t nReductionJobsThisSamplingPeriod = 0;
 		std::vector<P<_ReductionJob>> reductionJobQueue;
 		// Use a deque so we can efficiently remove from the front.
 		std::deque<P<TimeJob>> orderedTimeJobQueue;
@@ -446,27 +447,39 @@ namespace	r_exec{
 			if (state == STOPPED)
 				break;
 
-			// Transfer all reduction jobs to a local queue and run only these.
-			// Below, we only run one time job, so any extra jobs that these reduction
-			// jobs add will be run on the next pass after running the time job.
-			while (true) {
-				P<_ReductionJob> reductionJob = popReductionJob(false);
-				if (reductionJob == NULL)
-					// No more reduction jobs.
+			// Reduction jobs can add more reduction jobs, so make a few passes.
+            for (int passNumber = 1; passNumber <= 2; ++passNumber) {
+				// Transfer all reduction jobs to a local queue and run only these.
+				// Below, we only run one time job, so any extra jobs that these reduction
+				// jobs add will be run on the next pass after running the time job.
+				while (true) {
+					P<_ReductionJob> reductionJob = popReductionJob(false);
+					if (reductionJob == NULL)
+						// No more reduction jobs.
+						break;
+					reductionJobQueue.push_back(reductionJob);
+				}
+
+				size_t nJobsToRun = min(reductionJobQueue.size(), maxReductionJobsPerCycle);
+				if (nJobsToRun == 0)
 					break;
-				reductionJobQueue.push_back(reductionJob);
+				for (size_t i = 0; i < nJobsToRun; ++i) {
+					reductionJobQueue[i]->update(Now());
+					reductionJobQueue[i] = NULL;
+				}
+				nReductionJobsThisSamplingPeriod += nJobsToRun;
+
+				if (reductionJobQueue.size() > maxReductionJobsPerCycle)
+					// There are remaining jobs to be run. Shift them to the front.
+					reductionJobQueue.erase
+					  (reductionJobQueue.begin(), reductionJobQueue.begin() + maxReductionJobsPerCycle);
+				else
+					reductionJobQueue.clear();
+
+				if (nReductionJobsThisSamplingPeriod >= maxReductionJobsPerCycle)
+					// We have hit the limit of reduction jobs this sampling period.
+					break;
 			}
-			for (size_t i = 0; 
-                 i < reductionJobQueue.size() && i < maxReductionJobsPerCycle; ++i) {
-				reductionJobQueue[i]->update(Now());
-				reductionJobQueue[i] = NULL;
-			}
-			if (reductionJobQueue.size() > maxReductionJobsPerCycle)
-				// There are remaining jobs to be run. Shift them to the front.
-				reductionJobQueue.erase
-				  (reductionJobQueue.begin(), reductionJobQueue.begin() + maxReductionJobsPerCycle);
-			else
-				reductionJobQueue.clear();
 
 			// Transfer all time jobs to orderedTimeJobQueue,
 			// sorted on target_time.
@@ -494,6 +507,8 @@ namespace	r_exec{
 				tickTime += sampling_period_us;
 				// Increase the diagnostic time to the tick time.
 				DiagnosticTimeNow = tickTime;
+				// We are beginning a new sampling period.
+				nReductionJobsThisSamplingPeriod = 0;
 				onDiagnosticTimeTick();
 
 				if (orderedTimeJobQueue.size() == 0 ||
