@@ -85,7 +85,6 @@
 #include	"dll.h"
 
 #include	<list>
-#include	<deque>
 
 #include	"../r_code/list.h"
 #include	"../r_comp/segments.h"
@@ -146,9 +145,6 @@ namespace	r_exec{
 		PipeNN<P<TimeJob>,1024>			*time_job_queue;
 		ReductionCore					**reduction_cores;
 		TimeCore						**time_cores;
-		// Use a deque so we can efficiently remove from the front.
-		// Only used if reduction and time core count == 0.
-		std::deque<P<TimeJob>> ordered_time_job_queue;
 		TimeJob::Compare timeJobCompare_;
 
 		// Performance stats.

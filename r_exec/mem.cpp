@@ -76,6 +76,7 @@
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
 #include	<algorithm>
+#include	<deque>
 #include	"mem.h"
 #include	"mdl_controller.h"
 #include	"model_base.h"
@@ -433,6 +434,8 @@ namespace	r_exec{
 		// Average job time is 333us. 300 jobs is 100000us, which is the sampling period.
 		const size_t maxReductionJobsPerCycle = 300;
 		std::vector<P<_ReductionJob>> reductionJobQueue;
+		// Use a deque so we can efficiently remove from the front.
+		std::deque<P<TimeJob>> orderedTimeJobQueue;
 
 		uint64 tickTime = Now();
 		onDiagnosticTimeTick();
@@ -465,7 +468,7 @@ namespace	r_exec{
 			else
 				reductionJobQueue.clear();
 
-			// Transfer all time jobs to ordered_time_job_queue,
+			// Transfer all time jobs to orderedTimeJobQueue,
 			// sorted on target_time.
 			while (true) {
 				P<TimeJob> timeJob = popTimeJob(false);
@@ -473,9 +476,9 @@ namespace	r_exec{
 					// No more time jobs.
 					break;
 
-				ordered_time_job_queue.insert
-				  (upper_bound(ordered_time_job_queue.begin(), 
-					 ordered_time_job_queue.end(), timeJob, timeJobCompare_),
+				orderedTimeJobQueue.insert
+				  (upper_bound(orderedTimeJobQueue.begin(), 
+					 orderedTimeJobQueue.end(), timeJob, timeJobCompare_),
 				   timeJob);
 			}
 
@@ -484,8 +487,8 @@ namespace	r_exec{
 				break;
 
 			// The entry at the front is the earliest.
-			if (ordered_time_job_queue.size() == 0 ||
-                ordered_time_job_queue.front()->target_time >=
+			if (orderedTimeJobQueue.size() == 0 ||
+                orderedTimeJobQueue.front()->target_time >=
                   tickTime + sampling_period_us) {
 				// There is no time job before the next tick time, so tick.
 				tickTime += sampling_period_us;
@@ -493,23 +496,23 @@ namespace	r_exec{
 				DiagnosticTimeNow = tickTime;
 				onDiagnosticTimeTick();
 
-				if (ordered_time_job_queue.size() == 0 ||
-				    ordered_time_job_queue.front()->target_time > tickTime)
+				if (orderedTimeJobQueue.size() == 0 ||
+				    orderedTimeJobQueue.front()->target_time > tickTime)
 					// Loop again in case a reduction job will add more time jobs.
 					continue;
 			}
 
-			if (ordered_time_job_queue.size() == 0)
+			if (orderedTimeJobQueue.size() == 0)
 				// No time jobs. Loop again in case a reduction job will add one.
 				continue;
 
-			if (ordered_time_job_queue.front()->target_time > Now())
+			if (orderedTimeJobQueue.front()->target_time > Now())
 				// Increase the diagnostic time to the job's target time.
-				DiagnosticTimeNow = ordered_time_job_queue.front()->target_time;
+				DiagnosticTimeNow = orderedTimeJobQueue.front()->target_time;
 
 			// Only process one job in case it adds more jobs.
-			P<TimeJob> timeJob = ordered_time_job_queue.front();
-			ordered_time_job_queue.erase(ordered_time_job_queue.begin());
+			P<TimeJob> timeJob = orderedTimeJobQueue.front();
+			orderedTimeJobQueue.erase(orderedTimeJobQueue.begin());
 
 			if (!timeJob->is_alive()) {
 				timeJob = NULL;
@@ -526,9 +529,9 @@ namespace	r_exec{
 			if (next_target != 0) {
 				// The job wants to run again, so re-insert into the queue.
 				timeJob->target_time = next_target;
-				ordered_time_job_queue.insert
-				  (upper_bound(ordered_time_job_queue.begin(),
-					 ordered_time_job_queue.end(), timeJob, timeJobCompare_),
+				orderedTimeJobQueue.insert
+				  (upper_bound(orderedTimeJobQueue.begin(),
+					 orderedTimeJobQueue.end(), timeJob, timeJobCompare_),
 				   timeJob);
 			}
 			else
