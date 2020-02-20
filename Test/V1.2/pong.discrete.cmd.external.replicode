@@ -105,7 +105,8 @@ pgm_inject_drive:(pgm |[]
    (> after (+ this.vw.ijt inject_drive_time))
 []
    (inj []
-      f_run:(fact run after before 1 1)
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      f_run:(fact run (+ after 10000us) before 1 1)
       |[]
    )
    (inj []
@@ -113,7 +114,7 @@ pgm_inject_drive:(pgm |[]
       |[]
    )
    (inj []
-      (fact g t1:(now) t1 1 1)
+      (fact g t1:(+ after 10000us) (+ after 10000us) 1 1)
       [SYNC_ONCE t1 1 forever primary nil]
    )
    (prb [1 "print" "injected drive" |[]])
