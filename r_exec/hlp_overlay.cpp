@@ -175,12 +175,25 @@ namespace	r_exec{
 			}
 		}
 
-		if(!evaluate(guard_set_index+fwd_before_guard_index))
-			return	false;
+		if(!bindings->has_fwd_before()) {
+			// We need to evaluate forward before.
+			if (fwd_before_guard_index == -1)
+				// None of the backward guards assigns the variable for forward before.
+				return false;
+			if(!evaluate(guard_set_index+fwd_before_guard_index))
+				return	false;
+		}
 		if(bindings->get_fwd_before()<=Now())
 			return	false;
-		if(!evaluate(guard_set_index+fwd_after_guard_index))
-			return	false;
+
+		if(!bindings->has_fwd_after()) {
+			// We need to evaluate forward after.
+			if (fwd_after_guard_index == -1)
+				// None of the backward guards assigns the variable for forward after.
+				return false;
+			if(!evaluate(guard_set_index+fwd_after_guard_index))
+				return	false;
+		}
 
 		return	true;
 	}
