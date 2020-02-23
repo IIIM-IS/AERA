@@ -143,29 +143,29 @@ namespace	r_exec{
 	class	MDLController:
 	public	HLPController{
 	protected:
-		class	REntry:	// use for requirements.
-		public	PEEntry{
+		class	RequirementEntry:	// use for requirements.
+		public	PredictedEvidenceEntry{
 		public:
 			P<MDLController>	controller;	// of the requirement.
 			bool				chaining_was_allowed;
 
-			REntry();
-			REntry(_Fact	*f_p_f_imdl,MDLController	*c,bool	chaining_was_allowed);	// f_imdl is f0 as in f0->pred->f1->imdl.
+			RequirementEntry();
+			RequirementEntry(_Fact	*f_p_f_imdl,MDLController	*c,bool	chaining_was_allowed);	// f_imdl is f0 as in f0->pred->f1->imdl.
 
 			bool	is_out_of_range(uint64	now)	const{	return	(before<now	||	after>now);	}
 		};
 
-		class	RCache{
+		class	RequirementCache{
 		public:
 			CriticalSection	CS;
-			r_code::list<REntry>	positive_evidences;
-			r_code::list<REntry>	negative_evidences;
+			r_code::list<RequirementEntry>	positive_evidences;
+			r_code::list<RequirementEntry>	negative_evidences;
 		};
 
-		RCache	requirements;
-		RCache	simulated_requirements;
+		RequirementCache	requirements;
+		RequirementCache	simulated_requirements;
 
-		void	_store_requirement(r_code::list<REntry>	*cache,REntry	&e);
+		void	_store_requirement(r_code::list<RequirementEntry>	*cache,RequirementEntry	&e);
 
 		CriticalSection				p_monitorsCS;
 		r_code::list<P<PMonitor> >	p_monitors;
@@ -177,12 +177,12 @@ namespace	r_exec{
 		static	const	uint32	RHSController=1;
 
 		typedef	enum{
-			NaR=0,
-			WR=1,
-			SR=2
-		}RType;
+			NOT_A_REQUIREMENT = 0,
+			WEAK_REQUIREMENT = 1,
+			STRONG_REQUIREMENT = 2
+		} RequirementType;
 
-		RType	_is_requirement;
+		RequirementType	_is_requirement;
 		bool	_is_reuse;
 		bool	_is_cmd;
 
@@ -242,7 +242,7 @@ namespace	r_exec{
 		void	add_requirement_to_rhs();
 		void	remove_requirement_from_rhs();
 
-		bool	is_requirement()	const{	return	(_is_requirement!=NaR);	}
+		bool	is_requirement()	const{	return	(_is_requirement!=NOT_A_REQUIREMENT);	}
 		bool	is_reuse()			const{	return	_is_reuse;	}
 		bool	is_cmd()			const{	return	_is_cmd;	}
 
