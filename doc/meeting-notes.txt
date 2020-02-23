@@ -106,21 +106,44 @@
 * DONE. Review and merge https://github.com/IIIM-IS/replicode/pull/52 .
 * DONE. Set max_sim_time_horizon to 5000000 us. See how behavior changes.
   ANSWER: Not much change. E.g. fact_558 goal imdl injected just the same.
-* Review and merge https://github.com/IIIM-IS/replicode/pull/53 .
+* DONE. Review and merge https://github.com/IIIM-IS/replicode/pull/53 .
 * DONE. In hand-coded model, why doesn't it (goal (fact (imdl)))?
   PrimaryMDLController::abduce:1636 retrieve_imdl_bwd returns NO_R (no requirements)
     -> directly to abduce LHS
   For mdl_98 from CTPX, MDLController constructor sets _is_requirement=WR (weak requirement)
 * OK. Review issue to rename for readability https://github.com/IIIM-IS/replicode/issues/55
 
+2020-02-23
+* DONE. Merge pull request for readability issue https://github.com/IIIM-IS/replicode/issues/55
+* DONE. Review issue to remove unused parameter https://github.com/IIIM-IS/replicode/issues/57
+* Changes in pong.discrete.cmd.external to abduce a goal from learned models:
+  * Still need pull request https://github.com/IIIM-IS/replicode/pull/48
+  * Still need CSTOverlay::reduce:288 to require all inputs for an icst.
+  * Offset (fact (cmd)) to allow it to be a cause. https://github.com/IIIM-IS/replicode/pull/59
+  * Delay the drive to allow predicting the imdl as a requirement. https://github.com/IIIM-IS/replicode/commit/3339d3a804a32d1692b993777d1da87d3035a787
+  * In m_run_position, offset the timestamp of the goal position by 90000us 
+    so that v2 in mdl_93 exactly matches 3s:200ms:0us in the requirement
+	(imdl mdl_93 [y1 3s:100ms:0us 3s:200ms:0us] [p1 y2 v5]) .
+	(Need to find a way to make this flexible.)
+  * Force HLPBindingMap::match_bwd_timings to succeed.
+    The requirement timestamps 3s:100ms:0us,3s:200ms:0us don't match
+	the mdl_93 RHS backward timestamps 3s:200ms:0us,3s:300ms:0us .
+	It works if we use the timestamps of f_pattern (the constructed imdl).
+  * In HLPOverlay::check_fwd_timings:178, need to evaluate fwd_after
+    "v4:(sub v2 0s:80ms:0us)" first because fwd_before 
+	"v5:(add v4 0s:30ms:0us)" depends on it.
+	In general, there may be dependencies among many guards, so the general solution
+	needs multiple passes to bind other assignment variables that may be dependencies.
+	Maybe do ScanBWDGuards first and let it bind variables?
+
 TODO
+* Review/merge pull request to only evaluate timings if needed https://github.com/IIIM-IS/replicode/pull/60
+* Review and merge allowing a reference to an expression https://github.com/IIIM-IS/replicode/pull/58
+* Abduce a goal more in the future than the next sampling period.
+* pong.discrete.cmd.external: Fix learned model for move_y_minus position1->position2.
 * Decompiler error for VL_PTR in imdl https://github.com/IIIM-IS/replicode/issues/51
-* Pull requst for readability issue https://github.com/IIIM-IS/replicode/issues/55
-* In hand-coded model, try m_y1_plus with variables needing binding. Does it (goal (fact (imdl)))?
 * Is PTPX invoked when a prediction fails?
 * In babbling, issue random goals for positions and an early (fact (success)). Is GTPX invoked?
-* Merge pull request https://github.com/IIIM-IS/replicode/pull/48 ?
-* Pull request for InputLessPGMOverlay::inject_productions:461  + 2 * Utils::GetTimeTolerance()
 * Why does A/F choose the (fact (cmd ...)) injected by inject_productions over pgm_cmd_move_y_minus?
 * Treat move commands at the same time step as impulses and have them accumulate?
 * Issue #2: Try to reproduce.
