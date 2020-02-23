@@ -183,7 +183,7 @@ namespace	r_exec{
 		MatchResult	r=MATCH_FAILURE;
 		evidences.CS.enter();
 		uint64	now=Now();
-		r_code::list<EEntry>::const_iterator	e;
+		r_code::list<EvidenceEntry>::const_iterator	e;
 		for(e=evidences.evidences.begin();e!=evidences.evidences.end();){
 
 			if((*e).is_too_old(now))	// garbage collection.	// garbage collection.
@@ -209,7 +209,7 @@ namespace	r_exec{
 		MatchResult	r=MATCH_FAILURE;
 		predicted_evidences.CS.enter();
 		uint64	now=Now();
-		r_code::list<PEEntry>::const_iterator	e;
+		r_code::list<PredictedEvidenceEntry>::const_iterator	e;
 		for(e=predicted_evidences.evidences.begin();e!=predicted_evidences.evidences.end();){
 
 			if((*e).is_too_old(now))	// garbage collection.	// garbage collection.
@@ -276,20 +276,20 @@ namespace	r_exec{
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	HLPController::EEntry::EEntry():evidence(NULL){
+	HLPController::EvidenceEntry::EvidenceEntry():evidence(NULL){
 	}
 
-	HLPController::EEntry::EEntry(_Fact	*evidence):evidence(evidence){
+	HLPController::EvidenceEntry::EvidenceEntry(_Fact	*evidence):evidence(evidence){
 
 		load_data(evidence);
 	}
 
-	HLPController::EEntry::EEntry(_Fact	*evidence,_Fact	*payload):evidence(evidence){
+	HLPController::EvidenceEntry::EvidenceEntry(_Fact	*evidence,_Fact	*payload):evidence(evidence){
 
 		load_data(payload);
 	}
 
-	void	HLPController::EEntry::load_data(_Fact	*evidence){
+	void	HLPController::EvidenceEntry::load_data(_Fact	*evidence){
 
 		after=evidence->get_after();
 		before=evidence->get_before();
@@ -298,9 +298,9 @@ namespace	r_exec{
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	HLPController::PEEntry::PEEntry():EEntry(){
+	HLPController::PredictedEvidenceEntry::PredictedEvidenceEntry():EvidenceEntry(){
 	}
 
-	HLPController::PEEntry::PEEntry(_Fact	*evidence):EEntry(evidence,evidence->get_pred()->get_target()){
+	HLPController::PredictedEvidenceEntry::PredictedEvidenceEntry(_Fact	*evidence):EvidenceEntry(evidence,evidence->get_pred()->get_target()){
 	}
 }

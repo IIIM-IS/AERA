@@ -287,7 +287,7 @@ namespace	r_exec{
 			if(r!=ratings.end()){	// shall always be the case.
 
 				r->second.add_evidence(success);
-				if(Rating::DSR(r->second.dSR))	// target for which we don't see much improvement over time.
+				if(Rating::DeltaSuccessRate(r->second.delta_success_rate))	// target for which we don't see much improvement over time.
 					m->second=new	TPX(m->second);
 			}
 		}*/
@@ -327,7 +327,7 @@ namespace	r_exec{
 				if(goal!=NULL){	// build a tpx to find models like M:[A -> B] where B is the goal target.
 
 					pattern=(_Fact	*)unpacked_mdl->get_reference(unpacked_mdl->code(obj_set_index+1).asIndex());	// lhs.
-					tpx=build_tpx<GTPX>((_Fact	*)production,pattern,bm,goal_ratings,f_ihlp,f_ihlp->get_reference(0)->code(I_HLP_WR_E).asBoolean());
+					tpx=build_tpx<GTPX>((_Fact	*)production,pattern,bm,goal_ratings,f_ihlp,f_ihlp->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED).asBoolean());
 	//		jm		goals.insert(std::pair<P<Code>,P<TPX>	>((_Fact	*)production,tpx));
 					goals.insert(std::make_pair((_Fact *)production, tpx));
 					//std::cout<<Utils::RelativeTime(Now())<<" goal focus["<<production->get_oid()<<"]\n";
@@ -337,7 +337,7 @@ namespace	r_exec{
 					if(pred!=NULL){	// build a tpx to find models like M:[A -> |imdl M0] where M0 is the model that produced the prediction.
 
 						pattern=(_Fact	*)unpacked_mdl->get_reference(unpacked_mdl->code(obj_set_index+2).asIndex());	// rhs.
-						tpx=build_tpx<PTPX>((_Fact	*)production,pattern,bm,prediction_ratings,f_ihlp,f_ihlp->get_reference(0)->code(I_HLP_WR_E).asBoolean());
+						tpx=build_tpx<PTPX>((_Fact	*)production,pattern,bm,prediction_ratings,f_ihlp,f_ihlp->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED).asBoolean());
 						//predictions.insert(std::pair<P<Code>,P<TPX>	>((_Fact	*)production,tpx));
 						predictions.insert(std::make_pair((_Fact *)production, tpx));
 

@@ -135,11 +135,11 @@ namespace	r_exec{
 			bool				wr_enabled;
 			bool	stop=(req_controller!=NULL);
 			ChainingStatus		c_s=((MDLController	*)controller)->retrieve_imdl_fwd(bm,f_imdl,r_p,ground,req_controller,wr_enabled);
-			f_imdl->get_reference(0)->code(I_HLP_WR_E)=Atom::Boolean(wr_enabled);
-			bool				c_a=(c_s>=WR_ENABLED);
+			f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED)=Atom::Boolean(wr_enabled);
+			bool				c_a=(c_s>=WEAK_REQUIREMENT_ENABLED);
 			switch(c_s){
-			case	WR_DISABLED:
-			case	SR_DISABLED_NO_WR:	// silent monitoring of a prediction that will not be injected.
+			case	WEAK_REQUIREMENT_DISABLED:
+			case	STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT:	// silent monitoring of a prediction that will not be injected.
 				if(simulation){	// if there is simulated imdl for the root of one sim in prediction, allow forward chaining.
 
 					if(check_simulated_chaining(bm,f_imdl,prediction))
@@ -150,14 +150,14 @@ namespace	r_exec{
 						break;
 					}
 				}
-			case	NO_R:
+			case	NO_REQUIREMENT:
 				if(((MDLController	*)controller)->has_tpl_args()){	// there are tpl args, abort.
 
 					o=NULL;
 					break;
 				}else
-					f_imdl->get_reference(0)->code(I_HLP_WR_E)=Atom::Boolean(false);
-			case	SR_DISABLED_WR:		// silent monitoring of a prediction that will not be injected.
+					f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED)=Atom::Boolean(false);
+			case	STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT:		// silent monitoring of a prediction that will not be injected.
 				if(simulation){	// if there is simulated imdl for the root of one sim in prediction, allow forward chaining.
 
 					if(check_simulated_chaining(bm,f_imdl,prediction))
@@ -168,7 +168,7 @@ namespace	r_exec{
 						break;
 					}
 				}
-			case	WR_ENABLED:
+			case	WEAK_REQUIREMENT_ENABLED:
 				if(evaluate_fwd_guards()){	// may update bindings.
 //std::cout<<" match\n";
 					f_imdl->set_reference(0,bm->bind_pattern(f_imdl->get_reference(0)));	// valuate f_imdl from updated bm.
@@ -201,8 +201,8 @@ namespace	r_exec{
 		for(uint32	i=0;i<prediction->simulations.size();++i){
 
 			switch(((MDLController	*)controller)->retrieve_simulated_imdl_fwd(bm,f_imdl,prediction->simulations[i]->root)){
-			case	NO_R:
-			case	WR_ENABLED:
+			case	NO_REQUIREMENT:
+			case	WEAK_REQUIREMENT_ENABLED:
 				return	true;
 			default:
 				break;
@@ -236,20 +236,20 @@ namespace	r_exec{
 			Fact				*ground=f_p_f_imdl;
 			bool				wr_enabled;
 			ChainingStatus		c_s=((MDLController	*)controller)->retrieve_imdl_fwd(bm,f_imdl,r_p,ground,req_controller,wr_enabled);
-			f_imdl->get_reference(0)->code(I_HLP_WR_E)=Atom::Boolean(wr_enabled);
-			bool				c_a=(c_s>=NO_R);
+			f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED)=Atom::Boolean(wr_enabled);
+			bool				c_a=(c_s>=NO_REQUIREMENT);
 			switch(c_s){
-			case	WR_DISABLED:
-			case	SR_DISABLED_NO_WR:	// silent monitoring of a prediction that will not be injected.
-			case	NO_R:
+			case	WEAK_REQUIREMENT_DISABLED:
+			case	STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT:	// silent monitoring of a prediction that will not be injected.
+			case	NO_REQUIREMENT:
 				if(((MDLController	*)controller)->has_tpl_args()){	// there are tpl args, abort.
 
 					o=NULL;
 					break;
 				}else
-					f_imdl->get_reference(0)->code(I_HLP_WR_E)=Atom::Boolean(false);
-			case	SR_DISABLED_WR:
-			case	WR_ENABLED:
+					f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED)=Atom::Boolean(false);
+			case	STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT:
+			case	WEAK_REQUIREMENT_ENABLED:
 				if(evaluate_fwd_guards()){	// may update bindings.
 //std::cout<<" match\n";
 					f_imdl->set_reference(0,bm->bind_pattern(f_imdl->get_reference(0)));	// valuate f_imdl from updated bm.
@@ -302,7 +302,7 @@ namespace	r_exec{
 		controllers.resize(2);
 
 		Code	*rhs_ihlp=rhs->get_reference(0);
-		_is_requirement=NaR;
+		_is_requirement=NOT_A_REQUIREMENT;
 		controllers[RHSController]=NULL;
 		uint16	opcode=rhs_ihlp->code(0).asOpcode();
 		if(	opcode==Opcodes::ICst	||
@@ -313,7 +313,7 @@ namespace	r_exec{
 			if(rhs_hlp_v){
 
 				if(opcode==Opcodes::IMdl)
-					_is_requirement=(rhs->code(0).asOpcode()==Opcodes::AntiFact?SR:WR);
+					_is_requirement=(rhs->code(0).asOpcode()==Opcodes::AntiFact ? STRONG_REQUIREMENT : WEAK_REQUIREMENT);
 				controllers[RHSController]=(HLPController	*)rhs_hlp_v->controller;
 			}
 		}
@@ -397,29 +397,29 @@ namespace	r_exec{
 
 	void	MDLController::add_requirement_to_rhs(){
 
-		if(_is_requirement!=NaR){
+		if(_is_requirement!=NOT_A_REQUIREMENT){
 
 			HLPController	*c=controllers[RHSController];
 			if(c)
-				c->add_requirement(_is_requirement==SR);
+				c->add_requirement(_is_requirement==STRONG_REQUIREMENT);
 		}
 	}
 
 	void	MDLController::remove_requirement_from_rhs(){
 
-		if(_is_requirement!=NaR){
+		if(_is_requirement!=NOT_A_REQUIREMENT){
 
 			HLPController	*c=controllers[RHSController];
 			if(c)
-				c->remove_requirement(_is_requirement==SR);
+				c->remove_requirement(_is_requirement==STRONG_REQUIREMENT);
 		}
 	}
 
-	void	MDLController::_store_requirement(r_code::list<REntry>	*cache,REntry	&e){
+	void	MDLController::_store_requirement(r_code::list<RequirementEntry>	*cache,RequirementEntry	&e){
 
 		requirements.CS.enter();
 		uint64	now=Now();
-		r_code::list<REntry>::const_iterator	_e;
+		r_code::list<RequirementEntry>::const_iterator	_e;
 		for(_e=cache->begin();_e!=cache->end();){
 
 			if((*_e).is_too_old(now))	// garbage collection.
@@ -437,14 +437,14 @@ namespace	r_exec{
 		uint32	sr_count;
 		uint32	r_count=get_requirement_count(wr_count,sr_count);
 		if(!r_count)
-			return	NO_R;
+			return	NO_REQUIREMENT;
 		ChainingStatus	r;
 		if(!sr_count){	// no strong req., some weak req.: true if there is one f->imdl complying with timings and bindings.
 
-			r=WR_DISABLED;
+			r=WEAK_REQUIREMENT_DISABLED;
 			requirements.CS.enter();
 			uint64	now=Now();
-			r_code::list<REntry>::const_iterator	e;
+			r_code::list<RequirementEntry>::const_iterator	e;
 			for(e=simulated_requirements.positive_evidences.begin();e!=simulated_requirements.positive_evidences.end();){
 
 				if((*e).is_too_old(now))	// garbage collection.
@@ -460,7 +460,7 @@ namespace	r_exec{
 						//f_imdl->get_reference(0)->trace();
 						if(bm->match_bwd_strict(_f_imdl,f_imdl)){	// tpl args will be valuated in bm, but not in f_imdl yet.
 
-							r=WR_ENABLED;
+							r=WEAK_REQUIREMENT_ENABLED;
 							break;
 						}
 					}
@@ -476,7 +476,7 @@ namespace	r_exec{
 
 				requirements.CS.enter();
 				uint64	now=Now();
-				r_code::list<REntry>::const_iterator	e;
+				r_code::list<RequirementEntry>::const_iterator	e;
 				for(e=simulated_requirements.negative_evidences.begin();e!=simulated_requirements.negative_evidences.end();){
 
 					if((*e).is_too_old(now))	// garbage collection.
@@ -491,7 +491,7 @@ namespace	r_exec{
 							if(bm->match_bwd_lenient(_f_imdl,f_imdl)==MATCH_SUCCESS_NEGATIVE){	// tpl args will be valuated in bm.
 
 								requirements.CS.leave();
-								return	SR_DISABLED_NO_WR;
+								return	STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT;
 							}
 						}
 						++e;
@@ -499,14 +499,14 @@ namespace	r_exec{
 				}
 
 				requirements.CS.leave();
-				return	WR_ENABLED;
+				return	WEAK_REQUIREMENT_ENABLED;
 			}else{	// some strong req. and some weak req.: true if among the entries complying with timings and bindings, the youngest |f->imdl is weaker than the youngest f->imdl.
 
-				r=WR_DISABLED;
+				r=WEAK_REQUIREMENT_DISABLED;
 				float32	negative_cfd=0;
 				requirements.CS.enter();
 				uint64	now=Now();
-				r_code::list<REntry>::const_iterator	e;
+				r_code::list<RequirementEntry>::const_iterator	e;
 				for(e=simulated_requirements.negative_evidences.begin();e!=simulated_requirements.negative_evidences.end();){
 
 					if((*e).is_too_old(now))	// garbage collection.
@@ -521,7 +521,7 @@ namespace	r_exec{
 							if(bm->match_bwd_lenient(_f_imdl,f_imdl)==MATCH_SUCCESS_NEGATIVE){
 
 								negative_cfd=(*e).confidence;
-								r=SR_DISABLED_NO_WR;
+								r=STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT;
 								break;
 							}
 						}
@@ -545,10 +545,10 @@ namespace	r_exec{
 
 								if((*e).confidence>=negative_cfd){
 
-									r=WR_ENABLED;
+									r=WEAK_REQUIREMENT_ENABLED;
 									break;
 								}else
-									r=SR_DISABLED_WR;
+									r=STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
 							}
 						}
 						++e;
@@ -567,14 +567,14 @@ namespace	r_exec{
 		uint32	sr_count;
 		uint32	r_count=get_requirement_count(wr_count,sr_count);
 		if(!r_count)
-			return	NO_R;
+			return	NO_REQUIREMENT;
 		ChainingStatus	r;
 		if(!sr_count){	// no strong req., some weak req.: true if there is one f->imdl complying with timings and bindings.
 
-			r=WR_DISABLED;
+			r=WEAK_REQUIREMENT_DISABLED;
 			requirements.CS.enter();
 			uint64	now=Now();
-			r_code::list<REntry>::const_iterator	e;
+			r_code::list<RequirementEntry>::const_iterator	e;
 			for(e=simulated_requirements.positive_evidences.begin();e!=simulated_requirements.positive_evidences.end();){
 
 				if((*e).is_too_old(now))	// garbage collection.
@@ -588,7 +588,7 @@ namespace	r_exec{
 						//f_imdl->get_reference(0)->trace();
 						if(bm->match_bwd_strict(_f_imdl,f_imdl)){	// tpl args will be valuated in bm, but not in f_imdl yet.
 
-							r=WR_ENABLED;
+							r=WEAK_REQUIREMENT_ENABLED;
 							break;
 						}
 					}
@@ -604,7 +604,7 @@ namespace	r_exec{
 
 				requirements.CS.enter();
 				uint64	now=Now();
-				r_code::list<REntry>::const_iterator	e;
+				r_code::list<RequirementEntry>::const_iterator	e;
 				for(e=simulated_requirements.negative_evidences.begin();e!=simulated_requirements.negative_evidences.end();){
 
 					if((*e).is_too_old(now))	// garbage collection.
@@ -617,7 +617,7 @@ namespace	r_exec{
 							if(bm->match_bwd_lenient(_f_imdl,f_imdl)==MATCH_SUCCESS_NEGATIVE){	// tpl args will be valuated in bm.
 
 								requirements.CS.leave();
-								return	SR_DISABLED_NO_WR;
+								return	STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT;
 							}
 						}
 						++e;
@@ -625,14 +625,14 @@ namespace	r_exec{
 				}
 
 				requirements.CS.leave();
-				return	WR_ENABLED;
+				return	WEAK_REQUIREMENT_ENABLED;
 			}else{	// some strong req. and some weak req.: true if among the entries complying with timings and bindings, the youngest |f->imdl is weaker than the youngest f->imdl.
 
-				r=WR_DISABLED;
+				r=WEAK_REQUIREMENT_DISABLED;
 				float32	negative_cfd=0;
 				requirements.CS.enter();
 				uint64	now=Now();
-				r_code::list<REntry>::const_iterator	e;
+				r_code::list<RequirementEntry>::const_iterator	e;
 				for(e=simulated_requirements.negative_evidences.begin();e!=simulated_requirements.negative_evidences.end();){
 
 					if((*e).is_too_old(now))	// garbage collection.
@@ -645,7 +645,7 @@ namespace	r_exec{
 							if(bm->match_bwd_lenient(_f_imdl,f_imdl)==MATCH_SUCCESS_NEGATIVE){
 
 								negative_cfd=(*e).confidence;
-								r=SR_DISABLED_NO_WR;
+								r=STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT;
 								break;
 							}
 						}
@@ -667,10 +667,10 @@ namespace	r_exec{
 
 								if((*e).confidence>=negative_cfd){
 
-									r=WR_ENABLED;
+									r=WEAK_REQUIREMENT_ENABLED;
 									break;
 								}else
-									r=SR_DISABLED_WR;
+									r=STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
 							}
 						}
 						++e;
@@ -690,7 +690,7 @@ namespace	r_exec{
 		uint32	r_count=get_requirement_count(wr_count,sr_count);
 		ground=NULL;
 		if(!r_count)
-			return	NO_R;
+			return	NO_REQUIREMENT;
 		ChainingStatus	r;
 		HLPBindingMap	original(bm);
 		if(!sr_count){	// no strong req., some weak req.: true if there is one f->imdl complying with timings and bindings.
@@ -702,13 +702,13 @@ namespace	r_exec{
 				r_p.first.controllers.push_back(req_controller);
 				r_p.first.f_imdl=ground;
 				r_p.first.chaining_was_allowed=true;
-				return	WR_ENABLED;
+				return	WEAK_REQUIREMENT_ENABLED;
 			}
 
-			r=WR_DISABLED;
+			r=WEAK_REQUIREMENT_DISABLED;
 			requirements.CS.enter();
 			uint64	now=Now();
-			r_code::list<REntry>::const_iterator	e;
+			r_code::list<RequirementEntry>::const_iterator	e;
 			for(e=requirements.positive_evidences.begin();e!=requirements.positive_evidences.end();){
 
 				Code	*imdl=(*e).evidence->get_pred()->get_target()->get_reference(0);
@@ -731,9 +731,9 @@ namespace	r_exec{
 						  f_imdl->get_reference(0)->get_reference(0)->get_oid() << " matches evidence fact (" <<
 						  _f_imdl->get_debug_oid() <<  ") imdl mdl " << _f_imdl->get_reference(0)->get_reference(0)->get_oid() << std::endl;
 #endif
-						if(r==WR_DISABLED	&&	(*e).chaining_was_allowed){	// first match.
+						if(r==WEAK_REQUIREMENT_DISABLED	&&	(*e).chaining_was_allowed){	// first match.
 
-							r=WR_ENABLED;
+							r=WEAK_REQUIREMENT_ENABLED;
 							bm->load(&_original);
 							ground=(*e).evidence;
 							//std::cout<<"Chosen IMDL: "<<imdl->code(tpl_index+1).asFloat()<<" ["<<Time::ToString_seconds((*e).after-Utils::GetTimeReference())<<" "<<Time::ToString_seconds((*e).before-Utils::GetTimeReference())<<"]"<<std::endl;
@@ -754,10 +754,10 @@ namespace	r_exec{
 			if(!wr_count){	// some strong req., no weak req.: true if there is no |f->imdl complying with timings and bindings.
 
 				wr_enabled=false;
-				r=WR_ENABLED;
+				r=WEAK_REQUIREMENT_ENABLED;
 				requirements.CS.enter();
 				uint64	now=Now();
-				r_code::list<REntry>::const_iterator	e;
+				r_code::list<RequirementEntry>::const_iterator	e;
 				for(e=requirements.negative_evidences.begin();e!=requirements.negative_evidences.end();){
 
 					if((*e).is_too_old(now))	// garbage collection.
@@ -770,8 +770,8 @@ namespace	r_exec{
 						HLPBindingMap	_original=original;	// matching updates the bm; always start afresh.
 						if(_original.match_fwd_lenient(_f_imdl,f_imdl)==MATCH_SUCCESS_NEGATIVE){	// tpl args will be valuated in bm.
 
-							if(r==WR_ENABLED	&&	(*e).chaining_was_allowed)	// first match.
-								r=SR_DISABLED_NO_WR;
+							if(r==WEAK_REQUIREMENT_ENABLED	&&	(*e).chaining_was_allowed)	// first match.
+								r=STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT;
 
 							r_p.second.controllers.push_back((*e).controller);
 							r_p.second.f_imdl=_f_imdl;
@@ -785,12 +785,12 @@ namespace	r_exec{
 				return	r;
 			}else{	// some strong req. and some weak req.: true if among the entries complying with timings and bindings, the youngest |f->imdl is weaker than the youngest f->imdl.
 
-				r=NO_R;
+				r=NO_REQUIREMENT;
 				requirements.CS.enter();
 				float32	negative_cfd=0;
 				uint64	now=Now();
 
-				r_code::list<REntry>::const_iterator	e;
+				r_code::list<RequirementEntry>::const_iterator	e;
 				for(e=requirements.negative_evidences.begin();e!=requirements.negative_evidences.end();){
 
 					if((*e).is_too_old(now))	// garbage collection.
@@ -803,10 +803,10 @@ namespace	r_exec{
 						HLPBindingMap	_original=original;	// matching updates the bm; always start afresh.
 						if(_original.match_fwd_lenient(_f_imdl,f_imdl)==MATCH_SUCCESS_NEGATIVE){
 
-							if(r==NO_R	&&	(*e).chaining_was_allowed){	// first match.
+							if(r==NO_REQUIREMENT	&&	(*e).chaining_was_allowed){	// first match.
 
 								negative_cfd=(*e).confidence;
-								r=SR_DISABLED_NO_WR;
+								r=STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT;
 							}
 
 							r_p.second.controllers.push_back((*e).controller);
@@ -823,7 +823,7 @@ namespace	r_exec{
 					float32	confidence=ground->get_pred()->get_target()->get_cfd();
 					if(confidence>=negative_cfd){
 	
-						r=WR_ENABLED;
+						r=WEAK_REQUIREMENT_ENABLED;
 						r_p.first.controllers.push_back(req_controller);
 						r_p.first.f_imdl=ground;
 						r_p.first.chaining_was_allowed=true;
@@ -842,16 +842,16 @@ namespace	r_exec{
 						HLPBindingMap	_original=original;	// matching updates the bm; always start afresh.
 						if(_original.match_fwd_strict(_f_imdl,f_imdl)){
 
-							if(r!=WR_ENABLED	&&	(*e).chaining_was_allowed){	// first siginificant match.
+							if(r!=WEAK_REQUIREMENT_ENABLED	&&	(*e).chaining_was_allowed){	// first siginificant match.
 								
 								if((*e).confidence>=negative_cfd){
 
-									r=WR_ENABLED;
+									r=WEAK_REQUIREMENT_ENABLED;
 									ground=(*e).evidence;
 									wr_enabled=true;
 								}else{
 
-									r=SR_DISABLED_WR;
+									r=STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
 									wr_enabled=false;
 								}
 								bm->load(&_original);
@@ -877,14 +877,14 @@ namespace	r_exec{
 		uint32	r_count=get_requirement_count(wr_count,sr_count);
 		ground=NULL;
 		if(!r_count)
-			return	NO_R;
+			return	NO_REQUIREMENT;
 		ChainingStatus	r;
 		if(!sr_count){	// no strong req., some weak req.: true if there is one f->imdl complying with timings and bindings.
 
-			r=WR_DISABLED;
+			r=WEAK_REQUIREMENT_DISABLED;
 			requirements.CS.enter();
 			uint64	now=Now();
-			r_code::list<REntry>::const_iterator	e;
+			r_code::list<RequirementEntry>::const_iterator	e;
 			for(e=requirements.positive_evidences.begin();e!=requirements.positive_evidences.end();){
 
 				if((*e).is_too_old(now))	// garbage collection.
@@ -896,7 +896,7 @@ namespace	r_exec{
 					//f_imdl->get_reference(0)->trace();
 					if(bm->match_bwd_strict(_f_imdl,f_imdl)){	// tpl args will be valuated in bm, but not in f_imdl yet.
 
-						r=WR_ENABLED;
+						r=WEAK_REQUIREMENT_ENABLED;
 						ground=(*e).evidence;
 						break;
 					}
@@ -914,7 +914,7 @@ namespace	r_exec{
 
 				requirements.CS.enter();
 				uint64	now=Now();
-				r_code::list<REntry>::const_iterator	e;
+				r_code::list<RequirementEntry>::const_iterator	e;
 				for(e=requirements.negative_evidences.begin();e!=requirements.negative_evidences.end();){
 
 					if((*e).is_too_old(now))	// garbage collection.
@@ -925,21 +925,21 @@ namespace	r_exec{
 						if(bm->match_bwd_lenient(_f_imdl,f_imdl)==MATCH_SUCCESS_NEGATIVE){	// tpl args will be valuated in bm.
 
 							requirements.CS.leave();
-							return	SR_DISABLED_NO_WR;
+							return	STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT;
 						}
 						++e;
 					}
 				}
 
 				requirements.CS.leave();
-				return	WR_ENABLED;
+				return	WEAK_REQUIREMENT_ENABLED;
 			}else{	// some strong req. and some weak req.: true if among the entries complying with timings and bindings, the youngest |f->imdl is weaker than the youngest f->imdl.
 
-				r=WR_DISABLED;
+				r=WEAK_REQUIREMENT_DISABLED;
 				float32	negative_cfd=0;
 				requirements.CS.enter();
 				uint64	now=Now();
-				r_code::list<REntry>::const_iterator	e;
+				r_code::list<RequirementEntry>::const_iterator	e;
 				for(e=requirements.negative_evidences.begin();e!=requirements.negative_evidences.end();){
 
 					if((*e).is_too_old(now))	// garbage collection.
@@ -950,7 +950,7 @@ namespace	r_exec{
 						if(bm->match_bwd_lenient(_f_imdl,f_imdl)==MATCH_SUCCESS_NEGATIVE){
 
 							negative_cfd=(*e).confidence;
-							r=SR_DISABLED_NO_WR;
+							r=STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT;
 							break;
 						}
 						++e;
@@ -969,11 +969,11 @@ namespace	r_exec{
 
 							if((*e).confidence>=negative_cfd){
 
-								r=WR_ENABLED;
+								r=WEAK_REQUIREMENT_ENABLED;
 								ground=(*e).evidence;
 								break;
 							}else
-								r=SR_DISABLED_WR;
+								r=STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
 						}
 						++e;
 					}
@@ -994,10 +994,10 @@ namespace	r_exec{
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	MDLController::REntry::REntry():PEEntry(),controller(NULL),chaining_was_allowed(false){
+	MDLController::RequirementEntry::RequirementEntry():PredictedEvidenceEntry(),controller(NULL),chaining_was_allowed(false){
 	}
 
-	MDLController::REntry::REntry(_Fact	*f_p_f_imdl,MDLController	*c,bool	chaining_was_allowed):PEEntry(f_p_f_imdl),controller(c),chaining_was_allowed(chaining_was_allowed){
+	MDLController::RequirementEntry::RequirementEntry(_Fact	*f_p_f_imdl,MDLController	*c,bool	chaining_was_allowed):PredictedEvidenceEntry(f_p_f_imdl),controller(c),chaining_was_allowed(chaining_was_allowed){
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1152,7 +1152,7 @@ namespace	r_exec{
 		if(goal	&&	goal->is_drive()){
 
 			_Fact	*goal_target=goal->get_target();				// goal_target is f->object.
-			float32	confidence=get_cfd()*goal_target->get_cfd();	// reading SR is atomic.
+			float32	confidence=get_cfd()*goal_target->get_cfd();	// reading STRONG_REQUIREMENT is atomic.
 			if(confidence<=get_host()->code(GRP_SLN_THR).asFloat())	// cfd is too low for any sub-goal to be injected.
 				return;
 			
@@ -1354,7 +1354,7 @@ namespace	r_exec{
 
 		_Fact	*f_imdl=f_p_f_imdl->get_pred()->get_target();
 		Code	*mdl=f_imdl->get_reference(0);
-		REntry	e(f_p_f_imdl,controller,chaining_was_allowed);
+		RequirementEntry	e(f_p_f_imdl,controller,chaining_was_allowed);
 		if(f_imdl->is_fact()){	// in case of a positive requirement tell monitors they can check for chaining again.
 
 			r_code::list<P<_GMonitor> >::const_iterator	m;
@@ -1553,7 +1553,7 @@ namespace	r_exec{
 		if(goal	&&	goal->is_self_goal()	&&	!goal->is_drive()){
 
 			_Fact	*goal_target=goal->get_target();				// goal_target is f->object.
-			float32	confidence=get_cfd()*goal_target->get_cfd();	// reading SR is atomic.
+			float32	confidence=get_cfd()*goal_target->get_cfd();	// reading STRONG_REQUIREMENT is atomic.
 			Code	*host=get_host();
 			if(confidence<=host->code(GRP_SLN_THR).asFloat())	// cfd is too low for any sub-goal to be injected.
 				return;
@@ -1600,8 +1600,8 @@ namespace	r_exec{
 		if(is_orphan())
 			return;
 
-		reduce_cache<EEntry>(&evidences,f_p_f_imdl,controller);
-		reduce_cache<PEEntry>(&predicted_evidences,f_p_f_imdl,controller);
+		reduce_cache<EvidenceEntry>(&evidences,f_p_f_imdl,controller);
+		reduce_cache<PredictedEvidenceEntry>(&predicted_evidences,f_p_f_imdl,controller);
 	}
 
 	void	PrimaryMDLController::abduce(HLPBindingMap	*bm,Fact	*super_goal,bool	opposite,float32	confidence){	// goal is f->g->f->object or f->g->|f->object; called concurrently by redcue() and _GMonitor::update().
@@ -1634,25 +1634,25 @@ namespace	r_exec{
 
 			Fact	*ground;
 			switch(retrieve_imdl_bwd(bm,f_imdl,ground)){
-			case	WR_ENABLED:
-				f_imdl->get_reference(0)->code(I_HLP_WR_E)=Atom::Boolean(true);
-			case	NO_R:
+			case	WEAK_REQUIREMENT_ENABLED:
+				f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED)=Atom::Boolean(true);
+			case	NO_REQUIREMENT:
 				if(sub_sim->mode==SIM_ROOT)
 					abduce_lhs(bm,super_goal,f_imdl,opposite,confidence,sub_sim,ground,true);
 				else
 					abduce_simulated_lhs(bm,super_goal,f_imdl,opposite,confidence,sub_sim);
 				break;
-			default:	// WR_DISABLED, SR_DISABLED_NO_WR or SR_DISABLED_WR.
+			default:	// WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
 				switch(retrieve_simulated_imdl_bwd(bm,f_imdl,sim->root)){
-				case	WR_ENABLED:
-					f_imdl->get_reference(0)->code(I_HLP_WR_E)=Atom::Boolean(true);
-				case	NO_R:
+				case	WEAK_REQUIREMENT_ENABLED:
+					f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED)=Atom::Boolean(true);
+				case	NO_REQUIREMENT:
 					if(sub_sim->mode==SIM_ROOT)
 						abduce_lhs(bm,super_goal,f_imdl,opposite,confidence,sub_sim,NULL,true);
 					else
 						abduce_simulated_lhs(bm,super_goal,f_imdl,opposite,confidence,sub_sim);
 					break;
-				default:	// WR_DISABLED, SR_DISABLED_NO_WR or SR_DISABLED_WR.
+				default:	// WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
 					sub_sim->is_requirement=true;
 					if(sub_sim->mode==SIM_ROOT)
 						abduce_imdl(bm,super_goal,f_imdl,opposite,confidence,sub_sim);
@@ -1669,13 +1669,13 @@ namespace	r_exec{
 			case	SIM_ROOT:
 				f_imdl->set_reference(0,bm->bind_pattern(f_imdl->get_reference(0)));	// valuate f_imdl from updated bm.
 				switch(retrieve_imdl_bwd(bm,f_imdl,ground)){
-				case	WR_ENABLED:
-					f_imdl->get_reference(0)->code(I_HLP_WR_E)=Atom::Boolean(true);
-				case	NO_R:
+				case	WEAK_REQUIREMENT_ENABLED:
+					f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED)=Atom::Boolean(true);
+				case	NO_REQUIREMENT:
 					sub_sim=new	Sim(SIM_ROOT,0,super_goal,opposite,this);
 					abduce_lhs(bm,super_goal,f_imdl,opposite,confidence,sub_sim,ground,false);
 					break;
-				default:	// WR_DISABLED, SR_DISABLED_NO_WR or SR_DISABLED_WR.
+				default:	// WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
 					sub_sim=new	Sim(SIM_ROOT,0,super_goal,opposite,this);
 					sub_sim->is_requirement=true;
 					abduce_imdl(bm,super_goal,f_imdl,opposite,confidence,sub_sim);
@@ -1824,9 +1824,9 @@ namespace	r_exec{
 		Sim	*sim=g->sim;
 		Fact	*ground;
 		switch(retrieve_imdl_bwd(bm,f_imdl,ground)){
-		case	WR_ENABLED:
-			f_imdl->get_reference(0)->code(I_HLP_WR_E)=Atom::Boolean(true);
-		case	NO_R:
+		case	WEAK_REQUIREMENT_ENABLED:
+			f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED)=Atom::Boolean(true);
+		case	NO_REQUIREMENT:
 			if(evaluate_bwd_guards(bm)){	// bm may be updated.
 
 				f_imdl->set_reference(0,bm->bind_pattern(f_imdl->get_reference(0)));	// valuate f_imdl from updated bm.
@@ -1834,7 +1834,7 @@ namespace	r_exec{
 				return	true;
 			}
 			return	false;
-		default:	// WR_DISABLED, SR_DISABLED_NO_WR or SR_DISABLED_WR.
+		default:	// WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
 			return	false;
 		}
 	}
@@ -1854,9 +1854,9 @@ namespace	r_exec{
 
 		Sim	*sim=g->sim;
 		switch(c_s){
-		case	WR_ENABLED:
-			f_imdl->get_reference(0)->code(I_HLP_WR_E)=Atom::Boolean(true);
-		case	NO_R:
+		case	WEAK_REQUIREMENT_ENABLED:
+			f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED)=Atom::Boolean(true);
+		case	NO_REQUIREMENT:
 			if(evaluate_bwd_guards(bm)){	// bm may be updated.
 
 				f_imdl->set_reference(0,bm->bind_pattern(f_imdl->get_reference(0)));	// valuate f_imdl from updated bm.
@@ -1864,7 +1864,7 @@ namespace	r_exec{
 				return	true;
 			}
 			return	false;
-		default:	// WR_DISABLED, SR_DISABLED_NO_WR or SR_DISABLED_WR.
+		default:	// WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
 			return	false;
 		}
 	}
@@ -2104,7 +2104,7 @@ namespace	r_exec{
 		if(input->get_pred())	// discard predictions.
 			return;
 
-		float32	confidence=get_cfd()*input->get_cfd();	// reading SR is atomic.
+		float32	confidence=get_cfd()*input->get_cfd();	// reading STRONG_REQUIREMENT is atomic.
 		Code	*host=get_host();
 		if(confidence<=host->code(GRP_SLN_THR).asFloat())	// cfd is too low for any assumption to be injected.
 			return;
@@ -2129,12 +2129,12 @@ namespace	r_exec{
 		P<Fact>	f_imdl=get_f_ihlp(bm,false);
 		Fact	*ground;
 		switch(retrieve_imdl_bwd(bm,f_imdl,ground)){
-		case	WR_ENABLED:
-		case	NO_R:
+		case	WEAK_REQUIREMENT_ENABLED:
+		case	NO_REQUIREMENT:
 			if(evaluate_bwd_guards(bm))	// bm may be updated.
 				break;
 			return;
-		default:	// WR_DISABLED, SR_DISABLED_NO_WR or SR_DISABLED_WR.
+		default:	// WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
 			return;
 		}
 		
@@ -2246,8 +2246,8 @@ namespace	r_exec{
 		if(is_orphan())
 			return;
 
-		reduce_cache<EEntry>(&evidences,f_p_f_imdl,controller);
-		reduce_cache<PEEntry>(&predicted_evidences,f_p_f_imdl,controller);
+		reduce_cache<EvidenceEntry>(&evidences,f_p_f_imdl,controller);
+		reduce_cache<PredictedEvidenceEntry>(&predicted_evidences,f_p_f_imdl,controller);
 	}
 
 	void	SecondaryMDLController::predict(HLPBindingMap	*bm,_Fact	*input,Fact	*f_imdl,bool	chaining_was_allowed,RequirementsPair	&r_p,Fact	*ground){	// predicitons are not injected: they are silently produced for rating purposes.
@@ -2273,7 +2273,7 @@ namespace	r_exec{
 	void	SecondaryMDLController::store_requirement(_Fact	*f_imdl,MDLController	*controller,bool	chaining_was_allowed,bool	simulation){
 
 		Code	*mdl=f_imdl->get_reference(0);
-		REntry	e(f_imdl,controller,chaining_was_allowed);
+		RequirementEntry	e(f_imdl,controller,chaining_was_allowed);
 		if(f_imdl->is_fact()){
 
 			_store_requirement(&requirements.positive_evidences,e);

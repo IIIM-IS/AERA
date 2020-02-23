@@ -104,24 +104,24 @@ namespace	r_exec{
 		public:
 			uint32	evidences;
 			uint32	positive_evidences;
-			float32	SR;
-			float32	dSR;
+			float32	success_rate;
+			float32	delta_success_rate;
 
-			static	bool	DSR(float32	dSR){
+			static	bool	DeltaSuccessRate(float32	delta_success_rate){
 
-				return	dSR>0	&&	dSR<_Mem::Get()->get_tpx_dsr_thr();
+				return	delta_success_rate>0	&&	delta_success_rate<_Mem::Get()->get_tpx_dsr_thr();
 			}
 
-			Rating():evidences(0),positive_evidences(0),SR(0),dSR(1){}
+			Rating():evidences(0),positive_evidences(0),success_rate(0),delta_success_rate(1){}
 
 			void	add_evidence(bool	success){
 
 				++evidences;
 				if(success)
 					++positive_evidences;
-				dSR=SR;
-				SR=positive_evidences/evidences;
-				dSR=SR-dSR;
+				delta_success_rate=success_rate;
+				success_rate=positive_evidences/evidences;
+				delta_success_rate=success_rate-delta_success_rate;
 			}
 		};
 
@@ -157,7 +157,7 @@ namespace	r_exec{
 			RatingMap::const_iterator	r=map.find(pattern);
 			if(r!=map.end()){
 
-				if(Rating::DSR(r->second.dSR))	// target for which we don't see much improvement over time.
+				if(Rating::DeltaSuccessRate(r->second.delta_success_rate))	// target for which we don't see much improvement over time.
 					return	new	TPX(this,target,pattern,bm);
 				else
 					return	new	T(this,target,pattern,bm,f_imdl);

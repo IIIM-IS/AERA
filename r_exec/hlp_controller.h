@@ -87,11 +87,11 @@
 namespace	r_exec{
 
 	typedef	enum{
-		WR_DISABLED=0,
-		SR_DISABLED_NO_WR=1,
-		SR_DISABLED_WR=2,
-		WR_ENABLED=3,
-		NO_R=4
+		WEAK_REQUIREMENT_DISABLED = 0,
+		STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT = 1,
+		STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT = 2,
+		WEAK_REQUIREMENT_ENABLED = 3,
+		NO_REQUIREMENT = 4
 	}ChainingStatus;
 
 	class	HLPController:
@@ -101,7 +101,7 @@ namespace	r_exec{
 		uint32	weak_requirement_count;		// number of active weak requirements in the same group; updated dynamically.
 		uint32	requirement_count;			// sum of the two above.
 	protected:
-		class	EEntry{	// evidences.
+		class	EvidenceEntry{	// evidences.
 		private:
 			void	load_data(_Fact	*evidence);
 		public:
@@ -110,18 +110,18 @@ namespace	r_exec{
 			uint64		before;
 			float32		confidence;
 
-			EEntry();
-			EEntry(_Fact	*evidence);
-			EEntry(_Fact	*evidence,_Fact	*payload);
+			EvidenceEntry();
+			EvidenceEntry(_Fact	*evidence);
+			EvidenceEntry(_Fact	*evidence,_Fact	*payload);
 
 			bool	is_too_old(uint64	now)	const{	return	(evidence->is_invalidated()	||	before<now);	}
 		};
 
-		class	PEEntry:	// predicted evidences.
-		public	EEntry{
+		class	PredictedEvidenceEntry:	// predicted evidences.
+		public	EvidenceEntry{
 		public:
-			PEEntry();
-			PEEntry(_Fact	*evidence);
+			PredictedEvidenceEntry();
+			PredictedEvidenceEntry(_Fact	*evidence);
 		};
 
 		template<class	E>	class	Cache{
@@ -130,8 +130,8 @@ namespace	r_exec{
 			r_code::list<E>	evidences;
 		};
 
-		Cache<EEntry>	evidences;
-		Cache<PEEntry>	predicted_evidences;
+		Cache<EvidenceEntry>	evidences;
+		Cache<PredictedEvidenceEntry>	predicted_evidences;
 
 		template<class	E>	void	_store_evidence(Cache<E>	*cache,_Fact	*evidence){
 
@@ -186,8 +186,8 @@ namespace	r_exec{
 		uint32	get_requirement_count(uint32	&weak_requirement_count,uint32	&strong_requirement_count);
 		uint32	get_requirement_count();
 
-		void	store_evidence(_Fact	*evidence){			_store_evidence<EEntry>(&evidences,evidence);	}
-		void	store_predicted_evidence(_Fact	*evidence){	_store_evidence <PEEntry>(&predicted_evidences,evidence);	}
+		void	store_evidence(_Fact	*evidence){			_store_evidence<EvidenceEntry>(&evidences,evidence);	}
+		void	store_predicted_evidence(_Fact	*evidence){	_store_evidence <PredictedEvidenceEntry>(&predicted_evidences,evidence);	}
 		
 		virtual	Fact	*get_f_ihlp(HLPBindingMap	*bindings,bool	wr_enabled)	const=0;
 
