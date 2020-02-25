@@ -136,11 +136,16 @@
 	needs multiple passes to bind other assignment variables that may be dependencies.
 	Maybe do ScanBWDGuards first and let it bind variables?
 
+2020-02-25
+* DONE. Review/merge allowing a reference to an expression https://github.com/IIIM-IS/replicode/pull/58
+* REVIEW. pong.discrete.cmd.external: Fix learned model for move_y_minus position1->position2.
+  CTPX::reduce: Require each icst component to share values with the target or consequent.
+
 TODO
-* Review/merge pull request to only evaluate timings if needed https://github.com/IIIM-IS/replicode/pull/60
-* Review and merge allowing a reference to an expression https://github.com/IIIM-IS/replicode/pull/58
+* In unfixed pong.discrete.cmd.external, when the goal to achieve position y0 is not achieved,
+  what does the goal monitor do?
 * Abduce a goal more in the future than the next sampling period.
-* pong.discrete.cmd.external: Fix learned model for move_y_minus position1->position2.
+* Try integer positions. It should learn models like position n to n+1.
 * Decompiler error for VL_PTR in imdl https://github.com/IIIM-IS/replicode/issues/51
 * Is PTPX invoked when a prediction fails?
 * In babbling, issue random goals for positions and an early (fact (success)). Is GTPX invoked?
@@ -149,3 +154,4 @@ TODO
 * Issue #2: Try to reproduce.
 * Issue #25: Reproduce running in real-time, and see if it happens in diagnostic time.
 * Run pong.2.goal.replicode in real time and reproduce/isolate crash. Post issue. Depends on SYNC_PERIODIC change to SYNC_HOLD.
+* DEFER until design session on temporal strictness: Pull request to offset (fact (cmd)) to allow it to be a cause. https://github.com/IIIM-IS/replicode/pull/59
