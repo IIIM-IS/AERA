@@ -76,7 +76,7 @@ pgm_set_speed:(pgm
       |[]
    )
    (inj []
-      (fact g t1:(+ after 10000us) (+ after 10000us) 1 1)
+      (fact g t1:(+ after 10000us) t1 1 1)
       [SYNC_ONCE t1 1 forever primary nil]
    )
    (prb [1 "print" "injected run" |[]])
