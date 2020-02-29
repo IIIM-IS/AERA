@@ -93,9 +93,8 @@ template<class O, class S> TestMem<O, S>::TestMem()
   move_y_minus_opcode_ = 0xFFFF;
   lastCommandTime_ = 0;
 
-  y0Ent_ = NULL;
-  y1Ent_ = NULL;
-  y2Ent_ = NULL;
+  for (int i = 0; i <= 9; ++i)
+    yEnt_[i] = NULL;
   discretePositionObj_ = NULL;
   discretePosition_ = NULL;
   nextDiscretePosition_ = NULL;
@@ -126,9 +125,8 @@ template<class O, class S> bool TestMem<O, S>::load
   primary_group_ = findObject(objects, "primary");
 
   // Find the entities we need.
-  y0Ent_ = findObject(objects, "y0");
-  y1Ent_ = findObject(objects, "y1");
-  y2Ent_ = findObject(objects, "y2");
+  for (int i = 0; i <= 9; ++i)
+    yEnt_[i] = findObject(objects, ("y" + to_string(i)).c_str());
 
   return true;
 }
@@ -251,9 +249,11 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
       cout << "WARNING: Can't find the position property" << endl;
       return;
     }
-    if (!y0Ent_ || !y1Ent_ || !y2Ent_) {
-      cout << "WARNING: Can't find the entities y0, y1 and y2" << endl;
-      return;
+    for (int i = 0; i <= 9; ++i) {
+      if (!yEnt_[i]) {
+        cout << "WARNING: Can't find the entities y0, y1, etc." << endl;
+        return;
+      }
     }
 
     uint64 now = r_exec::Now();
@@ -264,7 +264,7 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
     if (!discretePositionObj_) {
       // This is the first call. Remember the object whose position we're setting.
       discretePositionObj_ = obj;
-      discretePosition_ = y0Ent_;
+      discretePosition_ = yEnt_[0];
       startTimeTickThread();
       return;
     }
@@ -281,16 +281,16 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
     // nextDiscretePosition_ will become the position at the next sampling period.
     lastCommandTime_ = now;
     if (function == move_y_plus_opcode_) {
-      if (discretePosition_ == y0Ent_)
-        nextDiscretePosition_ = y1Ent_;
-      else if (discretePosition_ == y1Ent_)
-        nextDiscretePosition_ = y2Ent_;
+      if (discretePosition_ == yEnt_[0])
+        nextDiscretePosition_ = yEnt_[1];
+      else if (discretePosition_ == yEnt_[1])
+        nextDiscretePosition_ = yEnt_[2];
     }
     else if (function == move_y_minus_opcode_) {
-      if (discretePosition_ == y2Ent_)
-        nextDiscretePosition_ = y1Ent_;
-      else if (discretePosition_ == y1Ent_)
-        nextDiscretePosition_ = y0Ent_;
+      if (discretePosition_ == yEnt_[2])
+        nextDiscretePosition_ = yEnt_[1];
+      else if (discretePosition_ == yEnt_[1])
+        nextDiscretePosition_ = yEnt_[0];
     }
     // Let onTimeTick inject the new position.
   }
@@ -338,13 +338,13 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
         (discretePositionObj_, position_property_, discretePosition_,
           now, now + sampling_period_us);
 
-      const uint64 babbleStopTime_us = 2900000;
+      const uint64 babbleStopTime_us = 2800000;
       if (now - Utils::GetTimeReference() < babbleStopTime_us) {
         // Babble.
-        if (discretePosition_ == y0Ent_)
+        if (discretePosition_ == yEnt_[0])
           // Reset to the expected value.
           babbleState_ = 1;
-        else if (discretePosition_ == y2Ent_)
+        else if (discretePosition_ == yEnt_[2])
           // Reset to the expected value.
           babbleState_ = 3;
         else {

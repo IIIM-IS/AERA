@@ -267,9 +267,7 @@ protected:
   uint16 move_y_minus_opcode_;
   uint64 lastCommandTime_;
 
-  Code* y0Ent_;
-  Code* y1Ent_;
-  Code* y2Ent_;
+  Code* yEnt_[10];
   Code* discretePositionObj_;
   Code* discretePosition_;
   Code* nextDiscretePosition_;
