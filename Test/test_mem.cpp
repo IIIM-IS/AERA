@@ -280,17 +280,18 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
 
     // nextDiscretePosition_ will become the position at the next sampling period.
     lastCommandTime_ = now;
+    const int maxYPosition = 9;
     if (function == move_y_plus_opcode_) {
-      if (discretePosition_ == yEnt_[0])
-        nextDiscretePosition_ = yEnt_[1];
-      else if (discretePosition_ == yEnt_[1])
-        nextDiscretePosition_ = yEnt_[2];
+      for (int i = 0; i <= maxYPosition - 1; ++i) {
+        if (discretePosition_ == yEnt_[i])
+          nextDiscretePosition_ = yEnt_[i + 1];
+      }
     }
     else if (function == move_y_minus_opcode_) {
-      if (discretePosition_ == yEnt_[2])
-        nextDiscretePosition_ = yEnt_[1];
-      else if (discretePosition_ == yEnt_[1])
-        nextDiscretePosition_ = yEnt_[0];
+      for (int i = 1; i <= maxYPosition; ++i) {
+        if (discretePosition_ == yEnt_[i])
+          nextDiscretePosition_ = yEnt_[i - 1];
+      }
     }
     // Let onTimeTick inject the new position.
   }
@@ -338,23 +339,24 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
         (discretePositionObj_, position_property_, discretePosition_,
           now, now + sampling_period_us);
 
-      const uint64 babbleStopTime_us = 2800000;
+      const uint64 babbleStopTime_us = 2000000;
+      const int maxBabblePosition = 9;
       if (now - Utils::GetTimeReference() < babbleStopTime_us) {
         // Babble.
         if (discretePosition_ == yEnt_[0])
           // Reset to the expected value.
           babbleState_ = 1;
-        else if (discretePosition_ == yEnt_[2])
+        else if (discretePosition_ == yEnt_[maxBabblePosition])
           // Reset to the expected value.
-          babbleState_ = 3;
+          babbleState_ = maxBabblePosition + 1;
         else {
           ++babbleState_;
-          if (babbleState_ >= 4)
+          if (babbleState_ >= maxBabblePosition * 2)
             babbleState_ = 0;
         }
 
         uint16 nextCommand;
-        if (babbleState_ == 0 || babbleState_ == 1)
+        if (babbleState_ >= 0 && babbleState_ <= maxBabblePosition - 1)
           nextCommand = move_y_plus_opcode_;
         else
           nextCommand = move_y_minus_opcode_;

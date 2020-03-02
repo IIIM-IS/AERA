@@ -141,6 +141,9 @@
 * REVIEW. pong.discrete.cmd.external: Fix learned model for move_y_minus position1->position2.
   CTPX::reduce: Require each icst component to share values with the target or consequent.
 
+next meeting
+* DONE. pong.discrete.cmd.external: Increase to 10 positions.
+
 TODO
 * In unfixed pong.discrete.cmd.external, when the goal to achieve position y0 is not achieved,
   what does the goal monitor do?
