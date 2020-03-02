@@ -432,7 +432,8 @@ namespace	r_exec{
 
 		// The maximum number of reduction jobs to run before trying a time job.
 		// Average job time is 333us. 300 jobs is 100000us, which is the sampling period.
-		const size_t maxReductionJobsPerCycle = 300;
+		// Assume 8 threads (on 4 cores), so allow 300 * 8 = 2400 jobs per cycle.
+		const size_t maxReductionJobsPerCycle = 2400;
         size_t nReductionJobsThisSamplingPeriod = 0;
 		std::vector<P<_ReductionJob>> reductionJobQueue;
 		// Use a deque so we can efficiently remove from the front.
