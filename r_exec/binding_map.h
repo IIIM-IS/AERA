@@ -110,6 +110,18 @@ namespace	r_exec{
 		virtual	bool	contains(const	Atom	a)	const{	return	false;	}
 		virtual	bool	contains(const	Atom	*s)	const{	return	false;	}
 		virtual	bool	contains(const	Code	*o)	const{	return	false;	}
+
+		/**
+		 * Return the trace of the value as a string by creating a temporary Code
+		 * object and calling valuate().
+		 * For debugging purposes only (can be inefficient).
+		 */
+		std::string traceString() const {
+			P<LObject> code = new LObject();
+			uint16 extent_index = 1;
+			valuate(code, 0, extent_index);
+			return code->traceString();
+		}
 	};
 
 	class	r_exec_dll	BoundValue:
