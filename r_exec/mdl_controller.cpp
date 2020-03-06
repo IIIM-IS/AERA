@@ -1433,6 +1433,9 @@ namespace	r_exec{
 
 		if(is_requirement()){
 
+			if (is_invalidated())
+				// Another thread has invalidated this controller which clears the controllers.
+				return;
 			PrimaryMDLController	*c=(PrimaryMDLController	*)controllers[RHSController];	// rhs controller: in the same view.
 			c->store_requirement(production,this,chaining_was_allowed,simulation);				// if not simulation, stores also in the secondary controller.
 #ifdef WITH_DEBUG_OID
@@ -2262,6 +2265,9 @@ namespace	r_exec{
 		
 		if(is_requirement()){	// store in the rhs controller, even if primary (to allow rating in any case).
 
+			if (is_invalidated())
+				// Another thread has invalidated this controller which clears the controllers.
+				return;
 			((MDLController	*)controllers[RHSController])->store_requirement(production,this,chaining_was_allowed,false);
 			return;
 		}
