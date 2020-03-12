@@ -141,18 +141,35 @@
 * REVIEW. pong.discrete.cmd.external: Fix learned model for move_y_minus position1->position2.
   CTPX::reduce: Require each icst component to share values with the target or consequent.
 
-next meeting
+2020-03-12
 * DONE. pong.discrete.cmd.external: Increase to 10 positions.
+* DONE. In unfixed pong.discrete.cmd.external, when the goal to achieve position y0 is not achieved,
+  what does the goal monitor do?
+  ANSWER: Makes |fact_845:(|fact (success fact_825 fact_832) ...)
+    but no further reduction jobs process it.
+* DONE. Is PTPX invoked when a prediction fails?
+  ANSWER: Yes, but does nothing. PTPX::reduce needs inputs, but nothing adds them.
+  Makes |fact_234:(|fact (success fact_226 fact_232) ...)
+  std.replicode:166 Need to set ctpx_on true.
+  settings.xml: Need to set tpx_time_horizon?
+* DONE. Is GTPX invoked when drive goal succeeds?
+  ANSWER: Yes, but does nothing. GTPX::reduce needs inputs, but AutoFocusController::reduce:392
+    doesn't call dispatch becuase std.replicode:166 pass_through is true.
+	Setting pass_through false: No auto focus, no learned models, no AutoFocus.goals. Still no dispatch.
+* DONE. Review/merge fix for getting fwd_after_index https://github.com/IIIM-IS/replicode/pull/63
+* DONE. Review/merge fix for accessing controllers array https://github.com/IIIM-IS/replicode/pull/64
 
 TODO
-* In unfixed pong.discrete.cmd.external, when the goal to achieve position y0 is not achieved,
-  what does the goal monitor do?
-* Abduce a goal more in the future than the next sampling period.
+* Pull request to fix tabs.
+* Pull request to add MDLController::retrieve_imdl_bwd use_f_pattern_timings, but don't use yet.
+* Is GMonitor::commit called?
+* TopLevelMDLController::abduce_lhs:1228 new Sim. Is the Sim used?
+* In babbling, issue a goal for a position, an "unrelated" speed_x, and move the position there. Is GTPX invoked?
+* Abduce a goal more in the future than the next sampling period. (Need simulation.)
 * Try integer positions. It should learn models like position n to n+1.
 * Decompiler error for VL_PTR in imdl https://github.com/IIIM-IS/replicode/issues/51
-* Is PTPX invoked when a prediction fails?
-* In babbling, issue random goals for positions and an early (fact (success)). Is GTPX invoked?
 * Why does A/F choose the (fact (cmd ...)) injected by inject_productions over pgm_cmd_move_y_minus?
+* Pull request? for MDLController::retrieve_imdl_bwd:897 Make match_bwd_timings use f_pattern .
 * Treat move commands at the same time step as impulses and have them accumulate?
 * Issue #2: Try to reproduce.
 * Issue #25: Reproduce running in real-time, and see if it happens in diagnostic time.
