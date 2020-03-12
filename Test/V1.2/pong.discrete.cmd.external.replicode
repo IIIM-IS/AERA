@@ -130,7 +130,7 @@ i_pgm_cmd_move_y_minus:(ipgm pgm_cmd_move_y_minus |[] RUN_ALWAYS MAX_TIME VOLATI
    [SYNC_ONCE now 0 forever primary nil 1]
 
 ; Run once (when babbling is finished) to inject the drive that will abduce a goal 
-; to move p1 to y2.
+; to move p1 to y0.
 pgm_inject_drive:(pgm |[]
 []
    ; This fact repeats periodically. We use it as a "heartbeat".
