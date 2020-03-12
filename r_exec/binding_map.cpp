@@ -417,8 +417,9 @@ namespace	r_exec{
 
 		if(fwd_after_index==-1){
 
-			fwd_after_index=map.size()-2;
-			fwd_before_index=fwd_after_index+1;
+			// Get the indexes that were put into the fact by abstract_member().
+			fwd_after_index = fact->code(FACT_AFTER).asIndex();
+			fwd_before_index = fact->code(FACT_BEFORE).asIndex();
 		}
 
 		return	fact;
