@@ -296,7 +296,7 @@ namespace	r_exec{
 		int16	bwd_after_index;
 		int16	bwd_before_index;
 
-		bool	match_bwd_timings(const	_Fact	*f_object,const	_Fact	*f_pattern);
+		bool	match_bwd_timings(const	_Fact	*f_object,const	_Fact	*f_pattern, bool use_f_pattern_timings = false);
 
 		bool	need_binding(Code	*pattern)	const;
 		void	init_from_pattern(const	Code	*source,int16	position);	// first source is f->obj.
@@ -318,7 +318,7 @@ namespace	r_exec{
 		void	reset_bwd_timings(_Fact	*reference_fact);	// idem for the last 2 unbound variables (i.e. timings of the second pattern in a mdl).
 
 		MatchResult	match_bwd_lenient(const	_Fact	*f_object,const	_Fact	*f_pattern);	// use for facts when we are lenient about fact vs |fact.
-		bool	match_bwd_strict(const	_Fact	*f_object,const	_Fact	*f_pattern);		// use for facts when we need sharp match.
+		bool	match_bwd_strict(const	_Fact	*f_object,const	_Fact	*f_pattern, bool use_f_pattern_timings = false);		// use for facts when we need sharp match.
 
 		bool has_bwd_after() const { return bwd_after_index >= 0 && map.size() > bwd_after_index && 
 		  map[bwd_after_index]->get_code() != NULL; }

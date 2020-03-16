@@ -1136,19 +1136,23 @@ namespace	r_exec{
 		map[bwd_before_index]=new	StructureValue(this,reference_fact,reference_fact->code(FACT_BEFORE).asIndex());
 	}
 
-	bool	HLPBindingMap::match_bwd_timings(const	_Fact	*f_object,const	_Fact	*f_pattern){
+	bool	HLPBindingMap::match_bwd_timings(const	_Fact	*f_object,const	_Fact	*f_pattern, bool use_f_pattern_timings){
 
-		return	match_timings(get_bwd_after(),get_bwd_before(),f_object->get_after(),f_object->get_before(),bwd_after_index,bwd_before_index);
+		if (use_f_pattern_timings)
+			return match_timings
+			  (f_pattern->get_after(), f_pattern->get_before(), f_object->get_after(), f_object->get_before(), bwd_after_index, bwd_before_index);
+		else
+			return	match_timings(get_bwd_after(),get_bwd_before(),f_object->get_after(),f_object->get_before(),bwd_after_index,bwd_before_index);
 	}
 
-	bool	HLPBindingMap::match_bwd_strict(const	_Fact	*f_object,const	_Fact	*f_pattern){
+	bool	HLPBindingMap::match_bwd_strict(const	_Fact	*f_object,const	_Fact	*f_pattern, bool use_f_pattern_timings){
 
 		if(match_object(f_object->get_reference(0),f_pattern->get_reference(0))){
 
 			if(f_object->code(0)!=f_pattern->code(0))
 				return	false;
 
-			return	match_bwd_timings(f_object,f_pattern);
+			return	match_bwd_timings(f_object,f_pattern, use_f_pattern_timings);
 		}else
 			return	false;
 	}
