@@ -986,6 +986,7 @@ namespace	r_exec{
 		for(uint32	j=first_index;j<map.size();++j){	// valuate args.
 
 			if(j==fwd_after_index	||	j==fwd_before_index)
+				// The forward timestamps don't appear in the args set, so skip.
 				continue;
 
 			Atom	atom=ihlp->code(val_set_index+i);
@@ -1004,6 +1005,9 @@ namespace	r_exec{
 				map[j]=new	AtomValue(this,atom);
 				break;
 			}
+
+			// Increment to look at the next value in the args set in the ihlp.
+			++i;
 		}
 
 		// Valuate timings; fwd_after_index is already known. We know that time stamps are I_PTR to the time stamp structure.
