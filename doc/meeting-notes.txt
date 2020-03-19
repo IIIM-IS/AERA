@@ -159,11 +159,27 @@
 * DONE. Review/merge fix for getting fwd_after_index https://github.com/IIIM-IS/replicode/pull/63
 * DONE. Review/merge fix for accessing controllers array https://github.com/IIIM-IS/replicode/pull/64
 
+2020-03-19
+* DONE. MERGED. Add MDLController::retrieve_imdl_bwd use_f_pattern_timings, but don't use yet.
+* DONE. MERGED. Pull request: CoreLibrary tabs to spaces https://github.com/IIIM-IS/CoreLibrary/pull/2
+* DONE. Review/merge static_cast in class P https://github.com/IIIM-IS/CoreLibrary/pull/3
+* DONE. Merge pull request, need to increment iterator https://github.com/IIIM-IS/replicode/pull/53
+* DONE. Is GMonitor::commit called?
+  ANSWER: Yes, but sim_successes is empty because store_simulated_outcome is never called. 
+  * It might be called from GMonitor::reduce but only after calling get_simulation(controller),
+	which I can't believe was ever tested because it would crash due to the bug reported in
+	https://github.com/IIIM-IS/CoreLibrary/pull/3 .
+  * Also, the code in store_similated_outcome never adds to sim_successes.optional_solutions . 
+    _GMonitor::store_simulated_outcome:112
+    (Hard to believe this code was tested.)
+  * Also, GMonitor::commit:217 uses (*sol).second, not best_sol. (Copy/paste error?)
+  * Also, GMonitor::commit:219 may not use sim_successes.mandatory_solutions if there is no 
+    best_sol from sim_successes.optional_solutions .
+
 TODO
-* Pull request to fix tabs.
-* Pull request to add MDLController::retrieve_imdl_bwd use_f_pattern_timings, but don't use yet.
-* Is GMonitor::commit called?
-* TopLevelMDLController::abduce_lhs:1228 new Sim. Is the Sim used?
+* Pull request to fix tabs in replicode.
+* In normal prediction, is there a Sim attached? Does it predict past the next sampling period? Need a drive?
+* If min_sim_time_horizon > 0, how is the behavior different?
 * In babbling, issue a goal for a position, an "unrelated" speed_x, and move the position there. Is GTPX invoked?
 * Abduce a goal more in the future than the next sampling period. (Need simulation.)
 * Try integer positions. It should learn models like position n to n+1.
