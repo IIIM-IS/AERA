@@ -449,7 +449,7 @@ namespace	r_exec{
 				break;
 
 			// Reduction jobs can add more reduction jobs, so make a few passes.
-            for (int passNumber = 1; passNumber <= 2; ++passNumber) {
+            for (int passNumber = 1; passNumber <= 3; ++passNumber) {
 				// Transfer all reduction jobs to a local queue and run only these.
 				// Below, we only run one time job, so any extra jobs that these reduction
 				// jobs add will be run on the next pass after running the time job.
