@@ -109,7 +109,7 @@ namespace	r_exec{
 				sim_successes.mandatory_solutions.push_back(std::pair<P<Goal>,P<Sim> >(affected_goal,sim));
 				break;
 			case	SIM_OPTIONAL:
-				sim_successes.mandatory_solutions.push_back(std::pair<P<Goal>,P<Sim> >(affected_goal,sim));
+				sim_successes.optional_solutions.push_back(std::pair<P<Goal>,P<Sim> >(affected_goal,sim));
 				break;
 			default:
 				break;
@@ -118,7 +118,7 @@ namespace	r_exec{
 
 			switch(sim->mode){
 			case	SIM_MANDATORY:
-				sim_failures.optional_solutions.push_back(std::pair<P<Goal>,P<Sim> >(affected_goal,sim));
+				sim_failures.mandatory_solutions.push_back(std::pair<P<Goal>,P<Sim> >(affected_goal,sim));
 				break;
 			case	SIM_OPTIONAL:
 				sim_failures.optional_solutions.push_back(std::pair<P<Goal>,P<Sim> >(affected_goal,sim));
