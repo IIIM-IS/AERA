@@ -214,7 +214,7 @@ namespace	r_exec{
 
 		if(best_sol){
 
-			((PrimaryMDLController	*)(*sol).second->sol)->abduce(bindings,best_sol->super_goal,best_sol->opposite,goal_target->get_cfd());
+			((PrimaryMDLController	*)best_sol->sol)->abduce(bindings,best_sol->super_goal,best_sol->opposite,goal_target->get_cfd());
 
 			for(sol=sim_successes.mandatory_solutions.begin();sol!=sim_successes.mandatory_solutions.end();++sol)	// commit to all mandatory solutions.
 				((PrimaryMDLController	*)(*sol).second->sol)->abduce(bindings,(*sol).second->super_goal,(*sol).second->opposite,goal_target->get_cfd());
