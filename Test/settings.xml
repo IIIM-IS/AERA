@@ -15,7 +15,7 @@
     tpx_dsr_thr="0.1"
     min_sim_time_horizon="0"
     max_sim_time_horizon="0"
-    sim_time_horizon="0.3"
+    sim_time_horizon_factor="0.3"
     tpx_time_horizon="500000"
     perf_sampling_period="250000"
     float_tolerance="0.00001"
@@ -64,7 +64,7 @@ System
   tpx_dsr_thr: in [0,1].
   min_sim_time_horizon: in us.
   max_sim_time_horizon: in us.
-  sim_time_horizon: in [0,1]: percentage of (before-now) allocated to simulation.
+  sim_time_horizon_factor: in [0,1]: factor of (before-now) allocated to simulation.
   tpx_time_horizon: in us.
   perf_sampling_prd: in us.
   float_tolerance: in [0,1].

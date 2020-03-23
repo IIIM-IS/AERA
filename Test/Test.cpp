@@ -331,7 +331,7 @@ int32	main(int	argc,char	**argv){
 					settings.tpx_dsr_thr,
 					settings.min_sim_time_horizon,
 					settings.max_sim_time_horizon,
-					settings.sim_time_horizon,
+					settings.sim_time_horizon_factor,
 					settings.tpx_time_horizon,
 					settings.perf_sampling_period,
 					settings.float_tolerance,
