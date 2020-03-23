@@ -124,7 +124,7 @@ namespace	r_exec{
 		float32	tpx_dsr_thr;
 		uint32	min_sim_time_horizon;
 		uint32	max_sim_time_horizon;
-		float32	sim_time_horizon;
+		float32	sim_time_horizon_factor;
 		uint32	tpx_time_horizon;
 		uint32	perf_sampling_period;
 		float32	float_tolerance;
@@ -208,7 +208,7 @@ namespace	r_exec{
 					float32	tpx_dsr_thr,
 					uint32	min_sim_time_horizon,
 					uint32	max_sim_time_horizon,
-					float32	sim_time_horizon,
+					float32	sim_time_horizon_factor,
 					uint32	tpx_time_horizon,
 					uint32	perf_sampling_period,
 					float32	float_tolerance,
@@ -229,7 +229,7 @@ namespace	r_exec{
 		float32	get_tpx_dsr_thr()						const{	return	tpx_dsr_thr;	}
 		uint32	get_min_sim_time_horizon()				const{	return	min_sim_time_horizon;	}
 		uint32	get_max_sim_time_horizon()				const{	return	max_sim_time_horizon;	}
-		uint64	get_sim_time_horizon(uint64	horizon)	const{	return	horizon*sim_time_horizon;	}
+		uint64	get_sim_time_horizon_factor(uint64	horizon)	const{	return	horizon*sim_time_horizon_factor;	}
 		uint32	get_tpx_time_horizon()					const{	return	tpx_time_horizon;	}
 		uint64	get_primary_thz()						const{	return	primary_thz;	}
 		uint64	get_secondary_thz()						const{	return	secondary_thz;	}

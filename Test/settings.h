@@ -99,7 +99,7 @@ public:
 	core::float32	tpx_dsr_thr;
 	core::uint32	min_sim_time_horizon;
 	core::uint32	max_sim_time_horizon;
-	core::float32	sim_time_horizon;
+	core::float32	sim_time_horizon_factor;
 	core::uint32	tpx_time_horizon;
 	core::uint32	perf_sampling_period;
 	core::float32	float_tolerance;
@@ -178,7 +178,7 @@ public:
 			const	char	*_tpx_dsr_thr=system.getAttribute("tpx_dsr_thr");
 			const	char	*_min_sim_time_horizon=system.getAttribute("min_sim_time_horizon");
 			const	char	*_max_sim_time_horizon=system.getAttribute("max_sim_time_horizon");
-			const	char	*_sim_time_horizon=system.getAttribute("sim_time_horizon");
+			const	char	*_sim_time_horizon_factor=system.getAttribute("sim_time_horizon_factor");
 			const	char	*_tpx_time_horizon=system.getAttribute("tpx_time_horizon");
 			const	char	*_perf_sampling_period=system.getAttribute("perf_sampling_period");
 			const	char	*_float_tolerance=system.getAttribute("float_tolerance");
@@ -191,7 +191,7 @@ public:
 			tpx_dsr_thr=atof(_tpx_dsr_thr);
 			min_sim_time_horizon=atoi(_min_sim_time_horizon);
 			max_sim_time_horizon=atoi(_max_sim_time_horizon);
-			sim_time_horizon=atof(_sim_time_horizon);
+			sim_time_horizon_factor=atof(_sim_time_horizon_factor);
 			tpx_time_horizon=atoi(_tpx_time_horizon);
 			perf_sampling_period=atoi(_perf_sampling_period);
 			float_tolerance=atof(_float_tolerance);
