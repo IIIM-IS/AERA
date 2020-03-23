@@ -105,7 +105,7 @@ namespace	r_exec{
 						float32	tpx_dsr_thr,
 						uint32	min_sim_time_horizon,
 						uint32	max_sim_time_horizon,
-						float32	sim_time_horizon,
+						float32	sim_time_horizon_factor,
 						uint32	tpx_time_horizon,
 						uint32	perf_sampling_period,
 						float32	float_tolerance,
@@ -129,7 +129,7 @@ namespace	r_exec{
 		this->tpx_dsr_thr=tpx_dsr_thr;
 		this->min_sim_time_horizon=min_sim_time_horizon;
 		this->max_sim_time_horizon=max_sim_time_horizon;
-		this->sim_time_horizon=sim_time_horizon;
+		this->sim_time_horizon_factor=sim_time_horizon_factor;
 		this->tpx_time_horizon=tpx_time_horizon;
 		this->perf_sampling_period=perf_sampling_period;
 		this->float_tolerance=float_tolerance;
