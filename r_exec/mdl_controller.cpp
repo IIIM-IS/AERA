@@ -1105,7 +1105,7 @@ void PMDLController::register_predicted_goal_outcome(Fact *goal, HLPBindingMap *
 
         g->sim = new_sim;
 
-        add_g_monitor(new GMonitor(this, bm, deadline, sim_thz, new_goal, f_imdl, NULL));
+        add_g_monitor(new GMonitor(this, bm, deadline, Now() + sim_thz, new_goal, f_imdl, NULL));
 
         inject_goal(bm, new_goal, f_imdl);
       }
@@ -1751,7 +1751,7 @@ void PrimaryMDLController::abduce_imdl(HLPBindingMap *bm, Fact *super_goal, Fact
 
   uint64 now = Now();
   Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
-  add_r_monitor(new RMonitor(this, bm, super_goal->get_goal()->get_target()->get_before(), sim->thz, f_sub_goal, f_imdl)); // the monitor will wait until the deadline of the super-goal.
+  add_r_monitor(new RMonitor(this, bm, super_goal->get_goal()->get_target()->get_before(), now + sim->thz, f_sub_goal, f_imdl)); // the monitor will wait until the deadline of the super-goal.
   inject_goal(bm, f_sub_goal, f_imdl);
   OUTPUT(MDL_OUT) << Utils::RelativeTime(Now()) << " " << getObject()->get_oid() << " -> fact " << f_sub_goal->get_oid() << " goal fact " << f_imdl->get_oid();
 #ifdef WITH_DEBUG_OID
@@ -1796,7 +1796,7 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
         uint64 now = Now();
         Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
 
-        add_g_monitor(new SGMonitor(this, bm, sim->thz, f_sub_goal, f_imdl));
+        add_g_monitor(new SGMonitor(this, bm, now + sim->thz, f_sub_goal, f_imdl));
         inject_simulation(f_sub_goal);
         break;
       }
@@ -1815,7 +1815,7 @@ void PrimaryMDLController::abduce_simulated_imdl(HLPBindingMap *bm, Fact *super_
 
   uint64 now = Now();
   Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
-  add_r_monitor(new SRMonitor(this, bm, sim->thz, f_sub_goal, f_imdl));
+  add_r_monitor(new SRMonitor(this, bm, now + sim->thz, f_sub_goal, f_imdl));
   inject_simulation(f_sub_goal);
 }
 
