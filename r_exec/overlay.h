@@ -157,9 +157,9 @@ protected:
   r_code::vector<Atom> values; // value array: stores the results of computations.
   // Copy of the pgm/hlp code. Will be patched during matching and evaluation:
   // any area indexed by a vl_ptr will be overwritten with:
-  // 		the evaluation result if it fits in a single atom,
-  // a ptr to the value array if the result is larger than a single atom,
-  // a ptr to an input if the result is a pattern input.
+  //   the evaluation result if it fits in a single atom,
+  //   a ptr to the value array if the result is larger than a single atom,
+  //   a ptr to an input if the result is a pattern input.
   Atom *code;
   uint16 code_size;
   std::vector<uint16> patch_indices; // indices where patches are applied; used for rollbacks.

@@ -98,11 +98,11 @@ namespace r_exec {
 // Maintains 2 pipes of jobs (injection, update, etc.). each job is processed asynchronously by instances of ReductionCore and TimeCore.
 // Pipes and threads are created at starting time and deleted at stopping time.
 // Groups and IPGMControllers are cleared up when only held by jobs;
-// 	- when a group is not projected anywhere anymore, it is invalidated (it releases all its views) and when a job attempts an update, the latter is cancelled.
-// 	- when a reduction core attempts to perform a reduction for an ipgm-controller that is not projected anywhere anymore, the reduction is cancelled.
+// - when a group is not projected anywhere anymore, it is invalidated (it releases all its views) and when a job attempts an update, the latter is cancelled.
+// - when a reduction core attempts to perform a reduction for an ipgm-controller that is not projected anywhere anymore, the reduction is cancelled.
 // In addition:
-// 	- when an object is scheduled for injection and the target group does not exist anymore (or is invalidated), the injection is cancelled.
-// 	- when an object is scheduled for propagation of sln changes and has no view anymore, the operation is cancelled.
+// - when an object is scheduled for injection and the target group does not exist anymore (or is invalidated), the injection is cancelled.
+// - when an object is scheduled for propagation of sln changes and has no view anymore, the operation is cancelled.
 // Main processing in _Mem::update().
 class r_exec_dll _Mem :
   public r_code::Mem {
@@ -389,8 +389,8 @@ public:
 };
 
 // O is the class of the objects held by the rMem (except groups and notifications):
-// 	r_exec::LObject if non distributed, or
-// 	RObject (see the integration project) when network-aware.
+//   r_exec::LObject if non distributed, or
+//   RObject (see the integration project) when network-aware.
 // Notification objects and groups are instances of r_exec::LObject (they are not network-aware).
 // Objects are built at reduction time as r_exec:LObjects and packed into instances of O when O is network-aware.
 // S is the super-class.
