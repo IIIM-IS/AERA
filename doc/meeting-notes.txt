@@ -169,16 +169,29 @@
   * It might be called from GMonitor::reduce but only after calling get_simulation(controller),
 	which I can't believe was ever tested because it would crash due to the bug reported in
 	https://github.com/IIIM-IS/CoreLibrary/pull/3 .
-  * Also, the code in store_similated_outcome never adds to sim_successes.optional_solutions . 
+  * FIXED. Also, the code in store_similated_outcome never adds to sim_successes.optional_solutions . 
     _GMonitor::store_simulated_outcome:112
     (Hard to believe this code was tested.)
-  * Also, GMonitor::commit:217 uses (*sol).second, not best_sol. (Copy/paste error?)
-  * Also, GMonitor::commit:219 may not use sim_successes.mandatory_solutions if there is no 
+  * FIXED. Also, GMonitor::commit:217 uses (*sol).second, not best_sol. (Copy/paste error?)
+  * MAYBE NOT A PROBLEM. Also, GMonitor::commit:219 may not use sim_successes.mandatory_solutions if there is no 
     best_sol from sim_successes.optional_solutions .
 
+2020-03-26
+* DONE. Review/merge pull request for tabs to spaces https://github.com/IIIM-IS/replicode/pull/69
+* DONE. In normal prediction, is there a Sim attached? Does it predict past the next sampling period? Need a drive?
+  ANSWER: Apparently, no. The Pred object simulations is empty. The Sim constructor is only called when abducing from the drive.
+* DONE. Review merged pull request to rename to sim_time_horizon_factor https://github.com/IIIM-IS/replicode/pull/68
+* Review/merge pull request for GMonitor sim_thz https://github.com/IIIM-IS/replicode/pull/70
+* More simulation issues:
+  * min_sim_time_horizon is really "time allowance for the simulated predictions". PMDLController::get_sim_thz:1118
+  * In get_sim_thz, Sim::thz and _GMonitor::sim_thz, "time horizon" means only abduction w/o prediction (min_sim_thz).
+  * TopLevelMDLController::abduce_lhs:1228 makes Sim where sim_thz already has subtracted min_sim_thz. Then,
+    PrimaryMDLController::abduce:1623 divides this by 2 and subtracts min_sim_thz again.
+  * GMonitor::commit:217 bindings belongs to top model, but abduce called on another model - mismatch.
+
 TODO
-* Pull request to fix tabs in replicode.
-* In normal prediction, is there a Sim attached? Does it predict past the next sampling period? Need a drive?
+* Pull request to rename thz variables with _duration or _timestamp, and use chrono::microseconds or time_point.
+* Look at the version of Replicode from Eric's laptop. Is it v1.2? v1.1? Or some intermediate with simulation implemented?
 * If min_sim_time_horizon > 0, how is the behavior different?
 * In babbling, issue a goal for a position, an "unrelated" speed_x, and move the position there. Is GTPX invoked?
 * Abduce a goal more in the future than the next sampling period. (Need simulation.)
