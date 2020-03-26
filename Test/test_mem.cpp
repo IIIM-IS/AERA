@@ -8,10 +8,10 @@
 //_/_/   http://cadia.ru.is
 //_/_/ Copyright(c)2012
 //_/_/
-//_/_/ This software was developed by the above copyright holder as part of 
-//_/_/ the HUMANOBS EU research project, in collaboration with the 
+//_/_/ This software was developed by the above copyright holder as part of
+//_/_/ the HUMANOBS EU research project, in collaboration with the
 //_/_/ following parties:
-//_/_/ 
+//_/_/
 //_/_/ Autonomous Systems Laboratory
 //_/_/   Technical University of Madrid, Spain
 //_/_/   http://www.aslab.org/
@@ -35,50 +35,50 @@
 //_/_/
 //_/_/ --- HUMANOBS Open-Source BSD License, with CADIA Clause v 1.0 ---
 //_/_/
-//_/_/ Redistribution and use in source and binary forms, with or without 
-//_/_/ modification, is permitted provided that the following conditions 
+//_/_/ Redistribution and use in source and binary forms, with or without
+//_/_/ modification, is permitted provided that the following conditions
 //_/_/ are met:
 //_/_/
-//_/_/ - Redistributions of source code must retain the above copyright 
-//_/_/ and collaboration notice, this list of conditions and the 
+//_/_/ - Redistributions of source code must retain the above copyright
+//_/_/ and collaboration notice, this list of conditions and the
 //_/_/ following disclaimer.
 //_/_/
-//_/_/ - Redistributions in binary form must reproduce the above copyright 
+//_/_/ - Redistributions in binary form must reproduce the above copyright
 //_/_/ notice, this list of conditions and the following
-//_/_/ disclaimer in the documentation and/or other materials provided 
+//_/_/ disclaimer in the documentation and/or other materials provided
 //_/_/ with the distribution.
 //_/_/
-//_/_/ - Neither the name of its copyright holders nor the names of its 
-//_/_/ contributors may be used to endorse or promote products 
+//_/_/ - Neither the name of its copyright holders nor the names of its
+//_/_/ contributors may be used to endorse or promote products
 //_/_/ derived from this software without specific prior written permission.
 //_/_/
-//_/_/ - CADIA Clause: The license granted in and to the software under this 
-//_/_/ agreement is a limited-use license. The software may not be used in 
-//_/_/ furtherance of: 
-//_/_/ (i) intentionally causing bodily injury or severe emotional distress 
-//_/_/ to any person; 
-//_/_/ (ii) invading the personal privacy or violating the human rights of 
-//_/_/ any person; or 
+//_/_/ - CADIA Clause: The license granted in and to the software under this
+//_/_/ agreement is a limited-use license. The software may not be used in
+//_/_/ furtherance of:
+//_/_/ (i) intentionally causing bodily injury or severe emotional distress
+//_/_/ to any person;
+//_/_/ (ii) invading the personal privacy or violating the human rights of
+//_/_/ any person; or
 //_/_/ (iii) committing or preparing for any act of war.
 //_/_/
 //_/_/ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-//_/_/ "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
-//_/_/ LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR 
-//_/_/ A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT 
-//_/_/ OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
-//_/_/ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT 
-//_/_/ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
-//_/_/ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY 
-//_/_/ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
-//_/_/ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+//_/_/ "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+//_/_/ LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+//_/_/ A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+//_/_/ OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+//_/_/ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//_/_/ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+//_/_/ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+//_/_/ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+//_/_/ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //_/_/ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //_/_/
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
 #include "test_mem.h"
 
-template<class O, class S> TestMem<O, S>::TestMem() 
-: r_exec::Mem<O, S>() {
+template<class O, class S> TestMem<O, S>::TestMem()
+  : r_exec::Mem<O, S>() {
   timeTickThread_ = 0;
   lastInjectTime_ = 0;
   speed_y_ = 0;
@@ -88,7 +88,7 @@ template<class O, class S> TestMem<O, S>::TestMem()
   position_y_property_ = NULL;
   speed_y_property_ = NULL;
   primary_group_ = NULL,
-  set_speed_y_opcode_ = 0xFFFF;
+    set_speed_y_opcode_ = 0xFFFF;
   move_y_plus_opcode_ = 0xFFFF;
   move_y_minus_opcode_ = 0xFFFF;
   lastCommandTime_ = 0;
@@ -107,8 +107,8 @@ template<class O, class S> TestMem<O, S>::~TestMem() {
 }
 
 template<class O, class S> bool TestMem<O, S>::load
-  (std::vector<Code*> *objects, uint32 stdin_oid, uint32 stdout_oid,
-   uint32 self_oid) {
+(std::vector<Code*> *objects, uint32 stdin_oid, uint32 stdout_oid,
+  uint32 self_oid) {
   // Call the method in the parent class.
   if (!r_exec::Mem<O, S>::load(objects, stdin_oid, stdout_oid, self_oid))
     return false;
@@ -131,12 +131,12 @@ template<class O, class S> bool TestMem<O, S>::load
   return true;
 }
 
-template<class O, class S> Code* 
+template<class O, class S> Code*
 TestMem<O, S>::findObject(std::vector<Code*> *objects, const char* name) {
   // Find the object OID.
   uint32 oid = 0;
   for (UNORDERED_MAP<uint32, std::string>::const_iterator it = r_exec::Seed.object_names.symbols.begin();
-       it != r_exec::Seed.object_names.symbols.end(); ++it) {
+    it != r_exec::Seed.object_names.symbols.end(); ++it) {
     if (it->second == name) {
       oid = it->first;
       break;
@@ -157,8 +157,8 @@ TestMem<O, S>::findObject(std::vector<Code*> *objects, const char* name) {
 }
 
 template<class O, class S> r_exec::View* TestMem<O, S>::injectMarkerValue
-  (Code* obj, Code* prop, Atom val, uint64 after, uint64 before, 
-   r_exec::View::SyncMode syncMode, Code* group) {
+(Code* obj, Code* prop, Atom val, uint64 after, uint64 before,
+  r_exec::View::SyncMode syncMode, Code* group) {
   if (!obj || !prop)
     // We don't expect this, but sanity check.
     return NULL;
@@ -177,8 +177,8 @@ template<class O, class S> r_exec::View* TestMem<O, S>::injectMarkerValue
 }
 
 template<class O, class S> r_exec::View* TestMem<O, S>::injectMarkerValue
-  (Code* obj, Code* prop, Code* val, uint64 after, uint64 before,
-    r_exec::View::SyncMode syncMode, Code* group) {
+(Code* obj, Code* prop, Code* val, uint64 after, uint64 before,
+  r_exec::View::SyncMode syncMode, Code* group) {
   if (!obj || !prop)
     // We don't expect this, but sanity check.
     return NULL;
@@ -198,8 +198,8 @@ template<class O, class S> r_exec::View* TestMem<O, S>::injectMarkerValue
 }
 
 template<class O, class S> r_exec::View* TestMem<O, S>::injectFact
-  (Code* object, uint64 after, uint64 before, r_exec::View::SyncMode syncMode,
-   Code* group) {
+(Code* object, uint64 after, uint64 before, r_exec::View::SyncMode syncMode,
+  Code* group) {
   // Build a fact.
   Code* fact = new r_exec::Fact(object, after, before, 1, 1);
 
@@ -228,7 +228,7 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
     lastCommandTime_ = now;
     uint16 args_set_index = command->code(CMD_ARGS).asIndex();
     Code* obj = command->get_reference
-      (command->code(args_set_index + 1).asIndex());
+    (command->code(args_set_index + 1).asIndex());
     if (!position_y_obj_) {
       // This is the first call. Remember the object whose speed we're setting.
       position_y_obj_ = obj;
@@ -244,7 +244,7 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
     // Let onTimeTick inject the new speed_y.
   }
   else if (function == move_y_plus_opcode_ ||
-           function == move_y_minus_opcode_) {
+    function == move_y_minus_opcode_) {
     if (!position_property_) {
       cout << "WARNING: Can't find the position property" << endl;
       return;
@@ -260,7 +260,7 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
 
     uint16 args_set_index = command->code(CMD_ARGS).asIndex();
     Code* obj = command->get_reference
-      (command->code(args_set_index + 1).asIndex());
+    (command->code(args_set_index + 1).asIndex());
     if (!discretePositionObj_) {
       // This is the first call. Remember the object whose position we're setting.
       discretePositionObj_ = obj;
@@ -313,11 +313,11 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
       // Inject the speed and position.
       // It seems that speed_y needs SYNC_HOLD for building models.
       injectMarkerValue
-        (position_y_obj_, speed_y_property_, Atom::Float(speed_y_),
-         now, now + sampling_period_us, r_exec::View::SYNC_HOLD);
+      (position_y_obj_, speed_y_property_, Atom::Float(speed_y_),
+        now, now + sampling_period_us, r_exec::View::SYNC_HOLD);
       injectMarkerValue
-        (position_y_obj_, position_y_property_, Atom::Float(position_y_),
-          now, now + sampling_period_us);
+      (position_y_obj_, position_y_property_, Atom::Float(position_y_),
+        now, now + sampling_period_us);
     }
   }
 
@@ -327,7 +327,7 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
     if (now >= lastInjectTime_ + sampling_period_us * 8 / 10) {
       // Enough time has elapsed to inject another position.
       if (nextDiscretePosition_ &&
-          now >= lastCommandTime_ + sampling_period_us * 5 / 10) {
+        now >= lastCommandTime_ + sampling_period_us * 5 / 10) {
         // Enough time has elapsed from the move command to update the position.
         discretePosition_ = nextDiscretePosition_;
         // Clear nextDiscretePosition_ to allow another move command.
@@ -336,8 +336,8 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
 
       lastInjectTime_ = now;
       injectMarkerValue
-        (discretePositionObj_, position_property_, discretePosition_,
-          now, now + sampling_period_us);
+      (discretePositionObj_, position_property_, discretePosition_,
+        now, now + sampling_period_us);
 
       const uint64 babbleStopTime_us = 2000000;
       const int maxBabblePosition = 9;
@@ -372,7 +372,7 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
         cmd->set_reference(0, discretePositionObj_);
 
         r_exec::Fact* factCmd = new r_exec::Fact
-          (cmd, now + sampling_period_us, now + 2*sampling_period_us, 1, 1);
+        (cmd, now + sampling_period_us, now + 2 * sampling_period_us, 1, 1);
         r_exec::Goal* goal = new r_exec::Goal(factCmd, get_self(), 1);
         injectFact(goal, now + sampling_period_us, now + sampling_period_us, primary_group_);
       }

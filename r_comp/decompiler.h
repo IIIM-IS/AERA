@@ -8,10 +8,10 @@
 //_/_/   http://cadia.ru.is
 //_/_/ Copyright(c)2012
 //_/_/
-//_/_/ This software was developed by the above copyright holder as part of 
-//_/_/ the HUMANOBS EU research project, in collaboration with the 
+//_/_/ This software was developed by the above copyright holder as part of
+//_/_/ the HUMANOBS EU research project, in collaboration with the
 //_/_/ following parties:
-//_/_/ 
+//_/_/
 //_/_/ Autonomous Systems Laboratory
 //_/_/   Technical University of Madrid, Spain
 //_/_/   http://www.aslab.org/
@@ -35,126 +35,126 @@
 //_/_/
 //_/_/ --- HUMANOBS Open-Source BSD License, with CADIA Clause v 1.0 ---
 //_/_/
-//_/_/ Redistribution and use in source and binary forms, with or without 
-//_/_/ modification, is permitted provided that the following conditions 
+//_/_/ Redistribution and use in source and binary forms, with or without
+//_/_/ modification, is permitted provided that the following conditions
 //_/_/ are met:
 //_/_/
-//_/_/ - Redistributions of source code must retain the above copyright 
-//_/_/ and collaboration notice, this list of conditions and the 
+//_/_/ - Redistributions of source code must retain the above copyright
+//_/_/ and collaboration notice, this list of conditions and the
 //_/_/ following disclaimer.
 //_/_/
-//_/_/ - Redistributions in binary form must reproduce the above copyright 
+//_/_/ - Redistributions in binary form must reproduce the above copyright
 //_/_/ notice, this list of conditions and the following
-//_/_/ disclaimer in the documentation and/or other materials provided 
+//_/_/ disclaimer in the documentation and/or other materials provided
 //_/_/ with the distribution.
 //_/_/
-//_/_/ - Neither the name of its copyright holders nor the names of its 
-//_/_/ contributors may be used to endorse or promote products 
+//_/_/ - Neither the name of its copyright holders nor the names of its
+//_/_/ contributors may be used to endorse or promote products
 //_/_/ derived from this software without specific prior written permission.
 //_/_/
-//_/_/ - CADIA Clause: The license granted in and to the software under this 
-//_/_/ agreement is a limited-use license. The software may not be used in 
-//_/_/ furtherance of: 
-//_/_/ (i) intentionally causing bodily injury or severe emotional distress 
-//_/_/ to any person; 
-//_/_/ (ii) invading the personal privacy or violating the human rights of 
-//_/_/ any person; or 
+//_/_/ - CADIA Clause: The license granted in and to the software under this
+//_/_/ agreement is a limited-use license. The software may not be used in
+//_/_/ furtherance of:
+//_/_/ (i) intentionally causing bodily injury or severe emotional distress
+//_/_/ to any person;
+//_/_/ (ii) invading the personal privacy or violating the human rights of
+//_/_/ any person; or
 //_/_/ (iii) committing or preparing for any act of war.
 //_/_/
 //_/_/ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-//_/_/ "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
-//_/_/ LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR 
-//_/_/ A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT 
-//_/_/ OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
-//_/_/ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT 
-//_/_/ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
-//_/_/ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY 
-//_/_/ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
-//_/_/ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+//_/_/ "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+//_/_/ LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+//_/_/ A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+//_/_/ OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+//_/_/ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//_/_/ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+//_/_/ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+//_/_/ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+//_/_/ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //_/_/ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //_/_/
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
-#ifndef	decompiler_h
-#define	decompiler_h
+#ifndef decompiler_h
+#define decompiler_h
 
-#include	<fstream>
-#include	<sstream>
+#include <fstream>
+#include <sstream>
 
-#include	"out_stream.h"
-#include	"segments.h"
+#include "out_stream.h"
+#include "segments.h"
 
 
-namespace	r_comp{
+namespace r_comp {
 
-	class	dll_export	Decompiler{
-	private:
-		OutStream	*out_stream;
-		uint16		indents;		// in chars.
-		bool		closing_set;	// set after writing the last element of a set: any element in an expression finding closing_set will indent and set closing_set to false.
-		bool		in_hlp;
-		bool		hlp_postfix;
-		bool		horizontal_set;
-		
-		ImageObject	*current_object;
+class dll_export Decompiler {
+private:
+  OutStream *out_stream;
+  uint16 indents; // in chars.
+  bool closing_set; // set after writing the last element of a set: any element in an expression finding closing_set will indent and set closing_set to false.
+  bool in_hlp;
+  bool hlp_postfix;
+  bool horizontal_set;
 
-		r_comp::Metadata	*metadata;
-		r_comp::Image		*image;
+  ImageObject *current_object;
 
-		uint64	time_offset;	// 0 means no offset.
+  r_comp::Metadata *metadata;
+  r_comp::Image *image;
 
-		UNORDERED_MAP<uint16,std::string>	variable_names;				// in the form vxxx where xxx is an integer representing the order of referencing of the variable/label in the code.
-		uint16	last_variable_id;
-		std::string	get_variable_name(uint16	index,bool	postfix);	// associates iptr/vptr indexes to names; inserts them in out_stream if necessary; when postfix==true, a trailing ':' is added.
-		std::string	get_hlp_variable_name(uint16	index);
+  uint64 time_offset; // 0 means no offset.
 
-		UNORDERED_MAP<uint16,std::string>	object_names;				// in the form class_namexxx where xxx is an integer representing the order of appearence of the object in the image; or: user-defined names when they are provided.
-		UNORDERED_MAP<std::string,uint16>	object_indices;				// inverted version of the object_names.
-		std::string	get_object_name(uint16	index);						// retrieves the name of an object.
+  UNORDERED_MAP<uint16, std::string> variable_names; // in the form vxxx where xxx is an integer representing the order of referencing of the variable/label in the code.
+  uint16 last_variable_id;
+  std::string get_variable_name(uint16 index, bool postfix); // associates iptr/vptr indexes to names; inserts them in out_stream if necessary; when postfix==true, a trailing ':' is added.
+  std::string get_hlp_variable_name(uint16 index);
 
-		void	write_indent(uint16	i);
-		void	write_expression_head(uint16	read_index);												// decodes the leading atom of an expression.
-		void	write_expression_tail(uint16	read_index,bool	apply_time_offset,bool	vertical=false);	// decodes the elements of an expression following the head.
-		void	write_set(uint16	read_index,bool	aply_time_offset,uint16	write_as_view_index=0);
-		void	write_any(uint16	read_index,bool	&after_tail_wildcard,bool	apply_time_offset,uint16	write_as_view_index=0);	// decodes any element in an expression or a set.
+  UNORDERED_MAP<uint16, std::string> object_names; // in the form class_namexxx where xxx is an integer representing the order of appearence of the object in the image; or: user-defined names when they are provided.
+  UNORDERED_MAP<std::string, uint16> object_indices; // inverted version of the object_names.
+  std::string get_object_name(uint16 index); // retrieves the name of an object.
 
-		typedef	void	(Decompiler::*Renderer)(uint16);
-		r_code::vector<Renderer>	renderers;	// indexed by opcodes; when not there, write_expression() is used.
+  void write_indent(uint16 i);
+  void write_expression_head(uint16 read_index); // decodes the leading atom of an expression.
+  void write_expression_tail(uint16 read_index, bool apply_time_offset, bool vertical = false); // decodes the elements of an expression following the head.
+  void write_set(uint16 read_index, bool aply_time_offset, uint16 write_as_view_index = 0);
+  void write_any(uint16 read_index, bool &after_tail_wildcard, bool apply_time_offset, uint16 write_as_view_index = 0); // decodes any element in an expression or a set.
 
-		// Renderers.
-		void	write_expression(uint16	read_index);	// default renderer.
-		void	write_group(uint16	read_index);
-		void	write_marker(uint16	read_index);
-		void	write_pgm(uint16	read_index);
-		void	write_ipgm(uint16	read_index);
-		void	write_icmd(uint16	read_index);
-		void	write_cmd(uint16	read_index);
-		void	write_fact(uint16	read_index);
-		void	write_hlp(uint16	read_index);
-		void	write_ihlp(uint16	read_index);
-		void	write_view(uint16	read_index,uint16	arity);
+  typedef void (Decompiler::*Renderer)(uint16);
+  r_code::vector<Renderer> renderers; // indexed by opcodes; when not there, write_expression() is used.
 
-		bool						partial_decompilation;	// used when decompiling on-the-fly.
-		bool						ignore_named_objects;
-		UNORDERED_SET<uint16>		named_objects;
-		std::vector<SysObject	*>	imported_objects;	// referenced objects added to the image that were not in the original list of objects to be decompiled.
-	public:
-		Decompiler();
-		~Decompiler();
+  // Renderers.
+  void write_expression(uint16 read_index); // default renderer.
+  void write_group(uint16 read_index);
+  void write_marker(uint16 read_index);
+  void write_pgm(uint16 read_index);
+  void write_ipgm(uint16 read_index);
+  void write_icmd(uint16 read_index);
+  void write_cmd(uint16 read_index);
+  void write_fact(uint16 read_index);
+  void write_hlp(uint16 read_index);
+  void write_ihlp(uint16 read_index);
+  void write_view(uint16 read_index, uint16 arity);
 
-		void	init(r_comp::Metadata	*metadata);
-		uint32	decompile(	r_comp::Image		*image,
-							std::ostringstream	*stream,
-							uint64				time_offset,
-							bool				ignore_named_objects);		// decompiles the whole image; returns the number of objects.
-		uint32	decompile(	r_comp::Image				*image,
-							std::ostringstream			*stream,
-							uint64						time_offset,
-							std::vector<SysObject	*>	&imported_objects);	// idem, ignores named objects if in the imported object list.
-		uint32	decompile_references(r_comp::Image	*image);														// initialize a reference table so that objects can be decompiled individually; returns the number of objects.
-		void	decompile_object(uint16	object_index,std::ostringstream	*stream,uint64	time_offset);				// decompiles a single object; object_index is the position of the object in the vector returned by Image::getObject.
-		void	decompile_object(const	std::string	object_name,std::ostringstream	*stream,uint64	time_offset);	// decompiles a single object given its name: use this function to follow references.
-	};
+  bool partial_decompilation; // used when decompiling on-the-fly.
+  bool ignore_named_objects;
+  UNORDERED_SET<uint16> named_objects;
+  std::vector<SysObject *> imported_objects; // referenced objects added to the image that were not in the original list of objects to be decompiled.
+public:
+  Decompiler();
+  ~Decompiler();
+
+  void init(r_comp::Metadata *metadata);
+  uint32 decompile(r_comp::Image *image,
+    std::ostringstream *stream,
+    uint64 time_offset,
+    bool ignore_named_objects); // decompiles the whole image; returns the number of objects.
+  uint32 decompile(r_comp::Image *image,
+    std::ostringstream *stream,
+    uint64 time_offset,
+    std::vector<SysObject *> &imported_objects); // idem, ignores named objects if in the imported object list.
+  uint32 decompile_references(r_comp::Image *image); // initialize a reference table so that objects can be decompiled individually; returns the number of objects.
+  void decompile_object(uint16 object_index, std::ostringstream *stream, uint64 time_offset); // decompiles a single object; object_index is the position of the object in the vector returned by Image::getObject.
+  void decompile_object(const std::string object_name, std::ostringstream *stream, uint64 time_offset); // decompiles a single object given its name: use this function to follow references.
+};
 }
 
 

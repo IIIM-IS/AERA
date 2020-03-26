@@ -8,10 +8,10 @@
 //_/_/   http://cadia.ru.is
 //_/_/ Copyright(c)2012
 //_/_/
-//_/_/ This software was developed by the above copyright holder as part of 
-//_/_/ the HUMANOBS EU research project, in collaboration with the 
+//_/_/ This software was developed by the above copyright holder as part of
+//_/_/ the HUMANOBS EU research project, in collaboration with the
 //_/_/ following parties:
-//_/_/ 
+//_/_/
 //_/_/ Autonomous Systems Laboratory
 //_/_/   Technical University of Madrid, Spain
 //_/_/   http://www.aslab.org/
@@ -35,185 +35,185 @@
 //_/_/
 //_/_/ --- HUMANOBS Open-Source BSD License, with CADIA Clause v 1.0 ---
 //_/_/
-//_/_/ Redistribution and use in source and binary forms, with or without 
-//_/_/ modification, is permitted provided that the following conditions 
+//_/_/ Redistribution and use in source and binary forms, with or without
+//_/_/ modification, is permitted provided that the following conditions
 //_/_/ are met:
 //_/_/
-//_/_/ - Redistributions of source code must retain the above copyright 
-//_/_/ and collaboration notice, this list of conditions and the 
+//_/_/ - Redistributions of source code must retain the above copyright
+//_/_/ and collaboration notice, this list of conditions and the
 //_/_/ following disclaimer.
 //_/_/
-//_/_/ - Redistributions in binary form must reproduce the above copyright 
+//_/_/ - Redistributions in binary form must reproduce the above copyright
 //_/_/ notice, this list of conditions and the following
-//_/_/ disclaimer in the documentation and/or other materials provided 
+//_/_/ disclaimer in the documentation and/or other materials provided
 //_/_/ with the distribution.
 //_/_/
-//_/_/ - Neither the name of its copyright holders nor the names of its 
-//_/_/ contributors may be used to endorse or promote products 
+//_/_/ - Neither the name of its copyright holders nor the names of its
+//_/_/ contributors may be used to endorse or promote products
 //_/_/ derived from this software without specific prior written permission.
 //_/_/
-//_/_/ - CADIA Clause: The license granted in and to the software under this 
-//_/_/ agreement is a limited-use license. The software may not be used in 
-//_/_/ furtherance of: 
-//_/_/ (i) intentionally causing bodily injury or severe emotional distress 
-//_/_/ to any person; 
-//_/_/ (ii) invading the personal privacy or violating the human rights of 
-//_/_/ any person; or 
+//_/_/ - CADIA Clause: The license granted in and to the software under this
+//_/_/ agreement is a limited-use license. The software may not be used in
+//_/_/ furtherance of:
+//_/_/ (i) intentionally causing bodily injury or severe emotional distress
+//_/_/ to any person;
+//_/_/ (ii) invading the personal privacy or violating the human rights of
+//_/_/ any person; or
 //_/_/ (iii) committing or preparing for any act of war.
 //_/_/
 //_/_/ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-//_/_/ "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
-//_/_/ LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR 
-//_/_/ A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT 
-//_/_/ OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
-//_/_/ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT 
-//_/_/ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
-//_/_/ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY 
-//_/_/ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
-//_/_/ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+//_/_/ "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+//_/_/ LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+//_/_/ A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+//_/_/ OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+//_/_/ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//_/_/ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+//_/_/ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+//_/_/ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+//_/_/ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //_/_/ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //_/_/
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
-#include	<set>
+#include <set>
 
-#include	"decompiler.h"
-#include	"init.h"
-#include	"opcodes.h"
-#include	"../r_code/image_impl.h"
+#include "decompiler.h"
+#include "init.h"
+#include "opcodes.h"
+#include "../r_code/image_impl.h"
 
-#include	"settings.h"
-#include	"correlator.h"
+#include "settings.h"
+#include "correlator.h"
 
-//#define	DECOMPILE_ONE_BY_ONE
+//#define DECOMPILE_ONE_BY_ONE
 
-void	decompile(r_comp::Decompiler	&decompiler,r_comp::Image	*image,uint64	time_offset){
+void decompile(r_comp::Decompiler &decompiler, r_comp::Image *image, uint64 time_offset) {
 
-#ifdef	DECOMPILE_ONE_BY_ONE
-	uint32	object_count=decompiler.decompile_references(image);
-	std::cout<<object_count<<" objects in the image\n";
-	while(1){
+#ifdef DECOMPILE_ONE_BY_ONE
+  uint32 object_count = decompiler.decompile_references(image);
+  std::cout << object_count << " objects in the image\n";
+  while (1) {
 
-		std::cout<<"Which object (-1 to exit)?\n";
-		int32	index;std::cin>>index;
-		if(index==-1)
-			break;
-		if(index>=object_count){
+    std::cout << "Which object (-1 to exit)?\n";
+    int32 index; std::cin >> index;
+    if (index == -1)
+      break;
+    if (index >= object_count) {
 
-			std::cout<<"there is only "<<object_count<<" objects\n";
-			continue;
-		}
-		std::ostringstream	decompiled_code;
-		decompiler.decompile_object(index,&decompiled_code,time_offset);
-		std::cout<<"... done\n";
-		std::cout<<"\n\nDECOMPILATION\n\n"<<decompiled_code.str()<<std::endl;
-	}
+      std::cout << "there is only " << object_count << " objects\n";
+      continue;
+    }
+    std::ostringstream decompiled_code;
+    decompiler.decompile_object(index, &decompiled_code, time_offset);
+    std::cout << "... done\n";
+    std::cout << "\n\nDECOMPILATION\n\n" << decompiled_code.str() << std::endl;
+  }
 #else
-	std::cout<<"\ndecompiling ...\n";
-	std::ostringstream	decompiled_code;
-	uint32	object_count=decompiler.decompile(image,&decompiled_code,time_offset,false);
-	std::cout<<"... done\n";
-	std::cout<<"\n\nDECOMPILATION\n\n"<<decompiled_code.str()<<std::endl;
-	std::cout<<"Image taken at: "<<Time::ToString_year(image->timestamp)<<std::endl<<std::endl;
-	std::cout<<object_count<<" objects\n";
+  std::cout << "\ndecompiling ...\n";
+  std::ostringstream decompiled_code;
+  uint32 object_count = decompiler.decompile(image, &decompiled_code, time_offset, false);
+  std::cout << "... done\n";
+  std::cout << "\n\nDECOMPILATION\n\n" << decompiled_code.str() << std::endl;
+  std::cout << "Image taken at: " << Time::ToString_year(image->timestamp) << std::endl << std::endl;
+  std::cout << object_count << " objects\n";
 #endif
 }
 
-int32	main(int	argc,char	**argv){
+int32 main(int argc, char **argv) {
 
-	core::Time::Init(1000);
+  core::Time::Init(1000);
 
-	CorrelatorTestSettings	settings;
-	if(!settings.load(argv[1]))
-		return	1;
+  CorrelatorTestSettings settings;
+  if (!settings.load(argv[1]))
+    return 1;
 
-	std::cout<<"compiling ...\n";
-	r_exec::Init(settings.usr_operator_path.c_str(),Time::Get,settings.usr_class_path.c_str());
-	std::cout<<"... done\n";
+  std::cout << "compiling ...\n";
+  r_exec::Init(settings.usr_operator_path.c_str(), Time::Get, settings.usr_class_path.c_str());
+  std::cout << "... done\n";
 
-	r_comp::Decompiler	decompiler;
-	decompiler.init(&r_exec::Metadata);
+  r_comp::Decompiler decompiler;
+  decompiler.init(&r_exec::Metadata);
 
-	Correlator	correlator;
+  Correlator correlator;
 
-	//	Feed the Correlator incrementally with episodes related to the pursuit of one goal.
+  // Feed the Correlator incrementally with episodes related to the pursuit of one goal.
 
-	//	First, get an image containing all the episodes.
-	std::string	image_path=settings.use_case_path;
-	image_path+="/";
-	image_path+=settings.image_name;
+  // First, get an image containing all the episodes.
+  std::string image_path = settings.use_case_path;
+  image_path += "/";
+  image_path += settings.image_name;
 
-	ifstream	input(image_path.c_str(),ios::binary|ios::in);
-	if(!input.good())
-		return	1;
+  ifstream input(image_path.c_str(), ios::binary | ios::in);
+  if (!input.good())
+    return 1;
 
-	r_code::Image<ImageImpl>	*img=(r_code::Image<ImageImpl>	*)r_code::Image<ImageImpl>::Read(input);
-	input.close();
+  r_code::Image<ImageImpl> *img = (r_code::Image<ImageImpl> *)r_code::Image<ImageImpl>::Read(input);
+  input.close();
 
-	r_code::vector<Code	*>	objects;
-	r_comp::Image			*_i=new	r_comp::Image();
-	_i->load(img);
-	_i->get_objects<r_code::LObject>(objects);
+  r_code::vector<Code *> objects;
+  r_comp::Image *_i = new r_comp::Image();
+  _i->load(img);
+  _i->get_objects<r_code::LObject>(objects);
 
-	decompile(decompiler,_i,0);
-	delete	_i;
+  decompile(decompiler, _i, 0);
+  delete _i;
 
-	delete	img;
+  delete img;
 
-	//	Second, filter objects: retain only those which are actual inputs in stdin and store them in a time-ordered list.
-	uint32	stdin_oid;
-	std::string	stdin_str("stdin");
-	UNORDERED_MAP<uint32,std::string>::const_iterator	n;
-	for(n=_i->object_names.symbols.begin();n!=_i->object_names.symbols.end();++n)
-		if(n->second==stdin_str){
+  // Second, filter objects: retain only those which are actual inputs in stdin and store them in a time-ordered list.
+  uint32 stdin_oid;
+  std::string stdin_str("stdin");
+  UNORDERED_MAP<uint32, std::string>::const_iterator n;
+  for (n = _i->object_names.symbols.begin(); n != _i->object_names.symbols.end(); ++n)
+    if (n->second == stdin_str) {
 
-			stdin_oid=n->first;
-			break;
-		}
-	
-	std::set<r_code::View	*,r_code::View::Less>	correlator_inputs;
-	for(uint32	i=0;i<objects.size();++i){
+      stdin_oid = n->first;
+      break;
+    }
 
-		Code	*object=objects[i];
-		if(object->code(0).asOpcode()==r_exec::Opcodes::IPgm)
-			continue;
+  std::set<r_code::View *, r_code::View::Less> correlator_inputs;
+  for (uint32 i = 0; i < objects.size(); ++i) {
 
-		UNORDERED_SET<View	*,View::Hash,View::Equal>::const_iterator	v;
-		for(v=object->views.begin();v!=object->views.end();++v){
+    Code *object = objects[i];
+    if (object->code(0).asOpcode() == r_exec::Opcodes::IPgm)
+      continue;
 
-			if(!(*v)->references[0])
-				continue;
+    UNORDERED_SET<View *, View::Hash, View::Equal>::const_iterator v;
+    for (v = object->views.begin(); v != object->views.end(); ++v) {
 
-			if((*v)->references[0]->get_oid()==stdin_oid){
+      if (!(*v)->references[0])
+        continue;
 
-				correlator_inputs.insert(*v);
-				break;
-			}
-		}
-	}
+      if ((*v)->references[0]->get_oid() == stdin_oid) {
 
-	//	Third, feed the Correlator with the episodes, one by one.
-	//	Episodes are delimited with an object of the class episode_end (See user.classes.replicode).
-	std::string	episode_end_class_name="episode_end";
-	uint16		episode_end_opcode=r_exec::Metadata.get_class(episode_end_class_name)->atom.asOpcode();
-	uint16		episode_count=0;
+        correlator_inputs.insert(*v);
+        break;
+      }
+    }
+  }
 
-	std::set<r_code::View	*,r_code::View::Less>::const_iterator	v;
-	for(v=correlator_inputs.begin();v!=correlator_inputs.end();++v){
+  // Third, feed the Correlator with the episodes, one by one.
+  // Episodes are delimited with an object of the class episode_end (See user.classes.replicode).
+  std::string episode_end_class_name = "episode_end";
+  uint16 episode_end_opcode = r_exec::Metadata.get_class(episode_end_class_name)->atom.asOpcode();
+  uint16 episode_count = 0;
 
-		if((*v)->object->code(0).asOpcode()==episode_end_opcode){
+  std::set<r_code::View *, r_code::View::Less>::const_iterator v;
+  for (v = correlator_inputs.begin(); v != correlator_inputs.end(); ++v) {
 
-			//	Get the result.
-			CorrelatorOutput	*output=correlator.get_output();
-			output->trace();
-			delete	output;
+    if ((*v)->object->code(0).asOpcode() == episode_end_opcode) {
 
-			++episode_count;
-		}else
-			correlator.take_input(*v);
-	}
+      // Get the result.
+      CorrelatorOutput *output = correlator.get_output();
+      output->trace();
+      delete output;
 
-	std::cout<<episode_count<<" episodes\n";
+      ++episode_count;
+    } else
+      correlator.take_input(*v);
+  }
 
-	return	0;
+  std::cout << episode_count << " episodes\n";
+
+  return 0;
 }
