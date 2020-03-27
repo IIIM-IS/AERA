@@ -196,7 +196,6 @@ class r_exec_dll Sim :
 private:
   uint32 volatile invalidated; // 32 bits alignment.
 public:
-  Sim();
   Sim(Sim *s); // is_requirement=false (not copied).
   Sim(SimMode mode, uint64 thz, Fact *super_goal, bool opposite, Controller *root); // use for SIM_ROOT.
   Sim(SimMode mode, uint64 thz, Fact *super_goal, bool opposite, Controller *root, Controller *sol, float32 sol_cfd, uint64 sol_deadline); // USE for SIM_MANDATORY or SIM_OPTIONAL.

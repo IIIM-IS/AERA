@@ -709,9 +709,6 @@ inline float32 Goal::get_strength(uint64 now) const {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Sim::Sim() : _Object(), super_goal(NULL), root(NULL), sol(NULL), is_requirement(false), opposite(false), invalidated(0), sol_cfd(0), sol_before(0) {
-}
-
 Sim::Sim(Sim *s) : _Object(), mode(s->mode), thz(s->thz), super_goal(s->super_goal), root(s->root), sol(s->sol), is_requirement(false), opposite(s->opposite), invalidated(0), sol_cfd(s->sol_cfd), sol_before(s->sol_before) {
 }
 
