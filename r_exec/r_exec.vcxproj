@@ -184,16 +184,8 @@
     <ClCompile Include="opcodes.cpp" />
     <ClCompile Include="operator.cpp" />
     <ClCompile Include="overlay.cpp" />
-    <ClCompile Include="overlay.inline.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="pattern_extractor.cpp" />
     <ClCompile Include="pgm_controller.cpp" />
-    <ClCompile Include="pgm_controller.inline.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="pgm_overlay.cpp" />
     <ClCompile Include="pgm_overlay.inline.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugVisualizer|Win32'">true</ExcludedFromBuild>
