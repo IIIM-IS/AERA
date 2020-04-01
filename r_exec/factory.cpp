@@ -716,7 +716,7 @@ Sim::Sim(Sim *s) : _Object(), mode(s->mode), thz(s->thz), super_goal(s->super_go
 Sim::Sim(SimMode mode, microseconds thz, Fact *super_goal, bool opposite, Controller *root) : _Object(), mode(mode), thz(thz), super_goal(super_goal), root(root), sol(NULL), is_requirement(false), opposite(opposite), invalidated(0), sol_cfd(0), sol_before(seconds(0)) {
 }
 
-Sim::Sim(SimMode mode, microseconds thz, Fact *super_goal, bool opposite, Controller *root, Controller *sol, float32 sol_cfd, Timestamp sol_deadline) : _Object(), mode(mode), thz(thz), super_goal(super_goal), root(root), sol(sol), is_requirement(false), opposite(opposite), invalidated(0), sol_cfd(sol_cfd), sol_before(sol_before) {
+Sim::Sim(SimMode mode, microseconds thz, Fact *super_goal, bool opposite, Controller *root, Controller *sol, float32 sol_cfd, Timestamp sol_before) : _Object(), mode(mode), thz(thz), super_goal(super_goal), root(root), sol(sol), is_requirement(false), opposite(opposite), invalidated(0), sol_cfd(sol_cfd), sol_before(sol_before) {
 }
 
 void Sim::invalidate() {
