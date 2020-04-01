@@ -90,14 +90,14 @@ _ReductionJob::_ReductionJob() : _Object() {
 
 ////////////////////////////////////////////////////////////
 
-bool ShutdownReductionCore::update(uint64 now) {
+bool ShutdownReductionCore::update(Timestamp now) {
 
   return false;
 }
 
 ////////////////////////////////////////////////////////////
 
-bool AsyncInjectionJob::update(uint64 now) {
+bool AsyncInjectionJob::update(Timestamp now) {
 
   _Mem::Get()->inject(input);
   return true;

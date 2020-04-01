@@ -77,6 +77,7 @@
 
 #include "guard_builder.h"
 
+using namespace std::chrono;
 
 namespace r_exec {
 
@@ -97,19 +98,19 @@ void GuardBuilder::build(Code *mdl, _Fact *premise, _Fact *cause, uint16 &write_
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TimingGuardBuilder::TimingGuardBuilder(uint64 period) : GuardBuilder(), period(period) {
+TimingGuardBuilder::TimingGuardBuilder(microseconds period) : GuardBuilder(), period(period) {
 }
 
 TimingGuardBuilder::~TimingGuardBuilder() {
 }
 
-void TimingGuardBuilder::write_guard(Code *mdl, uint16 l, uint16 r, uint16 opcode, uint64 offset, uint16 &write_index, uint16 &extent_index) const {
+void TimingGuardBuilder::write_guard(Code *mdl, uint16 l, uint16 r, uint16 opcode, microseconds offset, uint16 &write_index, uint16 &extent_index) const {
 
   mdl->code(++write_index) = Atom::AssignmentPointer(l, ++extent_index);
   mdl->code(extent_index) = Atom::Operator(opcode, 2); // l:(opcode r offset)
   mdl->code(++extent_index) = Atom::VLPointer(r);
   mdl->code(++extent_index) = Atom::IPointer(extent_index + 1);
-  Utils::SetTimestamp(mdl, ++extent_index, offset);
+  Utils::SetTimestamp(mdl, ++extent_index, Timestamp(offset));
   extent_index += 2;
 }
 
@@ -160,7 +161,7 @@ void TimingGuardBuilder::build(Code *mdl, _Fact *premise, _Fact *cause, uint16 &
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SGuardBuilder::SGuardBuilder(uint64 period, uint64 offset) : TimingGuardBuilder(period), offset(offset) {
+SGuardBuilder::SGuardBuilder(microseconds period, microseconds offset) : TimingGuardBuilder(period), offset(offset) {
 }
 
 SGuardBuilder::~SGuardBuilder() {
@@ -193,7 +194,7 @@ void SGuardBuilder::_build(Code *mdl, uint16 q0, uint16 t0, uint16 t1, uint16 &w
   mdl->code(++extent_index) = Atom::Operator(Opcodes::Mul, 2);
   mdl->code(++extent_index) = Atom::VLPointer(speed_value);
   mdl->code(++extent_index) = Atom::IPointer(extent_index + 1);
-  Utils::SetTimestamp(mdl, ++extent_index, period);
+  Utils::SetTimestamp(mdl, ++extent_index, Timestamp(period));
   extent_index += 2;
 
   write_index = extent_index;
@@ -215,7 +216,7 @@ void SGuardBuilder::_build(Code *mdl, uint16 q0, uint16 t0, uint16 t1, uint16 &w
   mdl->code(++extent_index) = Atom::Operator(Opcodes::Sub, 2);
   mdl->code(++extent_index) = Atom::VLPointer(q1);
   mdl->code(++extent_index) = Atom::VLPointer(q0);
-  Utils::SetTimestamp(mdl, ++extent_index, period);
+  Utils::SetTimestamp(mdl, ++extent_index, Timestamp(period));
   extent_index += 2;
 
   write_index = extent_index;
@@ -244,7 +245,7 @@ void SGuardBuilder::build(Code *mdl, _Fact *premise_pattern, _Fact *cause_patter
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-NoArgCmdGuardBuilder::NoArgCmdGuardBuilder(uint64 period, uint64 offset, uint64 cmd_duration) : TimingGuardBuilder(period), offset(offset), cmd_duration(cmd_duration) {
+NoArgCmdGuardBuilder::NoArgCmdGuardBuilder(microseconds period, microseconds offset, microseconds cmd_duration) : TimingGuardBuilder(period), offset(offset), cmd_duration(cmd_duration) {
 }
 
 NoArgCmdGuardBuilder::~NoArgCmdGuardBuilder() {
@@ -306,7 +307,7 @@ void NoArgCmdGuardBuilder::build(Code *mdl, _Fact *premise_pattern, _Fact *cause
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-CmdGuardBuilder::CmdGuardBuilder(uint64 period, uint16 cmd_arg_index) : TimingGuardBuilder(period), cmd_arg_index(cmd_arg_index) {
+CmdGuardBuilder::CmdGuardBuilder(microseconds period, uint16 cmd_arg_index) : TimingGuardBuilder(period), cmd_arg_index(cmd_arg_index) {
 }
 
 CmdGuardBuilder::~CmdGuardBuilder() {
@@ -382,7 +383,7 @@ void CmdGuardBuilder::_build(Code *mdl, uint16 fwd_opcode, uint16 bwd_opcode, _F
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-MCGuardBuilder::MCGuardBuilder(uint64 period, float32 cmd_arg_index) : CmdGuardBuilder(period, cmd_arg_index) {
+MCGuardBuilder::MCGuardBuilder(microseconds period, float32 cmd_arg_index) : CmdGuardBuilder(period, cmd_arg_index) {
 }
 
 MCGuardBuilder::~MCGuardBuilder() {
@@ -395,7 +396,7 @@ void MCGuardBuilder::build(Code *mdl, _Fact *premise_pattern, _Fact *cause_patte
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-ACGuardBuilder::ACGuardBuilder(uint64 period, uint16 cmd_arg_index) : CmdGuardBuilder(period, cmd_arg_index) {
+ACGuardBuilder::ACGuardBuilder(microseconds period, uint16 cmd_arg_index) : CmdGuardBuilder(period, cmd_arg_index) {
 }
 
 ACGuardBuilder::~ACGuardBuilder() {
@@ -408,7 +409,7 @@ void ACGuardBuilder::build(Code *mdl, _Fact *premise_pattern, _Fact *cause_patte
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-ConstGuardBuilder::ConstGuardBuilder(uint64 period, float32 constant, uint64 offset) : TimingGuardBuilder(period), constant(constant), offset(offset) {
+ConstGuardBuilder::ConstGuardBuilder(microseconds period, float32 constant, microseconds offset) : TimingGuardBuilder(period), constant(constant), offset(offset) {
 }
 
 ConstGuardBuilder::~ConstGuardBuilder() {
@@ -483,7 +484,7 @@ void ConstGuardBuilder::_build(Code *mdl, uint16 fwd_opcode, uint16 bwd_opcode, 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-MGuardBuilder::MGuardBuilder(uint64 period, float32 constant, uint64 offset) : ConstGuardBuilder(period, constant, offset) {
+MGuardBuilder::MGuardBuilder(microseconds period, float32 constant, microseconds offset) : ConstGuardBuilder(period, constant, offset) {
 }
 
 MGuardBuilder::~MGuardBuilder() {
@@ -496,7 +497,7 @@ void MGuardBuilder::build(Code *mdl, _Fact *premise_pattern, _Fact *cause_patter
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-AGuardBuilder::AGuardBuilder(uint64 period, float32 constant, uint64 offset) : ConstGuardBuilder(period, constant, offset) {
+AGuardBuilder::AGuardBuilder(microseconds period, float32 constant, microseconds offset) : ConstGuardBuilder(period, constant, offset) {
 }
 
 AGuardBuilder::~AGuardBuilder() {

@@ -129,7 +129,7 @@ public:
   uint16 get_last_patch_index() const { return overlay->get_last_patch_index(); }
 
   uint16 setAtomicResult(Atom a) const;
-  uint16 setTimestampResult(uint64 t) const;
+  uint16 setTimestampResult(Timestamp t) const;
   uint16 setCompoundResultHead(Atom a) const;
   uint16 addCompoundResultPart(Atom a) const;
 

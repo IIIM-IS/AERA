@@ -90,12 +90,12 @@ namespace r_code {
 template<typename T, class IsInvalidated> class time_buffer :
   public list<T> {
 protected:
-  uint32 thz; // time horizon.
-  uint64 time_reference;
+  std::chrono::microseconds thz; // time horizon.
+  Timestamp time_reference;
 public:
   time_buffer() : list(), thz(Utils::MaxTHZ) {}
 
-  void set_thz(uint32 thz) { this->thz = thz; }
+  void set_thz(std::chrono::microseconds thz) { this->thz = thz; }
 
   class iterator {
     friend class time_buffer;
@@ -128,13 +128,13 @@ public:
 private:
   static iterator end_iterator;
 public:
-  iterator begin(uint64 time_reference) {
+  iterator begin(Timestamp time_reference) {
 
     this->time_reference = time_reference;
     return iterator(this, used_cells_head);
   }
   iterator &end() { return end_iterator; }
-  iterator find(uint64 time_reference, const T &t) {
+  iterator find(Timestamp time_reference, const T &t) {
 
     iterator i;
     for (i = begin(time_reference); i != end(); ++i) {

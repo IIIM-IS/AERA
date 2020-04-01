@@ -124,6 +124,8 @@
 // pgm_code[pgm_code[PGM_PRODS]+n3] >opcode of the last production
 // ... >...
 
+using namespace std::chrono;
+
 namespace r_exec {
 
 InputLessPGMOverlay::InputLessPGMOverlay() : Overlay() { // used for constructing PGMOverlay offsprings.
@@ -197,7 +199,7 @@ void InputLessPGMOverlay::patch_input_code(uint16 pgm_code_index, uint16 input_i
 
 bool InputLessPGMOverlay::inject_productions() {
 
-  uint64 now = Now();
+  auto now = Now();
 
   uint16 unused_index;
   bool in_red = false; // if prods are computed by red, we have to evaluate the expression; otherwise, we have to evaluate the prods in the set one by one to be able to reference new objects in this->productions.
@@ -435,7 +437,7 @@ bool InputLessPGMOverlay::inject_productions() {
                 objects[i - 1] = (*_objects.getChild(i)).getObject();
             }
 
-            callback(now - Utils::GetTimeReference(), false, msg.c_str(), object_count, objects);
+            callback(duration_cast<microseconds>(now - Utils::GetTimeReference()), false, msg.c_str(), object_count, objects);
             if (object_count)
               delete[] objects;
           }
@@ -545,7 +547,7 @@ inline void PGMOverlay::init() {
   for (uint16 i = 1; i <= pattern_count; ++i)
     input_pattern_indices.push_back(code[pattern_set_index + i].asIndex());
 
-  birth_time = 0;
+  birth_time = Timestamp(seconds(0));
 }
 
 inline void PGMOverlay::reset() {
@@ -667,7 +669,7 @@ Overlay *PGMOverlay::reduce(r_exec::View *input) {
         std::cout<<std::endl;*/
       PGMOverlay *offspring = new PGMOverlay(this, input_index, value_commit_index);
       commit();
-      if (birth_time == 0)
+      if (birth_time.time_since_epoch().count() == 0)
         birth_time = Now();
       return offspring;
     }

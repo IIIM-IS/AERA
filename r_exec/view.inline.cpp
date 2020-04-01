@@ -104,7 +104,7 @@ inline View::View(const View *view, bool new_OID) : r_code::View(), controller(N
 }
 
 inline View::View(SyncMode sync,
-  uint64 ijt,
+  Timestamp ijt,
   float32 sln,
   int32 res,
   Code *destination,
@@ -116,7 +116,7 @@ inline View::View(SyncMode sync,
 }
 
 inline View::View(SyncMode sync,
-  uint64 ijt,
+  Timestamp ijt,
   float32 sln,
   int32 res,
   Code *destination,
@@ -130,7 +130,7 @@ inline View::View(SyncMode sync,
 }
 
 inline void View::init(SyncMode sync,
-  uint64 ijt,
+  Timestamp ijt,
   float32 sln,
   int32 res,
   Code *destination,

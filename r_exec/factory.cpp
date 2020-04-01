@@ -79,6 +79,7 @@
 #include "mdl_controller.h"
 #include "mem.h"
 
+using namespace std::chrono;
 
 namespace r_exec {
 
@@ -186,7 +187,7 @@ _Fact::_Fact(_Fact *f) {
     add_reference(f->get_reference(i));
 }
 
-_Fact::_Fact(uint16 opcode, Code *object, uint64 after, uint64 before, float32 confidence, float32 psln_thr) : LObject() {
+_Fact::_Fact(uint16 opcode, Code *object, Timestamp after, Timestamp before, float32 confidence, float32 psln_thr) : LObject() {
 
   code(0) = Atom::Object(opcode, FACT_ARITY);
   code(FACT_OBJ) = Atom::RPointer(0);
@@ -242,29 +243,29 @@ bool _Fact::is_invalidated() {
 
 bool _Fact::match_timings_sync(const _Fact *evidence) const { // intervals of the form [after,before].
 
-  uint64 after = get_after();
-  uint64 e_after = evidence->get_after();
-  uint64 e_before = evidence->get_before();
+  auto after = get_after();
+  auto e_after = evidence->get_after();
+  auto e_before = evidence->get_before();
 
   return !(e_after > after + Utils::GetTimeTolerance() || e_before <= after);
 }
 
 bool _Fact::match_timings_overlap(const _Fact *evidence) const { // intervals of the form [after,before].
 
-  uint64 after = get_after();
-  uint64 before = get_before();
-  uint64 e_after = evidence->get_after();
-  uint64 e_before = evidence->get_before();
+  auto after = get_after();
+  auto before = get_before();
+  auto e_after = evidence->get_after();
+  auto e_before = evidence->get_before();
 
   return !(e_after >= before || e_before <= after);
 }
 
 bool _Fact::match_timings_inclusive(const _Fact *evidence) const { // intervals of the form [after,before].
 
-  uint64 after = get_after();
-  uint64 before = get_before();
-  uint64 e_after = evidence->get_after();
-  uint64 e_before = evidence->get_before();
+  auto after = get_after();
+  auto before = get_before();
+  auto e_after = evidence->get_after();
+  auto e_before = evidence->get_before();
 
   return (e_after <= after && e_before >= before);
 }
@@ -489,12 +490,12 @@ inline Goal *_Fact::get_goal() const {
   return NULL;
 }
 
-uint64 _Fact::get_after() const {
+Timestamp _Fact::get_after() const {
 
   return Utils::GetTimestamp<Code>(this, FACT_AFTER);
 }
 
-uint64 _Fact::get_before() const {
+Timestamp _Fact::get_before() const {
 
   return Utils::GetTimestamp<Code>(this, FACT_BEFORE);
 }
@@ -522,7 +523,7 @@ Fact::Fact(SysObject *source) : _Fact(source) {
 Fact::Fact(Fact *f) : _Fact(f) {
 }
 
-Fact::Fact(Code *object, uint64 after, uint64 before, float32 confidence, float32 psln_thr) : _Fact(Opcodes::Fact, object, after, before, confidence, psln_thr) {
+Fact::Fact(Code *object, Timestamp after, Timestamp before, float32 confidence, float32 psln_thr) : _Fact(Opcodes::Fact, object, after, before, confidence, psln_thr) {
 }
 
 ////////////////////////////////////////////////////////////////
@@ -543,7 +544,7 @@ AntiFact::AntiFact(SysObject *source) : _Fact(source) {
 AntiFact::AntiFact(AntiFact *f) : _Fact(f) {
 }
 
-AntiFact::AntiFact(Code *object, uint64 after, uint64 before, float32 confidence, float32 psln_thr) : _Fact(Opcodes::AntiFact, object, after, before, confidence, psln_thr) {
+AntiFact::AntiFact(Code *object, Timestamp after, Timestamp before, float32 confidence, float32 psln_thr) : _Fact(Opcodes::AntiFact, object, after, before, confidence, psln_thr) {
 }
 
 ////////////////////////////////////////////////////////////////
@@ -701,10 +702,10 @@ inline Code *Goal::get_actor() const {
   return get_reference(code(GOAL_ACTR).asIndex());
 }
 
-inline float32 Goal::get_strength(uint64 now) const {
+inline float32 Goal::get_strength(Timestamp now) const {
 
   _Fact *target = get_target();
-  return target->get_cfd() / (target->get_before() - now);
+  return target->get_cfd() / duration_cast<microseconds>(target->get_before() - now).count();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -712,10 +713,10 @@ inline float32 Goal::get_strength(uint64 now) const {
 Sim::Sim(Sim *s) : _Object(), mode(s->mode), thz(s->thz), super_goal(s->super_goal), root(s->root), sol(s->sol), is_requirement(false), opposite(s->opposite), invalidated(0), sol_cfd(s->sol_cfd), sol_before(s->sol_before) {
 }
 
-Sim::Sim(SimMode mode, uint64 thz, Fact *super_goal, bool opposite, Controller *root) : _Object(), mode(mode), thz(thz), super_goal(super_goal), root(root), sol(NULL), is_requirement(false), opposite(opposite), invalidated(0), sol_cfd(0), sol_before(0) {
+Sim::Sim(SimMode mode, microseconds thz, Fact *super_goal, bool opposite, Controller *root) : _Object(), mode(mode), thz(thz), super_goal(super_goal), root(root), sol(NULL), is_requirement(false), opposite(opposite), invalidated(0), sol_cfd(0), sol_before(seconds(0)) {
 }
 
-Sim::Sim(SimMode mode, uint64 thz, Fact *super_goal, bool opposite, Controller *root, Controller *sol, float32 sol_cfd, uint64 sol_deadline) : _Object(), mode(mode), thz(thz), super_goal(super_goal), root(root), sol(sol), is_requirement(false), opposite(opposite), invalidated(0), sol_cfd(sol_cfd), sol_before(sol_before) {
+Sim::Sim(SimMode mode, microseconds thz, Fact *super_goal, bool opposite, Controller *root, Controller *sol, float32 sol_cfd, Timestamp sol_deadline) : _Object(), mode(mode), thz(thz), super_goal(super_goal), root(root), sol(sol), is_requirement(false), opposite(opposite), invalidated(0), sol_cfd(sol_cfd), sol_before(sol_before) {
 }
 
 void Sim::invalidate() {
@@ -784,13 +785,13 @@ Success::Success(_Fact *object, _Fact *evidence, float32 psln_thr) : LObject() {
 Perf::Perf() : LObject() {
 }
 
-Perf::Perf(uint32 reduction_job_avg_latency, int32 d_reduction_job_avg_latency, uint32 time_job_avg_latency, int32 d_time_job_avg_latency) : LObject() {
+Perf::Perf(microseconds reduction_job_avg_latency, microseconds d_reduction_job_avg_latency, microseconds time_job_avg_latency, microseconds d_time_job_avg_latency) : LObject() {
 
   code(0) = Atom::Object(Opcodes::Perf, PERF_ARITY);
-  code(PERF_RDX_LTCY) = Atom::Float(reduction_job_avg_latency);
-  code(PERF_D_RDX_LTCY) = Atom::Float(d_reduction_job_avg_latency);
-  code(PERF_TIME_LTCY) = Atom::Float(time_job_avg_latency);
-  code(PERF_D_TIME_LTCY) = Atom::Float(d_time_job_avg_latency);
+  code(PERF_RDX_LTCY) = Atom::Float(reduction_job_avg_latency.count());
+  code(PERF_D_RDX_LTCY) = Atom::Float(d_reduction_job_avg_latency.count());
+  code(PERF_TIME_LTCY) = Atom::Float(time_job_avg_latency.count());
+  code(PERF_D_TIME_LTCY) = Atom::Float(d_time_job_avg_latency.count());
   code(PERF_ARITY) = Atom::Float(1);
 }
 

@@ -92,7 +92,7 @@
 namespace r_exec {
 
 // Time base; either Time::Get or network-aware synced time.
-extern r_exec_dll uint64(*Now)();
+extern r_exec_dll Timestamp (*Now)();
 
 // Loaded once for all.
 // Results from the compilation of user.classes.replicode.
@@ -167,12 +167,12 @@ public:
 // Initialize Now, compile user.classes.replicode, builds the Seed and loads the user-defined operators.
 // Return false in case of a problem (e.g. file not found, operator not found, etc.).
 bool r_exec_dll Init(const char *user_operator_library_path,
-  uint64(*time_base)(),
+  Timestamp (*time_base)(),
   const char *seed_path);
 
 // Alternate taking a ready-made metadata and seed (will be copied into Metadata and Seed).
 bool r_exec_dll Init(const char *user_operator_library_path,
-  uint64(*time_base)(),
+  Timestamp (*time_base)(),
   const r_comp::Metadata &metadata,
   const r_comp::Image &seed);
 

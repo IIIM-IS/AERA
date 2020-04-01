@@ -95,17 +95,17 @@ public:
   P<_Fact> abstraction;
   P<_Fact> input;
   bool eligible_cause;
-  uint64 ijt; // injection time.
+  Timestamp ijt; // injection time.
 
   Input(View *input, _Fact *abstraction, BindingMap *bindings) : input(input->object), ijt(input->get_ijt()), eligible_cause(IsEligibleCause(input)), abstraction(abstraction), bindings(bindings) {}
-  Input() : input(NULL), eligible_cause(false), abstraction(NULL), bindings(NULL), ijt(0) {}
+  Input() : input(NULL), eligible_cause(false), abstraction(NULL), bindings(NULL), ijt(std::chrono::seconds(0)) {}
   Input(const Input &original) : input(original.input), eligible_cause(original.eligible_cause), abstraction(original.abstraction), bindings(original.bindings), ijt(original.ijt) {}
 
   static bool IsEligibleCause(r_exec::View *view);
 
   class IsInvalidated { // for storage in time_buffers.
   public:
-    bool operator ()(Input &i, uint64 time_reference, uint32 thz) const {
+    bool operator ()(Input &i, Timestamp time_reference, std::chrono::microseconds thz) const {
 
       return (time_reference - i.ijt > thz);
     }
@@ -118,15 +118,15 @@ public:
   P<_Fact> abstraction;
   P<View> input;
   bool injected;
-  uint64 ijt; // injection time.
+  Timestamp ijt; // injection time.
   CInput(View *input, _Fact *abstraction, BindingMap *bindings) : input(input), abstraction(abstraction), bindings(bindings), injected(false), ijt(input->get_ijt()) {}
-  CInput() : input(NULL), abstraction(NULL), bindings(NULL), injected(false), ijt(0) {}
+  CInput() : input(NULL), abstraction(NULL), bindings(NULL), injected(false), ijt(std::chrono::seconds(0)) {}
 
   bool operator ==(const CInput &i) const { return input == i.input; }
 
   class IsInvalidated { // for storage in time_buffers.
   public:
-    bool operator ()(CInput &i, uint64 time_reference, uint32 thz) const {
+    bool operator ()(CInput &i, Timestamp time_reference, std::chrono::microseconds thz) const {
 
       return (time_reference - i.ijt > thz);
     }
@@ -193,7 +193,7 @@ protected:
   void build_mdl_tail(Code *mdl, uint16 write_index);
 
   void inject_hlps() const;
-  void inject_hlps(uint64 analysis_starting_time);
+  void inject_hlps(Timestamp analysis_starting_time);
 
   virtual std::string get_header() const = 0;
 
@@ -217,8 +217,8 @@ private:
 
   std::vector<P<_Fact> > predictions; // successful predictions that may invalidate the need for model building.
 
-  bool build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, uint64 period);
-  bool build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, uint64 period, Code *new_cst);
+  bool build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period);
+  bool build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period, Code *new_cst);
 
   std::string get_header() const;
 public:
@@ -241,8 +241,8 @@ class r_exec_dll PTPX : // target is the prediction.
 private:
   P<Fact> f_imdl; // that produced the prediction (and for which the PTPX will find strong requirements).
 
-  bool build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, uint64 period);
-  bool build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, uint64 period, Code *new_cst);
+  bool build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period);
+  bool build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period, Code *new_cst);
 
   std::string get_header() const;
 public:
@@ -267,13 +267,13 @@ private:
   bool stored_premise;
   P<View> premise;
 
-  GuardBuilder *get_default_guard_builder(_Fact *cause, _Fact *consequent, uint64 period);
-  GuardBuilder *find_guard_builder(_Fact *cause, _Fact *consequent, uint64 period);
+  GuardBuilder *get_default_guard_builder(_Fact *cause, _Fact *consequent, std::chrono::microseconds period);
+  GuardBuilder *find_guard_builder(_Fact *cause, _Fact *consequent, std::chrono::microseconds period);
 
-  bool build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, uint64 period);
-  bool build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, uint64 period);
+  bool build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period);
+  bool build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period);
 
-  bool build_requirement(HLPBindingMap *bm, Code *m0, uint64 period);
+  bool build_requirement(HLPBindingMap *bm, Code *m0, std::chrono::microseconds period);
 
   std::string get_header() const;
 public:

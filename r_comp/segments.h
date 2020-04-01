@@ -177,7 +177,7 @@ public:
   CodeSegment code_segment;
   ObjectNames object_names;
 
-  uint64 timestamp;
+  Timestamp timestamp;
 
   Image();
   ~Image();

@@ -85,9 +85,11 @@
 #include "settings.h"
 #include "correlator.h"
 
+using namespace std::chrono;
+
 //#define DECOMPILE_ONE_BY_ONE
 
-void decompile(r_comp::Decompiler &decompiler, r_comp::Image *image, uint64 time_offset) {
+void decompile(r_comp::Decompiler &decompiler, r_comp::Image *image, Timestamp::duration time_offset) {
 
 #ifdef DECOMPILE_ONE_BY_ONE
   uint32 object_count = decompiler.decompile_references(image);
@@ -155,7 +157,7 @@ int32 main(int argc, char **argv) {
   _i->load(img);
   _i->get_objects<r_code::LObject>(objects);
 
-  decompile(decompiler, _i, 0);
+  decompile(decompiler, _i, seconds(0));
   delete _i;
 
   delete img;

@@ -86,7 +86,7 @@ uint16 _Context::setAtomicResult(Atom a) const { // patch code with 32 bits data
   return index;
 }
 
-uint16 _Context::setTimestampResult(uint64 t) const { // patch code with a VALUE_PTR
+uint16 _Context::setTimestampResult(Timestamp t) const { // patch code with a VALUE_PTR
 
   overlay->patch_code(index, Atom::ValuePointer(overlay->values.size()));
   overlay->values.as_std()->resize(overlay->values.size() + 3);

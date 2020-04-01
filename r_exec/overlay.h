@@ -99,7 +99,7 @@ protected:
   volatile uint32 invalidated; // 32 bit alignment.
   volatile uint32 activated; // 32 bit alignment.
 
-  uint64 tsc;
+  std::chrono::microseconds tsc;
 
   r_code::View *view;
 
@@ -117,7 +117,7 @@ protected:
 public:
   virtual ~Controller();
 
-  uint64 get_tsc() { return tsc; }
+  std::chrono::microseconds get_tsc() { return tsc; }
 
   virtual void invalidate() { invalidated = 1; }
   bool is_invalidated() { return invalidated == 1; };

@@ -98,7 +98,7 @@ private:
 
   CriticalSection mdlCS;
 
-  uint64 thz;
+  std::chrono::microseconds thz;
 
   class MEntry {
   private:
@@ -111,7 +111,7 @@ private:
     MEntry(Code *mdl, bool packed);
 
     P<Code> mdl;
-    uint64 touch_time; // last time the mdl was successfully compared to.
+    Timestamp touch_time; // last time the mdl was successfully compared to.
     uint32 hash_code;
 
     bool match(const MEntry &e) const;
@@ -132,7 +132,7 @@ private:
   MdlSet black_list; // mdls are already packed when inserted (they come from the white list).
   MdlSet white_list; // mdls are packed just before insertion.
 
-  void set_thz(uint64 thz) { this->thz = thz; } // called by _Mem::start(); set to secondary_thz.
+  void set_thz(std::chrono::microseconds thz) { this->thz = thz; } // called by _Mem::start(); set to secondary_thz.
   void trim_objects(); // called by _Mem::GC().
 
   ModelBase();

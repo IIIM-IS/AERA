@@ -106,15 +106,15 @@ protected:
     void load_data(_Fact *evidence);
   public:
     P<_Fact> evidence;
-    uint64 after;
-    uint64 before;
+    Timestamp after;
+    Timestamp before;
     float32 confidence;
 
     EvidenceEntry();
     EvidenceEntry(_Fact *evidence);
     EvidenceEntry(_Fact *evidence, _Fact *payload);
 
-    bool is_too_old(uint64 now) const { return (evidence->is_invalidated() || before < now); }
+    bool is_too_old(Timestamp now) const { return (evidence->is_invalidated() || before < now); }
   };
 
   class PredictedEvidenceEntry : // predicted evidences.
@@ -137,7 +137,7 @@ protected:
 
     E e(evidence);
     cache->CS.enter();
-    uint64 now = Now();
+    auto now = Now();
     r_code::list<E>::const_iterator _e;
     for (_e = cache->evidences.begin(); _e != cache->evidences.end();) {
 
@@ -162,7 +162,7 @@ protected:
   bool is_orphan(); // true when there are tpl args and no requirements: the controller cannot execute anymore.
 
   std::vector<P<HLPController> > controllers; // all controllers for models/states instantiated in the patterns; case of models: [0]==lhs, [1]==rhs.
-  uint64 last_match_time; // last time a match occurred (fwd), regardless of its outcome.
+  Timestamp last_match_time; // last time a match occurred (fwd), regardless of its outcome.
   bool become_invalidated(); // true if one controller is invalidated or if all controllers pointing to this are invalidated.
   virtual void kill_views() {}
   virtual void check_last_match_time(bool match) = 0;

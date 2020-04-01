@@ -142,7 +142,7 @@ template<class I> class Image :
   public I {
   friend class r_comp::Image;
 public:
-  static Image<I> *Build(uint64 timestamp, uint32 map_size, uint32 code_size, uint32 names_size);
+  static Image<I> *Build(Timestamp timestamp, uint32 map_size, uint32 code_size, uint32 names_size);
   // file IO
   static Image<I> *Read(ifstream &stream);
   static void Write(Image<I> *image, ofstream &stream);

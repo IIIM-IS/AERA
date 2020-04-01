@@ -113,7 +113,7 @@ private:
   float32 initial_act;
 
   void init(SyncMode sync,
-    uint64 ijt,
+    Timestamp ijt,
     float32 sln,
     int32 res,
     Code *host,
@@ -140,14 +140,14 @@ public:
   View(View *view, Group *group); // copy the view and assigns it to the group (used for cov); morph ctrl values.
   View(const View *view, bool new_OID = false); // simple copy.
   View(SyncMode sync,
-    uint64 ijt,
+    Timestamp ijt,
     float32 sln,
     int32 res,
     Code *host,
     Code *origin,
     Code *object); // regular view; res set to -1 means forever.
   View(SyncMode sync,
-    uint64 ijt,
+    Timestamp ijt,
     float32 sln,
     int32 res,
     Code *host,

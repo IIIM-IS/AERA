@@ -80,6 +80,7 @@
 #include "mem.h"
 #include "model_base.h"
 
+using namespace std::chrono;
 
 namespace r_exec {
 
@@ -152,7 +153,7 @@ bool TPX::filter(View *input, _Fact *abstracted_input, BindingMap *bm) {
 //std::cout<<" match";
     new_maps.push_back(_bm);
     time_buffer<CInput, CInput::IsInvalidated>::iterator i;
-    uint64 now = Now();
+    auto now = Now();
     for (i = cache.begin(now); i != cache.end(); ++i) {
 
       if (i->injected) {//std::cout<<" ?"<<(*i).input->object->get_oid()<<" ("<<Utils::RelativeTime(i->ijt)<<") skip\n";
@@ -423,7 +424,7 @@ void _TPX::inject_hlps() const {
   auto_focus->inject_hlps(mdls);
 }
 
-void _TPX::inject_hlps(uint64 analysis_starting_time) {
+void _TPX::inject_hlps(Timestamp analysis_starting_time) {
 
   if (auto_focus->decompile_models()) {
 
@@ -438,10 +439,10 @@ void _TPX::inject_hlps(uint64 analysis_starting_time) {
     td->add_objects(tmp);
     td->decompile();
 
-    uint64 analysis_end = Now();
-    uint32 d = analysis_end - analysis_starting_time;
+    auto analysis_end = Now();
+    auto d = duration_cast<microseconds>(analysis_end - analysis_starting_time);
     char _timing[255];
-    itoa(d, _timing, 10);
+    itoa(d.count(), _timing, 10);
     header = Time::ToString_seconds(Now() - Utils::GetTimeReference());
     std::string s0 = (" > ");
     s0 += get_header() + std::string(":production [");
@@ -508,7 +509,7 @@ void GTPX::reduce(r_exec::View *input) { // input->object: f->success.
       return;
   }
 
-  uint64 analysis_starting_time = Now();
+  auto analysis_starting_time = Now();
 
   bool need_guard;
   if (target->get_reference(0)->code(0).asOpcode() == Opcodes::MkVal)
@@ -516,9 +517,9 @@ void GTPX::reduce(r_exec::View *input) { // input->object: f->success.
 
   P<GuardBuilder> guard_builder;
 
-  uint64 period;
-  uint64 lhs_duration;
-  uint64 rhs_duration;
+  microseconds period;
+  microseconds lhs_duration;
+  microseconds rhs_duration;
 
   r_code::list<Input>::const_iterator i;
   for (i = inputs.begin(); i != inputs.end();) {
@@ -551,9 +552,9 @@ void GTPX::reduce(r_exec::View *input) { // input->object: f->success.
 
     guard_builder = new TimingGuardBuilder(period);// TODO: use the durations.
 
-    period = consequent->get_after() - cause.input->get_after();
-    lhs_duration = cause.input->get_before() - cause.input->get_after();
-    rhs_duration = consequent->get_before() - consequent->get_after();
+    period = duration_cast<microseconds>(consequent->get_after() - cause.input->get_after());
+    lhs_duration = duration_cast<microseconds>(cause.input->get_before() - cause.input->get_after());
+    rhs_duration = duration_cast<microseconds>(consequent->get_before() - consequent->get_after());
 
     uint16 cause_index;
     Code *new_cst;
@@ -580,7 +581,7 @@ void GTPX::reduce(r_exec::View *input) { // input->object: f->success.
   }
 }
 
-bool GTPX::build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, uint64 period) {
+bool GTPX::build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, microseconds period) {
 
   P<BindingMap> bm = new BindingMap();
 
@@ -600,7 +601,7 @@ bool GTPX::build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builde
     return false;
 }
 
-bool GTPX::build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, uint64 period, Code *new_cst) {
+bool GTPX::build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, microseconds period, Code *new_cst) {
 
   P<BindingMap> bm = new BindingMap();
 
@@ -651,7 +652,7 @@ void PTPX::reduce(r_exec::View *input) {
 
   auto_focus->copy_cross_buffer(inputs); // the cause of the prediction failure comes before the prediction.
 
-  uint64 analysis_starting_time = Now();
+  auto analysis_starting_time = Now();
 
   _Fact *consequent = new Fact((Fact *)f_imdl); // input->object is the prediction failure: ignore and consider |f->imdl instead.
   consequent->set_opposite();
@@ -671,9 +672,9 @@ void PTPX::reduce(r_exec::View *input) {
   }
 
   P<GuardBuilder> guard_builder;
-  uint64 period;
-  uint64 lhs_duration;
-  uint64 rhs_duration;
+  microseconds period;
+  microseconds lhs_duration;
+  microseconds rhs_duration;
 
   for (i = inputs.begin(); i != inputs.end(); ++i) {
 
@@ -685,9 +686,9 @@ void PTPX::reduce(r_exec::View *input) {
     if (!cause.eligible_cause)
       continue;
 
-    period = consequent->get_after() - cause.input->get_after();
-    lhs_duration = cause.input->get_before() - cause.input->get_after();
-    rhs_duration = consequent->get_before() - consequent->get_after();
+    period = duration_cast<microseconds>(consequent->get_after() - cause.input->get_after());
+    lhs_duration = duration_cast<microseconds>(cause.input->get_before() - cause.input->get_after());
+    rhs_duration = duration_cast<microseconds>(consequent->get_before() - consequent->get_after());
     guard_builder = new TimingGuardBuilder(period); // TODO: use the durations.
 
     uint16 cause_index;
@@ -714,7 +715,7 @@ void PTPX::reduce(r_exec::View *input) {
   }
 }
 
-bool PTPX::build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, uint64 period) {
+bool PTPX::build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, microseconds period) {
 
   P<BindingMap> bm = new BindingMap();
 
@@ -734,7 +735,7 @@ bool PTPX::build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builde
     return false;
 }
 
-bool PTPX::build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, uint64 period, Code *new_cst) {
+bool PTPX::build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, microseconds period, Code *new_cst) {
 
   P<BindingMap> bm = new BindingMap();
 
@@ -789,7 +790,7 @@ void CTPX::signal(r_exec::View *input) {
 
 void CTPX::reduce(r_exec::View *input) {
 
-  uint64 analysis_starting_time = Now();
+  auto analysis_starting_time = Now();
 
   if (!stored_premise)
     inputs.push_back(Input(premise, abstracted_target, target_bindings));
@@ -814,7 +815,7 @@ void CTPX::reduce(r_exec::View *input) {
   else
     need_guard = false;
 
-  uint64 period = Utils::GetTimestamp<Code>(consequent, FACT_AFTER) - Utils::GetTimestamp<Code>(target, FACT_AFTER); // sampling period.
+  auto period = duration_cast<microseconds>(Utils::GetTimestamp<Code>(consequent, FACT_AFTER) - Utils::GetTimestamp<Code>(target, FACT_AFTER)); // sampling period.
   P<GuardBuilder> guard_builder;
 
   for (i = inputs.begin(); i != inputs.end(); ++i) {
@@ -857,14 +858,14 @@ void CTPX::reduce(r_exec::View *input) {
   }
 }
 
-GuardBuilder *CTPX::get_default_guard_builder(_Fact *cause, _Fact *consequent, uint64 period) {
+GuardBuilder *CTPX::get_default_guard_builder(_Fact *cause, _Fact *consequent, microseconds period) {
 
   Code *cause_payload = cause->get_reference(0);
   uint16 opcode = cause_payload->code(0).asOpcode();
   if (opcode == Opcodes::Cmd) {
 
-    uint64 offset = consequent->get_after() - cause->get_after();
-    uint64 cmd_duration = cause->get_before() - cause->get_after();
+    auto offset = duration_cast<microseconds>(consequent->get_after() - cause->get_after());
+    auto cmd_duration = duration_cast<microseconds>(cause->get_before() - cause->get_after());
     return new NoArgCmdGuardBuilder(period, offset, cmd_duration);
   }
 
@@ -875,7 +876,7 @@ GuardBuilder *CTPX::get_default_guard_builder(_Fact *cause, _Fact *consequent, u
 // 0 - q1=q0+cmd_arg (if the cause is a cmd) or q1=q0*cmd_arg with q0!=0.
 // 1 - q1=q0+speed*period, with q1=consequent.value, q0=premise.value, speed=cause.value,
 // 3 - q1=q0+constant or q1=q0*constant with q0!=0.
-GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, uint64 period) {
+GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microseconds period) {
 
   Code *cause_payload = cause->get_reference(0);
   uint16 opcode = cause_payload->code(0).asOpcode();
@@ -919,20 +920,20 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, uint64 p
       float32 q0 = target->get_reference(0)->code(MK_VAL_VALUE).asFloat();
       float32 q1 = consequent->get_reference(0)->code(MK_VAL_VALUE).asFloat();
 
-      float32 searched_for = (q1 - q0) / period;
+      float32 searched_for = (q1 - q0) / period.count();
       if (Utils::Equal(_s, searched_for)) { // form 1.
 
-        uint64 offset = Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target, FACT_AFTER);
+        auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target, FACT_AFTER));
         return new SGuardBuilder(period, period - offset);
       }
 
       if (q0 != 0) { // form 2.
 
-        uint64 offset = Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target, FACT_AFTER);
+        auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target, FACT_AFTER));
         return new MGuardBuilder(period, q1 / q0, offset);
       }
 
-      uint64 offset = Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target, FACT_AFTER);
+      auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target, FACT_AFTER));
       return new AGuardBuilder(period, q1 - q0, offset);
     }
   }
@@ -942,7 +943,7 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, uint64 p
 
 // m0:[premise.value premise.after premise.before][cause->consequent].
 // m1:[icst->imdl m0[...][...]] with icst containing the premise.
-bool CTPX::build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, uint64 period) {
+bool CTPX::build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, microseconds period) {
 
   P<HLPBindingMap> bm = new HLPBindingMap();
   bm->init(target->get_reference(0), MK_VAL_VALUE);
@@ -959,7 +960,7 @@ bool CTPX::build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builde
 
 // m0:[premise.value premise.after premise.before][icst->consequent] with icst containing the cause.
 // m1:[icst->imdl m0[...][...]] with icst containing the premise.
-bool CTPX::build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, uint64 period) {
+bool CTPX::build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, microseconds period) {
 
   P<BindingMap> bm = new BindingMap();
   bm->init(target->get_reference(0), MK_VAL_VALUE);
@@ -974,7 +975,7 @@ bool CTPX::build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, Gua
   return build_requirement(bm, m0, period); // existence checks performed there.
 }
 
-bool CTPX::build_requirement(HLPBindingMap *bm, Code *m0, uint64 period) { // check for mdl existence at the same time (ModelBase::mdlCS-wise).
+bool CTPX::build_requirement(HLPBindingMap *bm, Code *m0, microseconds period) { // check for mdl existence at the same time (ModelBase::mdlCS-wise).
 
   uint16 premise_index;
   Code *new_cst;

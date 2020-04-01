@@ -99,7 +99,7 @@ namespace r_exec {
 class CSTOverlay :
   public HLPOverlay {
 protected:
-  uint64 match_deadline; // before deadline after the last match.
+  Timestamp match_deadline; // before deadline after the last match.
   float32 lowest_cfd; // among the inputs (forward chaining).
 
   std::vector<P<_Fact> > inputs;
@@ -120,7 +120,7 @@ public:
 
   void load_patterns();
 
-  bool can_match(uint64 now) const;
+  bool can_match(Timestamp now) const;
 };
 
 // Backward chaining:
@@ -137,7 +137,7 @@ private:
     Fact *super_goal, // f0->g->f1->icst.
     _Fact *sub_goal_target, // f1.
     Sim *sim,
-    uint64 now,
+    Timestamp now,
     float32 confidence,
     Code *group) const;
 
@@ -153,8 +153,14 @@ public:
   Fact *get_f_ihlp(HLPBindingMap *bindings, bool wr_enabled) const;
   Fact *get_f_icst(HLPBindingMap *bindings, std::vector<P<_Fact> > *inputs) const;
 
-  void inject_icst(Fact *production, float32 confidence, uint64 time_to_live) const; // here, resilience=time to live, in us.
-  bool inject_prediction(Fact *prediction, float32 confidence, uint64 time_to_live) const; // here, resilience=time to live, in us; returns true if the prediction has actually been injected.
+  void inject_icst(Fact *production, float32 confidence, std::chrono::microseconds time_to_live) const; // here, resilience=time to live, in us.
+  void inject_icst(Fact *production, float32 confidence, Timestamp::duration time_to_live) const {
+    inject_icst(production, confidence, std::chrono::duration_cast<std::chrono::microseconds>(time_to_live));
+  }
+  bool inject_prediction(Fact *prediction, float32 confidence, std::chrono::microseconds time_to_live) const; // here, resilience=time to live, in us; returns true if the prediction has actually been injected.
+  bool inject_prediction(Fact *prediction, float32 confidence, Timestamp::duration time_to_live) const {
+    return inject_prediction(prediction, confidence, std::chrono::duration_cast<std::chrono::microseconds>(time_to_live));
+  }
 
   void set_secondary_host(Group *host);
   Group *get_secondary_host() const;

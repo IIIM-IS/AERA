@@ -84,9 +84,10 @@
 
 //#define DECOMPILE_ONE_BY_ONE
 
+using namespace std::chrono;
 using namespace r_comp;
 
-r_exec::View *build_view(uint64 time, Code* rstdin) { // this is application dependent WRT view->sync.
+r_exec::View *build_view(Timestamp time, Code* rstdin) { // this is application dependent WRT view->sync.
 
   r_exec::View *view = new r_exec::View();
   const uint32 arity = VIEW_ARITY; // reminder: opcode not included in the arity.
@@ -141,13 +142,13 @@ void test_injection(r_exec::_Mem *mem, float32 n) {
   // v3.reserve(n);
   // v4.reserve(n);
 
-  uint64 t0 = r_exec::Now();
+  auto t0 = r_exec::Now();
 
   for (float32 i = 0; i < n; ++i) {
     // tt1 = r_exec::Now();
     Code* object = make_object(mem, rstdin, i);
 
-    uint64 now = r_exec::Now();
+    auto now = r_exec::Now();
     // v1.push_back(now - tt1);
 
             // Build a fact.
@@ -169,9 +170,9 @@ void test_injection(r_exec::_Mem *mem, float32 n) {
     // v4.push_back(r_exec::Now() - tt4);
   }
 
-  uint64 t1 = r_exec::Now();
-  uint64 t2 = t1 - t0;
-  std::cout << "for-loop total time: " << t2 << std::endl;
+  auto t1 = r_exec::Now();
+  auto t2 = t1 - t0;
+  std::cout << "for-loop total time: " << duration_cast<microseconds>(t2).count() << std::endl;
   /* uint64 acc=0;
       for(uint32 i=0;i<n;++i){
           acc+=v1[i];
@@ -200,20 +201,20 @@ void test_injection(r_exec::_Mem *mem, float32 n) {
   */
 }
 
-void test_many_injections(r_exec::_Mem *mem, uint32 sampling_period_ms, uint32 nRuns, float32 nObjects) {
+void test_many_injections(r_exec::_Mem *mem, milliseconds sampling_period, uint32 nRuns, float32 nObjects) {
   for (; nRuns; --nRuns) {
-    uint64 start = r_exec::Now();
+    auto start = r_exec::Now();
     std::cout << nRuns << '\t';
     test_injection(mem, nObjects);
-    uint64 taken_ms = (r_exec::Now() - start) / 1000;
-    if (taken_ms > sampling_period_ms)
+    auto taken = r_exec::Now() - start;
+    if (taken > sampling_period)
       std::cout << "Good grief! I exceeded the sampling period!" << std::endl;
     else
-      Thread::Sleep(sampling_period_ms - taken_ms);
+      Thread::Sleep(sampling_period - taken);
   }
 }
 
-void decompile(Decompiler &decompiler, r_comp::Image *image, uint64 time_offset, bool ignore_named_objects) {
+void decompile(Decompiler &decompiler, r_comp::Image *image, Timestamp::duration time_offset, bool ignore_named_objects) {
 
 #ifdef DECOMPILE_ONE_BY_ONE
   uint32 object_count = decompiler.decompile_references(image);
@@ -243,7 +244,7 @@ void decompile(Decompiler &decompiler, r_comp::Image *image, uint64 time_offset,
 #endif
 }
 
-void write_to_file(r_comp::Image *image, std::string &image_path, Decompiler *decompiler, uint64 time_offset) {
+void write_to_file(r_comp::Image *image, std::string &image_path, Decompiler *decompiler, Timestamp::duration time_offset) {
 
   ofstream output(image_path.c_str(), ios::binary | ios::out);
   r_code::Image<r_code::ImageImpl> *i = image->serialize<r_code::Image<r_code::ImageImpl> >();
@@ -295,7 +296,7 @@ int32 main(int argc, char **argv) {
       return 2;
   }
 
-  srand(r_exec::Now());
+  srand(duration_cast<microseconds>(r_exec::Now().time_since_epoch()).count());
   Random::Init();
 
   std::string error;
@@ -323,21 +324,21 @@ int32 main(int argc, char **argv) {
     r_code::vector<r_code::Code *> ram_objects;
     r_exec::Seed.get_objects(mem, ram_objects);
 
-    mem->init(settings.base_period,
+    mem->init(microseconds(settings.base_period),
       settings.reduction_core_count,
       settings.time_core_count,
       settings.mdl_inertia_sr_thr,
       settings.mdl_inertia_cnt_thr,
       settings.tpx_dsr_thr,
-      settings.min_sim_time_horizon,
-      settings.max_sim_time_horizon,
+      microseconds(settings.min_sim_time_horizon),
+      microseconds(settings.max_sim_time_horizon),
       settings.sim_time_horizon_factor,
-      settings.tpx_time_horizon,
-      settings.perf_sampling_period,
+      microseconds(settings.tpx_time_horizon),
+      microseconds(settings.perf_sampling_period),
       settings.float_tolerance,
-      settings.time_tolerance,
-      settings.primary_thz,
-      settings.secondary_thz,
+      microseconds(settings.time_tolerance),
+      seconds(settings.primary_thz),
+      seconds(settings.secondary_thz),
       settings.debug,
       settings.ntf_mk_resilience,
       settings.goal_pred_success_resilience,
@@ -364,15 +365,15 @@ int32 main(int argc, char **argv) {
 
     if (!mem->load(ram_objects.as_std(), stdin_oid, stdout_oid, self_oid))
       return 4;
-    uint64 starting_time = mem->start();
+    auto starting_time = mem->start();
 
     if (settings.reduction_core_count == 0 && settings.time_core_count == 0) {
       std::cout << "> running for " << settings.run_time << " ms in diagnostic time\n\n";
-      mem->runInDiagnosticTime(settings.run_time);
+      mem->runInDiagnosticTime(milliseconds(settings.run_time));
     }
     else {
       std::cout << "> running for " << settings.run_time << " ms\n\n";
-      Thread::Sleep(settings.run_time);
+      Thread::Sleep(milliseconds(settings.run_time));
     }
 
     /*Thread::Sleep(settings.run_time/2);
@@ -393,7 +394,7 @@ int32 main(int argc, char **argv) {
       image->object_names.symbols = r_exec::Seed.object_names.symbols;
 
       if (settings.write_objects)
-        write_to_file(image, settings.objects_path, settings.test_objects ? &decompiler : NULL, starting_time);
+        write_to_file(image, settings.objects_path, settings.test_objects ? &decompiler : NULL, starting_time.time_since_epoch());
 
       if (settings.decompile_objects && (!settings.write_objects || !settings.test_objects)) {
 
@@ -403,12 +404,12 @@ int32 main(int argc, char **argv) {
           outfile.open(settings.decompilation_file_path.c_str(), std::ios_base::trunc);
           std::streambuf *coutbuf = std::cout.rdbuf(outfile.rdbuf());
 
-          decompile(decompiler, image, starting_time, settings.ignore_named_objects);
+          decompile(decompiler, image, starting_time.time_since_epoch(), settings.ignore_named_objects);
 
           std::cout.rdbuf(coutbuf);
           outfile.close();
         } else
-          decompile(decompiler, image, starting_time, settings.ignore_named_objects);
+          decompile(decompiler, image, starting_time.time_since_epoch(), settings.ignore_named_objects);
       }
       delete image;
       //std::cout<<"get_image(): "<<probe.us()<<"us"<<std::endl;
@@ -422,7 +423,7 @@ int32 main(int argc, char **argv) {
       image->object_names.symbols = r_exec::Seed.object_names.symbols;
 
       if (settings.write_models)
-        write_to_file(image, settings.models_path, settings.test_models ? &decompiler : NULL, starting_time);
+        write_to_file(image, settings.models_path, settings.test_models ? &decompiler : NULL, starting_time.time_since_epoch());
 
       if (settings.decompile_models && (!settings.write_models || !settings.test_models)) {
 
@@ -432,12 +433,12 @@ int32 main(int argc, char **argv) {
           outfile.open(argv[2], std::ios_base::trunc);
           std::streambuf *coutbuf = std::cout.rdbuf(outfile.rdbuf());
 
-          decompile(decompiler, image, starting_time, settings.ignore_named_models);
+          decompile(decompiler, image, starting_time.time_since_epoch(), settings.ignore_named_models);
 
           std::cout.rdbuf(coutbuf);
           outfile.close();
         } else
-          decompile(decompiler, image, starting_time, settings.ignore_named_models);
+          decompile(decompiler, image, starting_time.time_since_epoch(), settings.ignore_named_models);
       }
       delete image;
       //std::cout<<"get_models(): "<<probe.us()<<"us"<<std::endl;

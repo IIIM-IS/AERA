@@ -80,7 +80,7 @@
 
 namespace r_code {
 
-template<class I> Image<I> *Image<I>::Build(uint64 timestamp, uint32 map_size, uint32 code_size, uint32 names_size) {
+template<class I> Image<I> *Image<I>::Build(Timestamp timestamp, uint32 map_size, uint32 code_size, uint32 names_size) {
 
   I *image = new(map_size + code_size) I(timestamp, map_size, code_size, names_size);
   return (Image<I> *)image;
@@ -88,7 +88,7 @@ template<class I> Image<I> *Image<I>::Build(uint64 timestamp, uint32 map_size, u
 
 template<class I> Image<I> *Image<I>::Read(ifstream &stream) {
 
-  uint64 timestamp;
+  Timestamp timestamp;
   uint32 map_size;
   uint32 code_size;
   uint32 names_size;
@@ -103,7 +103,7 @@ template<class I> Image<I> *Image<I>::Read(ifstream &stream) {
 
 template<class I> void Image<I>::Write(Image<I> *image, ofstream &stream) {
 
-  uint64 timestamp = image->timestamp();
+  Timestamp timestamp = image->timestamp();
   uint32 map_size = image->map_size();
   uint32 code_size = image->code_size();
   uint32 names_size = image->names_size();

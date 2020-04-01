@@ -98,7 +98,7 @@ public:
   ~PMonitor();
 
   bool reduce(_Fact *input);
-  void update(uint64 &next_target);
+  void update(Timestamp &next_target);
 };
 }
 

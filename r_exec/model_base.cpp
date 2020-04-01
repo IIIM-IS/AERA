@@ -78,6 +78,7 @@
 #include "model_base.h"
 #include "mem.h"
 
+using namespace std::chrono;
 
 namespace r_exec {
 
@@ -160,7 +161,7 @@ bool ModelBase::MEntry::Match(Code *lhs, Code *rhs) {
   return true;
 }
 
-ModelBase::MEntry::MEntry() : mdl(NULL), touch_time(0), hash_code(0) {
+ModelBase::MEntry::MEntry() : mdl(NULL), touch_time(seconds(0)), hash_code(0) {
 }
 
 ModelBase::MEntry::MEntry(Code *mdl, bool packed) : mdl(mdl), touch_time(Now()), hash_code(ComputeHashCode(mdl, packed)) {
@@ -212,7 +213,7 @@ ModelBase::ModelBase() {
 void ModelBase::trim_objects() {
 
   mdlCS.enter();
-  uint64 now = Now();
+  auto now = Now();
   MdlSet::iterator m;
   for (m = black_list.begin(); m != black_list.end();) {
 

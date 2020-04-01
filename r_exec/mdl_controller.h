@@ -152,7 +152,7 @@ protected:
     RequirementEntry();
     RequirementEntry(_Fact *f_p_f_imdl, MDLController *c, bool chaining_was_allowed); // f_imdl is f0 as in f0->pred->f1->imdl.
 
-    bool is_out_of_range(uint64 now) const { return (before<now || after>now); }
+    bool is_out_of_range(Timestamp now) const { return (before<now || after>now); }
   };
 
   class RequirementCache {
@@ -200,7 +200,7 @@ protected:
   template<class E> void reduce_cache(Cache<E> *cache, Fact *f_p_f_imdl, MDLController *controller) {
 
     cache->CS.enter();
-    uint64 now = Now();
+    auto now = Now();
     r_code::list<E>::const_iterator _e;
     for (_e = cache->evidences.begin(); _e != cache->evidences.end();) {
 
@@ -262,7 +262,7 @@ protected:
 
   bool monitor_goals(_Fact *input);
 
-  uint64 get_sim_thz(uint64 now, uint64 deadline) const;
+  std::chrono::microseconds get_sim_thz(Timestamp now, Timestamp deadline) const;
 
   PMDLController(r_code::View *view);
 public:
@@ -374,7 +374,7 @@ public:
   void store_requirement(_Fact *f_imdl, MDLController *controller, bool chaining_was_allowed, bool simulation);
 
   void predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground);
-  bool inject_prediction(Fact *prediction, Fact *f_imdl, float32 confidence, uint64 time_to_live, Code *mk_rdx) const; // here, resilience=time to live, in us; returns true if the prediction has actually been injected.
+  bool inject_prediction(Fact *prediction, Fact *f_imdl, float32 confidence, Timestamp::duration time_to_live, Code *mk_rdx) const; // here, resilience=time to live, in us; returns true if the prediction has actually been injected.
 
   void register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures);
   void register_req_outcome(Fact *f_pred, bool success, bool rate_failures);

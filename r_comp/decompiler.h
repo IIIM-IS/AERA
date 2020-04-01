@@ -101,7 +101,7 @@ private:
   r_comp::Metadata *metadata;
   r_comp::Image *image;
 
-  uint64 time_offset; // 0 means no offset.
+  std::chrono::microseconds time_offset; // 0 means no offset.
 
   UNORDERED_MAP<uint16, std::string> variable_names; // in the form vxxx where xxx is an integer representing the order of referencing of the variable/label in the code.
   uint16 last_variable_id;
@@ -145,15 +145,15 @@ public:
   void init(r_comp::Metadata *metadata);
   uint32 decompile(r_comp::Image *image,
     std::ostringstream *stream,
-    uint64 time_offset,
+    Timestamp::duration time_offset,
     bool ignore_named_objects); // decompiles the whole image; returns the number of objects.
   uint32 decompile(r_comp::Image *image,
     std::ostringstream *stream,
-    uint64 time_offset,
+    Timestamp::duration time_offset,
     std::vector<SysObject *> &imported_objects); // idem, ignores named objects if in the imported object list.
   uint32 decompile_references(r_comp::Image *image); // initialize a reference table so that objects can be decompiled individually; returns the number of objects.
-  void decompile_object(uint16 object_index, std::ostringstream *stream, uint64 time_offset); // decompiles a single object; object_index is the position of the object in the vector returned by Image::getObject.
-  void decompile_object(const std::string object_name, std::ostringstream *stream, uint64 time_offset); // decompiles a single object given its name: use this function to follow references.
+  void decompile_object(uint16 object_index, std::ostringstream *stream, Timestamp::duration time_offset); // decompiles a single object; object_index is the position of the object in the vector returned by Image::getObject.
+  void decompile_object(const std::string object_name, std::ostringstream *stream, Timestamp::duration time_offset); // decompiles a single object given its name: use this function to follow references.
 };
 }
 

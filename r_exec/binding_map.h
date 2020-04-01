@@ -175,7 +175,7 @@ private:
 public:
   StructureValue(BindingMap *map, const Code *source, uint16 structure_index);
   StructureValue(BindingMap *map, Atom *source, uint16 structure_index);
-  StructureValue(BindingMap *map, uint64 time);
+  StructureValue(BindingMap *map, Timestamp time);
 
   Value *copy(BindingMap *map) const;
   void valuate(Code *destination, uint16 write_index, uint16 &extent_index) const;
@@ -233,7 +233,7 @@ protected:
   int16 fwd_after_index; // tpl args (if any) are located before fwd_after_index.
   int16 fwd_before_index;
 
-  bool match_timings(uint64 stored_after, uint64 stored_before, uint64 after, uint64 before, uint32 destination_after_index, uint32 destination_before_index);
+  bool match_timings(Timestamp stored_after, Timestamp stored_before, Timestamp after, Timestamp before, uint32 destination_after_index, uint32 destination_before_index);
   bool match_fwd_timings(const _Fact *f_object, const _Fact *f_pattern);
   bool match(const Code *object, uint16 o_base_index, uint16 o_index, const Code *pattern, uint16 p_index, uint16 o_arity);
 
@@ -267,8 +267,8 @@ public:
       map[fwd_after_index]->get_code() != NULL; }
   bool has_fwd_before() const { return fwd_before_index >= 0 && map.size() > fwd_before_index &&
       map[fwd_before_index]->get_code() != NULL; }
-  uint64 get_fwd_after() const; // assumes the timings are valuated.
-  uint64 get_fwd_before() const; // idem.
+  Timestamp get_fwd_after() const; // assumes the timings are valuated.
+  Timestamp get_fwd_before() const; // idem.
 
   bool match_object(const Code *object, const Code *pattern);
   bool match_structure(const Code *object, uint16 o_base_index, uint16 o_index, const Code *pattern, uint16 p_index);
@@ -324,8 +324,8 @@ public:
       map[bwd_after_index]->get_code() != NULL; }
   bool has_bwd_before() const { return bwd_before_index >= 0 && map.size() > bwd_before_index &&
       map[bwd_before_index]->get_code() != NULL; }
-  uint64 get_bwd_after() const; // assumes the timings are valuated.
-  uint64 get_bwd_before() const; // idem.
+  Timestamp get_bwd_after() const; // assumes the timings are valuated.
+  Timestamp get_bwd_before() const; // idem.
 };
 }
 

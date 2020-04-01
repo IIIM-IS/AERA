@@ -78,6 +78,7 @@
 #include "decompiler.h"
 #include "../submodules/CoreLibrary/CoreLibrary/utils.h"
 
+using namespace std::chrono;
 
 namespace r_comp {
 
@@ -130,7 +131,7 @@ std::string Decompiler::get_object_name(uint16 index) {
 void Decompiler::init(r_comp::Metadata *metadata) {
 
   this->metadata = metadata;
-  this->time_offset = 0;
+  this->time_offset = microseconds(0);
 
   partial_decompilation = false;
   ignore_named_objects = false;
@@ -164,7 +165,7 @@ void Decompiler::init(r_comp::Metadata *metadata) {
   }
 }
 
-uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, uint64 time_offset, bool ignore_named_objects) {
+uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, Timestamp::duration time_offset, bool ignore_named_objects) {
 
   this->ignore_named_objects = ignore_named_objects;
 
@@ -176,7 +177,7 @@ uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, u
   return object_count;
 }
 
-uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, uint64 time_offset, std::vector<SysObject *> &imported_objects) {
+uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, Timestamp::duration time_offset, std::vector<SysObject *> &imported_objects) {
 
   partial_decompilation = true;
   ignore_named_objects = true;
@@ -235,7 +236,7 @@ uint32 Decompiler::decompile_references(r_comp::Image *image) {
   return image->code_segment.objects.size();
 }
 
-void Decompiler::decompile_object(uint16 object_index, std::ostringstream *stream, uint64 time_offset) {
+void Decompiler::decompile_object(uint16 object_index, std::ostringstream *stream, Timestamp::duration time_offset) {
 
   if (!out_stream)
     out_stream = new OutStream(stream);
@@ -245,7 +246,7 @@ void Decompiler::decompile_object(uint16 object_index, std::ostringstream *strea
     out_stream = new OutStream(stream);
   }
 
-  this->time_offset = time_offset;
+  this->time_offset = duration_cast<microseconds>(time_offset);
 
   variable_names.clear();
   last_variable_id = 0;
@@ -312,7 +313,7 @@ void Decompiler::decompile_object(uint16 object_index, std::ostringstream *strea
   write_indent(0);
 }
 
-void Decompiler::decompile_object(const std::string object_name, std::ostringstream *stream, uint64 time_offset) {
+void Decompiler::decompile_object(const std::string object_name, std::ostringstream *stream, Timestamp::duration time_offset) {
 
   decompile_object(object_indices[object_name], stream, time_offset);
 }
@@ -789,8 +790,8 @@ void Decompiler::write_any(uint16 read_index, bool &after_tail_wildcard, bool ap
       else {
 
         Atom first = current_object->code[index + 1];
-        uint64 ts = Utils::GetTimestamp(&current_object->code[index]);
-        if (!in_hlp && ts > 0 && apply_time_offset)
+        auto ts = Utils::GetMicrosecondsSinceEpoch(&current_object->code[index]);
+        if (!in_hlp && ts.count() > 0 && apply_time_offset)
           ts -= time_offset;
         out_stream->push(Time::ToString_seconds(ts), read_index);
       }

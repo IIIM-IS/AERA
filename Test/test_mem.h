@@ -130,7 +130,7 @@ protected:
    * @return The created View.
    */
   r_exec::View* injectMarkerValue
-  (Code* obj, Code* prop, Atom val, uint64 after, uint64 before,
+  (Code* obj, Code* prop, Atom val, Timestamp after, Timestamp before,
     r_exec::View::SyncMode syncMode, Code* group);
 
   /**
@@ -140,7 +140,7 @@ protected:
    * @return The created View.
    */
   r_exec::View* injectMarkerValue
-  (Code* obj, Code* prop, Atom val, uint64 after, uint64 before,
+  (Code* obj, Code* prop, Atom val, Timestamp after, Timestamp before,
     r_exec::View::SyncMode syncMode)
   {
     return injectMarkerValue(obj, prop, val, after, before, syncMode, get_stdin());
@@ -153,7 +153,7 @@ protected:
    * @return The created View.
    */
   r_exec::View* injectMarkerValue
-  (Code* obj, Code* prop, Atom val, uint64 after, uint64 before, Code* group)
+  (Code* obj, Code* prop, Atom val, Timestamp after, Timestamp before, Code* group)
   {
     return injectMarkerValue
     (obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, group);
@@ -166,7 +166,7 @@ protected:
    * @return The created View.
    */
   r_exec::View* injectMarkerValue
-  (Code* obj, Code* prop, Atom val, uint64 after, uint64 before)
+  (Code* obj, Code* prop, Atom val, Timestamp after, Timestamp before)
   {
     return injectMarkerValue
     (obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, get_stdin());
@@ -179,7 +179,7 @@ protected:
    * @return The created View.
    */
   r_exec::View* injectMarkerValue
-  (Code* obj, Code* prop, Code* val, uint64 after, uint64 before,
+  (Code* obj, Code* prop, Code* val, Timestamp after, Timestamp before,
     r_exec::View::SyncMode syncMode, Code* group);
 
   /**
@@ -189,7 +189,7 @@ protected:
    * @return The created View.
    */
   r_exec::View* injectMarkerValue
-  (Code* obj, Code* prop, Code* val, uint64 after, uint64 before,
+  (Code* obj, Code* prop, Code* val, Timestamp after, Timestamp before,
     r_exec::View::SyncMode syncMode)
   {
     return injectMarkerValue(obj, prop, val, after, before, syncMode, get_stdin());
@@ -202,7 +202,7 @@ protected:
    * @return The created View.
    */
   r_exec::View* injectMarkerValue
-  (Code* obj, Code* prop, Code* val, uint64 after, uint64 before, Code* group)
+  (Code* obj, Code* prop, Code* val, Timestamp after, Timestamp before, Code* group)
   {
     return injectMarkerValue
     (obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, group);
@@ -215,7 +215,7 @@ protected:
    * @return The created View.
    */
   r_exec::View* injectMarkerValue
-  (Code* obj, Code* prop, Code* val, uint64 after, uint64 before)
+  (Code* obj, Code* prop, Code* val, Timestamp after, Timestamp before)
   {
     return injectMarkerValue
     (obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, get_stdin());
@@ -227,14 +227,14 @@ protected:
    * @return The created View.
    */
   r_exec::View* injectFact
-  (Code* object, uint64 after, uint64 before, r_exec::View::SyncMode syncMode,
+  (Code* object, Timestamp after, Timestamp before, r_exec::View::SyncMode syncMode,
     Code* group);
 
   /**
    * Inject (fact object after before 1 1)
    * [SYNC_PERIODIC after 1 1 group nil]
    */
-  r_exec::View* injectFact(Code* object, uint64 after, uint64 before, Code* group) {
+  r_exec::View* injectFact(Code* object, Timestamp after, Timestamp before, Code* group) {
     return injectFact
     (object, after, before, r_exec::View::SYNC_PERIODIC, group);
   }
@@ -254,7 +254,7 @@ protected:
   static thread_ret thread_function_call timeTickRun(void *args);
 
   Thread* timeTickThread_;
-  uint64 lastInjectTime_;
+  Timestamp lastInjectTime_;
   float speed_y_;
   float position_y_;
   Code* position_y_obj_;
@@ -265,7 +265,7 @@ protected:
   uint16 set_speed_y_opcode_;
   uint16 move_y_plus_opcode_;
   uint16 move_y_minus_opcode_;
-  uint64 lastCommandTime_;
+  Timestamp lastCommandTime_;
 
   Code* yEnt_[10];
   Code* discretePositionObj_;

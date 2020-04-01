@@ -79,6 +79,7 @@
 
 #include <iostream>
 
+using namespace std::chrono;
 
 namespace r_comp {
 
@@ -449,7 +450,7 @@ uint32 ObjectNames::get_size() {
 
 ////////////////////////////////////////////////////////////////
 
-Image::Image() : map_offset(0), timestamp(0) {
+Image::Image() : map_offset(0), timestamp(seconds(0)) {
 }
 
 Image::~Image() {

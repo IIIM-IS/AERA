@@ -159,10 +159,10 @@ void PGMController::reduce(r_exec::View *input) {
   uint32 oid = input->object->get_oid();
   //uint64 t=Now()-Utils::GetTimeReference();
   //std::cout<<Time::ToString_seconds(t)<<" got "<<oid<<" "<<input->get_sync()<<std::endl;
-  if (tsc > 0) {
+  if (tsc.count() > 0) {
 
     reductionCS.enter();
-    uint64 now = Now(); // call must be located after the CS.enter() since (*o)->reduce() may update (*o)->birth_time.
+    auto now = Now(); // call must be located after the CS.enter() since (*o)->reduce() may update (*o)->birth_time.
     //uint64 t=now-Utils::GetTimeReference();
     for (o = overlays.begin(); o != overlays.end();) {
 
@@ -170,8 +170,8 @@ void PGMController::reduce(r_exec::View *input) {
         o = overlays.erase(o);
       else {
 
-        uint64 birth_time = ((PGMOverlay *)*o)->get_birth_time();
-        if (birth_time > 0 && now - birth_time > tsc) {
+        auto  birth_time = ((PGMOverlay *)*o)->get_birth_time();
+        if (birth_time.time_since_epoch().count() > 0 && now - birth_time > tsc) {
           //std::cout<<Time::ToString_seconds(t)<<" kill "<<std::hex<<(void *)*o<<std::dec<<" born: "<<Time::ToString_seconds(birth_time-Utils::GetTimeReference())<<" after "<<Time::ToString_seconds(now-birth_time)<<std::endl;
           //std::cout<<std::hex<<(void *)*o<<std::dec<<" ------------kill "<<input->object->get_oid()<<" ignored "<<std::endl;
           o = overlays.erase(o);
@@ -292,7 +292,8 @@ void AntiPGMController::push_new_signaling_job() {
     host->get_c_sln() > host->get_c_sln_thr()) { // c-salient group.
 
     host->leave();
-    TimeJob *next_job = new AntiPGMSignalingJob((r_exec::View*)view, Now() + Utils::GetTimestamp<Code>(getObject(), IPGM_TSC));
+    // The time scope is stored as a timestamp, but it is actually a duration.
+    TimeJob *next_job = new AntiPGMSignalingJob((r_exec::View*)view, Now() + Utils::GetTimestamp<Code>(getObject(), IPGM_TSC).time_since_epoch());
     _Mem::Get()->pushTimeJob(next_job);
   } else
     host->leave();

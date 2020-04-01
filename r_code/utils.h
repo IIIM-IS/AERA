@@ -107,26 +107,28 @@ class Code;
 
 class dll_export Utils {
 private:
-  static uint64 TimeReference; // starting time.
-  static uint32 BasePeriod;
+  static Timestamp TimeReference; // starting time.
+  static std::chrono::microseconds BasePeriod;
   static float32 FloatTolerance;
-  static uint32 TimeTolerance;
+  static std::chrono::microseconds TimeTolerance;
 public:
-  static uint64 GetTimeReference();
-  static uint32 GetBasePeriod();
+  static Timestamp GetTimeReference();
+  static std::chrono::microseconds GetBasePeriod();
   static uint32 GetFloatTolerance();
-  static uint32 GetTimeTolerance();
-  static void SetReferenceValues(uint32 base_period, float32 float_tolerance, uint32 time_tolerance);
-  static void SetTimeReference(uint64 time_reference);
+  static std::chrono::microseconds GetTimeTolerance();
+  static void SetReferenceValues(std::chrono::microseconds base_period, float32 float_tolerance, std::chrono::microseconds time_tolerance);
+  static void SetTimeReference(Timestamp time_reference);
 
   static bool Equal(float32 l, float32 r);
-  static bool Synchronous(uint64 l, uint64 r);
+  static bool Synchronous(Timestamp l, Timestamp r);
 
-  static uint64 GetTimestamp(const Atom *iptr);
-  static void SetTimestamp(Atom *iptr, uint64 t);
-  static void SetTimestamp(Code *object, uint16 index, uint64 t); // allocates atoms.
+  static Timestamp GetTimestamp(const Atom *iptr);
+  static std::chrono::microseconds GetMicrosecondsSinceEpoch(const Atom *iptr) { 
+    return std::chrono::duration_cast<std::chrono::microseconds>(GetTimestamp(iptr).time_since_epoch()); 
+  }
+  static void SetTimestamp(Atom *iptr, Timestamp t);
+  static void SetTimestamp(Code *object, uint16 index, Timestamp t); // allocates atoms.
 
-  static const uint64 MaxTime = 0xFFFFFFFFFFFFFFFF;
   static const uint64 MaxTHZ = 0xFFFFFFFF;
 
   template<class O> static bool HasTimestamp(const O *object, uint16 index) {
@@ -135,15 +137,16 @@ public:
     uint16 t_index = object->code(index).asIndex();
     return object->code_size() > t_index + 2;
   }
-  template<class O> static uint64 GetTimestamp(const O *object, uint16 index) {
+  template<class O> static Timestamp GetTimestamp(const O *object, uint16 index) {
 
     uint16 t_index = object->code(index).asIndex();
     uint64 high = object->code(t_index + 1).atom;
-    return high << 32 | object->code(t_index + 2).atom;
+    return Timestamp(std::chrono::microseconds(high << 32 | object->code(t_index + 2).atom));
   }
 
-  template<class O> static void SetTimestamp(O *object, uint16 index, uint64 t) {
+  template<class O> static void SetTimestamp(O *object, uint16 index, Timestamp timestamp) {
 
+    uint64 t = std::chrono::duration_cast<std::chrono::microseconds>(timestamp.time_since_epoch()).count();
     uint16 t_index = object->code(index).asIndex();
     object->code(t_index) = Atom::Timestamp();
     object->code(t_index + 1).atom = t >> 32;
@@ -187,11 +190,18 @@ public:
       object->code(++s_index) = _st;
   }
 
-  static int32 GetResilience(uint64 now, uint64 time_to_live, uint64 upr); // ttl: us, upr: us.
+  static int32 GetResilience(Timestamp now, std::chrono::microseconds time_to_live, uint64 upr); // ttl: us, upr: us.
+  static int32 GetResilience(Timestamp now, Timestamp::duration time_to_live, uint64 upr) {
+    return GetResilience(now, std::chrono::duration_cast<std::chrono::microseconds>(time_to_live), upr);
+  }
   static int32 GetResilience(float32 resilience, float32 origin_upr, float32 destination_upr); // express the res in destination group, given the res in origin group.
 
-  static std::string RelativeTime(uint64 t);
+  static std::string RelativeTime(Timestamp t);
 };
+
+// Timestamp is int64, not uint64. So use the max signed value.
+const Timestamp Utils_MaxTime(std::chrono::microseconds(0x7FFFFFFFFFFFFFFF));
+
 }
 
 

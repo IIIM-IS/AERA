@@ -113,7 +113,7 @@ public:
   Atom &operator [](uint16 i) const { return implementation->get_atom(i); }
 
   uint16 setAtomicResult(Atom a) const { return implementation->setAtomicResult(a); }
-  uint16 setTimestampResult(uint64 t) const { return implementation->setTimestampResult(t); }
+  uint16 setTimestampResult(Timestamp t) const { return implementation->setTimestampResult(t); }
   uint16 setCompoundResultHead(Atom a) const { return implementation->setCompoundResultHead(a); }
   uint16 addCompoundResultPart(Atom a) const { return implementation->addCompoundResultPart(a); }
 
