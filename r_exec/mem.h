@@ -245,7 +245,7 @@ public:
 
     if (debug)
       return goal_pred_success_res;
-    if (time_to_live = 0)
+    if (time_to_live.count() == 0)
       return 1;
     return Utils::GetResilience(now, time_to_live, host->get_upr());
   }
