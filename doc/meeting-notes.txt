@@ -189,9 +189,18 @@
     PrimaryMDLController::abduce:1623 divides this by 2 and subtracts min_sim_thz again.
   * GMonitor::commit:217 bindings belongs to top model, but abduce called on another model - mismatch.
 
+2020-04-02
+* DONE. Review/merge std::chrono https://github.com/IIIM-IS/CoreLibrary/pull/5 and https://github.com/IIIM-IS/replicode/pull/71
+* DONE. Review/merge pull request for GMonitor sim_thz https://github.com/IIIM-IS/replicode/pull/72
+* DONE. Review/merge pull request for if (time_to_live = 0) https://github.com/IIIM-IS/replicode/pull/73
+* DONE. Review/merge pull request for Sim sol_before https://github.com/IIIM-IS/replicode/pull/74
+* DONE. Review/merge pull request for converting primary_thz https://github.com/IIIM-IS/replicode/pull/75
+
 TODO
-* Pull request to rename thz variables with _duration or _timestamp, and use chrono::microseconds or time_point.
+* Pull request to rename thz variables with _duration or _timestamp.
+* Pull request to rename member variables with a trailing underscore.
 * Look at the version of Replicode from Eric's laptop. Is it v1.2? v1.1? Or some intermediate with simulation implemented?
+* Document methods, starting with those related to the simulator.
 * If min_sim_time_horizon > 0, how is the behavior different?
 * In babbling, issue a goal for a position, an "unrelated" speed_x, and move the position there. Is GTPX invoked?
 * Abduce a goal more in the future than the next sampling period. (Need simulation.)
