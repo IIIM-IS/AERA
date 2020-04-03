@@ -233,7 +233,7 @@ public:
     return std::chrono::microseconds((int64)(horizon.count() * sim_time_horizon_factor)); 
   }
   std::chrono::microseconds get_sim_time_horizon(Timestamp::duration horizon) const { 
-    return std::chrono::duration_cast<std::chrono::microseconds>(horizon);
+    return get_sim_time_horizon(std::chrono::duration_cast<std::chrono::microseconds>(horizon));
   }
   std::chrono::microseconds get_tpx_time_horizon() const { return tpx_time_horizon; }
   std::chrono::microseconds get_primary_thz() const { return primary_thz; }
