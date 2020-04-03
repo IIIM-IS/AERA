@@ -135,8 +135,8 @@ void _Mem::init(microseconds base_period,
   this->perf_sampling_period = perf_sampling_period;
   this->float_tolerance = float_tolerance;
   this->time_tolerance = time_tolerance;
-  this->primary_thz = primary_thz * 1000000;
-  this->secondary_thz = secondary_thz * 1000000;
+  this->primary_thz = primary_thz;
+  this->secondary_thz = secondary_thz;
 
   this->debug = debug;
   if (debug)
