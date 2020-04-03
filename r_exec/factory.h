@@ -198,7 +198,7 @@ private:
 public:
   Sim(Sim *s); // is_requirement=false (not copied).
   Sim(SimMode mode, std::chrono::microseconds thz, Fact *super_goal, bool opposite, Controller *root); // use for SIM_ROOT.
-  Sim(SimMode mode, std::chrono::microseconds thz, Fact *super_goal, bool opposite, Controller *root, Controller *sol, float32 sol_cfd, Timestamp sol_deadline); // USE for SIM_MANDATORY or SIM_OPTIONAL.
+  Sim(SimMode mode, std::chrono::microseconds thz, Fact *super_goal, bool opposite, Controller *root, Controller *sol, float32 sol_cfd, Timestamp sol_before); // USE for SIM_MANDATORY or SIM_OPTIONAL.
 
   void invalidate();
   bool is_invalidated();
