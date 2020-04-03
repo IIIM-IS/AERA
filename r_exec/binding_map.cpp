@@ -79,6 +79,7 @@
 #include "binding_map.h"
 #include "factory.h"
 
+using namespace std::chrono;
 
 namespace r_exec {
 
@@ -226,7 +227,7 @@ StructureValue::StructureValue(BindingMap *map, Atom *source, uint16 structure_i
     structure->code(i) = source[structure_index + i];
 }
 
-StructureValue::StructureValue(BindingMap *map, uint64 time) : BoundValue(map) {
+StructureValue::StructureValue(BindingMap *map, Timestamp time) : BoundValue(map) {
 
   structure = new r_code::LObject();
   structure->resize_code(3);
@@ -703,7 +704,7 @@ void BindingMap::reset_fwd_timings(_Fact *reference_fact) { // valuate at after_
     map[fwd_before_index] = new StructureValue(this, reference_fact, reference_fact->code(FACT_BEFORE).asIndex());
 }
 
-bool BindingMap::match_timings(uint64 stored_after, uint64 stored_before, uint64 after, uint64 before, uint32 destination_after_index, uint32 destination_before_index) {
+bool BindingMap::match_timings(Timestamp stored_after, Timestamp stored_before, Timestamp after, Timestamp before, uint32 destination_after_index, uint32 destination_before_index) {
 
   if (stored_after <= after) {
 
@@ -768,12 +769,12 @@ MatchResult BindingMap::match_fwd_lenient(const _Fact *f_object, const _Fact *f_
     return MATCH_FAILURE;
 }
 
-uint64 BindingMap::get_fwd_after() const {
+Timestamp BindingMap::get_fwd_after() const {
 
   return Utils::GetTimestamp(map[fwd_after_index]->get_code());
 }
 
-uint64 BindingMap::get_fwd_before() const {
+Timestamp BindingMap::get_fwd_before() const {
 
   return Utils::GetTimestamp(map[fwd_before_index]->get_code());
 }
@@ -1052,7 +1053,7 @@ Fact *HLPBindingMap::build_f_ihlp(Code *hlp, uint16 opcode, bool wr_enabled) con
   ihlp->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(wr_enabled);
   ihlp->code(I_HLP_ARITY) = Atom::Float(1); // psln_thr.
 
-  Fact *f_ihlp = new Fact(ihlp, 0, 0, 1, 1);
+  Fact *f_ihlp = new Fact(ihlp, Timestamp(seconds(0)), Timestamp(seconds(0)), 1, 1);
   extent_index = FACT_ARITY + 1;
   map[fwd_after_index]->valuate(f_ihlp, FACT_AFTER, extent_index);
   map[fwd_before_index]->valuate(f_ihlp, FACT_BEFORE, extent_index);
@@ -1178,12 +1179,12 @@ MatchResult HLPBindingMap::match_bwd_lenient(const _Fact *f_object, const _Fact 
     return MATCH_FAILURE;
 }
 
-uint64 HLPBindingMap::get_bwd_after() const {
+Timestamp HLPBindingMap::get_bwd_after() const {
 
   return Utils::GetTimestamp(map[bwd_after_index]->get_code());
 }
 
-uint64 HLPBindingMap::get_bwd_before() const {
+Timestamp HLPBindingMap::get_bwd_before() const {
 
   return Utils::GetTimestamp(map[bwd_before_index]->get_code());
 }

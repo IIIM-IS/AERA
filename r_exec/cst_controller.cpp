@@ -79,10 +79,11 @@
 #include "mem.h"
 #include "hlp_context.h"
 
+using namespace std::chrono;
 
 namespace r_exec {
 
-CSTOverlay::CSTOverlay(Controller *c, HLPBindingMap *bindings) : HLPOverlay(c, bindings), match_deadline(0), lowest_cfd(1) {
+CSTOverlay::CSTOverlay(Controller *c, HLPBindingMap *bindings) : HLPOverlay(c, bindings), match_deadline(Timestamp(seconds(0))), lowest_cfd(1) {
 }
 
 CSTOverlay::CSTOverlay(const CSTOverlay *original) : HLPOverlay(original->controller, original->bindings) {
@@ -109,9 +110,9 @@ void CSTOverlay::load_patterns() {
   }
 }
 
-bool CSTOverlay::can_match(uint64 now) const { // to reach inputs until a given thz in the past, return now<deadline+thz.
+bool CSTOverlay::can_match(Timestamp now) const { // to reach inputs until a given thz in the past, return now<deadline+thz.
 
-  if (match_deadline == 0)
+  if (match_deadline.time_since_epoch().count() == 0)
     return true;
   return now <= match_deadline;
 }
@@ -119,14 +120,14 @@ bool CSTOverlay::can_match(uint64 now) const { // to reach inputs until a given 
 void CSTOverlay::inject_production() {
 
   Fact *f_icst = ((CSTController *)controller)->get_f_icst(bindings, &inputs);
-  uint64 now = Now();//f_icst->get_reference(0)->trace();
+  auto now = Now();//f_icst->get_reference(0)->trace();
 
   if (simulations.size() == 0) { // no simulation.
 
-    uint64 before = bindings->get_fwd_before();
-    uint64 time_to_live;
+    auto before = bindings->get_fwd_before();
+    Timestamp::duration time_to_live;
     if (now >= before)
-      time_to_live = 0;
+      time_to_live = Timestamp::duration(seconds(0));
     else
       time_to_live = before - now;
     if (predictions.size()) {
@@ -173,7 +174,7 @@ CSTOverlay *CSTOverlay::get_offspring(HLPBindingMap *map, _Fact *input, _Fact *b
 
   CSTOverlay *offspring = new CSTOverlay(this);
   patterns.remove(bound_pattern);
-  if (match_deadline == 0)
+  if (match_deadline.time_since_epoch().count() == 0)
     match_deadline = map->get_fwd_before();
   update(map, input, bound_pattern);
   //std::cout<<std::hex<<this<<std::dec<<" produced: "<<std::hex<<offspring<<std::dec<<std::endl;
@@ -218,8 +219,8 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
       return false;
     }
   }
-  uint64 now = Now();
-  // if(match_deadline==0)
+  auto now = Now();
+  // if(match_deadline.time_since_epoch().count() == 0)
   // std::cout<<Time::ToString_seconds(Now()-st)<<" "<<std::hex<<this<<std::dec<<" (0) "<<input->object->get_oid()<<std::endl;
   // else
   // std::cout<<Time::ToString_seconds(Now()-st)<<" "<<std::hex<<this<<std::dec<<" ("<<Time::ToString_seconds(match_deadline-st)<<") "<<input->object->get_oid()<<std::endl;
@@ -252,7 +253,7 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
   }
 
   if (bound_pattern) {
-    //if(match_deadline==0){
+    //if(match_deadline.time_since_epoch().count() == 0){
     // std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" "<<std::hex<<this<<std::dec<<" (0) ";
     //} else{
     // std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" "<<std::hex<<this<<std::dec<<" ("<<Time::ToString_seconds(match_deadline-Utils::GetTimeReference())<<") ";
@@ -374,7 +375,7 @@ void CSTController::reduce(r_exec::View *input) {
     CSTOverlay *offspring;
     r_code::list<P<Overlay> >::const_iterator o;
     reductionCS.enter();
-    uint64 now = Now();
+    auto now = Now();
     for (o = overlays.begin(); o != overlays.end();) {
 
       if (!((CSTOverlay *)*o)->can_match(now))
@@ -414,7 +415,7 @@ void CSTController::abduce(HLPBindingMap *bm, Fact *super_goal) { // super_goal 
   uint16 obj_set_index = cst->code(CST_OBJS).asIndex();
   uint16 obj_count = cst->code(obj_set_index).getAtomCount();
   Group *host = get_host();
-  uint64 now = Now();
+  auto now = Now();
   for (uint16 i = 1; i <= obj_count; ++i) {
 
     _Fact *pattern = (_Fact *)cst->get_reference(cst->code(obj_set_index + i).asIndex());
@@ -444,7 +445,7 @@ void CSTController::inject_goal(HLPBindingMap *bm,
   Fact *super_goal, // f0->g->f1->icst or f0->g->|f1->icst.
   _Fact *sub_goal_target, // f1.
   Sim *sim,
-  uint64 now,
+  Timestamp now,
   float32 confidence,
   Code *group) const {
 
@@ -485,9 +486,9 @@ Fact *CSTController::get_f_icst(HLPBindingMap *bindings, std::vector<P<_Fact> > 
   return f_icst;
 }
 
-bool CSTController::inject_prediction(Fact *prediction, float32 confidence, uint64 time_to_live) const { // prediction: f->pred->f->target.
+bool CSTController::inject_prediction(Fact *prediction, float32 confidence, microseconds time_to_live) const { // prediction: f->pred->f->target.
 
-  uint64 now = Now();
+  auto now = Now();
   Group *primary_host = get_host();
   float32 sln_thr = primary_host->code(GRP_SLN_THR).asFloat();
   if (confidence > sln_thr) { // do not inject if cfd is too low.
@@ -500,14 +501,14 @@ bool CSTController::inject_prediction(Fact *prediction, float32 confidence, uint
     return false;
 }
 
-void CSTController::inject_icst(Fact *production, float32 confidence, uint64 time_to_live) const { // production: f->icst.
+void CSTController::inject_icst(Fact *production, float32 confidence, microseconds time_to_live) const { // production: f->icst.
 
-  uint64 now = Now();
+  auto now = Now();
   Group *primary_host = get_host();
   float32 sln_thr = primary_host->code(GRP_SLN_THR).asFloat();
   if (confidence > sln_thr) {
 
-    View *view = new View(View::SYNC_ONCE, now, 1, Utils::GetResilience(now, time_to_live, primary_host->get_upr()*Utils::GetBasePeriod()), primary_host, primary_host, production);
+    View *view = new View(View::SYNC_ONCE, now, 1, Utils::GetResilience(now, time_to_live, primary_host->get_upr() * Utils::GetBasePeriod().count()), primary_host, primary_host, production);
     _Mem::Get()->inject(view); // inject f->icst in the primary group: needed for hlps like M[icst -> X] and S[icst X Y].
     uint16 out_group_count = get_out_group_count();
     for (uint16 i = 0; i < out_group_count; ++i) {
@@ -521,7 +522,7 @@ void CSTController::inject_icst(Fact *production, float32 confidence, uint64 tim
   sln_thr = secondary_host->code(GRP_SLN_THR).asFloat();
   if (confidence > sln_thr) {
 
-    View *view = new View(View::SYNC_ONCE, now, 1, Utils::GetResilience(now, time_to_live, secondary_host->get_upr()*Utils::GetBasePeriod()), secondary_host, primary_host, production);
+    View *view = new View(View::SYNC_ONCE, now, 1, Utils::GetResilience(now, time_to_live, secondary_host->get_upr() * Utils::GetBasePeriod().count()), secondary_host, primary_host, production);
     _Mem::Get()->inject(view); // inject f->icst in the secondary group: same reason as above.
   }
 }
@@ -544,7 +545,7 @@ void CSTController::kill_views() {
 
 void CSTController::check_last_match_time(bool match) {
 
-  uint64 now = Now();
+  auto now = Now();
   if (match)
     last_match_time = now;
   else if (now - last_match_time > _Mem::Get()->get_primary_thz())

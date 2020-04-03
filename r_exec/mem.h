@@ -114,7 +114,7 @@ public:
   }State;
 protected:
   // Parameters::Init.
-  uint32 base_period;
+  std::chrono::microseconds base_period;
   uint32 reduction_core_count;
   uint32 time_core_count;
 
@@ -122,15 +122,15 @@ protected:
   float32 mdl_inertia_sr_thr;
   uint32 mdl_inertia_cnt_thr;
   float32 tpx_dsr_thr;
-  uint32 min_sim_time_horizon;
-  uint32 max_sim_time_horizon;
+  std::chrono::microseconds min_sim_time_horizon;
+  std::chrono::microseconds max_sim_time_horizon;
   float32 sim_time_horizon_factor;
-  uint32 tpx_time_horizon;
-  uint32 perf_sampling_period;
+  std::chrono::microseconds tpx_time_horizon;
+  std::chrono::microseconds perf_sampling_period;
   float32 float_tolerance;
-  uint32 time_tolerance;
-  uint64 primary_thz;
-  uint64 secondary_thz;
+  std::chrono::microseconds time_tolerance;
+  std::chrono::microseconds primary_thz;
+  std::chrono::microseconds secondary_thz;
 
   // Parameters::Debug.
   bool debug;
@@ -149,11 +149,11 @@ protected:
 
   // Performance stats.
   uint32 reduction_job_count;
-  uint64 reduction_job_avg_latency; // latency: popping time.-pushing time; the lower the better.
-  uint64 _reduction_job_avg_latency; // previous value.
+  std::chrono::microseconds reduction_job_avg_latency; // latency: popping time.-pushing time; the lower the better.
+  std::chrono::microseconds _reduction_job_avg_latency; // previous value.
   uint32 time_job_count;
-  uint64 time_job_avg_latency; // latency: deadline-the time the job is popped from the pipe; if <0, not registered (as it is too late for action); the higher the better.
-  uint64 _time_job_avg_latency; // previous value.
+  std::chrono::microseconds time_job_avg_latency; // latency: deadline-the time the job is popped from the pipe; if <0, not registered (as it is too late for action); the higher the better.
+  std::chrono::microseconds _time_job_avg_latency; // previous value.
 
   CriticalSection time_jobCS;
   CriticalSection reduction_jobCS;
@@ -176,7 +176,7 @@ protected:
 
   std::vector<Group *> initial_groups; // convenience; cleared after start();
 
-  void init_timings(uint64 now) const;
+  void init_timings(Timestamp now) const;
 
   void store(Code *object);
   virtual void set_last_oid(int32 oid) = 0;
@@ -200,21 +200,21 @@ public:
 
   virtual ~_Mem();
 
-  void init(uint32 base_period,
+  void init(std::chrono::microseconds base_period,
     uint32 reduction_core_count,
     uint32 time_core_count,
     float32 mdl_inertia_sr_thr,
     uint32 mdl_inertia_cnt_thr,
     float32 tpx_dsr_thr,
-    uint32 min_sim_time_horizon,
-    uint32 max_sim_time_horizon,
+    std::chrono::microseconds min_sim_time_horizon,
+    std::chrono::microseconds max_sim_time_horizon,
     float32 sim_time_horizon_factor,
-    uint32 tpx_time_horizon,
-    uint32 perf_sampling_period,
+    std::chrono::microseconds tpx_time_horizon,
+    std::chrono::microseconds perf_sampling_period,
     float32 float_tolerance,
-    uint32 time_tolerance,
-    uint32 primary_thz,
-    uint32 secondary_thz,
+    std::chrono::microseconds time_tolerance,
+    std::chrono::microseconds primary_thz,
+    std::chrono::microseconds secondary_thz,
     bool debug,
     uint32 ntf_mk_res,
     uint32 goal_pred_success_res,
@@ -227,16 +227,21 @@ public:
   float32 get_mdl_inertia_sr_thr() const { return mdl_inertia_sr_thr; }
   uint32 get_mdl_inertia_cnt_thr() const { return mdl_inertia_cnt_thr; }
   float32 get_tpx_dsr_thr() const { return tpx_dsr_thr; }
-  uint32 get_min_sim_time_horizon() const { return min_sim_time_horizon; }
-  uint32 get_max_sim_time_horizon() const { return max_sim_time_horizon; }
-  uint64 get_sim_time_horizon(uint64 horizon) const { return horizon * sim_time_horizon_factor; }
-  uint32 get_tpx_time_horizon() const { return tpx_time_horizon; }
-  uint64 get_primary_thz() const { return primary_thz; }
-  uint64 get_secondary_thz() const { return secondary_thz; }
+  std::chrono::microseconds get_min_sim_time_horizon() const { return min_sim_time_horizon; }
+  std::chrono::microseconds get_max_sim_time_horizon() const { return max_sim_time_horizon; }
+  std::chrono::microseconds get_sim_time_horizon(std::chrono::microseconds horizon) const { 
+    return std::chrono::microseconds((int64)(horizon.count() * sim_time_horizon_factor)); 
+  }
+  std::chrono::microseconds get_sim_time_horizon(Timestamp::duration horizon) const { 
+    return std::chrono::duration_cast<std::chrono::microseconds>(horizon);
+  }
+  std::chrono::microseconds get_tpx_time_horizon() const { return tpx_time_horizon; }
+  std::chrono::microseconds get_primary_thz() const { return primary_thz; }
+  std::chrono::microseconds get_secondary_thz() const { return secondary_thz; }
 
   bool get_debug() const { return debug; }
   uint32 get_ntf_mk_res() const { return ntf_mk_res; }
-  uint32 get_goal_pred_success_res(Group *host, uint64 now, uint64 time_to_live) const {
+  uint32 get_goal_pred_success_res(Group *host, Timestamp now, Timestamp::duration time_to_live) const {
 
     if (debug)
       return goal_pred_success_res;
@@ -256,7 +261,7 @@ public:
 
   virtual bool load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid); // call before start; no mod/set/eje will be executed (only inj);
                                                                                                                   // return false on error.
-  uint64 start(); // return the starting time.
+  Timestamp start(); // return the starting time.
   /**
    * When reduction and core count == 0, start() does not start
    * any core threads, so call this instead of Thread::Sleep(runTimeMilliseconds)
@@ -268,11 +273,11 @@ public:
    * runs on time). This way, the return value of Now() does not move with real time, but moves
    * step-by-step when DiagnosticTimeNow is updated, making it possible to set
    * break points and diagnose the program.
-   * @param runTimeMilliseconds The number of milliseconds (in diagnostic time) to run for.
+   * @param runTime The number of milliseconds (in diagnostic time) to run for.
    */
-  void runInDiagnosticTime(uint32 runTimeMilliseconds);
-  static uint64 DiagnosticTimeNow;
-  static uint64 getDiagnosticTimeNow();
+  void runInDiagnosticTime(std::chrono::milliseconds runTime);
+  static Timestamp DiagnosticTimeNow;
+  static Timestamp getDiagnosticTimeNow();
   // Tell an inheriting class (with inject) when the time is changed.
   virtual void onDiagnosticTimeTick();
   void stop(); // after stop() the content is cleared and one has to call load() and start() again.
@@ -289,7 +294,7 @@ public:
   void inject_async(View *view);
   void inject_new_object(View *view);
   void inject_existing_object(View *view, Code *object, Group *host);
-  void inject_null_program(Controller *c, Group *group, uint64 time_to_live, bool take_past_inputs); // build a view v (ijt=now, act=1, sln=0, res according to time_to_live in the group), attach c to v, inject v in the group.
+  void inject_null_program(Controller *c, Group *group, std::chrono::microseconds time_to_live, bool take_past_inputs); // build a view v (ijt=now, act=1, sln=0, res according to time_to_live in the group), attach c to v, inject v in the group.
   void inject_hlps(std::vector<View *> views, Group *destination);
   void inject_notification(View *view, bool lock);
   virtual Code *check_existence(Code *object) = 0; // returns the existing object if any, or object otherwise: in the latter case, packing may occur.
@@ -300,8 +305,14 @@ public:
   void inject_copy(View *view, Group *destination); // for cov; NB: no cov for groups, r-groups, models, pgm or notifications.
 
   // Called by cores.
-  void register_reduction_job_latency(uint64 latency);
-  void register_time_job_latency(uint64 latency);
+  void register_reduction_job_latency(std::chrono::microseconds latency);
+  void register_reduction_job_latency(Timestamp::duration latency) {
+    register_reduction_job_latency(std::chrono::duration_cast<std::chrono::microseconds>(latency));
+  };
+  void register_time_job_latency(std::chrono::microseconds latency);
+  void register_time_job_latency(Timestamp::duration latency) {
+    register_time_job_latency(std::chrono::duration_cast<std::chrono::microseconds>(latency)); 
+  };
   void inject_perf_stats();
 
   // rMem to rMem.
@@ -344,11 +355,10 @@ public:
     HLP_INJ = 7
   }TraceLevel;
   static std::ostream &Output(TraceLevel l);
-
-  // Note: This should match the definition in user.classes.replicode.
-  static const uint64 sampling_period_us = 100000;
 };
 
+// Note: This should match the definition in user.classes.replicode.
+const std::chrono::microseconds Mem_sampling_period = std::chrono::milliseconds(100);
 
 #define OUTPUT(c) _Mem::Output(_Mem::c)
 

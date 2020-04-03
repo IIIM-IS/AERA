@@ -78,6 +78,7 @@
 #include "overlay.h"
 #include "mem.h"
 
+using namespace std::chrono;
 
 #define MAX_VALUE_SIZE 128
 
@@ -188,10 +189,12 @@ Controller::Controller(r_code::View *view) : _Object(), invalidated(0), activate
   case Atom::INSTANTIATED_PROGRAM:
   case Atom::INSTANTIATED_INPUT_LESS_PROGRAM:
   case Atom::INSTANTIATED_ANTI_PROGRAM:
-    tsc = Utils::GetTimestamp<Code>(getObject(), IPGM_TSC);
+    // The time scope is stored as a timestamp, but it is actually a duration.
+    tsc = duration_cast<microseconds>(Utils::GetTimestamp<Code>(getObject(), IPGM_TSC).time_since_epoch());
     break;
   case Atom::INSTANTIATED_CPP_PROGRAM:
-    tsc = Utils::GetTimestamp<Code>(getObject(), ICPP_PGM_TSC);
+    // The time scope is stored as a timestamp, but it is actually a duration.
+    tsc = duration_cast<microseconds>(Utils::GetTimestamp<Code>(getObject(), ICPP_PGM_TSC).time_since_epoch());
     break;
   }
 }

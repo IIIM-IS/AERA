@@ -81,6 +81,7 @@
 #include <iostream>
 #include <set>
 
+using namespace std::chrono;
 
 namespace r_code {
 
@@ -105,7 +106,7 @@ void Atom::trace(TraceContext& context, std::ostream& out) const {
       context.Timestamp_high = atom;
     else {
       // Imitate Utils::GetTimestamp.
-      uint64 timestamp = context.Timestamp_high << 32 | atom;
+      auto timestamp = core::Timestamp(microseconds(context.Timestamp_high << 32 | atom));
       out << " " << Utils::RelativeTime(timestamp);
     }
     return;

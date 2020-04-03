@@ -79,6 +79,7 @@
 #include "mem.h"
 #include "mdl_controller.h"
 
+using namespace std::chrono;
 
 namespace r_exec {
 
@@ -88,7 +89,7 @@ PMonitor::PMonitor(MDLController *controller,
   bool rate_failures) : Monitor(controller, bindings, prediction), rate_failures(rate_failures) { // prediction is f0->pred->f1->obj; not simulated.
 
   prediction_target = prediction->get_pred()->get_target(); // f1.
-  uint64 now = Now();
+  auto now = Now();
 
   bindings->reset_fwd_timings(prediction_target);
 
@@ -145,7 +146,7 @@ bool PMonitor::reduce(_Fact *input) { // input is always an actual fact.
   }
 }
 
-void PMonitor::update(uint64 &next_target) { // executed by a time core, upon reaching the expected time of occurrence of the target of the prediction.
+void PMonitor::update(Timestamp &next_target) { // executed by a time core, upon reaching the expected time of occurrence of the target of the prediction.
 
   if (!target->is_invalidated()) { // received nothing matching the target's object so far (neither positively nor negatively).
 
@@ -153,6 +154,6 @@ void PMonitor::update(uint64 &next_target) { // executed by a time core, upon re
       controller->register_pred_outcome(target, false, NULL, 1, rate_failures);
   }
   controller->remove_monitor(this);
-  next_target = 0;
+  next_target = Timestamp(seconds(0));
 }
 }

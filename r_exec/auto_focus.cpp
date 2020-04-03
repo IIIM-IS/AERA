@@ -99,7 +99,7 @@ AutoFocusController::AutoFocusController(r_code::View *view) : Controller(view) 
 
   cross_buffer.set_thz(_Mem::Get()->get_tpx_time_horizon());
   cross_buffer.reserve(CrossBufferInitialSize);
-  uint64 thz = 2 * ((r_exec::View*)view)->get_host()->get_upr()*Utils::GetBasePeriod(); // thz==2*sampling period.
+  auto thz = 2 * ((r_exec::View*)view)->get_host()->get_upr()*Utils::GetBasePeriod(); // thz==2*sampling period.
   cache.set_thz(thz);
   cache.reserve(CacheInitialSize);
 }
@@ -138,7 +138,7 @@ inline View *AutoFocusController::inject_input(View *input) {
   Group *origin = input->get_host();
   Group *ref_group = output_groups[0];
 
-  uint64 now = Now();
+  auto now = Now();
 
   View *primary_view;
   _Fact *copy;
@@ -179,7 +179,7 @@ inline View *AutoFocusController::inject_input(View *input) {
     }
     break;
   case View::SYNC_HOLD: { // inject a copy, add a controller, sync_once, morph res, after=now+time_tolerance (de-sync as it can have the same effect as a cmd), before=now+output_grp.upr+time_tolerance.
-    uint64 offset = 2 * Utils::GetTimeTolerance();
+    auto offset = 2 * Utils::GetTimeTolerance();
     if (input_fact->is_anti_fact())
       copy = new AntiFact(input_fact->get_reference(0), now + offset, now + offset + ref_group->get_upr()*Utils::GetBasePeriod(), 1, 1);
     else
@@ -404,7 +404,7 @@ void AutoFocusController::inject_hlps(const std::vector<P<Code> > &hlps) const {
 
   std::vector<View *> views;
 
-  uint64 now = Now();
+  auto now = Now();
 
   std::vector<P<Code> >::const_iterator hlp;
   for (hlp = hlps.begin(); hlp != hlps.end(); ++hlp) {

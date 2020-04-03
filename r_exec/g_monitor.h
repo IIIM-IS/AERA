@@ -89,8 +89,8 @@ class PrimaryMDLController;
 class _GMonitor :
   public Monitor {
 protected:
-  uint64 deadline; // of the goal.
-  uint64 sim_thz;
+  Timestamp deadline; // of the goal.
+  Timestamp sim_thz;
   _Fact *goal_target; // convenience; f1->object.
   P<Fact> f_imdl;
   SimMode sim_mode;
@@ -114,8 +114,8 @@ protected:
 
   _GMonitor(PMDLController *controller,
     BindingMap *bindings,
-    uint64 deadline,
-    uint64 sim_thz,
+    Timestamp deadline,
+    Timestamp sim_thz,
     Fact *goal,
     Fact *f_imdl); // goal is f0->g->f1->object.
 public:
@@ -157,14 +157,14 @@ protected:
 public:
   GMonitor(PMDLController *controller,
     BindingMap *bindings,
-    uint64 deadline,
-    uint64 sim_thz,
+    Timestamp deadline,
+    Timestamp sim_thz,
     Fact *goal,
     Fact *f_imdl,
     _Fact *predicted_evidence); // goal is f0->g->f1->object.
 
   virtual bool reduce(_Fact *input); // returning true will remove the monitor form the controller.
-  virtual void update(uint64 &next_target);
+  virtual void update(Timestamp &next_target);
 };
 
 // Monitors actual requirements.
@@ -180,13 +180,13 @@ class RMonitor :
 public:
   RMonitor(PrimaryMDLController *controller,
     BindingMap *bindings,
-    uint64 deadline,
-    uint64 sim_thz,
+    Timestamp deadline,
+    Timestamp sim_thz,
     Fact *goal,
     Fact *f_imdl);
 
   bool reduce(_Fact *input);
-  void update(uint64 &next_target);
+  void update(Timestamp &next_target);
   bool signal(bool simulation);
 };
 
@@ -198,12 +198,12 @@ protected:
 public:
   SGMonitor(PrimaryMDLController *controller,
     BindingMap *bindings,
-    uint64 sim_thz,
+    Timestamp sim_thz,
     Fact *goal,
     Fact *f_imdl); // goal is f0->g->f1->object.
 
   bool reduce(_Fact *input);
-  void update(uint64 &next_target);
+  void update(Timestamp &next_target);
 };
 
 // Monitors simulated requirements.
@@ -213,12 +213,12 @@ class SRMonitor :
 public:
   SRMonitor(PrimaryMDLController *controller,
     BindingMap *bindings,
-    uint64 sim_thz,
+    Timestamp sim_thz,
     Fact *goal,
     Fact *f_imdl);
 
   bool reduce(_Fact *input);
-  void update(uint64 &next_target);
+  void update(Timestamp &next_target);
   bool signal(bool simulation);
 };
 

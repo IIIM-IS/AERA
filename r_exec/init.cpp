@@ -89,10 +89,11 @@
 
 #include <process.h>
 
+using namespace std::chrono;
 
 namespace r_exec {
 
-dll_export uint64(*Now)();
+dll_export Timestamp (*Now)();
 
 dll_export r_comp::Metadata Metadata;
 dll_export r_comp::Image Seed;
@@ -167,7 +168,7 @@ thread_ret TDecompiler::Decompile(void *args) {
   image->object_names.symbols = r_exec::Seed.object_names.symbols;
 
   std::ostringstream decompiled_code;
-  decompiler.decompile(image, &decompiled_code, Utils::GetTimeReference(), imported_objects);
+  decompiler.decompile(image, &decompiled_code, duration_cast<microseconds>(Utils::GetTimeReference().time_since_epoch()), imported_objects);
 
   if (_this->ostream_id == 0) {
 
@@ -330,7 +331,7 @@ uint16 RetrieveOpcode(const char *name) {
 }
 
 bool Init(const char *user_operator_library_path,
-  uint64(*time_base)()) {
+          Timestamp (*time_base)()) {
 
   Now = time_base;
 
@@ -531,7 +532,7 @@ bool Init(const char *user_operator_library_path,
   if (!GetCallbackName)
     return false;
 
-  typedef bool(*UserCallback)(uint64, bool, const char *, uint8, Code **);
+  typedef bool(*UserCallback)(microseconds, bool, const char *, uint8, Code **);
 
   uint16 callbackCount = GetCallbackCount();
   for (uint16 i = 0; i < callbackCount; ++i) {
@@ -555,7 +556,7 @@ bool Init(const char *user_operator_library_path,
 }
 
 bool Init(const char *user_operator_library_path,
-  uint64(*time_base)(),
+  Timestamp (*time_base)(),
   const char *seed_path) {
 
   std::string error;
@@ -569,7 +570,7 @@ bool Init(const char *user_operator_library_path,
 }
 
 bool Init(const char *user_operator_library_path,
-  uint64(*time_base)(),
+  Timestamp (*time_base)(),
   const r_comp::Metadata &metadata,
   const r_comp::Image &seed) {
 

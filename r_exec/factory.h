@@ -153,7 +153,7 @@ protected:
   _Fact();
   _Fact(SysObject *source);
   _Fact(_Fact *f);
-  _Fact(uint16 opcode, Code *object, uint64 after, uint64 before, float32 confidence, float32 psln_thr);
+  _Fact(uint16 opcode, Code *object, Timestamp after, Timestamp before, float32 confidence, float32 psln_thr);
 public:
   static bool MatchObject(const Code *lhs, const Code *rhs);
 
@@ -173,8 +173,8 @@ public:
 
   bool has_after() const { return Utils::HasTimestamp<Code>(this, FACT_AFTER); }
   bool has_before() const { return Utils::HasTimestamp<Code>(this, FACT_BEFORE); }
-  uint64 get_after() const;
-  uint64 get_before() const;
+  Timestamp get_after() const;
+  Timestamp get_before() const;
   float32 get_cfd() const;
 
   void set_cfd(float32 cfd);
@@ -197,8 +197,8 @@ private:
   uint32 volatile invalidated; // 32 bits alignment.
 public:
   Sim(Sim *s); // is_requirement=false (not copied).
-  Sim(SimMode mode, uint64 thz, Fact *super_goal, bool opposite, Controller *root); // use for SIM_ROOT.
-  Sim(SimMode mode, uint64 thz, Fact *super_goal, bool opposite, Controller *root, Controller *sol, float32 sol_cfd, uint64 sol_deadline); // USE for SIM_MANDATORY or SIM_OPTIONAL.
+  Sim(SimMode mode, std::chrono::microseconds thz, Fact *super_goal, bool opposite, Controller *root); // use for SIM_ROOT.
+  Sim(SimMode mode, std::chrono::microseconds thz, Fact *super_goal, bool opposite, Controller *root, Controller *sol, float32 sol_cfd, Timestamp sol_deadline); // USE for SIM_MANDATORY or SIM_OPTIONAL.
 
   void invalidate();
   bool is_invalidated();
@@ -208,12 +208,12 @@ public:
   bool opposite; // of the goal the sim is attached to, i.e. the result of the match during controller->reduce(); the confidence is in the goal target.
 
   SimMode mode; // if SIM_MANDATORY or SIM_OPTIONAL: qualifies a sub-goal of the branch's root.
-  uint64 thz; // simulation time allowance (this is not the goal deadline); 0 indicates no time for simulation.
+  std::chrono::microseconds thz; // simulation time allowance (this is not the goal deadline); 0 indicates no time for simulation.
   P<Fact> super_goal; // of the goal the sim is attached to.
   P<Controller> root; // controller that produced the simulation branch root (SIM_ROOT): identifies the branch.
   P<Controller> sol; // controller that produced a sub-goal of the branch's root: identifies the model that can be a solution for the super-goal.
   float32 sol_cfd; // confidence of the solution goal.
-  uint64 sol_before; // deadline of the solution goal.
+  Timestamp sol_before; // deadline of the solution goal.
 };
 
 // Caveat: instances of Fact can becone instances of AntiFact (set_opposite() upon MATCH_SUCCESS_NEGATIVE during backward chaining).
@@ -226,7 +226,7 @@ public:
   Fact();
   Fact(SysObject *source);
   Fact(Fact *f);
-  Fact(Code *object, uint64 after, uint64 before, float32 confidence, float32 psln_thr);
+  Fact(Code *object, Timestamp after, Timestamp before, float32 confidence, float32 psln_thr);
 };
 
 // Caveat: as for Fact.
@@ -237,7 +237,7 @@ public:
   AntiFact();
   AntiFact(SysObject *source);
   AntiFact(AntiFact *f);
-  AntiFact(Code *object, uint64 after, uint64 before, float32 confidence, float32 psln_thr);
+  AntiFact(Code *object, Timestamp after, Timestamp before, float32 confidence, float32 psln_thr);
 };
 
 // Goals and predictions:
@@ -295,7 +295,7 @@ public:
   P<Sim> sim;
   P<_Fact> ground; // f->p->f->imdl (weak requirement) that allowed backward chaining, if any.
 
-  float32 get_strength(uint64 now) const; // goal->target->cfd/(before-now).
+  float32 get_strength(Timestamp now) const; // goal->target->cfd/(before-now).
 };
 
 class r_exec_dll MkRdx :
@@ -319,7 +319,7 @@ class r_exec_dll Perf :
   public LObject {
 public:
   Perf();
-  Perf(uint32 reduction_job_avg_latency, int32 d_reduction_job_avg_latency, uint32 time_job_avg_latency, int32 d_time_job_avg_latency);
+  Perf(std::chrono::microseconds reduction_job_avg_latency, std::chrono::microseconds d_reduction_job_avg_latency, std::chrono::microseconds time_job_avg_latency, std::chrono::microseconds d_time_job_avg_latency);
 };
 
 class r_exec_dll ICST :

@@ -80,10 +80,12 @@
 
 #include "../r_exec/mem.h"
 
-bool print(uint64 t, bool suspended, const char *msg, uint8 object_count, Code **objects) { // return true to resume the executive (applies when called from a suspend call, i.e. suspended==true).
+using namespace std::chrono;
+
+bool print(microseconds relative_time, bool suspended, const char *msg, uint8 object_count, Code **objects) { // return true to resume the executive (applies when called from a suspend call, i.e. suspended==true).
 
   ostringstream out;
-  out << Time::ToString_seconds(t) << ": " << msg << std::endl;
+  out << Time::ToString_seconds(relative_time) << ": " << msg << std::endl;
   for (uint8 i = 0; i < object_count; ++i)
     objects[i]->trace(out);
 

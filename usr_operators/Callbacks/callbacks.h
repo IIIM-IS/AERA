@@ -82,7 +82,7 @@
 
 
 extern "C" {
-bool dll_export print(uint64 t, bool suspended, const char *msg, uint8 object_count, Code **objects);
+bool dll_export print(std::chrono::microseconds relative_time, bool suspended, const char *msg, uint8 object_count, Code **objects);
 }
 
 

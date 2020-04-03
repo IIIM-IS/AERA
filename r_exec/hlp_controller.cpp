@@ -182,7 +182,7 @@ MatchResult HLPController::check_evidences(_Fact *target, _Fact *&evidence) {
 
   MatchResult r = MATCH_FAILURE;
   evidences.CS.enter();
-  uint64 now = Now();
+  auto now = Now();
   r_code::list<EvidenceEntry>::const_iterator e;
   for (e = evidences.evidences.begin(); e != evidences.evidences.end();) {
 
@@ -208,7 +208,7 @@ MatchResult HLPController::check_predicted_evidences(_Fact *target, _Fact *&evid
 
   MatchResult r = MATCH_FAILURE;
   predicted_evidences.CS.enter();
-  uint64 now = Now();
+  auto now = Now();
   r_code::list<PredictedEvidenceEntry>::const_iterator e;
   for (e = predicted_evidences.evidences.begin(); e != predicted_evidences.evidences.end();) {
 

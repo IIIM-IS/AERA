@@ -79,6 +79,7 @@
 #include "mem.h"
 #include "model_base.h"
 
+using namespace std::chrono;
 
 namespace r_exec {
 
@@ -418,7 +419,7 @@ void MDLController::remove_requirement_from_rhs() {
 void MDLController::_store_requirement(r_code::list<RequirementEntry> *cache, RequirementEntry &e) {
 
   requirements.CS.enter();
-  uint64 now = Now();
+  auto now = Now();
   r_code::list<RequirementEntry>::const_iterator _e;
   for (_e = cache->begin(); _e != cache->end();) {
 
@@ -443,7 +444,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
 
     r = WEAK_REQUIREMENT_DISABLED;
     requirements.CS.enter();
-    uint64 now = Now();
+    auto now = Now();
     r_code::list<RequirementEntry>::const_iterator e;
     for (e = simulated_requirements.positive_evidences.begin(); e != simulated_requirements.positive_evidences.end();) {
 
@@ -475,7 +476,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
     if (!wr_count) { // some strong req., no weak req.: true if there is no |f->imdl complying with timings and bindings.
 
       requirements.CS.enter();
-      uint64 now = Now();
+      auto now = Now();
       r_code::list<RequirementEntry>::const_iterator e;
       for (e = simulated_requirements.negative_evidences.begin(); e != simulated_requirements.negative_evidences.end();) {
 
@@ -505,7 +506,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
       r = WEAK_REQUIREMENT_DISABLED;
       float32 negative_cfd = 0;
       requirements.CS.enter();
-      uint64 now = Now();
+      auto now = Now();
       r_code::list<RequirementEntry>::const_iterator e;
       for (e = simulated_requirements.negative_evidences.begin(); e != simulated_requirements.negative_evidences.end();) {
 
@@ -573,7 +574,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
 
     r = WEAK_REQUIREMENT_DISABLED;
     requirements.CS.enter();
-    uint64 now = Now();
+    auto now = Now();
     r_code::list<RequirementEntry>::const_iterator e;
     for (e = simulated_requirements.positive_evidences.begin(); e != simulated_requirements.positive_evidences.end();) {
 
@@ -603,7 +604,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
     if (!wr_count) { // some strong req., no weak req.: true if there is no |f->imdl complying with timings and bindings.
 
       requirements.CS.enter();
-      uint64 now = Now();
+      auto now = Now();
       r_code::list<RequirementEntry>::const_iterator e;
       for (e = simulated_requirements.negative_evidences.begin(); e != simulated_requirements.negative_evidences.end();) {
 
@@ -631,7 +632,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
       r = WEAK_REQUIREMENT_DISABLED;
       float32 negative_cfd = 0;
       requirements.CS.enter();
-      uint64 now = Now();
+      auto now = Now();
       r_code::list<RequirementEntry>::const_iterator e;
       for (e = simulated_requirements.negative_evidences.begin(); e != simulated_requirements.negative_evidences.end();) {
 
@@ -707,7 +708,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
 
     r = WEAK_REQUIREMENT_DISABLED;
     requirements.CS.enter();
-    uint64 now = Now();
+    auto now = Now();
     r_code::list<RequirementEntry>::const_iterator e;
     for (e = requirements.positive_evidences.begin(); e != requirements.positive_evidences.end();) {
 
@@ -756,7 +757,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
       wr_enabled = false;
       r = WEAK_REQUIREMENT_ENABLED;
       requirements.CS.enter();
-      uint64 now = Now();
+      auto now = Now();
       r_code::list<RequirementEntry>::const_iterator e;
       for (e = requirements.negative_evidences.begin(); e != requirements.negative_evidences.end();) {
 
@@ -788,7 +789,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
       r = NO_REQUIREMENT;
       requirements.CS.enter();
       float32 negative_cfd = 0;
-      uint64 now = Now();
+      auto now = Now();
 
       r_code::list<RequirementEntry>::const_iterator e;
       for (e = requirements.negative_evidences.begin(); e != requirements.negative_evidences.end();) {
@@ -883,7 +884,7 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
 
     r = WEAK_REQUIREMENT_DISABLED;
     requirements.CS.enter();
-    uint64 now = Now();
+    auto now = Now();
     r_code::list<RequirementEntry>::const_iterator e;
     for (e = requirements.positive_evidences.begin(); e != requirements.positive_evidences.end();) {
 
@@ -913,7 +914,7 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
       ground = NULL;
 
       requirements.CS.enter();
-      uint64 now = Now();
+      auto now = Now();
       r_code::list<RequirementEntry>::const_iterator e;
       for (e = requirements.negative_evidences.begin(); e != requirements.negative_evidences.end();) {
 
@@ -938,7 +939,7 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
       r = WEAK_REQUIREMENT_DISABLED;
       float32 negative_cfd = 0;
       requirements.CS.enter();
-      uint64 now = Now();
+      auto now = Now();
       r_code::list<RequirementEntry>::const_iterator e;
       for (e = requirements.negative_evidences.begin(); e != requirements.negative_evidences.end();) {
 
@@ -1036,8 +1037,8 @@ void PMDLController::remove_r_monitor(_GMonitor *m) {
 void PMDLController::inject_goal(HLPBindingMap *bm, Fact *goal, Fact *f_imdl) const {
 
   Group *primary_grp = get_host();
-  uint64 before = goal->get_before();
-  uint64 now = Now();
+  auto before = goal->get_before();
+  auto now = Now();
   int32 resilience = _Mem::Get()->get_goal_pred_success_res(primary_grp, now, before - now);
 
   View *view = new View(View::SYNC_ONCE, now, 1, resilience, primary_grp, primary_grp, goal); // SYNC_ONCE,res=resilience.
@@ -1057,8 +1058,8 @@ void PMDLController::inject_goal(HLPBindingMap *bm, Fact *goal, Fact *f_imdl) co
 void PMDLController::inject_simulation(Fact *goal_pred) const { // f->pred->f->obj or f->goal->f->obj.
 
   Group *primary_grp = get_host();
-  uint64 before = ((_Fact *)goal_pred->get_reference(0)->get_reference(0))->get_before();
-  uint64 now = Now();
+  auto before = ((_Fact *)goal_pred->get_reference(0)->get_reference(0))->get_before();
+  auto now = Now();
   int32 resilience = _Mem::Get()->get_goal_pred_success_res(primary_grp, now, before - now);
 
   View *view = new View(View::SYNC_ONCE, now, 1, resilience, primary_grp, primary_grp, goal_pred); // SYNC_ONCE,res=resilience.
@@ -1097,9 +1098,9 @@ void PMDLController::register_predicted_goal_outcome(Fact *goal, HLPBindingMap *
 
         Fact *new_goal = new Fact(goal);
         Goal *g = new_goal->get_goal();
-
-        uint64 deadline = g->get_target()->get_before();
-        uint64 sim_thz = get_sim_thz(Now(), deadline);
+        auto now = Now();
+        auto deadline = g->get_target()->get_before();
+        auto sim_thz = get_sim_thz(now, deadline);
 
         Sim *new_sim = new Sim(SIM_ROOT, sim_thz, g->sim->super_goal, false, this);
 
@@ -1113,19 +1114,19 @@ void PMDLController::register_predicted_goal_outcome(Fact *goal, HLPBindingMap *
   }
 }
 
-inline uint64 PMDLController::get_sim_thz(uint64 now, uint64 deadline) const {
+inline microseconds PMDLController::get_sim_thz(Timestamp now, Timestamp deadline) const {
 
-  uint32 min_sim_thz = _Mem::Get()->get_min_sim_time_horizon(); // time allowance for the simulated predictions to flow upward.
-  uint64 sim_thz = _Mem::Get()->get_sim_time_horizon(deadline - now);
+  auto min_sim_thz = _Mem::Get()->get_min_sim_time_horizon(); // time allowance for the simulated predictions to flow upward.
+  auto sim_thz = _Mem::Get()->get_sim_time_horizon(deadline - now);
   if (sim_thz > min_sim_thz) {
 
     sim_thz -= min_sim_thz;
-    uint32 max_sim_thz = _Mem::Get()->get_max_sim_time_horizon();
+    auto max_sim_thz = _Mem::Get()->get_max_sim_time_horizon();
     if (sim_thz > max_sim_thz)
       sim_thz = max_sim_thz;
     return sim_thz;
   } else // no time to simulate.
-    return 0;
+    return microseconds(0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1220,10 +1221,10 @@ void TopLevelMDLController::abduce_lhs(HLPBindingMap *bm,
   _Fact *evidence) {
 
   Goal *sub_goal = new Goal(sub_goal_target, super_goal->get_goal()->get_actor(), 1);
-  uint64 now = Now();
+  auto now = Now();
   Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
-  uint64 deadline = sub_goal_target->get_before();
-  uint64 sim_thz = get_sim_thz(now, deadline);
+  auto deadline = sub_goal_target->get_before();
+  auto sim_thz = get_sim_thz(now, deadline);
 
   Sim *sub_sim = new Sim(SIM_ROOT, sim_thz, super_goal, false, this);
 
@@ -1245,7 +1246,7 @@ void TopLevelMDLController::register_goal_outcome(Fact *goal, bool success, _Fac
 
   goal->invalidate();
 
-  uint64 now = Now();
+  auto now = Now();
   Code *goal_success;
   Code *f_goal_success;
   _Fact *absentee;
@@ -1274,7 +1275,7 @@ void TopLevelMDLController::register_goal_outcome(Fact *goal, bool success, _Fac
   for (uint16 i = 0; i < out_group_count; ++i) { // inject notification in out groups (drives host excepted).
 
     Group *out_group = (Group *)get_out_group(i);
-    int32 resilience = _Mem::Get()->get_goal_pred_success_res(out_group, now, 0);
+    int32 resilience = _Mem::Get()->get_goal_pred_success_res(out_group, now, seconds(0));
     View *view = new View(View::SYNC_ONCE, now, 1, resilience, out_group, primary_host, f_goal_success);
     _Mem::Get()->inject(view);
 
@@ -1294,7 +1295,7 @@ void TopLevelMDLController::register_drive_outcome(Fact *drive, bool success) co
 
   drive->invalidate();
 
-  uint64 now = Now();
+  auto now = Now();
   Code *drive_success = new Success(drive, NULL, 1);
   Code *f_drive_success;
   if (success)
@@ -1316,7 +1317,7 @@ void TopLevelMDLController::register_simulated_goal_outcome(Fact *goal, bool suc
   Code *success_object = new Success(goal, evidence, 1);
   Pred *evidence_pred = evidence->get_pred();
   float32 confidence = evidence_pred->get_target()->get_cfd();
-  uint64 now = Now();
+  auto now = Now();
   _Fact *f_success_object;
   if (success)
     f_success_object = new Fact(success_object, now, now, confidence, 1);
@@ -1330,7 +1331,7 @@ void TopLevelMDLController::register_simulated_goal_outcome(Fact *goal, bool suc
   Fact *f_pred = new Fact(pred, now, now, 1, 1);
 
   Group *primary_host = get_host();
-  int32 resilience = _Mem::Get()->get_goal_pred_success_res(primary_host, now, 0);
+  int32 resilience = _Mem::Get()->get_goal_pred_success_res(primary_host, now, seconds(0));
   View *view = new View(View::SYNC_ONCE, now, 1, resilience, primary_host, primary_host, f_pred);
   _Mem::Get()->inject(view); // inject in the primary group.
 }
@@ -1421,7 +1422,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
   bound_rhs->set_cfd(confidence);
 
   Pred *pred = new Pred(bound_rhs, 1);
-  uint64 now = Now();
+  auto now = Now();
   Fact *production = new Fact(pred, now, now, 1, 1);
 
   if (prediction && !simulation) { // store the antecedents.
@@ -1458,7 +1459,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
       MDLController::add_monitor(m);
     } else { // try to inject the prediction: if cfd too low, the prediction is not injected.
 
-      uint64 before = bound_rhs->get_before();
+      auto before = bound_rhs->get_before();
       if (before <= now) // can happen if the input comes from the past and the predicted time is still in the past.
         return;
       if (prediction) { // no rdx nor monitoring if the input was a prediction; case of a reuse: f_imdl becomes f->p->f_imdl.
@@ -1499,9 +1500,9 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
   }
 }
 
-bool PrimaryMDLController::inject_prediction(Fact *prediction, Fact *f_imdl, float32 confidence, uint64 time_to_live, Code *mk_rdx) const { // prediction: f->pred->f->target.
+bool PrimaryMDLController::inject_prediction(Fact *prediction, Fact *f_imdl, float32 confidence, Timestamp::duration time_to_live, Code *mk_rdx) const { // prediction: f->pred->f->target.
 
-  uint64 now = Now();
+  auto now = Now();
   Group *primary_host = get_host();
   float32 sln_thr = primary_host->code(GRP_SLN_THR).asFloat();
   if (confidence > sln_thr) { // do not inject if cfd is too low.
@@ -1614,8 +1615,8 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
 
   P<Fact> f_imdl = get_f_ihlp(bm, false);
   Sim *sim = super_goal->get_goal()->sim;
-  uint64 sim_thz = sim->thz >> 1; // 0 if super-goal had not time for simulation, else use half the thz (in case there are some requirments to simulate: they'll use the other half).
-  uint32 min_sim_thz = _Mem::Get()->get_min_sim_time_horizon() >> 1; // time allowance for the simulated predictions to flow upward.
+  auto sim_thz = sim->thz / 2; // 0 if super-goal had not time for simulation, else use half the thz (in case there are some requirments to simulate: they'll use the other half).
+  auto min_sim_thz = _Mem::Get()->get_min_sim_time_horizon() / 2; // time allowance for the simulated predictions to flow upward.
 
   Sim *sub_sim;
   if (sim_thz > min_sim_thz) {
@@ -1624,10 +1625,10 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
 
     f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
 
-    uint64 now = Now();
+    auto now = Now();
     switch (sim->mode) {
     case SIM_ROOT:
-      sub_sim = new Sim(opposite ? SIM_MANDATORY : SIM_OPTIONAL, sim_thz, super_goal, opposite, sim->root, this, confidence, 0);
+      sub_sim = new Sim(opposite ? SIM_MANDATORY : SIM_OPTIONAL, sim_thz, super_goal, opposite, sim->root, this, confidence, Timestamp(seconds(0)));
       break;
     case SIM_OPTIONAL:
     case SIM_MANDATORY:
@@ -1675,11 +1676,11 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
       case WEAK_REQUIREMENT_ENABLED:
         f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(true);
       case NO_REQUIREMENT:
-        sub_sim = new Sim(SIM_ROOT, 0, super_goal, opposite, this);
+        sub_sim = new Sim(SIM_ROOT, seconds(0), super_goal, opposite, this);
         abduce_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim, ground, false);
         break;
       default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
-        sub_sim = new Sim(SIM_ROOT, 0, super_goal, opposite, this);
+        sub_sim = new Sim(SIM_ROOT, seconds(0), super_goal, opposite, this);
         sub_sim->is_requirement = true;
         abduce_imdl(bm, super_goal, f_imdl, opposite, confidence, sub_sim);
         break;
@@ -1727,10 +1728,10 @@ void PrimaryMDLController::abduce_lhs(HLPBindingMap *bm, Fact *super_goal, Fact 
       if (set_before)
         sim->sol_before = bound_lhs->get_before();
 
-      uint64 now = Now();
+      auto now = Now();
       Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
 
-      add_g_monitor(new GMonitor(this, bm, bound_lhs->get_before(), 0, f_sub_goal, f_imdl, evidence));
+      add_g_monitor(new GMonitor(this, bm, bound_lhs->get_before(), Timestamp(seconds(0)), f_sub_goal, f_imdl, evidence));
 
       if (!evidence) {
         inject_goal(bm, f_sub_goal, f_imdl);
@@ -1749,7 +1750,7 @@ void PrimaryMDLController::abduce_imdl(HLPBindingMap *bm, Fact *super_goal, Fact
   Goal *sub_goal = new Goal(f_imdl, super_goal->get_goal()->get_actor(), 1);
   sub_goal->sim = sim;
 
-  uint64 now = Now();
+  auto now = Now();
   Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
   add_r_monitor(new RMonitor(this, bm, super_goal->get_goal()->get_target()->get_before(), sim->thz, f_sub_goal, f_imdl)); // the monitor will wait until the deadline of the super-goal.
   inject_goal(bm, f_sub_goal, f_imdl);
@@ -1793,7 +1794,7 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
 
         sub_goal->sim = sim;
 
-        uint64 now = Now();
+        auto now = Now();
         Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
 
         add_g_monitor(new SGMonitor(this, bm, sim->thz, f_sub_goal, f_imdl));
@@ -1813,7 +1814,7 @@ void PrimaryMDLController::abduce_simulated_imdl(HLPBindingMap *bm, Fact *super_
   Goal *sub_goal = new Goal(f_imdl, super_goal->get_goal()->get_actor(), 1);
   sub_goal->sim = sim;
 
-  uint64 now = Now();
+  auto now = Now();
   Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
   add_r_monitor(new SRMonitor(this, bm, sim->thz, f_sub_goal, f_imdl));
   inject_simulation(f_sub_goal);
@@ -1833,7 +1834,7 @@ bool PrimaryMDLController::check_imdl(Fact *goal, HLPBindingMap *bm) { // goal i
     if (evaluate_bwd_guards(bm)) { // bm may be updated.
 
       f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
-      abduce_lhs(bm, sim->super_goal, f_imdl, sim->opposite, f_imdl->get_cfd(), new Sim(SIM_ROOT, 0, sim->super_goal, sim->opposite, this), ground, false);
+      abduce_lhs(bm, sim->super_goal, f_imdl, sim->opposite, f_imdl->get_cfd(), new Sim(SIM_ROOT, seconds(0), sim->super_goal, sim->opposite, this), ground, false);
       return true;
     }
     return false;
@@ -1887,7 +1888,7 @@ inline void PrimaryMDLController::predict_simulated_evidence(_Fact *evidence, Si
   Pred *pred = new Pred(evidence, 1);
   pred->simulations.push_back(sim);
 
-  uint64 now = Now();
+  auto now = Now();
   inject_simulation(new Fact(pred, now, now, 1, 1));
 }
 
@@ -1907,7 +1908,7 @@ void PrimaryMDLController::register_pred_outcome(Fact *f_pred, bool success, _Fa
 
   Success *success_object = new Success(f_pred, f_evidence, 1);
   Code *f_success_object;
-  uint64 now = Now();
+  auto now = Now();
   if (success) {
 
     f_success_object = new Fact(success_object, now, now, confidence, 1);
@@ -1923,7 +1924,7 @@ void PrimaryMDLController::register_pred_outcome(Fact *f_pred, bool success, _Fa
   for (uint16 i = 0; i < out_group_count; ++i) { // inject notification in out groups.
 
     Group *out_group = (Group *)get_out_group(i);
-    int32 resilience = _Mem::Get()->get_goal_pred_success_res(out_group, now, 0);
+    int32 resilience = _Mem::Get()->get_goal_pred_success_res(out_group, now, seconds(0));
     View *view = new View(View::SYNC_ONCE, now, 1, resilience, out_group, primary_host, f_success_object);
     _Mem::Get()->inject(view);
 
@@ -1967,7 +1968,7 @@ void PrimaryMDLController::register_goal_outcome(Fact *goal, bool success, _Fact
 
   goal->invalidate();
 
-  uint64 now = Now();
+  auto now = Now();
   _Fact *f_success_object;
   _Fact *absentee;
   if (success) {
@@ -2000,7 +2001,7 @@ void PrimaryMDLController::register_goal_outcome(Fact *goal, bool success, _Fact
   for (uint16 i = 0; i < out_group_count; ++i) { // inject notification in out groups.
 
     Group *out_group = (Group *)get_out_group(i);
-    int32 resilience = _Mem::Get()->get_goal_pred_success_res(out_group, now, 0);
+    int32 resilience = _Mem::Get()->get_goal_pred_success_res(out_group, now, seconds(0));
     View *view = new View(View::SYNC_ONCE, now, 1, resilience, out_group, primary_host, f_success_object);
     _Mem::Get()->inject(view);
 
@@ -2017,7 +2018,7 @@ void PrimaryMDLController::register_simulated_goal_outcome(Fact *goal, bool succ
   Code *success_object = new Success(goal, evidence, 1);
   _Fact *f_success;
 
-  uint64 now = Now();
+  auto now = Now();
   if (success)
     f_success = new Fact(success_object, now, now, 1, 1);
   else
@@ -2027,7 +2028,7 @@ void PrimaryMDLController::register_simulated_goal_outcome(Fact *goal, bool succ
   Fact *f_pred = new Fact(pred, now, now, 1, 1);
 
   Group *primary_host = get_host();
-  int32 resilience = _Mem::Get()->get_goal_pred_success_res(primary_host, now, 0);
+  int32 resilience = _Mem::Get()->get_goal_pred_success_res(primary_host, now, seconds(0));
   View *view = new View(View::SYNC_ONCE, now, 1, resilience, primary_host, primary_host, f_pred);
 }
 
@@ -2150,14 +2151,14 @@ void PrimaryMDLController::assume_lhs(HLPBindingMap *bm, bool opposite, _Fact *i
   assumptions.push_back(bound_lhs);
   assumptionsCS.leave();
 
-  uint64 now = Now();
-  uint64 before = bound_lhs->get_before();
+  auto now = Now();
+  Timestamp before = bound_lhs->get_before();
   Group *primary_host = get_host();
-  uint64 time_to_live;
+  Timestamp::duration time_to_live;
   if (before > now)
     time_to_live = before - now;
   else
-    time_to_live = 0;
+    time_to_live = seconds(0);
   int32 resilience = _Mem::Get()->get_goal_pred_success_res(primary_host, now, time_to_live);
   View *view = new View(View::SYNC_ONCE, now, confidence, resilience, primary_host, primary_host, bound_lhs); // SYNC_ONCE,res=resilience.
   _Mem::Get()->inject(view);
@@ -2183,7 +2184,7 @@ void PrimaryMDLController::kill_views() {
 
 void PrimaryMDLController::check_last_match_time(bool match) {
 
-  uint64 now;
+  Timestamp now;
   if (match) {
 
     last_match_timeCS.enter();
@@ -2258,7 +2259,7 @@ void SecondaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_im
     //rhs->trace();rhs->get_reference(0)->trace();bindings->trace();
   _Fact *bound_rhs = (_Fact *)bm->bind_pattern(rhs); // fact or |fact.
   Pred *_prediction = new Pred(bound_rhs, 1);
-  uint64 now = Now();
+  auto now = Now();
   Fact *production = new Fact(_prediction, now, now, 1, 1);
 
   register_requirement(production, r_p);
@@ -2361,7 +2362,7 @@ void SecondaryMDLController::kill_views() {
 
 void SecondaryMDLController::check_last_match_time(bool match) {
 
-  uint64 now;
+  Timestamp now;
   if (match) {
 
     last_match_timeCS.enter();

@@ -123,7 +123,7 @@ class r_exec_dll PGMOverlay :
   friend class IPGMContext;
 private:
   bool is_volatile;
-  uint64 birth_time; // used for ipgms: overlays older than ipgm->tsc are killed; birth_time set to the time of the first match, 0 if no match occurred.
+  Timestamp birth_time; // used for ipgms: overlays older than ipgm->tsc are killed; birth_time set to the time of the first match, 0 if no match occurred.
 protected:
   r_code::list<uint16> input_pattern_indices; // stores the input patterns still waiting for a match: will be plucked upon each successful match.
   std::vector<P<r_code::View> > input_views; // copies of the inputs; vector updated at each successful match.
@@ -159,7 +159,7 @@ public:
   r_code::Code *getInputObject(uint16 i) const;
   r_code::View *getInputView(uint16 i) const;
 
-  uint64 get_birth_time() const { return birth_time; }
+  Timestamp get_birth_time() const { return birth_time; }
 
   bool is_invalidated();
 };

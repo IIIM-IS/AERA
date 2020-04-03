@@ -90,13 +90,13 @@ class DelegatedCore :
   public Thread {
 private:
   Timer timer;
-  uint64 target_time;
-  uint64 time_to_wait;
+  Timestamp target_time;
+  std::chrono::microseconds time_to_wait;
   P<TimeJob> job;
 public:
   static thread_ret thread_function_call Wait(void *args);
 
-  DelegatedCore(uint64 target_time, uint64 time_to_wait, TimeJob *j);
+  DelegatedCore(Timestamp target_time, std::chrono::microseconds time_to_wait, TimeJob *j);
   ~DelegatedCore();
 };
 

@@ -85,6 +85,7 @@
 #include "../r_code/utils.h"
 #include <math.h>
 
+using namespace std::chrono;
 
 namespace r_exec {
 
@@ -292,7 +293,7 @@ bool add(const Context &context, uint16 &index) {
 
       if (lhs[0] != Atom::PlusInfinity()) {
 
-        index = context.setTimestampResult(Utils::GetTimestamp(&rhs[0]) + (int64)lhs[0].asFloat());
+        index = context.setTimestampResult(Utils::GetTimestamp(&rhs[0]) + microseconds((int64)lhs[0].asFloat()));
         return true;
       }
     }
@@ -300,13 +301,13 @@ bool add(const Context &context, uint16 &index) {
 
     if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
-      index = context.setTimestampResult(Utils::GetTimestamp(&lhs[0]) + Utils::GetTimestamp(&rhs[0]));
+      index = context.setTimestampResult(Utils::GetTimestamp(&lhs[0]) + Utils::GetTimestamp(&rhs[0]).time_since_epoch());
       return true;
     } else if (rhs[0].isFloat()) {
 
       if (rhs[0] != Atom::PlusInfinity()) {
 
-        index = context.setTimestampResult(Utils::GetTimestamp(&lhs[0]) + (int64)rhs[0].asFloat());
+        index = context.setTimestampResult(Utils::GetTimestamp(&lhs[0]) + microseconds((int64)rhs[0].asFloat()));
         return true;
       }
     }
@@ -346,13 +347,13 @@ bool sub(const Context &context, uint16 &index) {
 
     if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
-      index = context.setTimestampResult(Utils::GetTimestamp(&lhs[0]) - Utils::GetTimestamp(&rhs[0]));
+      index = context.setTimestampResult(Utils::GetTimestamp(&lhs[0]) - Utils::GetTimestamp(&rhs[0]).time_since_epoch());
       return true;
     } else if (rhs[0].isFloat()) {
 
       if (rhs[0] != Atom::PlusInfinity()) {
 
-        index = context.setTimestampResult(Utils::GetTimestamp(&lhs[0]) - (int64)rhs[0].asFloat());
+        index = context.setTimestampResult(Utils::GetTimestamp(&lhs[0]) - microseconds((int64)rhs[0].asFloat()));
         return true;
       }
     }
@@ -413,18 +414,18 @@ bool mul(const Context &context, uint16 &index) {
       return true;
     } else if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
-      index = context.setAtomicResult(Atom::Float(Utils::GetTimestamp(&rhs[0])*lhs[0].asFloat()));
+      index = context.setAtomicResult(Atom::Float(Utils::GetMicrosecondsSinceEpoch(&rhs[0]).count() * lhs[0].asFloat()));
       return true;
     }
   } else if (lhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
     if (rhs[0].isFloat()) {
 
-      index = context.setTimestampResult(Utils::GetTimestamp(&lhs[0])*rhs[0].asFloat());
+      index = context.setTimestampResult(Timestamp(microseconds((int64)(Utils::GetMicrosecondsSinceEpoch(&lhs[0]).count() * rhs[0].asFloat()))));
       return true;
     } else if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
-      index = context.setAtomicResult(Atom::Float(Utils::GetTimestamp(&lhs[0])*Utils::GetTimestamp(&lhs[0])));
+      index = context.setAtomicResult(Atom::Float(Utils::GetMicrosecondsSinceEpoch(&lhs[0]).count() * Utils::GetMicrosecondsSinceEpoch(&lhs[0]).count()));
       return true;
     }
   }
@@ -487,7 +488,7 @@ bool div(const Context &context, uint16 &index) {
       }
     } else if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
-      float64 rhs_t = (float64)Utils::GetTimestamp(&rhs[0]);
+      float64 rhs_t = (float64)Utils::GetMicrosecondsSinceEpoch(&rhs[0]).count();
       if (rhs_t != 0) {
 
         index = context.setAtomicResult(Atom::Float(lhs[0].asFloat() / rhs_t));
@@ -500,16 +501,16 @@ bool div(const Context &context, uint16 &index) {
 
       if (rhs[0].asFloat() != 0) {
 
-        float64 lhs_t = (float64)Utils::GetTimestamp(&lhs[0]);
-        index = context.setTimestampResult(lhs_t / rhs[0].asFloat());
+        float64 lhs_t = (float64)Utils::GetMicrosecondsSinceEpoch(&lhs[0]).count();
+        index = context.setTimestampResult(Timestamp(microseconds((int64)(lhs_t / rhs[0].asFloat()))));
         return true;
       }
     } else if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
-      float64 rhs_t = (float64)Utils::GetTimestamp(&rhs[0]);
+      float64 rhs_t = (float64)Utils::GetMicrosecondsSinceEpoch(&rhs[0]).count();
       if (rhs_t != 0) {
 
-        float64 lhs_t = (float64)Utils::GetTimestamp(&lhs[0]);
+        float64 lhs_t = (float64)Utils::GetMicrosecondsSinceEpoch(&lhs[0]).count();
         index = context.setAtomicResult(Atom::Float(lhs_t / rhs_t));
         return true;
       }
@@ -538,9 +539,9 @@ bool dis(const Context &context, uint16 &index) {
 
     if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
-      uint64 lhs_t = Utils::GetTimestamp(&lhs[0]);
-      uint64 rhs_t = Utils::GetTimestamp(&rhs[0]);
-      index = context.setTimestampResult(abs((float64)(lhs_t - rhs_t)));
+      auto lhs_t = Utils::GetMicrosecondsSinceEpoch(&lhs[0]).count();
+      auto rhs_t = Utils::GetMicrosecondsSinceEpoch(&rhs[0]).count();
+      index = context.setTimestampResult(Timestamp(microseconds(abs(lhs_t - rhs_t))));
       return true;
     }
   }

@@ -80,27 +80,28 @@
 
 #include <math.h>
 
+using namespace std::chrono;
 
 namespace r_code {
 
-uint64 Utils::TimeReference = 0;
-uint32 Utils::BasePeriod = 0;
+Timestamp Utils::TimeReference = Timestamp(microseconds(0));
+microseconds Utils::BasePeriod = microseconds(0);
 float32 Utils::FloatTolerance = 0;
-uint32 Utils::TimeTolerance = 0;
+microseconds Utils::TimeTolerance = microseconds(0);
 
-uint64 Utils::GetTimeReference() { return TimeReference; }
-uint32 Utils::GetBasePeriod() { return BasePeriod; }
+Timestamp Utils::GetTimeReference() { return TimeReference; }
+microseconds Utils::GetBasePeriod() { return BasePeriod; }
 uint32 Utils::GetFloatTolerance() { return FloatTolerance; }
-uint32 Utils::GetTimeTolerance() { return TimeTolerance; }
+microseconds Utils::GetTimeTolerance() { return TimeTolerance; }
 
-void Utils::SetReferenceValues(uint32 base_period, float32 float_tolerance, uint32 time_tolerance) {
+void Utils::SetReferenceValues(microseconds base_period, float32 float_tolerance, microseconds time_tolerance) {
 
   BasePeriod = base_period;
   FloatTolerance = float_tolerance;
   TimeTolerance = time_tolerance;
 }
 
-void Utils::SetTimeReference(uint64 time_reference) {
+void Utils::SetTimeReference(Timestamp time_reference) {
 
   TimeReference = time_reference;
 }
@@ -112,26 +113,28 @@ bool Utils::Equal(float32 l, float32 r) {
   return fabs(l - r) < FloatTolerance;
 }
 
-bool Utils::Synchronous(uint64 l, uint64 r) {
+bool Utils::Synchronous(Timestamp l, Timestamp r) {
 
-  return abs((int32)(l - r)) < TimeTolerance;
+  return abs(l - r) < TimeTolerance;
 }
 
-uint64 Utils::GetTimestamp(const Atom *iptr) {
+Timestamp Utils::GetTimestamp(const Atom *iptr) {
 
   uint64 high = iptr[1].atom;
-  return high << 32 | iptr[2].atom;
+  return Timestamp(microseconds(high << 32 | iptr[2].atom));
 }
 
-void Utils::SetTimestamp(Atom *iptr, uint64 t) {
+void Utils::SetTimestamp(Atom *iptr, Timestamp timestamp) {
 
+  uint64 t = duration_cast<microseconds>(timestamp.time_since_epoch()).count();
   iptr[0] = Atom::Timestamp();
   iptr[1].atom = t >> 32;
   iptr[2].atom = t & 0x00000000FFFFFFFF;
 }
 
-void Utils::SetTimestamp(Code *object, uint16 index, uint64 t) {
+void Utils::SetTimestamp(Code *object, uint16 index, Timestamp timestamp) {
 
+  uint64 t = duration_cast<microseconds>(timestamp.time_since_epoch()).count();
   object->code(index) = Atom::Timestamp();
   object->code(++index) = Atom(t >> 32);
   object->code(++index) = Atom(t & 0x00000000FFFFFFFF);
@@ -170,14 +173,14 @@ void Utils::SetString(Atom *iptr, const std::string &s) {
     iptr[++index] = _st;
 }
 
-int32 Utils::GetResilience(uint64 now, uint64 time_to_live, uint64 upr) {
+int32 Utils::GetResilience(Timestamp now, microseconds time_to_live, uint64 upr) {
 
-  if (time_to_live == 0 || upr == 0)
+  if (time_to_live.count() == 0 || upr == 0)
     return 1;
-  uint64 deadline = now + time_to_live;
-  uint64 last_upr = (now - TimeReference) / upr;
-  uint64 next_upr = (deadline - TimeReference) / upr;
-  if ((deadline - TimeReference) % upr > 0)
+  auto deadline = now + time_to_live;
+  uint64 last_upr = duration_cast<microseconds>(now - TimeReference).count() / upr;
+  uint64 next_upr = duration_cast<microseconds>(deadline - TimeReference).count() / upr;
+  if (duration_cast<microseconds>(deadline - TimeReference).count() % upr > 0)
     ++next_upr;
   return next_upr - last_upr;
 }
@@ -195,7 +198,7 @@ int32 Utils::GetResilience(float32 resilience, float32 origin_upr, float32 desti
   return res;
 }
 
-std::string Utils::RelativeTime(uint64 t) {
+std::string Utils::RelativeTime(Timestamp t) {
 
   return Time::ToString_seconds(t - TimeReference);
 }

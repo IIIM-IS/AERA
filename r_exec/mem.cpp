@@ -81,6 +81,7 @@
 #include "mdl_controller.h"
 #include "model_base.h"
 
+using namespace std::chrono;
 
 namespace r_exec {
 
@@ -97,21 +98,21 @@ _Mem::~_Mem() {
       delete debug_streams[i];
 }
 
-void _Mem::init(uint32 base_period,
+void _Mem::init(microseconds base_period,
   uint32 reduction_core_count,
   uint32 time_core_count,
   float32 mdl_inertia_sr_thr,
   uint32 mdl_inertia_cnt_thr,
   float32 tpx_dsr_thr,
-  uint32 min_sim_time_horizon,
-  uint32 max_sim_time_horizon,
+  microseconds min_sim_time_horizon,
+  microseconds max_sim_time_horizon,
   float32 sim_time_horizon_factor,
-  uint32 tpx_time_horizon,
-  uint32 perf_sampling_period,
+  microseconds tpx_time_horizon,
+  microseconds perf_sampling_period,
   float32 float_tolerance,
-  uint32 time_tolerance,
-  uint32 primary_thz,
-  uint32 secondary_thz,
+  microseconds time_tolerance,
+  microseconds primary_thz,
+  microseconds secondary_thz,
   bool debug,
   uint32 ntf_mk_res,
   uint32 goal_pred_success_res,
@@ -148,8 +149,8 @@ void _Mem::init(uint32 base_period,
   this->enable_assumptions = enable_assumptions;
 
   reduction_job_count = time_job_count = 0;
-  reduction_job_avg_latency = _reduction_job_avg_latency = 0;
-  time_job_avg_latency = _time_job_avg_latency = 0;
+  reduction_job_avg_latency = _reduction_job_avg_latency = microseconds(0);
+  time_job_avg_latency = _time_job_avg_latency = microseconds(0);
 
   uint32 mask = 1;
   for (uint32 i = 0; i < DebugStreamCount; ++i) {
@@ -311,32 +312,33 @@ bool _Mem::load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 s
   return true;
 }
 
-void _Mem::init_timings(uint64 now) const { // called at the beginning of _Mem::start(); use initial user-supplied facts' times as offsets from now.
+void _Mem::init_timings(Timestamp now) const { // called at the beginning of _Mem::start(); use initial user-supplied facts' times as offsets from now.
 
-  uint64 time_tolerance = Utils::GetTimeTolerance() * 2;
+  auto time_tolerance = Utils::GetTimeTolerance() * 2;
   r_code::list<P<Code> >::const_iterator o;
   for (o = objects.begin(); o != objects.end(); ++o) {
 
     uint16 opcode = (*o)->code(0).asOpcode();
     if (opcode == Opcodes::Fact || opcode == Opcodes::AntiFact) {
 
-      uint64 after = Utils::GetTimestamp<Code>(*o, FACT_AFTER);
-      uint64 before = Utils::GetTimestamp<Code>(*o, FACT_BEFORE);
+      // Use these as offsets from now.
+      auto after = Utils::GetTimestamp<Code>(*o, FACT_AFTER).time_since_epoch();
+      auto before = Utils::GetTimestamp<Code>(*o, FACT_BEFORE).time_since_epoch();
 
-      if (after < Utils::MaxTime - now)
+      if (after < Utils_MaxTime - now)
         Utils::SetTimestamp<Code>(*o, FACT_AFTER, after + now);
-      if (before < Utils::MaxTime - now - time_tolerance)
+      if (before < Utils_MaxTime - now - time_tolerance)
         Utils::SetTimestamp<Code>(*o, FACT_BEFORE, before + now + time_tolerance);
       else
-        Utils::SetTimestamp<Code>(*o, FACT_BEFORE, Utils::MaxTime);
+        Utils::SetTimestamp<Code>(*o, FACT_BEFORE, Utils_MaxTime);
     }
   }
 }
 
-uint64 _Mem::start() {
+Timestamp _Mem::start() {
 
   if (state != STOPPED && state != NOT_STARTED)
-    return 0;
+    return Timestamp(seconds(0));
 
   core_count = 0;
   stop_sem = new Semaphore(1, 1);
@@ -347,7 +349,7 @@ uint64 _Mem::start() {
   std::vector<std::pair<View *, Group *> > initial_reduction_jobs;
 
   uint32 i;
-  uint64 now = Now();
+  auto now = Now();
   Utils::SetTimeReference(now);
   ModelBase::Get()->set_thz(secondary_thz);
   init_timings(now);
@@ -370,8 +372,8 @@ uint64 _Mem::start() {
         for (v = g->input_less_ipgm_views.begin(); v != g->input_less_ipgm_views.end(); ++v) {
 
           if (v->second->controller != NULL && v->second->controller->is_activated()) {
-
-            P<TimeJob> j = new InputLessPGMSignalingJob(v->second, now + Utils::GetTimestamp<Code>(v->second->object, IPGM_TSC));
+            // The time scope is stored as a timestamp, but it is actually a duration.
+            P<TimeJob> j = new InputLessPGMSignalingJob(v->second, now + Utils::GetTimestamp<Code>(v->second->object, IPGM_TSC).time_since_epoch());
             time_job_queue->push(j);
           }
         }
@@ -380,8 +382,8 @@ uint64 _Mem::start() {
         for (v = g->anti_ipgm_views.begin(); v != g->anti_ipgm_views.end(); ++v) {
 
           if (v->second->controller != NULL && v->second->controller->is_activated()) {
-
-            P<TimeJob> j = new AntiPGMSignalingJob(v->second, now + Utils::GetTimestamp<Code>(v->second->object, IPGM_TSC));
+            // The time scope is stored as a timestamp, but it is actually a duration.
+            P<TimeJob> j = new AntiPGMSignalingJob(v->second, now + Utils::GetTimestamp<Code>(v->second->object, IPGM_TSC).time_since_epoch());
             time_job_queue->push(j);
           }
         }
@@ -425,7 +427,7 @@ uint64 _Mem::start() {
   return now;
 }
 
-void _Mem::runInDiagnosticTime(uint32 runTimeMilliseconds) {
+void _Mem::runInDiagnosticTime(milliseconds runTime) {
   if (!(reduction_core_count == 0 && time_core_count == 0))
     // This should only be called if there are no running core threads.
     return;
@@ -439,9 +441,9 @@ void _Mem::runInDiagnosticTime(uint32 runTimeMilliseconds) {
   // Use a deque so we can efficiently remove from the front.
   std::deque<P<TimeJob>> orderedTimeJobQueue;
 
-  uint64 tickTime = Now();
+  auto tickTime = Now();
   onDiagnosticTimeTick();
-  uint64 endTime = Now() + ((uint64)runTimeMilliseconds * 1000);
+  auto endTime = Now() + runTime;
 
   // Loop until the runTimeMilliseconds expires.
   while (true) {
@@ -503,9 +505,9 @@ void _Mem::runInDiagnosticTime(uint32 runTimeMilliseconds) {
     // The entry at the front is the earliest.
     if (orderedTimeJobQueue.size() == 0 ||
       orderedTimeJobQueue.front()->target_time >=
-      tickTime + sampling_period_us) {
+        tickTime + Mem_sampling_period) {
       // There is no time job before the next tick time, so tick.
-      tickTime += sampling_period_us;
+      tickTime += Mem_sampling_period;
       // Increase the diagnostic time to the tick time.
       DiagnosticTimeNow = tickTime;
       // We are beginning a new sampling period.
@@ -535,14 +537,14 @@ void _Mem::runInDiagnosticTime(uint32 runTimeMilliseconds) {
       continue;
     }
 
-    uint64 next_target = 0;
+    Timestamp next_target(seconds(0));
     if (!timeJob->update(next_target)) {
       // update() says to stop running.
       timeJob = NULL;
       break;
     }
 
-    if (next_target != 0) {
+    if (next_target.time_since_epoch().count() != 0) {
       // The job wants to run again, so re-insert into the queue.
       timeJob->target_time = next_target;
       orderedTimeJobQueue.insert
@@ -555,9 +557,9 @@ void _Mem::runInDiagnosticTime(uint32 runTimeMilliseconds) {
   }
 }
 
-uint64 _Mem::DiagnosticTimeNow = 1;
+Timestamp _Mem::DiagnosticTimeNow = Timestamp(microseconds(1));
 
-uint64 _Mem::getDiagnosticTimeNow() { return DiagnosticTimeNow; }
+Timestamp _Mem::getDiagnosticTimeNow() { return DiagnosticTimeNow; }
 
 void _Mem::onDiagnosticTimeTick() {}
 
@@ -655,14 +657,14 @@ void _Mem::inject_existing_object(View *view, Code *object, Group *host) {
   host->inject_existing_object(view);
 }
 
-void _Mem::inject_null_program(Controller *c, Group *group, uint64 time_to_live, bool take_past_inputs) {
+void _Mem::inject_null_program(Controller *c, Group *group, microseconds time_to_live, bool take_past_inputs) {
 
-  uint64 now = Now();
+  auto now = Now();
 
   Code *null_pgm = new LObject();
   null_pgm->code(0) = Atom::NullProgram(take_past_inputs);
 
-  uint32 res = Utils::GetResilience(now, time_to_live, group->get_upr()*Utils::GetBasePeriod());
+  uint32 res = Utils::GetResilience(now, time_to_live, group->get_upr() * Utils::GetBasePeriod().count());
 
   View *view = new View(View::SYNC_ONCE, now, 0, res, group, NULL, null_pgm, 1);
   view->controller = c;
@@ -703,8 +705,8 @@ void _Mem::inject(View *view) {
   if (host->is_invalidated())
     return;
 
-  uint64 now = Now();
-  uint64 ijt = view->get_ijt();
+  auto now = Now();
+  auto ijt = view->get_ijt();
 
   if (view->object->is_registered()) { // existing object.
 
@@ -737,8 +739,8 @@ void _Mem::inject_async(View *view) {
   if (host->is_invalidated())
     return;
 
-  uint64 now = Now();
-  uint64 ijt = view->get_ijt();
+  auto now = Now();
+  auto ijt = view->get_ijt();
 
   if (ijt <= now) {
 
@@ -778,14 +780,14 @@ void _Mem::inject_notification(View *view, bool lock) { // no notification for n
 
 ////////////////////////////////////////////////////////////////
 
-void _Mem::register_reduction_job_latency(uint64 latency) {
+void _Mem::register_reduction_job_latency(microseconds latency) {
 
   reduction_jobCS.enter();
   ++reduction_job_count;
   reduction_job_avg_latency += latency;
   reduction_jobCS.leave();
 }
-void _Mem::register_time_job_latency(uint64 latency) {
+void _Mem::register_time_job_latency(microseconds latency) {
 
   time_jobCS.enter();
   ++time_job_count;
@@ -798,21 +800,21 @@ void _Mem::inject_perf_stats() {
   reduction_jobCS.enter();
   time_jobCS.enter();
 
-  int64 d_reduction_job_avg_latency;
+  microseconds d_reduction_job_avg_latency;
   if (reduction_job_count > 0) {
 
     reduction_job_avg_latency /= reduction_job_count;
     d_reduction_job_avg_latency = reduction_job_avg_latency - _reduction_job_avg_latency;
   } else
-    reduction_job_avg_latency = d_reduction_job_avg_latency = 0;
+    reduction_job_avg_latency = d_reduction_job_avg_latency = microseconds(0);
 
-  int64 d_time_job_avg_latency;
+  microseconds d_time_job_avg_latency;
   if (time_job_count > 0) {
 
     time_job_avg_latency /= time_job_count;
     d_time_job_avg_latency = time_job_avg_latency - _time_job_avg_latency;
   } else
-    time_job_avg_latency = d_time_job_avg_latency = 0;
+    time_job_avg_latency = d_time_job_avg_latency = microseconds(0);
 
   Code *perf = new Perf(reduction_job_avg_latency, d_reduction_job_avg_latency, time_job_avg_latency, d_time_job_avg_latency);
 
@@ -825,7 +827,7 @@ void _Mem::inject_perf_stats() {
   reduction_jobCS.leave();
 
   // inject f->perf in stdin.
-  uint64 now = Now();
+  auto now = Now();
   Code *f_perf = new Fact(perf, now, now + perf_sampling_period, 1, 1);
   View *view = new View(View::SYNC_ONCE, now, 1, 1, _stdin, NULL, f_perf); // sync front, sln=1, res=1.
   inject(view);

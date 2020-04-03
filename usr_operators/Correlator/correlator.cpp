@@ -135,7 +135,7 @@ public:
     //correlator=new Correlator();
   }
 
-  void decompile(uint64 time_offset) {
+  void decompile(Timestamp::duration time_offset) {
 
     r_comp::Image *image = r_exec::_Mem::Get()->get_objects();
 
@@ -147,9 +147,9 @@ public:
       r_comp::Decompiler& decompiler;
       r_code::vector<r_code::SysObject*>& objects;
       uint32& object_count;
-      uint64& time_offset;
+      Timestamp::duration& time_offset;
 
-      OID2string(r_comp::Decompiler& d, r_code::vector<r_code::SysObject*>& o, uint32& c, uint64& t) :
+      OID2string(r_comp::Decompiler& d, r_code::vector<r_code::SysObject*>& o, uint32& c, Timestamp::duration& t) :
         decompiler(d), objects(o), object_count(c), time_offset(t) {inst = this;}
 
       static std::string wrapper(uint32 id) {

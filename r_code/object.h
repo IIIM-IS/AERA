@@ -186,8 +186,8 @@ public:
   }SyncMode;
 
   SyncMode get_sync() const { return (SyncMode)(uint32)_code[VIEW_SYNC].asFloat(); }
-  uint64 get_ijt() const { return Utils::GetTimestamp(_code + _code[VIEW_IJT].asIndex()); }
-  void set_ijt(uint64 ijt) { Utils::SetTimestamp(_code + _code[VIEW_IJT].asIndex(), ijt); }
+  Timestamp get_ijt() const { return Utils::GetTimestamp(_code + _code[VIEW_IJT].asIndex()); }
+  void set_ijt(Timestamp ijt) { Utils::SetTimestamp(_code + _code[VIEW_IJT].asIndex(), ijt); }
 
   class Hash {
   public:

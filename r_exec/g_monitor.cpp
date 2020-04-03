@@ -80,13 +80,14 @@
 #include "mdl_controller.h"
 #include "factory.h"
 
+using namespace std::chrono;
 
 namespace r_exec {
 
 _GMonitor::_GMonitor(PMDLController *controller,
   BindingMap *bindings,
-  uint64 deadline,
-  uint64 sim_thz,
+  Timestamp deadline,
+  Timestamp sim_thz,
   Fact *goal,
   Fact *f_imdl) : Monitor(controller,
     bindings,
@@ -150,8 +151,8 @@ void _GMonitor::invalidate_sim_outcomes() {
 
 GMonitor::GMonitor(PMDLController *controller,
   BindingMap *bindings,
-  uint64 deadline,
-  uint64 sim_thz,
+  Timestamp deadline,
+  Timestamp sim_thz,
   Fact *goal,
   Fact *f_imdl,
   _Fact *predicted_evidence) : _GMonitor(controller,
@@ -171,7 +172,7 @@ void GMonitor::commit() { // the purpose is to invalidate damaging simulations; 
 
   Goal *monitored_goal = target->get_goal();
 
-  uint64 now = Now();
+  auto now = Now();
 
   SolutionList::const_iterator sol;
 
@@ -203,8 +204,8 @@ void GMonitor::commit() { // the purpose is to invalidate damaging simulations; 
       best_sol = (*sol).second;
     else {
 
-      float32 s = (*sol).second->sol_cfd / ((*sol).second->sol_before - now);
-      float32 _s = best_sol->sol_cfd / (best_sol->sol_before - now);
+      float32 s = (*sol).second->sol_cfd / duration_cast<microseconds>((*sol).second->sol_before - now).count();
+      float32 _s = best_sol->sol_cfd / duration_cast<microseconds>(best_sol->sol_before - now).count();
       if (s > _s)
         best_sol = (*sol).second;
     }
@@ -243,7 +244,7 @@ bool GMonitor::reduce(_Fact *input) { // executed by a reduction core; invalidat
     _Fact *_input = prediction->get_target(); // _input is f1->obj.
     if (simulating) { // injected_goal==true.
 
-      Sim *sim = prediction->get_simulation(target);
+      Sim *sim = prediction->get_simulation(controller);
       if (sim) {
 
         Code *outcome = _input->get_reference(0);
@@ -312,12 +313,12 @@ bool GMonitor::reduce(_Fact *input) { // executed by a reduction core; invalidat
   }
 }
 
-void GMonitor::update(uint64 &next_target) { // executed by a time core.
+void GMonitor::update(Timestamp &next_target) { // executed by a time core.
 
   if (target->is_invalidated()) {
 
     ((PMDLController *)controller)->remove_g_monitor(this);
-    next_target = 0;
+    next_target = Timestamp(seconds(0));
   } else if (simulating) {
 
     simulating = 0;
@@ -327,7 +328,7 @@ void GMonitor::update(uint64 &next_target) { // executed by a time core.
 
     ((PMDLController *)controller)->register_goal_outcome(target, false, NULL);
     ((PMDLController *)controller)->remove_g_monitor(this);
-    next_target = 0;
+    next_target = Timestamp(seconds(0));
   }
 }
 
@@ -335,8 +336,8 @@ void GMonitor::update(uint64 &next_target) { // executed by a time core.
 
 RMonitor::RMonitor(PrimaryMDLController *controller,
   BindingMap *bindings,
-  uint64 deadline,
-  uint64 sim_thz,
+  Timestamp deadline,
+  Timestamp sim_thz,
   Fact *goal,
   Fact *f_imdl) : GMonitor(controller,
     bindings,
@@ -378,7 +379,7 @@ bool RMonitor::reduce(_Fact *input) { // catch simulated predictions only; requi
     _Fact *_input = prediction->get_target(); // _input is f1->obj.
     if (simulating) { // injected_goal==true.
 
-      Sim *sim = prediction->get_simulation(target);
+      Sim *sim = prediction->get_simulation(controller);
       if (sim) {
 
         Code *outcome = _input->get_reference(0);
@@ -399,12 +400,12 @@ bool RMonitor::reduce(_Fact *input) { // catch simulated predictions only; requi
   return false;
 }
 
-void RMonitor::update(uint64 &next_target) {
+void RMonitor::update(Timestamp &next_target) {
 
   if (target->is_invalidated()) {
 
     ((PMDLController *)controller)->remove_r_monitor(this);
-    next_target = 0;
+    next_target = Timestamp(seconds(0));
   } else if (simulating) {
 
     simulating = 0;
@@ -414,7 +415,7 @@ void RMonitor::update(uint64 &next_target) {
 
     ((PMDLController *)controller)->register_goal_outcome(target, false, NULL);
     ((PMDLController *)controller)->remove_r_monitor(this);
-    next_target = 0;
+    next_target = Timestamp(seconds(0));
   }
 }
 
@@ -422,11 +423,11 @@ void RMonitor::update(uint64 &next_target) {
 
 SGMonitor::SGMonitor(PrimaryMDLController *controller,
   BindingMap *bindings,
-  uint64 sim_thz,
+  Timestamp sim_thz,
   Fact *goal,
   Fact *f_imdl) : _GMonitor(controller,
     bindings,
-    0,
+    Timestamp(seconds(0)),
     sim_thz,
     goal,
     f_imdl) { // goal is f0->g->f1->object.
@@ -439,7 +440,7 @@ void SGMonitor::commit() { // the purpose is to invalidate damaging simulations 
 
   Goal *monitored_goal = target->get_goal();
 
-  uint64 now = Now();
+  auto now = Now();
 
   SolutionList::const_iterator sol;
 
@@ -474,7 +475,7 @@ bool SGMonitor::reduce(_Fact *input) {
 
     _input = prediction->get_target(); // _input is f1->obj.
 
-    Sim *sim = prediction->get_simulation(target);
+    Sim *sim = prediction->get_simulation(controller);
     if (sim) {
 
       Code *outcome = _input->get_reference(0);
@@ -505,19 +506,19 @@ bool SGMonitor::reduce(_Fact *input) {
   }
 }
 
-void SGMonitor::update(uint64 &next_target) { // executed by a time core.
+void SGMonitor::update(Timestamp &next_target) { // executed by a time core.
 
   if (!target->is_invalidated())
     commit();
   ((PMDLController *)controller)->remove_g_monitor(this);
-  next_target = 0;
+  next_target = Timestamp(seconds(0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SRMonitor::SRMonitor(PrimaryMDLController *controller,
   BindingMap *bindings,
-  uint64 sim_thz,
+  Timestamp sim_thz,
   Fact *goal,
   Fact *f_imdl) : SGMonitor(controller,
     bindings,
@@ -556,7 +557,7 @@ bool SRMonitor::reduce(_Fact *input) {
 
     _Fact *_input = prediction->get_target(); // _input is f1->obj.
 
-    Sim *sim = prediction->get_simulation(target);
+    Sim *sim = prediction->get_simulation(controller);
     if (sim) {
 
       Code *outcome = _input->get_reference(0);
@@ -576,11 +577,11 @@ bool SRMonitor::reduce(_Fact *input) {
   return false;
 }
 
-void SRMonitor::update(uint64 &next_target) {
+void SRMonitor::update(Timestamp &next_target) {
 
   if (!target->is_invalidated())
     commit();
   ((PMDLController *)controller)->remove_r_monitor(this);
-  next_target = 0;
+  next_target = Timestamp(seconds(0));
 }
 }

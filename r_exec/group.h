@@ -438,7 +438,7 @@ public:
   // - inject next update job for the group.
   // - inject new signaling jobs if act pgm with no input or act |pgm.
   // - notify high and low values.
-  void update(uint64 planned_time);
+  void update(Timestamp planned_time);
 
   void inject_new_object(View *view);
   void inject_existing_object(View *view);
@@ -470,8 +470,8 @@ public:
   void load_secondary_mdl_controller(View *view);
   void inject_secondary_mdl_controller(View *view);
 
-  uint64 get_next_upr_time(uint64 now) const;
-  uint64 get_prev_upr_time(uint64 now) const;
+  Timestamp get_next_upr_time(Timestamp now) const;
+  Timestamp get_prev_upr_time(Timestamp now) const;
 };
 }
 

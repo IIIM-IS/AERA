@@ -83,6 +83,7 @@
 #include "mdl_controller.h"
 #include <math.h>
 
+using namespace std::chrono;
 
 namespace r_exec {
 
@@ -529,7 +530,7 @@ bool Group::load(View *view, Code *object) {
   return true;
 }
 
-void Group::update(uint64 planned_time) {
+void Group::update(Timestamp planned_time) {
 
   enter();
 
@@ -540,7 +541,7 @@ void Group::update(uint64 planned_time) {
     return;
   }
 
-  uint64 now = Now();
+  auto now = Now();
   //if(get_secondary_group()!=NULL)
   // std::cout<<Utils::RelativeTime(Now())<<" UPR\n";
   //if(this==_Mem::Get()->get_stdin())
@@ -570,7 +571,7 @@ void Group::update(uint64 planned_time) {
       delete_view(v);
     else {
 
-      uint64 ijt = v->second->get_ijt();
+      auto ijt = v->second->get_ijt();
       if (ijt >= planned_time) { // in case the update happens later than planned, don't touch views that were injected after the planned update time: update next time.
 
         ++v;
@@ -619,13 +620,13 @@ void Group::update(uint64 planned_time) {
 
       switch (new_controllers[i]->getObject()->code(0).getDescriptor()) {
       case Atom::INSTANTIATED_ANTI_PROGRAM: { // inject signaling jobs for |ipgm (tsc).
-
-        P<TimeJob> j = new AntiPGMSignalingJob((r_exec::View *)new_controllers[i]->getView(), now + Utils::GetTimestamp<Code>(new_controllers[i]->getObject(), IPGM_TSC));
+        // The time scope is stored as a timestamp, but it is actually a duration.
+        P<TimeJob> j = new AntiPGMSignalingJob((r_exec::View *)new_controllers[i]->getView(), now + Utils::GetTimestamp<Code>(new_controllers[i]->getObject(), IPGM_TSC).time_since_epoch());
         _Mem::Get()->pushTimeJob(j);
         break;
       }case Atom::INSTANTIATED_INPUT_LESS_PROGRAM: { // inject a signaling job for an input-less pgm.
 
-        P<TimeJob> j = new InputLessPGMSignalingJob((r_exec::View *)new_controllers[i]->getView(), now + Utils::GetTimestamp<Code>(new_controllers[i]->getObject(), IPGM_TSC));
+        P<TimeJob> j = new InputLessPGMSignalingJob((r_exec::View *)new_controllers[i]->getView(), now + Utils::GetTimestamp<Code>(new_controllers[i]->getObject(), IPGM_TSC).time_since_epoch());
         _Mem::Get()->pushTimeJob(j);
         break;
       }
@@ -811,7 +812,7 @@ void Group::_propagate_sln(Code *object, float32 change, float32 source_sln_thr,
       return;
   path.push_back(object);
 
-  P<TimeJob> j = new SaliencyPropagationJob(object, change, source_sln_thr, 0);
+  P<TimeJob> j = new SaliencyPropagationJob(object, change, source_sln_thr, Timestamp(seconds(0)));
   _Mem::Get()->pushTimeJob(j);
 
   _initiate_sln_propagation(object, change, source_sln_thr, path);
@@ -866,7 +867,7 @@ void Group::inject(View *view) { // the view can hold anything but groups and no
   enter();
 
   Atom a = view->object->code(0);
-  uint64 now = Now();
+  auto now = Now();
   view->set_ijt(now);
   switch (a.getDescriptor()) {
   case Atom::NULL_PROGRAM: // the view comes with a controller.
@@ -918,8 +919,8 @@ void Group::inject(View *view) { // the view can hold anything but groups and no
       std::multiset<P<View>, r_code::View::Less>::const_iterator v;
       for (v = newly_salient_views.begin(); v != newly_salient_views.end(); ++v)
         c->_take_input(*v); // view will be copied.
-
-      _Mem::Get()->pushTimeJob(new AntiPGMSignalingJob(view, now + Utils::GetTimestamp<Code>(c->getObject(), IPGM_TSC)));
+      // The time scope is stored as a timestamp, but it is actually a duration.
+      _Mem::Get()->pushTimeJob(new AntiPGMSignalingJob(view, now + Utils::GetTimestamp<Code>(c->getObject(), IPGM_TSC).time_since_epoch()));
     }
     break;
   }case Atom::INSTANTIATED_INPUT_LESS_PROGRAM: {
@@ -929,7 +930,7 @@ void Group::inject(View *view) { // the view can hold anything but groups and no
     if (is_active_pgm(view)) {
 
       c->gain_activation();
-      _Mem::Get()->pushTimeJob(new InputLessPGMSignalingJob(view, now + Utils::GetTimestamp<Code>(view->object, IPGM_TSC)));
+      _Mem::Get()->pushTimeJob(new InputLessPGMSignalingJob(view, now + Utils::GetTimestamp<Code>(view->object, IPGM_TSC).time_since_epoch()));
     }
     break;
   }case Atom::MARKER: // the marker has already been added to the mks of its references.
@@ -1291,23 +1292,23 @@ void Group::inject_secondary_mdl_controller(View *view) {
   s->set_primary(p);
 }
 
-uint64 Group::get_next_upr_time(uint64 now) const {
+Timestamp Group::get_next_upr_time(Timestamp now) const {
 
   uint32 __upr = get_upr();
   if (__upr == 0)
-    return Utils::MaxTime;
-  uint64 _upr = __upr * Utils::GetBasePeriod();
-  uint64 delta = (now - Utils::GetTimeReference()) % _upr;
+    return Utils_MaxTime;
+  auto _upr = __upr * Utils::GetBasePeriod();
+  auto delta = (now - Utils::GetTimeReference()) % _upr;
   return now - delta + _upr;
 }
 
-uint64 Group::get_prev_upr_time(uint64 now) const {
+Timestamp Group::get_prev_upr_time(Timestamp now) const {
 
   uint32 __upr = get_upr();
   if (__upr == 0)
-    return Utils::MaxTime;
-  uint64 _upr = __upr * Utils::GetBasePeriod();
-  uint64 delta = (now - Utils::GetTimeReference()) % _upr;
+    return Utils_MaxTime;
+  auto _upr = __upr * Utils::GetBasePeriod();
+  auto delta = (now - Utils::GetTimeReference()) % _upr;
   return now - delta;
 }
 }
