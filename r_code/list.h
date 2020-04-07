@@ -90,119 +90,119 @@ namespace r_code {
 // Insertion not needed for now; not implemented.
 template<typename T> class list {
 protected:
-  static const int32 null = -1;
+  static const int32 null_ = -1;
 
   class cell { // int32: to be robust WRT realloc(); this means that Ts can hold a cell index to speed up erasure.
   public:
-    int32 next;
-    int32 prev;
-    T data;
-    cell() : next(null), prev(null) {}
+    int32 next_;
+    int32 prev_;
+    T data_;
+    cell() : next_(null_), prev_(null_) {}
   };
 
-  std::vector<cell> cells;
+  std::vector<cell> cells_;
 
-  int32 used_cells_head;
-  int32 used_cells_tail;
-  int32 free_cells; // backward links unused.
-  uint32 used_cell_count;
-  uint32 free_cell_count;
+  int32 used_cells_head_;
+  int32 used_cells_tail_;
+  int32 free_cells_; // backward links unused.
+  uint32 used_cell_count_;
+  uint32 free_cell_count_;
 
   void push_back_free_cell(const T &t) {
 
-    int32 free = free_cells;
-    free_cells = cells[free_cells].next;
-    --free_cell_count;
-    cells[free].data = t;
-    cells[free].next = null;
-    cells[free].prev = used_cells_tail;
-    used_cells_tail = free;
+    int32 free = free_cells_;
+    free_cells_ = cells_[free_cells_].next_;
+    --free_cell_count_;
+    cells_[free].data_ = t;
+    cells_[free].next_ = null_;
+    cells_[free].prev_ = used_cells_tail_;
+    used_cells_tail_ = free;
   }
 
   void push_back_new_cell(const T &t) {
 
     cell c;
-    c.data = t;
-    c.next = null;
-    c.prev = used_cells_tail;
-    cells.push_back(c);
-    used_cells_tail = cells.size() - 1;
+    c.data_ = t;
+    c.next_ = null_;
+    c.prev_ = used_cells_tail_;
+    cells_.push_back(c);
+    used_cells_tail_ = cells_.size() - 1;
   }
 
   void update_used_cells_tail_state() {
 
-    if (cells[used_cells_tail].prev != null)
-      cells[cells[used_cells_tail].prev].next = used_cells_tail;
-    if (used_cells_head == null)
-      used_cells_head = used_cells_tail;
-    ++used_cell_count;
+    if (cells_[used_cells_tail_].prev_ != null_)
+      cells_[cells_[used_cells_tail_].prev_].next_ = used_cells_tail_;
+    if (used_cells_head_ == null_)
+      used_cells_head_ = used_cells_tail_;
+    ++used_cell_count_;
   }
 
   void push_front_free_cell(const T &t) {
 
-    int32 free = free_cells;
-    free_cells = cells[free_cells].next;
-    --free_cell_count;
-    cells[free].data = t;
-    cells[free].next = used_cells_head;
-    cells[free].prev = null;
-    used_cells_head = free;
+    int32 free = free_cells_;
+    free_cells_ = cells_[free_cells_].next_;
+    --free_cell_count_;
+    cells_[free].data_ = t;
+    cells_[free].next_ = used_cells_head_;
+    cells_[free].prev_ = null_;
+    used_cells_head_ = free;
   }
 
   void push_front_new_cell(const T &t) {
 
     cell c;
-    c.data = t;
-    c.next = used_cells_head;
-    c.prev = null;
-    cells.push_back(c);
-    used_cells_head = cells.size() - 1;
+    c.data_ = t;
+    c.next_ = used_cells_head_;
+    c.prev_ = null_;
+    cells_.push_back(c);
+    used_cells_head_ = cells_.size() - 1;
   }
 
   void update_used_cells_head_state() {
 
-    if (cells[used_cells_head].next != null)
-      cells[cells[used_cells_head].next].prev = used_cells_head;
-    if (used_cells_tail == null)
-      used_cells_tail = used_cells_head;
-    ++used_cell_count;
+    if (cells_[used_cells_head_].next_ != null_)
+      cells_[cells_[used_cells_head_].next_].prev_ = used_cells_head_;
+    if (used_cells_tail_ == null_)
+      used_cells_tail_ = used_cells_head_;
+    ++used_cell_count_;
   }
 
   void __erase(int32 c) {
 
-    if (cells[c].prev != null)
-      cells[cells[c].prev].next = cells[c].next;
+    if (cells_[c].prev_ != null_)
+      cells_[cells_[c].prev_].next_ = cells_[c].next_;
     else
-      used_cells_head = cells[c].next;
-    if (cells[c].next != null)
-      cells[cells[c].next].prev = cells[c].prev;
+      used_cells_head_ = cells_[c].next_;
+    if (cells_[c].next_ != null_)
+      cells_[cells_[c].next_].prev_ = cells_[c].prev_;
     else
-      used_cells_tail = cells[c].prev;
-    cells[c].next = free_cells;
-    free_cells = c;
-    ++free_cell_count;
-    --used_cell_count;
+      used_cells_tail_ = cells_[c].prev_;
+    cells_[c].next_ = free_cells_;
+    free_cells_ = c;
+    ++free_cell_count_;
+    --used_cell_count_;
   }
   int32 _erase(int32 c) {
 
-    int32 next = cells[c].next;
+    int32 next_ = cells_[c].next_;
     __erase(c);
-    return next;
+    return next_;
   }
 public:
-  list() : used_cells_head(null), used_cells_tail(null), free_cells(null), used_cell_count(0), free_cell_count(0) {}
+  list() : used_cells_head_(null_), used_cells_tail_(null_), free_cells_(null_), used_cell_count_(0), free_cell_count_(0) {}
 
-  uint32 size() const { return used_cell_count; }
-  void reserve(uint32 size) { cells.reserve(size); }
+  uint32 size() const { return used_cell_count_; }
+  void reserve(uint32 size) { cells_.reserve(size); }
   void clear() {
 
-    used_cells_head = used_cells_tail = free_cells = null;
-    used_cell_count = free_cell_count = 0;
-    cells.clear();
+    used_cells_head_ = used_cells_tail_ = free_cells_ = null_;
+    used_cell_count_ = free_cell_count_ = 0;
+    cells_.clear();
   }
   void push_back(const T &t) {
 
-    if (free_cell_count)
+    if (free_cell_count_)
       push_back_free_cell(t);
     else
       push_back_new_cell(t);
@@ -210,20 +210,20 @@ public:
   }
   void push_back(const T &t, int32 &location) {
 
-    if (free_cell_count) {
+    if (free_cell_count_) {
 
-      location = free_cells;
+      location = free_cells_;
       push_back_free_cell(t);
     } else {
 
       push_back_new_cell(t);
-      location = used_cells_tail;
+      location = used_cells_tail_;
     }
     update_used_cells_tail_state();
   }
   void push_front(const T &t) {
 
-    if (free_cell_count)
+    if (free_cell_count_)
       push_front_free_cell(t);
     else
       push_front_new_cell(t);
@@ -231,26 +231,26 @@ public:
   }
   void push_front(const T &t, int32 &location) {
 
-    if (free_cell_count) {
+    if (free_cell_count_) {
 
-      location = free_cells;
+      location = free_cells_;
       push_front_free_cell(t);
     } else {
 
       push_front_new_cell(t);
-      location = used_cells_tail;
+      location = used_cells_tail_;
     }
     update_used_cells_head_state();
   }
 
   class _iterator {
   protected:
-    int32 _cell;
-    _iterator(int32 c) : _cell(c) {}
-    _iterator() : _cell(null) {}
+    int32 cell_;
+    _iterator(int32 c) : cell_(c) {}
+    _iterator() : cell_(null_) {}
   public:
-    bool operator ==(const _iterator &i) const { return _cell == i._cell; }
-    bool operator !=(const _iterator &i) const { return _cell != i._cell; }
+    bool operator ==(const _iterator &i) const { return cell_ == i.cell_; }
+    bool operator !=(const _iterator &i) const { return cell_ != i.cell_; }
   };
 
   class iterator;
@@ -258,27 +258,27 @@ public:
     public _iterator {
     friend class list;
   private:
-    const list *_list;
-    const_iterator(const list *l, int32 c) : _iterator(c), _list(l) {}
+    const list *list_;
+    const_iterator(const list *l, int32 c) : _iterator(c), list_(l) {}
   public:
-    const_iterator() : _iterator(), _list(NULL) {}
-    const T &operator *() const { return _list->cells[_cell].data; }
-    const T *operator ->() const { return &(_list->cells[_cell].data); }
+    const_iterator() : _iterator(), list_(NULL) {}
+    const T &operator *() const { return list_->cells_[cell_].data_; }
+    const T *operator ->() const { return &(list_->cells_[cell_].data_); }
     const_iterator &operator ++() {
 
-      _cell = _list->cells[_cell].next;
+      cell_ = list_->cells_[cell_].next_;
       return *this;
     }
     const_iterator &operator =(const const_iterator &i) {
 
-      _list = i._list;
-      _cell = i._cell;
+      list_ = i.list_;
+      cell_ = i.cell_;
       return *this;
     }
     const_iterator &operator =(const iterator &i) {
 
-      _list = i._list;
-      _cell = i._cell;
+      list_ = i.list_;
+      cell_ = i.cell_;
       return *this;
     }
   };
@@ -288,37 +288,37 @@ public:
     friend class list;
     friend class const_iterator;
   protected:
-    list *_list;
-    iterator(list *l, int32 c) : _iterator(c), _list(l) {}
+    list *list_;
+    iterator(list *l, int32 c) : _iterator(c), list_(l) {}
   public:
-    iterator() : _iterator(), _list(NULL) {}
-    T &operator *() const { return _list->cells[_cell].data; }
-    T *operator ->() const { return &(_list->cells[_cell].data); }
+    iterator() : _iterator(), list_(NULL) {}
+    T &operator *() const { return list_->cells_[cell_].data_; }
+    T *operator ->() const { return &(list_->cells_[cell_].data_); }
     iterator &operator ++() {
 
-      _cell = _list->cells[_cell].next;
+      cell_ = list_->cells_[cell_].next_;
       return *this;
     }
     iterator &operator =(const iterator &i) {
 
-      _list = i._list;
-      _cell = i._cell;
+      list_ = i.list_;
+      cell_ = i.cell_;
       return *this;
     }
   };
 private:
-  static const_iterator end_iterator;
+  static const_iterator end_iterator_;
 public:
-  iterator begin() { return iterator(this, used_cells_head); }
-  const_iterator begin() const { return const_iterator(this, used_cells_head); }
-  const_iterator &end() const { return end_iterator; }
-  iterator erase(iterator &i) { return iterator(this, _erase(i._cell)); } // no check for i._cell==null.
-  const_iterator erase(const_iterator &i) { return const_iterator(this, _erase(i._cell)); } // no check for i._cell==null.
+  iterator begin() { return iterator(this, used_cells_head_); }
+  const_iterator begin() const { return const_iterator(this, used_cells_head_); }
+  const_iterator &end() const { return end_iterator_; }
+  iterator erase(iterator &i) { return iterator(this, _erase(i.cell_)); } // no check for i.cell_==null_.
+  const_iterator erase(const_iterator &i) { return const_iterator(this, _erase(i.cell_)); } // no check for i.cell_==null_.
   void erase(int32 c) { __erase(c); } // use for random object deletion.
   void remove(const T &t) {
 
-    const_iterator i(this, used_cells_head);
-    for (; i != end_iterator; ++i) {
+    const_iterator i(this, used_cells_head_);
+    for (; i != end_iterator_; ++i) {
 
       if ((*i) == t) {
 
@@ -327,11 +327,11 @@ public:
       }
     }
   }
-  T &front() { return cells[used_cells_head].data; }
-  T &back() { return cells[used_cells_tail].data; }
+  T &front() { return cells_[used_cells_head_].data_; }
+  T &back() { return cells_[used_cells_tail_].data_; }
 };
 
-template<typename T> typename list<T>::const_iterator list<T>::end_iterator;
+template<typename T> typename list<T>::const_iterator list<T>::end_iterator_;
 }
 
 

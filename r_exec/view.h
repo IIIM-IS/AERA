@@ -88,29 +88,29 @@ namespace r_exec {
 class Group;
 class LObject;
 
-// OID is hidden at _code[VIEW_OID].
+// OID is hidden at code_[VIEW_OID].
 // Shared resources:
 // none: all mod/set operations are pushed on the group and executed at update time.
 class r_exec_dll View :
   public r_code::View {
 private:
-  static uint32 LastOID;
+  static uint32 lastOID_;
   static uint32 GetOID();
 
   // Ctrl values.
-  uint32 sln_changes;
-  float32 acc_sln;
-  uint32 act_changes;
-  float32 acc_act;
-  uint32 vis_changes;
-  float32 acc_vis;
-  uint32 res_changes;
-  float32 acc_res;
+  uint32 sln_changes_;
+  float32 acc_sln_;
+  uint32 act_changes_;
+  float32 acc_act_;
+  uint32 vis_changes_;
+  float32 acc_vis_;
+  uint32 res_changes_;
+  float32 acc_res_;
   void reset_ctrl_values();
 
   // Monitoring
-  float32 initial_sln;
-  float32 initial_act;
+  float32 initial_sln_;
+  float32 initial_act_;
 
   void init(SyncMode sync,
     Timestamp ijt,
@@ -123,17 +123,17 @@ protected:
   void reset_init_sln();
   void reset_init_act();
 public:
-  static uint16 ViewOpcode;
+  static uint16 ViewOpcode_;
 
-  P<Controller> controller; // built upon injection of the view (if the object is an ipgm/icpp_pgm/cst/mdl).
+  P<Controller> controller_; // built upon injection of the view (if the object is an ipgm/icpp_pgm/cst/mdl).
 
   static float32 MorphValue(float32 value, float32 source_thr, float32 destination_thr);
   static float32 MorphChange(float32 change, float32 source_thr, float32 destination_thr);
 
-  uint32 periods_at_low_sln;
-  uint32 periods_at_high_sln;
-  uint32 periods_at_low_act;
-  uint32 periods_at_high_act;
+  uint32 periods_at_low_sln_;
+  uint32 periods_at_high_sln_;
+  uint32 periods_at_low_act_;
+  uint32 periods_at_high_act_;
 
   View();
   View(r_code::SysView *source, r_code::Code *object);
@@ -171,8 +171,8 @@ public:
   float32 get_act();
   bool get_cov();
   float32 get_vis();
-  uint32 &ctrl0() { return _code[VIEW_CTRL_0].atom; } // use only for non-group views.
-  uint32 &ctrl1() { return _code[VIEW_CTRL_1].atom; } // idem.
+  uint32 &ctrl0() { return code_[VIEW_CTRL_0].atom_; } // use only for non-group views.
+  uint32 &ctrl1() { return code_[VIEW_CTRL_1].atom_; } // idem.
 
   void mod_res(float32 value);
   void set_res(float32 value);

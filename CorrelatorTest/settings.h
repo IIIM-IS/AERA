@@ -87,11 +87,11 @@ public:
     TS_RELATIVE = 0,
     TS_ABSOLUTE = 1
   }TSMode;
-  TSMode decompile_timestamps;
-  std::string usr_operator_path;
-  std::string usr_class_path;
-  std::string use_case_path;
-  std::string image_name;
+  TSMode decompile_timestamps_;
+  std::string usr_operator_path_;
+  std::string usr_class_path_;
+  std::string use_case_path_;
+  std::string image_name_;
 
   bool load(const char *file_name) {
 
@@ -107,16 +107,16 @@ public:
 
       const char *_decompile_timestamps = parameters.getAttribute("decompile_timestamps");
 
-      usr_operator_path = parameters.getAttribute("usr_operator_path");
-      usr_class_path = parameters.getAttribute("usr_class_path");
+      usr_operator_path_ = parameters.getAttribute("usr_operator_path");
+      usr_class_path_ = parameters.getAttribute("usr_class_path");
 
-      use_case_path = parameters.getAttribute("use_case_path");
-      image_name = parameters.getAttribute("image_name");
+      use_case_path_ = parameters.getAttribute("use_case_path");
+      image_name_ = parameters.getAttribute("image_name");
 
       if (strcmp(_decompile_timestamps, "relative") == 0)
-        decompile_timestamps = TS_RELATIVE;
+        decompile_timestamps_ = TS_RELATIVE;
       else
-        decompile_timestamps = TS_ABSOLUTE;
+        decompile_timestamps_ = TS_ABSOLUTE;
     } else {
 
       std::cerr << "> Error: Parameter section is unreadable" << std::endl;

@@ -81,25 +81,25 @@
 
 namespace r_exec {
 
-inline View::View() : r_code::View(), controller(NULL) {
+inline View::View() : r_code::View(), controller_(NULL) {
 
-  _code[VIEW_OID].atom = GetOID();
+  code_[VIEW_OID].atom_ = GetOID();
   reset_ctrl_values();
 }
 
-inline View::View(r_code::SysView *source, r_code::Code *object) : r_code::View(source, object), controller(NULL) {
+inline View::View(r_code::SysView *source, r_code::Code *object) : r_code::View(source, object), controller_(NULL) {
 
-  _code[VIEW_OID].atom = GetOID();
+  code_[VIEW_OID].atom_ = GetOID();
   reset();
 }
 
-inline View::View(const View *view, bool new_OID) : r_code::View(), controller(NULL) {
+inline View::View(const View *view, bool new_OID) : r_code::View(), controller_(NULL) {
 
-  object = view->object;
-  memcpy(_code, view->_code, VIEW_CODE_MAX_SIZE * sizeof(Atom) + 2 * sizeof(Code *)); // reference_set is contiguous to code; memcpy in one go.
+  object_ = view->object_;
+  memcpy(code_, view->code_, VIEW_CODE_MAX_SIZE * sizeof(Atom) + 2 * sizeof(Code *)); // reference_set is contiguous to code; memcpy in one go.
   if (new_OID)
-    _code[VIEW_OID].atom = GetOID();
-  controller = NULL; // deprecated: controller=view->controller;
+    code_[VIEW_OID].atom_ = GetOID();
+  controller_ = NULL; // deprecated: controller=view->controller;
   reset();
 }
 
@@ -109,7 +109,7 @@ inline View::View(SyncMode sync,
   int32 res,
   Code *destination,
   Code *origin,
-  Code *object) : r_code::View(), controller(NULL) {
+  Code *object) : r_code::View(), controller_(NULL) {
 
   code(VIEW_OPCODE) = Atom::SSet(Opcodes::View, VIEW_ARITY);
   init(sync, ijt, sln, res, destination, origin, object);
@@ -122,7 +122,7 @@ inline View::View(SyncMode sync,
   Code *destination,
   Code *origin,
   Code *object,
-  float32 act) : r_code::View(), controller(NULL) {
+  float32 act) : r_code::View(), controller_(NULL) {
 
   code(VIEW_OPCODE) = Atom::SSet(Opcodes::PgmView, PGM_VIEW_ARITY);
   init(sync, ijt, sln, res, destination, origin, object);
@@ -137,7 +137,7 @@ inline void View::init(SyncMode sync,
   Code *origin,
   Code *object) {
 
-  _code[VIEW_OID].atom = GetOID();
+  code_[VIEW_OID].atom_ = GetOID();
   reset_ctrl_values();
 
   code(VIEW_SYNC) = Atom::Float(sync);
@@ -148,16 +148,16 @@ inline void View::init(SyncMode sync,
   code(VIEW_HOST) = Atom::RPointer(0);
   code(VIEW_ORG) = origin ? Atom::RPointer(1) : Atom::Nil();
 
-  references[0] = destination;
-  references[1] = origin;
+  references_[0] = destination;
+  references_[1] = origin;
 
   set_object(object);
 }
 
 inline View::~View() {
 
-  if (!!controller)
-    controller->invalidate();
+  if (!!controller_)
+    controller_->invalidate();
 }
 
 inline void View::reset() {
@@ -169,7 +169,7 @@ inline void View::reset() {
 
 inline uint32 View::get_oid() const {
 
-  return _code[VIEW_OID].atom;
+  return code_[VIEW_OID].atom_;
 }
 
 inline bool View::isNotification() const {
@@ -180,7 +180,7 @@ inline bool View::isNotification() const {
 inline Group *View::get_host() {
 
   uint32 host_reference = code(VIEW_HOST).asIndex();
-  return (Group *)references[host_reference];
+  return (Group *)references_[host_reference];
 }
 
 inline View::SyncMode View::get_sync() {
@@ -210,7 +210,7 @@ inline float32 View::get_vis() {
 
 inline bool View::get_cov() {
 
-  if (object->code(0).getDescriptor() == Atom::GROUP)
+  if (object_->code(0).getDescriptor() == Atom::GROUP)
     return code(GRP_VIEW_COV).asBoolean();
   return false;
 }
@@ -219,66 +219,66 @@ inline void View::mod_res(float32 value) {
 
   if (code(VIEW_RES) == Atom::PlusInfinity())
     return;
-  acc_res += value;
-  ++res_changes;
+  acc_res_ += value;
+  ++res_changes_;
 }
 
 inline void View::set_res(float32 value) {
 
   if (code(VIEW_RES) == Atom::PlusInfinity())
     return;
-  acc_res += value - get_res();
-  ++res_changes;
+  acc_res_ += value - get_res();
+  ++res_changes_;
 }
 
 inline void View::mod_sln(float32 value) {
 
-  acc_sln += value;
-  ++sln_changes;
+  acc_sln_ += value;
+  ++sln_changes_;
 }
 
 inline void View::set_sln(float32 value) {
 
-  acc_sln += value - get_sln();
-  ++sln_changes;
+  acc_sln_ += value - get_sln();
+  ++sln_changes_;
 }
 
 inline void View::mod_act(float32 value) {
 
-  acc_act += value;
-  ++act_changes;
+  acc_act_ += value;
+  ++act_changes_;
 }
 
 inline void View::set_act(float32 value) {
 
-  acc_act += value - get_act();
-  ++act_changes;
+  acc_act_ += value - get_act();
+  ++act_changes_;
 }
 
 inline void View::mod_vis(float32 value) {
 
-  acc_vis += value;
-  ++vis_changes;
+  acc_vis_ += value;
+  ++vis_changes_;
 }
 
 inline void View::set_vis(float32 value) {
 
-  acc_vis += value - get_vis();
-  ++vis_changes;
+  acc_vis_ += value - get_vis();
+  ++vis_changes_;
 }
 
 inline float32 View::update_sln_delta() {
 
-  float32 delta = get_sln() - initial_sln;
-  initial_sln = get_sln();
+  float32 delta = get_sln() - initial_sln_;
+  initial_sln_ = get_sln();
   return delta;
 }
 
 inline float32 View::update_act_delta() {
 
   float32 act = get_act();
-  float32 delta = act - initial_act;
-  initial_act = act;
+  float32 delta = act - initial_act_;
+  initial_act_ = act;
   return delta;
 }
 

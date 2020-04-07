@@ -111,8 +111,8 @@ public:
 
   ~LstmNetwork();
 
-  LstmLayer* lstmLayer;
-  ForwardLayer* outputLayer;
+  LstmLayer* lstmLayer_;
+  ForwardLayer* outputLayer_;
 
 private:
 

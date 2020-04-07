@@ -79,7 +79,7 @@ namespace r_exec {
 
 inline r_code::Code *PGMOverlay::getInputObject(uint16 i) const {
 
-  return input_views[i]->object;
+  return input_views[i]->object_;
 }
 
 inline r_code::View *PGMOverlay::getInputView(uint16 i) const {

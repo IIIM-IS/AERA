@@ -87,7 +87,7 @@ class r_exec_dll CPPPrograms {
 public:
   typedef Controller *(*Program)(r_code::View *);
 private:
-  static UNORDERED_MAP<std::string, Program> Programs;
+  static UNORDERED_MAP<std::string, Program> Programs_;
 public:
   static void Register(std::string &pgm_name, Program pgm);
   static Program Get(std::string &pgm_name);

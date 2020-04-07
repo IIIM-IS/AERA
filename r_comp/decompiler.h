@@ -89,27 +89,27 @@ namespace r_comp {
 
 class dll_export Decompiler {
 private:
-  OutStream *out_stream;
-  uint16 indents; // in chars.
+  OutStream *out_stream_;
+  uint16 indents_; // in chars.
   bool closing_set; // set after writing the last element of a set: any element in an expression finding closing_set will indent and set closing_set to false.
-  bool in_hlp;
-  bool hlp_postfix;
-  bool horizontal_set;
+  bool in_hlp_;
+  bool hlp_postfix_;
+  bool horizontal_set_;
 
-  ImageObject *current_object;
+  ImageObject *current_object_;
 
-  r_comp::Metadata *metadata;
-  r_comp::Image *image;
+  r_comp::Metadata *metadata_;
+  r_comp::Image *image_;
 
-  std::chrono::microseconds time_offset; // 0 means no offset.
+  std::chrono::microseconds time_offset_; // 0 means no offset.
 
-  UNORDERED_MAP<uint16, std::string> variable_names; // in the form vxxx where xxx is an integer representing the order of referencing of the variable/label in the code.
-  uint16 last_variable_id;
-  std::string get_variable_name(uint16 index, bool postfix); // associates iptr/vptr indexes to names; inserts them in out_stream if necessary; when postfix==true, a trailing ':' is added.
+  UNORDERED_MAP<uint16, std::string> variable_names_; // in the form vxxx where xxx is an integer representing the order of referencing of the variable/label in the code.
+  uint16 last_variable_id_;
+  std::string get_variable_name(uint16 index, bool postfix); // associates iptr/vptr indexes to names; inserts them in out_stream_ if necessary; when postfix==true, a trailing ':' is added.
   std::string get_hlp_variable_name(uint16 index);
 
-  UNORDERED_MAP<uint16, std::string> object_names; // in the form class_namexxx where xxx is an integer representing the order of appearence of the object in the image; or: user-defined names when they are provided.
-  UNORDERED_MAP<std::string, uint16> object_indices; // inverted version of the object_names.
+  UNORDERED_MAP<uint16, std::string> object_names_; // in the form class_namexxx where xxx is an integer representing the order of appearence of the object in the image; or: user-defined names when they are provided.
+  UNORDERED_MAP<std::string, uint16> object_indices_; // inverted version of the object_names.
   std::string get_object_name(uint16 index); // retrieves the name of an object.
 
   void write_indent(uint16 i);
@@ -119,7 +119,7 @@ private:
   void write_any(uint16 read_index, bool &after_tail_wildcard, bool apply_time_offset, uint16 write_as_view_index = 0); // decodes any element in an expression or a set.
 
   typedef void (Decompiler::*Renderer)(uint16);
-  r_code::vector<Renderer> renderers; // indexed by opcodes; when not there, write_expression() is used.
+  r_code::vector<Renderer> renderers_; // indexed by opcodes; when not there, write_expression() is used.
 
   // Renderers.
   void write_expression(uint16 read_index); // default renderer.
@@ -134,10 +134,10 @@ private:
   void write_ihlp(uint16 read_index);
   void write_view(uint16 read_index, uint16 arity);
 
-  bool partial_decompilation; // used when decompiling on-the-fly.
-  bool ignore_named_objects;
-  UNORDERED_SET<uint16> named_objects;
-  std::vector<SysObject *> imported_objects; // referenced objects added to the image that were not in the original list of objects to be decompiled.
+  bool partial_decompilation_; // used when decompiling on-the-fly.
+  bool ignore_named_objects_;
+  UNORDERED_SET<uint16> named_objects_;
+  std::vector<SysObject *> imported_objects_; // referenced objects added to the image that were not in the original list of objects to be decompiled.
 public:
   Decompiler();
   ~Decompiler();

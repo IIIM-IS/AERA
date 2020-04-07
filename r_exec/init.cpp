@@ -156,7 +156,7 @@ bool Compile(std::istream &source_code, const std::string& filePath, std::string
 thread_ret TDecompiler::Decompile(void *args) {
 
   P<TDecompiler> _this = (TDecompiler *)args;
-  _this->spawned = 1;
+  _this->spawned_ = 1;
 
   r_comp::Decompiler decompiler;
   decompiler.init(&r_exec::Metadata);
@@ -164,66 +164,66 @@ thread_ret TDecompiler::Decompile(void *args) {
   std::vector<SysObject *> imported_objects;
 
   r_comp::Image *image = new r_comp::Image();
-  image->add_objects(_this->objects, imported_objects);
-  image->object_names.symbols = r_exec::Seed.object_names.symbols;
+  image->add_objects(_this->objects_, imported_objects);
+  image->object_names_.symbols_ = r_exec::Seed.object_names_.symbols_;
 
   std::ostringstream decompiled_code;
   decompiler.decompile(image, &decompiled_code, duration_cast<microseconds>(Utils::GetTimeReference().time_since_epoch()), imported_objects);
 
-  if (_this->ostream_id == 0) {
+  if (_this->ostream_id_ == 0) {
 
-    std::cout << _this->header.c_str();
+    std::cout << _this->header_.c_str();
     std::cout << decompiled_code.str().c_str();
   } else {
 
-    PipeOStream::Get(_this->ostream_id - 1) << _this->header.c_str();
-    PipeOStream::Get(_this->ostream_id - 1) << decompiled_code.str().c_str();
+    PipeOStream::Get(_this->ostream_id_ - 1) << _this->header_.c_str();
+    PipeOStream::Get(_this->ostream_id_ - 1) << decompiled_code.str().c_str();
   }
 
   thread_ret_val(0);
 }
 
-TDecompiler::TDecompiler(uint32 ostream_id, std::string header) : _Object(), ostream_id(ostream_id), header(header), _thread(NULL), spawned(0) {
+TDecompiler::TDecompiler(uint32 ostream_id, std::string header) : _Object(), ostream_id_(ostream_id), header_(header), thread_(NULL), spawned_(0) {
 
-  objects.reserve(ObjectsInitialSize);
+  objects_.reserve(ObjectsInitialSize);
 }
 
 TDecompiler::~TDecompiler() {
 
-  if (_thread)
-    delete _thread;
+  if (thread_)
+    delete thread_;
 }
 
 void TDecompiler::add_object(Code *object) {
 
-  objects.push_back(object);
+  objects_.push_back(object);
 }
 
 void TDecompiler::add_objects(const r_code::list<P<Code> > &objects) {
 
   r_code::list<P<Code> >::const_iterator o;
   for (o = objects.begin(); o != objects.end(); ++o)
-    this->objects.push_back(*o);
+    this->objects_.push_back(*o);
 }
 
 void TDecompiler::add_objects(const std::vector<P<Code> > &objects) {
 
   std::vector<P<Code> >::const_iterator o;
   for (o = objects.begin(); o != objects.end(); ++o)
-    this->objects.push_back(*o);
+    this->objects_.push_back(*o);
 }
 
 void TDecompiler::decompile() {
 
-  _thread = Thread::New<_Thread>(Decompile, this);
-  while (spawned == 0);
+  thread_ = Thread::New<_Thread>(Decompile, this);
+  while (spawned_ == 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::vector<PipeOStream *> PipeOStream::Streams;
+std::vector<PipeOStream *> PipeOStream::Streams_;
 
-PipeOStream PipeOStream::NullStream;
+PipeOStream PipeOStream::NullStream_;
 
 void PipeOStream::Open(uint8 count) {
 
@@ -232,25 +232,25 @@ void PipeOStream::Open(uint8 count) {
     PipeOStream *p = new PipeOStream();
     p->init();
 
-    Streams.push_back(p);
+    Streams_.push_back(p);
   }
 }
 
 void PipeOStream::Close() {
 
-  for (uint8 i = 0; i < Streams.size(); ++i)
-    delete Streams[i];
-  Streams.clear();
+  for (uint8 i = 0; i < Streams_.size(); ++i)
+    delete Streams_[i];
+  Streams_.clear();
 }
 
 PipeOStream &PipeOStream::Get(uint8 id) {
 
-  if (id < Streams.size())
-    return *Streams[id];
-  return NullStream;
+  if (id < Streams_.size())
+    return *Streams_[id];
+  return NullStream_;
 }
 
-PipeOStream::PipeOStream() : std::ostream(NULL), pipe_read(0), pipe_write(0) {
+PipeOStream::PipeOStream() : std::ostream(NULL), pipe_read_(0), pipe_write_(0) {
 }
 
 void PipeOStream::init() {
@@ -260,7 +260,7 @@ void PipeOStream::init() {
   saAttr.bInheritHandle = true;
   saAttr.lpSecurityDescriptor = NULL;
 
-  CreatePipe(&pipe_read, &pipe_write, &saAttr, 0);
+  CreatePipe(&pipe_read_, &pipe_write_, &saAttr, 0);
 
   STARTUPINFO si;
   PROCESS_INFORMATION pi;
@@ -270,7 +270,7 @@ void PipeOStream::init() {
   ZeroMemory(&pi, sizeof(pi));
 
   char handle[255];
-  itoa((int)pipe_read, handle, 10);
+  itoa((int)pipe_read_, handle, 10);
   std::string command("output_window.exe ");
   command += std::string(handle);
 
@@ -288,37 +288,37 @@ void PipeOStream::init() {
 
 PipeOStream::~PipeOStream() {
 
-  if (pipe_read == 0)
+  if (pipe_read_ == 0)
     return;
 
   std::string stop("close_output_window");
   *this << stop;
-  CloseHandle(pipe_read);
-  CloseHandle(pipe_write);
+  CloseHandle(pipe_read_);
+  CloseHandle(pipe_write_);
 }
 
 PipeOStream &PipeOStream::operator <<(std::string &s) {
 
-  if (pipe_read == 0)
+  if (pipe_read_ == 0)
     return *this;
 
   uint32 to_write = s.length();
   uint32 written;
 
-  WriteFile(pipe_write, s.c_str(), to_write, &written, NULL);
+  WriteFile(pipe_write_, s.c_str(), to_write, &written, NULL);
 
   return *this;
 }
 
 PipeOStream& PipeOStream::operator <<(const char *s) {
 
-  if (pipe_read == 0)
+  if (pipe_read_ == 0)
     return *this;
 
   uint32 to_write = strlen(s);
   uint32 written;
 
-  WriteFile(pipe_write, s, to_write, &written, NULL);
+  WriteFile(pipe_write_, s, to_write, &written, NULL);
 
   return *this;
 }
@@ -336,21 +336,21 @@ bool Init(const char *user_operator_library_path,
   Now = time_base;
 
   UNORDERED_MAP<std::string, r_comp::Class>::iterator it;
-  for (it = Metadata.classes.begin(); it != Metadata.classes.end(); ++it) {
+  for (it = Metadata.classes_.begin(); it != Metadata.classes_.end(); ++it) {
 
-    _Opcodes[it->first] = it->second.atom.asOpcode();
-    r_code::AddOpcodeName(it->second.atom.asOpcode(), it->first.c_str());
-    //std::cout<<it->first<<":"<<it->second.atom.asOpcode()<<std::endl;
+    _Opcodes[it->first] = it->second.atom_.asOpcode();
+    r_code::AddOpcodeName(it->second.atom_.asOpcode(), it->first.c_str());
+    //std::cout<<it->first<<":"<<it->second.atom_.asOpcode()<<std::endl;
   }
-  for (it = Metadata.sys_classes.begin(); it != Metadata.sys_classes.end(); ++it) {
+  for (it = Metadata.sys_classes_.begin(); it != Metadata.sys_classes_.end(); ++it) {
 
-    _Opcodes[it->first] = it->second.atom.asOpcode();
-    r_code::AddOpcodeName(it->second.atom.asOpcode(), it->first.c_str());
-    //std::cout<<it->first<<":"<<it->second.atom.asOpcode()<<std::endl;
+    _Opcodes[it->first] = it->second.atom_.asOpcode();
+    r_code::AddOpcodeName(it->second.atom_.asOpcode(), it->first.c_str());
+    //std::cout<<it->first<<":"<<it->second.atom_.asOpcode()<<std::endl;
   }
 
   // load class Opcodes.
-  View::ViewOpcode = _Opcodes.find("view")->second;
+  View::ViewOpcode_ = _Opcodes.find("view")->second;
 
   Opcodes::View = _Opcodes.find("view")->second;
   Opcodes::PgmView = _Opcodes.find("pgm_view")->second;

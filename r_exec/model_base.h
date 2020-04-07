@@ -94,11 +94,11 @@ class _Mem;
 class ModelBase {
   friend class _Mem;
 private:
-  static ModelBase *Singleton;
+  static ModelBase *singleton_;
 
-  CriticalSection mdlCS;
+  CriticalSection mdlCS_;
 
-  std::chrono::microseconds thz;
+  std::chrono::microseconds thz_;
 
   class MEntry {
   private:
@@ -110,15 +110,15 @@ private:
     MEntry();
     MEntry(Code *mdl, bool packed);
 
-    P<Code> mdl;
-    Timestamp touch_time; // last time the mdl was successfully compared to.
-    uint32 hash_code;
+    P<Code> mdl_;
+    Timestamp touch_time_; // last time the mdl was successfully compared to.
+    uint32 hash_code_;
 
     bool match(const MEntry &e) const;
 
     class Hash {
     public:
-      size_t operator ()(MEntry e) const { return e.hash_code; }
+      size_t operator ()(MEntry e) const { return e.hash_code_; }
     };
 
     class Equal {
@@ -129,18 +129,18 @@ private:
 
   typedef UNORDERED_SET<MEntry, typename MEntry::Hash, typename MEntry::Equal> MdlSet;
 
-  MdlSet black_list; // mdls are already packed when inserted (they come from the white list).
-  MdlSet white_list; // mdls are packed just before insertion.
+  MdlSet black_list_; // mdls are already packed when inserted (they come from the white list).
+  MdlSet white_list_; // mdls are packed just before insertion.
 
-  void set_thz(std::chrono::microseconds thz) { this->thz = thz; } // called by _Mem::start(); set to secondary_thz.
+  void set_thz(std::chrono::microseconds thz) { this->thz_ = thz; } // called by _Mem::start(); set to secondary_thz.
   void trim_objects(); // called by _Mem::GC().
 
   ModelBase();
 public:
   static ModelBase *Get();
 
-  void load(Code *mdl); // called by _Mem::load(); models with no views go to the black_list.
-  void get_models(r_code::list<P<Code> > &models); // white_list first, black_list next.
+  void load(Code *mdl); // called by _Mem::load(); models with no views go to the black_list_.
+  void get_models(r_code::list<P<Code> > &models); // white_list_ first, black_list_ next.
 
   Code *check_existence(Code *mdl); // caveat: mdl is unpacked; return (a) NULL if the model is in the black list, (b) a model in the white list if the mdl has been registered there or (c) the mdl itself if not in the model base, in which case the mdl is added to the white list.
   void check_existence(Code *m0, Code *m1, Code *&_m0, Code *&_m1); // m1 is a requirement on m0; _m0 and _m1 are the return values as defined above; m0 added only if m1 is not black listed.

@@ -125,15 +125,15 @@ struct event_compare
 
 
 struct Candidate {
-  std::map<int, event_t> G; // mapping from [1..] to event_types
+  std::map<int, event_t> G_; // mapping from [1..] to event_types
 #ifdef WINEPI_SERIAL
   std::multimap<int, int> R; // list of tuples of type (int,int)
 #endif
-  std::map<event_t, size_t, event_less> type_count;
-  int block_start;
-  int event_count;
-  int freq_count;
-  timestamp_t inwindow;
+  std::map<event_t, size_t, event_less> type_count_;
+  int block_start_;
+  int event_count_;
+  int freq_count_;
+  timestamp_t inwindow_;
 
 
   Candidate() {
@@ -147,58 +147,58 @@ struct Candidate {
   }
 
   void init() {
-    block_start = 0;
-    event_count = 0;
-    freq_count = -1;
-    inwindow = 0;
+    block_start_ = 0;
+    event_count_ = 0;
+    freq_count_ = -1;
+    inwindow_ = 0;
   }
 
   Candidate& operator=(const Candidate& e) {
-    G.clear();
-    G.insert(e.G.begin(), e.G.end());
+    G_.clear();
+    G_.insert(e.G_.begin(), e.G_.end());
 #ifdef WINEPI_SERIAL
     R.clear();
     R.insert(e.R.begin(), e.R.end());
 #endif
-    type_count.clear();
-    type_count.insert(e.type_count.begin(), e.type_count.end());
-    block_start = e.block_start;
-    event_count = e.event_count;
-    freq_count = e.freq_count;
-    inwindow = e.inwindow;
+    type_count_.clear();
+    type_count_.insert(e.type_count_.begin(), e.type_count_.end());
+    block_start_ = e.block_start_;
+    event_count_ = e.event_count_;
+    freq_count_ = e.freq_count_;
+    inwindow_ = e.inwindow_;
     return *this;
   }
 
   bool operator==(const Candidate& e) const {
-    return G == e.G;
+    return G_ == e.G_;
   }
 
   bool operator<(const Candidate& e) const {
-    std::map<int, event_t>::const_iterator it = G.begin(), it2 = e.G.begin();
+    std::map<int, event_t>::const_iterator it = G_.begin(), it2 = e.G_.begin();
     //jm added explicit comparison from correlator.cpp -presumably where this was
     // being handled by default in previous c++ versions.
-    for (; it != G.end() && it2 != e.G.end(); ++it, ++it2)
+    for (; it != G_.end() && it2 != e.G_.end(); ++it, ++it2)
       if (it->second->get_oid() < it2->second->get_oid())
         return true;
       else if (it->second->get_oid() > it2->second->get_oid())
         return false;
-    return (it2 != e.G.end());
+    return (it2 != e.G_.end());
   }
 
   size_t size() const {
-    return G.size();
+    return G_.size();
   }
 
   event_t& get(int i) {
-    return G.find(i)->second;
+    return G_.find(i)->second;
   }
 
 
   void set(int i, const event_t& x) {
-    // if(G.find(i) != G.end())
-    // --type_count[G[i]];
-    ++type_count[x];
-    G[i] = x;
+    // if(G_.find(i) != G_.end())
+    // --type_count_[G_[i]];
+    ++type_count_[x];
+    G_[i] = x;
   }
   /*
       bool order(int x, int y) {
@@ -213,7 +213,7 @@ struct Candidate {
     std::stringstream ss;
     ss << "<";
     bool comma = false;
-    for (std::map<int, event_t>::const_iterator it = G.begin(); it != G.end(); ++it) {
+    for (std::map<int, event_t>::const_iterator it = G_.begin(); it != G_.end(); ++it) {
       if (comma)
         ss << ", ";
       else
@@ -222,7 +222,7 @@ struct Candidate {
     }
 #ifdef WINEPI_SERIAL
     for (std::multimap<int, int>::const_iterator it = R.begin(); it != R.end(); ++it)
-      ss << ", " << G.find(it->first)->second /*<< it->first*/ << "->" << G.find(it->second)->second /*<< it->second*/;
+      ss << ", " << G_.find(it->first)->second /*<< it->first*/ << "->" << G_.find(it->second)->second /*<< it->second*/;
 #endif
     ss << ">";
     return ss.str();
@@ -230,22 +230,22 @@ struct Candidate {
 };
 
 struct Rule {
-  Candidate lhs;
-  Candidate rhs;
-  double conf;
+  Candidate lhs_;
+  Candidate rhs_;
+  double conf_;
 
-  Rule(const Candidate& lhs_, const Candidate& rhs_, double conf_) : lhs(lhs_), rhs(rhs_), conf(conf_) {}
+  Rule(const Candidate& lhs_, const Candidate& rhs_, double conf_) : lhs_(lhs_), rhs_(rhs_), conf_(conf_) {}
 
   Rule& operator=(const Rule& r) {
-    lhs = r.lhs;
-    rhs = r.rhs;
-    conf = r.conf;
+    lhs_ = r.lhs_;
+    rhs_ = r.rhs_;
+    conf_ = r.conf_;
     return *this;
   }
 
   std::string toString() {
     std::stringstream ss;
-    ss << lhs.toString() << " implies " << rhs.toString() << " with conf " << conf;
+    ss << lhs_.toString() << " implies " << rhs_.toString() << " with conf " << conf_;
     return ss.str();
   }
 };
@@ -257,42 +257,42 @@ struct Rule {
 //         block_start is an index
 
 struct Sequence {
-  std::multimap<timestamp_t, event_t> seq;
-  timestamp_t start;
-  timestamp_t end;
+  std::multimap<timestamp_t, event_t> seq_;
+  timestamp_t start_;
+  timestamp_t end_;
 
   Sequence() {}
 
   Sequence(std::multimap<timestamp_t, event_t>& seq_)
-    : seq(seq_.begin(), seq_.end())
-    , start(seq.begin()->first)
-    , end(seq.rbegin()->first + 1)
+    : seq_(seq_.begin(), seq_.end())
+    , start_(seq_.begin()->first)
+    , end_(seq_.rbegin()->first + 1)
   {}
 
   template<class InputIterator>
   void init(InputIterator it, InputIterator last) {
-    seq.clear();
-    seq.insert(it, last);
-    start = seq.begin()->first;
-    end = seq.rbegin()->first + 1;
+    seq_.clear();
+    seq_.insert(it, last);
+    start_ = seq_.begin()->first;
+    end_ = seq_.rbegin()->first + 1;
   }
 
   void addEvent(timestamp_t t, event_t ev) {
-    seq.insert(std::make_pair(t, ev));  //jm make_pair conversion
+    seq_.insert(std::make_pair(t, ev));  //jm make_pair conversion
   }
 
   std::string toString() {
     std::stringstream ss;
     ss << "<";
     bool comma = false;
-    for (std::multimap<timestamp_t, event_t, event_compare>::iterator it = seq.begin(); it != seq.end(); ++it) {
+    for (std::multimap<timestamp_t, event_t, event_compare>::iterator it = seq_.begin(); it != seq_.end(); ++it) {
       if (comma)
         ss << ", ";
       else
         comma = true;
       ss << it->first << ":" << it->second->get_oid();
     }
-    ss << "}, s:" << start << ", e:" << end << ">";
+    ss << "}, s:" << start_ << ", e:" << end_ << ">";
     return ss.str();
   }
 };
@@ -303,13 +303,13 @@ struct Sequence {
 class WinEpi {
 public:
 
-  Sequence seq;
-  int win;
-  double min_fr;
-  double min_conf;
-  int max_size;
+  Sequence seq_;
+  int win_;
+  double min_fr_;
+  double min_conf_;
+  int max_size_;
 
-  std::set<event_t, event_compare> event_types;
+  std::set<event_t, event_compare> event_types_;
 
   WinEpi(/*std::multimap<timestamp_t,event_t>& seq, int win, double min_fr, double min_conf, int max_size = -1*/);
 
@@ -317,9 +317,9 @@ public:
 // template<class InputIterator> void setSeq(InputIterator it, InputIterator end);
   template<class InputIterator>
   void setSeq(InputIterator it, InputIterator end) {
-    seq.init(it, end);
+    seq_.init(it, end);
     for (; it != end; ++it) {
-      event_types.insert(it->second);
+      event_types_.insert(it->second);
     }
   }
 
@@ -361,7 +361,7 @@ public:
     out.resize((1 << a.size()) - 2);
 
     std::vector<std::map<int, event_t> > subseqv(1 << a.size());
-    subsets(a.G, subseqv);
+    subsets(a.G_, subseqv);
     std::vector<std::map<int, event_t> >::iterator it = subseqv.begin();
     std::vector<std::map<int, event_t> >::iterator end = subseqv.end();
     size_t i = 0;

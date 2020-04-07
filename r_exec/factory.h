@@ -194,7 +194,7 @@ typedef enum {
 class r_exec_dll Sim :
   public _Object {
 private:
-  uint32 volatile invalidated; // 32 bits alignment.
+  uint32 volatile invalidated_; // 32 bits alignment.
 public:
   Sim(Sim *s); // is_requirement=false (not copied).
   Sim(SimMode mode, std::chrono::microseconds thz, Fact *super_goal, bool opposite, Controller *root); // use for SIM_ROOT.
@@ -203,17 +203,17 @@ public:
   void invalidate();
   bool is_invalidated();
 
-  bool is_requirement;
+  bool is_requirement_;
 
-  bool opposite; // of the goal the sim is attached to, i.e. the result of the match during controller->reduce(); the confidence is in the goal target.
+  bool opposite_; // of the goal the sim is attached to, i.e. the result of the match during controller->reduce(); the confidence is in the goal target.
 
-  SimMode mode; // if SIM_MANDATORY or SIM_OPTIONAL: qualifies a sub-goal of the branch's root.
-  std::chrono::microseconds thz; // simulation time allowance (this is not the goal deadline); 0 indicates no time for simulation.
-  P<Fact> super_goal; // of the goal the sim is attached to.
-  P<Controller> root; // controller that produced the simulation branch root (SIM_ROOT): identifies the branch.
-  P<Controller> sol; // controller that produced a sub-goal of the branch's root: identifies the model that can be a solution for the super-goal.
-  float32 sol_cfd; // confidence of the solution goal.
-  Timestamp sol_before; // deadline of the solution goal.
+  SimMode mode_; // if SIM_MANDATORY or SIM_OPTIONAL: qualifies a sub-goal of the branch's root.
+  std::chrono::microseconds thz_; // simulation time allowance (this is not the goal deadline); 0 indicates no time for simulation.
+  P<Fact> super_goal_; // of the goal the sim is attached to.
+  P<Controller> root_; // controller that produced the simulation branch root (SIM_ROOT): identifies the branch.
+  P<Controller> sol_; // controller that produced a sub-goal of the branch's root: identifies the model that can be a solution for the super-goal.
+  float32 sol_cfd_; // confidence of the solution goal.
+  Timestamp sol_before_; // deadline of the solution goal.
 };
 
 // Caveat: instances of Fact can becone instances of AntiFact (set_opposite() upon MATCH_SUCCESS_NEGATIVE during backward chaining).
@@ -265,8 +265,8 @@ public:
 
   _Fact *get_target() const;
 
-  std::vector<P<_Fact> > grounds; // f1->obj; predictions that were used to build this predictions (i.e. antecedents); empty if simulated.
-  std::vector<P<Sim> > simulations;
+  std::vector<P<_Fact> > grounds_; // f1->obj; predictions that were used to build this predictions (i.e. antecedents); empty if simulated.
+  std::vector<P<Sim> > simulations_;
 
   bool is_simulation() const;
   Sim *get_simulation(Controller *root) const; // return true if there is a simulation for the goal.
@@ -292,8 +292,8 @@ public:
   _Fact *get_super_goal() const;
   Code *get_actor() const;
 
-  P<Sim> sim;
-  P<_Fact> ground; // f->p->f->imdl (weak requirement) that allowed backward chaining, if any.
+  P<Sim> sim_;
+  P<_Fact> ground_; // f->p->f->imdl (weak requirement) that allowed backward chaining, if any.
 
   float32 get_strength(Timestamp now) const; // goal->target->cfd/(before-now).
 };
@@ -305,7 +305,7 @@ public:
   MkRdx(SysObject *source);
   MkRdx(Code *imdl_fact, Code *input, Code *output, float32 psln_thr, BindingMap *binding_map); // for mdl.
 
-  P<BindingMap> bindings; // NULL when produced by programs.
+  P<BindingMap> bindings_; // NULL when produced by programs.
 };
 
 class r_exec_dll Success :
@@ -332,8 +332,8 @@ public:
 
   bool contains(_Fact *component, uint16 &component_index) const;
 
-  P<BindingMap> bindings;
-  std::vector<P<_Fact> > components; // the inputs that triggered the building of the icst.
+  P<BindingMap> bindings_;
+  std::vector<P<_Fact> > components_; // the inputs that triggered the building of the icst.
 };
 }
 

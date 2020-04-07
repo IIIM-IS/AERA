@@ -91,9 +91,9 @@ class HLPOverlay :
   public Overlay {
   friend class HLPContext;
 protected:
-  P<HLPBindingMap> bindings;
+  P<HLPBindingMap> bindings_;
 
-  r_code::list<P<_Fact> > patterns;
+  r_code::list<P<_Fact> > patterns_;
 
   bool evaluate_guards(uint16 guard_set_iptr_index);
   bool evaluate_fwd_guards();
@@ -116,7 +116,7 @@ public:
   HLPOverlay(Controller *c, const HLPBindingMap *bindings, bool load_code);
   virtual ~HLPOverlay();
 
-  HLPBindingMap *get_bindings() const { return bindings; }
+  HLPBindingMap *get_bindings() const { return bindings_; }
 
   Atom *get_value_code(uint16 id) const;
   uint16 get_value_code_size(uint16 id) const;

@@ -91,21 +91,21 @@ class RepliMacro;
 class RepliCondition;
 class RepliStruct {
 public:
-  static UNORDERED_MAP<std::string, RepliMacro *> RepliMacros;
-  static UNORDERED_MAP<std::string, int32> Counters;
-  static std::list<RepliCondition *> Conditions;
-  static uint32 GlobalLine;
-  static std::vector<std::string> LoadedFilePaths;
+  static UNORDERED_MAP<std::string, RepliMacro *> RepliMacros_;
+  static UNORDERED_MAP<std::string, int32> Counters_;
+  static std::list<RepliCondition *> Conditions_;
+  static uint32 GlobalLine_;
+  static std::vector<std::string> LoadedFilePaths_;
 
   enum Type { Root, Structure, Set, Atom, Directive, Condition, Development };
-  Type type;
-  std::string cmd;
-  std::string tail;
-  std::string label;
-  std::string error;
-  uint32 line;
-  std::list<RepliStruct *> args;
-  RepliStruct *parent;
+  Type type_;
+  std::string cmd_;
+  std::string tail_;
+  std::string label_;
+  std::string error_;
+  uint32 line_;
+  std::list<RepliStruct *> args_;
+  RepliStruct *parent_;
   std::string filePath_;
 
   RepliStruct(RepliStruct::Type type);
@@ -127,7 +127,7 @@ public:
    */
   RepliStruct *loadReplicodeFile(const std::string &filename);
   /**
-   * Search RepliStruct::LoadedFilePaths to check if the filePath is already loaded. This checks
+   * Search RepliStruct::LoadedFilePaths_ to check if the filePath is already loaded. This checks
    * for equivalent file paths. So, for example, "Test/file.replicode" will match with
    * "/work/AERA/Test/file.replicode" and "Test/../Test/file.replicode" if they all
    * refer to the same file.
@@ -146,10 +146,10 @@ public:
 
 class RepliMacro {
 public:
-  std::string name;
-  RepliStruct *src;
-  RepliStruct *dest;
-  std::string error;
+  std::string name_;
+  RepliStruct *src_;
+  RepliStruct *dest_;
+  std::string error_;
 
   RepliMacro(const std::string &name, RepliStruct *src, RepliStruct *dest);
   ~RepliMacro();
@@ -160,13 +160,13 @@ public:
 
 class RepliCondition {
 public:
-  std::string name;
-  bool reversed;
+  std::string name_;
+  bool reversed_;
 
   RepliCondition(const std::string &name, bool reversed);
   ~RepliCondition();
   bool reverse();
-  bool isActive(UNORDERED_MAP<std::string, RepliMacro*> &RepliMacros, UNORDERED_MAP<std::string, int32> &Counters);
+  bool isActive(UNORDERED_MAP<std::string, RepliMacro*> &repliMacros, UNORDERED_MAP<std::string, int32> &counters);
 };
 
 class dll_export Preprocessor {
@@ -176,9 +176,9 @@ private:
     T_SYS_CLASS = 1,
     T_SET = 2
   }ClassType;
-  Metadata *metadata;
-  uint16 class_opcode; // shared with sys_classes
-  UNORDERED_MAP<std::string, RepliStruct *> template_classes;
+  Metadata *metadata_;
+  uint16 class_opcode_; // shared with sys_classes_
+  UNORDERED_MAP<std::string, RepliStruct *> template_classes_;
   void instantiateClass(RepliStruct *tpl_class, std::list<RepliStruct *> &tpl_args, std::string &instantiated_class_name);
   bool isSet(std::string class_name);
   bool isTemplateClass(RepliStruct *s);
@@ -187,7 +187,7 @@ private:
   ReturnType getReturnType(RepliStruct *s);
   void initialize(Metadata *metadata); // init definition_segment
 public:
-  RepliStruct *root;
+  RepliStruct *root_;
 
   Preprocessor();
   ~Preprocessor();

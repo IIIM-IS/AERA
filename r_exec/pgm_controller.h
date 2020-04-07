@@ -86,7 +86,7 @@ namespace r_exec {
 class r_exec_dll _PGMController :
   public OController {
 protected:
-  bool run_once;
+  bool run_once_;
 
   _PGMController(r_code::View *ipgm_view);
   virtual ~_PGMController();
@@ -123,7 +123,7 @@ public:
 class r_exec_dll AntiPGMController :
   public _PGMController {
 private:
-  bool successful_match;
+  bool successful_match_;
 
   void push_new_signaling_job();
 public:

@@ -85,7 +85,7 @@ namespace r_exec {
 
 uint32 TimeJob::job_count_ = 0;
 
-TimeJob::TimeJob(Timestamp target_time) : _Object(), target_time(target_time) {
+TimeJob::TimeJob(Timestamp target_time) : _Object(), target_time_(target_time) {
   // Increment without thread lock. It's only for tracing.
   job_id_ = ++job_count_;
 }
@@ -104,12 +104,12 @@ void TimeJob::report(microseconds lag) const {
 
 UpdateJob::UpdateJob(Group *g, Timestamp ijt) : TimeJob(ijt) {
 
-  group = g;
+  group_ = g;
 }
 
 bool UpdateJob::update(Timestamp &next_target) {
 
-  group->update(target_time);
+  group_->update(target_time_);
   return true;
 }
 
@@ -122,12 +122,12 @@ void UpdateJob::report(int64 lag) const {
 
 SignalingJob::SignalingJob(View *v, Timestamp ijt) : TimeJob(ijt) {
 
-  view = v;
+  view_ = v;
 }
 
 bool SignalingJob::is_alive() const {
 
-  return view->controller->is_alive();
+  return view_->controller_->is_alive();
 }
 
 ////////////////////////////////////////////////////////////
@@ -138,7 +138,7 @@ AntiPGMSignalingJob::AntiPGMSignalingJob(View *v, Timestamp ijt) : SignalingJob(
 bool AntiPGMSignalingJob::update(Timestamp &next_target) {
 
   if (is_alive())
-    ((AntiPGMController *)view->controller)->signal_anti_pgm();
+    ((AntiPGMController *)view_->controller_)->signal_anti_pgm();
   return true;
 }
 
@@ -155,7 +155,7 @@ InputLessPGMSignalingJob::InputLessPGMSignalingJob(View *v, Timestamp ijt) : Sig
 bool InputLessPGMSignalingJob::update(Timestamp &next_target) {
 
   if (is_alive())
-    ((InputLessPGMController *)view->controller)->signal_input_less_pgm();
+    ((InputLessPGMController *)view_->controller_)->signal_input_less_pgm();
   return true;
 }
 
@@ -168,12 +168,12 @@ void InputLessPGMSignalingJob::report(int64 lag) const {
 
 InjectionJob::InjectionJob(View *v, Timestamp ijt) : TimeJob(ijt) {
 
-  view = v;
+  view_ = v;
 }
 
 bool InjectionJob::update(Timestamp &next_target) {
 
-  _Mem::Get()->inject(view);
+  _Mem::Get()->inject(view_);
   return true;
 }
 
@@ -186,12 +186,12 @@ void InjectionJob::report(int64 lag) const {
 
 EInjectionJob::EInjectionJob(View *v, Timestamp ijt) : TimeJob(ijt) {
 
-  view = v;
+  view_ = v;
 }
 
 bool EInjectionJob::update(Timestamp &next_target) {
 
-  _Mem::Get()->inject_existing_object(view, view->object, view->get_host());
+  _Mem::Get()->inject_existing_object(view_, view_->object_, view_->get_host());
   return true;
 }
 
@@ -202,15 +202,15 @@ void EInjectionJob::report(int64 lag) const {
 
 ////////////////////////////////////////////////////////////
 
-SaliencyPropagationJob::SaliencyPropagationJob(Code *o, float32 sln_change, float32 source_sln_thr, Timestamp ijt) : TimeJob(ijt), sln_change(sln_change), source_sln_thr(source_sln_thr) {
+SaliencyPropagationJob::SaliencyPropagationJob(Code *o, float32 sln_change, float32 source_sln_thr, Timestamp ijt) : TimeJob(ijt), sln_change_(sln_change), source_sln_thr_(source_sln_thr) {
 
-  object = o;
+  object_ = o;
 }
 
 bool SaliencyPropagationJob::update(Timestamp &next_target) {
 
-  if (!object->is_invalidated())
-    _Mem::Get()->propagate_sln(object, sln_change, source_sln_thr);
+  if (!object_->is_invalidated())
+    _Mem::Get()->propagate_sln(object_, sln_change_, source_sln_thr_);
   return true;
 }
 
@@ -231,14 +231,14 @@ bool ShutdownTimeCore::update(Timestamp &next_target) {
 
 ////////////////////////////////////////////////////////////
 
-PerfSamplingJob::PerfSamplingJob(Timestamp start, microseconds period) : TimeJob(start), period(period) {
+PerfSamplingJob::PerfSamplingJob(Timestamp start, microseconds period) : TimeJob(start), period_(period) {
 }
 
 bool PerfSamplingJob::update(Timestamp &next_target) {
 
   _Mem::Get()->inject_perf_stats();
-  target_time += period;
-  next_target = target_time;
+  target_time_ += period_;
+  next_target = target_time_;
   return true;
 }
 

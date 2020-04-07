@@ -210,7 +210,7 @@ public:
   bool operator !() const;
   operator size_t () const;
 
-  uint32 atom;
+  uint32 atom_;
 
   // decoders
   bool isUndefined() const;
@@ -237,7 +237,7 @@ public:
   uint8 asAssignmentIndex() const;
 
   bool takesPastInputs() const; // applicable to NULL_PROGRAM.
-  template<class C> C *asRawPointer() const { return (C *)atom; }
+  template<class C> C *asRawPointer() const { return (C *)atom_; }
 
   void trace(TraceContext& context, std::ostream& out) const;
 };

@@ -89,14 +89,14 @@ class r_exec_dll TimeJob :
 protected:
   TimeJob(Timestamp target_time);
 public:
-  Timestamp target_time; // absolute deadline; 0 means ASAP.
+  Timestamp target_time_; // absolute deadline; 0 means ASAP.
   virtual bool update(Timestamp &next_target) = 0; // next_target: absolute deadline; 0 means no more waiting; return false to shutdown the time core.
   virtual bool is_alive() const;
   virtual void report(std::chrono::microseconds lag) const;
   uint32 get_job_id() { return job_id_; }
 
   /**
-   * Compare P<TimeJob> based only on target_time.
+   * Compare P<TimeJob> based only on target_time_.
    */
   class Compare {
   public:
@@ -104,7 +104,7 @@ public:
       operator()
       (const P<TimeJob>& x, const P<TimeJob>& y) const
     {
-      return x->target_time < y->target_time;
+      return x->target_time_ < y->target_time_;
     }
   };
 
@@ -116,7 +116,7 @@ private:
 class r_exec_dll UpdateJob :
   public TimeJob {
 public:
-  P<Group> group;
+  P<Group> group_;
   UpdateJob(Group *g, Timestamp ijt);
   bool update(Timestamp &next_target);
   void report(int64 lag) const;
@@ -127,7 +127,7 @@ class r_exec_dll SignalingJob :
 protected:
   SignalingJob(View *v, Timestamp ijt);
 public:
-  P<View> view;
+  P<View> view_;
   bool is_alive() const;
 };
 
@@ -150,7 +150,7 @@ public:
 class r_exec_dll InjectionJob :
   public TimeJob {
 public:
-  P<View> view;
+  P<View> view_;
   InjectionJob(View *v, Timestamp ijt);
   bool update(Timestamp &next_target);
   void report(int64 lag) const;
@@ -159,7 +159,7 @@ public:
 class r_exec_dll EInjectionJob :
   public TimeJob {
 public:
-  P<View> view;
+  P<View> view_;
   EInjectionJob(View *v, Timestamp ijt);
   bool update(Timestamp &next_target);
   void report(int64 lag) const;
@@ -168,9 +168,9 @@ public:
 class r_exec_dll SaliencyPropagationJob :
   public TimeJob {
 public:
-  P<Code> object;
-  float32 sln_change;
-  float32 source_sln_thr;
+  P<Code> object_;
+  float32 sln_change_;
+  float32 source_sln_thr_;
   SaliencyPropagationJob(Code *o, float32 sln_change, float32 source_sln_thr, Timestamp ijt);
   bool update(Timestamp &next_target);
   void report(int64 lag) const;
@@ -186,16 +186,16 @@ public:
 template<class M> class MonitoringJob :
   public TimeJob {
 public:
-  P<M> monitor;
-  MonitoringJob(M *monitor, Timestamp deadline) : TimeJob(deadline), monitor(monitor) {}
+  P<M> monitor_;
+  MonitoringJob(M *monitor, Timestamp deadline) : TimeJob(deadline), monitor_(monitor) {}
   bool update(Timestamp &next_target) {
 
-    monitor->update(next_target);
+    monitor_->update(next_target);
     return true;
   }
   bool is_alive() const {
 
-    return monitor->is_alive();
+    return monitor_->is_alive();
   }
   void report(std::chrono::microseconds lag) const {
 
@@ -206,7 +206,7 @@ public:
 class r_exec_dll PerfSamplingJob :
   public TimeJob {
 public:
-  std::chrono::microseconds period;
+  std::chrono::microseconds period_;
   PerfSamplingJob(Timestamp start, std::chrono::microseconds period);
   bool is_alive() const;
   bool update(Timestamp &next_target);

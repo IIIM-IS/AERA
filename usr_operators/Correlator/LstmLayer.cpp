@@ -83,7 +83,7 @@
 #include "LstmBlock.h"
 
 LstmLayer::LstmLayer(int nCells, int nInputs, int nOutputs, int nBlocks) {
-  lstmBlock.assign(nBlocks, LstmBlock(nCells, nInputs, nOutputs, nBlocks));
+  lstmBlock_.assign(nBlocks, LstmBlock(nCells, nInputs, nOutputs, nBlocks));
 }
 
 void LstmLayer::getBlockOutputs(int t, std::vector <std::vector<LstmBlockState> >& state, std::vector<double>& b) {
@@ -104,7 +104,7 @@ void LstmLayer::forwardPassStep(int t, std::vector <std::vector<LstmBlockState> 
   getBlockOutputs(t - 1, state, b);
 
   for (int i = 0; i < (int)state.size(); i++) {
-    lstmBlock[i].forwardPassStep(t, state[i], x[t], b);
+    lstmBlock_[i].forwardPassStep(t, state[i], x[t], b);
   }
 }
 
@@ -139,7 +139,7 @@ void LstmLayer::backwardPassStep(int t, std::vector <std::vector<LstmBlockState>
   for (int i = 0; i < nBlocks; i++) {
     for (int j = 0; j < nCells; j++) {
       for (int k = 0; k < nCells*nBlocks; k++) {
-        wHtrans[i][j][k] = lstmBlock[k / nCells].wHc[k % nCells][i * nCells + j];
+        wHtrans[i][j][k] = lstmBlock_[k / nCells].wHc[k % nCells][i * nCells + j];
       }
     }
   }
@@ -179,9 +179,9 @@ void LstmLayer::backwardPassStep(int t, std::vector <std::vector<LstmBlockState>
   for (int i = 0; i < nBlocks; i++) {
     for (int j = 0; j < nCells; j++) {
       for (int k = 0; k < nBlocks; k++) {
-        gw[i][j][3 * k] = lstmBlock[k].wHi[nCells * i + j];
-        gw[i][j][3 * k + 1] = lstmBlock[k].wHf[nCells * i + j];;
-        gw[i][j][3 * k + 2] = lstmBlock[k].wHo[nCells * i + j];;
+        gw[i][j][3 * k] = lstmBlock_[k].wHi[nCells * i + j];
+        gw[i][j][3 * k + 1] = lstmBlock_[k].wHf[nCells * i + j];;
+        gw[i][j][3 * k + 2] = lstmBlock_[k].wHo[nCells * i + j];;
       }
     }
   }
@@ -191,38 +191,38 @@ void LstmLayer::backwardPassStep(int t, std::vector <std::vector<LstmBlockState>
   getBlockOutputs(t - 1, state, b); // was t-1
 
   for (int i = 0; i < (int)state.size(); i++) {
-    lstmBlock[i].backwardPassStep(t, state[i], wKtrans[i], dk, wHtrans[i], db, gw[i], gd, x[t], b);  //fix
+    lstmBlock_[i].backwardPassStep(t, state[i], wKtrans[i], dk, wHtrans[i], db, gw[i], gd, x[t], b);  //fix
   }
 }
 
 void LstmLayer::updateWeights(double eta, double alpha) {
-  for (int i = 0; i < lstmBlock.size(); i++) {
-    lstmBlock[i].updateWeights(eta, alpha);
+  for (int i = 0; i < lstmBlock_.size(); i++) {
+    lstmBlock_[i].updateWeights(eta, alpha);
   }
 }
 
 void LstmLayer::resetDerivs() {
-  for (int i = 0; i < lstmBlock.size(); i++) {
-    lstmBlock[i].resetDerivs();
+  for (int i = 0; i < lstmBlock_.size(); i++) {
+    lstmBlock_[i].resetDerivs();
   }
 }
 
 void LstmLayer::printWeights() {
-  for (int i = 0; i < lstmBlock.size(); i++) {
+  for (int i = 0; i < lstmBlock_.size(); i++) {
     std::cout << "Debug [LstmLayer, weights]" << std::endl;
-    lstmBlock[i].printWeights();
+    lstmBlock_[i].printWeights();
   }
 }
 
 void LstmLayer::setConstantWeights(double w) {
-  for (int i = 0; i < lstmBlock.size(); i++) {
-    lstmBlock[i].setConstantWeights(w);
+  for (int i = 0; i < lstmBlock_.size(); i++) {
+    lstmBlock_[i].setConstantWeights(w);
   }
 }
 
 void LstmLayer::setRandomWeights(double halfRange) {
-  for (int i = 0; i < lstmBlock.size(); i++) {
-    lstmBlock[i].setRandomWeights(halfRange);
+  for (int i = 0; i < lstmBlock_.size(); i++) {
+    lstmBlock_[i].setRandomWeights(halfRange);
   }
 }
 

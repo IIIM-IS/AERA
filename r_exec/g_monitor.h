@@ -89,13 +89,13 @@ class PrimaryMDLController;
 class _GMonitor :
   public Monitor {
 protected:
-  Timestamp deadline; // of the goal.
-  Timestamp sim_thz;
-  _Fact *goal_target; // convenience; f1->object.
-  P<Fact> f_imdl;
-  SimMode sim_mode;
+  Timestamp deadline_; // of the goal.
+  Timestamp sim_thz_;
+  _Fact *goal_target_; // convenience; f1->object.
+  P<Fact> f_imdl_;
+  SimMode sim_mode_;
 
-  uint32 volatile simulating; // 32 bits alignment.
+  uint32 volatile simulating_; // 32 bits alignment.
 
   typedef std::list<std::pair<P<Goal>, P<Sim> > > SolutionList;
 
@@ -106,8 +106,8 @@ protected:
   };
 
   // Simulated predictions of any goal success resulting from the simulation of the monitored goal.
-  SimOutcomes sim_successes;
-  SimOutcomes sim_failures;
+  SimOutcomes sim_successes_;
+  SimOutcomes sim_failures_;
 
   void store_simulated_outcome(Goal *affected_goal, Sim *sim, bool success); // store the outcomes of any goal affected by the simulation of the monitored goal.
   void invalidate_sim_outcomes();
@@ -150,8 +150,8 @@ public:
 class GMonitor :
   public _GMonitor {
 protected:
-  _Fact *volatile predicted_evidence; // f0->pred->f1->object; 32 bits alignment.
-  bool injected_goal;
+  _Fact *volatile predicted_evidence_; // f0->pred->f1->object; 32 bits alignment.
+  bool injected_goal_;
 
   void commit();
 public:

@@ -80,17 +80,17 @@
 
 namespace r_exec {
 
-UNORDERED_MAP<std::string, CPPPrograms::Program> CPPPrograms::Programs;
+UNORDERED_MAP<std::string, CPPPrograms::Program> CPPPrograms::Programs_;
 
 void CPPPrograms::Register(std::string &pgm_name, Program pgm) {
 
-  Programs[pgm_name] = pgm;
+  Programs_[pgm_name] = pgm;
 }
 
 CPPPrograms::Program CPPPrograms::Get(std::string &pgm_name) {
 
-  UNORDERED_MAP<std::string, Program>::const_iterator it = Programs.find(pgm_name);
-  if (it != Programs.end())
+  UNORDERED_MAP<std::string, Program>::const_iterator it = Programs_.find(pgm_name);
+  if (it != Programs_.end())
     return it->second;
   return NULL;
 }

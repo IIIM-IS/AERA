@@ -91,15 +91,15 @@ class AutoFocusController;
 
 class Input {
 public:
-  P<BindingMap> bindings; // contains the values for the abstraction.
-  P<_Fact> abstraction;
-  P<_Fact> input;
-  bool eligible_cause;
-  Timestamp ijt; // injection time.
+  P<BindingMap> bindings_; // contains the values for the abstraction.
+  P<_Fact> abstraction_;
+  P<_Fact> input_;
+  bool eligible_cause_;
+  Timestamp ijt_; // injection time.
 
-  Input(View *input, _Fact *abstraction, BindingMap *bindings) : input(input->object), ijt(input->get_ijt()), eligible_cause(IsEligibleCause(input)), abstraction(abstraction), bindings(bindings) {}
-  Input() : input(NULL), eligible_cause(false), abstraction(NULL), bindings(NULL), ijt(std::chrono::seconds(0)) {}
-  Input(const Input &original) : input(original.input), eligible_cause(original.eligible_cause), abstraction(original.abstraction), bindings(original.bindings), ijt(original.ijt) {}
+  Input(View *input, _Fact *abstraction, BindingMap *bindings) : input_(input->object_), ijt_(input->get_ijt()), eligible_cause_(IsEligibleCause(input)), abstraction_(abstraction), bindings_(bindings) {}
+  Input() : input_(NULL), eligible_cause_(false), abstraction_(NULL), bindings_(NULL), ijt_(std::chrono::seconds(0)) {}
+  Input(const Input &original) : input_(original.input_), eligible_cause_(original.eligible_cause_), abstraction_(original.abstraction_), bindings_(original.bindings_), ijt_(original.ijt_) {}
 
   static bool IsEligibleCause(r_exec::View *view);
 
@@ -107,28 +107,28 @@ public:
   public:
     bool operator ()(Input &i, Timestamp time_reference, std::chrono::microseconds thz) const {
 
-      return (time_reference - i.ijt > thz);
+      return (time_reference - i.ijt_ > thz);
     }
   };
 };
 
 class CInput { // cached inputs.
 public:
-  P<BindingMap> bindings; // contains the values for the abstraction.
-  P<_Fact> abstraction;
-  P<View> input;
-  bool injected;
-  Timestamp ijt; // injection time.
-  CInput(View *input, _Fact *abstraction, BindingMap *bindings) : input(input), abstraction(abstraction), bindings(bindings), injected(false), ijt(input->get_ijt()) {}
-  CInput() : input(NULL), abstraction(NULL), bindings(NULL), injected(false), ijt(std::chrono::seconds(0)) {}
+  P<BindingMap> bindings_; // contains the values for the abstraction.
+  P<_Fact> abstraction_;
+  P<View> input_;
+  bool injected_;
+  Timestamp ijt_; // injection time.
+  CInput(View *input, _Fact *abstraction, BindingMap *bindings) : input_(input), abstraction_(abstraction), bindings_(bindings), injected_(false), ijt_(input->get_ijt()) {}
+  CInput() : input_(NULL), abstraction_(NULL), bindings_(NULL), injected_(false), ijt_(std::chrono::seconds(0)) {}
 
-  bool operator ==(const CInput &i) const { return input == i.input; }
+  bool operator ==(const CInput &i) const { return input_ == i.input_; }
 
   class IsInvalidated { // for storage in time_buffers.
   public:
     bool operator ()(CInput &i, Timestamp time_reference, std::chrono::microseconds thz) const {
 
-      return (time_reference - i.ijt > thz);
+      return (time_reference - i.ijt_ > thz);
     }
   };
 };
@@ -139,14 +139,14 @@ public:
 class r_exec_dll TPX :
   public _Object {
 protected:
-  AutoFocusController *auto_focus;
-  P<_Fact> target; // goal or prediction target, or premise (CTPX); abstraction: lhs of a mdl for goals, rhs for predictions, premise for CTPX.
-  P<BindingMap> target_bindings;
-  P<_Fact> abstracted_target;
+  AutoFocusController *auto_focus_;
+  P<_Fact> target_; // goal or prediction target, or premise (CTPX); abstraction: lhs of a mdl for goals, rhs for predictions, premise for CTPX.
+  P<BindingMap> target_bindings_;
+  P<_Fact> abstracted_target_;
 
-  P<CSTController> cst_hook; // in case the target is an icst.
+  P<CSTController> cst_hook_; // in case the target is an icst.
 
-  std::vector<P<BindingMap> > new_maps; // acquired (in the case the target's bm is not fully specified) while matching the target's bm with inputs.
+  std::vector<P<BindingMap> > new_maps_; // acquired (in the case the target's bm is not fully specified) while matching the target's bm with inputs.
 
   bool filter(View *input, _Fact *abstracted_input, BindingMap *bm);
 
@@ -155,8 +155,8 @@ public:
   TPX(AutoFocusController *auto_focus, _Fact *target, _Fact *pattern, BindingMap *bindings);
   virtual ~TPX();
 
-  _Fact *get_pattern() const { return abstracted_target; }
-  BindingMap *get_bindings() const { return target_bindings; }
+  _Fact *get_pattern() const { return abstracted_target_; }
+  BindingMap *get_bindings() const { return target_bindings_; }
 
   virtual bool take_input(View *view, _Fact *abstracted_input, BindingMap *bm);
   virtual void signal(View *input) const;
@@ -178,10 +178,10 @@ protected:
     Component(_Fact *object) : object(object), discarded(false) {}
   };
 
-  r_code::list<Input> inputs; // time-controlled buffer (inputs older than tpx_time_horizon from now are discarded).
-  std::vector<P<Code> > mdls; // new mdls.
-  std::vector<P<Code> > csts; // new csts.
-  std::vector<P<_Fact> > icsts; // new icsts.
+  r_code::list<Input> inputs_; // time-controlled buffer (inputs older than tpx_time_horizon from now are discarded).
+  std::vector<P<Code> > mdls_; // new mdls.
+  std::vector<P<Code> > csts_; // new csts.
+  std::vector<P<_Fact> > icsts_; // new icsts.
 
   void filter_icst_components(ICST *icst, uint32 icst_index, std::vector<Component> &components);
   _Fact *_find_f_icst(_Fact *component, uint16 &component_index);
@@ -213,9 +213,9 @@ public:
 class r_exec_dll GTPX : // target is the goal target.
   public _TPX {
 private:
-  P<Fact> f_imdl; // that produced the goal.
+  P<Fact> f_imdl_; // that produced the goal.
 
-  std::vector<P<_Fact> > predictions; // successful predictions that may invalidate the need for model building.
+  std::vector<P<_Fact> > predictions_; // successful predictions that may invalidate the need for model building.
 
   bool build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period);
   bool build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period, Code *new_cst);
@@ -239,7 +239,7 @@ public:
 class r_exec_dll PTPX : // target is the prediction.
   public _TPX {
 private:
-  P<Fact> f_imdl; // that produced the prediction (and for which the PTPX will find strong requirements).
+  P<Fact> f_imdl_; // that produced the prediction (and for which the PTPX will find strong requirements).
 
   bool build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period);
   bool build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period, Code *new_cst);
@@ -264,8 +264,8 @@ public:
 class CTPX :
   public _TPX {
 private:
-  bool stored_premise;
-  P<View> premise;
+  bool stored_premise_;
+  P<View> premise_;
 
   GuardBuilder *get_default_guard_builder(_Fact *cause, _Fact *consequent, std::chrono::microseconds period);
   GuardBuilder *find_guard_builder(_Fact *cause, _Fact *consequent, std::chrono::microseconds period);

@@ -90,50 +90,50 @@ namespace r_code {
 template<typename T, class IsInvalidated> class time_buffer :
   public list<T> {
 protected:
-  std::chrono::microseconds thz; // time horizon.
-  Timestamp time_reference;
+  std::chrono::microseconds thz_; // time horizon.
+  Timestamp time_reference_;
 public:
-  time_buffer() : list(), thz(Utils::MaxTHZ) {}
+  time_buffer() : list(), thz_(Utils::MaxTHZ) {}
 
-  void set_thz(std::chrono::microseconds thz) { this->thz = thz; }
+  void set_thz(std::chrono::microseconds thz) { this->thz_ = thz; }
 
   class iterator {
     friend class time_buffer;
   private:
-    time_buffer *buffer;
-    int32 _cell;
-    iterator(time_buffer *b, int32 c) : buffer(b), _cell(c) {}
+    time_buffer *buffer_;
+    int32 cell_;
+    iterator(time_buffer *b, int32 c) : buffer_(b), cell_(c) {}
   public:
-    iterator() : buffer(NULL), _cell(null) {}
-    T &operator *() const { return buffer->cells[_cell].data; }
-    T *operator ->() const { return &(buffer->cells[_cell].data); }
+    iterator() : buffer_(NULL), cell_(null_) {}
+    T &operator *() const { return buffer_->cells_[cell_].data_; }
+    T *operator ->() const { return &(buffer_->cells_[cell_].data_); }
     iterator &operator ++() { // moves to the next time-compliant cell and erase old cells met in the process.
 
-      _cell = buffer->cells[_cell].next;
-      if (_cell != null) {
+      cell_ = buffer_->cells_[cell_].next_;
+      if (cell_ != null_) {
 
         IsInvalidated i;
-      check: if (i(buffer->cells[_cell].data, buffer->time_reference, buffer->thz)) {
+      check: if (i(buffer_->cells_[cell_].data_, buffer_->time_reference_, buffer_->thz_)) {
 
-        _cell = buffer->_erase(_cell);
-        if (_cell != null)
+        cell_ = buffer_->_erase(cell_);
+        if (cell_ != null_)
           goto check;
       }
       }
       return *this;
     }
-    bool operator==(iterator &i) const { return _cell == i._cell; }
-    bool operator!=(iterator &i) const { return _cell != i._cell; }
+    bool operator==(iterator &i) const { return cell_ == i.cell_; }
+    bool operator!=(iterator &i) const { return cell_ != i.cell_; }
   };
 private:
-  static iterator end_iterator;
+  static iterator end_iterator_;
 public:
   iterator begin(Timestamp time_reference) {
 
-    this->time_reference = time_reference;
-    return iterator(this, used_cells_head);
+    this->time_reference_ = time_reference;
+    return iterator(this, used_cells_head_);
   }
-  iterator &end() { return end_iterator; }
+  iterator &end() { return end_iterator_; }
   iterator find(Timestamp time_reference, const T &t) {
 
     iterator i;
@@ -142,21 +142,21 @@ public:
       if ((*i) == t)
         return i;
     }
-    return end_iterator;
+    return end_iterator_;
   }
   iterator find(const T &t) {
 
-    for (int32 c = used_cells_head; c != null; c = _cells[c].next) {
+    for (int32 c = used_cells_head_; c != null_; c = cells_[c].next_) {
 
-      if (_cells[c].data == t)
+      if (cells_[c].data_ == t)
         return iterator(this, c);
     }
-    return end_iterator;
+    return end_iterator_;
   }
-  iterator erase(iterator &i) { return iterator(this, _erase(i._cell)); }
+  iterator erase(iterator &i) { return iterator(this, _erase(i.cell_)); }
 };
 
-template<typename T, class IsInvalidated> typename time_buffer<T, IsInvalidated>::iterator time_buffer<T, IsInvalidated>::end_iterator;
+template<typename T, class IsInvalidated> typename time_buffer<T, IsInvalidated>::iterator time_buffer<T, IsInvalidated>::end_iterator_;
 }
 
 

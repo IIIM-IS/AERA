@@ -96,19 +96,19 @@ public:
 
   HLPContext &operator =(const HLPContext &c) {
 
-    code = c.code;
-    index = c.index;
+    code_ = c.code_;
+    index_ = c.index_;
     return *this;
   }
 
-  Atom &operator [](uint16 i) const { return code[index + i]; }
+  Atom &operator [](uint16 i) const { return code_[index_ + i]; }
 
   bool operator ==(const HLPContext &c) const;
   bool operator !=(const HLPContext &c) const;
 
   HLPContext getChild(uint16 index) const {
 
-    return HLPContext(code, this->index + index, (HLPOverlay *)overlay);
+    return HLPContext(code_, this->index_ + index, (HLPOverlay *)overlay_);
   }
 
   bool evaluate(uint16 &result_index) const; // index is set to the index of the result, undefined in case of failure.
@@ -129,7 +129,7 @@ public:
 
   uint16 getChildrenCount() const {
 
-    return code[index].getAtomCount();
+    return code_[index_].getAtomCount();
   }
   _Context *_getChild(uint16 index) const {
 

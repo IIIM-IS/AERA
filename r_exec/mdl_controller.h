@@ -146,13 +146,13 @@ protected:
   class RequirementEntry : // use for requirements.
     public PredictedEvidenceEntry {
   public:
-    P<MDLController> controller; // of the requirement.
-    bool chaining_was_allowed;
+    P<MDLController> controller_; // of the requirement.
+    bool chaining_was_allowed_;
 
     RequirementEntry();
     RequirementEntry(_Fact *f_p_f_imdl, MDLController *c, bool chaining_was_allowed); // f_imdl is f0 as in f0->pred->f1->imdl.
 
-    bool is_out_of_range(Timestamp now) const { return (before<now || after>now); }
+    bool is_out_of_range(Timestamp now) const { return (before_<now || after_>now); }
   };
 
   class RequirementCache {
@@ -162,16 +162,16 @@ protected:
     r_code::list<RequirementEntry> negative_evidences;
   };
 
-  RequirementCache requirements;
-  RequirementCache simulated_requirements;
+  RequirementCache requirements_;
+  RequirementCache simulated_requirements_;
 
   void _store_requirement(r_code::list<RequirementEntry> *cache, RequirementEntry &e);
 
-  CriticalSection p_monitorsCS;
-  r_code::list<P<PMonitor> > p_monitors;
+  CriticalSection p_monitorsCS_;
+  r_code::list<P<PMonitor> > p_monitors_;
 
-  P<Code> lhs;
-  P<Code> rhs;
+  P<Code> lhs_;
+  P<Code> rhs_;
 
   static const uint32 LHSController = 0;
   static const uint32 RHSController = 1;
@@ -182,14 +182,14 @@ protected:
     STRONG_REQUIREMENT = 2
   } RequirementType;
 
-  RequirementType _is_requirement;
-  bool _is_reuse;
-  bool _is_cmd;
+  RequirementType is_requirement_;
+  bool is_reuse_;
+  bool is_cmd_;
 
   float32 get_cfd() const;
 
-  CriticalSection active_requirementsCS;
-  UNORDERED_MAP<P<_Fact>, RequirementsPair, PHash<_Fact> > active_requirements; // P<_Fact>: f1 as in f0->pred->f1->imdl; requirements having allowed the production of prediction; first: wr, second: sr.
+  CriticalSection active_requirementsCS_;
+  UNORDERED_MAP<P<_Fact>, RequirementsPair, PHash<_Fact> > active_requirements_; // P<_Fact>: f1 as in f0->pred->f1->imdl; requirements having allowed the production of prediction; first: wr, second: sr.
 
   template<class C> void reduce_cache(Fact *f_p_f_imdl, MDLController *controller) { // fwd; controller is the controller of the requirement which produced f_p_f_imdl.
 
@@ -208,8 +208,8 @@ protected:
         _e = cache->evidences.erase(_e);
       else {
 
-        PrimaryMDLOverlay o(this, bindings);
-        o.reduce((*_e).evidence, f_p_f_imdl, controller);
+        PrimaryMDLOverlay o(this, bindings_);
+        o.reduce((*_e).evidence_, f_p_f_imdl, controller);
         ++_e;
       }
     }
@@ -242,9 +242,9 @@ public:
   void add_requirement_to_rhs();
   void remove_requirement_from_rhs();
 
-  bool is_requirement() const { return (_is_requirement != NOT_A_REQUIREMENT); }
-  bool is_reuse() const { return _is_reuse; }
-  bool is_cmd() const { return _is_cmd; }
+  bool is_requirement() const { return (is_requirement_ != NOT_A_REQUIREMENT); }
+  bool is_reuse() const { return is_reuse_; }
+  bool is_cmd() const { return is_cmd_; }
 
   void register_requirement(_Fact *f_pred, RequirementsPair &r_p);
 };
@@ -252,9 +252,9 @@ public:
 class PMDLController :
   public MDLController {
 protected:
-  CriticalSection g_monitorsCS;
-  r_code::list<P<_GMonitor> > g_monitors;
-  r_code::list<P<_GMonitor> > r_monitors;
+  CriticalSection g_monitorsCS_;
+  r_code::list<P<_GMonitor> > g_monitors_;
+  r_code::list<P<_GMonitor> > r_monitors_;
 
   virtual uint32 get_rdx_out_group_count() const { return get_out_group_count(); }
   void inject_goal(HLPBindingMap *bm, Fact *goal, Fact *f_imdl) const;
@@ -340,13 +340,13 @@ class SecondaryMDLController;
 class PrimaryMDLController :
   public PMDLController {
 private:
-  SecondaryMDLController *secondary;
+  SecondaryMDLController *secondary_;
 
-  CriticalSection codeCS;
-  CriticalSection last_match_timeCS;
+  CriticalSection codeCS_;
+  CriticalSection last_match_timeCS_;
 
-  CriticalSection assumptionsCS;
-  r_code::list<P<Code> > assumptions; // produced by the model; garbage collection at reduce() time..
+  CriticalSection assumptionsCS_;
+  r_code::list<P<Code> > assumptions_; // produced by the model; garbage collection at reduce() time..
 
   void rate_model(bool success);
   void kill_views(); // force res in both primary/secondary to 0.
@@ -396,10 +396,10 @@ public:
 class SecondaryMDLController :
   public MDLController {
 private:
-  PrimaryMDLController *primary;
+  PrimaryMDLController *primary_;
 
-  CriticalSection codeCS;
-  CriticalSection last_match_timeCS;
+  CriticalSection codeCS_;
+  CriticalSection last_match_timeCS_;
 
   void rate_model(); // record successes only.
   void kill_views(); // force res in both primary/secondary to 0.

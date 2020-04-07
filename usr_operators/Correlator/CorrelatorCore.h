@@ -92,24 +92,24 @@
 
 class CorrelatorCore {
 public:
-  std::vector< std::vector<double> > inputSequenceBuffer;
-  std::vector< std::vector<LstmBlockState> > lstmStateBuffer;
-  std::vector<ForwardLayerState> outputLayerStateBuffer;
-  std::vector<std::vector<double> > trainingSequenceBuffer;
-  std::vector<std::vector<double> > inputLayerErrorBuffer;
-  std::vector<std::vector<double> > outputErrorBuffer;
+  std::vector< std::vector<double> > inputSequenceBuffer_;
+  std::vector< std::vector<LstmBlockState> > lstmStateBuffer_;
+  std::vector<ForwardLayerState> outputLayerStateBuffer_;
+  std::vector<std::vector<double> > trainingSequenceBuffer_;
+  std::vector<std::vector<double> > inputLayerErrorBuffer_;
+  std::vector<std::vector<double> > outputErrorBuffer_;
 
-  std::vector< std::vector<double> > inputSequenceBufferSnapshot;
-  std::vector< std::vector<LstmBlockState> > lstmStateBufferSnapshot;
-  std::vector<ForwardLayerState> outputLayerStateBufferSnapshot;
-  std::vector<std::vector<double> > trainingSequenceBufferSnapshot;
-  std::vector<std::vector<double> > inputLayerErrorBufferSnapshot;
-  std::vector<std::vector<double> > outputErrorBufferSnapshot;
+  std::vector< std::vector<double> > inputSequenceBufferSnapshot_;
+  std::vector< std::vector<LstmBlockState> > lstmStateBufferSnapshot_;
+  std::vector<ForwardLayerState> outputLayerStateBufferSnapshot_;
+  std::vector<std::vector<double> > trainingSequenceBufferSnapshot_;
+  std::vector<std::vector<double> > inputLayerErrorBufferSnapshot_;
+  std::vector<std::vector<double> > outputErrorBufferSnapshot_;
 
-  int nCells, nBlocks, nInputs, nOutputs;
-  int buffersLength;
+  int nCells_, nBlocks_, nInputs_, nOutputs_;
+  int buffersLength_;
 
-  LstmNetwork* lstmNetwork;
+  LstmNetwork* lstmNetwork_;
 
   CorrelatorCore();
 

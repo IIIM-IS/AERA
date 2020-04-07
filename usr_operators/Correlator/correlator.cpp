@@ -111,7 +111,7 @@ public:
     // Manual filtering is needed instead of pattern-matching.
     // Here we take all inputs until we get an episode notification.
     std::string episode_end = "episode_end";
-    if (input->object->code(0).asOpcode() == r_exec::Metadata.get_class(episode_end)->atom.asOpcode()) {
+    if (input->object_->code(0).asOpcode() == r_exec::Metadata.get_class(episode_end)->atom_.asOpcode()) {
 
       //r_exec::ReductionJob<CorrelatorController> *j=new r_exec::ReductionJob<CorrelatorController>(input,this);
       //r_exec::_Mem::Get()->pushReductionJob(j);once=true;
@@ -158,7 +158,7 @@ public:
 
       std::string impl(uint32 id) {
         for (uint16 j = 0; j < object_count; ++j)
-          if (objects[j]->oid == id) {
+          if (objects[j]->oid_ == id) {
             std::ostringstream decompiled_code;
             decompiler.decompile_object(j, &decompiled_code, time_offset);
             std::string s = decompiled_code.str();
@@ -168,7 +168,7 @@ public:
           }
         return "";
       }
-    } closure(decompiler, image->code_segment.objects, object_count, time_offset);
+    } closure(decompiler, image->code_segment_.objects_, object_count, time_offset);
     char buf[33];
     std::ofstream file((std::string("_DATA_") + itoa(rand(), buf, 10) + ".txt").c_str(), std::ios_base::trunc);
     if (file.is_open())
@@ -190,7 +190,7 @@ public:
 
               for(uint16 j=0;j<object_count;++j){
 
-                  if(((SysObject *)image->code_segment.objects[j])->oid==correlator->episode[i]){
+                  if(((SysObject *)image->code_segment_.objects[j])->oid_==correlator->episode[i]){
 
                       std::ostringstream decompiled_code;
                       decompiler.decompile_object(j,&decompiled_code,time_offset);
@@ -221,7 +221,7 @@ bool operator< (const P<r_code::Code>& x, const P<r_code::Code>& y) {
     return x->get_oid() < y->get_oid();
 }
 */
-Correlator::Correlator() : episode(), episode_start(0), winepi() {
+Correlator::Correlator() : episode_(), episode_start_(0), winepi() {
   // no-op
 }
 
@@ -231,23 +231,23 @@ void Correlator::take_input(r_code::View* input) {
   if (!input || !input->object)
     return;
 
-  episode.push_back(std::pair<timestamp_t, event_t>(input->get_ijt(), input->object));
+  episode_.push_back(std::pair<timestamp_t, event_t>(input->get_ijt(), input->object));
 }
 
 CorrelatorOutput* Correlator::get_output(bool useEntireHistory) {
 
-  if (episode_start == episode.size())
+  if (episode_start_ == episode_.size())
     // no new inputs since last call to get_output => nothing to correlate
     return new CorrelatorOutput;
 
-  Episode::iterator it = episode.begin();
+  Episode::iterator it = episode_.begin();
   if (useEntireHistory)
-    episode_start = 0;
-  std::advance(it, episode_start);
-  winepi.setSeq(it, episode.end());
+    episode_start_ = 0;
+  std::advance(it, episode_start_);
+  winepi.setSeq(it, episode_.end());
 
 # define AVG_IN_WINDOW 10
-  int window_size = AVG_IN_WINDOW * (episode.back().first - episode[episode_start].first) / (episode.size() - episode_start);
+  int window_size = AVG_IN_WINDOW * (episode_.back().first - episode_[episode_start_].first) / (episode_.size() - episode_start_);
   winepi.setParams(window_size, 0.1, 0.5, 2); // TODO: find a way to set these appropriately!
 
   std::vector<Rule> rules;
@@ -259,31 +259,31 @@ CorrelatorOutput* Correlator::get_output(bool useEntireHistory) {
 // COUT(rules[i].toString());
 
   CorrelatorOutput* c = new CorrelatorOutput;
-  c->states.reserve(rules.size());
+  c->states_.reserve(rules.size());
   for (size_t i = 0; i < rules.size(); ++i) {
     Rule& rule = rules[i];
     Pattern* p = new Pattern;
     // LHS and RHS of rules are sorted by OID
-    std::map<int, event_t>::iterator lit = rule.lhs.G.begin(), rit = rule.rhs.G.begin();
-    while (lit != rule.lhs.G.end()) {
+    std::map<int, event_t>::iterator lit = rule.lhs_.G_.begin(), rit = rule.rhs_.G_.begin();
+    while (lit != rule.lhs_.G_.end()) {
       if (lit->second->get_oid() == rit->second->get_oid()) {
-        p->left.push_back(lit->second);
+        p->left_.push_back(lit->second);
         ++lit;
         ++rit;
       }
       else {
-        p->right.push_back(rit->second);
+        p->right_.push_back(rit->second);
         ++rit;
       }
     }
-    for (; rit != rule.rhs.G.end(); ++rit) {
-      p->right.push_back(rit->second);
+    for (; rit != rule.rhs_.G_.end(); ++rit) {
+      p->right_.push_back(rit->second);
     }
-    p->confidence = rule.conf;
-    c->states.push_back(p);
+    p->confidence_ = rule.conf_;
+    c->states_.push_back(p);
   }
 
-  episode_start = episode.size(); // remember where we left off
+  episode_start_ = episode_.size(); // remember where we left off
   return c;
 }
 
@@ -416,17 +416,17 @@ static Correlations::iterator swm2corr(
   // no context found; make a pattern
   if (contextEnd == next) {
     Pattern* pat = new Pattern();
-    pat->left.assign(first->begin(), --first->end()); // this is pretty arbitrary
-    pat->right.assign(--first->end(), first->end());
+    pat->left_.assign(first->begin(), --first->end()); // this is pretty arbitrary
+    pat->right_.assign(--first->end(), first->end());
     *result++ = pat;
   }
   // context found; recurse on it
   else {
     IPGMContext* con = new IPGMContext();
-    con->objects.assign(first->begin(), first->end());
-    con->states.resize(std::distance(next, contextEnd));
-    Correlations::iterator subEnd = swm2corr(next, contextEnd, con->states.begin());
-    con->states.resize(std::distance(con->states.begin(), subEnd));
+    con->objects_.assign(first->begin(), first->end());
+    con->states_.resize(std::distance(next, contextEnd));
+    Correlations::iterator subEnd = swm2corr(next, contextEnd, con->states_.begin());
+    con->states_.resize(std::distance(con->states_.begin(), subEnd));
     *result++ = con;
   }
 
@@ -461,7 +461,7 @@ static void dump(const Episode& episode, const Table_Enc2Obj& enc2obj, std::ostr
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-Correlator::Correlator() : episode_start(0) {
+Correlator::Correlator() : episode_start_(0) {
 }
 
 // stores the object pointed to by the provided View
@@ -469,17 +469,17 @@ Correlator::Correlator() : episode_start(0) {
 // runtime: O(log N) where N = size of episode so far
 void Correlator::take_input(r_code::View* input) {
 
-  if (!input || !input->object)
+  if (!input || !input->object_)
     return;
 
-  // OID_t id = input->code(VIEW_OID).atom;
-  OID_t id = input->object->get_oid();
+  // OID_t id = input->code(VIEW_OID).atom_;
+  OID_t id = input->object_->get_oid();
   bool is_new;
   enc_t code = encode(id, is_new);
-  episode.push_back(code);
+  episode_.push_back(code);
   if (is_new) {
-    enc2obj[code] = input->object;
-    oid2enc[id] = code;
+    enc2obj_[code] = input->object_;
+    oid2enc_[id] = code;
   }
 }
 
@@ -494,32 +494,32 @@ CorrelatorOutput* Correlator::get_output(bool useEntireHistory) {
   //dump(); // DEBUG
 
   // determine where to start
-  Episode::iterator first = episode.begin();
+  Episode::iterator first = episode_.begin();
   if (!useEntireHistory)
-    std::advance(first, episode_start);
+    std::advance(first, episode_start_);
 
   // remember where we left off
-  episode_start = episode.size();
+  episode_start_ = episode_.size();
 
   // remove noise and generate LSTM inputs
   LSTMInput inputs;
-  makeNoislessInputs(first, episode.end(), inputs);
+  makeNoislessInputs(first, episode_.end(), inputs);
 
   // train the LSTM
   std::cout << "*** START TRAINING ***" << std::endl; // DEBUG
   if (first_call) {
-    corcor.initializeOneStepPrediction(CELLS_PER_BLOCK, NUM_BLOCKS, inputs);
-    corcor.lstmNetwork->setRandomWeights(.5);
+    corcor_.initializeOneStepPrediction(CELLS_PER_BLOCK, NUM_BLOCKS, inputs);
+    corcor_.lstmNetwork_->setRandomWeights(.5);
     first_call = false;
   } else
-    corcor.appendBuffers(inputs);
+    corcor_.appendBuffers(inputs);
   time_t start, current;
   uint16 epoch;
   float64 mse;
   for (time(&start), time(&current), epoch = 0, mse = 0xFFFFFFFF;
     epoch < NUM_EPOCHS && mse > MSE_THR && difftime(current, start) < TRAIN_TIME_SEC;
     ++epoch, time(&current)) {
-    mse = corcor.trainingEpoch(LEARNING_RATE, MOMENTUM);
+    mse = corcor_.trainingEpoch(LEARNING_RATE, MOMENTUM);
     std::cout << epoch << "\t" << mse << std::endl; // DEBUG
   }
   std::cout << "#epochs done: " << epoch << std::endl; // DEBUG
@@ -534,9 +534,9 @@ CorrelatorOutput* Correlator::get_output(bool useEntireHistory) {
 
   // the small worlds representation is easily converted to the desired correlator output
   CorrelatorOutput* c = new CorrelatorOutput();
-  c->states.resize(worlds.size());
-  Correlations::iterator corrEnd = swm2corr(worlds.begin(), worlds.end(), c->states.begin());
-  c->states.resize(std::distance(c->states.begin(), corrEnd));
+  c->states_.resize(worlds.size());
+  Correlations::iterator corrEnd = swm2corr(worlds.begin(), worlds.end(), c->states_.begin());
+  c->states_.resize(std::distance(c->states_.begin(), corrEnd));
   return c;
 }
 
@@ -544,7 +544,7 @@ CorrelatorOutput* Correlator::get_output(bool useEntireHistory) {
 // the oid2str function can be used to provide a way of printing objects
 void Correlator::dump(std::ostream& out, std::string(*oid2str)(OID_t)) const {
 
-  ::dump(episode, enc2obj, out, oid2str);
+  ::dump(episode_, enc2obj_, out, oid2str);
 }
 
 // finds a sparse binary encoding of the provided identifier
@@ -573,8 +573,8 @@ enc_t Correlator::encode(OID_t id, bool& is_new) {
     (INIT_NUM_ONES > 0 ? CUML_BINS[INIT_NUM_ONES - 1] : 0);
 
   // first, check if we already have an encoding
-  Table_OID2Enc::iterator it = oid2enc.find(id);
-  if (it != oid2enc.end()) {
+  Table_OID2Enc::iterator it = oid2enc_.find(id);
+  if (it != oid2enc_.end()) {
     is_new = false;
     return it->second;
   }
@@ -582,7 +582,7 @@ enc_t Correlator::encode(OID_t id, bool& is_new) {
   // check if encodings with current number of ones have been depleted
   // if so, use more ones
   // to use LESS possibilities: >= CUML_BINS[NUM_ONES] / 2
-  if (oid2enc.size() >= MAX_SIZE) {
+  if (oid2enc_.size() >= MAX_SIZE) {
     ++NUM_ONES;
     MAX_SIZE = CUML_BINS[NUM_ONES] -
       (INIT_NUM_ONES > 0 ? CUML_BINS[INIT_NUM_ONES - 1] : 0);
@@ -605,7 +605,7 @@ enc_t Correlator::encode(OID_t id, bool& is_new) {
     for (it = positions.begin(); it != positions.end(); ++it)
       code ^= (enc_t)1 << *it;
 
-  } while (enc2obj.find(code) != enc2obj.end()); // check uniqueness
+  } while (enc2obj_.find(code) != enc2obj_.end()); // check uniqueness
 
   is_new = true;
   return code;
@@ -623,7 +623,7 @@ void Correlator::extract_rules(JacobianRules& rules, uint32 episode_size) {
   for (int32 t = num_calls - 1; t >= 0; --t) {
 
     // perform sensitivity analysis
-    corcor.getJacobian(t, t + SLICE_SIZE, slice);
+    corcor_.getJacobian(t, t + SLICE_SIZE, slice);
 
     // the last one is the target
     JacobianRule rule;
@@ -670,7 +670,7 @@ r_code::Code* Correlator::findBestMatch(InputIterator first, float64& bestMatch)
   bestMatch = -1;
 
   Table_Enc2Obj::const_iterator it;
-  for (it = enc2obj.begin(); it != enc2obj.end(); ++it) {
+  for (it = enc2obj_.begin(); it != enc2obj_.end(); ++it) {
 
     enc_t code = it->first;
     if (code == 0) { // can only happen if encode::INIT_NUM_ONES = 0
@@ -693,7 +693,7 @@ r_code::Code* Correlator::findBestMatch(InputIterator first, float64& bestMatch)
   }
 
   /* DEBUG //
-  enc_t code = oid2enc.find(object->get_oid())->second;
+  enc_t code = oid2enc_.find(object->get_oid())->second;
   std::cout << "Best match found: ";
   for(enc_t b = 1 << 31; b; b >>= 1)
       std::cout << (code & b ? 1 : 0);

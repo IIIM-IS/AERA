@@ -116,15 +116,15 @@ HLPContext HLPContext::operator *() const {
 
   switch ((*this)[0].getDescriptor()) {
   case Atom::I_PTR:
-    return *HLPContext(code, (*this)[0].asIndex(), (HLPOverlay *)overlay, data);
+    return *HLPContext(code_, (*this)[0].asIndex(), (HLPOverlay *)overlay_, data_);
   case Atom::VL_PTR: {
-    Atom *value_code = ((HLPOverlay *)overlay)->get_value_code((*this)[0].asIndex());
+    Atom *value_code = ((HLPOverlay *)overlay_)->get_value_code((*this)[0].asIndex());
     if (value_code)
-      return *HLPContext(value_code, 0, (HLPOverlay *)overlay, BINDING_MAP);
+      return *HLPContext(value_code, 0, (HLPOverlay *)overlay_, BINDING_MAP);
     else // unbound variable.
       return HLPContext(); // data=undefined: evaluation will return false.
   }case Atom::VALUE_PTR:
-    return *HLPContext(&overlay->values[0], (*this)[0].asIndex(), (HLPOverlay *)overlay, VALUE_ARRAY);
+    return *HLPContext(&overlay_->values_[0], (*this)[0].asIndex(), (HLPOverlay *)overlay_, VALUE_ARRAY);
   default:
     return *this;
   }
@@ -132,7 +132,7 @@ HLPContext HLPContext::operator *() const {
 
 inline bool HLPContext::evaluate(uint16 &result_index) const {
 
-  if (data == BINDING_MAP || data == VALUE_ARRAY)
+  if (data_ == BINDING_MAP || data_ == VALUE_ARRAY)
     return true;
 
   HLPContext c = **this;
@@ -141,7 +141,7 @@ inline bool HLPContext::evaluate(uint16 &result_index) const {
 
 bool HLPContext::evaluate_no_dereference(uint16 &result_index) const {
 
-  switch (data) {
+  switch (data_) {
   case VALUE_ARRAY:
   case BINDING_MAP:
     return true;
@@ -149,13 +149,13 @@ bool HLPContext::evaluate_no_dereference(uint16 &result_index) const {
     return false;
   }
 
-  switch (code[index].getDescriptor()) {
+  switch (code_[index_].getDescriptor()) {
   case Atom::ASSIGN_PTR: {
 
-    HLPContext c(code, code[index].asIndex(), (HLPOverlay *)overlay);
+    HLPContext c(code_, code_[index_].asIndex(), (HLPOverlay *)overlay_);
     if (c.evaluate_no_dereference(result_index)) {
 
-      ((HLPOverlay *)overlay)->bindings->bind_variable(code, code[index].asAssignmentIndex(), code[index].asIndex(), &overlay->values[0]);
+      ((HLPOverlay *)overlay_)->bindings_->bind_variable(code_, code_[index_].asAssignmentIndex(), code_[index_].asIndex(), &overlay_->values_[0]);
       return true;
     } else
       return false;
@@ -192,23 +192,23 @@ bool HLPContext::evaluate_no_dereference(uint16 &result_index) const {
       if (!(*getChild(i)).evaluate_no_dereference(unused_result_index))
         return false;
     }
-    result_index = index;
+    result_index = index_;
     return true;
   }default:
-    result_index = index;
+    result_index = index_;
     return true;
   }
 }
 
 uint16 HLPContext::get_object_code_size() const {
 
-  switch (data) {
+  switch (data_) {
   case STEM:
-    return ((HLPOverlay *)overlay)->get_unpacked_object()->code_size();
+    return ((HLPOverlay *)overlay_)->get_unpacked_object()->code_size();
   case BINDING_MAP:
-    return ((HLPOverlay *)overlay)->get_value_code_size((*this)[0].asIndex());
+    return ((HLPOverlay *)overlay_)->get_value_code_size((*this)[0].asIndex());
   case VALUE_ARRAY:
-    return overlay->values.size();
+    return overlay_->values_.size();
   default:
     return 0;
   }

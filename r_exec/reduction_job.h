@@ -89,7 +89,7 @@ class r_exec_dll _ReductionJob :
 protected:
   _ReductionJob();
 public:
-  Timestamp ijt; // time of injection of the job in the pipe.
+  Timestamp ijt_; // time of injection of the job in the pipe.
   virtual bool update(Timestamp now) = 0; // return false to shutdown the reduction core.
   virtual void debug() {}
   uint32 get_job_id() { return job_id_; }
@@ -101,32 +101,32 @@ private:
 template<class _P> class ReductionJob :
   public _ReductionJob {
 public:
-  P<View> input;
-  P<_P> processor;
-  ReductionJob(View *input, _P *processor) : _ReductionJob(), input(input), processor(processor) {}
+  P<View> input_;
+  P<_P> processor_;
+  ReductionJob(View *input, _P *processor) : _ReductionJob(), input_(input), processor_(processor) {}
   bool update(Timestamp now) {
 
-    _Mem::Get()->register_reduction_job_latency(now - ijt);
-    processor->reduce(input);
+    _Mem::Get()->register_reduction_job_latency(now - ijt_);
+    processor_->reduce(input_);
     return true;
   }
   void debug() {
 
-    processor->debug(input);
+    processor_->debug(input_);
   }
 };
 
 template<class _P, class T, class C> class BatchReductionJob :
   public _ReductionJob {
 public:
-  P<_P> processor; // the controller that will process the job.
-  P<T> trigger; // the event that triggered the job.
-  P<C> controller; // the controller that produced the job.
-  BatchReductionJob(_P *processor, T *trigger, C *controller) : _ReductionJob(), processor(processor), trigger(trigger), controller(controller) {}
+  P<_P> processor_; // the controller that will process the job.
+  P<T> trigger_; // the event that triggered the job.
+  P<C> controller_; // the controller that produced the job.
+  BatchReductionJob(_P *processor, T *trigger, C *controller) : _ReductionJob(), processor_(processor), trigger_(trigger), controller_(controller) {}
   bool update(Timestamp now) {
 
-    _Mem::Get()->register_reduction_job_latency(now - ijt);
-    processor->reduce_batch(trigger, controller);
+    _Mem::Get()->register_reduction_job_latency(now - ijt_);
+    processor_->reduce_batch(trigger_, controller_);
     return true;
   }
 };
@@ -140,8 +140,8 @@ public:
 class r_exec_dll AsyncInjectionJob :
   public _ReductionJob {
 public:
-  P<View> input;
-  AsyncInjectionJob(View *input) : _ReductionJob(), input(input) {}
+  P<View> input_;
+  AsyncInjectionJob(View *input) : _ReductionJob(), input_(input) {}
   bool update(Timestamp now);
 };
 }

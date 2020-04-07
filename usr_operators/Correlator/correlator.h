@@ -112,7 +112,7 @@ r_exec::Controller dll_export *correlator(r_code::View *view);
 class State :
   public core::_Object {
 public:
-  float32 confidence;
+  float32 confidence_;
   virtual void trace(std::ostream& out) = 0;
 };
 
@@ -121,18 +121,18 @@ public:
 class IPGMContext :
   public State {
 public:
-  std::vector<P<r_code::Code> > objects;
-  std::vector<P<State> > states;
+  std::vector<P<r_code::Code> > objects_;
+  std::vector<P<State> > states_;
 
   void trace(std::ostream& out) {
 
     out << "IPGMContext\n";
     out << "Objects\n";
-    for (uint32 i = 0; i < objects.size(); ++i)
-      objects[i]->trace(out);
+    for (uint32 i = 0; i < objects_.size(); ++i)
+      objects_[i]->trace(out);
     out << "States\n";
-    for (uint32 i = 0; i < states.size(); ++i)
-      states[i]->trace(out);
+    for (uint32 i = 0; i < states_.size(); ++i)
+      states_[i]->trace(out);
   }
 
   void trace() { trace(std::cout); }
@@ -143,18 +143,18 @@ public:
 class Pattern :
   public State {
 public:
-  std::vector<P<r_code::Code> > left;
-  std::vector<P<r_code::Code> > right;
+  std::vector<P<r_code::Code> > left_;
+  std::vector<P<r_code::Code> > right_;
 
   void trace(std::ostream& out) {
 
     out << "Pattern\n";
     out << "Left\n";
-    for (uint32 i = 0; i < left.size(); ++i)
-      left[i]->trace(out);
+    for (uint32 i = 0; i < left_.size(); ++i)
+      left_[i]->trace(out);
     out << "Right\n";
-    for (uint32 i = 0; i < right.size(); ++i)
-      right[i]->trace(out);
+    for (uint32 i = 0; i < right_.size(); ++i)
+      right_[i]->trace(out);
   }
 
   void trace() { trace(std::cout); }
@@ -162,13 +162,13 @@ public:
 
 class CorrelatorOutput {
 public:
-  std::vector<P<State> > states; // changed from vector<P<IPGMContext>>
+  std::vector<P<State> > states_; // changed from vector<P<IPGMContext>>
 
   void trace(std::ostream& out) {
 
-    out << "CorrelatorOutput: " << states.size() << " states" << std::endl;
-    for (uint32 i = 0; i < states.size(); ++i)
-      states[i]->trace(out);
+    out << "CorrelatorOutput: " << states_.size() << " states" << std::endl;
+    for (uint32 i = 0; i < states_.size(); ++i)
+      states_[i]->trace(out);
   }
 
   void trace() { trace(std::cout); }
@@ -184,8 +184,8 @@ typedef std::vector<std::pair<timestamp_t, event_t> > Episode;
 
 class Correlator {
 private:
-  Episode episode;
-  size_t episode_start; // index of start of current episode
+  Episode episode_;
+  size_t episode_start_; // index of start of current episode
   WinEpi winepi;
 
 public:
@@ -228,11 +228,11 @@ typedef std::map<enc_t, P<r_code::Code> > Table_Enc2Obj;
 
 class Correlator {
 private:
-  Episode episode; // chronological list of binary encodings of observed objects
-  Table_Enc2Obj enc2obj; // binary encoding => object (P<Code>)
-  Table_OID2Enc oid2enc; // object identifier => binary encoding
-  uint32 episode_start; // index of start of current episode
-  CorrelatorCore corcor; // holds and maintains the learning core
+  Episode episode_; // chronological list of binary encodings of observed objects
+  Table_Enc2Obj enc2obj_; // binary encoding => object (P<Code>)
+  Table_OID2Enc oid2enc_; // object identifier => binary encoding
+  uint32 episode_start_; // index of start of current episode
+  CorrelatorCore corcor_; // holds and maintains the learning core
 
   // finds a sparse binary encoding of the provided identifier
   // sets is_new to false iff an encoding already exists

@@ -99,14 +99,14 @@ void Atom::trace(TraceContext& context, std::ostream& out) const {
     // Output the timestamp value now. Otherwise, it could be interpreted
     // as an op code, etc.
     --context.Timestamp_data;
-    out << atom;
+    out << atom_;
 
     if (context.Timestamp_data == 1)
       // Save for the next step.
-      context.Timestamp_high = atom;
+      context.Timestamp_high = atom_;
     else {
       // Imitate Utils::GetTimestamp.
-      auto timestamp = core::Timestamp(microseconds(context.Timestamp_high << 32 | atom));
+      auto timestamp = core::Timestamp(microseconds(context.Timestamp_high << 32 | atom_));
       out << " " << Utils::RelativeTime(timestamp);
     }
     return;
@@ -140,7 +140,7 @@ void Atom::trace(TraceContext& context, std::ostream& out) const {
   case S_SET: out << "s_set: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.Members_to_go = getAtomCount(); return;
   case MARKER: out << "mk: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.Members_to_go = getAtomCount(); return;
   case OPERATOR: out << "op: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.Members_to_go = getAtomCount(); return;
-  case STRING: out << "st: " << std::dec << (uint16)getAtomCount(); context.Members_to_go = context.String_data = getAtomCount(); context.Char_count = (atom & 0x000000FF); return;
+  case STRING: out << "st: " << std::dec << (uint16)getAtomCount(); context.Members_to_go = context.String_data = getAtomCount(); context.Char_count = (atom_ & 0x000000FF); return;
   case TIMESTAMP: out << "us"; context.Members_to_go = context.Timestamp_data = 2; return;
   case GROUP: out << "grp: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.Members_to_go = getAtomCount(); return;
   case INSTANTIATED_PROGRAM:
@@ -155,7 +155,7 @@ void Atom::trace(TraceContext& context, std::ostream& out) const {
 
       --context.String_data;
       std::string s;
-      char *content = (char *)&atom;
+      char *content = (char *)&atom_;
       for (uint8 i = 0; i < 4; ++i) {
 
         if (context.Char_count-- > 0)

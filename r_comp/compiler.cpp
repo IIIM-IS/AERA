@@ -83,13 +83,13 @@ namespace r_comp {
 
 static bool Output = true;
 
-Compiler::Compiler() : out_stream(NULL), current_object(NULL), error(std::string("")) {
+Compiler::Compiler() : out_stream_(NULL), current_object_(NULL), error_(std::string("")) {
 }
 
 Compiler::~Compiler() {
 
-  if (out_stream)
-    delete out_stream;
+  if (out_stream_)
+    delete out_stream_;
 }
 
 Compiler::State Compiler::save_state() {
@@ -100,16 +100,16 @@ Compiler::State Compiler::save_state() {
 
 void Compiler::restore_state(State s) {
 
-  in_stream->seekg(s.stream_ptr);
-  state = s;
+  in_stream_->seekg(s.stream_ptr);
+  state_ = s;
 }
 
 void Compiler::set_error(const std::string &s) {
 
-  if (!err && Output) {
+  if (!err_ && Output) {
 
-    err = true;
-    error = s;
+    err_ = true;
+    error_ = s;
   }
 }
 
@@ -121,36 +121,36 @@ void Compiler::set_arity_error(uint16 expected, uint16 got) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool Compiler::compile(std::istream *stream, r_comp::Image *_image, r_comp::Metadata *_metadata, std::string &error, bool trace) {
+bool Compiler::compile(std::istream *stream, r_comp::Image *image, r_comp::Metadata *metadata, std::string &error, bool trace) {
 
-  this->in_stream = stream;
-  this->err = false;
-  this->trace = trace;
+  this->in_stream_ = stream;
+  this->err_ = false;
+  this->trace_ = trace;
 
-  this->_image = _image;
-  this->_metadata = _metadata;
-  current_object_index = _image->object_map.objects.size();
-  while (!in_stream->eof()) {
+  this->image_ = image;
+  this->metadata_ = metadata;
+  current_object_index_ = image->object_map_.objects_.size();
+  while (!in_stream_->eof()) {
 
-    switch (in_stream->peek()) {
+    switch (in_stream_->peek()) {
     case '!':
       set_error("error: found preprocessor directive");
-      error = this->error;
+      error = this->error_;
       return false;
     default:
-      if (in_stream->eof())
+      if (in_stream_->eof())
         return true;
       if (!read_sys_object()) {
 
-        error = this->error;
+        error = this->error_;
         return false;
       }
-      current_object_index++;
+      current_object_index_++;
       break;
     }
-    char c = (char)in_stream->get();
+    char c = (char)in_stream_->get();
     if (c != -1)
-      in_stream->putback(c);
+      in_stream_->putback(c);
   }
 
   return true;
@@ -158,22 +158,22 @@ bool Compiler::compile(std::istream *stream, r_comp::Image *_image, r_comp::Meta
 
 bool Compiler::read_sys_object() {
 
-  local_references.clear();
-  hlp_references.clear();
+  local_references_.clear();
+  hlp_references_.clear();
   bool indented = false;
   bool lbl = false;
 
-  current_view_index = -1;
+  current_view_index_ = -1;
 
   std::string l;
   while (indent(false));
-  char c = (char)in_stream->get();
+  char c = (char)in_stream_->get();
   if (c != -1)
-    in_stream->putback(c);
+    in_stream_->putback(c);
   else
     return true;
 
-  in_hlp = false;
+  in_hlp_ = false;
 
   if (label(l))
     lbl = true;
@@ -187,21 +187,21 @@ bool Compiler::read_sys_object() {
   }
   indent(false);
 
-  if (!sys_object(current_class)) {
+  if (!sys_object(current_class_)) {
 
     set_error("error: unknown class");
     return false;
   } else {
 
-    if (current_class.str_opcode == "mdl" || current_class.str_opcode == "cst")
-      in_hlp = true;
-    current_object = new SysObject();
+    if (current_class_.str_opcode == "mdl" || current_class_.str_opcode == "cst")
+      in_hlp_ = true;
+    current_object_ = new SysObject();
     if (lbl)
-      global_references[l] = Reference(_image->code_segment.objects.size(), current_class, Class());
+      global_references_[l] = Reference(image_->code_segment_.objects_.size(), current_class_, Class());
   }
 
-  current_object->code[0] = current_class.atom;
-  if (current_class.atom.getAtomCount()) {
+  current_object_->code_[0] = current_class_.atom_;
+  if (current_class_.atom_.getAtomCount()) {
 
     if (!right_indent(true)) {
 
@@ -211,12 +211,12 @@ bool Compiler::read_sys_object() {
         return false;
       }
     }
-    uint16 extent_index = current_class.atom.getAtomCount() + 1;
-    if (!expression_tail(indented, current_class, 1, extent_index, true))
+    uint16 extent_index = current_class_.atom_.getAtomCount() + 1;
+    if (!expression_tail(indented, current_class_, 1, extent_index, true))
       return false;
   }
 
-  SysObject *sys_object = (SysObject *)current_object; // current_object will point to views, if any.
+  SysObject *sys_object = (SysObject *)current_object_; // current_object_ will point to views_, if any.
 
   // compile view set
   // input format:
@@ -228,10 +228,10 @@ bool Compiler::read_sys_object() {
   // |[]
 
   while (indent(false));
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (!match_symbol("|[]", false)) {
 
-    in_stream->seekg(i);
+    in_stream_->seekg(i);
     if (!set_begin(indented)) {
 
       set_error(" error: expected a view set");
@@ -240,23 +240,23 @@ bool Compiler::read_sys_object() {
 
     indent(false);
 
-    if (current_class.str_opcode == "grp")
-      current_class = _metadata->classes.find("grp_view")->second;
-    else if (current_class.str_opcode == "ipgm" ||
-      current_class.str_opcode == "icpp_pgm" ||
-      current_class.str_opcode == "mdl" ||
-      current_class.str_opcode == "cst")
-      current_class = _metadata->classes.find("pgm_view")->second;
+    if (current_class_.str_opcode == "grp")
+      current_class_ = metadata_->classes_.find("grp_view")->second;
+    else if (current_class_.str_opcode == "ipgm" ||
+      current_class_.str_opcode == "icpp_pgm" ||
+      current_class_.str_opcode == "mdl" ||
+      current_class_.str_opcode == "cst")
+      current_class_ = metadata_->classes_.find("pgm_view")->second;
     else
-      current_class = _metadata->classes.find("view")->second;
-    current_class.use_as = StructureMember::I_CLASS;
+      current_class_ = metadata_->classes_.find("view")->second;
+    current_class_.use_as = StructureMember::I_CLASS;
 
     uint16 count = 0;
     bool _indented = false;
-    while (!in_stream->eof()) {
+    while (!in_stream_->eof()) {
 
-      current_object = new SysView();
-      current_view_index = count;
+      current_object_ = new SysView();
+      current_view_index_ = count;
       uint16 extent_index = 0;
 
       if (set_end(indented)) {
@@ -264,11 +264,11 @@ bool Compiler::read_sys_object() {
         if (!count) {
 
           set_error(" syntax error: use |[] for empty sets");
-          delete current_object;
+          delete current_object_;
           return false;
         } else {
 
-          delete current_object;
+          delete current_object_;
           break;
         }
       }
@@ -281,34 +281,34 @@ bool Compiler::read_sys_object() {
             if (!separator(false)) {
 
               set_error("syntax error: missing separator between 2 elements");
-              delete current_object;
+              delete current_object_;
               return false;
             }
           }
         } else
           _indented = false;
       }
-      if (!read_set(_indented, true, &current_class, 0, extent_index, true)) {
+      if (!read_set(_indented, true, &current_class_, 0, extent_index, true)) {
 
         set_error(" error: illegal element in set");
-        delete current_object;
+        delete current_object_;
         return false;
       }
       count++;
-      sys_object->views.push_back((SysView *)current_object);
+      sys_object->views_.push_back((SysView *)current_object_);
     }
   }
 
-  if (trace)
+  if (trace_)
     sys_object->trace();
 
-  _image->add_sys_object(sys_object, l);
+  image_->add_sys_object(sys_object, l);
   return true;
 }
 
 bool Compiler::read(const StructureMember &m, bool &indented, bool enforce, uint16 write_index, uint16 &extent_index, bool write) {
 
-  if (Class *p = m.get_class(_metadata)) {
+  if (Class *p = m.get_class(metadata_)) {
 
     p->use_as = m.getIteration();
     return (this->*m.read())(indented, enforce, p, write_index, extent_index, write);
@@ -318,18 +318,18 @@ bool Compiler::read(const StructureMember &m, bool &indented, bool enforce, uint
 
 bool Compiler::getGlobalReferenceIndex(const std::string reference_name, const ReturnType t, ImageObject *object, uint16 &index, Class *&_class) {
 
-  UNORDERED_MAP<std::string, Reference>::iterator it = global_references.find(reference_name);
-  if (it != global_references.end() && (t == ANY || (t != ANY && it->second._class.type == t))) {
+  UNORDERED_MAP<std::string, Reference>::iterator it = global_references_.find(reference_name);
+  if (it != global_references_.end() && (t == ANY || (t != ANY && it->second.class_.type == t))) {
 
-    _class = &it->second._class;
-    for (uint16 j = 0; j < object->references.size(); ++j)
-      if (object->references[j] == it->second.index) { // the object has already been referenced.
+    _class = &it->second.class_;
+    for (uint16 j = 0; j < object->references_.size(); ++j)
+      if (object->references_[j] == it->second.index_) { // the object has already been referenced.
 
         index = j; // rptr points to object->reference_set[j], which in turn points to it->second.index.
         return true;
       }
-    object->references.push_back(it->second.index); // add new reference to the object.
-    index = object->references.size() - 1; // rptr points to the last element of object->reference_set, which in turn points to it->second.index.
+    object->references_.push_back(it->second.index_); // add new reference to the object.
+    index = object->references_.size() - 1; // rptr points to the last element of object->reference_set, which in turn points to it->second.index.
     return true;
   }
   return false;
@@ -344,28 +344,28 @@ void Compiler::addLocalReference(const std::string reference_name, const uint16 
     std::string class_name = reference_name.substr(pos + 1);
     std::string ref_name = reference_name.substr(0, pos);
 
-    UNORDERED_MAP<std::string, Class>::iterator it = _metadata->classes.find(class_name);
-    if (it != _metadata->classes.end())
-      local_references[ref_name] = Reference(index, p, it->second);
+    UNORDERED_MAP<std::string, Class>::iterator it = metadata_->classes_.find(class_name);
+    if (it != metadata_->classes_.end())
+      local_references_[ref_name] = Reference(index, p, it->second);
     else
       set_error(" error: cast to " + class_name + ": unknown class");
   } else
-    local_references[reference_name] = Reference(index, p, Class());
+    local_references_[reference_name] = Reference(index, p, Class());
 }
 
 uint8 Compiler::add_hlp_reference(std::string reference_name) {
 
-  for (uint8 i = 0; i < hlp_references.size(); ++i)
-    if (reference_name == hlp_references[i])
+  for (uint8 i = 0; i < hlp_references_.size(); ++i)
+    if (reference_name == hlp_references_[i])
       return i;
-  hlp_references.push_back(reference_name);
-  return hlp_references.size() - 1;
+  hlp_references_.push_back(reference_name);
+  return hlp_references_.size() - 1;
 }
 
 uint8 Compiler::get_hlp_reference(std::string reference_name) {
 
-  for (uint8 i = 0; i < hlp_references.size(); ++i)
-    if (reference_name == hlp_references[i])
+  for (uint8 i = 0; i < hlp_references_.size(); ++i)
+    if (reference_name == hlp_references_[i])
       return i;
   return 0xFF;
 }
@@ -374,13 +374,13 @@ uint8 Compiler::get_hlp_reference(std::string reference_name) {
 
 bool Compiler::comment() {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   bool started = false;
   bool continuation = false; // continuation mark detected
   bool period = false; // to detect 2 subsequent '.'
-  while (!in_stream->eof()) {
+  while (!in_stream_->eof()) {
 
-    switch (char c = (char)in_stream->get()) {
+    switch (char c = (char)in_stream_->get()) {
     case ';':
       if (!started)
         started = true;
@@ -400,7 +400,7 @@ bool Compiler::comment() {
     case NEWLINE:
       if (!continuation) {
 
-        in_stream->putback(c);
+        in_stream_->putback(c);
         return true;
       }
       continuation = period = false;
@@ -413,8 +413,8 @@ bool Compiler::comment() {
     }
   }
 return_false:
-  in_stream->seekg(i);
-  in_stream->clear();
+  in_stream_->seekg(i);
+  in_stream_->clear();
   return false;
 }
 
@@ -423,7 +423,7 @@ bool Compiler::indent(bool pushback) {
   comment();
   std::string s;
   s += NEWLINE;
-  for (uint16 j = 0; j < 3 * state.indents; j++)
+  for (uint16 j = 0; j < 3 * state_.indents; j++)
     s += ' ';
   return match_symbol(s.c_str(), pushback);
 }
@@ -433,30 +433,30 @@ bool Compiler::right_indent(bool pushback) { // no look ahead when pushback==tru
   comment();
   if (pushback) {
 
-    if (state.right_indents_ahead)
+    if (state_.right_indents_ahead)
       return true;
     std::string s;
     s += NEWLINE;
-    for (uint16 j = 0; j < 3 * (state.indents + 1); j++)
+    for (uint16 j = 0; j < 3 * (state_.indents + 1); j++)
       s += ' ';
     return match_symbol(s.c_str(), true);
   }
-  if (state.right_indents_ahead) {
+  if (state_.right_indents_ahead) {
 
-    state.indents++;
-    state.right_indents_ahead--;
+    state_.indents++;
+    state_.right_indents_ahead--;
     return true;
   }
   std::string s;
   s += NEWLINE;
-  for (uint16 j = 0; j < 3 * (state.indents + 1); j++)
+  for (uint16 j = 0; j < 3 * (state_.indents + 1); j++)
     s += ' ';
   if (!match_symbol(s.c_str(), false))
     return false;
-  state.indents++;
+  state_.indents++;
   s = "   ";
   while (match_symbol(s.c_str(), false)) // look ahead for more indents
-    state.right_indents_ahead++;
+    state_.right_indents_ahead++;
   return true;
 }
 
@@ -467,41 +467,41 @@ bool Compiler::left_indent(bool pushback) { // no look ahead when pushback==true
     return false;
   if (pushback) {
 
-    if (state.left_indents_ahead)
+    if (state_.left_indents_ahead)
       return true;
     std::string s;
     s += NEWLINE;
-    for (uint16 j = 0; j < 3 * (state.indents - 1); j++)
+    for (uint16 j = 0; j < 3 * (state_.indents - 1); j++)
       s += ' ';
     return match_symbol(s.c_str(), true);
   }
-  if (state.left_indents_ahead) {
+  if (state_.left_indents_ahead) {
 
-    if (state.indents)
-      state.indents--;
-    state.left_indents_ahead--;
+    if (state_.indents)
+      state_.indents--;
+    state_.left_indents_ahead--;
     return true;
   }
   std::string s;
   s += NEWLINE;
   if (!match_symbol(s.c_str(), false))
     return false;
-  uint16 expected = state.indents - 1;
+  uint16 expected = state_.indents - 1;
   if (expected <= 0) {
 
-    if (state.indents)
-      state.indents--;
+    if (state_.indents)
+      state_.indents--;
     return true;
   }
-  state.left_indents_ahead = expected; // look ahead for more indents
+  state_.left_indents_ahead = expected; // look ahead for more indents
   s = "   ";
   for (uint16 j = 0; j < expected; j++) {
 
     if (match_symbol(s.c_str(), false))
-      state.left_indents_ahead--;
+      state_.left_indents_ahead--;
   }
-  if (state.indents)
-    state.indents--;
+  if (state_.indents)
+    state_.indents--;
   return true;
 }
 
@@ -509,25 +509,25 @@ bool Compiler::separator(bool pushback) {
 
   if (indent(pushback))
     return true;
-  char c = (char)in_stream->get();
+  char c = (char)in_stream_->get();
   if (c == ' ') {
 
     if (pushback)
-      in_stream->putback(c);
+      in_stream_->putback(c);
     return true;
   }
-  in_stream->clear();
-  in_stream->putback(c);
+  in_stream_->clear();
+  in_stream_->putback(c);
   return false;
 }
 
 bool Compiler::symbol_expr(std::string &s) {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   uint16 count = 0;
-  while (!in_stream->eof()) {
+  while (!in_stream_->eof()) {
 
-    switch (char c = (char)in_stream->get()) {
+    switch (char c = (char)in_stream_->get()) {
     case ':':
     case ' ':
     case NEWLINE:
@@ -535,7 +535,7 @@ bool Compiler::symbol_expr(std::string &s) {
     case ')':
       if (count) {
 
-        in_stream->putback(c);
+        in_stream_->putback(c);
         return true;
       }
     case '(':
@@ -547,7 +547,7 @@ bool Compiler::symbol_expr(std::string &s) {
         s += '.';
         break;
       }
-      in_stream->seekg(i);
+      in_stream_->seekg(i);
       return false;
     default:
       count++;
@@ -555,18 +555,18 @@ bool Compiler::symbol_expr(std::string &s) {
       break;
     }
   }
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
 bool Compiler::symbol_expr_set(std::string &s) {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   uint16 count = 0;
-  while (!in_stream->eof()) {
+  while (!in_stream_->eof()) {
 
-    switch (char c = (char)in_stream->get()) {
+    switch (char c = (char)in_stream_->get()) {
     case ' ':
     case NEWLINE:
     case ';':
@@ -574,14 +574,14 @@ bool Compiler::symbol_expr_set(std::string &s) {
     case ']':
       if (count) {
 
-        in_stream->putback(c);
+        in_stream_->putback(c);
         return true;
       }
     case '(':
     case '[':
     case '.':
     case ':':
-      in_stream->seekg(i);
+      in_stream_->seekg(i);
       return false;
     default:
       count++;
@@ -589,8 +589,8 @@ bool Compiler::symbol_expr_set(std::string &s) {
       break;
     }
   }
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
@@ -600,7 +600,7 @@ bool Compiler::match_symbol_separator(const char *symbol, bool pushback) {
 
     if (separator(true) || right_indent(true) || left_indent(true))
       return true;
-    char c = (char)in_stream->peek();
+    char c = (char)in_stream_->peek();
     if (c == ')' || c == ']')
       return true;
   }
@@ -609,29 +609,29 @@ bool Compiler::match_symbol_separator(const char *symbol, bool pushback) {
 
 bool Compiler::match_symbol(const char *symbol, bool pushback) {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   for (uint32 j = 0; j < strlen(symbol); j++) {
 
-    if (in_stream->eof() || ((char)in_stream->get()) != symbol[j]) {
+    if (in_stream_->eof() || ((char)in_stream_->get()) != symbol[j]) {
 
-      in_stream->clear();
-      in_stream->seekg(i);
+      in_stream_->clear();
+      in_stream_->seekg(i);
       return false;
     }
   }
   if (pushback)
-    in_stream->seekg(i);
+    in_stream_->seekg(i);
   return true;
 }
 
 bool Compiler::member(std::string &s) {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   s = "";
   uint16 count = 0;
-  while (!in_stream->eof()) {
+  while (!in_stream_->eof()) {
 
-    switch (char c = (char)in_stream->get()) {
+    switch (char c = (char)in_stream_->get()) {
     case ' ':
     case NEWLINE:
     case ';':
@@ -640,13 +640,13 @@ bool Compiler::member(std::string &s) {
     case '.':
       if (count) {
 
-        in_stream->putback(c);
+        in_stream_->putback(c);
         return true;
       }
     case '(':
     case '[':
     case ':':
-      in_stream->seekg(i);
+      in_stream_->seekg(i);
       return false;
     default:
       count++;
@@ -654,8 +654,8 @@ bool Compiler::member(std::string &s) {
       break;
     }
   }
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
@@ -666,20 +666,20 @@ bool Compiler::expression_begin(bool &indented) {
     indented = true;
     return true;
   }
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (indent(false)) {
 
-    char c = (char)in_stream->get();
+    char c = (char)in_stream_->get();
     if (c == '(')
       return true;
-    in_stream->clear();
+    in_stream_->clear();
   }
-  in_stream->seekg(i);
-  char c = (char)in_stream->get();
+  in_stream_->seekg(i);
+  char c = (char)in_stream_->get();
   if (c == '(')
     return true;
-  in_stream->clear();
-  in_stream->putback(c);
+  in_stream_->clear();
+  in_stream_->putback(c);
   return false;
 }
 
@@ -687,26 +687,26 @@ bool Compiler::expression_end(bool indented) {
 
   if (indented)
     return left_indent(false);
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (indent(false)) {
 
-    char c = (char)in_stream->get();
+    char c = (char)in_stream_->get();
     if (c == ')')
       return true;
-    in_stream->clear();
+    in_stream_->clear();
   }
-  in_stream->seekg(i);
-  char c = (char)in_stream->get();
+  in_stream_->seekg(i);
+  char c = (char)in_stream_->get();
   if (c == ')')
     return true;
-  in_stream->clear();
-  in_stream->putback(c);
+  in_stream_->clear();
+  in_stream_->putback(c);
   return false;
 }
 
 bool Compiler::set_begin(bool &indented) {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (match_symbol("[]", false)) {
 
     if (right_indent(false)) {
@@ -719,20 +719,20 @@ bool Compiler::set_begin(bool &indented) {
       return false;
     }
   }
-  in_stream->seekg(i);
+  in_stream_->seekg(i);
   if (indent(false)) {
 
-    char c = (char)in_stream->get();
+    char c = (char)in_stream_->get();
     if (c == '[')
       return true;
-    in_stream->clear();
+    in_stream_->clear();
   }
-  in_stream->seekg(i);
-  char c = (char)in_stream->get();
+  in_stream_->seekg(i);
+  char c = (char)in_stream_->get();
   if (c == '[')
     return true;
-  in_stream->clear();
-  in_stream->putback(c);
+  in_stream_->clear();
+  in_stream_->putback(c);
   return false;
 }
 
@@ -740,20 +740,20 @@ bool Compiler::set_end(bool indented) {
 
   if (indented)
     return left_indent(false);
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (indent(false)) {
 
-    char c = (char)in_stream->get();
+    char c = (char)in_stream_->get();
     if (c == ']')
       return true;
-    in_stream->clear();
+    in_stream_->clear();
   }
-  in_stream->seekg(i);
-  char c = (char)in_stream->get();
+  in_stream_->seekg(i);
+  char c = (char)in_stream_->get();
   if (c == ']')
     return true;
-  in_stream->clear();
-  in_stream->putback(c);
+  in_stream_->clear();
+  in_stream_->putback(c);
   return false;
 }
 
@@ -761,195 +761,195 @@ bool Compiler::set_end(bool indented) {
 
 bool Compiler::nil() {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (match_symbol_separator("nil", false))
     return true;
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
 bool Compiler::nil_nb() {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (match_symbol_separator("|nb", false))
     return true;
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
 bool Compiler::nil_us() {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (match_symbol_separator("|ms", false))
     return true;
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
 bool Compiler::forever() {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (match_symbol_separator("forever", false))
     return true;
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
 bool Compiler::nil_nid() {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (match_symbol_separator("|nid", false))
     return true;
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
 bool Compiler::nil_did() {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (match_symbol_separator("|did", false))
     return true;
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
 bool Compiler::nil_fid() {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (match_symbol_separator("|fid", false))
     return true;
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
 bool Compiler::nil_bl() {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (match_symbol_separator("|bl", false))
     return true;
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
 bool Compiler::nil_st() {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (match_symbol_separator("|st", false))
     return true;
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
 bool Compiler::label(std::string &l) {
 
-  std::streampos i = in_stream->tellg();
-  if (symbol_expr(l) && (char)in_stream->get() == ':')
+  std::streampos i = in_stream_->tellg();
+  if (symbol_expr(l) && (char)in_stream_->get() == ':')
     return true;
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
 bool Compiler::variable(std::string &l) {
 
-  std::streampos i = in_stream->tellg();
-  if (symbol_expr(l) && (char)in_stream->get() == ':') {
+  std::streampos i = in_stream_->tellg();
+  if (symbol_expr(l) && (char)in_stream_->get() == ':') {
 
-    in_stream->seekg(i);
+    in_stream_->seekg(i);
     std::string _l = l + ':';
     if (match_symbol_separator(_l.c_str(), false))
       return true;
   }
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
 bool Compiler::this_() {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (match_symbol_separator("this", false))
     return true;
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
 bool Compiler::local_reference(uint16 &index, const ReturnType t) {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   std::string r;
   if (symbol_expr_set(r)) {
 
-    UNORDERED_MAP<std::string, Reference>::iterator it = local_references.find(r);
-    if (it != local_references.end() && (t == ANY || it->second._class.type == ANY || (t != ANY && it->second._class.type == t))) {
+    UNORDERED_MAP<std::string, Reference>::iterator it = local_references_.find(r);
+    if (it != local_references_.end() && (t == ANY || it->second.class_.type == ANY || (t != ANY && it->second.class_.type == t))) {
 
-      index = it->second.index;
+      index = it->second.index_;
       return true;
     }
   }
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
 bool Compiler::global_reference(uint16 &index, const ReturnType t) {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   std::string r;
   if (symbol_expr_set(r)) {
 
     Class *unused;
-    if (getGlobalReferenceIndex(r, t, current_object, index, unused))
+    if (getGlobalReferenceIndex(r, t, current_object_, index, unused))
       return true;
   }
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
 bool Compiler::hlp_reference(uint16 &index) {
 
   std::string r;
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (label(r)) {
 
-    in_stream->clear();
-    in_stream->seekg(i);
+    in_stream_->clear();
+    in_stream_->seekg(i);
     return false;
   }
   r = "";
   if (symbol_expr(r)) {
 
-    for (uint8 i = 0; i < hlp_references.size(); ++i)
-      if (r == hlp_references[i]) {
+    for (uint8 i = 0; i < hlp_references_.size(); ++i)
+      if (r == hlp_references_[i]) {
 
         index = i;
         return true;
       }
   }
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
 bool Compiler::this_indirection(std::vector<int16> &v, const ReturnType t) {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (match_symbol("this.", false)) {
 
-    Class *p; // in general, p starts as the current_class; exception: in pgm, this refers to the instantiated program.
-    if (current_class.str_opcode == "pgm")
-      p = &_metadata->sys_classes["ipgm"];
+    Class *p; // in general, p starts as the current_class_; exception: in pgm, this refers to the instantiated program.
+    if (current_class_.str_opcode == "pgm")
+      p = &metadata_->sys_classes_["ipgm"];
     Class *_p;
     std::string m;
     uint16 index;
@@ -958,7 +958,7 @@ bool Compiler::this_indirection(std::vector<int16> &v, const ReturnType t) {
 
       if (m == "vw") {
 
-        _p = &_metadata->classes.find("pgm_view")->second;
+        _p = &metadata_->classes_.find("pgm_view")->second;
         type = ANY;
         v.push_back(-1);
       } else if (m == "mks") {
@@ -971,7 +971,7 @@ bool Compiler::this_indirection(std::vector<int16> &v, const ReturnType t) {
         _p = NULL;
         type = SET;
         v.push_back(-3);
-      } else if (!p->get_member_index(_metadata, m, index, _p)) {
+      } else if (!p->get_member_index(metadata_, m, index, _p)) {
 
         set_error(" error: " + m + " is not a member of " + p->str_opcode);
         break;
@@ -981,7 +981,7 @@ bool Compiler::this_indirection(std::vector<int16> &v, const ReturnType t) {
         v.push_back(index);
       }
 
-      char c = (char)in_stream->get();
+      char c = (char)in_stream_->get();
       if (c == '.') {
 
         if (!_p) {
@@ -994,48 +994,48 @@ bool Compiler::this_indirection(std::vector<int16> &v, const ReturnType t) {
 
         if (t == ANY || (t != ANY && type == t)) {
 
-          in_stream->putback(c);
+          in_stream_->putback(c);
           return true;
         }
         break;
       }
     }
   }
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
 bool Compiler::local_indirection(std::vector<int16> &v, const ReturnType t, uint16 &cast_opcode) {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   std::string m;
   std::string path = "";
   Class *p;
-  if (member(m) && (char)in_stream->get() == '.') { // first m is a reference to a label or a variable
+  if (member(m) && (char)in_stream_->get() == '.') { // first m is a reference to a label or a variable
 
     uint16 index;
     ReturnType type;
-    UNORDERED_MAP<std::string, Reference>::iterator it = local_references.find(m);
-    if (it != local_references.end()) {
+    UNORDERED_MAP<std::string, Reference>::iterator it = local_references_.find(m);
+    if (it != local_references_.end()) {
 
-      index = it->second.index;
+      index = it->second.index_;
       v.push_back(index);
-      if (it->second.cast_class.str_opcode == "undefined") { // find out if there was a cast for this reference.
+      if (it->second.cast_class_.str_opcode == "undefined") { // find out if there was a cast for this reference.
 
-        p = &it->second._class;
+        p = &it->second.class_;
         cast_opcode = 0x0FFF;
       } else {
 
-        p = &it->second.cast_class;
-        cast_opcode = p->atom.asOpcode();
+        p = &it->second.cast_class_;
+        cast_opcode = p->atom_.asOpcode();
       }
       Class *_p;
       while (member(m)) {
 
         if (m == "vw") {
 
-          _p = &_metadata->classes.find("pgm_view")->second;
+          _p = &metadata_->classes_.find("pgm_view")->second;
           type = ANY;
           v.push_back(-1);
         } else if (m == "mks") {
@@ -1048,7 +1048,7 @@ bool Compiler::local_indirection(std::vector<int16> &v, const ReturnType t, uint
           _p = NULL;
           type = SET;
           v.push_back(-3);
-        } else if (!p->get_member_index(_metadata, m, index, _p)) {
+        } else if (!p->get_member_index(metadata_, m, index, _p)) {
 
           set_error(" error: " + m + " is not a member of " + p->str_opcode);
           break;
@@ -1060,7 +1060,7 @@ bool Compiler::local_indirection(std::vector<int16> &v, const ReturnType t, uint
 
         path += '.';
         path += m;
-        char c = (char)in_stream->get();
+        char c = (char)in_stream_->get();
         if (c == '.') {
 
           if (!_p) {
@@ -1073,7 +1073,7 @@ bool Compiler::local_indirection(std::vector<int16> &v, const ReturnType t, uint
 
           if (t == ANY || (t != ANY && type == t)) {
 
-            in_stream->putback(c);
+            in_stream_->putback(c);
             return true;
           }
           break;
@@ -1081,21 +1081,21 @@ bool Compiler::local_indirection(std::vector<int16> &v, const ReturnType t, uint
       }
     }
   }
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
 bool Compiler::global_indirection(std::vector<int16> &v, const ReturnType t) {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   std::string m;
   Class *p;
-  if (member(m) && (char)in_stream->get() == '.') { // first m is a reference
+  if (member(m) && (char)in_stream_->get() == '.') { // first m is a reference
 
     uint16 index;
     ReturnType type;
-    if (getGlobalReferenceIndex(m, ANY, current_object, index, p)) {
+    if (getGlobalReferenceIndex(m, ANY, current_object_, index, p)) {
 
       v.push_back(index);
       Class *_p;
@@ -1116,7 +1116,7 @@ bool Compiler::global_indirection(std::vector<int16> &v, const ReturnType t) {
           _p = NULL;
           type = SET;
           v.push_back(-3);
-        } else if (!p->get_member_index(_metadata, m, index, _p)) {
+        } else if (!p->get_member_index(metadata_, m, index, _p)) {
 
           set_error(" error: " + m + " is not a member of " + p->str_opcode);
           break;
@@ -1130,7 +1130,7 @@ bool Compiler::global_indirection(std::vector<int16> &v, const ReturnType t) {
 
         first_member = false;
 
-        char c = (char)in_stream->get();
+        char c = (char)in_stream_->get();
         if (c == '.') {
 
           if (!_p) {
@@ -1143,7 +1143,7 @@ bool Compiler::global_indirection(std::vector<int16> &v, const ReturnType t) {
 
           if (t == ANY || (t != ANY && type == t)) {
 
-            in_stream->putback(c);
+            in_stream_->putback(c);
             return true;
           }
           break;
@@ -1151,63 +1151,63 @@ bool Compiler::global_indirection(std::vector<int16> &v, const ReturnType t) {
       }
     }
   }
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
 bool Compiler::wildcard() {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (match_symbol_separator(":", false))
     return true;
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
 bool Compiler::tail_wildcard() {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (match_symbol("::", false)) {
 
     if (left_indent(true)) {
 
-      state.no_arity_check = true;
+      state_.no_arity_check = true;
       return true;
     }
-    char c = (char)in_stream->peek();
+    char c = (char)in_stream_->peek();
     if (c == ')' || c == ']') {
 
-      state.no_arity_check = true;
+      state_.no_arity_check = true;
       return true;
     }
   }
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
 bool Compiler::number(float32 &n) {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (match_symbol("0x", true)) {
 
-    in_stream->clear();
-    in_stream->seekg(i);
+    in_stream_->clear();
+    in_stream_->seekg(i);
     return false;
   }
-  *in_stream >> std::dec >> n;
-  if (in_stream->fail() || in_stream->eof()) {
+  *in_stream_ >> std::dec >> n;
+  if (in_stream_->fail() || in_stream_->eof()) {
 
-    in_stream->clear();
-    in_stream->seekg(i);
+    in_stream_->clear();
+    in_stream_->seekg(i);
     return false;
   }
   if (match_symbol("us", true)) {
 
-    in_stream->clear();
-    in_stream->seekg(i);
+    in_stream_->clear();
+    in_stream_->seekg(i);
     return false;
   }
   return true;
@@ -1215,18 +1215,18 @@ bool Compiler::number(float32 &n) {
 
 bool Compiler::hex(uint32 &h) {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (!match_symbol("0x", false)) {
 
-    in_stream->clear();
-    in_stream->seekg(i);
+    in_stream_->clear();
+    in_stream_->seekg(i);
     return false;
   }
-  *in_stream >> std::hex >> h;
-  if (in_stream->fail() || in_stream->eof()) {
+  *in_stream_ >> std::hex >> h;
+  if (in_stream_->fail() || in_stream_->eof()) {
 
-    in_stream->clear();
-    in_stream->seekg(i);
+    in_stream_->clear();
+    in_stream_->seekg(i);
     return false;
   }
   return true;
@@ -1234,7 +1234,7 @@ bool Compiler::hex(uint32 &h) {
 
 bool Compiler::boolean(bool &b) {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (match_symbol_separator("true", false)) {
 
     b = true;
@@ -1245,31 +1245,31 @@ bool Compiler::boolean(bool &b) {
     b = false;
     return true;
   }
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
 bool Compiler::timestamp(uint64 &ts) {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (match_symbol("0x", true)) {
 
-    in_stream->clear();
-    in_stream->seekg(i);
+    in_stream_->clear();
+    in_stream_->seekg(i);
     return false;
   }
-  *in_stream >> std::dec >> ts;
-  if (in_stream->fail() || in_stream->eof()) {
+  *in_stream_ >> std::dec >> ts;
+  if (in_stream_->fail() || in_stream_->eof()) {
 
-    in_stream->clear();
-    in_stream->seekg(i);
+    in_stream_->clear();
+    in_stream_->seekg(i);
     return false;
   }
   if (!match_symbol("us", false)) {
 
-    in_stream->clear();
-    in_stream->seekg(i);
+    in_stream_->clear();
+    in_stream_->seekg(i);
     return false;
   }
   return true;
@@ -1277,12 +1277,12 @@ bool Compiler::timestamp(uint64 &ts) {
 
 bool Compiler::str(std::string &s) {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   uint16 count = 0;
   bool started = false;
-  while (!in_stream->eof()) {
+  while (!in_stream_->eof()) {
 
-    switch (char c = (char)in_stream->get()) {
+    switch (char c = (char)in_stream_->get()) {
     case '"':
       if (!count) {
 
@@ -1293,8 +1293,8 @@ bool Compiler::str(std::string &s) {
     default:
       if (!started) {
 
-        in_stream->clear();
-        in_stream->seekg(i);
+        in_stream_->clear();
+        in_stream_->seekg(i);
         return false;
       }
       count++;
@@ -1302,8 +1302,8 @@ bool Compiler::str(std::string &s) {
       break;
     }
   }
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
@@ -1311,22 +1311,22 @@ bool Compiler::object(Class &p) {
 
   if (sys_object(p))
     return true;
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   std::string s;
   if (!symbol_expr(s)) {
 
-    in_stream->seekg(i);
+    in_stream_->seekg(i);
     s = "";
     if (!symbol_expr_set(s)) {
 
-      in_stream->seekg(i);
+      in_stream_->seekg(i);
       return false;
     }
   }
-  UNORDERED_MAP<std::string, Class>::const_iterator it = _metadata->classes.find(s);
-  if (it == _metadata->classes.end()) {
+  UNORDERED_MAP<std::string, Class>::const_iterator it = metadata_->classes_.find(s);
+  if (it == metadata_->classes_.end()) {
 
-    in_stream->seekg(i);
+    in_stream_->seekg(i);
     return false;
   }
   p = it->second;
@@ -1337,10 +1337,10 @@ bool Compiler::object(const Class &p) {
 
   if (sys_object(p))
     return true;
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (!match_symbol_separator(p.str_opcode.c_str(), false)) {
 
-    in_stream->seekg(i);
+    in_stream_->seekg(i);
     return false;
   }
   return true;
@@ -1348,22 +1348,22 @@ bool Compiler::object(const Class &p) {
 
 bool Compiler::sys_object(Class &p) {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   std::string s;
   if (!symbol_expr(s)) {
 
-    in_stream->seekg(i);
+    in_stream_->seekg(i);
     s = "";
     if (!symbol_expr_set(s)) {
 
-      in_stream->seekg(i);
+      in_stream_->seekg(i);
       return false;
     }
   }
-  UNORDERED_MAP<std::string, Class>::const_iterator it = _metadata->sys_classes.find(s);
-  if (it == _metadata->sys_classes.end()) {
+  UNORDERED_MAP<std::string, Class>::const_iterator it = metadata_->sys_classes_.find(s);
+  if (it == metadata_->sys_classes_.end()) {
 
-    in_stream->seekg(i);
+    in_stream_->seekg(i);
     return false;
   }
   p = it->second;
@@ -1372,10 +1372,10 @@ bool Compiler::sys_object(Class &p) {
 
 bool Compiler::sys_object(const Class &p) {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (!match_symbol_separator(p.str_opcode.c_str(), false)) {
 
-    in_stream->seekg(i);
+    in_stream_->seekg(i);
     return false;
   }
   return true;
@@ -1383,28 +1383,28 @@ bool Compiler::sys_object(const Class &p) {
 
 bool Compiler::marker(Class &p) {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (!match_symbol("mk.", false)) {
 
-    in_stream->seekg(i);
+    in_stream_->seekg(i);
     return false;
   }
-  std::streampos j = in_stream->tellg();
+  std::streampos j = in_stream_->tellg();
   std::string s;
   if (!symbol_expr(s)) {
 
-    in_stream->seekg(j);
+    in_stream_->seekg(j);
     s = "";
     if (!symbol_expr_set(s)) {
 
-      in_stream->seekg(i);
+      in_stream_->seekg(i);
       return false;
     }
   }
-  UNORDERED_MAP<std::string, Class>::const_iterator it = _metadata->sys_classes.find("mk." + s);
-  if (it == _metadata->sys_classes.end()) {
+  UNORDERED_MAP<std::string, Class>::const_iterator it = metadata_->sys_classes_.find("mk." + s);
+  if (it == metadata_->sys_classes_.end()) {
 
-    in_stream->seekg(i);
+    in_stream_->seekg(i);
     return false;
   }
   p = it->second;
@@ -1413,17 +1413,17 @@ bool Compiler::marker(Class &p) {
 
 bool Compiler::op(Class &p, const ReturnType t) { // return true if type matches t or ANY
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   std::string s;
   if (!symbol_expr(s)) {
 
-    in_stream->seekg(i);
+    in_stream_->seekg(i);
     return false;
   }
-  UNORDERED_MAP<std::string, Class>::const_iterator it = _metadata->classes.find(s);
-  if (it == _metadata->classes.end() || (t != ANY && it->second.type != ANY && it->second.type != t)) {
+  UNORDERED_MAP<std::string, Class>::const_iterator it = metadata_->classes_.find(s);
+  if (it == metadata_->classes_.end() || (t != ANY && it->second.type != ANY && it->second.type != t)) {
 
-    in_stream->seekg(i);
+    in_stream_->seekg(i);
     return false;
   }
   p = it->second;
@@ -1432,10 +1432,10 @@ bool Compiler::op(Class &p, const ReturnType t) { // return true if type matches
 
 bool Compiler::op(const Class &p) {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (!match_symbol_separator(p.str_opcode.c_str(), false)) {
 
-    in_stream->seekg(i);
+    in_stream_->seekg(i);
     return false;
   }
   return true;
@@ -1443,17 +1443,17 @@ bool Compiler::op(const Class &p) {
 
 bool Compiler::function(Class &p) {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   std::string s;
   if (!symbol_expr(s)) {
 
-    in_stream->seekg(i);
+    in_stream_->seekg(i);
     return false;
   }
-  UNORDERED_MAP<std::string, Class>::const_iterator it = _metadata->classes.find(s);
-  if (it == _metadata->classes.end()) {
+  UNORDERED_MAP<std::string, Class>::const_iterator it = metadata_->classes_.find(s);
+  if (it == metadata_->classes_.end()) {
 
-    in_stream->seekg(i);
+    in_stream_->seekg(i);
     return false;
   }
   p = it->second;
@@ -1471,7 +1471,7 @@ bool Compiler::expression_head(Class &p, const ReturnType t) {
           return false;
   } else if (!op(p, t))
     return false;
-  if (p.atom.getAtomCount()) {
+  if (p.atom_.getAtomCount()) {
 
     if (!right_indent(true)) {
 
@@ -1491,7 +1491,7 @@ bool Compiler::expression_head(const Class &p) {
   if (!object(p))
     if (!op(p))
       return false;
-  if (p.atom.getAtomCount()) {
+  if (p.atom_.getAtomCount()) {
 
     if (!right_indent(true)) {
 
@@ -1511,36 +1511,36 @@ bool Compiler::expression_tail(bool indented, const Class &p, uint16 write_index
   bool _indented = false;
   bool entered_pattern;
   uint16 pattern_end_index;
-  if (in_hlp) {
+  if (in_hlp_) {
 
-    entered_pattern = true;//p.is_fact(_metadata);
-    pattern_end_index = p.atom.getAtomCount() - 1;
+    entered_pattern = true;//p.is_fact(metadata_);
+    pattern_end_index = p.atom_.getAtomCount() - 1;
   } else {
 
-    entered_pattern = p.is_pattern(_metadata);
+    entered_pattern = p.is_pattern(metadata_);
     pattern_end_index = 0;
   }
-  if (write && state.pattern_lvl) // fill up with wildcards that will be overwritten up to ::.
-    for (uint16 j = write_index; j < write_index + p.atom.getAtomCount(); ++j)
-      current_object->code[j] = Atom::Wildcard();
-  std::streampos i = in_stream->tellg();
-  while (!in_stream->eof()) {
+  if (write && state_.pattern_lvl) // fill up with wildcards that will be overwritten up to ::.
+    for (uint16 j = write_index; j < write_index + p.atom_.getAtomCount(); ++j)
+      current_object_->code_[j] = Atom::Wildcard();
+  std::streampos i = in_stream_->tellg();
+  while (!in_stream_->eof()) {
 
     if (expression_end(indented)) {
 
-      if (state.no_arity_check) {
+      if (state_.no_arity_check) {
 
-        state.no_arity_check = false;
+        state_.no_arity_check = false;
         return true;
       }
-      if (count == p.atom.getAtomCount())
+      if (count == p.atom_.getAtomCount())
         return true;
-      set_arity_error(p.atom.getAtomCount(), count);
+      set_arity_error(p.atom_.getAtomCount(), count);
       return false;
     }
-    if (count >= p.atom.getAtomCount()) {
+    if (count >= p.atom_.getAtomCount()) {
 
-      set_arity_error(p.atom.getAtomCount(), count + 1);
+      set_arity_error(p.atom_.getAtomCount(), count + 1);
       return false;
     }
     if (count) {
@@ -1559,14 +1559,14 @@ bool Compiler::expression_tail(bool indented, const Class &p, uint16 write_index
         _indented = false;
     }
     if (entered_pattern && count == 0) // pattern begin.
-      ++state.pattern_lvl;
+      ++state_.pattern_lvl;
     if (!read(p.things_to_read[count], _indented, true, write_index + count, extent_index, write)) {
 
       set_error(" error: parsing element in expression");
       return false;
     }
     if (entered_pattern && count == pattern_end_index) // pattern end.
-      --state.pattern_lvl;
+      --state_.pattern_lvl;
     ++count;
   }
   return false;
@@ -1577,7 +1577,7 @@ bool Compiler::expression_tail(bool indented, const Class &p, uint16 write_index
 bool Compiler::expression(bool &indented, const ReturnType t, uint16 write_index, uint16 &extent_index, bool write) {
 
   bool lbl = false;
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   std::string l;
   if (label(l))
     lbl = true;
@@ -1590,15 +1590,15 @@ bool Compiler::expression(bool &indented, const ReturnType t, uint16 write_index
   Class p;
   if (!expression_head(p, t)) {
 
-    in_stream->seekg(i);
+    in_stream_->seekg(i);
     return false;
   }
-  if (lbl && !in_hlp)
+  if (lbl && !in_hlp_)
     addLocalReference(l, write_index, p);
   uint16 tail_write_index = 0;
   if (write) {
 
-    if (lbl && in_hlp) {
+    if (lbl && in_hlp_) {
 
       uint8 variable_index = get_hlp_reference(l);
       if (variable_index == 0xFF) {
@@ -1606,12 +1606,12 @@ bool Compiler::expression(bool &indented, const ReturnType t, uint16 write_index
         set_error(" error: undeclared variable");
         return false;
       }
-      current_object->code[write_index] = Atom::AssignmentPointer(variable_index, extent_index);
+      current_object_->code_[write_index] = Atom::AssignmentPointer(variable_index, extent_index);
     } else
-      current_object->code[write_index] = Atom::IPointer(extent_index);
-    current_object->code[extent_index++] = p.atom;
+      current_object_->code_[write_index] = Atom::IPointer(extent_index);
+    current_object_->code_[extent_index++] = p.atom_;
     tail_write_index = extent_index;
-    extent_index += p.atom.getAtomCount();
+    extent_index += p.atom_.getAtomCount();
   }
   if (!expression_tail(indented, p, tail_write_index, extent_index, write))
     return false;
@@ -1621,7 +1621,7 @@ bool Compiler::expression(bool &indented, const ReturnType t, uint16 write_index
 bool Compiler::expression(bool &indented, const Class &p, uint16 write_index, uint16 &extent_index, bool write) {
 
   bool lbl = false;
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   std::string l;
   if (label(l))
     lbl = true;
@@ -1633,7 +1633,7 @@ bool Compiler::expression(bool &indented, const Class &p, uint16 write_index, ui
   }
   if (!expression_head(p)) {
 
-    in_stream->seekg(i);
+    in_stream_->seekg(i);
     return false;
   }
   if (lbl)
@@ -1641,7 +1641,7 @@ bool Compiler::expression(bool &indented, const Class &p, uint16 write_index, ui
   uint16 tail_write_index = 0;
   if (write) {
 
-    if (lbl && in_hlp) {
+    if (lbl && in_hlp_) {
 
       uint8 variable_index = get_hlp_reference(l);
       if (variable_index == 0xFF) {
@@ -1649,12 +1649,12 @@ bool Compiler::expression(bool &indented, const Class &p, uint16 write_index, ui
         set_error(" error: undeclared variable");
         return false;
       }
-      current_object->code[write_index] = Atom::AssignmentPointer(variable_index, extent_index);
+      current_object_->code_[write_index] = Atom::AssignmentPointer(variable_index, extent_index);
     } else
-      current_object->code[write_index] = Atom::IPointer(extent_index);
-    current_object->code[extent_index++] = p.atom;
+      current_object_->code_[write_index] = Atom::IPointer(extent_index);
+    current_object_->code_[extent_index++] = p.atom_;
     tail_write_index = extent_index;
-    extent_index += p.atom.getAtomCount();
+    extent_index += p.atom_.getAtomCount();
   }
   if (!expression_tail(indented, p, tail_write_index, extent_index, write))
     return false;
@@ -1663,7 +1663,7 @@ bool Compiler::expression(bool &indented, const Class &p, uint16 write_index, ui
 
 bool Compiler::set(bool &indented, uint16 write_index, uint16 &extent_index, bool write) { // [ ] is illegal; use |[] instead, or [nil].
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   bool lbl = false;
   std::string l;
   if (label(l))
@@ -1680,15 +1680,15 @@ bool Compiler::set(bool &indented, uint16 write_index, uint16 &extent_index, boo
   uint16 content_write_index = 0;
   if (write) {
 
-    current_object->code[write_index] = Atom::IPointer(extent_index);
+    current_object_->code_[write_index] = Atom::IPointer(extent_index);
     uint8 element_count = set_element_count(indented);
-    current_object->code[extent_index++] = Atom::Set(element_count);
+    current_object_->code_[extent_index++] = Atom::Set(element_count);
     content_write_index = extent_index;
     extent_index += element_count;
   }
   uint16 count = 0;
   bool _indented = false;
-  while (!in_stream->eof()) {
+  while (!in_stream_->eof()) {
 
     if (set_end(indented)) {
 
@@ -1721,14 +1721,14 @@ bool Compiler::set(bool &indented, uint16 write_index, uint16 &extent_index, boo
     }
     count++;
   }
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
 bool Compiler::set(bool &indented, const Class &p, uint16 write_index, uint16 &extent_index, bool write) { // for class defs like member-name:[member-list] or !class (name[] member-list).
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   bool lbl = false;
   std::string l;
   if (label(l))
@@ -1745,16 +1745,16 @@ bool Compiler::set(bool &indented, const Class &p, uint16 write_index, uint16 &e
   uint16 content_write_index = 0;
   if (write) {
 
-    current_object->code[write_index] = Atom::IPointer(extent_index);
+    current_object_->code_[write_index] = Atom::IPointer(extent_index);
     uint8 element_count;
-    if (p.atom.getDescriptor() == Atom::S_SET && p.use_as != StructureMember::I_SET) {
+    if (p.atom_.getDescriptor() == Atom::S_SET && p.use_as != StructureMember::I_SET) {
 
-      element_count = p.atom.getAtomCount();
-      current_object->code[extent_index++] = p.atom;
+      element_count = p.atom_.getAtomCount();
+      current_object_->code_[extent_index++] = p.atom_;
     } else {
 
       element_count = set_element_count(indented);
-      current_object->code[extent_index++] = Atom::Set(element_count);
+      current_object_->code_[extent_index++] = Atom::Set(element_count);
     }
     content_write_index = extent_index;
     extent_index += element_count;
@@ -1764,12 +1764,12 @@ bool Compiler::set(bool &indented, const Class &p, uint16 write_index, uint16 &e
   uint16 arity = 0xFFFF;
   if (p.use_as == StructureMember::I_CLASS) { // undefined arity for unstructured sets.
 
-    arity = p.atom.getAtomCount();
+    arity = p.atom_.getAtomCount();
     if (write) // fill up with wildcards that will be overwritten up to ::.
       for (uint16 j = content_write_index; j < content_write_index + arity; ++j)
-        current_object->code[j] = Atom::Wildcard();
+        current_object_->code_[j] = Atom::Wildcard();
   }
-  while (!in_stream->eof()) {
+  while (!in_stream_->eof()) {
 
     if (set_end(indented)) {
 
@@ -1780,9 +1780,9 @@ bool Compiler::set(bool &indented, const Class &p, uint16 write_index, uint16 &e
       }
       if (count == arity || arity == 0xFFFF)
         return true;
-      if (state.no_arity_check) {
+      if (state_.no_arity_check) {
 
-        state.no_arity_check = false;
+        state_.no_arity_check = false;
         return true;
       }
       set_arity_error(arity, count);
@@ -1834,8 +1834,8 @@ bool Compiler::set(bool &indented, const Class &p, uint16 write_index, uint16 &e
     }
     count++;
   }
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
@@ -1847,7 +1847,7 @@ uint8 Compiler::set_element_count(bool indented) { // error checking is done in 
   indent(false);
   bool _indented = false;
   uint16 unused_index = 0;
-  while (!in_stream->eof()) {
+  while (!in_stream_->eof()) {
 
     if (set_end(indented))
       break;
@@ -1867,7 +1867,7 @@ uint8 Compiler::set_element_count(bool indented) { // error checking is done in 
       break;
     count++;
   }
-  in_stream->clear();
+  in_stream_->clear();
   restore_state(s);
   Output = true;
   return count;
@@ -1880,37 +1880,37 @@ bool Compiler::read_any(bool &indented, bool enforce, const Class *p, uint16 wri
   indented = false;
   if (read_number(indented, false, NULL, write_index, extent_index, write))
     return true;
-  if (err)
+  if (err_)
     return false;
   if (read_timestamp(indented, false, NULL, write_index, extent_index, write))
     return true;
-  if (err)
+  if (err_)
     return false;
   if (read_string(indented, false, NULL, write_index, extent_index, write))
     return true;
-  if (err)
+  if (err_)
     return false;
   if (read_boolean(indented, false, NULL, write_index, extent_index, write))
     return true;
-  if (err)
+  if (err_)
     return false;
   if (read_function(indented, false, NULL, write_index, extent_index, write))
     return true;
-  if (err)
+  if (err_)
     return false;
   if (read_node(indented, false, NULL, write_index, extent_index, write))
     return true;
-  if (err)
+  if (err_)
     return false;
   if (read_device(indented, false, NULL, write_index, extent_index, write))
     return true;
   if (read_class(indented, false, NULL, write_index, extent_index, write))
     return true;
-  if (err)
+  if (err_)
     return false;
   if (read_expression(indented, false, NULL, write_index, extent_index, write))
     return true;
-  if (err)
+  if (err_)
     return false;
   if (read_set(indented, false, NULL, write_index, extent_index, write))
     return true;
@@ -1938,7 +1938,7 @@ bool Compiler::read_number(bool &indented, bool enforce, const Class *p, uint16 
   if (number(n)) {
 
     if (write)
-      current_object->code[write_index] = Atom::Float(n);
+      current_object_->code_[write_index] = Atom::Float(n);
     return true;
   }
   State s = save_state();
@@ -1970,7 +1970,7 @@ bool Compiler::read_boolean(bool &indented, bool enforce, const Class *p, uint16
   if (boolean(b)) {
 
     if (write)
-      current_object->code[write_index] = Atom::Boolean(b);
+      current_object_->code_[write_index] = Atom::Boolean(b);
     return true;
   }
   State s = save_state();
@@ -2003,10 +2003,10 @@ bool Compiler::read_timestamp(bool &indented, bool enforce, const Class *p, uint
 
     if (write) {
 
-      current_object->code[write_index] = Atom::IPointer(extent_index);
-      current_object->code[extent_index++] = Atom::Timestamp();
-      current_object->code[extent_index++] = ts >> 32;
-      current_object->code[extent_index++] = (ts & 0x00000000FFFFFFFF);
+      current_object_->code_[write_index] = Atom::IPointer(extent_index);
+      current_object_->code_[extent_index++] = Atom::Timestamp();
+      current_object_->code_[extent_index++] = ts >> 32;
+      current_object_->code_[extent_index++] = (ts & 0x00000000FFFFFFFF);
     }
     return true;
   }
@@ -2041,8 +2041,8 @@ bool Compiler::read_string(bool &indented, bool enforce, const Class *p, uint16 
     if (write) {
 
       uint16 l = (uint16)st.length();
-      current_object->code[write_index] = Atom::IPointer(extent_index);
-      current_object->code[extent_index++] = Atom::String(l);
+      current_object_->code_[write_index] = Atom::IPointer(extent_index);
+      current_object_->code_[extent_index++] = Atom::String(l);
       uint32 _st = 0;
       int8 shift = 0;
       for (uint16 i = 0; i < l; ++i) {
@@ -2051,13 +2051,13 @@ bool Compiler::read_string(bool &indented, bool enforce, const Class *p, uint16 
         shift += 8;
         if (shift == 32) {
 
-          current_object->code[extent_index++] = _st;
+          current_object_->code_[extent_index++] = _st;
           _st = 0;
           shift = 0;
         }
       }
       if (l % 4)
-        current_object->code[extent_index++] = _st;
+        current_object_->code_[extent_index++] = _st;
     }
     return true;
   }
@@ -2086,15 +2086,15 @@ bool Compiler::read_node(bool &indented, bool enforce, const Class *p, uint16 wr
   if (read_tail_wildcard(write_index, extent_index, write))
     return true;
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   uint32 h;
   if (hex(h) && Atom(h).getDescriptor() == Atom::NODE) {
 
     if (write)
-      current_object->code[write_index] = Atom::Atom(h);
+      current_object_->code_[write_index] = Atom::Atom(h);
     return true;
   }
-  in_stream->seekg(i);
+  in_stream_->seekg(i);
   State s = save_state();
   if (expression(indented, NODE_ID, write_index, extent_index, write))
     return true;
@@ -2120,15 +2120,15 @@ bool Compiler::read_device(bool &indented, bool enforce, const Class *p, uint16 
   if (read_tail_wildcard(write_index, extent_index, write))
     return true;
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   uint32 h;
   if (hex(h) && Atom(h).getDescriptor() == Atom::DEVICE) {
 
     if (write)
-      current_object->code[write_index] = Atom::Atom(h);
+      current_object_->code_[write_index] = Atom::Atom(h);
     return true;
   }
-  in_stream->seekg(i);
+  in_stream_->seekg(i);
   State s = save_state();
   if (expression(indented, DEVICE_ID, write_index, extent_index, write))
     return true;
@@ -2158,7 +2158,7 @@ bool Compiler::read_function(bool &indented, bool enforce, const Class *p, uint1
   if (function(_p)) { // TODO: _p shall be used to parse the args in the embedding expression
 
     if (write)
-      current_object->code[write_index] = _p.atom;
+      current_object_->code_[write_index] = _p.atom_;
     return true;
   }
   State s = save_state();
@@ -2246,7 +2246,7 @@ bool Compiler::read_set(bool &indented, bool enforce, const Class *p, uint16 wri
 
 bool Compiler::read_class(bool &indented, bool enforce, const Class *p, uint16 write_index, uint16 &extent_index, bool write) { // p always NULL.
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   std::string l;
   if (label(l)) {
 
@@ -2254,13 +2254,13 @@ bool Compiler::read_class(bool &indented, bool enforce, const Class *p, uint16 w
     if (!object(_p))
       if (!marker(_p))
         return false;
-    local_references[l] = Reference(write_index, _p, Class());
+    local_references_[l] = Reference(write_index, _p, Class());
     if (write)
-      current_object->code[write_index] = _p.atom;
+      current_object_->code_[write_index] = _p.atom_;
     return true;
   }
-  in_stream->clear();
-  in_stream->seekg(i);
+  in_stream_->clear();
+  in_stream_->seekg(i);
   return false;
 }
 
@@ -2271,7 +2271,7 @@ bool Compiler::read_nil(uint16 write_index, uint16 &extent_index, bool write) {
   if (nil()) {
 
     if (write)
-      current_object->code[write_index] = Atom::Nil();
+      current_object_->code_[write_index] = Atom::Nil();
     return true;
   }
   return false;
@@ -2279,17 +2279,17 @@ bool Compiler::read_nil(uint16 write_index, uint16 &extent_index, bool write) {
 
 bool Compiler::read_nil_set(uint16 write_index, uint16 &extent_index, bool write) {
 
-  std::streampos i = in_stream->tellg();
+  std::streampos i = in_stream_->tellg();
   if (match_symbol("|[]", false)) {
 
     if (write) {
 
-      current_object->code[write_index] = Atom::IPointer(extent_index);
-      current_object->code[extent_index++] = Atom::Set(0);
+      current_object_->code_[write_index] = Atom::IPointer(extent_index);
+      current_object_->code_[extent_index++] = Atom::Set(0);
     }
     return true;
   }
-  in_stream->seekg(i);
+  in_stream_->seekg(i);
   return false;
 }
 
@@ -2298,7 +2298,7 @@ bool Compiler::read_nil_nb(uint16 write_index, uint16 &extent_index, bool write)
   if (nil_nb()) {
 
     if (write)
-      current_object->code[write_index] = Atom::UndefinedFloat();
+      current_object_->code_[write_index] = Atom::UndefinedFloat();
     return true;
   }
   return false;
@@ -2310,10 +2310,10 @@ bool Compiler::read_nil_us(uint16 write_index, uint16 &extent_index, bool write)
 
     if (write) {
 
-      current_object->code[write_index] = Atom::IPointer(extent_index);
-      current_object->code[extent_index++] = Atom::UndefinedTimestamp();
-      current_object->code[extent_index++] = 0xFFFFFFFF;
-      current_object->code[extent_index++] = 0xFFFFFFFF;
+      current_object_->code_[write_index] = Atom::IPointer(extent_index);
+      current_object_->code_[extent_index++] = Atom::UndefinedTimestamp();
+      current_object_->code_[extent_index++] = 0xFFFFFFFF;
+      current_object_->code_[extent_index++] = 0xFFFFFFFF;
     }
     return true;
   }
@@ -2326,7 +2326,7 @@ bool Compiler::read_forever_nb(uint16 write_index, uint16 &extent_index, bool wr
 
     if (write) {
 
-      current_object->code[write_index] = Atom::PlusInfinity();
+      current_object_->code_[write_index] = Atom::PlusInfinity();
     }
     return true;
   }
@@ -2338,7 +2338,7 @@ bool Compiler::read_nil_nid(uint16 write_index, uint16 &extent_index, bool write
   if (nil_nid()) {
 
     if (write)
-      current_object->code[write_index] = Atom::UndefinedNode();
+      current_object_->code_[write_index] = Atom::UndefinedNode();
     return true;
   }
   return false;
@@ -2349,7 +2349,7 @@ bool Compiler::read_nil_did(uint16 write_index, uint16 &extent_index, bool write
   if (nil_did()) {
 
     if (write)
-      current_object->code[write_index] = Atom::UndefinedDevice();
+      current_object_->code_[write_index] = Atom::UndefinedDevice();
     return true;
   }
   return false;
@@ -2360,7 +2360,7 @@ bool Compiler::read_nil_fid(uint16 write_index, uint16 &extent_index, bool write
   if (nil_fid()) {
 
     if (write)
-      current_object->code[write_index] = Atom::UndefinedDeviceFunction();
+      current_object_->code_[write_index] = Atom::UndefinedDeviceFunction();
     return true;
   }
   return false;
@@ -2371,7 +2371,7 @@ bool Compiler::read_nil_bl(uint16 write_index, uint16 &extent_index, bool write)
   if (nil_bl()) {
 
     if (write)
-      current_object->code[write_index] = Atom::UndefinedBoolean();
+      current_object_->code_[write_index] = Atom::UndefinedBoolean();
     return true;
   }
   return false;
@@ -2382,7 +2382,7 @@ bool Compiler::read_nil_st(uint16 write_index, uint16 &extent_index, bool write)
   if (nil_st()) {
 
     if (write)
-      current_object->code[write_index] = Atom::UndefinedString();
+      current_object_->code_[write_index] = Atom::UndefinedString();
     return true;
   }
   return false;
@@ -2393,18 +2393,18 @@ bool Compiler::read_variable(uint16 write_index, uint16 &extent_index, bool writ
   std::string v;
   if (variable(v)) {
 
-    if (state.pattern_lvl) {
+    if (state_.pattern_lvl) {
 
-      if (in_hlp) {
+      if (in_hlp_) {
 
         uint8 variable_index = add_hlp_reference(v);
         if (write)
-          current_object->code[write_index] = Atom::VLPointer(variable_index);
+          current_object_->code_[write_index] = Atom::VLPointer(variable_index);
       } else {
 
         addLocalReference(v, write_index, p);
         if (write)
-          current_object->code[write_index] = Atom::Wildcard(p.atom.asOpcode()); // useless in skeleton expressions (already filled up in expression_head); usefull when the skeleton itself is a variable
+          current_object_->code_[write_index] = Atom::Wildcard(p.atom_.asOpcode()); // useless in skeleton expressions (already filled up in expression_head); usefull when the skeleton itself is a variable
       }
       return true;
     } else {
@@ -2419,22 +2419,22 @@ bool Compiler::read_variable(uint16 write_index, uint16 &extent_index, bool writ
 bool Compiler::read_reference(uint16 write_index, uint16 &extent_index, bool write, const ReturnType t) {
 
   uint16 index;
-  if ((t == ANY || (t != ANY && current_class.type == t)) && this_()) {
+  if ((t == ANY || (t != ANY && current_class_.type == t)) && this_()) {
 
     if (write)
-      current_object->code[write_index] = Atom::This();
+      current_object_->code_[write_index] = Atom::This();
     return true;
   }
   if (local_reference(index, t)) {
 
     if (write)
-      current_object->code[write_index] = Atom::VLPointer(index); // local references are always pointing to the value array
+      current_object_->code_[write_index] = Atom::VLPointer(index); // local references are always pointing to the value array
     return true;
   }
   if (global_reference(index, t)) { // index is the index held by a reference pointer
 
     if (write)
-      current_object->code[write_index] = Atom::RPointer(index);
+      current_object_->code_[write_index] = Atom::RPointer(index);
     return true;
   }
   std::vector<int16> v;
@@ -2442,23 +2442,23 @@ bool Compiler::read_reference(uint16 write_index, uint16 &extent_index, bool wri
 
     if (write) {
 
-      current_object->code[write_index] = Atom::IPointer(extent_index);
-      current_object->code[extent_index++] = Atom::CPointer(v.size() + 1);
-      current_object->code[extent_index++] = Atom::This();
+      current_object_->code_[write_index] = Atom::IPointer(extent_index);
+      current_object_->code_[extent_index++] = Atom::CPointer(v.size() + 1);
+      current_object_->code_[extent_index++] = Atom::This();
       for (uint16 i = 0; i < v.size(); ++i) {
 
         switch (v[i]) {
         case -1:
-          current_object->code[extent_index++] = Atom::View();
+          current_object_->code_[extent_index++] = Atom::View();
           break;
         case -2:
-          current_object->code[extent_index++] = Atom::Mks();
+          current_object_->code_[extent_index++] = Atom::Mks();
           break;
         case -3:
-          current_object->code[extent_index++] = Atom::Vws();
+          current_object_->code_[extent_index++] = Atom::Vws();
           break;
         default:
-          current_object->code[extent_index++] = Atom::IPointer(v[i]);
+          current_object_->code_[extent_index++] = Atom::IPointer(v[i]);
           break;
         }
       }
@@ -2470,23 +2470,23 @@ bool Compiler::read_reference(uint16 write_index, uint16 &extent_index, bool wri
 
     if (write) {
 
-      current_object->code[write_index] = Atom::IPointer(extent_index);
-      current_object->code[extent_index++] = Atom::CPointer(v.size());
-      current_object->code[extent_index++] = Atom::VLPointer(v[0], cast_opcode);
+      current_object_->code_[write_index] = Atom::IPointer(extent_index);
+      current_object_->code_[extent_index++] = Atom::CPointer(v.size());
+      current_object_->code_[extent_index++] = Atom::VLPointer(v[0], cast_opcode);
       for (uint16 i = 1; i < v.size(); ++i) {
 
         switch (v[i]) {
         case -1:
-          current_object->code[extent_index++] = Atom::View();
+          current_object_->code_[extent_index++] = Atom::View();
           break;
         case -2:
-          current_object->code[extent_index++] = Atom::Mks();
+          current_object_->code_[extent_index++] = Atom::Mks();
           break;
         case -3:
-          current_object->code[extent_index++] = Atom::Vws();
+          current_object_->code_[extent_index++] = Atom::Vws();
           break;
         default:
-          current_object->code[extent_index++] = Atom::IPointer(v[i]);
+          current_object_->code_[extent_index++] = Atom::IPointer(v[i]);
           break;
         }
       }
@@ -2497,20 +2497,20 @@ bool Compiler::read_reference(uint16 write_index, uint16 &extent_index, bool wri
 
     if (write) {
 
-      current_object->code[write_index] = Atom::IPointer(extent_index);
-      current_object->code[extent_index++] = Atom::CPointer(v.size());
-      current_object->code[extent_index++] = Atom::RPointer(v[0]);
+      current_object_->code_[write_index] = Atom::IPointer(extent_index);
+      current_object_->code_[extent_index++] = Atom::CPointer(v.size());
+      current_object_->code_[extent_index++] = Atom::RPointer(v[0]);
       for (uint16 i = 1; i < v.size(); ++i) {
 
         switch (v[i]) {
         case -2:
-          current_object->code[extent_index++] = Atom::Mks();
+          current_object_->code_[extent_index++] = Atom::Mks();
           break;
         case -3:
-          current_object->code[extent_index++] = Atom::Vws();
+          current_object_->code_[extent_index++] = Atom::Vws();
           break;
         default:
-          current_object->code[extent_index++] = Atom::IPointer(v[i]);
+          current_object_->code_[extent_index++] = Atom::IPointer(v[i]);
           break;
         }
       }
@@ -2520,7 +2520,7 @@ bool Compiler::read_reference(uint16 write_index, uint16 &extent_index, bool wri
   if (hlp_reference(index)) {
 
     if (write)
-      current_object->code[write_index] = Atom::VLPointer(index);
+      current_object_->code_[write_index] = Atom::VLPointer(index);
     return true;
   }
   return false;
@@ -2530,10 +2530,10 @@ bool Compiler::read_wildcard(uint16 write_index, uint16 &extent_index, bool writ
 
   if (wildcard()) {
 
-    if (state.pattern_lvl) {
+    if (state_.pattern_lvl) {
 
       if (write)
-        current_object->code[write_index] = Atom::Wildcard();
+        current_object_->code_[write_index] = Atom::Wildcard();
       return true;
     } else {
 
@@ -2548,10 +2548,10 @@ bool Compiler::read_tail_wildcard(uint16 write_index, uint16 &extent_index, bool
 
   if (tail_wildcard()) {
 
-    if (state.pattern_lvl) {
+    if (state_.pattern_lvl) {
 
       if (write)
-        current_object->code[write_index] = Atom::TailWildcard();
+        current_object_->code_[write_index] = Atom::TailWildcard();
       return true;
     } else {
 
@@ -2565,9 +2565,9 @@ bool Compiler::read_tail_wildcard(uint16 write_index, uint16 &extent_index, bool
 std::string Compiler::getObjectName(const uint16 index) const {
 
   UNORDERED_MAP<std::string, Reference>::const_iterator r;
-  for (r = global_references.begin(); r != global_references.end(); ++r) {
+  for (r = global_references_.begin(); r != global_references_.end(); ++r) {
 
-    if (r->second.index == index)
+    if (r->second.index_ == index)
       return r->first;
   }
   std::string s;

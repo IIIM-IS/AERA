@@ -88,20 +88,20 @@ AutoFocusController::AutoFocusController(r_code::View *view) : Controller(view) 
   uint16 arg_set_index = icpp_pgm->code(ICPP_PGM_ARGS).asIndex();
   uint16 arg_count = icpp_pgm->code(arg_set_index).getAtomCount();
   uint8 i = 1;
-  _pass_through = icpp_pgm->code(arg_set_index + i++).asBoolean();
-  _ctpx_on = icpp_pgm->code(arg_set_index + i++).asBoolean();
-  _gtpx_on = icpp_pgm->code(arg_set_index + i++).asBoolean();
-  _ptpx_on = icpp_pgm->code(arg_set_index + i++).asBoolean();
-  _trace_injections = icpp_pgm->code(arg_set_index + i++).asBoolean();
-  _decompile_models = icpp_pgm->code(arg_set_index + i).asBoolean();
+  pass_through_ = icpp_pgm->code(arg_set_index + i++).asBoolean();
+  ctpx_on_ = icpp_pgm->code(arg_set_index + i++).asBoolean();
+  gtpx_on_ = icpp_pgm->code(arg_set_index + i++).asBoolean();
+  ptpx_on_ = icpp_pgm->code(arg_set_index + i++).asBoolean();
+  trace_injections_ = icpp_pgm->code(arg_set_index + i++).asBoolean();
+  decompile_models_ = icpp_pgm->code(arg_set_index + i).asBoolean();
   for (uint16 j = i; j < arg_count; ++j)
-    output_groups.push_back((Group *)icpp_pgm->get_reference(j - i));
+    output_groups_.push_back((Group *)icpp_pgm->get_reference(j - i));
 
-  cross_buffer.set_thz(_Mem::Get()->get_tpx_time_horizon());
-  cross_buffer.reserve(CrossBufferInitialSize);
+  cross_buffer_.set_thz(_Mem::Get()->get_tpx_time_horizon());
+  cross_buffer_.reserve(CrossBufferInitialSize);
   auto thz = 2 * ((r_exec::View*)view)->get_host()->get_upr()*Utils::GetBasePeriod(); // thz==2*sampling period.
-  cache.set_thz(thz);
-  cache.reserve(CacheInitialSize);
+  cache_.set_thz(thz);
+  cache_.reserve(CacheInitialSize);
 }
 
 AutoFocusController::~AutoFocusController() {
@@ -115,11 +115,11 @@ Code *AutoFocusController::get_core_object() const {
 inline void AutoFocusController::inject_input(View *input, uint32 start) {
 
   Group *origin = input->get_host();
-  for (uint16 i = start; i < output_groups.size(); ++i) {
+  for (uint16 i = start; i < output_groups_.size(); ++i) {
 
-    Group *output_group = output_groups[i];
+    Group *output_group = output_groups_[i];
     View *view = new View(input, true);
-    view->references[0] = output_group;
+    view->references_[0] = output_group;
     view->code(VIEW_RES) = Atom::Float(Utils::GetResilience(view->code(VIEW_RES).asFloat(), origin->get_upr(), output_group->get_upr()));
     _Mem::Get()->inject(view);
   }
@@ -128,15 +128,15 @@ inline void AutoFocusController::inject_input(View *input, uint32 start) {
 inline void AutoFocusController::inject_input(View *input, _Fact *abstract_input, BindingMap *bm) {
 
   View *primary_view = inject_input(input);
-  cross_buffer.push_back(Input(primary_view, abstract_input, bm));
+  cross_buffer_.push_back(Input(primary_view, abstract_input, bm));
 }
 
 inline View *AutoFocusController::inject_input(View *input) {
 
-  _Fact *input_fact = (_Fact *)input->object;
+  _Fact *input_fact = (_Fact *)input->object_;
 
   Group *origin = input->get_host();
-  Group *ref_group = output_groups[0];
+  Group *ref_group = output_groups_[0];
 
   auto now = Now();
 
@@ -144,12 +144,12 @@ inline View *AutoFocusController::inject_input(View *input) {
   _Fact *copy;
   switch (input->get_sync()) {
   case View::SYNC_ONCE: // no copy, morph res; N.B.: cmds are sync_once.
-    for (uint16 i = 0; i < output_groups.size(); ++i) {
+    for (uint16 i = 0; i < output_groups_.size(); ++i) {
 
-      Group *output_group = output_groups[i];
+      Group *output_group = output_groups_[i];
       View *view = new View(input, true);
-      view->references[0] = output_group;
-      view->references[1] = input->references[0];
+      view->references_[0] = output_group;
+      view->references_[1] = input->references_[0];
       view->code(VIEW_RES) = Atom::Float(Utils::GetResilience(view->code(VIEW_RES).asFloat(), origin->get_upr(), output_group->get_upr()));
       _Mem::Get()->inject(view);
       if (i == 0)
@@ -161,19 +161,19 @@ inline View *AutoFocusController::inject_input(View *input) {
       copy = new AntiFact(input_fact->get_reference(0), ref_group->get_prev_upr_time(now), ref_group->get_next_upr_time(now), 1, 1);
     else
       copy = new Fact(input_fact->get_reference(0), ref_group->get_prev_upr_time(now), ref_group->get_next_upr_time(now), 1, 1);
-    for (uint16 i = 0; i < output_groups.size(); ++i) {
+    for (uint16 i = 0; i < output_groups_.size(); ++i) {
 
-      Group *output_group = output_groups[i];
+      Group *output_group = output_groups_[i];
       View *view = new View(input, true);
-      view->references[0] = output_group;
-      view->references[1] = input->references[0];
+      view->references_[0] = output_group;
+      view->references_[1] = input->references_[0];
       view->code(VIEW_RES) = Atom::Float(Utils::GetResilience(view->code(VIEW_RES).asFloat(), origin->get_upr(), output_group->get_upr()));
-      view->object = copy;
+      view->object_ = copy;
       _Mem::Get()->inject(view);
       if (i == 0) {
 
         primary_view = view;
-        if (_ctpx_on)
+        if (ctpx_on_)
           _Mem::Get()->inject_null_program(new PASTController(this, view), output_group, output_group->get_upr()*Utils::GetBasePeriod(), true);
       }
     }
@@ -184,20 +184,20 @@ inline View *AutoFocusController::inject_input(View *input) {
       copy = new AntiFact(input_fact->get_reference(0), now + offset, now + offset + ref_group->get_upr()*Utils::GetBasePeriod(), 1, 1);
     else
       copy = new Fact(input_fact->get_reference(0), now + offset, now + offset + ref_group->get_upr()*Utils::GetBasePeriod(), 1, 1);
-    for (uint16 i = 0; i < output_groups.size(); ++i) {
+    for (uint16 i = 0; i < output_groups_.size(); ++i) {
 
-      Group *output_group = output_groups[i];
+      Group *output_group = output_groups_[i];
       View *view = new View(input, true);
-      view->references[0] = output_group;
-      view->references[1] = input->references[0];
+      view->references_[0] = output_group;
+      view->references_[1] = input->references_[0];
       view->code(VIEW_SYNC) = Atom::Float(View::SYNC_ONCE);
       view->code(VIEW_RES) = Atom::Float(Utils::GetResilience(view->code(VIEW_RES).asFloat(), origin->get_upr(), output_group->get_upr()));
-      view->object = copy;
+      view->object_ = copy;
       _Mem::Get()->inject(view);
       if (i == 0) {
 
         primary_view = view;
-        if (_ctpx_on)
+        if (ctpx_on_)
           _Mem::Get()->inject_null_program(new HASTController(this, view, input_fact), output_group, output_group->get_upr()*Utils::GetBasePeriod(), true);
       }
     }
@@ -207,15 +207,15 @@ inline View *AutoFocusController::inject_input(View *input) {
       copy = new AntiFact(input_fact->get_reference(0), ref_group->get_prev_upr_time(now), ref_group->get_next_upr_time(now), 1, 1);
     else
       copy = new Fact(input_fact->get_reference(0), ref_group->get_prev_upr_time(now), ref_group->get_next_upr_time(now), 1, 1);
-    for (uint16 i = 0; i < output_groups.size(); ++i) {
+    for (uint16 i = 0; i < output_groups_.size(); ++i) {
 
-      Group *output_group = output_groups[i];
+      Group *output_group = output_groups_[i];
       View *view = new View(input, true);
-      view->references[0] = output_group;
-      view->references[1] = input->references[0];
+      view->references_[0] = output_group;
+      view->references_[1] = input->references_[0];
       view->code(VIEW_SYNC) = Atom::Float(View::SYNC_ONCE_AXIOM);
       view->code(VIEW_RES) = Atom::Float(1);
-      view->object = copy;
+      view->object_ = copy;
       _Mem::Get()->inject(view);
       if (i == 0)
         primary_view = view;
@@ -223,9 +223,9 @@ inline View *AutoFocusController::inject_input(View *input) {
     break;
   }
 
-  if (_trace_injections) {
+  if (trace_injections_) {
 
-    std::cout << Utils::RelativeTime(Now()) << " A/F -> " << input->object->get_oid() << "|" << primary_view->object->get_oid();
+    std::cout << Utils::RelativeTime(Now()) << " A/F -> " << input->object_->get_oid() << "|" << primary_view->object_->get_oid();
     switch (input->get_sync()) {
     case View::SYNC_HOLD:std::cout << " (HOLD)"; break;
     case View::SYNC_ONCE:std::cout << " (ONCE)"; break;
@@ -297,24 +297,24 @@ void AutoFocusController::take_input(r_exec::View *input) {
 
   if (is_invalidated())
     return;
-  if (input->object->code(0).asOpcode() == Opcodes::Fact ||
-    input->object->code(0).asOpcode() == Opcodes::AntiFact ||
-    input->object->code(0).asOpcode() == Opcodes::MkRdx) // discard everything but facts, |facts and mk.rdx.
+  if (input->object_->code(0).asOpcode() == Opcodes::Fact ||
+    input->object_->code(0).asOpcode() == Opcodes::AntiFact ||
+    input->object_->code(0).asOpcode() == Opcodes::MkRdx) // discard everything but facts, |facts and mk.rdx.
     Controller::__take_input<AutoFocusController>(input);// std::cout<<"A/F::TI: "<<get_host()->get_oid()<<" > "<<input->object->get_oid()<<std::endl;
 }
 
 void AutoFocusController::reduce(r_exec::View *input) {
 
-  Code *input_object = input->object;
+  Code *input_object = input->object_;
   uint16 opcode = input_object->code(0).asOpcode();
 
-  reductionCS.enter();
+  reductionCS_.enter();
 
   if (opcode == Opcodes::MkRdx) {
 
     Code *production = input_object->get_reference(MK_RDX_MDL_PRODUCTION_REF); // fact, if an ihlp was the producer.
     Fact *f_ihlp = (Fact *)input_object->get_reference(MK_RDX_IHLP_REF);
-    BindingMap *bm = ((MkRdx *)input_object)->bindings;
+    BindingMap *bm = ((MkRdx *)input_object)->bindings_;
     if (f_ihlp->get_reference(0)->code(0).asOpcode() == Opcodes::IMdl) { // handle new goals/predictions as new targets.
 
       Code *mdl = f_ihlp->get_reference(0)->get_reference(0);
@@ -327,9 +327,9 @@ void AutoFocusController::reduce(r_exec::View *input) {
       if (goal != NULL) { // build a tpx to find models like M:[A -> B] where B is the goal target.
 
         pattern = (_Fact *)unpacked_mdl->get_reference(unpacked_mdl->code(obj_set_index + 1).asIndex()); // lhs.
-        tpx = build_tpx<GTPX>((_Fact *)production, pattern, bm, goal_ratings, f_ihlp, f_ihlp->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED).asBoolean());
+        tpx = build_tpx<GTPX>((_Fact *)production, pattern, bm, goal_ratings_, f_ihlp, f_ihlp->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED).asBoolean());
         // jm goals.insert(std::pair<P<Code>,P<TPX> >((_Fact *)production,tpx));
-        goals.insert(std::make_pair((_Fact *)production, tpx));
+        goals_.insert(std::make_pair((_Fact *)production, tpx));
         //std::cout<<Utils::RelativeTime(Now())<<" goal focus["<<production->get_oid()<<"]\n";
       } else {
 
@@ -337,9 +337,9 @@ void AutoFocusController::reduce(r_exec::View *input) {
         if (pred != NULL) { // build a tpx to find models like M:[A -> |imdl M0] where M0 is the model that produced the prediction.
 
           pattern = (_Fact *)unpacked_mdl->get_reference(unpacked_mdl->code(obj_set_index + 2).asIndex()); // rhs.
-          tpx = build_tpx<PTPX>((_Fact *)production, pattern, bm, prediction_ratings, f_ihlp, f_ihlp->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED).asBoolean());
+          tpx = build_tpx<PTPX>((_Fact *)production, pattern, bm, prediction_ratings_, f_ihlp, f_ihlp->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED).asBoolean());
           //predictions.insert(std::pair<P<Code>,P<TPX> >((_Fact *)production,tpx));
-          predictions.insert(std::make_pair((_Fact *)production, tpx));
+          predictions_.insert(std::make_pair((_Fact *)production, tpx));
 
           //std::cout<<Utils::RelativeTime(Now())<<" pred focus["<<production->get_oid()<<"]\n";
         }
@@ -359,19 +359,19 @@ void AutoFocusController::reduce(r_exec::View *input) {
         if (goal != NULL) {
 
           //rate(target,success,goals,goal_ratings);
-          notify(target, input, goals);
+          notify(target, input, goals_);
         } else { // prediction.
 
             //rate(target,success,predictions,prediction_ratings);
-          notify(target, input, predictions);
+          notify(target, input, predictions_);
           if (success) // a mdl has correctly predicted a GTPX's target: the GTPX shall not produce anything: we need to pass the prediction to all GTPX.
-            dispatch_pred_success((_Fact *)target->get_pred()->get_reference(0), goals);
+            dispatch_pred_success((_Fact *)target->get_pred()->get_reference(0), goals_);
         }
       } else if (opcode == Opcodes::Perf)
         inject_input(input, 2); // inject in all output groups but the primary and secondary.
       else { // filter according to targets: inject (once) when possible and pass to TPX if any.
 
-        if (_pass_through) {
+        if (pass_through_) {
 
           if (opcode != Opcodes::ICst) // don't inject again (since it comes from inside).
             inject_input(input);
@@ -380,24 +380,24 @@ void AutoFocusController::reduce(r_exec::View *input) {
           P<BindingMap> bm = new BindingMap();
           if (opcode == Opcodes::ICst) { // dispatch but don't inject again (since it comes from inside).
 
-            bm = ((ICST *)payload)->bindings;
+            bm = ((ICST *)payload)->bindings_;
             _Fact *abstract_f_ihlp = bm->abstract_f_ihlp((_Fact *)input_object);
-            dispatch_no_inject(input, abstract_f_ihlp, bm, goals);
-            dispatch_no_inject(input, abstract_f_ihlp, bm, predictions);
-            cross_buffer.push_back(Input(input, abstract_f_ihlp, bm));
+            dispatch_no_inject(input, abstract_f_ihlp, bm, goals_);
+            dispatch_no_inject(input, abstract_f_ihlp, bm, predictions_);
+            cross_buffer_.push_back(Input(input, abstract_f_ihlp, bm));
           } else {
 
             P<_Fact> abstract_input = (_Fact *)bm->abstract_object(input_object, false);
             bool injected = false;
-            dispatch(input, abstract_input, bm, injected, goals);
-            dispatch(input, abstract_input, bm, injected, predictions);
+            dispatch(input, abstract_input, bm, injected, goals_);
+            dispatch(input, abstract_input, bm, injected, predictions_);
           }
         }
       }
     }
   }
 
-  reductionCS.leave();
+  reductionCS_.leave();
 }
 
 void AutoFocusController::inject_hlps(const std::vector<P<Code> > &hlps) const { // inject in the primary group; models will be injected in the secondary group automatically.
@@ -409,20 +409,20 @@ void AutoFocusController::inject_hlps(const std::vector<P<Code> > &hlps) const {
   std::vector<P<Code> >::const_iterator hlp;
   for (hlp = hlps.begin(); hlp != hlps.end(); ++hlp) {
 
-    View *view = new View(View::SYNC_ONCE, now, 0, -1, output_groups[0], NULL, *hlp, 1); // SYNC_ONCE,sln=0,res=forever,act=1.
-    view->references[0] = output_groups[0];
+    View *view = new View(View::SYNC_ONCE, now, 0, -1, output_groups_[0], NULL, *hlp, 1); // SYNC_ONCE,sln=0,res=forever,act=1.
+    view->references_[0] = output_groups_[0];
     views.push_back(view);
   }
 
-  _Mem::Get()->inject_hlps(views, output_groups[0]);
+  _Mem::Get()->inject_hlps(views, output_groups_[0]);
 }
 
 void AutoFocusController::copy_cross_buffer(r_code::list<Input> &destination) { // copy inputs so they can be flagged independently by the tpxs that share the cross buffer.
 
-  reductionCS.enter();
+  reductionCS_.enter();
   time_buffer<Input, Input::IsInvalidated>::iterator i;
-  for (i = cross_buffer.begin(Now()); i != cross_buffer.end(); ++i)
+  for (i = cross_buffer_.begin(Now()); i != cross_buffer_.end(); ++i)
     destination.push_back(Input(*i));
-  reductionCS.leave();
+  reductionCS_.leave();
 }
 }

@@ -92,9 +92,9 @@ bool IPGMContext::operator ==(const IPGMContext &c) const {
   IPGMContext lhs = **this;
   IPGMContext rhs = *c;
 
-  if (lhs.data == REFERENCE && lhs.index == 0 &&
-    rhs.data == REFERENCE && rhs.index == 0) // both point to an object's head, not one of its members.
-    return lhs.object == rhs.object;
+  if (lhs.data_ == REFERENCE && lhs.index_ == 0 &&
+    rhs.data_ == REFERENCE && rhs.index_ == 0) // both point to an object's head, not one of its members.
+    return lhs.object_ == rhs.object_;
 
   // both contexts point to an atom which is not a pointer.
   if (lhs[0] != rhs[0])
@@ -118,21 +118,21 @@ inline bool IPGMContext::operator !=(const IPGMContext &c) const {
 
 bool IPGMContext::match(const IPGMContext &input) const {
 
-  if (data == REFERENCE && index == 0 &&
-    input.data == REFERENCE && input.index == 0) { // both point to an object's head, not one of its members.
+  if (data_ == REFERENCE && index_ == 0 &&
+    input.data_ == REFERENCE && input.index_ == 0) { // both point to an object's head, not one of its members.
 
-    if (object == input.object)
+    if (object_ == input.object_)
       return true;
     return false;
   }
 
-  if (code[index].isStructural()) {
+  if (code_[index_].isStructural()) {
 
     uint16 atom_count = getChildrenCount();
     if (input.getChildrenCount() != atom_count)
       return false;
 
-    if (((*this)[0].atom & 0xFFFFFFF8) != (input[0].atom & 0xFFFFFFF8)) // masking a possible tolerance embedded in timestamps; otherwise, the last 3 bits encode an arity.
+    if (((*this)[0].atom_ & 0xFFFFFFF8) != (input[0].atom_ & 0xFFFFFFF8)) // masking a possible tolerance embedded in timestamps; otherwise, the last 3 bits encode an arity.
       return false;
 
     for (uint16 i = 1; i <= atom_count; ++i) {
@@ -160,7 +160,7 @@ void IPGMContext::dereference_once() {
 
   switch ((*this)[0].getDescriptor()) {
   case Atom::I_PTR:
-    index = (*this)[0].asIndex();
+    index_ = (*this)[0].asIndex();
     break;
   default:
     break;
@@ -173,24 +173,24 @@ IPGMContext IPGMContext::operator *() const {
   case Atom::VL_PTR: { // evaluate the code if necessary.
       // TODO: OPTIMIZATION: if not in a cptr and if this eventually points to an r-ptr or in-obj-ptr,
       // patch the code at this->index, i.e. replace the vl ptr by the in-obj-ptr or rptr.
-    Atom a = code[(*this)[0].asIndex()];
+    Atom a = code_[(*this)[0].asIndex()];
     uint16 structure_index;
     if (a.getDescriptor() == Atom::I_PTR) // dereference once.
-      a = code[structure_index = a.asIndex()];
+      a = code_[structure_index = a.asIndex()];
     if (a.isStructural()) { // the target location is not evaluated yet.
 
-      IPGMContext s(object, view, code, structure_index, (InputLessPGMOverlay *)overlay, data);
+      IPGMContext s(object_, view_, code_, structure_index, (InputLessPGMOverlay *)overlay_, data_);
       uint16 unused_index;
       if (s.evaluate_no_dereference(unused_index))
         return s; // patched code: atom at VL_PTR's index changed to VALUE_PTR or 32 bits result.
       else // evaluation failed, return undefined context.
         return IPGMContext();
     } else
-      return *IPGMContext(object, view, code, (*this)[0].asIndex(), (InputLessPGMOverlay *)overlay, data);
+      return *IPGMContext(object_, view_, code_, (*this)[0].asIndex(), (InputLessPGMOverlay *)overlay_, data_);
   }case Atom::I_PTR:
-    return *IPGMContext(object, view, code, (*this)[0].asIndex(), (InputLessPGMOverlay *)overlay, data);
+    return *IPGMContext(object_, view_, code_, (*this)[0].asIndex(), (InputLessPGMOverlay *)overlay_, data_);
   case Atom::R_PTR: {
-    Code *o = object->get_reference((*this)[0].asIndex());
+    Code *o = object_->get_reference((*this)[0].asIndex());
     return IPGMContext(o, NULL, &o->code(0), 0, NULL, REFERENCE);
   }case Atom::C_PTR: {
 
@@ -199,8 +199,8 @@ IPGMContext IPGMContext::operator *() const {
 
       switch ((*this)[i].getDescriptor()) {
       case Atom::VIEW: // accessible only for this and input objects.
-        if (c.view)
-          c = IPGMContext(c.getObject(), c.view, &c.view->code(0), 0, NULL, VIEW);
+        if (c.view_)
+          c = IPGMContext(c.getObject(), c.view_, &c.view_->code(0), 0, NULL, VIEW);
         else
           return IPGMContext();
         break;
@@ -217,29 +217,29 @@ IPGMContext IPGMContext::operator *() const {
     return c;
   }
   case Atom::THIS: // refers to the ipgm; the pgm view is not available.
-    return IPGMContext(overlay->getObject(), overlay->getView(), &overlay->getObject()->code(0), 0, (InputLessPGMOverlay *)overlay, REFERENCE);
+    return IPGMContext(overlay_->getObject(), overlay_->getView(), &overlay_->getObject()->code(0), 0, (InputLessPGMOverlay *)overlay_, REFERENCE);
   case Atom::VIEW: // never a reference, always in a cptr.
-    if (overlay && object == overlay->getObject())
-      return IPGMContext(object, view, &view->code(0), 0, NULL, VIEW);
+    if (overlay_ && object_ == overlay_->getObject())
+      return IPGMContext(object_, view_, &view_->code(0), 0, NULL, VIEW);
     return *this;
   case Atom::MKS:
-    return IPGMContext(object, MKS);
+    return IPGMContext(object_, MKS);
   case Atom::VWS:
-    return IPGMContext(object, VWS);
+    return IPGMContext(object_, VWS);
   case Atom::VALUE_PTR:
-    return IPGMContext(object, view, &overlay->values[0], (*this)[0].asIndex(), (InputLessPGMOverlay *)overlay, VALUE_ARRAY);
+    return IPGMContext(object_, view_, &overlay_->values_[0], (*this)[0].asIndex(), (InputLessPGMOverlay *)overlay_, VALUE_ARRAY);
   case Atom::IPGM_PTR:
-    return *IPGMContext(overlay->getObject(), (*this)[0].asIndex());
+    return *IPGMContext(overlay_->getObject(), (*this)[0].asIndex());
   case Atom::IN_OBJ_PTR: {
-    Code *input_object = ((PGMOverlay *)overlay)->getInputObject((*this)[0].asInputIndex());
-    View *input_view = (r_exec::View*)((PGMOverlay *)overlay)->getInputView((*this)[0].asInputIndex());
+    Code *input_object = ((PGMOverlay *)overlay_)->getInputObject((*this)[0].asInputIndex());
+    View *input_view = (r_exec::View*)((PGMOverlay *)overlay_)->getInputView((*this)[0].asInputIndex());
     return *IPGMContext(input_object, input_view, &input_object->code(0), (*this)[0].asIndex(), NULL, REFERENCE);
   }case Atom::D_IN_OBJ_PTR: {
-    IPGMContext parent = *IPGMContext(object, view, code, (*this)[0].asRelativeIndex(), (InputLessPGMOverlay *)overlay, data);
-    Code *parent_object = parent.object;
+    IPGMContext parent = *IPGMContext(object_, view_, code_, (*this)[0].asRelativeIndex(), (InputLessPGMOverlay *)overlay_, data_);
+    Code *parent_object = parent.object_;
     return *IPGMContext(parent_object, NULL, &parent_object->code(0), (*this)[0].asIndex(), NULL, REFERENCE);
   }case Atom::PROD_PTR:
-    return IPGMContext(((InputLessPGMOverlay *)overlay)->productions[(*this)[0].asIndex()], 0);
+    return IPGMContext(((InputLessPGMOverlay *)overlay_)->productions_[(*this)[0].asIndex()], 0);
   default:
     return *this;
   }
@@ -247,7 +247,7 @@ IPGMContext IPGMContext::operator *() const {
 
 bool IPGMContext::evaluate_no_dereference(uint16 &result_index) const {
 
-  switch (data) {
+  switch (data_) {
   case REFERENCE:
   case VALUE_ARRAY:
     return true;
@@ -256,10 +256,10 @@ bool IPGMContext::evaluate_no_dereference(uint16 &result_index) const {
   case VIEW:
   case MKS:
   case VWS:
-    result_index = index;
+    result_index = index_;
     return true;
   }
-  switch (code[index].getDescriptor()) {
+  switch (code_[index_].getDescriptor()) {
   case Atom::OPERATOR: {
 
     Operator op = Operator::Get((*this)[0].asOpcode());
@@ -281,7 +281,7 @@ bool IPGMContext::evaluate_no_dereference(uint16 &result_index) const {
   }case Atom::OBJECT: // incl. cmd.
     if ((*this)[0].asOpcode() == Opcodes::Ptn || (*this)[0].asOpcode() == Opcodes::AntiPtn) { // skip patterns.
 
-      result_index = index;
+      result_index = index_;
       return true;
     }
   case Atom::MARKER:
@@ -302,17 +302,17 @@ bool IPGMContext::evaluate_no_dereference(uint16 &result_index) const {
       if (!(*getChild(i)).evaluate_no_dereference(unused_result_index))
         return false;
     }
-    result_index = index;
+    result_index = index_;
     return true;
   }default:
-    result_index = index;
+    result_index = index_;
     return true;
   }
 }
 
 inline bool IPGMContext::evaluate(uint16 &result_index) const {
 
-  if (data == REFERENCE || data == VALUE_ARRAY)
+  if (data_ == REFERENCE || data_ == VALUE_ARRAY)
     return true;
 
   IPGMContext c = **this;
@@ -321,35 +321,35 @@ inline bool IPGMContext::evaluate(uint16 &result_index) const {
 
 void IPGMContext::copy_to_value_array(uint16 &position) {
 
-  position = overlay->values.size();
+  position = overlay_->values_.size();
   uint16 extent_index;
-  if (code[index].isStructural())
-    copy_structure_to_value_array(false, overlay->values.size(), extent_index, true);
+  if (code_[index_].isStructural())
+    copy_structure_to_value_array(false, overlay_->values_.size(), extent_index, true);
   else
-    copy_member_to_value_array(0, false, overlay->values.size(), extent_index, true);
+    copy_member_to_value_array(0, false, overlay_->values_.size(), extent_index, true);
 }
 
 void IPGMContext::copy_structure_to_value_array(bool prefix, uint16 write_index, uint16 &extent_index, bool dereference_cptr) { // prefix: by itpr or not.
 
-  if (code[index].getDescriptor() == Atom::OPERATOR && Operator::Get(code[index].asOpcode()).is_syn())
+  if (code_[index_].getDescriptor() == Atom::OPERATOR && Operator::Get(code_[index_].asOpcode()).is_syn())
     copy_member_to_value_array(1, prefix, write_index, extent_index, dereference_cptr);
   else {
 
     uint16 atom_count = getChildrenCount();
-    overlay->values[write_index++] = code[index];
+    overlay_->values_[write_index++] = code_[index_];
     extent_index = write_index + atom_count;
-    switch (code[index].getDescriptor()) {
+    switch (code_[index_].getDescriptor()) {
     case Atom::TIMESTAMP:
       for (uint16 i = 1; i <= atom_count; ++i)
-        overlay->values[write_index++] = code[index + i];
+        overlay_->values_[write_index++] = code_[index_ + i];
       break;
     case Atom::C_PTR:
       if (!dereference_cptr) {
 
         copy_member_to_value_array(1, prefix, write_index++, extent_index, false);
         for (uint16 i = 2; i <= atom_count; ++i)
-          overlay->values[write_index++] = code[index + i];
-        //Atom::Trace(&overlay->values[0],overlay->values.size());
+          overlay_->values_[write_index++] = code_[index_ + i];
+        //Atom::Trace(&overlay_->values[0],overlay_->values.size());
         break;
       } // else, dereference the c_ptr.
     default:
@@ -368,49 +368,49 @@ void IPGMContext::copy_structure_to_value_array(bool prefix, uint16 write_index,
 
 void IPGMContext::copy_member_to_value_array(uint16 child_index, bool prefix, uint16 write_index, uint16 &extent_index, bool dereference_cptr) {
 
-  uint16 _index = index + child_index;
+  uint16 _index = index_ + child_index;
   Atom head;
 dereference:
-  head = code[_index];
+  head = code_[_index];
   switch (head.getDescriptor()) { // dereference until either we reach some non-pointer or a reference or a value pointer.
   case Atom::I_PTR:
   case Atom::VL_PTR:
     _index = head.asIndex();
     goto dereference;
   case Atom::VALUE_PTR:
-    overlay->values[write_index] = Atom::IPointer(head.asIndex());
+    overlay_->values_[write_index] = Atom::IPointer(head.asIndex());
     return;
   case Atom::PROD_PTR:
   case Atom::IN_OBJ_PTR:
   case Atom::D_IN_OBJ_PTR:
   case Atom::R_PTR:
-    overlay->values[write_index] = head;
+    overlay_->values_[write_index] = head;
     return;
   case Atom::C_PTR:
     if (dereference_cptr) {
 
-      uint16 saved_index = index;
-      index = _index;
+      uint16 saved_index = index_;
+      index_ = _index;
       IPGMContext cptr = **this;
-      overlay->values[write_index] = cptr[0];
-      index = saved_index;
+      overlay_->values_[write_index] = cptr[0];
+      index_ = saved_index;
       return;
     }
   }
 
   if (head.isStructural()) {
 
-    uint16 saved_index = index;
-    index = _index;
+    uint16 saved_index = index_;
+    index_ = _index;
     if (prefix) {
 
-      overlay->values[write_index] = Atom::IPointer(extent_index);
+      overlay_->values_[write_index] = Atom::IPointer(extent_index);
       copy_structure_to_value_array(true, extent_index, extent_index, dereference_cptr);
     } else
       copy_structure_to_value_array(true, write_index, extent_index, dereference_cptr);
-    index = saved_index;
+    index_ = saved_index;
   } else
-    overlay->values[write_index] = head;
+    overlay_->values_[write_index] = head;
 }
 
 void IPGMContext::getMember(void *&object, uint32 &view_oid, ObjectType &object_type, int16 &member_index) const {
@@ -423,7 +423,7 @@ void IPGMContext::getMember(void *&object, uint32 &view_oid, ObjectType &object_
     return;
   }
 
-  IPGMContext cptr = IPGMContext(this->object, view, code, (*this)[0].asIndex(), (InputLessPGMOverlay *)overlay, data); // dereference manually (1 offset) to retain the cptr as is.
+  IPGMContext cptr = IPGMContext(this->object_, view_, code_, (*this)[0].asIndex(), (InputLessPGMOverlay *)overlay_, data_); // dereference manually (1 offset) to retain the cptr as is.
 
   if (cptr[0].getDescriptor() != Atom::C_PTR) { // ill-formed mod/set expression.
 
@@ -439,7 +439,7 @@ void IPGMContext::getMember(void *&object, uint32 &view_oid, ObjectType &object_
   for (uint16 i = 2; i < atom_count; ++i) { // stop before the last iptr.
 
     if (cptr[i].getDescriptor() == Atom::VIEW)
-      c = IPGMContext(c.getObject(), c.view, &c.view->code(0), 0, NULL, VIEW);
+      c = IPGMContext(c.getObject(), c.view_, &c.view_->code(0), 0, NULL, VIEW);
     else
       c = *c.getChild(cptr[i].asIndex());
   }
@@ -461,11 +461,11 @@ void IPGMContext::getMember(void *&object, uint32 &view_oid, ObjectType &object_
   case Atom::GROUP:
   case Atom::SET: // dynamically generated views can be sets.
   case Atom::S_SET: // views are always copied; set the object to the view's group on which to perform an operation for the view's oid.
-    if (c.data == VALUE_ARRAY)
-      object = (Group *)c[VIEW_CODE_MAX_SIZE].atom; // first reference of grp in a view stored in athe value array.
+    if (c.data_ == VALUE_ARRAY)
+      object = (Group *)c[VIEW_CODE_MAX_SIZE].atom_; // first reference of grp in a view stored in athe value array.
     else
-      object = c.view->get_host();
-    view_oid = c[VIEW_OID].atom; // oid is hidden at the end of the view code; stored directly as a uint32.
+      object = c.view_->get_host();
+    view_oid = c[VIEW_OID].atom_; // oid is hidden at the end of the view code; stored directly as a uint32.
     object_type = TYPE_VIEW;
     break;
   default: // atomic value or ill-formed mod/set expression.
@@ -490,8 +490,8 @@ bool IPGMContext::is_cmd_with_cptr() const {
 
 uint16 IPGMContext::addProduction(Code *object, bool check_for_existence) const { // called by operators (ins and red).
 
-  ((InputLessPGMOverlay *)overlay)->productions.push_back(_Mem::Get()->check_existence(object));
-  return ((InputLessPGMOverlay *)overlay)->productions.size() - 1;
+  ((InputLessPGMOverlay *)overlay_)->productions_.push_back(_Mem::Get()->check_existence(object));
+  return ((InputLessPGMOverlay *)overlay_)->productions_.size() - 1;
 }
 
 // Utilities for executive-dependent operators ////////////////////////////////////////////////////////////////////////////////
@@ -752,8 +752,8 @@ bool IPGMContext::Fvw(const IPGMContext &context, uint16 &index) {
     index = context.setCompoundResultHead(v->code(0));
     for (uint16 i = 1; i < VIEW_CODE_MAX_SIZE; ++i)
       context.addCompoundResultPart(v->code(i));
-    context.addCompoundResultPart(Atom((uint32)v->references[0]));
-    context.addCompoundResultPart(Atom((uint32)v->references[1]));
+    context.addCompoundResultPart(Atom((uint32)v->references_[0]));
+    context.addCompoundResultPart(Atom((uint32)v->references_[1]));
     delete v;
     return true;
   }

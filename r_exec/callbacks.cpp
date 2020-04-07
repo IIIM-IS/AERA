@@ -79,17 +79,17 @@
 
 namespace r_exec {
 
-UNORDERED_MAP<std::string, Callbacks::Callback> Callbacks::_Callbacks;
+UNORDERED_MAP<std::string, Callbacks::Callback> Callbacks::Callbacks_;
 
 void Callbacks::Register(std::string &callback_name, Callback callback) {
 
-  _Callbacks[callback_name] = callback;
+  Callbacks_[callback_name] = callback;
 }
 
 Callbacks::Callback Callbacks::Get(std::string &callback_name) {
 
-  UNORDERED_MAP<std::string, Callback>::const_iterator it = _Callbacks.find(callback_name);
-  if (it != _Callbacks.end())
+  UNORDERED_MAP<std::string, Callback>::const_iterator it = Callbacks_.find(callback_name);
+  if (it != Callbacks_.end())
     return it->second;
   return NULL;
 }

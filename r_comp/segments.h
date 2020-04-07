@@ -92,9 +92,9 @@ class Reference {
 public:
   Reference();
   Reference(const uint16 i, const Class &c, const Class &cc);
-  uint16 index;
-  Class _class;
-  Class cast_class;
+  uint16 index_;
+  Class class_;
+  Class cast_class_;
 };
 
 // All classes below map components of r_code::Image into r_comp::Image.
@@ -112,13 +112,13 @@ private:
 public:
   Metadata();
 
-  UNORDERED_MAP<std::string, Class> classes; // non-sys classes, operators and device functions.
-  UNORDERED_MAP<std::string, Class> sys_classes;
+  UNORDERED_MAP<std::string, Class> classes_; // non-sys classes, operators and device functions.
+  UNORDERED_MAP<std::string, Class> sys_classes_;
 
-  r_code::vector<std::string> class_names; // classes and sys-classes; does not include set classes.
-  r_code::vector<std::string> operator_names;
-  r_code::vector<std::string> function_names;
-  r_code::vector<Class> classes_by_opcodes; // classes indexed by opcodes; used to retrieve member names; registers all classes (incl. set classes).
+  r_code::vector<std::string> class_names_; // classes and sys-classes; does not include set classes.
+  r_code::vector<std::string> operator_names_;
+  r_code::vector<std::string> function_names_;
+  r_code::vector<Class> classes_by_opcodes_; // classes indexed by opcodes; used to retrieve member names; registers all classes (incl. set classes).
 
   Class *get_class(std::string &class_name);
   Class *get_class(uint16 opcode);
@@ -130,7 +130,7 @@ public:
 
 class dll_export ObjectMap {
 public:
-  r_code::vector<uint16> objects;
+  r_code::vector<uint16> objects_;
 
   void shift(uint16 offset);
 
@@ -141,7 +141,7 @@ public:
 
 class dll_export CodeSegment {
 public:
-  r_code::vector<SysObject *> objects;
+  r_code::vector<SysObject *> objects_;
 
   ~CodeSegment();
 
@@ -152,7 +152,7 @@ public:
 
 class dll_export ObjectNames {
 public:
-  UNORDERED_MAP<uint32, std::string> symbols; // indexed by objects' OIDs.
+  UNORDERED_MAP<uint32, std::string> symbols_; // indexed by objects' OIDs.
 
   ~ObjectNames();
 
@@ -163,8 +163,8 @@ public:
 
 class dll_export Image {
 private:
-  uint32 map_offset;
-  UNORDERED_MAP<r_code::Code *, uint16> ptrs_to_indices; // used for injection in memory.
+  uint32 map_offset_;
+  UNORDERED_MAP<r_code::Code *, uint16> ptrs_to_indices_; // used for injection in memory.
 
   void add_object(r_code::Code *object);
   SysObject *add_object(Code *object, std::vector<SysObject *> &imported_objects);
@@ -173,11 +173,11 @@ private:
   void build_references(SysObject *sys_object, r_code::Code *object);
   void unpack_objects(r_code::vector<Code *> &ram_objects);
 public:
-  ObjectMap object_map;
-  CodeSegment code_segment;
-  ObjectNames object_names;
+  ObjectMap object_map_;
+  CodeSegment code_segment_;
+  ObjectNames object_names_;
 
-  Timestamp timestamp;
+  Timestamp timestamp_;
 
   Image();
   ~Image();
@@ -188,10 +188,10 @@ public:
   void get_objects(Mem *mem, r_code::vector<r_code::Code *> &ram_objects);
   template<class O> void get_objects(r_code::vector<Code *> &ram_objects) {
 
-    for (uint32 i = 0; i < code_segment.objects.size(); ++i) {
+    for (uint32 i = 0; i < code_segment_.objects_.size(); ++i) {
 
-      uint16 opcode = code_segment.objects[i]->code[0].asOpcode();
-      ram_objects[i] = new O(code_segment.objects[i]);
+      uint16 opcode = code_segment_.objects_[i]->code_[0].asOpcode();
+      ram_objects[i] = new O(code_segment_.objects_[i]);
     }
     unpack_objects(ram_objects);
   }
@@ -201,22 +201,22 @@ public:
 
   template<class I> I *serialize() {
 
-    I *image = (I *)I::Build(timestamp, object_map.get_size(), code_segment.get_size(), object_names.get_size());
+    I *image = (I *)I::Build(timestamp_, object_map_.get_size(), code_segment_.get_size(), object_names_.get_size());
 
-    object_map.shift(image->map_size());
-    object_map.write(image->data());
-    code_segment.write(image->data() + image->map_size());
-    object_names.write(image->data() + image->map_size() + image->code_size());
+    object_map_.shift(image->map_size());
+    object_map_.write(image->data());
+    code_segment_.write(image->data() + image->map_size());
+    object_names_.write(image->data() + image->map_size() + image->code_size());
 
     return image;
   }
 
   template<class I> void load(I *image) {
 
-    timestamp = image->timestamp();
-    object_map.read(image->data(), image->map_size());
-    code_segment.read(image->data() + image->map_size(), image->map_size());
-    object_names.read(image->data() + image->map_size() + image->code_size());
+    timestamp_ = image->timestamp();
+    object_map_.read(image->data(), image->map_size());
+    code_segment_.read(image->data() + image->map_size(), image->map_size());
+    object_names_.read(image->data() + image->map_size() + image->code_size());
   }
 };
 }

@@ -91,9 +91,9 @@ namespace r_exec {
 // _Context * wrapped in Context, the latter used by operators.
 class dll_export _Context {
 protected:
-  Overlay *const overlay; // the overlay where the evaluation is performed; NULL when the context is dereferenced outside the original pgm or outside the value array.
-  Atom *code; // the object's code, or the code in value array, or the view's code when the context is dereferenced from Atom::VIEW.
-  uint16 index; // in the code;
+  Overlay *const overlay_; // the overlay where the evaluation is performed; NULL when the context is dereferenced outside the original pgm or outside the value array.
+  Atom *code_; // the object's code, or the code in value array, or the view's code when the context is dereferenced from Atom::VIEW.
+  uint16 index_; // in the code;
 
   typedef enum { // indicates whether the context refers to:
     STEM = 0, // - the pgm/hlp being reducing inputs;
@@ -105,9 +105,9 @@ protected:
     BINDING_MAP = 6, // - values of a imdl/icst.
     UNDEFINED = 7
   }Data;
-  Data data;
+  Data data_;
 
-  _Context(Atom *code, uint16 index, Overlay *overlay, Data data) : code(code), index(index), overlay(overlay), data(data) {}
+  _Context(Atom *code, uint16 index, Overlay *overlay, Data data) : code_(code), index_(index), overlay_(overlay), data_(data) {}
 public:
   virtual _Context *assign(const _Context *c) = 0;
 
@@ -122,11 +122,11 @@ public:
 
   virtual _Context *dereference() const = 0;
 
-  void commit() const { overlay->commit(); }
-  void rollback() const { overlay->rollback(); }
-  void patch_code(uint16 location, Atom value) const { overlay->patch_code(location, value); }
-  void unpatch_code(uint16 patch_index) const { overlay->unpatch_code(patch_index); }
-  uint16 get_last_patch_index() const { return overlay->get_last_patch_index(); }
+  void commit() const { overlay_->commit(); }
+  void rollback() const { overlay_->rollback(); }
+  void patch_code(uint16 location, Atom value) const { overlay_->patch_code(location, value); }
+  void unpatch_code(uint16 patch_index) const { overlay_->unpatch_code(patch_index); }
+  uint16 get_last_patch_index() const { return overlay_->get_last_patch_index(); }
 
   uint16 setAtomicResult(Atom a) const;
   uint16 setTimestampResult(Timestamp t) const;
