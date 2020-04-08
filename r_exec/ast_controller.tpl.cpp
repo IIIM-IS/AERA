@@ -87,7 +87,7 @@ template<class U> ASTController<U>::ASTController(AutoFocusController *auto_focu
 
   target_ = (_Fact *)target->object_;
   tpx_ = new CTPX(auto_focus, target); // target is the premise, i.e. the tpx' target to be defeated.
-  thz_ = Now() - Utils::GetTimeTolerance();
+  thz_timestamp_ = Now() - Utils::GetTimeTolerance();
 }
 
 template<class U> ASTController<U>::~ASTController() {
@@ -104,7 +104,7 @@ template<class U> void ASTController<U>::take_input(r_exec::View *input) {
     Goal *goal = ((_Fact *)input->object_)->get_goal();
     if (goal && goal->get_actor() == _Mem::Get()->get_self()) // ignore self's goals.
       return;
-    if (input->get_ijt() >= thz_) // input is too old.
+    if (input->get_ijt() >= thz_timestamp_) // input is too old.
       Controller::__take_input<U>(input);
   }
 }
