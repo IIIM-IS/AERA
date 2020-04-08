@@ -90,7 +90,7 @@ class _GMonitor :
   public Monitor {
 protected:
   Timestamp deadline_; // of the goal.
-  Timestamp sim_thz_;
+  Timestamp sim_thz_timestamp_;
   _Fact *goal_target_; // convenience; f1->object.
   P<Fact> f_imdl_;
   SimMode sim_mode_;
@@ -115,7 +115,7 @@ protected:
   _GMonitor(PMDLController *controller,
     BindingMap *bindings,
     Timestamp deadline,
-    Timestamp sim_thz,
+    Timestamp sim_thz_timestamp,
     Fact *goal,
     Fact *f_imdl); // goal is f0->g->f1->object.
 public:
@@ -158,7 +158,7 @@ public:
   GMonitor(PMDLController *controller,
     BindingMap *bindings,
     Timestamp deadline,
-    Timestamp sim_thz,
+    Timestamp sim_thz_timestamp,
     Fact *goal,
     Fact *f_imdl,
     _Fact *predicted_evidence); // goal is f0->g->f1->object.
@@ -181,7 +181,7 @@ public:
   RMonitor(PrimaryMDLController *controller,
     BindingMap *bindings,
     Timestamp deadline,
-    Timestamp sim_thz,
+    Timestamp sim_thz_timestamp,
     Fact *goal,
     Fact *f_imdl);
 
@@ -198,7 +198,7 @@ protected:
 public:
   SGMonitor(PrimaryMDLController *controller,
     BindingMap *bindings,
-    Timestamp sim_thz,
+    Timestamp sim_thz_timestamp,
     Fact *goal,
     Fact *f_imdl); // goal is f0->g->f1->object.
 
@@ -213,7 +213,7 @@ class SRMonitor :
 public:
   SRMonitor(PrimaryMDLController *controller,
     BindingMap *bindings,
-    Timestamp sim_thz,
+    Timestamp sim_thz_timestamp,
     Fact *goal,
     Fact *f_imdl);
 
