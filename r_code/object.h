@@ -169,7 +169,7 @@ public:
     for (uint16 i = 0; i < source->code_.size(); ++i)
       code_[i] = source->code_[i];
     references_[0] = references_[1] = NULL;
-    this->object_ = object;
+    object_ = object;
   }
 
   virtual ~View() {}

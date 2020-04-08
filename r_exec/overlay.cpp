@@ -204,7 +204,7 @@ Controller::~Controller() {
 
 void Controller::set_view(View *view) {
 
-  this->view_ = view;
+  view_ = view;
 }
 
 void Controller::_take_input(r_exec::View *input) { // called by groups at update and injection time.

@@ -211,7 +211,7 @@ public:
       const char *debug_windows = debug.getAttribute("debug_windows");
       const char *trace_levels = debug.getAttribute("trace_levels");
 
-      this->debug_ = (strcmp(debug_string, "yes") == 0);
+      debug_ = (strcmp(debug_string, "yes") == 0);
       debug_windows_ = atoi(debug_windows);
       sscanf(trace_levels, "%x", &trace_levels_);
 

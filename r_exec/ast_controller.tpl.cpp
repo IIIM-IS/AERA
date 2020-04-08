@@ -85,7 +85,7 @@ namespace r_exec {
 
 template<class U> ASTController<U>::ASTController(AutoFocusController *auto_focus, View *target) : OController(NULL) {
 
-  this->target_ = (_Fact *)target->object_;
+  target_ = (_Fact *)target->object_;
   tpx_ = new CTPX(auto_focus, target); // target is the premise, i.e. the tpx' target to be defeated.
   thz_ = Now() - Utils::GetTimeTolerance();
 }

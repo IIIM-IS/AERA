@@ -123,26 +123,26 @@ void Compiler::set_arity_error(uint16 expected, uint16 got) {
 
 bool Compiler::compile(std::istream *stream, r_comp::Image *image, r_comp::Metadata *metadata, std::string &error, bool trace) {
 
-  this->in_stream_ = stream;
-  this->err_ = false;
-  this->trace_ = trace;
+  in_stream_ = stream;
+  err_ = false;
+  trace_ = trace;
 
-  this->image_ = image;
-  this->metadata_ = metadata;
+  image_ = image;
+  metadata_ = metadata;
   current_object_index_ = image->object_map_.objects_.size();
   while (!in_stream_->eof()) {
 
     switch (in_stream_->peek()) {
     case '!':
       set_error("error: found preprocessor directive");
-      error = this->error_;
+      error = error_;
       return false;
     default:
       if (in_stream_->eof())
         return true;
       if (!read_sys_object()) {
 
-        error = this->error_;
+        error = error_;
         return false;
       }
       current_object_index_++;

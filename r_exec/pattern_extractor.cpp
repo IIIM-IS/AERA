@@ -114,7 +114,7 @@ TPX::TPX(AutoFocusController *auto_focus, _Fact *target) : _Object(), auto_focus
 
   P<BindingMap> bm = new BindingMap();
   abstracted_target_ = (_Fact *)bm->abstract_object(target, false);
-  this->target_ = target;
+  target_ = target;
   target_bindings_ = bm;
 }
 
@@ -802,7 +802,7 @@ void CTPX::reduce(r_exec::View *input) {
   r_code::list<Input>::const_iterator i;
   for (i = inputs_.begin(); i != inputs_.end();) {
 
-  if (!end_bm->intersect(i->bindings_) || // discard inputs that do not share values with the target or consequent.
+    if (!end_bm->intersect(i->bindings_) || // discard inputs that do not share values with the target or consequent.
       i->input_->get_after() >= consequent->get_after()) // discard inputs not younger than the consequent.
       i = inputs_.erase(i);
     else

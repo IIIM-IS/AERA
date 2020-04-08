@@ -228,7 +228,7 @@ private:
 
         destination->code(write_index) = Atom::IPointer(extent_index);
         if (pgm_index > 0 && index_ > pgm_index && data_ == STEM)
-          this->patch_code(index_, Atom::OutObjPointer(write_index));
+          patch_code(index_, Atom::OutObjPointer(write_index));
         c.copy_structure(destination, extent_index, extent_index, dereference_cptr, pgm_index);
       } else
         destination->code(write_index) = c[0];
@@ -295,7 +295,7 @@ private:
     case Atom::STRING:
       destination->code(write_index) = Atom::IPointer(extent_index);
       if (pgm_index > 0 && index_ > pgm_index && data_ == STEM)
-        this->patch_code(index_, Atom::OutObjPointer(write_index));
+        patch_code(index_, Atom::OutObjPointer(write_index));
       copy_structure(destination, extent_index, extent_index, dereference_cptr, pgm_index);
       break;
     case Atom::T_WILDCARD:
@@ -304,7 +304,7 @@ private:
     default:
       destination->code(write_index) = (*this)[0];
       if (pgm_index > 0 && index_ > pgm_index && data_ == STEM)
-        this->patch_code(index_, Atom::OutObjPointer(write_index));
+        patch_code(index_, Atom::OutObjPointer(write_index));
       break;
     }
   }
@@ -383,11 +383,11 @@ public:
 
     switch (data_) {
     case STEM:
-      return IPGMContext(object_, view_, code_, this->index_ + index, (InputLessPGMOverlay *)overlay_, STEM);
+      return IPGMContext(object_, view_, code_, index_ + index, (InputLessPGMOverlay *)overlay_, STEM);
     case REFERENCE:
-      return IPGMContext(object_, view_, code_, this->index_ + index, (InputLessPGMOverlay *)overlay_, REFERENCE);
+      return IPGMContext(object_, view_, code_, index_ + index, (InputLessPGMOverlay *)overlay_, REFERENCE);
     case VIEW:
-      return IPGMContext(object_, view_, code_, this->index_ + index, NULL, VIEW);
+      return IPGMContext(object_, view_, code_, index_ + index, NULL, VIEW);
     case MKS: {
 
       uint16 i = 0;
@@ -417,9 +417,9 @@ public:
         }
       }
       object_->rel_views();
-      return IPGMContext(object_, (r_exec::View*)*v, &(*v)->code(0), this->index_ + index, NULL, VIEW);
+      return IPGMContext(object_, (r_exec::View*)*v, &(*v)->code(0), index_ + index, NULL, VIEW);
     }case VALUE_ARRAY:
-      return IPGMContext(object_, view_, code_, this->index_ + index, (InputLessPGMOverlay *)overlay_, VALUE_ARRAY);
+      return IPGMContext(object_, view_, code_, index_ + index, (InputLessPGMOverlay *)overlay_, VALUE_ARRAY);
     default: // undefined context.
       return IPGMContext();
     }

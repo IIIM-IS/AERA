@@ -108,7 +108,7 @@ public:
 
   HLPContext getChild(uint16 index) const {
 
-    return HLPContext(code_, this->index_ + index, (HLPOverlay *)overlay_);
+    return HLPContext(code_, index_ + index, (HLPOverlay *)overlay_);
   }
 
   bool evaluate(uint16 &result_index) const; // index is set to the index of the result, undefined in case of failure.

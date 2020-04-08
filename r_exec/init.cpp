@@ -203,14 +203,14 @@ void TDecompiler::add_objects(const r_code::list<P<Code> > &objects) {
 
   r_code::list<P<Code> >::const_iterator o;
   for (o = objects.begin(); o != objects.end(); ++o)
-    this->objects_.push_back(*o);
+    objects_.push_back(*o);
 }
 
 void TDecompiler::add_objects(const std::vector<P<Code> > &objects) {
 
   std::vector<P<Code> >::const_iterator o;
   for (o = objects.begin(); o != objects.end(); ++o)
-    this->objects_.push_back(*o);
+    objects_.push_back(*o);
 }
 
 void TDecompiler::decompile() {

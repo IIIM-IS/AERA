@@ -130,8 +130,8 @@ uint32 HLPController::get_requirement_count(uint32 &weak_requirement_count, uint
   uint32 r_c;
   reductionCS_.enter();
   r_c = requirement_count_;
-  weak_requirement_count = this->weak_requirement_count_;
-  strong_requirement_count = this->strong_requirement_count_;
+  weak_requirement_count = weak_requirement_count_;
+  strong_requirement_count = strong_requirement_count_;
   reductionCS_.leave();
   return r_c;
 }

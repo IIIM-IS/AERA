@@ -95,7 +95,7 @@ protected:
 public:
   time_buffer() : list(), thz_(Utils::MaxTHZ) {}
 
-  void set_thz(std::chrono::microseconds thz) { this->thz_ = thz; }
+  void set_thz(std::chrono::microseconds thz) { thz_ = thz; }
 
   class iterator {
     friend class time_buffer;
@@ -130,7 +130,7 @@ private:
 public:
   iterator begin(Timestamp time_reference) {
 
-    this->time_reference_ = time_reference;
+    time_reference_ = time_reference;
     return iterator(this, used_cells_head_);
   }
   iterator &end() { return end_iterator_; }

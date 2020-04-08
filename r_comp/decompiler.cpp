@@ -130,8 +130,8 @@ std::string Decompiler::get_object_name(uint16 index) {
 
 void Decompiler::init(r_comp::Metadata *metadata) {
 
-  this->metadata_ = metadata;
-  this->time_offset_ = microseconds(0);
+  metadata_ = metadata;
+  time_offset_ = microseconds(0);
 
   partial_decompilation_ = false;
   ignore_named_objects_ = false;
@@ -167,7 +167,7 @@ void Decompiler::init(r_comp::Metadata *metadata) {
 
 uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, Timestamp::duration time_offset, bool ignore_named_objects) {
 
-  this->ignore_named_objects_ = ignore_named_objects;
+  ignore_named_objects_ = ignore_named_objects;
 
   uint32 object_count = decompile_references(image);
 
@@ -181,7 +181,7 @@ uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, T
 
   partial_decompilation_ = true;
   ignore_named_objects_ = true;
-  this->imported_objects_ = imported_objects;
+  imported_objects_ = imported_objects;
 
   uint32 object_count = decompile_references(image);
 
@@ -200,7 +200,7 @@ uint32 Decompiler::decompile_references(r_comp::Image *image) {
 
   std::string s;
 
-  this->image_ = image;
+  image_ = image;
 
   // populate object names first so they can be referenced in any order.
   Class *c;
@@ -246,7 +246,7 @@ void Decompiler::decompile_object(uint16 object_index, std::ostringstream *strea
     out_stream_ = new OutStream(stream);
   }
 
-  this->time_offset_ = duration_cast<microseconds>(time_offset);
+  time_offset_ = duration_cast<microseconds>(time_offset);
 
   variable_names_.clear();
   last_variable_id_ = 0;

@@ -120,33 +120,33 @@ void _Mem::init(microseconds base_period,
   uint32 traces,
   bool enable_assumptions) {
 
-  this->base_period_ = base_period;
+  base_period_ = base_period;
 
-  this->reduction_core_count_ = reduction_core_count;
-  this->time_core_count_ = time_core_count;
+  reduction_core_count_ = reduction_core_count;
+  time_core_count_ = time_core_count;
 
-  this->mdl_inertia_sr_thr_ = mdl_inertia_sr_thr;
-  this->mdl_inertia_cnt_thr_ = mdl_inertia_cnt_thr;
-  this->tpx_dsr_thr_ = tpx_dsr_thr;
-  this->min_sim_time_horizon_ = min_sim_time_horizon;
-  this->max_sim_time_horizon_ = max_sim_time_horizon;
-  this->sim_time_horizon_factor_ = sim_time_horizon_factor;
-  this->tpx_time_horizon_ = tpx_time_horizon;
-  this->perf_sampling_period_ = perf_sampling_period;
-  this->float_tolerance_ = float_tolerance;
-  this->time_tolerance_ = time_tolerance;
-  this->primary_thz_ = primary_thz;
-  this->secondary_thz_ = secondary_thz;
+  mdl_inertia_sr_thr_ = mdl_inertia_sr_thr;
+  mdl_inertia_cnt_thr_ = mdl_inertia_cnt_thr;
+  tpx_dsr_thr_ = tpx_dsr_thr;
+  min_sim_time_horizon_ = min_sim_time_horizon;
+  max_sim_time_horizon_ = max_sim_time_horizon;
+  sim_time_horizon_factor_ = sim_time_horizon_factor;
+  tpx_time_horizon_ = tpx_time_horizon;
+  perf_sampling_period_ = perf_sampling_period;
+  float_tolerance_ = float_tolerance;
+  time_tolerance_ = time_tolerance;
+  primary_thz_ = primary_thz;
+  secondary_thz_ = secondary_thz;
 
-  this->debug_ = debug;
+  debug_ = debug;
   if (debug)
-    this->ntf_mk_res_ = ntf_mk_res;
+    ntf_mk_res_ = ntf_mk_res;
   else
-    this->ntf_mk_res_ = 1;
-  this->goal_pred_success_res_ = goal_pred_success_res;
+    ntf_mk_res_ = 1;
+  goal_pred_success_res_ = goal_pred_success_res;
 
-  this->probe_level_ = probe_level;
-  this->enable_assumptions_ = enable_assumptions;
+  probe_level_ = probe_level;
+  enable_assumptions_ = enable_assumptions;
 
   reduction_job_count_ = time_job_count_ = 0;
   reduction_job_avg_latency_ = _reduction_job_avg_latency_ = microseconds(0);

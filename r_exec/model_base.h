@@ -132,7 +132,7 @@ private:
   MdlSet black_list_; // mdls are already packed when inserted (they come from the white list).
   MdlSet white_list_; // mdls are packed just before insertion.
 
-  void set_thz(std::chrono::microseconds thz) { this->thz_ = thz; } // called by _Mem::start(); set to secondary_thz.
+  void set_thz(std::chrono::microseconds thz) { thz_ = thz; } // called by _Mem::start(); set to secondary_thz.
   void trim_objects(); // called by _Mem::GC().
 
   ModelBase();

@@ -163,7 +163,7 @@ View::View(View *view, Group *group) : r_code::View(), controller_(NULL) {
 
 void View::set_object(r_code::Code *object) {
 
-  this->object_ = object;
+  object_ = object;
   reset();
 }
 

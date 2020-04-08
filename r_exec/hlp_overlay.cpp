@@ -106,7 +106,7 @@ HLPOverlay::HLPOverlay(Controller *c, HLPBindingMap *bindings) : Overlay(c, true
 
 HLPOverlay::HLPOverlay(Controller *c, const HLPBindingMap *bindings, bool load_code) : Overlay(c, load_code) {
 
-  this->bindings_ = new HLPBindingMap((HLPBindingMap *)bindings);
+  bindings_ = new HLPBindingMap((HLPBindingMap *)bindings);
 }
 
 HLPOverlay::~HLPOverlay() {

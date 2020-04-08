@@ -204,16 +204,16 @@ double CorrelatorCore::trainingEpoch(double learningRate, double momentum) {
 void CorrelatorCore::snapshot(int t1, int t2) {
   std::vector<LstmBlockState> tmpState;
 
-  inputSequenceBufferSnapshot_.assign(this->inputSequenceBuffer_.begin() + t1, this->inputSequenceBuffer_.begin() + t2);
+  inputSequenceBufferSnapshot_.assign(inputSequenceBuffer_.begin() + t1, inputSequenceBuffer_.begin() + t2);
   lstmStateBufferSnapshot_.clear();
   for (int i = 0; i < lstmStateBuffer_.size(); i++) { // all buffers for all lstm blocks
-    tmpState.assign(this->lstmStateBuffer_[i].begin() + t1, this->lstmStateBuffer_[i].begin() + t2);
+    tmpState.assign(lstmStateBuffer_[i].begin() + t1, lstmStateBuffer_[i].begin() + t2);
     lstmStateBufferSnapshot_.push_back(tmpState);
   }
-  outputLayerStateBufferSnapshot_.assign(this->outputLayerStateBuffer_.begin() + t1, this->outputLayerStateBuffer_.begin() + t2);
-  trainingSequenceBufferSnapshot_.assign(this->trainingSequenceBuffer_.begin() + t1, this->trainingSequenceBuffer_.begin() + t2);
-  inputLayerErrorBufferSnapshot_.assign(this->inputLayerErrorBuffer_.begin() + t1, this->inputLayerErrorBuffer_.begin() + t2);
-  outputErrorBufferSnapshot_.assign(this->outputErrorBuffer_.begin() + t1, this->outputErrorBuffer_.begin() + t2); // could be taken out, it is not useful in getJacobian
+  outputLayerStateBufferSnapshot_.assign(outputLayerStateBuffer_.begin() + t1, outputLayerStateBuffer_.begin() + t2);
+  trainingSequenceBufferSnapshot_.assign(trainingSequenceBuffer_.begin() + t1, trainingSequenceBuffer_.begin() + t2);
+  inputLayerErrorBufferSnapshot_.assign(inputLayerErrorBuffer_.begin() + t1, inputLayerErrorBuffer_.begin() + t2);
+  outputErrorBufferSnapshot_.assign(outputErrorBuffer_.begin() + t1, outputErrorBuffer_.begin() + t2); // could be taken out, it is not useful in getJacobian
   // a copy of the lstm network is needed as well, because the weight derivatives get messed up with backpropagation (TODO)
   // input vector buffer is not needed, it's just used to update the weight derivatives
 

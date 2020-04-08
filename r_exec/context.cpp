@@ -423,7 +423,7 @@ void IPGMContext::getMember(void *&object, uint32 &view_oid, ObjectType &object_
     return;
   }
 
-  IPGMContext cptr = IPGMContext(this->object_, view_, code_, (*this)[0].asIndex(), (InputLessPGMOverlay *)overlay_, data_); // dereference manually (1 offset) to retain the cptr as is.
+  IPGMContext cptr = IPGMContext(object_, view_, code_, (*this)[0].asIndex(), (InputLessPGMOverlay *)overlay_, data_); // dereference manually (1 offset) to retain the cptr as is.
 
   if (cptr[0].getDescriptor() != Atom::C_PTR) { // ill-formed mod/set expression.
 

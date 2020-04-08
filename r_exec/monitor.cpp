@@ -86,8 +86,8 @@ Monitor::Monitor(MDLController *controller,
   BindingMap *bindings,
   Fact *target) : _Object(), controller_(controller) {
 
-  this->bindings_ = bindings;
-  this->target_ = target;
+  bindings_ = bindings;
+  target_ = target;
 }
 
 bool Monitor::is_alive() const {

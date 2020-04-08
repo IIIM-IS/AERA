@@ -91,7 +91,7 @@ uint32 RepliStruct::GlobalLine_ = 1;
 std::vector<std::string> RepliStruct::LoadedFilePaths_;
 
 RepliStruct::RepliStruct(RepliStruct::Type type) {
-  this->type_ = type;
+  type_ = type;
   line_ = GlobalLine_;
   parent_ = NULL;
 }
@@ -164,7 +164,7 @@ int32 RepliStruct::parse(std::istream *stream, const std::string& filePath, uint
       return -1;
     case '!':
       if (inComment) continue;
-      if (this->type_ == Root) {
+      if (type_ == Root) {
         subStruct = new RepliStruct(Directive);
         subStruct->parent_ = this;
         args_.push_back(subStruct);
@@ -527,19 +527,19 @@ bool RepliStruct::parseDirective(std::istream *stream, const std::string& filePa
   else if (str.compare("!undef") == 0) // xxx
     paramCount = 1;
   else if (str.compare("!ifdef") == 0) { // name
-    this->type_ = Condition;
+    type_ = Condition;
     paramCount = 1;
   }
   else if (str.compare("!ifundef") == 0) { // name
-    this->type_ = Condition;
+    type_ = Condition;
     paramCount = 1;
   }
   else if (str.compare("!else") == 0) { //
-    this->type_ = Condition;
+    type_ = Condition;
     paramCount = 0;
   }
   else if (str.compare("!endif") == 0) { //
-    this->type_ = Condition;
+    type_ = Condition;
     paramCount = 0;
   }
   else if (str.compare("!class") == 0) // ()
@@ -911,9 +911,9 @@ std::string RepliStruct::printError() const {
 
 RepliMacro::RepliMacro(const std::string &name, RepliStruct *src, RepliStruct *dest) {
 
-  this->name_ = name;
-  this->src_ = src;
-  this->dest_ = dest;
+  name_ = name;
+  src_ = src;
+  dest_ = dest;
 }
 
 RepliMacro::~RepliMacro() {
@@ -944,7 +944,7 @@ RepliStruct *RepliMacro::expandMacro(RepliStruct *oldStruct) {
     error_ += "Macro '" + name_ + "' cannot expand empty structure. ";
     return NULL;
   }
-  if (oldStruct->cmd_.compare(this->name_) != 0) {
+  if (oldStruct->cmd_.compare(name_) != 0) {
     error_ += "Macro '" + name_ + "' cannot expand structure with different name '" + oldStruct->cmd_ + "'. ";
     return NULL;
   }
@@ -1011,8 +1011,8 @@ RepliStruct *RepliStruct::findAtom(const std::string &name) {
 
 RepliCondition::RepliCondition(const std::string &name, bool reversed) {
 
-  this->name_ = name;
-  this->reversed_ = reversed;
+  name_ = name;
+  reversed_ = reversed;
 }
 
 RepliCondition::~RepliCondition() {
@@ -1274,7 +1274,7 @@ ReturnType Preprocessor::getReturnType(RepliStruct *s) {
 
 void Preprocessor::initialize(Metadata *metadata) {
 
-  this->metadata_ = metadata;
+  metadata_ = metadata;
 
   class_opcode_ = 0;
   uint16 function_opcode = 0;

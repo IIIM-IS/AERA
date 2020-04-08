@@ -528,7 +528,7 @@ PGMOverlay::PGMOverlay(PGMOverlay *original, uint16 last_input_index, uint16 val
   for (uint16 i = 0; i < original->patch_indices_.size(); ++i) // unpatch code.
     code_[original->patch_indices_[i]] = original_code[original->patch_indices_[i]];
 
-  this->value_commit_index_ = value_commit_index;
+  value_commit_index_ = value_commit_index;
   for (uint16 i = 0; i < value_commit_index; ++i) // copy values up to the last commit index.
     values_.push_back(original->values_[i]);
 

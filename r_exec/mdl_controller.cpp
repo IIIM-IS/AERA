@@ -1346,7 +1346,7 @@ PrimaryMDLController::PrimaryMDLController(r_code::View *view) : PMDLController(
 
 void PrimaryMDLController::set_secondary(SecondaryMDLController *secondary) {
 
-  this->secondary_ = secondary;
+  secondary_ = secondary;
   add_requirement_to_rhs();
   secondary->add_requirement_to_rhs();
 }
@@ -2215,7 +2215,7 @@ SecondaryMDLController::SecondaryMDLController(r_code::View *view) : MDLControll
 
 void SecondaryMDLController::set_primary(PrimaryMDLController *primary) {
 
-  this->primary_ = primary;
+  primary_ = primary;
 }
 
 void SecondaryMDLController::take_input(r_exec::View *input) {

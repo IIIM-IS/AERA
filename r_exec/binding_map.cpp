@@ -118,15 +118,15 @@ bool UnboundValue::match(const Code *object, uint16 index) {
   Atom o_atom = object->code(index);
   switch (o_atom.getDescriptor()) {
   case Atom::I_PTR:
-    map_->bind_variable(new StructureValue(map_, object, o_atom.asIndex()), this->index_);
+    map_->bind_variable(new StructureValue(map_, object, o_atom.asIndex()), index_);
     break;
   case Atom::R_PTR:
-    map_->bind_variable(new ObjectValue(map_, object->get_reference(o_atom.asIndex())), this->index_);
+    map_->bind_variable(new ObjectValue(map_, object->get_reference(o_atom.asIndex())), index_);
     break;
   case Atom::WILDCARD:
     break;
   default:
-    map_->bind_variable(new AtomValue(map_, o_atom), this->index_);
+    map_->bind_variable(new AtomValue(map_, o_atom), index_);
     break;
   }
 
@@ -208,9 +208,9 @@ bool AtomValue::contains(const Atom a) const {
 
 StructureValue::StructureValue(BindingMap *map, const Code *structure) : BoundValue(map) {
 
-  this->structure_ = new r_code::LObject();
+  structure_ = new r_code::LObject();
   for (uint16 i = 0; i < structure->code_size(); ++i)
-    this->structure_->code(i) = structure->code(i);
+    structure_->code(i) = structure->code(i);
 }
 
 StructureValue::StructureValue(BindingMap *map, const Code *source, uint16 structure_index) : BoundValue(map) {
@@ -318,7 +318,7 @@ void ObjectValue::valuate(Code *destination, uint16 write_index, uint16 &extent_
 
 bool ObjectValue::match(const Code *object, uint16 index) {
 
-  return map_->match_object(object->get_reference(object->code(index).asIndex()), this->object_);
+  return map_->match_object(object->get_reference(object->code(index).asIndex()), object_);
 }
 
 Atom *ObjectValue::get_code() {
