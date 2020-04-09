@@ -196,10 +196,20 @@
 * DONE. Review/merge pull request for Sim sol_before https://github.com/IIIM-IS/replicode/pull/74
 * DONE. Review/merge pull request for converting primary_thz https://github.com/IIIM-IS/replicode/pull/75
 
+2020-04-09
+* DONE. Review/merge pull requests for member variable underscores https://github.com/IIIM-IS/CoreLibrary/pull/6
+  https://github.com/IIIM-IS/replicode/pull/76
+* DONE. Review/merge pull request to rename to thz_timestamp. https://github.com/IIIM-IS/replicode/pull/77
+* DONE. Look at the version of Replicode from Eric's laptop. Is it v1.2? v1.1? Or some intermediate with simulation implemented?
+  Laptop "eric_workdir": v1.2 August 1, 2012 0f9b1a4d1948954bbd7f3aa4089d5a4493cc7c76
+  Laptop "eric_from_home": v1.1 April 10, 2011 (more or less) 
+
 TODO
-* Pull request to rename thz variables with _duration or _timestamp.
-* Pull request to rename member variables with a trailing underscore.
-* Look at the version of Replicode from Eric's laptop. Is it v1.2? v1.1? Or some intermediate with simulation implemented?
+* Diagnostic time for v1.1.
+* Simple v1.1 program with two actions to achieve a goal. Does it simulate and choose only one?
+* Pull request for CSTController original_patterns_size .
+* Mock up an explanation session.
+* Start a program specification Word document.
 * Document methods, starting with those related to the simulator.
 * If min_sim_time_horizon > 0, how is the behavior different?
 * In babbling, issue a goal for a position, an "unrelated" speed_x, and move the position there. Is GTPX invoked?
