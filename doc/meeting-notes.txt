@@ -199,6 +199,7 @@
 2020-04-09
 * DONE. Review/merge pull requests for member variable underscores https://github.com/IIIM-IS/CoreLibrary/pull/6
   https://github.com/IIIM-IS/replicode/pull/76
+  Found unused member variables: _GMonitor::sim_thz_ f_imdl_ and sim_mode_, GTPX::f_imdl_
 * DONE. Review/merge pull request to rename to thz_timestamp. https://github.com/IIIM-IS/replicode/pull/77
 * DONE. Look at the version of Replicode from Eric's laptop. Is it v1.2? v1.1? Or some intermediate with simulation implemented?
   Laptop "eric_workdir": v1.2 August 1, 2012 0f9b1a4d1948954bbd7f3aa4089d5a4493cc7c76
