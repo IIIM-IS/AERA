@@ -152,7 +152,6 @@
     <ClCompile Include="context.cpp" />
     <ClCompile Include="cpp_programs.cpp" />
     <ClCompile Include="cst_controller.cpp" />
-    <ClCompile Include="domain.cpp" />
     <ClCompile Include="factory.cpp" />
     <ClCompile Include="group.cpp" />
     <ClCompile Include="group.inline.cpp">
@@ -214,7 +213,6 @@
     <ClInclude Include="cpp_programs.h" />
     <ClInclude Include="cst_controller.h" />
     <ClInclude Include="dll.h" />
-    <ClInclude Include="domain.h" />
     <ClInclude Include="factory.h" />
     <ClInclude Include="group.h" />
     <ClInclude Include="guard_builder.h" />
