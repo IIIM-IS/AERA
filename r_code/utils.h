@@ -140,8 +140,8 @@ public:
   template<class O> static Timestamp GetTimestamp(const O *object, uint16 index) {
 
     uint16 t_index = object->code(index).asIndex();
-    uint64 high = object->code(t_index + 1).atom;
-    return Timestamp(std::chrono::microseconds(high << 32 | object->code(t_index + 2).atom));
+    uint64 high = object->code(t_index + 1).atom_;
+    return Timestamp(std::chrono::microseconds(high << 32 | object->code(t_index + 2).atom_));
   }
 
   template<class O> static void SetTimestamp(O *object, uint16 index, Timestamp timestamp) {
@@ -149,8 +149,8 @@ public:
     uint64 t = std::chrono::duration_cast<std::chrono::microseconds>(timestamp.time_since_epoch()).count();
     uint16 t_index = object->code(index).asIndex();
     object->code(t_index) = Atom::Timestamp();
-    object->code(t_index + 1).atom = t >> 32;
-    object->code(t_index + 2).atom = t & 0x00000000FFFFFFFF;
+    object->code(t_index + 1).atom_ = t >> 32;
+    object->code(t_index + 2).atom_ = t & 0x00000000FFFFFFFF;
   }
 
   static std::string GetString(const Atom *iptr);
@@ -161,7 +161,7 @@ public:
     uint16 s_index = object->code(index).asIndex();
     std::string s;
     char buffer[255];
-    uint8 char_count = (object->code(s_index).atom & 0x000000FF);
+    uint8 char_count = (object->code(s_index).atom_ & 0x000000FF);
     memcpy(buffer, &object->code(s_index + 1), char_count);
     buffer[char_count] = 0;
     s += buffer;
@@ -173,21 +173,21 @@ public:
     uint16 s_index = object->code(index).asIndex();
     uint8 l = (uint8)s.length();
     object->code(s_index) = Atom::String(l);
-    uint32 _st = 0;
+    uint32 st = 0;
     int8 shift = 0;
     for (uint8 i = 0; i < l; ++i) {
 
-      _st |= s[i] << shift;
+      st |= s[i] << shift;
       shift += 8;
       if (shift == 32) {
 
-        object->code(++s_index) = _st;
-        _st = 0;
+        object->code(++s_index) = st;
+        st = 0;
         shift = 0;
       }
     }
     if (l % 4)
-      object->code(++s_index) = _st;
+      object->code(++s_index) = st;
   }
 
   static int32 GetResilience(Timestamp now, std::chrono::microseconds time_to_live, uint64 upr); // ttl: us, upr: us.

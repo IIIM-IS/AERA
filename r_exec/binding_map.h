@@ -92,7 +92,7 @@ class ObjectValue;
 class r_exec_dll Value :
   public _Object {
 protected:
-  BindingMap *map;
+  BindingMap *map_;
   Value(BindingMap *map);
 public:
   virtual Value *copy(BindingMap *map) const = 0;
@@ -134,7 +134,7 @@ public:
 class r_exec_dll UnboundValue :
   public Value {
 private:
-  uint8 index;
+  uint8 index_;
 public:
   UnboundValue(BindingMap *map, uint8 index);
   ~UnboundValue();
@@ -150,7 +150,7 @@ public:
 class r_exec_dll AtomValue :
   public BoundValue {
 private:
-  Atom atom;
+  Atom atom_;
 public:
   AtomValue(BindingMap *map, Atom atom);
 
@@ -170,7 +170,7 @@ public:
 class r_exec_dll StructureValue :
   public BoundValue {
 private:
-  P<Code> structure;
+  P<Code> structure_;
   StructureValue(BindingMap *map, const Code *structure);
 public:
   StructureValue(BindingMap *map, const Code *source, uint16 structure_index);
@@ -193,7 +193,7 @@ public:
 class r_exec_dll ObjectValue :
   public BoundValue {
 private:
-  const P<Code> object;
+  const P<Code> object_;
 public:
   ObjectValue(BindingMap *map, Code *object);
 
@@ -223,15 +223,15 @@ class r_exec_dll BindingMap :
   public _Object {
   friend class UnboundValue;
 protected:
-  std::vector<P<Value> > map; // indexed by vl-ptrs.
+  std::vector<P<Value> > map_; // indexed by vl-ptrs.
 
-  uint32 unbound_values;
+  uint32 unbound_values_;
 
   void add_unbound_value(uint8 id);
 
-  uint16 first_index; // index of the first value found in the first fact.
-  int16 fwd_after_index; // tpl args (if any) are located before fwd_after_index.
-  int16 fwd_before_index;
+  uint16 first_index_; // index of the first value found in the first fact.
+  int16 fwd_after_index_; // tpl args (if any) are located before fwd_after_index.
+  int16 fwd_before_index_;
 
   bool match_timings(Timestamp stored_after, Timestamp stored_before, Timestamp after, Timestamp before, uint32 destination_after_index, uint32 destination_before_index);
   bool match_fwd_timings(const _Fact *f_object, const _Fact *f_pattern);
@@ -263,10 +263,10 @@ public:
   MatchResult match_fwd_lenient(const _Fact *f_object, const _Fact *f_pattern); // use for facts when we are lenient about fact vs |fact.
   bool match_fwd_strict(const _Fact *f_object, const _Fact *f_pattern); // use for facts when we need sharp match.
 
-  bool has_fwd_after() const { return fwd_after_index >= 0 && map.size() > fwd_after_index &&
-      map[fwd_after_index]->get_code() != NULL; }
-  bool has_fwd_before() const { return fwd_before_index >= 0 && map.size() > fwd_before_index &&
-      map[fwd_before_index]->get_code() != NULL; }
+  bool has_fwd_after() const { return fwd_after_index_ >= 0 && map_.size() > fwd_after_index_ &&
+      map_[fwd_after_index_]->get_code() != NULL; }
+  bool has_fwd_before() const { return fwd_before_index_ >= 0 && map_.size() > fwd_before_index_ &&
+      map_[fwd_before_index_]->get_code() != NULL; }
   Timestamp get_fwd_after() const; // assumes the timings are valuated.
   Timestamp get_fwd_before() const; // idem.
 
@@ -283,18 +283,18 @@ public:
   bool intersect(BindingMap *bm);
   bool is_fully_specified() const;
 
-  Atom *get_code(uint16 i) const { return map[i]->get_code(); }
-  Code *get_object(uint16 i) const { return map[i]->get_object(); }
-  int16 get_fwd_after_index() const { return fwd_after_index; }
-  int16 get_fwd_before_index() const { return fwd_before_index; }
+  Atom *get_code(uint16 i) const { return map_[i]->get_code(); }
+  Code *get_object(uint16 i) const { return map_[i]->get_object(); }
+  int16 get_fwd_after_index() const { return fwd_after_index_; }
+  int16 get_fwd_before_index() const { return fwd_before_index_; }
   bool scan_variable(uint16 id) const; // return true if id<first_index or map[id] is not an UnboundValue.
 };
 
 class r_exec_dll HLPBindingMap :
   public BindingMap {
 private:
-  int16 bwd_after_index;
-  int16 bwd_before_index;
+  int16 bwd_after_index_;
+  int16 bwd_before_index_;
 
   bool match_bwd_timings(const _Fact *f_object, const _Fact *f_pattern, bool use_f_pattern_timings = false);
 
@@ -320,10 +320,10 @@ public:
   MatchResult match_bwd_lenient(const _Fact *f_object, const _Fact *f_pattern); // use for facts when we are lenient about fact vs |fact.
   bool match_bwd_strict(const _Fact *f_object, const _Fact *f_pattern, bool use_f_pattern_timings = false); // use for facts when we need sharp match.
 
-  bool has_bwd_after() const { return bwd_after_index >= 0 && map.size() > bwd_after_index &&
-      map[bwd_after_index]->get_code() != NULL; }
-  bool has_bwd_before() const { return bwd_before_index >= 0 && map.size() > bwd_before_index &&
-      map[bwd_before_index]->get_code() != NULL; }
+  bool has_bwd_after() const { return bwd_after_index_ >= 0 && map_.size() > bwd_after_index_ &&
+      map_[bwd_after_index_]->get_code() != NULL; }
+  bool has_bwd_before() const { return bwd_before_index_ >= 0 && map_.size() > bwd_before_index_ &&
+      map_[bwd_before_index_]->get_code() != NULL; }
   Timestamp get_bwd_after() const; // assumes the timings are valuated.
   Timestamp get_bwd_before() const; // idem.
 };

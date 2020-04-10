@@ -101,7 +101,7 @@ public:
 
   ~LstmLayer();
 
-  std::vector <LstmBlock> lstmBlock; // lstm blocks
+  std::vector <LstmBlock> lstmBlock_; // lstm blocks
 private:
 
 };

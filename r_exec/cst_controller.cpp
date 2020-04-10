@@ -83,16 +83,16 @@ using namespace std::chrono;
 
 namespace r_exec {
 
-CSTOverlay::CSTOverlay(Controller *c, HLPBindingMap *bindings) : HLPOverlay(c, bindings), match_deadline(Timestamp(seconds(0))), lowest_cfd(1) {
+CSTOverlay::CSTOverlay(Controller *c, HLPBindingMap *bindings) : HLPOverlay(c, bindings), match_deadline_(Timestamp(seconds(0))), lowest_cfd_(1) {
 }
 
-CSTOverlay::CSTOverlay(const CSTOverlay *original) : HLPOverlay(original->controller, original->bindings) {
+CSTOverlay::CSTOverlay(const CSTOverlay *original) : HLPOverlay(original->controller_, original->bindings_) {
 
-  patterns = original->patterns;
-  predictions = original->predictions;
-  simulations = original->simulations;
-  match_deadline = original->match_deadline;
-  lowest_cfd = original->lowest_cfd;
+  patterns_ = original->patterns_;
+  predictions_ = original->predictions_;
+  simulations_ = original->simulations_;
+  match_deadline_ = original->match_deadline_;
+  lowest_cfd_ = original->lowest_cfd_;
 }
 
 CSTOverlay::~CSTOverlay() {
@@ -100,44 +100,44 @@ CSTOverlay::~CSTOverlay() {
 
 void CSTOverlay::load_patterns() {
 
-  Code *object = ((HLPController *)controller)->get_unpacked_object();
+  Code *object = ((HLPController *)controller_)->get_unpacked_object();
   uint16 obj_set_index = object->code(CST_OBJS).asIndex();
   uint16 obj_count = object->code(obj_set_index).getAtomCount();
   for (uint16 i = 1; i <= obj_count; ++i) {
 
     _Fact *pattern = (_Fact *)object->get_reference(object->code(obj_set_index + i).asIndex());
-    patterns.push_back(pattern);
+    patterns_.push_back(pattern);
   }
 }
 
 bool CSTOverlay::can_match(Timestamp now) const { // to reach inputs until a given thz in the past, return now<deadline+thz.
 
-  if (match_deadline.time_since_epoch().count() == 0)
+  if (match_deadline_.time_since_epoch().count() == 0)
     return true;
-  return now <= match_deadline;
+  return now <= match_deadline_;
 }
 
 void CSTOverlay::inject_production() {
 
-  Fact *f_icst = ((CSTController *)controller)->get_f_icst(bindings, &inputs);
+  Fact *f_icst = ((CSTController *)controller_)->get_f_icst(bindings_, &inputs_);
   auto now = Now();//f_icst->get_reference(0)->trace();
 
-  if (simulations.size() == 0) { // no simulation.
+  if (simulations_.size() == 0) { // no simulation.
 
-    auto before = bindings->get_fwd_before();
+    auto before = bindings_->get_fwd_before();
     Timestamp::duration time_to_live;
     if (now >= before)
       time_to_live = Timestamp::duration(seconds(0));
     else
       time_to_live = before - now;
-    if (predictions.size()) {
+    if (predictions_.size()) {
 
       Pred *prediction = new Pred(f_icst, 1);
       Fact *f_p_f_icst = new Fact(prediction, now, now, 1, 1);
       UNORDERED_SET<P<_Fact>, PHash<_Fact> >::const_iterator pred;
-      for (pred = predictions.begin(); pred != predictions.end(); ++pred) // add antecedents to the prediction.
-        prediction->grounds.push_back(*pred);
-      ((CSTController *)controller)->inject_prediction(f_p_f_icst, lowest_cfd, time_to_live); // inject a f->pred->icst in the primary group, no rdx.
+      for (pred = predictions_.begin(); pred != predictions_.end(); ++pred) // add antecedents to the prediction.
+        prediction->grounds_.push_back(*pred);
+      ((CSTController *)controller_)->inject_prediction(f_p_f_icst, lowest_cfd_, time_to_live); // inject a f->pred->icst in the primary group, no rdx.
 
       OUTPUT(CST_OUT) << Utils::RelativeTime(Now()) << " fact " << f_p_f_icst->get_oid();
 #ifdef WITH_DEBUG_OID
@@ -147,16 +147,16 @@ void CSTOverlay::inject_production() {
 #ifdef WITH_DEBUG_OID
       OUTPUT(CST_OUT) << "(" << f_icst->get_debug_oid() << ") ";
 #endif
-      OUTPUT(CST_OUT) << "icst[" << controller->getObject()->get_oid() << "][";
-      for (uint32 i = 0; i < inputs.size(); ++i)
-        OUTPUT(CST_OUT) << " " << inputs[i]->get_oid();
+      OUTPUT(CST_OUT) << "icst[" << controller_->getObject()->get_oid() << "][";
+      for (uint32 i = 0; i < inputs_.size(); ++i)
+        OUTPUT(CST_OUT) << " " << inputs_[i]->get_oid();
       OUTPUT(CST_OUT) << "]" << std::endl;
     } else {
-      ((CSTController *)controller)->inject_icst(f_icst, lowest_cfd, time_to_live); // inject f->icst in the primary and secondary groups, and in the output groups.
+      ((CSTController *)controller_)->inject_icst(f_icst, lowest_cfd_, time_to_live); // inject f->icst in the primary and secondary groups, and in the output groups.
 
-      OUTPUT(CST_OUT) << Utils::RelativeTime(Now()) << " fact " << f_icst->get_oid() << " icst[" << controller->getObject()->get_oid() << "][";
-      for (uint32 i = 0; i < inputs.size(); ++i)
-        OUTPUT(CST_OUT) << " " << inputs[i]->get_oid();
+      OUTPUT(CST_OUT) << Utils::RelativeTime(Now()) << " fact " << f_icst->get_oid() << " icst[" << controller_->getObject()->get_oid() << "][";
+      for (uint32 i = 0; i < inputs_.size(); ++i)
+        OUTPUT(CST_OUT) << " " << inputs_[i]->get_oid();
       OUTPUT(CST_OUT) << "]" << std::endl;
     }
   } else { // there are simulations; the production is therefore a prediction; add the simulations to the latter.
@@ -164,18 +164,18 @@ void CSTOverlay::inject_production() {
     Pred *prediction = new Pred(f_icst, 1);
     Fact *f_p_f_icst = new Fact(prediction, now, now, 1, 1);
     UNORDERED_SET<P<Sim>, PHash<Sim> >::const_iterator sim;
-    for (sim = simulations.begin(); sim != simulations.end(); ++sim) // add simulations to the prediction.
-      prediction->simulations.push_back(*sim);
-    ((HLPController *)controller)->inject_prediction(f_p_f_icst, lowest_cfd); // inject a simulated prediction in the main group.
+    for (sim = simulations_.begin(); sim != simulations_.end(); ++sim) // add simulations to the prediction.
+      prediction->simulations_.push_back(*sim);
+    ((HLPController *)controller_)->inject_prediction(f_p_f_icst, lowest_cfd_); // inject a simulated prediction in the main group.
   }
 }
 
 CSTOverlay *CSTOverlay::get_offspring(HLPBindingMap *map, _Fact *input, _Fact *bound_pattern) {
 
   CSTOverlay *offspring = new CSTOverlay(this);
-  patterns.remove(bound_pattern);
-  if (match_deadline.time_since_epoch().count() == 0)
-    match_deadline = map->get_fwd_before();
+  patterns_.remove(bound_pattern);
+  if (match_deadline_.time_since_epoch().count() == 0)
+    match_deadline_ = map->get_fwd_before();
   update(map, input, bound_pattern);
   //std::cout<<std::hex<<this<<std::dec<<" produced: "<<std::hex<<offspring<<std::dec<<std::endl;
   return offspring;
@@ -183,8 +183,8 @@ CSTOverlay *CSTOverlay::get_offspring(HLPBindingMap *map, _Fact *input, _Fact *b
 
 void CSTOverlay::update(HLPBindingMap *map, _Fact *input, _Fact *bound_pattern) {
 
-  bindings = map;
-  inputs.push_back(input);
+  bindings_ = map;
+  inputs_.push_back(input);
   float32 last_cfd;
   Pred *prediction = input->get_pred();
   if (prediction) {
@@ -192,28 +192,28 @@ void CSTOverlay::update(HLPBindingMap *map, _Fact *input, _Fact *bound_pattern) 
     last_cfd = prediction->get_target()->get_cfd();
     if (prediction->is_simulation()) {
 
-      for (uint16 i = 0; i < prediction->simulations.size(); ++i)
-        simulations.insert(prediction->simulations[i]);
+      for (uint16 i = 0; i < prediction->simulations_.size(); ++i)
+        simulations_.insert(prediction->simulations_[i]);
     } else
-      predictions.insert(input);
+      predictions_.insert(input);
   } else
     last_cfd = input->get_cfd();
 
-  if (lowest_cfd > last_cfd)
-    lowest_cfd = last_cfd;
+  if (lowest_cfd_ > last_cfd)
+    lowest_cfd_ = last_cfd;
 }
 
 bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
 
-  if (input->object->is_invalidated()) {
+  if (input->object_->is_invalidated()) {
 
     offspring = NULL;
     return false;
   }
 
-  for (uint16 i = 0; i < inputs.size(); ++i) { // discard inputs that already matched.
+  for (uint16 i = 0; i < inputs_.size(); ++i) { // discard inputs that already matched.
 
-    if (((_Fact *)input->object) == inputs[i]) {
+    if (((_Fact *)input->object_) == inputs_[i]) {
 
       offspring = NULL;
       return false;
@@ -225,7 +225,7 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
   // else
   // std::cout<<Time::ToString_seconds(Now()-st)<<" "<<std::hex<<this<<std::dec<<" ("<<Time::ToString_seconds(match_deadline-st)<<") "<<input->object->get_oid()<<std::endl;
   _Fact *input_object;
-  Pred *prediction = ((_Fact *)input->object)->get_pred();
+  Pred *prediction = ((_Fact *)input->object_)->get_pred();
   bool simulation;
   if (prediction) {
 
@@ -233,17 +233,17 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
     simulation = prediction->is_simulation();
   } else {
 
-    input_object = (_Fact *)input->object;
+    input_object = (_Fact *)input->object_;
     simulation = false;
   }
 
   P<HLPBindingMap> bm = new HLPBindingMap();
   _Fact *bound_pattern = NULL;
   r_code::list<P<_Fact> >::const_iterator p;
-  for (p = patterns.begin(); p != patterns.end(); ++p) {
+  for (p = patterns_.begin(); p != patterns_.end(); ++p) {
 
-    bm->load(bindings);
-    if (inputs.size() == 0)
+    bm->load(bindings_);
+    if (inputs_.size() == 0)
       bm->reset_fwd_timings(input_object);
     if (bm->match_fwd_strict(input_object, *p)) {
 
@@ -258,41 +258,41 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
     //} else{
     // std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" "<<std::hex<<this<<std::dec<<" ("<<Time::ToString_seconds(match_deadline-Utils::GetTimeReference())<<") ";
     //}
-    if (patterns.size() == 1) { // last match.
+    if (patterns_.size() == 1) { // last match.
 
-      if (!code) {
+      if (!code_) {
 
         load_code();
-        P<HLPBindingMap> original_bindings = bindings;
-        bindings = bm;
+        P<HLPBindingMap> original_bindings = bindings_;
+        bindings_ = bm;
         if (evaluate_fwd_guards()) { // may update bindings; full match.
 //std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" full match\n";
-          update(bm, (_Fact *)input->object, bound_pattern);
+          update(bm, (_Fact *)input->object_, bound_pattern);
           inject_production();
           invalidate();
           offspring = NULL;
-          store_evidence(input->object, prediction, simulation);
+          store_evidence(input->object_, prediction, simulation);
           return true;
         } else {
           //std::cout<<" guards failed\n";
-          delete[] code;
-          code = NULL;
+          delete[] code_;
+          code_ = NULL;
           offspring = NULL;
           return false;
         }
       } else { // guards already evaluated, full match.
 //std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" full match\n";
-        update(bm, (_Fact *)input->object, bound_pattern);
+        update(bm, (_Fact *)input->object_, bound_pattern);
         inject_production();
         invalidate();
         offspring = NULL;
-        store_evidence(input->object, prediction, simulation);
+        store_evidence(input->object_, prediction, simulation);
         return true;
       }
     } else {
       //std::cout<<" match\n";
-      offspring = get_offspring(bm, (_Fact *)input->object, bound_pattern);
-      store_evidence(input->object, prediction, simulation);
+      offspring = get_offspring(bm, (_Fact *)input->object_, bound_pattern);
+      store_evidence(input->object_, prediction, simulation);
       return true;
     }
   } else {
@@ -306,9 +306,9 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
 
 CSTController::CSTController(r_code::View *view) : HLPController(view) {
 
-  CSTOverlay *o = new CSTOverlay(this, bindings); // master overlay.
+  CSTOverlay *o = new CSTOverlay(this, bindings_); // master overlay.
   o->load_patterns();
-  overlays.push_back(o);
+  overlays_.push_back(o);
 
   Group *host = get_host();
   Code *object = get_unpacked_object();
@@ -325,7 +325,7 @@ CSTController::CSTController(r_code::View *view) : HLPController(view) {
       Code *pattern_hlp = pattern_ihlp->get_reference(0);
       r_exec::View *pattern_hlp_v = (r_exec::View*)pattern_hlp->get_view(host, true);
       if (pattern_hlp_v)
-        controllers.push_back((HLPController *)pattern_hlp_v->controller);
+        controllers_.push_back((HLPController *)pattern_hlp_v->controller_);
     }
   }
 }
@@ -338,10 +338,10 @@ void CSTController::take_input(r_exec::View *input) {
   if (become_invalidated())
     return;
 
-  if (input->object->code(0).asOpcode() == Opcodes::Fact ||
-    input->object->code(0).asOpcode() == Opcodes::AntiFact) { // discard everything but facts and |facts.
+  if (input->object_->code(0).asOpcode() == Opcodes::Fact ||
+    input->object_->code(0).asOpcode() == Opcodes::AntiFact) { // discard everything but facts and |facts.
 
-    OUTPUT(CST_IN) << Utils::RelativeTime(Now()) << " cst " << getObject()->get_oid() << " <- " << input->object->get_oid() << std::endl;
+    OUTPUT(CST_IN) << Utils::RelativeTime(Now()) << " cst " << getObject()->get_oid() << " <- " << input->object_->get_oid() << std::endl;
     Controller::__take_input<CSTController>(input);
   }
 }
@@ -351,10 +351,10 @@ void CSTController::reduce(r_exec::View *input) {
   if (is_orphan())
     return;
 
-  if (input->object->is_invalidated())
+  if (input->object_->is_invalidated())
     return;
 
-  Goal *goal = ((_Fact *)input->object)->get_goal();
+  Goal *goal = ((_Fact *)input->object_)->get_goal();
   if (goal && goal->is_self_goal() && !goal->is_drive()) { // goal is g->f->target.
 
     _Fact *goal_target = goal->get_target(); // handle only icst.
@@ -363,10 +363,10 @@ void CSTController::reduce(r_exec::View *input) {
 
       if (!get_requirement_count()) { // models will attempt to produce the icst
 
-        P<HLPBindingMap> bm = new HLPBindingMap(bindings);
+        P<HLPBindingMap> bm = new HLPBindingMap(bindings_);
         bm->init_from_f_ihlp(goal_target);
         if (evaluate_bwd_guards(bm)) // leaves the controller constant: no need to protect; bm may be updated.
-          abduce(bm, input->object);
+          abduce(bm, input->object_);
       }
     }
   } else {
@@ -374,28 +374,28 @@ void CSTController::reduce(r_exec::View *input) {
     bool match = false;
     CSTOverlay *offspring;
     r_code::list<P<Overlay> >::const_iterator o;
-    reductionCS.enter();
+    reductionCS_.enter();
     auto now = Now();
-    for (o = overlays.begin(); o != overlays.end();) {
+    for (o = overlays_.begin(); o != overlays_.end();) {
 
       if (!((CSTOverlay *)*o)->can_match(now))
-        o = overlays.erase(o);
+        o = overlays_.erase(o);
       else if ((*o)->is_invalidated())
-        o = overlays.erase(o);
+        o = overlays_.erase(o);
       else {
 
         match = ((CSTOverlay *)*o)->reduce(input, offspring);
         if (offspring) {
-          overlays.push_front(offspring);
+          overlays_.push_front(offspring);
           ++o;
         }
         else if (match) // full match: no offspring.
-          o = overlays.erase(o);
+          o = overlays_.erase(o);
         else
           ++o;
       }
     }
-    reductionCS.leave();
+    reductionCS_.leave();
 
     check_last_match_time(match);
   }
@@ -409,7 +409,7 @@ void CSTController::abduce(HLPBindingMap *bm, Fact *super_goal) { // super_goal 
 
   float32 confidence = super_goal_target->get_cfd();
 
-  Sim *sim = g->sim;
+  Sim *sim = g->sim_;
 
   Code *cst = get_unpacked_object();
   uint16 obj_set_index = cst->code(CST_OBJS).asIndex();
@@ -452,7 +452,7 @@ void CSTController::inject_goal(HLPBindingMap *bm,
   sub_goal_target->set_cfd(confidence);
 
   Goal *sub_goal = new Goal(sub_goal_target, super_goal->get_goal()->get_actor(), 1);
-  sub_goal->sim = sim;
+  sub_goal->sim_ = sim;
 
   _Fact *f_icst = super_goal->get_goal()->get_target();
   _Fact *sub_goal_f = new Fact(sub_goal, now, now, 1, 1);
@@ -460,7 +460,7 @@ void CSTController::inject_goal(HLPBindingMap *bm,
   View *view = new View(View::SYNC_ONCE, now, confidence, 1, group, group, sub_goal_f); // SYNC_ONCE,res=1.
   _Mem::Get()->inject(view);
 
-  if (sim->mode == SIM_ROOT) { // no rdx for SIM_OPTIONAL or SIM_MANDATORY.
+  if (sim->mode_ == SIM_ROOT) { // no rdx for SIM_OPTIONAL or SIM_MANDATORY.
 
     MkRdx *mk_rdx = new MkRdx(f_icst, super_goal, sub_goal, 1, bm);
     uint16 out_group_count = get_out_group_count();
@@ -481,8 +481,8 @@ Fact *CSTController::get_f_ihlp(HLPBindingMap *bindings, bool wr_enabled) const 
 Fact *CSTController::get_f_icst(HLPBindingMap *bindings, std::vector<P<_Fact> > *inputs) const {
 
   Fact *f_icst = get_f_ihlp(bindings, false);
-  ((ICST *)f_icst->get_reference(0))->bindings = bindings;
-  ((ICST *)f_icst->get_reference(0))->components = *inputs;
+  ((ICST *)f_icst->get_reference(0))->bindings_ = bindings;
+  ((ICST *)f_icst->get_reference(0))->components_ = *inputs;
   return f_icst;
 }
 
@@ -519,22 +519,22 @@ void CSTController::inject_icst(Fact *production, float32 confidence, microsecon
     }
   }
 
-  sln_thr = secondary_host->code(GRP_SLN_THR).asFloat();
+  sln_thr = secondary_host_->code(GRP_SLN_THR).asFloat();
   if (confidence > sln_thr) {
 
-    View *view = new View(View::SYNC_ONCE, now, 1, Utils::GetResilience(now, time_to_live, secondary_host->get_upr() * Utils::GetBasePeriod().count()), secondary_host, primary_host, production);
+    View *view = new View(View::SYNC_ONCE, now, 1, Utils::GetResilience(now, time_to_live, secondary_host_->get_upr() * Utils::GetBasePeriod().count()), secondary_host_, primary_host, production);
     _Mem::Get()->inject(view); // inject f->icst in the secondary group: same reason as above.
   }
 }
 
 void CSTController::set_secondary_host(Group *host) {
 
-  secondary_host = host;
+  secondary_host_ = host;
 }
 
 Group *CSTController::get_secondary_host() const {
 
-  return secondary_host;
+  return secondary_host_;
 }
 
 void CSTController::kill_views() {
@@ -547,8 +547,8 @@ void CSTController::check_last_match_time(bool match) {
 
   auto now = Now();
   if (match)
-    last_match_time = now;
-  else if (now - last_match_time > _Mem::Get()->get_primary_thz())
+    last_match_time_ = now;
+  else if (now - last_match_time_ > _Mem::Get()->get_primary_thz())
     kill_views();
 }
 }

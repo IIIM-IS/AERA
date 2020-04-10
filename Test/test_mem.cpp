@@ -138,8 +138,8 @@ template<class O, class S> Code*
 TestMem<O, S>::findObject(std::vector<Code*> *objects, const char* name) {
   // Find the object OID.
   uint32 oid = 0;
-  for (UNORDERED_MAP<uint32, std::string>::const_iterator it = r_exec::Seed.object_names.symbols.begin();
-    it != r_exec::Seed.object_names.symbols.end(); ++it) {
+  for (UNORDERED_MAP<uint32, std::string>::const_iterator it = r_exec::Seed.object_names_.symbols_.begin();
+    it != r_exec::Seed.object_names_.symbols_.end(); ++it) {
     if (it->second == name) {
       oid = it->first;
       break;
@@ -215,7 +215,7 @@ template<class O, class S> r_exec::View* TestMem<O, S>::injectFact
 }
 
 template<class O, class S> void TestMem<O, S>::eject(Code *command) {
-  uint16 function = (command->code(CMD_FUNCTION).atom >> 8) & 0x000000FF;
+  uint16 function = (command->code(CMD_FUNCTION).atom_ >> 8) & 0x000000FF;
 
   if (function == set_speed_y_opcode_) {
     if (!speed_y_property_) {
@@ -304,7 +304,7 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
   if (position_y_obj_) {
     // We are updating the continuous position_y_.
     auto now = r_exec::Now();
-    if (now >= lastInjectTime_ + Mem_sampling_period * 8 / 10) {
+    if (now >= lastInjectTime_ + Mem_sampling_period_ * 8 / 10) {
       // Enough time has elapsed to inject a new position.
       if (lastInjectTime_.time_since_epoch().count() == 0) {
         // This is the first call, so leave the initial position.
@@ -317,20 +317,20 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
       // It seems that speed_y needs SYNC_HOLD for building models.
       injectMarkerValue
       (position_y_obj_, speed_y_property_, Atom::Float(speed_y_),
-        now, now + Mem_sampling_period, r_exec::View::SYNC_HOLD);
+        now, now + Mem_sampling_period_, r_exec::View::SYNC_HOLD);
       injectMarkerValue
       (position_y_obj_, position_y_property_, Atom::Float(position_y_),
-        now, now + Mem_sampling_period);
+        now, now + Mem_sampling_period_);
     }
   }
 
   if (discretePositionObj_) {
     // We are updating the discretePosition_.
     auto now = r_exec::Now();
-    if (now >= lastInjectTime_ + Mem_sampling_period * 8 / 10) {
+    if (now >= lastInjectTime_ + Mem_sampling_period_ * 8 / 10) {
       // Enough time has elapsed to inject another position.
       if (nextDiscretePosition_ &&
-        now >= lastCommandTime_ + Mem_sampling_period * 5 / 10) {
+        now >= lastCommandTime_ + Mem_sampling_period_ * 5 / 10) {
         // Enough time has elapsed from the move command to update the position.
         discretePosition_ = nextDiscretePosition_;
         // Clear nextDiscretePosition_ to allow another move command.
@@ -340,7 +340,7 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
       lastInjectTime_ = now;
       injectMarkerValue
       (discretePositionObj_, position_property_, discretePosition_,
-        now, now + Mem_sampling_period);
+        now, now + Mem_sampling_period_);
 
       const microseconds babbleStopTime(2000000);
       const int maxBabblePosition = 9;
@@ -375,9 +375,9 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
         cmd->set_reference(0, discretePositionObj_);
 
         r_exec::Fact* factCmd = new r_exec::Fact
-        (cmd, now + Mem_sampling_period, now + 2 * Mem_sampling_period, 1, 1);
+        (cmd, now + Mem_sampling_period_, now + 2 * Mem_sampling_period_, 1, 1);
         r_exec::Goal* goal = new r_exec::Goal(factCmd, get_self(), 1);
-        injectFact(goal, now + Mem_sampling_period, now + Mem_sampling_period, primary_group_);
+        injectFact(goal, now + Mem_sampling_period_, now + Mem_sampling_period_, primary_group_);
       }
     }
   }
@@ -385,7 +385,7 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
 
 template<class O, class S> void
 TestMem<O, S>::startTimeTickThread() {
-  if (reduction_core_count == 0 && time_core_count == 0)
+  if (reduction_core_count_ == 0 && time_core_count_ == 0)
     // We don't need a timeTickThread for diagnostic time.
     return;
   if (timeTickThread_)
@@ -403,10 +403,10 @@ TestMem<O, S>::timeTickRun(void *args) {
 
   auto tickTime = r_exec::Now();
   // Call onTimeTick at the sampling period.
-  while (self->state == RUNNING) {
+  while (self->state_ == RUNNING) {
     self->onTimeTick();
 
-    tickTime += Mem_sampling_period;
+    tickTime += Mem_sampling_period_;
     Thread::Sleep((tickTime - r_exec::Now()) / 1000);
   }
 

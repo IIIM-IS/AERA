@@ -93,18 +93,18 @@ public:
 class IPGMContext :
   public State {
 public:
-  std::vector<P<r_code::View> > views;
-  std::vector<P<State> > states;
+  std::vector<P<r_code::View> > views_;
+  std::vector<P<State> > states_;
 
   void trace(std::ostream& out) {
 
     out << "IPGMContext\n";
     out << "Views\n";
-    for (uint32 i = 0; i < views.size(); ++i)
-      views[i]->object->trace(out);
+    for (uint32 i = 0; i < views_.size(); ++i)
+      views_[i]->object_->trace(out);
     out << "States\n";
-    for (uint32 i = 0; i < states.size(); ++i)
-      states[i]->trace(out);
+    for (uint32 i = 0; i < states_.size(); ++i)
+      states_[i]->trace(out);
   }
 
   void trace() { trace(std::cout); }
@@ -115,18 +115,18 @@ public:
 class Pattern :
   public State {
 public:
-  std::vector<P<r_code::View> > left;
-  std::vector<P<r_code::View> > right;
+  std::vector<P<r_code::View> > left_;
+  std::vector<P<r_code::View> > right_;
 
   void trace(std::ostream& out) {
 
     out << "Pattern\n";
     out << "Left\n";
-    for (uint32 i = 0; i < left.size(); ++i)
-      left[i]->object->trace(out);
+    for (uint32 i = 0; i < left_.size(); ++i)
+      left_[i]->object_->trace(out);
     out << "Right\n";
-    for (uint32 i = 0; i < right.size(); ++i)
-      right[i]->object->trace(out);
+    for (uint32 i = 0; i < right_.size(); ++i)
+      right_[i]->object_->trace(out);
   }
 
   void trace() { trace(std::cout); }
@@ -134,13 +134,13 @@ public:
 
 class CorrelatorOutput {
 public:
-  std::vector<P<IPGMContext> > contexts;
+  std::vector<P<IPGMContext> > contexts_;
 
   void trace(std::ostream& out) {
 
     out << "CorrelatorOutput\n";
-    for (uint32 i = 0; i < contexts.size(); ++i)
-      contexts[i]->trace(out);
+    for (uint32 i = 0; i < contexts_.size(); ++i)
+      contexts_[i]->trace(out);
   }
 
   void trace() { trace(std::cout); }
@@ -148,11 +148,11 @@ public:
 
 class Correlator {
 private:
-  std::vector<uint32> episode;
+  std::vector<uint32> episode_;
 public:
   void take_input(r_code::View *input) {
 
-    episode.push_back(input->code(VIEW_OID).atom);
+    episode_.push_back(input->code(VIEW_OID).atom_);
   }
 
   CorrelatorOutput *get_output() {

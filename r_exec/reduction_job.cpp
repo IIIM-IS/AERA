@@ -99,7 +99,7 @@ bool ShutdownReductionCore::update(Timestamp now) {
 
 bool AsyncInjectionJob::update(Timestamp now) {
 
-  _Mem::Get()->inject(input);
+  _Mem::Get()->inject(input_);
   return true;
 }
 }

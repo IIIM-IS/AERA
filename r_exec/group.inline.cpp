@@ -103,28 +103,28 @@ inline bool Group::invalidate() {
 
   // unregister from all groups it views.
   UNORDERED_MAP<uint32, P<View> >::const_iterator gv;
-  for (gv = group_views.begin(); gv != group_views.end(); ++gv) {
+  for (gv = group_views_.begin(); gv != group_views_.end(); ++gv) {
 
-    ((Group *)gv->second->object)->enter();
-    ((Group *)gv->second->object)->viewing_groups.erase(this);
-    ((Group *)gv->second->object)->leave();
+    ((Group *)gv->second->object_)->enter();
+    ((Group *)gv->second->object_)->viewing_groups_.erase(this);
+    ((Group *)gv->second->object_)->leave();
   }
   /* We keep the group intact: the only thing is now the group will not be updated anymore.
           // remove all views that are hosted by this group.
           FOR_ALL_VIEWS_BEGIN(this,v)
 
               v->second->object->acq_views();
-              v->second->object->views.erase(v->second); // delete view from object's views.
+              v->second->object->views_.erase(v->second); // delete view from object's views.
               v->second->object->rel_views();
 
           FOR_ALL_VIEWS_END
 
-          notification_views.clear();
-          ipgm_views.clear();
-          anti_ipgm_views.clear();
-          input_less_ipgm_views.clear();
-          other_views.clear();
-          group_views.clear();
+          notification_views_.clear();
+          ipgm_views_.clear();
+          anti_ipgm_views_.clear();
+          input_less_ipgm_views_.clear();
+          other_views_.clear();
+          group_views_.clear();
   */
   return false;
 }
@@ -171,86 +171,86 @@ inline float32 Group::get_c_act() const {
 
 inline void Group::mod_sln_thr(float32 value) {
 
-  ++sln_thr_changes;
-  acc_sln_thr += value;
+  ++sln_thr_changes_;
+  acc_sln_thr_ += value;
 }
 
 inline void Group::set_sln_thr(float32 value) {
 
-  ++sln_thr_changes;
-  acc_sln_thr += value - get_sln_thr();
+  ++sln_thr_changes_;
+  acc_sln_thr_ += value - get_sln_thr();
 }
 
 inline void Group::mod_act_thr(float32 value) {
 
-  ++act_thr_changes;
-  acc_act_thr += value;
+  ++act_thr_changes_;
+  acc_act_thr_ += value;
 }
 
 inline void Group::set_act_thr(float32 value) {
 
-  ++act_thr_changes;
-  acc_act_thr += value - get_act_thr();
+  ++act_thr_changes_;
+  acc_act_thr_ += value - get_act_thr();
 }
 
 inline void Group::mod_vis_thr(float32 value) {
 
-  ++vis_thr_changes;
-  acc_vis_thr += value;
+  ++vis_thr_changes_;
+  acc_vis_thr_ += value;
 }
 
 inline void Group::set_vis_thr(float32 value) {
 
-  ++vis_thr_changes;
-  acc_vis_thr += value - get_vis_thr();
+  ++vis_thr_changes_;
+  acc_vis_thr_ += value - get_vis_thr();
 }
 
 inline void Group::mod_c_sln(float32 value) {
 
-  ++c_sln_changes;
-  acc_c_sln += value;
+  ++c_sln_changes_;
+  acc_c_sln_ += value;
 }
 
 inline void Group::set_c_sln(float32 value) {
 
-  ++c_sln_changes;
-  acc_c_sln += value - get_c_sln();
+  ++c_sln_changes_;
+  acc_c_sln_ += value - get_c_sln();
 }
 
 inline void Group::mod_c_act(float32 value) {
 
-  ++c_act_changes;
-  acc_c_act += value;
+  ++c_act_changes_;
+  acc_c_act_ += value;
 }
 
 inline void Group::set_c_act(float32 value) {
 
-  ++c_act_changes;
-  acc_c_act += value - get_c_act();
+  ++c_act_changes_;
+  acc_c_act_ += value - get_c_act();
 }
 
 inline void Group::mod_c_sln_thr(float32 value) {
 
-  ++c_sln_thr_changes;
-  acc_c_sln_thr += value;
+  ++c_sln_thr_changes_;
+  acc_c_sln_thr_ += value;
 }
 
 inline void Group::set_c_sln_thr(float32 value) {
 
-  ++c_sln_thr_changes;
-  acc_c_sln_thr += value - get_c_sln_thr();
+  ++c_sln_thr_changes_;
+  acc_c_sln_thr_ += value - get_c_sln_thr();
 }
 
 inline void Group::mod_c_act_thr(float32 value) {
 
-  ++c_act_thr_changes;
-  acc_c_act_thr += value;
+  ++c_act_thr_changes_;
+  acc_c_act_thr_ += value;
 }
 
 inline void Group::set_c_act_thr(float32 value) {
 
-  ++c_act_thr_changes;
-  acc_c_act_thr += value - get_c_act_thr();
+  ++c_act_thr_changes_;
+  acc_c_act_thr_ += value - get_c_act_thr();
 }
 
 inline float32 Group::get_sln_chg_thr() {

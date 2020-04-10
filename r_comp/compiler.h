@@ -92,18 +92,18 @@ namespace r_comp {
 class dll_export Compiler {
 private:
 
-  std::istream *in_stream;
-  std::string error;
+  std::istream *in_stream_;
+  std::string error_;
 
-  bool trace;
+  bool trace_;
 
-  Class current_class; // the sys-class currently parsed.
-  ImageObject *current_object; // the sys-object currently parsed.
-  uint32 current_object_index; // ordinal of the current sys-object in the code segment.
-  int32 current_view_index; // ordinal of a view in the sys-object's view set.
+  Class current_class_; // the sys-class currently parsed.
+  ImageObject *current_object_; // the sys-object currently parsed.
+  uint32 current_object_index_; // ordinal of the current sys-object in the code segment.
+  int32 current_view_index_; // ordinal of a view in the sys-object's view set.
 
-  r_comp::Image *_image;
-  r_comp::Metadata *_metadata;
+  r_comp::Image *image_;
+  r_comp::Metadata *metadata_;
 
   class State {
   public:
@@ -112,12 +112,12 @@ private:
       left_indents_ahead(0),
       pattern_lvl(0),
       no_arity_check(false) {}
-    State(Compiler *c) : indents(c->state.indents),
-      right_indents_ahead(c->state.right_indents_ahead),
-      left_indents_ahead(c->state.left_indents_ahead),
-      pattern_lvl(c->state.pattern_lvl),
-      no_arity_check(c->state.no_arity_check),
-      stream_ptr(c->in_stream->tellg()) {}
+    State(Compiler *c) : indents(c->state_.indents),
+      right_indents_ahead(c->state_.right_indents_ahead),
+      left_indents_ahead(c->state_.left_indents_ahead),
+      pattern_lvl(c->state_.pattern_lvl),
+      no_arity_check(c->state_.no_arity_check),
+      stream_ptr(c->in_stream_->tellg()) {}
     uint16 indents; // 1 indent = 3 char.
     uint16 right_indents_ahead; // parsing right indents may unveil more 3-char groups than needed: that's some indents ahead. Avoids requiring a newline for each indent.
     uint16 left_indents_ahead; // as above.
@@ -126,20 +126,20 @@ private:
     std::streampos stream_ptr;
   };
 
-  State state;
+  State state_;
   State save_state(); // called before trying to read an expression.
   void restore_state(State s); // called after failing to read an expression.
 
   void set_error(const std::string &s);
   void set_arity_error(uint16 expected, uint16 got);
 
-  UNORDERED_MAP<std::string, Reference> local_references; // labels and variables declared inside objects (cleared before parsing each sys-object): translate to value pointers.
-  UNORDERED_MAP<std::string, Reference> global_references; // labels declared outside sys-objects. translate to reference pointers.
+  UNORDERED_MAP<std::string, Reference> local_references_; // labels and variables declared inside objects (cleared before parsing each sys-object): translate to value pointers.
+  UNORDERED_MAP<std::string, Reference> global_references_; // labels declared outside sys-objects. translate to reference pointers.
   void addLocalReference(const std::string reference_name, const uint16 index, const Class &p); // detect cast.
   bool getGlobalReferenceIndex(const std::string reference_name, const ReturnType t, ImageObject *object, uint16 &index, Class *&_class); // index points to the reference set.
                                                                                                                                                       // return false when not found.
-  bool in_hlp;
-  std::vector<std::string> hlp_references;
+  bool in_hlp_;
+  std::vector<std::string> hlp_references_;
   uint8 add_hlp_reference(std::string reference_name);
   uint8 get_hlp_reference(std::string reference_name);
 
@@ -159,15 +159,15 @@ private:
   bool read_wildcard(uint16 write_index, uint16 &extent_index, bool write);
   bool read_tail_wildcard(uint16 write_index, uint16 &extent_index, bool write);
 
-  bool err; // set to true when parsing fails in the functions below.
+  bool err_; // set to true when parsing fails in the functions below.
 
   // All functions below return false (a) upon eof or, (b) when the class structure is not matched; in both cases, characters are pushed back.
   // Sub-lexical units
   bool comment(); // pull comments out of the stream.
   bool separator(bool pushback); // blank space or indent.
-  bool right_indent(bool pushback); // newline + 3 blank spaces wrt indents.top().
-  bool left_indent(bool pushback); // newline - 3 blank spaces wrt indents.top().
-  bool indent(bool pushback); // newline + same number of 3 blank spaces as given by indents.top().
+  bool right_indent(bool pushback); // newline + 3 blank spaces wrt indents_.top().
+  bool left_indent(bool pushback); // newline - 3 blank spaces wrt indents_.top().
+  bool indent(bool pushback); // newline + same number of 3 blank spaces as given by indents_.top().
   bool expression_begin(bool &indented); // ( or right_indent.
   bool expression_end(bool indented); // ) or left_indent.
   bool set_begin(bool &indented); // [ or []+right_indent.
@@ -229,7 +229,7 @@ private:
   uint8 set_element_count(bool indented); // returns the number of elements in a set; parses the stream (write set to false) until it finds the end of the set and rewinds (write set back to true).
   bool read(const StructureMember &m, bool &indented, bool enforce, uint16 write_index, uint16 &extent_index, bool write);
 
-  OutStream *out_stream;
+  OutStream *out_stream_;
 
   bool read_sys_object(); // compiles one object; return false when there is an error.
 public:
@@ -237,8 +237,8 @@ public:
   ~Compiler();
 
   bool compile(std::istream *stream, // stream must be open.
-    r_comp::Image *_image,
-    r_comp::Metadata *_metadata,
+    r_comp::Image *image,
+    r_comp::Metadata *metadata,
     std::string &error,
     bool trace); // set when compile() fails, e.g. returns false.
 

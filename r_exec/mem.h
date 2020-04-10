@@ -114,67 +114,67 @@ public:
   }State;
 protected:
   // Parameters::Init.
-  std::chrono::microseconds base_period;
-  uint32 reduction_core_count;
-  uint32 time_core_count;
+  std::chrono::microseconds base_period_;
+  uint32 reduction_core_count_;
+  uint32 time_core_count_;
 
   // Parameters::System.
-  float32 mdl_inertia_sr_thr;
-  uint32 mdl_inertia_cnt_thr;
-  float32 tpx_dsr_thr;
-  std::chrono::microseconds min_sim_time_horizon;
-  std::chrono::microseconds max_sim_time_horizon;
-  float32 sim_time_horizon_factor;
-  std::chrono::microseconds tpx_time_horizon;
-  std::chrono::microseconds perf_sampling_period;
-  float32 float_tolerance;
-  std::chrono::microseconds time_tolerance;
-  std::chrono::microseconds primary_thz;
-  std::chrono::microseconds secondary_thz;
+  float32 mdl_inertia_sr_thr_;
+  uint32 mdl_inertia_cnt_thr_;
+  float32 tpx_dsr_thr_;
+  std::chrono::microseconds min_sim_time_horizon_;
+  std::chrono::microseconds max_sim_time_horizon_;
+  float32 sim_time_horizon_factor_;
+  std::chrono::microseconds tpx_time_horizon_;
+  std::chrono::microseconds perf_sampling_period_;
+  float32 float_tolerance_;
+  std::chrono::microseconds time_tolerance_;
+  std::chrono::microseconds primary_thz_;
+  std::chrono::microseconds secondary_thz_;
 
   // Parameters::Debug.
-  bool debug;
-  uint32 ntf_mk_res;
-  uint32 goal_pred_success_res;
+  bool debug_;
+  uint32 ntf_mk_res_;
+  uint32 goal_pred_success_res_;
 
   // Parameters::Run.
-  uint32 probe_level;
-  bool enable_assumptions;
+  uint32 probe_level_;
+  bool enable_assumptions_;
 
-  PipeNN<P<_ReductionJob>, 1024> *reduction_job_queue;
-  PipeNN<P<TimeJob>, 1024> *time_job_queue;
-  ReductionCore **reduction_cores;
-  TimeCore **time_cores;
+  PipeNN<P<_ReductionJob>, 1024> *reduction_job_queue_;
+  PipeNN<P<TimeJob>, 1024> *time_job_queue_;
+  ReductionCore **reduction_cores_;
+  TimeCore **time_cores_;
   TimeJob::Compare timeJobCompare_;
 
   // Performance stats.
-  uint32 reduction_job_count;
-  std::chrono::microseconds reduction_job_avg_latency; // latency: popping time.-pushing time; the lower the better.
-  std::chrono::microseconds _reduction_job_avg_latency; // previous value.
-  uint32 time_job_count;
-  std::chrono::microseconds time_job_avg_latency; // latency: deadline-the time the job is popped from the pipe; if <0, not registered (as it is too late for action); the higher the better.
-  std::chrono::microseconds _time_job_avg_latency; // previous value.
+  uint32 reduction_job_count_;
+  std::chrono::microseconds reduction_job_avg_latency_; // latency: popping time.-pushing time; the lower the better.
+  std::chrono::microseconds _reduction_job_avg_latency_; // previous value.
+  uint32 time_job_count_;
+  std::chrono::microseconds time_job_avg_latency_; // latency: deadline-the time the job is popped from the pipe; if <0, not registered (as it is too late for action); the higher the better.
+  std::chrono::microseconds _time_job_avg_latency_; // previous value.
 
-  CriticalSection time_jobCS;
-  CriticalSection reduction_jobCS;
+  CriticalSection time_jobCS_;
+  CriticalSection reduction_jobCS_;
 
-  uint32 core_count;
-  CriticalSection core_countCS;
+  uint32 core_count_;
+  CriticalSection core_countCS_;
 
-  State state;
-  CriticalSection stateCS;
-  Semaphore *stop_sem; // blocks the rMem until all cores terminate.
+  State state_;
+  CriticalSection stateCS_;
+  Semaphore *stop_sem_; // blocks the rMem until all cores terminate.
 
-  r_code::list<P<Code> > objects; // store objects in order of injection: holds the initial objects (and dynamically created ones if MemStatic is used).
+  r_code::list<P<Code> > objects_; // store objects in order of injection: holds the initial objects (and dynamically created ones if MemStatic is used).
 
-  P<Group> _root; // holds everything.
-  Code *_stdin;
-  Code *_stdout;
-  Code *_self;
+  P<Group> root_; // holds everything.
+  Code *stdin_;
+  Code *stdout_;
+  Code *self_;
 
   void reset(); // clear the content of the mem.
 
-  std::vector<Group *> initial_groups; // convenience; cleared after start();
+  std::vector<Group *> initial_groups_; // convenience; cleared after start();
 
   void init_timings(Timestamp now) const;
 
@@ -182,10 +182,10 @@ protected:
   virtual void set_last_oid(int32 oid) = 0;
   virtual void bind(View *view) = 0;
 
-  bool deleted;
+  bool deleted_;
 
   static const uint32 DebugStreamCount = 8;
-  ostream *debug_streams[8];
+  ostream *debug_streams_[DebugStreamCount];
 
   _Mem();
 
@@ -222,29 +222,29 @@ public:
     uint32 traces,
     bool enable_assumptions);
 
-  uint64 get_probe_level() const { return probe_level; }
-  bool get_enable_assumptions() const { return enable_assumptions; }
-  float32 get_mdl_inertia_sr_thr() const { return mdl_inertia_sr_thr; }
-  uint32 get_mdl_inertia_cnt_thr() const { return mdl_inertia_cnt_thr; }
-  float32 get_tpx_dsr_thr() const { return tpx_dsr_thr; }
-  std::chrono::microseconds get_min_sim_time_horizon() const { return min_sim_time_horizon; }
-  std::chrono::microseconds get_max_sim_time_horizon() const { return max_sim_time_horizon; }
+  uint64 get_probe_level() const { return probe_level_; }
+  bool get_enable_assumptions() const { return enable_assumptions_; }
+  float32 get_mdl_inertia_sr_thr() const { return mdl_inertia_sr_thr_; }
+  uint32 get_mdl_inertia_cnt_thr() const { return mdl_inertia_cnt_thr_; }
+  float32 get_tpx_dsr_thr() const { return tpx_dsr_thr_; }
+  std::chrono::microseconds get_min_sim_time_horizon() const { return min_sim_time_horizon_; }
+  std::chrono::microseconds get_max_sim_time_horizon() const { return max_sim_time_horizon_; }
   std::chrono::microseconds get_sim_time_horizon(std::chrono::microseconds horizon) const { 
-    return std::chrono::microseconds((int64)(horizon.count() * sim_time_horizon_factor)); 
+    return std::chrono::microseconds((int64)(horizon.count() * sim_time_horizon_factor_)); 
   }
   std::chrono::microseconds get_sim_time_horizon(Timestamp::duration horizon) const { 
     return get_sim_time_horizon(std::chrono::duration_cast<std::chrono::microseconds>(horizon));
   }
-  std::chrono::microseconds get_tpx_time_horizon() const { return tpx_time_horizon; }
-  std::chrono::microseconds get_primary_thz() const { return primary_thz; }
-  std::chrono::microseconds get_secondary_thz() const { return secondary_thz; }
+  std::chrono::microseconds get_tpx_time_horizon() const { return tpx_time_horizon_; }
+  std::chrono::microseconds get_primary_thz() const { return primary_thz_; }
+  std::chrono::microseconds get_secondary_thz() const { return secondary_thz_; }
 
-  bool get_debug() const { return debug; }
-  uint32 get_ntf_mk_res() const { return ntf_mk_res; }
+  bool get_debug() const { return debug_; }
+  uint32 get_ntf_mk_res() const { return ntf_mk_res_; }
   uint32 get_goal_pred_success_res(Group *host, Timestamp now, Timestamp::duration time_to_live) const {
 
-    if (debug)
-      return goal_pred_success_res;
+    if (debug_)
+      return goal_pred_success_res_;
     if (time_to_live.count() == 0)
       return 1;
     return Utils::GetResilience(now, time_to_live, host->get_upr());
@@ -276,7 +276,7 @@ public:
    * @param runTime The number of milliseconds (in diagnostic time) to run for.
    */
   void runInDiagnosticTime(std::chrono::milliseconds runTime);
-  static Timestamp DiagnosticTimeNow;
+  static Timestamp DiagnosticTimeNow_;
   static Timestamp getDiagnosticTimeNow();
   // Tell an inheriting class (with inject) when the time is changed.
   virtual void onDiagnosticTimeTick();
@@ -358,7 +358,7 @@ public:
 };
 
 // Note: This should match the definition in user.classes.replicode.
-const std::chrono::microseconds Mem_sampling_period = std::chrono::milliseconds(100);
+const std::chrono::microseconds Mem_sampling_period_ = std::chrono::milliseconds(100);
 
 #define OUTPUT(c) _Mem::Output(_Mem::c)
 
@@ -366,8 +366,8 @@ const std::chrono::microseconds Mem_sampling_period = std::chrono::milliseconds(
 class r_exec_dll MemStatic :
   public _Mem {
 private:
-  CriticalSection objectsCS; // protects last_oid and objects.
-  uint32 last_oid;
+  CriticalSection objectsCS_; // protects last_oid_ and objects_.
+  uint32 last_oid_;
   void bind(View *view); // assigns an oid, stores view->object in objects if needed.
   void set_last_oid(int32 oid);
 protected:
@@ -384,7 +384,7 @@ public:
 class r_exec_dll MemVolatile :
   public _Mem {
 private:
-  volatile int32 last_oid;
+  volatile int32 last_oid_;
   uint32 get_oid();
   void bind(View *view); // assigns an oid (atomic operation).
   void set_last_oid(int32 oid);

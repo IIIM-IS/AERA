@@ -323,7 +323,7 @@ inline Atom Atom::RawPointer(void *pointer) {
   return Atom((uint32)pointer);
 }
 
-inline Atom::Atom(uint32 a) : atom(a) {
+inline Atom::Atom(uint32 a) : atom_(a) {
 }
 
 inline Atom::~Atom() {
@@ -331,18 +331,18 @@ inline Atom::~Atom() {
 
 inline Atom &Atom::operator =(const Atom& a) {
 
-  atom = a.atom;
+  atom_ = a.atom_;
   return *this;
 }
 
 inline bool Atom::operator ==(const Atom& a) const {
 
-  return atom == a.atom;
+  return atom_ == a.atom_;
 }
 
 inline bool Atom::operator !=(const Atom& a) const {
 
-  return atom != a.atom;
+  return atom_ != a.atom_;
 }
 
 inline bool Atom::operator !() const {
@@ -352,95 +352,95 @@ inline bool Atom::operator !() const {
 
 inline Atom::operator size_t () const {
 
-  return (size_t)atom;
+  return (size_t)atom_;
 }
 
 inline bool Atom::isUndefined() const {
 
-  return atom == 0xFFFFFFFF;
+  return atom_ == 0xFFFFFFFF;
 }
 
 inline uint8 Atom::getDescriptor() const {
 
-  return atom >> 24;
+  return atom_ >> 24;
 }
 
 inline bool Atom::isStructural() const {
 
-  return ((atom & 0xC0000000) == 0xC0000000 || (atom & 0xD0000000) == 0xD0000000);
+  return ((atom_ & 0xC0000000) == 0xC0000000 || (atom_ & 0xD0000000) == 0xD0000000);
 }
 
 inline bool Atom::isFloat() const {
 
-  return atom >> 31 == 0;
+  return atom_ >> 31 == 0;
 }
 
 inline bool Atom::readsAsNil() const {
 
-  return atom == 0x80000000 ||
-    atom == 0x3FFFFFFF ||
-    atom == 0x81FFFFFF ||
-    atom == 0xC1000000 ||
-    atom == 0xA0FFFFFF ||
-    atom == 0xA1FFFFFF ||
-    atom == 0xA2FFFFFF ||
-    atom == 0xC6FFFFFF;
+  return atom_ == 0x80000000 ||
+    atom_ == 0x3FFFFFFF ||
+    atom_ == 0x81FFFFFF ||
+    atom_ == 0xC1000000 ||
+    atom_ == 0xA0FFFFFF ||
+    atom_ == 0xA1FFFFFF ||
+    atom_ == 0xA2FFFFFF ||
+    atom_ == 0xC6FFFFFF;
 }
 
 inline float32 Atom::asFloat() const {
 
-  uint32 _f = atom << 1;
+  uint32 _f = atom_ << 1;
   return *reinterpret_cast<const float32 *>(&_f);
 }
 
 inline bool Atom::asBoolean() const {
 
-  return atom & 0x000000FF;
+  return atom_ & 0x000000FF;
 }
 
 inline uint16 Atom::asIndex() const {
 
-  return atom & 0x00000FFF;
+  return atom_ & 0x00000FFF;
 }
 
 inline uint8 Atom::asInputIndex() const {
 
-  return (uint8)((atom & 0x000FF000) >> 12);
+  return (uint8)((atom_ & 0x000FF000) >> 12);
 }
 
 inline uint8 Atom::asRelativeIndex() const {
 
-  return (uint8)((atom & 0x000FF000) >> 12);
+  return (uint8)((atom_ & 0x000FF000) >> 12);
 }
 
 inline uint16 Atom::asOpcode() const {
 
-  return (atom >> 8) & 0x00000FFF;
+  return (atom_ >> 8) & 0x00000FFF;
 }
 
 inline uint16 Atom::asCastOpcode() const {
 
-  return (uint16)((atom & 0x00FFF000) >> 12);
+  return (uint16)((atom_ & 0x00FFF000) >> 12);
 }
 
 inline uint8 Atom::getNodeID() const {
 
-  return (uint8)((atom & 0x00FF0000) >> 16);
+  return (uint8)((atom_ & 0x00FF0000) >> 16);
 }
 
 inline uint8 Atom::getClassID() const {
 
-  return (atom & 0x0000FF00) >> 8;
+  return (atom_ & 0x0000FF00) >> 8;
 }
 
 inline uint8 Atom::getDeviceID() const {
 
-  return atom & 0x000000FF;
+  return atom_ & 0x000000FF;
 }
 
 inline uint8 Atom::asAssignmentIndex() const {
 
-  return (atom & 0x00FF0000) >> 16;
+  return (atom_ & 0x00FF0000) >> 16;
 }
 
 inline uint8 Atom::getAtomCount() const {
@@ -458,8 +458,8 @@ inline uint8 Atom::getAtomCount() const {
   case COMPOSITE_STATE:
   case MODEL:
   case GROUP:
-  case S_SET: return atom & 0x000000FF;
-  case STRING: return (atom & 0x0000FF00) >> 8;
+  case S_SET: return atom_ & 0x000000FF;
+  case STRING: return (atom_ & 0x0000FF00) >> 8;
   case TIMESTAMP: return 2;
   default:
     return 0;
@@ -468,6 +468,6 @@ inline uint8 Atom::getAtomCount() const {
 
 inline bool Atom::takesPastInputs() const {
 
-  return atom & 0x00000001;
+  return atom_ & 0x00000001;
 }
 }

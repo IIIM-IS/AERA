@@ -82,25 +82,25 @@ using namespace std::chrono;
 
 namespace r_comp {
 
-Decompiler::Decompiler() : out_stream(NULL), current_object(NULL), metadata(NULL), image(NULL), in_hlp(false) {
+Decompiler::Decompiler() : out_stream_(NULL), current_object_(NULL), metadata_(NULL), image_(NULL), in_hlp_(false) {
 }
 
 Decompiler::~Decompiler() {
 
-  if (out_stream)
-    delete out_stream;
+  if (out_stream_)
+    delete out_stream_;
 }
 
 std::string Decompiler::get_variable_name(uint16 index, bool postfix) {
 
-  UNORDERED_MAP<uint16, std::string>::iterator it = variable_names.find(index);
-  if (it == variable_names.end()) {
+  UNORDERED_MAP<uint16, std::string>::iterator it = variable_names_.find(index);
+  if (it == variable_names_.end()) {
 
-    std::string s = "v" + std::to_string(last_variable_id++);
-    variable_names[index] = s;
+    std::string s = "v" + std::to_string(last_variable_id_++);
+    variable_names_[index] = s;
     if (postfix)
       s += ':';
-    out_stream->insert(index, s);
+    out_stream_->insert(index, s);
     if (postfix)
       return s.substr(0, s.length() - 1);
     return s;
@@ -111,7 +111,7 @@ std::string Decompiler::get_variable_name(uint16 index, bool postfix) {
 std::string Decompiler::get_hlp_variable_name(uint16 index) {
 
   std::string s = "v" + std::to_string(index);
-  if (hlp_postfix)
+  if (hlp_postfix_)
     s += ':';
   return s;
 }
@@ -119,8 +119,8 @@ std::string Decompiler::get_hlp_variable_name(uint16 index) {
 std::string Decompiler::get_object_name(uint16 index) {
 
   std::string s;
-  UNORDERED_MAP<uint16, std::string>::iterator it = object_names.find(index);
-  if (it == object_names.end()) {
+  UNORDERED_MAP<uint16, std::string>::iterator it = object_names_.find(index);
+  if (it == object_names_.end()) {
 
     s = "unknown-object";
     return s;
@@ -130,48 +130,48 @@ std::string Decompiler::get_object_name(uint16 index) {
 
 void Decompiler::init(r_comp::Metadata *metadata) {
 
-  this->metadata = metadata;
-  this->time_offset = microseconds(0);
+  metadata_ = metadata;
+  time_offset_ = microseconds(0);
 
-  partial_decompilation = false;
-  ignore_named_objects = false;
+  partial_decompilation_ = false;
+  ignore_named_objects_ = false;
 
   // Load the renderers;
-  for (uint16 i = 0; i < metadata->classes_by_opcodes.size(); ++i) {
+  for (uint16 i = 0; i < metadata->classes_by_opcodes_.size(); ++i) {
 
     Class *c = metadata->get_class(i);
     std::string class_name = c->str_opcode;
     size_t p = class_name.find("mk.");
     if (p != std::string::npos)
-      renderers[i] = &Decompiler::write_marker;
+      renderers_[i] = &Decompiler::write_marker;
     else if (class_name == "grp")
-      renderers[i] = &Decompiler::write_group;
+      renderers_[i] = &Decompiler::write_group;
     else if (class_name == "ipgm" || class_name == "icpp_pgm")
-      renderers[i] = &Decompiler::write_ipgm;
+      renderers_[i] = &Decompiler::write_ipgm;
     else if (class_name == "pgm" || class_name == "|pgm")
-      renderers[i] = &Decompiler::write_pgm;
+      renderers_[i] = &Decompiler::write_pgm;
     else if (class_name == "icmd")
-      renderers[i] = &Decompiler::write_icmd;
+      renderers_[i] = &Decompiler::write_icmd;
     else if (class_name == "cmd")
-      renderers[i] = &Decompiler::write_cmd;
+      renderers_[i] = &Decompiler::write_cmd;
     else if (class_name == "fact" || class_name == "|fact")
-      renderers[i] = &Decompiler::write_fact;
+      renderers_[i] = &Decompiler::write_fact;
     else if (class_name == "cst" || class_name == "mdl")
-      renderers[i] = &Decompiler::write_hlp;
+      renderers_[i] = &Decompiler::write_hlp;
     else if (class_name == "icst" || class_name == "imdl")
-      renderers[i] = &Decompiler::write_ihlp;
+      renderers_[i] = &Decompiler::write_ihlp;
     else
-      renderers[i] = &Decompiler::write_expression;
+      renderers_[i] = &Decompiler::write_expression;
   }
 }
 
 uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, Timestamp::duration time_offset, bool ignore_named_objects) {
 
-  this->ignore_named_objects = ignore_named_objects;
+  ignore_named_objects_ = ignore_named_objects;
 
   uint32 object_count = decompile_references(image);
 
-  for (uint16 i = 0; i < image->code_segment.objects.size(); ++i)
+  for (uint16 i = 0; i < image->code_segment_.objects_.size(); ++i)
     decompile_object(i, stream, time_offset);
 
   return object_count;
@@ -179,13 +179,13 @@ uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, T
 
 uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, Timestamp::duration time_offset, std::vector<SysObject *> &imported_objects) {
 
-  partial_decompilation = true;
-  ignore_named_objects = true;
-  this->imported_objects = imported_objects;
+  partial_decompilation_ = true;
+  ignore_named_objects_ = true;
+  imported_objects_ = imported_objects;
 
   uint32 object_count = decompile_references(image);
 
-  for (uint16 i = 0; i < image->code_segment.objects.size(); ++i)
+  for (uint16 i = 0; i < image->code_segment_.objects_.size(); ++i)
     decompile_object(i, stream, time_offset);
 
   return object_count;
@@ -195,30 +195,30 @@ uint32 Decompiler::decompile_references(r_comp::Image *image) {
 
   UNORDERED_MAP<const Class *, uint16> object_ID_per_class;
   UNORDERED_MAP<std::string, Class>::const_iterator it;
-  for (it = metadata->sys_classes.begin(); it != metadata->sys_classes.end(); ++it)
+  for (it = metadata_->sys_classes_.begin(); it != metadata_->sys_classes_.end(); ++it)
     object_ID_per_class[&(it->second)] = 0;
 
   std::string s;
 
-  this->image = image;
+  image_ = image;
 
   // populate object names first so they can be referenced in any order.
   Class *c;
   uint16 last_object_ID;
-  for (uint16 i = 0; i < image->code_segment.objects.size(); ++i) {
+  for (uint16 i = 0; i < image->code_segment_.objects_.size(); ++i) {
 
-    SysObject *sys_object = (SysObject *)image->code_segment.objects[i];
-    UNORDERED_MAP<uint32, std::string>::const_iterator n = image->object_names.symbols.find(sys_object->oid);
-    if (n != image->object_names.symbols.end()) {
+    SysObject *sys_object = (SysObject *)image->code_segment_.objects_[i];
+    UNORDERED_MAP<uint32, std::string>::const_iterator n = image->object_names_.symbols_.find(sys_object->oid_);
+    if (n != image->object_names_.symbols_.end()) {
 
       s = n->second;
-      named_objects.insert(sys_object->oid);
+      named_objects_.insert(sys_object->oid_);
     } else {
 
-      c = metadata->get_class(sys_object->code[0].asOpcode());
-      if (sys_object->oid != UNDEFINED_OID)
+      c = metadata_->get_class(sys_object->code_[0].asOpcode());
+      if (sys_object->oid_ != UNDEFINED_OID)
         // Use the object's OID.
-        s = c->str_opcode + "_" + std::to_string(sys_object->oid);
+        s = c->str_opcode + "_" + std::to_string(sys_object->oid_);
       else {
         // Create a name with a unique ID.
         last_object_ID = object_ID_per_class[c];
@@ -227,46 +227,46 @@ uint32 Decompiler::decompile_references(r_comp::Image *image) {
       }
     }
 
-    object_names[i] = s;
-    object_indices[s] = i;
+    object_names_[i] = s;
+    object_indices_[s] = i;
   }
 
   closing_set = false;
 
-  return image->code_segment.objects.size();
+  return image->code_segment_.objects_.size();
 }
 
 void Decompiler::decompile_object(uint16 object_index, std::ostringstream *stream, Timestamp::duration time_offset) {
 
-  if (!out_stream)
-    out_stream = new OutStream(stream);
-  else if (out_stream->stream != stream) {
+  if (!out_stream_)
+    out_stream_ = new OutStream(stream);
+  else if (out_stream_->stream_ != stream) {
 
-    delete out_stream;
-    out_stream = new OutStream(stream);
+    delete out_stream_;
+    out_stream_ = new OutStream(stream);
   }
 
-  this->time_offset = duration_cast<microseconds>(time_offset);
+  time_offset_ = duration_cast<microseconds>(time_offset);
 
-  variable_names.clear();
-  last_variable_id = 0;
+  variable_names_.clear();
+  last_variable_id_ = 0;
 
-  current_object = image->code_segment.objects[object_index];
-  SysObject *sys_object = (SysObject *)current_object;
+  current_object_ = image_->code_segment_.objects_[object_index];
+  SysObject *sys_object = (SysObject *)current_object_;
   uint16 read_index = 0;
   bool after_tail_wildcard = false;
-  indents = 0;
+  indents_ = 0;
 
-  if (!partial_decompilation && ignore_named_objects) { // decompilation of the entire memory.
+  if (!partial_decompilation_ && ignore_named_objects_) { // decompilation of the entire memory.
 
-    if (named_objects.find(sys_object->oid) != named_objects.end())
+    if (named_objects_.find(sys_object->oid_) != named_objects_.end())
       return;
   } else { // decompiling on-the-fly: ignore named objects only if imported.
 
     bool imported = false;
-    for (uint32 i = 0; i < imported_objects.size(); ++i) {
+    for (uint32 i = 0; i < imported_objects_.size(); ++i) {
 
-      if (sys_object == imported_objects[i]) {
+      if (sys_object == imported_objects_[i]) {
 
         imported = true;
         break;
@@ -275,93 +275,93 @@ void Decompiler::decompile_object(uint16 object_index, std::ostringstream *strea
 
     if (imported) {
 
-      if (named_objects.find(sys_object->oid) != named_objects.end())
+      if (named_objects_.find(sys_object->oid_) != named_objects_.end())
         return;
       else
-        *out_stream << "imported";
-    } else if (sys_object->oid != 0xFFFFFFFF)
-      *out_stream << sys_object->oid;
+        *out_stream_ << "imported";
+    } else if (sys_object->oid_ != 0xFFFFFFFF)
+      *out_stream_ << sys_object->oid_;
 #ifdef WITH_DEBUG_OID
-    *out_stream << "(" << sys_object->debug_oid << ") ";
+    *out_stream_ << "(" << sys_object->debug_oid_ << ") ";
 #else
-    if (sys_object->oid != 0xFFFFFFFF)
-      *out_stream << " ";
+    if (sys_object->oid_ != 0xFFFFFFFF)
+      *out_stream_ << " ";
 #endif
   }
 
-  std::string s = object_names[object_index];
+  std::string s = object_names_[object_index];
   s += ":";
-  *out_stream << s;
+  *out_stream_ << s;
 
-  horizontal_set = false;
+  horizontal_set_ = false;
 
-  (this->*renderers[current_object->code[read_index].asOpcode()])(read_index);
+  (this->*renderers_[current_object_->code_[read_index].asOpcode()])(read_index);
 
-  uint16 view_count = sys_object->views.size();
+  uint16 view_count = sys_object->views_.size();
   if (view_count) { // write the set of views
 
-    *out_stream << " []";
+    *out_stream_ << " []";
     for (uint16 i = 0; i < view_count; ++i) {
 
       write_indent(3);
-      current_object = sys_object->views[i];
-      write_view(0, current_object->code[0].getAtomCount());
+      current_object_ = sys_object->views_[i];
+      write_view(0, current_object_->code_[0].getAtomCount());
     }
   } else
-    *out_stream << " |[]";
+    *out_stream_ << " |[]";
   write_indent(0);
   write_indent(0);
 }
 
 void Decompiler::decompile_object(const std::string object_name, std::ostringstream *stream, Timestamp::duration time_offset) {
 
-  decompile_object(object_indices[object_name], stream, time_offset);
+  decompile_object(object_indices_[object_name], stream, time_offset);
 }
 
 void Decompiler::write_indent(uint16 i) {
 
-  *out_stream << NEWLINE;
-  indents = i;
-  for (uint16 j = 0; j < indents; j++)
-    *out_stream << ' ';
+  *out_stream_ << NEWLINE;
+  indents_ = i;
+  for (uint16 j = 0; j < indents_; j++)
+    *out_stream_ << ' ';
 }
 
 void Decompiler::write_expression_head(uint16 read_index) {
 
-  switch (current_object->code[read_index].getDescriptor()) {
+  switch (current_object_->code_[read_index].getDescriptor()) {
   case Atom::OPERATOR:
-    *out_stream << metadata->operator_names[current_object->code[read_index].asOpcode()];
+    *out_stream_ << metadata_->operator_names_[current_object_->code_[read_index].asOpcode()];
     break;
   case Atom::OBJECT:
   case Atom::MARKER:
-    *out_stream << metadata->class_names[current_object->code[read_index].asOpcode()];
+    *out_stream_ << metadata_->class_names_[current_object_->code_[read_index].asOpcode()];
     break;
   case Atom::INSTANTIATED_PROGRAM:
   case Atom::INSTANTIATED_INPUT_LESS_PROGRAM:
   case Atom::INSTANTIATED_ANTI_PROGRAM:
-    *out_stream << "ipgm";
+    *out_stream_ << "ipgm";
     break;
   case Atom::INSTANTIATED_CPP_PROGRAM:
-    *out_stream << "icpp_pgm";
+    *out_stream_ << "icpp_pgm";
     break;
   case Atom::COMPOSITE_STATE:
-    *out_stream << "cst";
+    *out_stream_ << "cst";
     break;
   case Atom::MODEL:
-    *out_stream << "mdl";
+    *out_stream_ << "mdl";
     break;
   case Atom::GROUP:
-    *out_stream << "grp";
+    *out_stream_ << "grp";
     break;
   default:
-    *out_stream << "undefined-class";
+    *out_stream_ << "undefined-class";
     break;
   }
 }
 
 void Decompiler::write_expression_tail(uint16 read_index, bool apply_time_offset, bool vertical) { // read_index points initially to the head.
 
-  uint16 arity = current_object->code[read_index].getAtomCount();
+  uint16 arity = current_object_->code_[read_index].getAtomCount();
   bool after_tail_wildcard = false;
 
   for (uint16 i = 0; i < arity; ++i) {
@@ -373,17 +373,17 @@ void Decompiler::write_expression_tail(uint16 read_index, bool apply_time_offset
       if (closing_set) {
 
         closing_set = false;
-        if (!horizontal_set)
-          write_indent(indents);
+        if (!horizontal_set_)
+          write_indent(indents_);
         else
-          *out_stream << ' ';
+          *out_stream_ << ' ';
       } else if (!vertical)
-        *out_stream << ' ';
+        *out_stream_ << ' ';
 
       write_any(++read_index, after_tail_wildcard, apply_time_offset);
 
       if (!closing_set && vertical)
-        *out_stream << NEWLINE;
+        *out_stream_ << NEWLINE;
     }
   }
 }
@@ -393,17 +393,17 @@ void Decompiler::write_expression(uint16 read_index) {
   if (closing_set) {
 
     closing_set = false;
-    write_indent(indents);
+    write_indent(indents_);
   }
-  out_stream->push('(', read_index);
+  out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, true);
   if (closing_set) {
 
     closing_set = false;
-    write_indent(indents);
+    write_indent(indents_);
   }
-  *out_stream << ')';
+  *out_stream_ << ')';
 }
 
 void Decompiler::write_group(uint16 read_index) {
@@ -411,17 +411,17 @@ void Decompiler::write_group(uint16 read_index) {
   if (closing_set) {
 
     closing_set = false;
-    write_indent(indents);
+    write_indent(indents_);
   }
-  out_stream->push('(', read_index);
+  out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, false);
   if (closing_set) {
 
     closing_set = false;
-    write_indent(indents);
+    write_indent(indents_);
   }
-  *out_stream << ')';
+  *out_stream_ << ')';
 }
 
 void Decompiler::write_marker(uint16 read_index) {
@@ -429,17 +429,17 @@ void Decompiler::write_marker(uint16 read_index) {
   if (closing_set) {
 
     closing_set = false;
-    write_indent(indents);
+    write_indent(indents_);
   }
-  out_stream->push('(', read_index);
+  out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, false);
   if (closing_set) {
 
     closing_set = false;
-    write_indent(indents);
+    write_indent(indents_);
   }
-  *out_stream << ')';
+  *out_stream_ << ')';
 }
 
 void Decompiler::write_pgm(uint16 read_index) {
@@ -447,17 +447,17 @@ void Decompiler::write_pgm(uint16 read_index) {
   if (closing_set) {
 
     closing_set = false;
-    write_indent(indents);
+    write_indent(indents_);
   }
-  out_stream->push('(', read_index);
+  out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, true);
   if (closing_set) {
 
     closing_set = false;
-    write_indent(indents);
+    write_indent(indents_);
   }
-  *out_stream << ')';
+  *out_stream_ << ')';
 }
 
 
@@ -466,32 +466,32 @@ void Decompiler::write_ipgm(uint16 read_index) {
   if (closing_set) {
 
     closing_set = false;
-    write_indent(indents);
+    write_indent(indents_);
   }
-  out_stream->push('(', read_index);
+  out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, false);
   if (closing_set) {
 
     closing_set = false;
-    write_indent(indents);
+    write_indent(indents_);
   }
-  *out_stream << ')';
+  *out_stream_ << ')';
 }
 
 void Decompiler::write_hlp(uint16 read_index) {
 
-  in_hlp = true;
+  in_hlp_ = true;
   if (closing_set) {
 
     closing_set = false;
-    write_indent(indents);
+    write_indent(indents_);
   }
-  out_stream->push('(', read_index);
+  out_stream_->push('(', read_index);
   write_expression_head(read_index);
-  *out_stream << " ";
+  *out_stream_ << " ";
 
-  uint16 arity = current_object->code[read_index].getAtomCount();
+  uint16 arity = current_object_->code_[read_index].getAtomCount();
   bool after_tail_wildcard = false;
 
   for (uint16 i = 0; i < arity; ++i) {
@@ -503,48 +503,48 @@ void Decompiler::write_hlp(uint16 read_index) {
       if (closing_set) {
 
         closing_set = false;
-        write_indent(indents);
+        write_indent(indents_);
       }
 
       if (i == 0 || i == 1)
-        hlp_postfix = true;
+        hlp_postfix_ = true;
       write_any(++read_index, after_tail_wildcard, false);
-      hlp_postfix = false;
+      hlp_postfix_ = false;
 
       if (!closing_set)
-        *out_stream << NEWLINE;
+        *out_stream_ << NEWLINE;
     }
   }
 
   if (closing_set) {
 
     closing_set = false;
-    write_indent(indents);
+    write_indent(indents_);
   }
-  *out_stream << ')';
-  in_hlp = false;
+  *out_stream_ << ')';
+  in_hlp_ = false;
 }
 
 void Decompiler::write_ihlp(uint16 read_index) {
 
-  if (!in_hlp)
-    horizontal_set = true;
+  if (!in_hlp_)
+    horizontal_set_ = true;
   if (closing_set) {
 
     closing_set = false;
-    write_indent(indents);
+    write_indent(indents_);
   }
-  out_stream->push('(', read_index);
+  out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, true);
   if (closing_set) {
 
     closing_set = false;
-    write_indent(indents);
+    write_indent(indents_);
   }
-  *out_stream << ')';
-  if (!in_hlp)
-    horizontal_set = false;
+  *out_stream_ << ')';
+  if (!in_hlp_)
+    horizontal_set_ = false;
 }
 
 void Decompiler::write_icmd(uint16 read_index) {
@@ -552,20 +552,20 @@ void Decompiler::write_icmd(uint16 read_index) {
   if (closing_set) {
 
     closing_set = false;
-    write_indent(indents);
+    write_indent(indents_);
   }
-  out_stream->push('(', read_index);
+  out_stream_->push('(', read_index);
   write_expression_head(read_index);
   //write_expression_tail(read_index,true);
 
   uint16 write_as_view_index = 0;
-  if (current_object->code[read_index + 1].asOpcode() == metadata->classes.find("_inj")->second.atom.asOpcode()) {
+  if (current_object_->code_[read_index + 1].asOpcode() == metadata_->classes_.find("_inj")->second.atom_.asOpcode()) {
 
-    uint16 arg_set_index = current_object->code[read_index + 2].asIndex(); // 2 args for _inj; the view is the second.
-    write_as_view_index = current_object->code[arg_set_index + 2].asIndex();
+    uint16 arg_set_index = current_object_->code_[read_index + 2].asIndex(); // 2 args for _inj; the view is the second.
+    write_as_view_index = current_object_->code_[arg_set_index + 2].asIndex();
   }
 
-  uint16 arity = current_object->code[read_index].getAtomCount();
+  uint16 arity = current_object_->code_[read_index].getAtomCount();
   bool after_tail_wildcard = false;
 
   for (uint16 i = 0; i < arity; ++i) {
@@ -577,9 +577,9 @@ void Decompiler::write_icmd(uint16 read_index) {
       if (closing_set) {
 
         closing_set = false;
-        write_indent(indents);
+        write_indent(indents_);
       } else
-        *out_stream << ' ';
+        *out_stream_ << ' ';
 
       write_any(++read_index, after_tail_wildcard, true, write_as_view_index);
     }
@@ -588,133 +588,133 @@ void Decompiler::write_icmd(uint16 read_index) {
   if (closing_set) {
 
     closing_set = false;
-    write_indent(indents);
+    write_indent(indents_);
   }
-  *out_stream << ')';
+  *out_stream_ << ')';
 }
 
 void Decompiler::write_cmd(uint16 read_index) {
 
-  if (!in_hlp)
-    horizontal_set = true;
+  if (!in_hlp_)
+    horizontal_set_ = true;
   if (closing_set) {
 
     closing_set = false;
-    write_indent(indents);
+    write_indent(indents_);
   }
-  out_stream->push('(', read_index);
+  out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, false);
   if (closing_set) {
 
     closing_set = false;
-    write_indent(indents);
+    write_indent(indents_);
   }
-  *out_stream << ')';
-  if (!in_hlp)
-    horizontal_set = false;
+  *out_stream_ << ')';
+  if (!in_hlp_)
+    horizontal_set_ = false;
 }
 
 void Decompiler::write_fact(uint16 read_index) {
 
-  if (in_hlp)
-    horizontal_set = true;
+  if (in_hlp_)
+    horizontal_set_ = true;
   if (closing_set) {
 
     closing_set = false;
-    write_indent(indents);
+    write_indent(indents_);
   }
-  out_stream->push('(', read_index);
+  out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, true);
   if (closing_set) {
 
     closing_set = false;
-    write_indent(indents);
+    write_indent(indents_);
   }
-  *out_stream << ')';
-  horizontal_set = false;
+  *out_stream_ << ')';
+  horizontal_set_ = false;
 }
 
 void Decompiler::write_view(uint16 read_index, uint16 arity) {
 
   if (arity > VIEW_CODE_MAX_SIZE || arity <= 1) {
 
-    *out_stream << "nil";
+    *out_stream_ << "nil";
     return;
   }
 
   bool after_tail_wildcard = false;
 
-  *out_stream << "[";
+  *out_stream_ << "[";
   for (uint16 j = 1; j <= arity; ++j) {
 
     write_any(read_index + j, after_tail_wildcard, true);
     if (j < arity)
-      *out_stream << " ";
+      *out_stream_ << " ";
   }
-  *out_stream << "]";
+  *out_stream_ << "]";
 }
 
 void Decompiler::write_set(uint16 read_index, bool aply_time_offset, uint16 write_as_view_index) { // read_index points to a set atom.
 
-  uint16 arity = current_object->code[read_index].getAtomCount();
+  uint16 arity = current_object_->code_[read_index].getAtomCount();
   bool after_tail_wildcard = false;
 
   if (arity == 1) { // write [element]
 
-    out_stream->push('[', read_index);
+    out_stream_->push('[', read_index);
     write_any(++read_index, after_tail_wildcard, aply_time_offset);
-    *out_stream << ']';
+    *out_stream_ << ']';
   } else if (write_as_view_index > 0 && write_as_view_index == read_index)
     write_view(read_index, arity);
-  else if (horizontal_set) { // write [elements].
+  else if (horizontal_set_) { // write [elements].
 
-    out_stream->push('[', read_index);
+    out_stream_->push('[', read_index);
     for (uint16 i = 0; i < arity; ++i) {
 
       if (i > 0)
-        *out_stream << ' ';
+        *out_stream_ << ' ';
       if (after_tail_wildcard)
         write_any(++read_index, after_tail_wildcard, aply_time_offset);
       else
         write_any(++read_index, after_tail_wildcard, aply_time_offset, write_as_view_index);
     }
-    *out_stream << ']';
+    *out_stream_ << ']';
     closing_set = true;
   } else { // write []+indented elements.
 
-    out_stream->push("[]", read_index);
-    indents += 3;
+    out_stream_->push("[]", read_index);
+    indents_ += 3;
     for (uint16 i = 0; i < arity; ++i) {
 
       if (after_tail_wildcard)
         write_any(++read_index, after_tail_wildcard, aply_time_offset);
       else {
 
-        write_indent(indents);
+        write_indent(indents_);
         write_any(++read_index, after_tail_wildcard, aply_time_offset, write_as_view_index);
       }
     }
     closing_set = true;
-    indents -= 3; // don't call write_indents() here as the last set member can be a set.
+    indents_ -= 3; // don't call write_indents() here as the last set member can be a set.
   }
 }
 
 void Decompiler::write_any(uint16 read_index, bool &after_tail_wildcard, bool apply_time_offset, uint16 write_as_view_index) { // after_tail_wildcard meant to avoid printing ':' after "::".
 
-  Atom a = current_object->code[read_index];
+  Atom a = current_object_->code_[read_index];
 
   if (a.isFloat()) {
 
-    if (a.atom == 0x3FFFFFFF)
-      out_stream->push("|nb", read_index);
+    if (a.atom_ == 0x3FFFFFFF)
+      out_stream_->push("|nb", read_index);
     else if (a == Atom::PlusInfinity())
-      out_stream->push("forever", read_index);
+      out_stream_->push("forever", read_index);
     else {
 
-      *out_stream << std::dec;
-      out_stream->push(a.asFloat(), read_index);
+      *out_stream_ << std::dec;
+      out_stream_->push(a.asFloat(), read_index);
     }
     return;
   }
@@ -723,35 +723,35 @@ void Decompiler::write_any(uint16 read_index, bool &after_tail_wildcard, bool ap
   uint16 index;
   switch (a.getDescriptor()) {
   case Atom::VL_PTR:
-    if (in_hlp) {
+    if (in_hlp_) {
 
       if (a.asCastOpcode() == 0x0FFE)
-        out_stream->push(':', read_index);
+        out_stream_->push(':', read_index);
       else {
 
         std::string s = get_hlp_variable_name(a.asIndex());
-        out_stream->push(s, read_index);
+        out_stream_->push(s, read_index);
       }
       break;
     }
   case Atom::ASSIGN_PTR:
-    if (in_hlp) {
+    if (in_hlp_) {
 
-      out_stream->push(get_hlp_variable_name(a.asAssignmentIndex()), read_index);
-      *out_stream << ":";
+      out_stream_->push(get_hlp_variable_name(a.asAssignmentIndex()), read_index);
+      *out_stream_ << ":";
     }
   case Atom::I_PTR:
     index = a.asIndex();
-    atom = current_object->code[index];
+    atom = current_object_->code_[index];
     while (atom.getDescriptor() == Atom::I_PTR) {
 
       index = atom.asIndex();
-      atom = current_object->code[index];
+      atom = current_object_->code_[index];
     }
     if (index < read_index) { // reference to a label or variable.
 
       std::string s = get_variable_name(index, atom.getDescriptor() != Atom::WILDCARD); // post-fix labels with ':' (no need for variables since they are inserted just before wildcards).
-      out_stream->push(s, read_index);
+      out_stream_->push(s, read_index);
       break;
     }
     switch (atom.getDescriptor()) { // structures.
@@ -765,77 +765,77 @@ void Decompiler::write_any(uint16 read_index, bool &after_tail_wildcard, bool ap
     case Atom::COMPOSITE_STATE:
     case Atom::MODEL:
     case Atom::OPERATOR:
-      (this->*renderers[atom.asOpcode()])(index);
+      (this->*renderers_[atom.asOpcode()])(index);
       break;
     case Atom::SET:
     case Atom::S_SET:
       if (atom.readsAsNil())
-        out_stream->push("|[]", read_index);
+        out_stream_->push("|[]", read_index);
       else
         write_set(index, apply_time_offset, write_as_view_index);
       break;
     case Atom::STRING:
       if (atom.readsAsNil())
-        out_stream->push("|st", read_index);
+        out_stream_->push("|st", read_index);
       else {
 
-        Atom first = current_object->code[index + 1];
-        std::string s = Utils::GetString(&current_object->code[index]);
-        *out_stream << '\"' << s << '\"';
+        Atom first = current_object_->code_[index + 1];
+        std::string s = Utils::GetString(&current_object_->code_[index]);
+        *out_stream_ << '\"' << s << '\"';
       }
       break;
     case Atom::TIMESTAMP:
       if (atom.readsAsNil())
-        out_stream->push("|us", read_index);
+        out_stream_->push("|us", read_index);
       else {
 
-        Atom first = current_object->code[index + 1];
-        auto ts = Utils::GetMicrosecondsSinceEpoch(&current_object->code[index]);
-        if (!in_hlp && ts.count() > 0 && apply_time_offset)
-          ts -= time_offset;
-        out_stream->push(Time::ToString_seconds(ts), read_index);
+        Atom first = current_object_->code_[index + 1];
+        auto ts = Utils::GetMicrosecondsSinceEpoch(&current_object_->code_[index]);
+        if (!in_hlp_ && ts.count() > 0 && apply_time_offset)
+          ts -= time_offset_;
+        out_stream_->push(Time::ToString_seconds(ts), read_index);
       }
       break;
     case Atom::C_PTR: {
 
       uint16 opcode;
       uint16 member_count = atom.getAtomCount();
-      atom = current_object->code[index + 1]; // current_object->code[index] is the cptr; lead atom is at index+1; iptrs start at index+2.
+      atom = current_object_->code_[index + 1]; // current_object_->code[index] is the cptr; lead atom is at index+1; iptrs start at index+2.
       switch (atom.getDescriptor()) {
       case Atom::THIS: // this always refers to an instantiated reactive object.
-        out_stream->push("this", read_index);
-        opcode = metadata->sys_classes["ipgm"].atom.asOpcode();
+        out_stream_->push("this", read_index);
+        opcode = metadata_->sys_classes_["ipgm"].atom_.asOpcode();
         break;
       case Atom::VL_PTR: {
 
         uint8 cast_opcode = atom.asCastOpcode();
-        while (current_object->code[atom.asIndex()].getDescriptor() == Atom::I_PTR) // position to a structure or an atomic value.
-          atom = current_object->code[atom.asIndex()];
-        out_stream->push(get_variable_name(atom.asIndex(), current_object->code[atom.asIndex()].getDescriptor() != Atom::WILDCARD), read_index);
+        while (current_object_->code_[atom.asIndex()].getDescriptor() == Atom::I_PTR) // position to a structure or an atomic value_.
+          atom = current_object_->code_[atom.asIndex()];
+        out_stream_->push(get_variable_name(atom.asIndex(), current_object_->code_[atom.asIndex()].getDescriptor() != Atom::WILDCARD), read_index);
         if (cast_opcode == 0xFF) {
 
-          if (current_object->code[atom.asIndex()].getDescriptor() == Atom::WILDCARD)
-            opcode = current_object->code[atom.asIndex()].asOpcode();
+          if (current_object_->code_[atom.asIndex()].getDescriptor() == Atom::WILDCARD)
+            opcode = current_object_->code_[atom.asIndex()].asOpcode();
           else
-            opcode = current_object->code[atom.asIndex()].asOpcode();
+            opcode = current_object_->code_[atom.asIndex()].asOpcode();
         } else
           opcode = cast_opcode;
         break;
       }case Atom::R_PTR: {
-        uint32 object_index = current_object->references[atom.asIndex()];
-        out_stream->push(get_object_name(object_index), read_index);
-        opcode = image->code_segment.objects[object_index]->code[0].asOpcode();
+        uint32 object_index = current_object_->references_[atom.asIndex()];
+        out_stream_->push(get_object_name(object_index), read_index);
+        opcode = image_->code_segment_.objects_[object_index]->code_[0].asOpcode();
         break;
       }default:
-        out_stream->push("unknown-cptr-lead-type", read_index);
+        out_stream_->push("unknown-cptr-lead-type", read_index);
         break;
       }
 
-      Class embedding_class = metadata->classes_by_opcodes[opcode]; // class defining the members.
+      Class embedding_class = metadata_->classes_by_opcodes_[opcode]; // class defining the members.
       for (uint16 i = 2; i <= member_count; ++i) { // get the class of the pointed structure and retrieve the member name from i.
 
         std::string member_name;
-        atom = current_object->code[index + i]; // atom is an iptr appearing after the leading atom in the cptr.
+        atom = current_object_->code_[index + i]; // atom is an iptr appearing after the leading atom in the cptr.
         switch (atom.getDescriptor()) {
         case Atom::VIEW:
           member_name = "vw";
@@ -849,103 +849,103 @@ void Decompiler::write_any(uint16 read_index, bool &after_tail_wildcard, bool ap
         default:
           member_name = embedding_class.get_member_name(atom.asIndex());
           if (i < member_count) // not the last member, get the next class.
-            embedding_class = *embedding_class.get_member_class(metadata, member_name);
+            embedding_class = *embedding_class.get_member_class(metadata_, member_name);
           break;
         }
-        *out_stream << '.' << member_name;
+        *out_stream_ << '.' << member_name;
 
         if (member_name == "vw") { // special case: no view structure in the code, vw is just a place holder; vw is the second to last member of the cptr: write the last member and exit.
 
-          atom = current_object->code[index + member_count]; // atom is the last internal pointer.
+          atom = current_object_->code_[index + member_count]; // atom is the last internal pointer.
           Class view_class;
           if (embedding_class.str_opcode == "grp")
-            view_class = metadata->classes.find("grp_view")->second;
+            view_class = metadata_->classes_.find("grp_view")->second;
           else if (embedding_class.str_opcode == "ipgm" ||
             embedding_class.str_opcode == "icpp_pgm" ||
             embedding_class.str_opcode == "mdl" ||
             embedding_class.str_opcode == "cst")
-            view_class = metadata->classes.find("pgm_view")->second;
+            view_class = metadata_->classes_.find("pgm_view")->second;
           else
-            view_class = metadata->classes.find("view")->second;
+            view_class = metadata_->classes_.find("view")->second;
           member_name = view_class.get_member_name(atom.asIndex());
-          *out_stream << '.' << member_name;
+          *out_stream_ << '.' << member_name;
           break;
         }
       }
       break;
     }default:
-      out_stream->push("undefined-structural-atom-or-reference", read_index);
+      out_stream_->push("undefined-structural-atom-or-reference", read_index);
       break;
     }
     break;
   case Atom::R_PTR:
-    out_stream->push(get_object_name(current_object->references[a.asIndex()]), read_index);
+    out_stream_->push(get_object_name(current_object_->references_[a.asIndex()]), read_index);
     break;
   case Atom::THIS:
-    out_stream->push("this", read_index);
+    out_stream_->push("this", read_index);
     break;
   case Atom::NIL:
-    out_stream->push("nil", read_index);
+    out_stream_->push("nil", read_index);
     break;
   case Atom::BOOLEAN_:
     if (a.readsAsNil())
-      out_stream->push("|bl", read_index);
+      out_stream_->push("|bl", read_index);
     else {
 
-      *out_stream << std::boolalpha;
-      out_stream->push(a.asBoolean(), read_index);
+      *out_stream_ << std::boolalpha;
+      out_stream_->push(a.asBoolean(), read_index);
     }
     break;
   case Atom::WILDCARD:
     if (after_tail_wildcard)
-      out_stream->push();
+      out_stream_->push();
     else
-      out_stream->push(':', read_index);
+      out_stream_->push(':', read_index);
     break;
   case Atom::T_WILDCARD:
-    out_stream->push("::", read_index);
+    out_stream_->push("::", read_index);
     after_tail_wildcard = true;
     break;
   case Atom::NODE:
     if (a.readsAsNil())
-      out_stream->push("|sid", read_index);
+      out_stream_->push("|sid", read_index);
     else {
 
-      out_stream->push("0x", read_index);
-      *out_stream << std::hex;
-      *out_stream << a.atom;
+      out_stream_->push("0x", read_index);
+      *out_stream_ << std::hex;
+      *out_stream_ << a.atom_;
     }
     break;
   case Atom::DEVICE:
     if (a.readsAsNil())
-      out_stream->push("|did", read_index);
+      out_stream_->push("|did", read_index);
     else {
 
-      out_stream->push("0x", read_index);
-      *out_stream << std::hex;
-      *out_stream << a.atom;
+      out_stream_->push("0x", read_index);
+      *out_stream_ << std::hex;
+      *out_stream_ << a.atom_;
     }
     break;
   case Atom::DEVICE_FUNCTION:
     if (a.readsAsNil())
-      out_stream->push("|fid", read_index);
+      out_stream_->push("|fid", read_index);
     else
-      out_stream->push(metadata->function_names[a.asOpcode()], read_index);
+      out_stream_->push(metadata_->function_names_[a.asOpcode()], read_index);
     break;
   case Atom::VIEW:
-    out_stream->push("vw", read_index);
+    out_stream_->push("vw", read_index);
     break;
   case Atom::MKS:
-    out_stream->push("mks", read_index);
+    out_stream_->push("mks", read_index);
     break;
   case Atom::VWS:
-    out_stream->push("vws", read_index);
+    out_stream_->push("vws", read_index);
     break;
   default:
-    // out_stream->push("undefined-atom",read_index).
-    out_stream->push("0x", read_index);
-    *out_stream << std::hex;
-    *out_stream << a.atom;
+    // out_stream_->push("undefined-atom",read_index).
+    out_stream_->push("0x", read_index);
+    *out_stream_ << std::hex;
+    *out_stream_ << a.atom_;
     break;
   }
 }

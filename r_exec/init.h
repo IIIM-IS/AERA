@@ -118,14 +118,14 @@ private:
     public Thread {
   };
 
-  _Thread *_thread;
-  volatile uint32 spawned;
+  _Thread *thread_;
+  volatile uint32 spawned_;
 
-  r_code::list<P<Code> > objects;
+  r_code::list<P<Code> > objects_;
 
-  uint32 ostream_id; // 0 is std::cout.
+  uint32 ostream_id_; // 0 is std::cout.
 
-  std::string header;
+  std::string header_;
 public:
   TDecompiler(uint32 ostream_id, std::string header);
   ~TDecompiler();
@@ -145,11 +145,11 @@ public:
 class r_exec_dll PipeOStream :
   public std::ostream {
 private:
-  static std::vector<PipeOStream *> Streams;
-  static PipeOStream NullStream;
+  static std::vector<PipeOStream *> Streams_;
+  static PipeOStream NullStream_;
 
-  HANDLE pipe_read;
-  HANDLE pipe_write;
+  HANDLE pipe_read_;
+  HANDLE pipe_write_;
 
   void init(); // create one child process and a pipe.
   PipeOStream();

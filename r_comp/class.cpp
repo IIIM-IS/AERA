@@ -86,7 +86,7 @@ const char *Class::Type = "type";
 
 bool Class::has_offset() const {
 
-  switch (atom.getDescriptor()) {
+  switch (atom_.getDescriptor()) {
   case Atom::OBJECT:
   case Atom::GROUP:
   case Atom::INSTANTIATED_PROGRAM:
@@ -103,7 +103,7 @@ Class::Class(ReturnType t) : type(t), str_opcode("undefined") {
 Class::Class(Atom atom,
   std::string str_opcode,
   std::vector<StructureMember> r,
-  ReturnType t) : atom(atom),
+  ReturnType t) : atom_(atom),
   str_opcode(str_opcode),
   things_to_read(r),
   type(t),
@@ -112,18 +112,18 @@ Class::Class(Atom atom,
 
 bool Class::is_pattern(Metadata *metadata) const {
 
-  return (metadata->classes.find("ptn")->second.atom == atom) || (metadata->classes.find("|ptn")->second.atom == atom);
+  return (metadata->classes_.find("ptn")->second.atom_ == atom_) || (metadata->classes_.find("|ptn")->second.atom_ == atom_);
 }
 
 bool Class::is_fact(Metadata *metadata) const {
 
-  return (metadata->classes.find("fact")->second.atom == atom) || (metadata->classes.find("|fact")->second.atom == atom);
+  return (metadata->classes_.find("fact")->second.atom_ == atom_) || (metadata->classes_.find("|fact")->second.atom_ == atom_);
 }
 
 bool Class::get_member_index(Metadata *metadata, std::string &name, uint16 &index, Class *&p) const {
 
   for (uint16 i = 0; i < things_to_read.size(); ++i)
-    if (things_to_read[i].name == name) {
+    if (things_to_read[i].name_ == name) {
 
       index = (has_offset() ? i + 1 : i); // in expressions the lead r-atom is at 0; in objects, members start at 1
       if (things_to_read[i].used_as_expression()) // the class is: [::a-class]
@@ -137,7 +137,7 @@ bool Class::get_member_index(Metadata *metadata, std::string &name, uint16 &inde
 
 std::string Class::get_member_name(uint32 index) {
 
-  return things_to_read[has_offset() ? index - 1 : index].name;
+  return things_to_read[has_offset() ? index - 1 : index].name_;
 }
 
 ReturnType Class::get_member_type(const uint16 index) {
@@ -148,14 +148,14 @@ ReturnType Class::get_member_type(const uint16 index) {
 Class *Class::get_member_class(Metadata *metadata, const std::string &name) {
 
   for (uint16 i = 0; i < things_to_read.size(); ++i)
-    if (things_to_read[i].name == name)
+    if (things_to_read[i].name_ == name)
       return things_to_read[i].get_class(metadata);
   return NULL;
 }
 
 void Class::write(word32 *storage) {
 
-  storage[0] = atom.atom;
+  storage[0] = atom_.atom_;
   r_code::Write(storage + 1, str_opcode);
   uint32 offset = 1 + r_code::GetSize(str_opcode);
   storage[offset++] = type;
@@ -170,7 +170,7 @@ void Class::write(word32 *storage) {
 
 void Class::read(word32 *storage) {
 
-  atom = storage[0];
+  atom_ = storage[0];
   r_code::Read(storage + 1, str_opcode);
   uint32 offset = 1 + r_code::GetSize(str_opcode);
   type = (ReturnType)storage[offset++];

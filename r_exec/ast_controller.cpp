@@ -93,28 +93,28 @@ PASTController::~PASTController() {
 
 void PASTController::reduce(View *v, _Fact *input) {
 
-  switch (input->is_timeless_evidence(target)) {
+  switch (input->is_timeless_evidence(target_)) {
   case MATCH_SUCCESS_POSITIVE:
-    //std::cout<<Utils::RelativeTime(Now())<<" "<<std::hex<<this<<std::dec<<" target: "<<target->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<" reduced: "<<input->get_oid()<<" positive\n";
+    //std::cout<<Utils::RelativeTime(Now())<<" "<<std::hex<<this<<std::dec<<" target: "<<target_->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<" reduced: "<<input->get_oid()<<" positive\n";
     kill();
-    target->invalidate();//std::cout<<Time::ToString_seconds(Now()-st)<<" "<<" ------------- "<<std::dec<<target->get_oid()<<std::endl;
+    target_->invalidate();//std::cout<<Time::ToString_seconds(Now()-st)<<" "<<" ------------- "<<std::dec<<target_->get_oid()<<std::endl;
     break;
   case MATCH_SUCCESS_NEGATIVE:
-    //std::cout<<Utils::RelativeTime(Now())<<" TPX"<<target->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<" reduced: "<<input->get_oid()<<" counter-evidence: "<<input->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<std::endl;
+    //std::cout<<Utils::RelativeTime(Now())<<" TPX"<<target_->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<" reduced: "<<input->get_oid()<<" counter-evidence: "<<input->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<std::endl;
     kill();
-    tpx->signal(v);
-    target->invalidate();//std::cout<<Utils::RelativeTime(Now())<<" "<<target->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<"|"<<std::dec<<target->get_oid()<<" invalidated"<<std::endl;
+    tpx_->signal(v);
+    target_->invalidate();//std::cout<<Utils::RelativeTime(Now())<<" "<<target_->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<"|"<<std::dec<<target_->get_oid()<<" invalidated"<<std::endl;
     break;
   case MATCH_FAILURE:
-    //std::cout<<Utils::RelativeTime(Now())<<" "<<std::hex<<this<<std::dec<<" target: "<<target->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<" stored: "<<input->get_oid()<<std::endl;
-    tpx->store_input(v);
+    //std::cout<<Utils::RelativeTime(Now())<<" "<<std::hex<<this<<std::dec<<" target: "<<target_->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<" stored: "<<input->get_oid()<<std::endl;
+    tpx_->store_input(v);
     break;
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-HASTController::HASTController(AutoFocusController *auto_focus, View *target, _Fact *source) : ASTController<HASTController>(auto_focus, target), source(source) {
+HASTController::HASTController(AutoFocusController *auto_focus, View *target, _Fact *source) : ASTController<HASTController>(auto_focus, target), source_(source) {
 
   //std::cout<<Utils::RelativeTime(Now())<<" "<<std::hex<<this<<std::dec<<" created HOLD "<<target->get_oid()<<std::endl;
 }
@@ -124,21 +124,21 @@ HASTController::~HASTController() {
 
 void HASTController::reduce(View *v, _Fact *input) {
 
-  switch (input->is_timeless_evidence(target)) {
+  switch (input->is_timeless_evidence(target_)) {
   case MATCH_SUCCESS_POSITIVE:
-    //std::cout<<Utils::RelativeTime(Now())<<" "<<std::hex<<this<<std::dec<<" target: "<<target->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<" reduced: "<<input->get_oid()<<" positive\n";
+    //std::cout<<Utils::RelativeTime(Now())<<" "<<std::hex<<this<<std::dec<<" target: "<<target_->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<" reduced: "<<input->get_oid()<<" positive\n";
     kill();
     break;
   case MATCH_SUCCESS_NEGATIVE:
-    //std::cout<<Utils::RelativeTime(Now())<<" "<<std::hex<<this<<std::dec<<" target: "<<target->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<" reduced: "<<input->get_oid()<<" counter-evidence: "<<input->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<std::endl;
+    //std::cout<<Utils::RelativeTime(Now())<<" "<<std::hex<<this<<std::dec<<" target: "<<target_->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<" reduced: "<<input->get_oid()<<" counter-evidence: "<<input->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<std::endl;
     kill();
-    tpx->signal(v);
-    target->invalidate();//std::cout<<Utils::RelativeTime(Now())<<" "<<std::hex<<this<<std::dec<<" ------------- "<<std::dec<<target->get_oid()<<std::endl;
-    source->invalidate();
+    tpx_->signal(v);
+    target_->invalidate();//std::cout<<Utils::RelativeTime(Now())<<" "<<std::hex<<this<<std::dec<<" ------------- "<<std::dec<<target_->get_oid()<<std::endl;
+    source_->invalidate();
     break;
   case MATCH_FAILURE:
-    //std::cout<<Utils::RelativeTime(Now())<<" "<<std::hex<<this<<std::dec<<" target: "<<target->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<" stored: "<<input->get_oid()<<std::endl;
-    tpx->store_input(v);
+    //std::cout<<Utils::RelativeTime(Now())<<" "<<std::hex<<this<<std::dec<<" target: "<<target_->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<" stored: "<<input->get_oid()<<std::endl;
+    tpx_->store_input(v);
     break;
   }
 }

@@ -89,14 +89,14 @@ using namespace std::chrono;
 
 namespace r_exec {
 
-r_code::vector<Operator> Operator::Operators;
+r_code::vector<Operator> Operator::Operators_;
 
 void Operator::Register(uint16 opcode, bool(*o)(const Context &, uint16 &index)) {
 
-  if (Operators[opcode]._operator)
-    Operators[opcode].setOverload(o);
+  if (Operators_[opcode].operator_)
+    Operators_[opcode].setOverload(o);
   else
-    Operators[opcode] = Operator(o);
+    Operators_[opcode] = Operator(o);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -95,9 +95,9 @@ namespace r_exec {
 template<class U> class ASTController :
   public OController {
 protected:
-  P<CTPX> tpx;
-  P<_Fact> target; // the repeated fact to be monitored.
-  Timestamp thz; // time horizon: if an input is caught with ijt<thz (meaning it's too old), discard it.
+  P<CTPX> tpx_;
+  P<_Fact> target_; // the repeated fact to be monitored.
+  Timestamp thz_; // time horizon: if an input is caught with ijt<thz (meaning it's too old), discard it.
 
   void kill();
 
@@ -126,7 +126,7 @@ public:
 class HASTController :
   public ASTController<HASTController> {
 private:
-  P<_Fact> source; // to be invalidated if a counter-evidence is found.
+  P<_Fact> source_; // to be invalidated if a counter-evidence is found.
 public:
   HASTController(AutoFocusController *auto_focus, View *target, _Fact *source);
   ~HASTController();

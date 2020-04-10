@@ -89,17 +89,17 @@ namespace r_exec {
 
 CriticalSection OIDCS;
 
-uint32 View::LastOID = 0;
+uint32 View::lastOID_ = 0;
 
 uint32 View::GetOID() {
 
   OIDCS.enter();
-  uint32 oid = LastOID++;
+  uint32 oid = lastOID_++;
   OIDCS.leave();
   return oid;
 }
 
-uint16 View::ViewOpcode;
+uint16 View::ViewOpcode_;
 
 float32 View::MorphValue(float32 value, float32 source_thr, float32 destination_thr) {
 
@@ -132,18 +132,18 @@ float32 View::MorphChange(float32 change, float32 source_thr, float32 destinatio
   return destination_thr + change;
 }
 
-View::View(View *view, Group *group) : r_code::View(), controller(NULL) {
+View::View(View *view, Group *group) : r_code::View(), controller_(NULL) {
 
   Group *source = view->get_host();
-  object = view->object;
-  memcpy(_code, view->_code, VIEW_CODE_MAX_SIZE * sizeof(Atom));
-  _code[VIEW_OID].atom = GetOID();
-  references[0] = group; // host.
-  references[1] = source; // origin.
+  object_ = view->object_;
+  memcpy(code_, view->code_, VIEW_CODE_MAX_SIZE * sizeof(Atom));
+  code_[VIEW_OID].atom_ = GetOID();
+  references_[0] = group; // host.
+  references_[1] = source; // origin.
 
   // morph ctrl values; NB: res is not morphed as it is expressed as a multiple of the upr.
   code(VIEW_SLN) = Atom::Float(MorphValue(view->code(VIEW_SLN).asFloat(), source->get_sln_thr(), group->get_sln_thr()));
-  switch (object->code(0).getDescriptor()) {
+  switch (object_->code(0).getDescriptor()) {
   case Atom::GROUP:
     code(GRP_VIEW_VIS) = Atom::Float(MorphValue(view->code(GRP_VIEW_VIS).asFloat(), source->get_vis_thr(), group->get_vis_thr()));
     break;
@@ -163,38 +163,38 @@ View::View(View *view, Group *group) : r_code::View(), controller(NULL) {
 
 void View::set_object(r_code::Code *object) {
 
-  this->object = object;
+  object_ = object;
   reset();
 }
 
 void View::reset_ctrl_values() {
 
-  sln_changes = 0;
-  acc_sln = 0;
-  act_changes = 0;
-  acc_act = 0;
-  vis_changes = 0;
-  acc_vis = 0;
-  res_changes = 0;
-  acc_res = 0;
+  sln_changes_ = 0;
+  acc_sln_ = 0;
+  act_changes_ = 0;
+  acc_act_ = 0;
+  vis_changes_ = 0;
+  acc_vis_ = 0;
+  res_changes_ = 0;
+  acc_res_ = 0;
 
-  periods_at_low_sln = 0;
-  periods_at_high_sln = 0;
-  periods_at_low_act = 0;
-  periods_at_high_act = 0;
+  periods_at_low_sln_ = 0;
+  periods_at_high_sln_ = 0;
+  periods_at_low_act_ = 0;
+  periods_at_high_act_ = 0;
 }
 
 void View::reset_init_sln() {
 
-  initial_sln = get_sln();
+  initial_sln_ = get_sln();
 }
 
 void View::reset_init_act() {
 
-  if (object != NULL)
-    initial_act = get_act();
+  if (object_ != NULL)
+    initial_act_ = get_act();
   else
-    initial_act = 0;
+    initial_act_ = 0;
 }
 
 float32 View::update_res() {
@@ -202,95 +202,95 @@ float32 View::update_res() {
   float32 new_res = get_res();
   if (new_res == PLUS_INFINITY)
     return new_res;
-  if (res_changes > 0 && acc_res != 0)
-    new_res = get_res() + (float32)acc_res / (float32)res_changes;
+  if (res_changes_ > 0 && acc_res_ != 0)
+    new_res = get_res() + (float32)acc_res_ / (float32)res_changes_;
   if (--new_res < 0) // decremented by one on behalf of the group (at upr).
     new_res = 0;
   code(VIEW_RES) = r_code::Atom::Float(new_res);
-  acc_res = 0;
-  res_changes = 0;
+  acc_res_ = 0;
+  res_changes_ = 0;
   return get_res();
 }
 
 float32 View::update_sln(float32 low, float32 high) {
 
-  if (sln_changes > 0 && acc_sln != 0) {
+  if (sln_changes_ > 0 && acc_sln_ != 0) {
 
-    float32 new_sln = get_sln() + acc_sln / sln_changes;
+    float32 new_sln = get_sln() + acc_sln_ / sln_changes_;
     if (new_sln < 0)
       new_sln = 0;
     else if (new_sln > 1)
       new_sln = 1;
     code(VIEW_SLN) = r_code::Atom::Float(new_sln);
   }
-  acc_sln = 0;
-  sln_changes = 0;
+  acc_sln_ = 0;
+  sln_changes_ = 0;
 
   float32 sln = get_sln();
   if (sln < low)
-    ++periods_at_low_sln;
+    ++periods_at_low_sln_;
   else {
 
-    periods_at_low_sln = 0;
+    periods_at_low_sln_ = 0;
     if (sln > high)
-      ++periods_at_high_sln;
+      ++periods_at_high_sln_;
     else
-      periods_at_high_sln = 0;
+      periods_at_high_sln_ = 0;
   }
   return sln;
 }
 
 float32 View::update_act(float32 low, float32 high) {
 
-  if (act_changes > 0 && acc_act != 0) {
+  if (act_changes_ > 0 && acc_act_ != 0) {
 
-    float32 new_act = get_act() + acc_act / act_changes;
+    float32 new_act = get_act() + acc_act_ / act_changes_;
     if (new_act < 0)
       new_act = 0;
     else if (new_act > 1)
       new_act = 1;
     code(VIEW_ACT) = r_code::Atom::Float(new_act);
   }
-  acc_act = 0;
-  act_changes = 0;
+  acc_act_ = 0;
+  act_changes_ = 0;
 
   float32 act = get_act();
   if (act < low)
-    ++periods_at_low_act;
+    ++periods_at_low_act_;
   else {
 
-    periods_at_low_act = 0;
+    periods_at_low_act_ = 0;
     if (act > high)
-      ++periods_at_high_act;
+      ++periods_at_high_act_;
     else
-      periods_at_high_act = 0;
+      periods_at_high_act_ = 0;
   }
   return act;
 }
 
 float32 View::update_vis() {
 
-  if (vis_changes > 0 && acc_vis != 0) {
+  if (vis_changes_ > 0 && acc_vis_ != 0) {
 
-    float32 new_vis = get_vis() + acc_vis / vis_changes;
+    float32 new_vis = get_vis() + acc_vis_ / vis_changes_;
     if (new_vis < 0)
       new_vis = 0;
     else if (new_vis > 1)
       new_vis = 1;
     code(GRP_VIEW_VIS) = r_code::Atom::Float(new_vis);
   }
-  acc_vis = 0;
-  vis_changes = 0;
+  acc_vis_ = 0;
+  vis_changes_ = 0;
   return get_vis();
 }
 
 void View::delete_from_object() {
 
-  object->acq_views();
-  object->views.erase(this);
-  if (object->views.size() == 0)
-    object->invalidate();
-  object->rel_views();
+  object_->acq_views();
+  object_->views_.erase(this);
+  if (object_->views_.size() == 0)
+    object_->invalidate();
+  object_->rel_views();
 }
 
 void View::delete_from_group() {
@@ -305,7 +305,7 @@ void View::delete_from_group() {
 
 NotificationView::NotificationView(Code *origin, Code *destination, Code *marker) : View() {
 
-  code(VIEW_OPCODE) = r_code::Atom::SSet(ViewOpcode, VIEW_ARITY); // Structured Set.
+  code(VIEW_OPCODE) = r_code::Atom::SSet(ViewOpcode_, VIEW_ARITY); // Structured Set.
   code(VIEW_SYNC) = r_code::Atom::Float(View::SYNC_ONCE); // sync once.
   code(VIEW_IJT) = r_code::Atom::IPointer(VIEW_ARITY + 1); // iptr to ijt.
   code(VIEW_SLN) = r_code::Atom::Float(1); // sln.
@@ -315,11 +315,11 @@ NotificationView::NotificationView(Code *origin, Code *destination, Code *marker
   code(VIEW_ARITY + 1) = r_code::Atom::Timestamp(); // ijt will be set at injection time.
   code(VIEW_ARITY + 2) = 0;
   code(VIEW_ARITY + 3) = 0;
-  references[0] = destination;
-  references[1] = origin;
+  references_[0] = destination;
+  references_[1] = origin;
 
   reset_init_sln();
 
-  object = marker;
+  object_ = marker;
 }
 }

@@ -99,7 +99,7 @@ thread_ret thread_function_call TimeCore::Run(void *args) {
       continue;
     }
 
-    Timestamp target = j->target_time;
+    Timestamp target = j->target_time_;
     Timestamp next_target(microseconds(0));
     if (target.time_since_epoch().count() == 0) // 0 means ASAP. Control jobs (shutdown) are caught here.
       run = j->update(next_target);
@@ -110,7 +110,7 @@ thread_ret thread_function_call TimeCore::Run(void *args) {
         run = j->update(next_target);
       else if (time_to_wait.count() > 0) { // early: spawn a delegate to wait for the due time; delegate will die when done.
 
-        DelegatedCore *d = new DelegatedCore(j->target_time, time_to_wait, j);
+        DelegatedCore *d = new DelegatedCore(j->target_time_, time_to_wait, j);
         d->start(DelegatedCore::Wait);
         _Mem::Get()->register_time_job_latency(time_to_wait);
         next_target = Timestamp(seconds(0));
@@ -161,25 +161,25 @@ thread_ret thread_function_call DelegatedCore::Wait(void *args) {
   _Mem::Get()->start_core();
   DelegatedCore *_this = ((DelegatedCore *)args);
 
-  auto time_to_wait = _this->time_to_wait;
-  auto target_time = _this->target_time;
+  auto time_to_wait = _this->time_to_wait_;
+  auto target_time = _this->target_time_;
 
-wait: _this->timer.start(time_to_wait);
-  _this->timer.wait();
+wait: _this->timer_.start(time_to_wait);
+  _this->timer_.wait();
 
-  if (!_this->job->is_alive())
+  if (!_this->job_->is_alive())
     goto end;
 
   if (_Mem::Get()->check_state() == _Mem::RUNNING) { // checks for shutdown that could have happened during the wait on timer.
 
     while (Now() < target_time); // early, we have to wait; on Windows: timers resolution in ms => poll.
     target_time = Timestamp(seconds(0));
-    _this->job->update(target_time);
+    _this->job_->update(target_time);
   }
 
 redo: if (target_time.time_since_epoch().count()) {
 
-  if (!_this->job->is_alive())
+  if (!_this->job_->is_alive())
     goto end;
   if (_Mem::Get()->check_state() != _Mem::RUNNING) // checks for shutdown that could have happened during the last update().
     goto end;
@@ -187,12 +187,12 @@ redo: if (target_time.time_since_epoch().count()) {
   time_to_wait = duration_cast<microseconds>(target_time - Now());
   if (time_to_wait.count() == 0) { // right on time: do the job.
 
-    _this->job->update(target_time);
+    _this->job_->update(target_time);
     goto redo;
   } else if (time_to_wait.count() < 0) { // late.
 
-    _this->job->update(target_time);
-    _this->job->report(-time_to_wait);
+    _this->job_->update(target_time);
+    _this->job_->report(-time_to_wait);
     goto redo;
   } else
     goto wait;
@@ -205,7 +205,7 @@ redo: if (target_time.time_since_epoch().count()) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-DelegatedCore::DelegatedCore(Timestamp target_time, microseconds time_to_wait, TimeJob *j) : Thread(), target_time(target_time), time_to_wait(time_to_wait), job(j) {
+DelegatedCore::DelegatedCore(Timestamp target_time, microseconds time_to_wait, TimeJob *j) : Thread(), target_time_(target_time), time_to_wait_(time_to_wait), job_(j) {
 }
 
 DelegatedCore::~DelegatedCore() {

@@ -129,12 +129,12 @@ private:
     R_SET = 9,
     R_CLASS = 10
   }ReadID; // used for serialization
-  _Read _read;
-  ReturnType type;
-  std::string _class; // when r==read_set or read_expression, _class specifies the class of said set/expression if one is targeted in particular; otherwise _class=="".
-  Iteration iteration; // indicates how to use the _class to read the elements of the set: as an enumeration of types, as a class of expression, or as an enumeration of types to use for reading subsets.
+  _Read read_;
+  ReturnType type_;
+  std::string class_; // when r==read_set or read_expression, _class specifies the class of said set/expression if one is targeted in particular; otherwise _class=="".
+  Iteration iteration_; // indicates how to use the _class to read the elements of the set: as an enumeration of types, as a class of expression, or as an enumeration of types to use for reading subsets.
 public:
-  std::string name; // unused for anything but set/object/marker classes.
+  std::string name_; // unused for anything but set/object/marker classes.
   StructureMember();
   StructureMember(_Read r, // compiler's read function.
     std::string m, // member's name.

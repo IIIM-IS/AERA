@@ -87,11 +87,11 @@ namespace r_code {
 
 class dll_export ImageImpl {
 private:
-  word32 *_data; // [object map|code segment|object names]
-  Timestamp _timestamp;
-  uint32 _map_size;
-  uint32 _code_size;
-  uint32 _names_size;
+  word32 *data_; // [object map|code segment|object names]
+  Timestamp timestamp_;
+  uint32 map_size_;
+  uint32 code_size_;
+  uint32 names_size_;
 protected:
   Timestamp timestamp() const;
   uint32 map_size() const;

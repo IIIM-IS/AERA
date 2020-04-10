@@ -97,7 +97,7 @@ bool Input::IsEligibleCause(r_exec::View *view) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TPX::TPX(AutoFocusController *auto_focus, _Fact *target, _Fact *pattern, BindingMap *bindings) : _Object(), auto_focus(auto_focus), target(target), abstracted_target(pattern), target_bindings(bindings), cst_hook(NULL) { // called by GTPX and PTPX's ctor.
+TPX::TPX(AutoFocusController *auto_focus, _Fact *target, _Fact *pattern, BindingMap *bindings) : _Object(), auto_focus_(auto_focus), target_(target), abstracted_target_(pattern), target_bindings_(bindings), cst_hook_(NULL) { // called by GTPX and PTPX's ctor.
 
   if (bindings->is_fully_specified()) { // get a hook on a cst controller so we get icsts from it: this is needed if the target is an underspecified icst.
 
@@ -105,17 +105,17 @@ TPX::TPX(AutoFocusController *auto_focus, _Fact *target, _Fact *pattern, Binding
     if (target_payload->code(0).asOpcode() == Opcodes::ICst) {
 
       Code *cst = target_payload->get_reference(0);
-      cst_hook = (CSTController *)((r_exec::View *)cst->get_view(auto_focus->get_primary_group(), true))->controller;
+      cst_hook_ = (CSTController *)((r_exec::View *)cst->get_view(auto_focus->get_primary_group(), true))->controller_;
     }
   }
 }
 
-TPX::TPX(AutoFocusController *auto_focus, _Fact *target) : _Object(), auto_focus(auto_focus) { // called by CTPX's ctor.
+TPX::TPX(AutoFocusController *auto_focus, _Fact *target) : _Object(), auto_focus_(auto_focus) { // called by CTPX's ctor.
 
   P<BindingMap> bm = new BindingMap();
-  abstracted_target = (_Fact *)bm->abstract_object(target, false);
-  this->target = target;
-  target_bindings = bm;
+  abstracted_target_ = (_Fact *)bm->abstract_object(target, false);
+  target_ = target;
+  target_bindings_ = bm;
 }
 
 TPX::~TPX() {
@@ -135,45 +135,45 @@ void TPX::ack_pred_success(_Fact *predicted_f) {
 
 bool TPX::filter(View *input, _Fact *abstracted_input, BindingMap *bm) {
 
-  if (input->object->get_reference(0)->code(0).asOpcode() == Opcodes::ICst) // if we get an icst we are called by auto_focus::dispatch_no_inject: the input is irrelevant.
+  if (input->object_->get_reference(0)->code(0).asOpcode() == Opcodes::ICst) // if we get an icst we are called by auto_focus::dispatch_no_inject: the input is irrelevant.
     return false;
   //std::cout<<Utils::RelativeTime(Now())<<" tpx ["<<target->get_oid()<<"] <- "<<input->object->get_oid();
-  if (target_bindings->intersect(bm)) {//std::cout<<" lvl0"<<std::endl;
+  if (target_bindings_->intersect(bm)) {//std::cout<<" lvl0"<<std::endl;
     return true; }
-  if (target_bindings->is_fully_specified())
+  if (target_bindings_->is_fully_specified())
     return false;
-  for (uint32 i = 0; i < new_maps.size(); ++i)
-    if (new_maps[i]->intersect(bm)) {//std::cout<<" lvl1"<<std::endl;
+  for (uint32 i = 0; i < new_maps_.size(); ++i)
+    if (new_maps_[i]->intersect(bm)) {//std::cout<<" lvl1"<<std::endl;
       return true; }
 
-  P<BindingMap> _bm = new BindingMap(target_bindings);
-  _bm->reset_fwd_timings(input->object);
-  time_buffer<CInput, CInput::IsInvalidated> &cache = auto_focus->get_cache();
-  if (_bm->match_fwd_strict(input->object, (_Fact *)target->get_reference(0)->get_reference(0))) { // both GTPX and PTPX' target are f0->g/p->f1: we need to match on f1.
+  P<BindingMap> _bm = new BindingMap(target_bindings_);
+  _bm->reset_fwd_timings(input->object_);
+  time_buffer<CInput, CInput::IsInvalidated> &cache = auto_focus_->get_cache();
+  if (_bm->match_fwd_strict(input->object_, (_Fact *)target_->get_reference(0)->get_reference(0))) { // both GTPX and PTPX' target are f0->g/p->f1: we need to match on f1.
 //std::cout<<" match";
-    new_maps.push_back(_bm);
+    new_maps_.push_back(_bm);
     time_buffer<CInput, CInput::IsInvalidated>::iterator i;
     auto now = Now();
     for (i = cache.begin(now); i != cache.end(); ++i) {
 
-      if (i->injected) {//std::cout<<" ?"<<(*i).input->object->get_oid()<<" ("<<Utils::RelativeTime(i->ijt)<<") skip\n";
+      if (i->injected_) {//std::cout<<" ?"<<(*i).input->object->get_oid()<<" ("<<Utils::RelativeTime(i->ijt)<<") skip\n";
         continue; }
-      if (_bm->intersect(i->bindings)) {
-        i->injected = true;
-        auto_focus->inject_input(i->input, i->abstraction, i->bindings);
+      if (_bm->intersect(i->bindings_)) {
+        i->injected_ = true;
+        auto_focus_->inject_input(i->input_, i->abstraction_, i->bindings_);
         //std::cout<<" ?"<<(*i).input->object->get_oid()<<" ("<<Utils::RelativeTime(i->ijt)<<") success\n";
       }//else std::cout<<" ?"<<(*i).input->object->get_oid()<<" ("<<Utils::RelativeTime(i->ijt)<<") failure\n";
     }
     return true;
   } else {
 
-    if (cst_hook != NULL)
-      cst_hook->take_input(input);
+    if (cst_hook_ != NULL)
+      cst_hook_->take_input(input);
     CInput ci(input, abstracted_input, bm);
     time_buffer<CInput, CInput::IsInvalidated>::iterator i = cache.find(Now(), ci);
     if (i != cache.end()) { // input already cached.
 
-      if (i->ijt < ci.ijt) // older view (happens for sync_axiom and sync_old).
+      if (i->ijt_ < ci.ijt_) // older view (happens for sync_axiom and sync_old).
         cache.erase(i);
       else
         return false;
@@ -188,7 +188,7 @@ bool TPX::filter(View *input, _Fact *abstracted_input, BindingMap *bm) {
 
 _TPX::_TPX(AutoFocusController *auto_focus, _Fact *target, _Fact *pattern, BindingMap *bindings) : TPX(auto_focus, target, pattern, bindings) {
 
-  inputs.reserve(InputsInitialSize);
+  inputs_.reserve(InputsInitialSize);
 }
 
 _TPX::_TPX(AutoFocusController *auto_focus, _Fact *target) : TPX(auto_focus, target) {
@@ -200,14 +200,14 @@ _TPX::~_TPX() {
 void _TPX::filter_icst_components(ICST *icst, uint32 icst_index, std::vector<Component> &components) {
 
   uint32 found_component_count = 0;
-  uint32 *found = new uint32[icst->components.size()];
+  uint32 *found = new uint32[icst->components_.size()];
   for (uint32 j = 0; j < components.size(); ++j) {
 
-    for (uint32 i = 0; i < icst->components.size(); ++i) {
+    for (uint32 i = 0; i < icst->components_.size(); ++i) {
 
       if (components[j].discarded)
         continue;
-      if (components[j].object == icst->components[i]) {
+      if (components[j].object == icst->components_[i]) {
 
         found[found_component_count] = j;
         ++found_component_count;
@@ -228,19 +228,19 @@ void _TPX::filter_icst_components(ICST *icst, uint32 icst_index, std::vector<Com
 _Fact *_TPX::_find_f_icst(_Fact *component, uint16 &component_index) {
 
   r_code::list<Input>::const_iterator i;
-  for (i = inputs.begin(); i != inputs.end(); ++i) {
+  for (i = inputs_.begin(); i != inputs_.end(); ++i) {
 
-    Code *candidate = i->input->get_reference(0);
+    Code *candidate = i->input_->get_reference(0);
     if (candidate->code(0).asOpcode() == Opcodes::ICst) {
 
       ICST *icst = (ICST *)candidate;
       if (icst->contains(component, component_index))
-        return i->input;
+        return i->input_;
     }
   }
 
   std::vector<P<_Fact> >::const_iterator f_icst;
-  for (f_icst = icsts.begin(); f_icst != icsts.end(); ++f_icst) {
+  for (f_icst = icsts_.begin(); f_icst != icsts_.end(); ++f_icst) {
 
     ICST *icst = (ICST *)(*f_icst)->get_reference(0);
     if (icst->contains(component, component_index))
@@ -279,18 +279,18 @@ _Fact *_TPX::find_f_icst(_Fact *component, uint16 &component_index, Code *&cst) 
   std::vector<uint32> icst_components;
 
   r_code::list<Input>::const_iterator i;
-  for (i = inputs.begin(); i != inputs.end(); ++i) {
+  for (i = inputs_.begin(); i != inputs_.end(); ++i) {
 
-    if (component == i->input) {
+    if (component == i->input_) {
 
       component_index = components.size();
       components.push_back(Component(component));
-    } else if (component->match_timings_sync(i->input)) {
+    } else if (component->match_timings_sync(i->input_)) {
 
-      Code *icst = i->input->get_reference(0);
+      Code *icst = i->input_->get_reference(0);
       if (icst->code(0).asOpcode() == Opcodes::ICst)
         icst_components.push_back(components.size());
-      components.push_back(Component(i->input));
+      components.push_back(Component(i->input_));
     }
   }
 
@@ -316,12 +316,12 @@ _Fact *_TPX::find_f_icst(_Fact *component, uint16 &component_index, Code *&cst) 
   }
 
   r_code::list<Input>::iterator _i;
-  for (_i = inputs.begin(); _i != inputs.end(); ++_i) { // flag the components so the tpx does not try them again.
+  for (_i = inputs_.begin(); _i != inputs_.end(); ++_i) { // flag the components so the tpx does not try them again.
 
     for (uint32 j = 0; j < components.size(); ++j) {
 
-      if (_i->input == components[j].object)
-        _i->eligible_cause = false;
+      if (_i->input_ == components[j].object)
+        _i->eligible_cause_ = false;
     }
   }
 
@@ -329,7 +329,7 @@ _Fact *_TPX::find_f_icst(_Fact *component, uint16 &component_index, Code *&cst) 
   cst = build_cst(components, bm, component);
   uint32 rc = cst->references_size();
   f_icst = bm->build_f_ihlp(cst, Opcodes::ICst, false);
-  icsts.push_back(f_icst); // the f_icst can be reused in subsequent model building attempts.
+  icsts_.push_back(f_icst); // the f_icst can be reused in subsequent model building attempts.
   return f_icst;
 }
 
@@ -373,7 +373,7 @@ Code *_TPX::build_cst(const std::vector<Component> &components, BindingMap *bm, 
 
   cst->code(CST_ARITY) = Atom::Float(1); // psln_thr.
 
-  cst->add_reference(auto_focus->getView()->get_host()); // reference the output group.
+  cst->add_reference(auto_focus_->getView()->get_host()); // reference the output group.
 
   return cst;
 }
@@ -412,26 +412,26 @@ void _TPX::build_mdl_tail(Code *mdl, uint16 write_index) {
   mdl->code(MDL_DSR) = Atom::Float(1);
   mdl->code(MDL_ARITY) = Atom::Float(1); // psln_thr.
 
-  mdl->add_reference(auto_focus->getView()->get_host()); // reference the output group.
+  mdl->add_reference(auto_focus_->getView()->get_host()); // reference the output group.
 }
 
 void _TPX::inject_hlps() const {
 
   std::vector<P<Code> >::const_iterator c;
-  for (c = csts.begin(); c != csts.end(); ++c)
+  for (c = csts_.begin(); c != csts_.end(); ++c)
     _Mem::Get()->pack_hlp(*c);
-  auto_focus->inject_hlps(csts);
-  auto_focus->inject_hlps(mdls);
+  auto_focus_->inject_hlps(csts_);
+  auto_focus_->inject_hlps(mdls_);
 }
 
 void _TPX::inject_hlps(Timestamp analysis_starting_time) {
 
-  if (auto_focus->decompile_models()) {
+  if (auto_focus_->decompile_models()) {
 
     r_code::list<P<Code> > tmp;
     r_code::list<Input>::const_iterator i;
-    for (i = inputs.begin(); i != inputs.end(); ++i)
-      tmp.push_back((Code *)i->input);
+    for (i = inputs_.begin(); i != inputs_.end(); ++i)
+      tmp.push_back((Code *)i->input_);
 
     std::string header("> from buffer -------------------\n\n");
 
@@ -451,19 +451,19 @@ void _TPX::inject_hlps(Timestamp analysis_starting_time) {
     header += s0 + timing + s1;
 
     td = new TDecompiler(1, header);
-    td->add_objects(mdls);
+    td->add_objects(mdls_);
     inject_hlps();
     td->decompile();
   } else
     inject_hlps();
 
-  csts.clear();
-  mdls.clear();
+  csts_.clear();
+  mdls_.clear();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-GTPX::GTPX(AutoFocusController *auto_focus, _Fact *target, _Fact *pattern, BindingMap *bindings, Fact *f_imdl) : _TPX(auto_focus, target, pattern, bindings), f_imdl(f_imdl) {
+GTPX::GTPX(AutoFocusController *auto_focus, _Fact *target, _Fact *pattern, BindingMap *bindings, Fact *f_imdl) : _TPX(auto_focus, target, pattern, bindings), f_imdl_(f_imdl) {
 }
 
 GTPX::~GTPX() {
@@ -474,16 +474,16 @@ bool GTPX::take_input(View *input, _Fact *abstracted_input, BindingMap *bm) { //
   if (!filter(input, abstracted_input, bm))
     return false;
 
-  inputs.push_back(Input(input, abstracted_input, bm));
+  inputs_.push_back(Input(input, abstracted_input, bm));
   return true;
 }
 
 void GTPX::signal(View *input) const { // will be erased from the AF map upon return. P<> kept in reduction job.
 
-  if (!auto_focus->gtpx_on())
+  if (!auto_focus_->gtpx_on())
     return;
 
-  if (((_Fact *)input->object)->is_fact()) { // goal success.
+  if (((_Fact *)input->object_)->is_fact()) { // goal success.
 
     ReductionJob<GTPX> *j = new ReductionJob<GTPX>(new View(input), (GTPX *)this);
     _Mem::Get()->pushReductionJob(j);
@@ -492,27 +492,27 @@ void GTPX::signal(View *input) const { // will be erased from the AF map upon re
 
 void GTPX::ack_pred_success(_Fact *predicted_f) { // successful prediction: store; at reduce() time, check if the target was successfully predicted and if so, abort mdl building.
 
-  predictions.push_back(predicted_f);
+  predictions_.push_back(predicted_f);
 }
 
 void GTPX::reduce(r_exec::View *input) { // input->object: f->success.
 
-  _Fact *consequent = (_Fact *)input->object->get_reference(0)->get_reference(1);
+  _Fact *consequent = (_Fact *)input->object_->get_reference(0)->get_reference(1);
   P<BindingMap> consequent_bm = new BindingMap();
   _Fact *abstracted_consequent = (_Fact *)consequent_bm->abstract_object(consequent, false);
 
-  for (uint32 i = 0; i < predictions.size(); ++i) { // check if some models have successfully predicted the target: if so, abort.
+  for (uint32 i = 0; i < predictions_.size(); ++i) { // check if some models have successfully predicted the target: if so, abort.
 
     P<BindingMap> bm = new BindingMap(consequent_bm);
-    bm->reset_fwd_timings(predictions[i]);
-    if (bm->match_fwd_strict(predictions[i], consequent))
+    bm->reset_fwd_timings(predictions_[i]);
+    if (bm->match_fwd_strict(predictions_[i], consequent))
       return;
   }
 
   auto analysis_starting_time = Now();
 
   bool need_guard;
-  if (target->get_reference(0)->code(0).asOpcode() == Opcodes::MkVal)
+  if (target_->get_reference(0)->code(0).asOpcode() == Opcodes::MkVal)
     return; // this case will be handled by CTPXs.
 
   P<GuardBuilder> guard_builder;
@@ -522,15 +522,15 @@ void GTPX::reduce(r_exec::View *input) { // input->object: f->success.
   microseconds rhs_duration;
 
   r_code::list<Input>::const_iterator i;
-  for (i = inputs.begin(); i != inputs.end();) {
+  for (i = inputs_.begin(); i != inputs_.end();) {
 
-    if (i->input->get_after() >= consequent->get_after()) { // discard inputs younger than the consequent.
+    if (i->input_->get_after() >= consequent->get_after()) { // discard inputs younger than the consequent.
 
-      i = inputs.erase(i);
+      i = inputs_.erase(i);
       continue;
     }
 
-    if (i->input->get_reference(0)->code(0).asOpcode() == Opcodes::ICst) {
+    if (i->input_->get_reference(0)->code(0).asOpcode() == Opcodes::ICst) {
 
       ++i;
       continue; // components will be evaluated first, then the icst will be identified.
@@ -538,13 +538,13 @@ void GTPX::reduce(r_exec::View *input) { // input->object: f->success.
 
     Input cause = *i;
 
-    if (!cause.eligible_cause) {
+    if (!cause.eligible_cause_) {
 
       ++i;
       continue;
     }
 
-    if (Utils::Synchronous(cause.input->get_after(), target->get_after())) { // cause in sync with the premise: ignore.
+    if (Utils::Synchronous(cause.input_->get_after(), target_->get_after())) { // cause in sync with the premise: ignore.
 
       ++i;
       continue;
@@ -552,16 +552,16 @@ void GTPX::reduce(r_exec::View *input) { // input->object: f->success.
 
     guard_builder = new TimingGuardBuilder(period);// TODO: use the durations.
 
-    period = duration_cast<microseconds>(consequent->get_after() - cause.input->get_after());
-    lhs_duration = duration_cast<microseconds>(cause.input->get_before() - cause.input->get_after());
+    period = duration_cast<microseconds>(consequent->get_after() - cause.input_->get_after());
+    lhs_duration = duration_cast<microseconds>(cause.input_->get_before() - cause.input_->get_after());
     rhs_duration = duration_cast<microseconds>(consequent->get_before() - consequent->get_after());
 
     uint16 cause_index;
     Code *new_cst;
-    _Fact *f_icst = find_f_icst(cause.input, cause_index, new_cst);
+    _Fact *f_icst = find_f_icst(cause.input_, cause_index, new_cst);
     if (f_icst == NULL) {
 
-      if (build_mdl(cause.input, consequent, guard_builder, period))
+      if (build_mdl(cause.input_, consequent, guard_builder, period))
         inject_hlps(analysis_starting_time);
     } else {
 
@@ -595,7 +595,7 @@ bool GTPX::build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builde
     return false;
   else if (_m0 == m0) {
 
-    mdls.push_back(m0);
+    mdls_.push_back(m0);
     return true;
   } else
     return false;
@@ -616,8 +616,8 @@ bool GTPX::build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, Gua
   else if (_m0 == m0) {
 
     if (new_cst)
-      csts.push_back(new_cst);
-    mdls.push_back(m0);
+      csts_.push_back(new_cst);
+    mdls_.push_back(m0);
     return true;
   } else // if m0 already exist, new_cst==NULL.
     return false;
@@ -630,7 +630,7 @@ std::string GTPX::get_header() const {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-PTPX::PTPX(AutoFocusController *auto_focus, _Fact *target, _Fact *pattern, BindingMap *bindings, Fact *f_imdl) : _TPX(auto_focus, target, pattern, bindings), f_imdl(f_imdl) {
+PTPX::PTPX(AutoFocusController *auto_focus, _Fact *target, _Fact *pattern, BindingMap *bindings, Fact *f_imdl) : _TPX(auto_focus, target, pattern, bindings), f_imdl_(f_imdl) {
 }
 
 PTPX::~PTPX() {
@@ -638,10 +638,10 @@ PTPX::~PTPX() {
 
 void PTPX::signal(View *input) const { // will be erased from the AF map upon return. P<> kept in reduction job.
 
-  if (!auto_focus->ptpx_on())
+  if (!auto_focus_->ptpx_on())
     return;
 
-  if (((_Fact *)input->object)->is_anti_fact()) { // prediction failure.
+  if (((_Fact *)input->object_)->is_anti_fact()) { // prediction failure.
 
     ReductionJob<PTPX> *j = new ReductionJob<PTPX>(new View(input), (PTPX *)this);
     _Mem::Get()->pushReductionJob(j);
@@ -650,23 +650,23 @@ void PTPX::signal(View *input) const { // will be erased from the AF map upon re
 
 void PTPX::reduce(r_exec::View *input) {
 
-  auto_focus->copy_cross_buffer(inputs); // the cause of the prediction failure comes before the prediction.
+  auto_focus_->copy_cross_buffer(inputs_); // the cause of the prediction failure comes before the prediction.
 
   auto analysis_starting_time = Now();
 
-  _Fact *consequent = new Fact((Fact *)f_imdl); // input->object is the prediction failure: ignore and consider |f->imdl instead.
+  _Fact *consequent = new Fact((Fact *)f_imdl_); // input->object is the prediction failure: ignore and consider |f->imdl instead.
   consequent->set_opposite();
 
   P<BindingMap> end_bm = new BindingMap();
   P<_Fact> abstract_input = (_Fact *)end_bm->abstract_object(consequent, false);
   r_code::list<Input>::const_iterator i;
-  for (i = inputs.begin(); i != inputs.end();) { // filter out inputs irrelevant for the prediction.
+  for (i = inputs_.begin(); i != inputs_.end();) { // filter out inputs irrelevant for the prediction.
 
-    if (i->input->code(0).asOpcode() == Opcodes::Cmd) // no cmds as req lhs (because no bwd-operational); prefer: cmd->effect, effect->imdl.
-      i = inputs.erase(i);
-    else if (!end_bm->intersect(i->bindings) || // discard inputs that do not share values with the consequent.
-      i->input->get_after() >= consequent->get_after()) // discard inputs younger than the consequent.
-      i = inputs.erase(i);
+    if (i->input_->code(0).asOpcode() == Opcodes::Cmd) // no cmds as req lhs (because no bwd-operational); prefer: cmd->effect, effect->imdl.
+      i = inputs_.erase(i);
+    else if (!end_bm->intersect(i->bindings_) || // discard inputs that do not share values with the consequent.
+      i->input_->get_after() >= consequent->get_after()) // discard inputs younger than the consequent.
+      i = inputs_.erase(i);
     else
       ++i;
   }
@@ -676,27 +676,27 @@ void PTPX::reduce(r_exec::View *input) {
   microseconds lhs_duration;
   microseconds rhs_duration;
 
-  for (i = inputs.begin(); i != inputs.end(); ++i) {
+  for (i = inputs_.begin(); i != inputs_.end(); ++i) {
 
-    if (i->input->get_reference(0)->code(0).asOpcode() == Opcodes::ICst)
+    if (i->input_->get_reference(0)->code(0).asOpcode() == Opcodes::ICst)
       continue; // components will be evaluated first, then the icst will be identified.
 
     Input cause = *i;
 
-    if (!cause.eligible_cause)
+    if (!cause.eligible_cause_)
       continue;
 
-    period = duration_cast<microseconds>(consequent->get_after() - cause.input->get_after());
-    lhs_duration = duration_cast<microseconds>(cause.input->get_before() - cause.input->get_after());
+    period = duration_cast<microseconds>(consequent->get_after() - cause.input_->get_after());
+    lhs_duration = duration_cast<microseconds>(cause.input_->get_before() - cause.input_->get_after());
     rhs_duration = duration_cast<microseconds>(consequent->get_before() - consequent->get_after());
     guard_builder = new TimingGuardBuilder(period); // TODO: use the durations.
 
     uint16 cause_index;
     Code *new_cst;
-    _Fact *f_icst = find_f_icst(cause.input, cause_index, new_cst);
+    _Fact *f_icst = find_f_icst(cause.input_, cause_index, new_cst);
     if (f_icst == NULL) {
 
-      if (build_mdl(cause.input, consequent, guard_builder, period))
+      if (build_mdl(cause.input_, consequent, guard_builder, period))
         inject_hlps(analysis_starting_time);
     } else {
 
@@ -729,7 +729,7 @@ bool PTPX::build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builde
     return false;
   else if (_m0 == m0) {
 
-    mdls.push_back(m0);
+    mdls_.push_back(m0);
     return true;
   } else
     return false;
@@ -750,8 +750,8 @@ bool PTPX::build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, Gua
   else if (_m0 == m0) {
 
     if (new_cst)
-      csts.push_back(new_cst);
-    mdls.push_back(m0);
+      csts_.push_back(new_cst);
+    mdls_.push_back(m0);
     return true;
   } else // if m0 already exist, new_cst==NULL.
     return false;
@@ -764,7 +764,7 @@ std::string PTPX::get_header() const {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-CTPX::CTPX(AutoFocusController *auto_focus, View *premise) : _TPX(auto_focus, premise->object), stored_premise(false), premise(premise) {
+CTPX::CTPX(AutoFocusController *auto_focus, View *premise) : _TPX(auto_focus, premise->object_), stored_premise_(false), premise_(premise) {
 }
 
 CTPX::~CTPX() {
@@ -772,13 +772,13 @@ CTPX::~CTPX() {
 
 void CTPX::store_input(r_exec::View *input) {
 
-  _Fact *input_object = (_Fact *)input->object;
+  _Fact *input_object = (_Fact *)input->object_;
   P<BindingMap> bm = new BindingMap();
   _Fact *abstracted_input = (_Fact *)bm->abstract_object(input_object, false);
   Input i(input, abstracted_input, bm);
-  inputs.push_front(i);
-  if (input_object == target)
-    stored_premise = true;
+  inputs_.push_front(i);
+  if (input_object == target_)
+    stored_premise_ = true;
 }
 
 void CTPX::signal(r_exec::View *input) {
@@ -792,60 +792,60 @@ void CTPX::reduce(r_exec::View *input) {
 
   auto analysis_starting_time = Now();
 
-  if (!stored_premise)
-    inputs.push_back(Input(premise, abstracted_target, target_bindings));
+  if (!stored_premise_)
+    inputs_.push_back(Input(premise_, abstracted_target_, target_bindings_));
 
-  _Fact *consequent = (_Fact *)input->object; // counter-evidence for the premise.
+  _Fact *consequent = (_Fact *)input->object_; // counter-evidence for the premise.
 
   P<BindingMap> end_bm = new BindingMap();
   P<_Fact> abstract_input = (_Fact *)end_bm->abstract_object(consequent, false);
   r_code::list<Input>::const_iterator i;
-  for (i = inputs.begin(); i != inputs.end();) {
+  for (i = inputs_.begin(); i != inputs_.end();) {
 
-    if (!end_bm->intersect(i->bindings) || // discard inputs that do not share values with the consequent.
-      i->input->get_after() >= consequent->get_after()) // discard inputs not younger than the consequent.
-      i = inputs.erase(i);
+    if (!end_bm->intersect(i->bindings_) || // discard inputs that do not share values with the target or consequent.
+      i->input_->get_after() >= consequent->get_after()) // discard inputs not younger than the consequent.
+      i = inputs_.erase(i);
     else
       ++i;
   }
 
   bool need_guard;
-  if (target->get_reference(0)->code(0).asOpcode() == Opcodes::MkVal)
-    need_guard = target->get_reference(0)->code(MK_VAL_VALUE).isFloat();
+  if (target_->get_reference(0)->code(0).asOpcode() == Opcodes::MkVal)
+    need_guard = target_->get_reference(0)->code(MK_VAL_VALUE).isFloat();
   else
     need_guard = false;
 
-  auto period = duration_cast<microseconds>(Utils::GetTimestamp<Code>(consequent, FACT_AFTER) - Utils::GetTimestamp<Code>(target, FACT_AFTER)); // sampling period.
+  auto period = duration_cast<microseconds>(Utils::GetTimestamp<Code>(consequent, FACT_AFTER) - Utils::GetTimestamp<Code>(target_, FACT_AFTER)); // sampling period.
   P<GuardBuilder> guard_builder;
 
-  for (i = inputs.begin(); i != inputs.end(); ++i) {
+  for (i = inputs_.begin(); i != inputs_.end(); ++i) {
 
-    if (target == i->input)
+    if (target_ == i->input_)
       continue;
 
-    if (i->input->get_reference(0)->code(0).asOpcode() == Opcodes::ICst)
+    if (i->input_->get_reference(0)->code(0).asOpcode() == Opcodes::ICst)
       continue; // components will be evaluated first, then the icst will be identified.
 
     Input cause = *i;
 
-    if (!cause.eligible_cause)
+    if (!cause.eligible_cause_)
       continue;
 
-    if (Utils::Synchronous(cause.input->get_after(), target->get_after())) // cause in sync with the premise: ignore.
+    if (Utils::Synchronous(cause.input_->get_after(), target_->get_after())) // cause in sync with the premise: ignore.
       continue;
 
     if (need_guard) {
 
-      if ((guard_builder = find_guard_builder(cause.input, consequent, period)) == NULL)
+      if ((guard_builder = find_guard_builder(cause.input_, consequent, period)) == NULL)
         continue;
     } else
-      guard_builder = get_default_guard_builder(cause.input, consequent, period);
+      guard_builder = get_default_guard_builder(cause.input_, consequent, period);
 
     uint16 cause_index;
-    _Fact *f_icst = find_f_icst(cause.input, cause_index);
+    _Fact *f_icst = find_f_icst(cause.input_, cause_index);
     if (f_icst == NULL) { // m0:[premise.value premise.after premise.before][cause->consequent] and m1:[lhs1->imdl m0[...][...]] with lhs1 either the premise or an icst containing the premise.
 
-      if (build_mdl(cause.input, consequent, guard_builder, period))
+      if (build_mdl(cause.input_, consequent, guard_builder, period))
         inject_hlps(analysis_starting_time);
     } else {
 
@@ -882,7 +882,7 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
   uint16 opcode = cause_payload->code(0).asOpcode();
   if (opcode == Opcodes::Cmd) { // form 0.
 
-    float32 q0 = target->get_reference(0)->code(MK_VAL_VALUE).asFloat();
+    float32 q0 = target_->get_reference(0)->code(MK_VAL_VALUE).asFloat();
     float32 q1 = consequent->get_reference(0)->code(MK_VAL_VALUE).asFloat();
 
     float32 searched_for = q1 - q0;
@@ -917,23 +917,23 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
     if (s.isFloat()) {
 
       float32 _s = s.asFloat();
-      float32 q0 = target->get_reference(0)->code(MK_VAL_VALUE).asFloat();
+      float32 q0 = target_->get_reference(0)->code(MK_VAL_VALUE).asFloat();
       float32 q1 = consequent->get_reference(0)->code(MK_VAL_VALUE).asFloat();
 
       float32 searched_for = (q1 - q0) / period.count();
       if (Utils::Equal(_s, searched_for)) { // form 1.
 
-        auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target, FACT_AFTER));
+        auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target_, FACT_AFTER));
         return new SGuardBuilder(period, period - offset);
       }
 
       if (q0 != 0) { // form 2.
 
-        auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target, FACT_AFTER));
+        auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target_, FACT_AFTER));
         return new MGuardBuilder(period, q1 / q0, offset);
       }
 
-      auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target, FACT_AFTER));
+      auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target_, FACT_AFTER));
       return new AGuardBuilder(period, q1 - q0, offset);
     }
   }
@@ -946,9 +946,9 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
 bool CTPX::build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, microseconds period) {
 
   P<HLPBindingMap> bm = new HLPBindingMap();
-  bm->init(target->get_reference(0), MK_VAL_VALUE);
-  bm->init(target, FACT_AFTER);
-  bm->init(target, FACT_BEFORE);
+  bm->init(target_->get_reference(0), MK_VAL_VALUE);
+  bm->init(target_, FACT_AFTER);
+  bm->init(target_, FACT_BEFORE);
 
   uint16 write_index;
   P<Code> m0 = build_mdl_head(bm, 3, cause, consequent, write_index);
@@ -963,9 +963,9 @@ bool CTPX::build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builde
 bool CTPX::build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, microseconds period) {
 
   P<BindingMap> bm = new BindingMap();
-  bm->init(target->get_reference(0), MK_VAL_VALUE);
-  bm->init(target, FACT_AFTER);
-  bm->init(target, FACT_BEFORE);
+  bm->init(target_->get_reference(0), MK_VAL_VALUE);
+  bm->init(target_, FACT_AFTER);
+  bm->init(target_, FACT_BEFORE);
 
   uint16 write_index;
   Code *m0 = build_mdl_head(bm, 3, f_icst, consequent, write_index);
@@ -975,11 +975,11 @@ bool CTPX::build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, Gua
   return build_requirement(bm, m0, period); // existence checks performed there.
 }
 
-bool CTPX::build_requirement(HLPBindingMap *bm, Code *m0, microseconds period) { // check for mdl existence at the same time (ModelBase::mdlCS-wise).
+bool CTPX::build_requirement(HLPBindingMap *bm, Code *m0, microseconds period) { // check for mdl existence at the same time (ModelBase::mdlCS_-wise).
 
   uint16 premise_index;
   Code *new_cst;
-  _Fact *f_icst = find_f_icst(target, premise_index, new_cst);
+  _Fact *f_icst = find_f_icst(target_, premise_index, new_cst);
   if (f_icst == NULL) {//std::cout<<Utils::RelativeTime(Now())<<" failed xxxxxxxxx M1 / 0\n";
     return false; }
 
@@ -1014,10 +1014,10 @@ bool CTPX::build_requirement(HLPBindingMap *bm, Code *m0, microseconds period) {
     if (_m0 == NULL)
       return false;
     else if (_m0 == m0)
-      mdls.push_back(m0);
+      mdls_.push_back(m0);
     if (new_cst != NULL)
-      csts.push_back(new_cst);
-    mdls.push_back(m1);
+      csts_.push_back(new_cst);
+    mdls_.push_back(m1);
   } // if m1 alrady exists, new_cst==NULL.
   //std::cout<<Utils::RelativeTime(Now()<<" found --------------------- M1\n";
   return true;

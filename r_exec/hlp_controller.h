@@ -97,24 +97,24 @@ typedef enum {
 class HLPController :
   public OController {
 private:
-  uint32 strong_requirement_count; // number of active strong requirements in the same group; updated dynamically.
-  uint32 weak_requirement_count; // number of active weak requirements in the same group; updated dynamically.
-  uint32 requirement_count; // sum of the two above.
+  uint32 strong_requirement_count_; // number of active strong requirements in the same group; updated dynamically.
+  uint32 weak_requirement_count_; // number of active weak requirements in the same group; updated dynamically.
+  uint32 requirement_count_; // sum of the two above.
 protected:
   class EvidenceEntry { // evidences.
   private:
     void load_data(_Fact *evidence);
   public:
-    P<_Fact> evidence;
-    Timestamp after;
-    Timestamp before;
-    float32 confidence;
+    P<_Fact> evidence_;
+    Timestamp after_;
+    Timestamp before_;
+    float32 confidence_;
 
     EvidenceEntry();
     EvidenceEntry(_Fact *evidence);
     EvidenceEntry(_Fact *evidence, _Fact *payload);
 
-    bool is_too_old(Timestamp now) const { return (evidence->is_invalidated() || before < now); }
+    bool is_too_old(Timestamp now) const { return (evidence_->is_invalidated() || before_ < now); }
   };
 
   class PredictedEvidenceEntry : // predicted evidences.
@@ -130,8 +130,8 @@ protected:
     r_code::list<E> evidences;
   };
 
-  Cache<EvidenceEntry> evidences;
-  Cache<PredictedEvidenceEntry> predicted_evidences;
+  Cache<EvidenceEntry> evidences_;
+  Cache<PredictedEvidenceEntry> predicted_evidences_;
 
   template<class E> void _store_evidence(Cache<E> *cache, _Fact *evidence) {
 
@@ -150,19 +150,19 @@ protected:
     cache->CS.leave();
   }
 
-  P<HLPBindingMap> bindings;
+  P<HLPBindingMap> bindings_;
 
   bool evaluate_bwd_guards(HLPBindingMap *bm);
 
   MatchResult check_evidences(_Fact *target, _Fact *&evidence); // evidence with the match (positive or negative), get_absentee(target) otherwise.
   MatchResult check_predicted_evidences(_Fact *target, _Fact *&evidence); // evidence with the match (positive or negative), NULL otherwise.
 
-  bool _has_tpl_args;
-  uint32 ref_count; // used to detect _Object::refCount dropping down to 1 for hlp with tpl args.
+  bool has_tpl_args_;
+  uint32 ref_count_; // used to detect _Object::refCount_ dropping down to 1 for hlp with tpl args.
   bool is_orphan(); // true when there are tpl args and no requirements: the controller cannot execute anymore.
 
-  std::vector<P<HLPController> > controllers; // all controllers for models/states instantiated in the patterns; case of models: [0]==lhs, [1]==rhs.
-  Timestamp last_match_time; // last time a match occurred (fwd), regardless of its outcome.
+  std::vector<P<HLPController> > controllers_; // all controllers for models/states instantiated in the patterns; case of models: [0]==lhs, [1]==rhs.
+  Timestamp last_match_time_; // last time a match occurred (fwd), regardless of its outcome.
   bool become_invalidated(); // true if one controller is invalidated or if all controllers pointing to this are invalidated.
   virtual void kill_views() {}
   virtual void check_last_match_time(bool match) = 0;
@@ -186,15 +186,15 @@ public:
   uint32 get_requirement_count(uint32 &weak_requirement_count, uint32 &strong_requirement_count);
   uint32 get_requirement_count();
 
-  void store_evidence(_Fact *evidence) { _store_evidence<EvidenceEntry>(&evidences, evidence); }
-  void store_predicted_evidence(_Fact *evidence) { _store_evidence <PredictedEvidenceEntry>(&predicted_evidences, evidence); }
+  void store_evidence(_Fact *evidence) { _store_evidence<EvidenceEntry>(&evidences_, evidence); }
+  void store_predicted_evidence(_Fact *evidence) { _store_evidence <PredictedEvidenceEntry>(&predicted_evidences_, evidence); }
 
   virtual Fact *get_f_ihlp(HLPBindingMap *bindings, bool wr_enabled) const = 0;
 
   uint16 get_out_group_count() const;
   Code *get_out_group(uint16 i) const; // i starts at 1.
   Group *get_host() const;
-  bool has_tpl_args() const { return _has_tpl_args; }
+  bool has_tpl_args() const { return has_tpl_args_; }
 
   void inject_prediction(Fact *prediction, float32 confidence) const; // for simulated predictions.
 };

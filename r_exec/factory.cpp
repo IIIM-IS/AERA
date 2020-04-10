@@ -378,7 +378,7 @@ bool _Fact::CounterEvidence(const Code *lhs, const Code *rhs) {
   if (opcode == Opcodes::MkVal) {
 
     if (lhs->get_reference(lhs->code(MK_VAL_OBJ).asIndex()) == rhs->get_reference(rhs->code(MK_VAL_OBJ).asIndex()) &&
-      lhs->get_reference(lhs->code(MK_VAL_ATTR).asIndex()) == rhs->get_reference(rhs->code(MK_VAL_ATTR).asIndex())) { // same attribute for the same object; value: r_ptr, atomic value or structure.
+      lhs->get_reference(lhs->code(MK_VAL_ATTR).asIndex()) == rhs->get_reference(rhs->code(MK_VAL_ATTR).asIndex())) { // same attribute for the same object; value_: r_ptr, atomic value or structure.
 
       Atom lhs_atom = lhs->code(MK_VAL_VALUE);
       Atom rhs_atom = rhs->code(MK_VAL_VALUE);
@@ -412,9 +412,9 @@ bool _Fact::CounterEvidence(const Code *lhs, const Code *rhs) {
     if (lhs->get_reference(0) != rhs->get_reference(0)) // check if the icsts instantiate the same cst.
       return false;
 
-    for (uint32 i = 0; i < ((ICST *)lhs)->components.size(); ++i) { // compare all components 2 by 2.
+    for (uint32 i = 0; i < ((ICST *)lhs)->components_.size(); ++i) { // compare all components 2 by 2.
 
-      if (CounterEvidence(((ICST *)lhs)->components[i], ((ICST *)rhs)->components[i]))
+      if (CounterEvidence(((ICST *)lhs)->components_[i], ((ICST *)rhs)->components_[i]))
         return true;
     }
   }
@@ -567,17 +567,17 @@ bool Pred::is_invalidated() {
 
   if (LObject::is_invalidated())
     return true;
-  for (uint32 i = 0; i < simulations.size(); ++i) {
+  for (uint32 i = 0; i < simulations_.size(); ++i) {
 
-    if (simulations[i]->is_invalidated()) {
+    if (simulations_[i]->is_invalidated()) {
 
       invalidate();
       return true;
     }
   }
-  for (uint32 i = 0; i < grounds.size(); ++i) {
+  for (uint32 i = 0; i < grounds_.size(); ++i) {
 
-    if (grounds[i]->is_invalidated()) {
+    if (grounds_[i]->is_invalidated()) {
 
       invalidate();
       return true;
@@ -593,9 +593,9 @@ bool Pred::is_invalidated() {
 
 bool Pred::grounds_invalidated(_Fact *evidence) {
 
-  for (uint32 i = 0; i < grounds.size(); ++i) {
+  for (uint32 i = 0; i < grounds_.size(); ++i) {
 
-    switch (evidence->is_evidence(grounds[i])) {
+    switch (evidence->is_evidence(grounds_[i])) {
     case MATCH_SUCCESS_NEGATIVE:
       return true;
     default:
@@ -612,15 +612,15 @@ inline _Fact *Pred::get_target() const {
 
 inline bool Pred::is_simulation() const {
 
-  return simulations.size() > 0;
+  return simulations_.size() > 0;
 }
 
 inline Sim *Pred::get_simulation(Controller *root) const {
 
-  for (uint32 i = 0; i < simulations.size(); ++i) {
+  for (uint32 i = 0; i < simulations_.size(); ++i) {
 
-    if (simulations[i]->root == root)
-      return simulations[i];
+    if (simulations_[i]->root_ == root)
+      return simulations_[i];
   }
 
   return NULL;
@@ -628,13 +628,13 @@ inline Sim *Pred::get_simulation(Controller *root) const {
 
 ////////////////////////////////////////////////////////////////
 
-Goal::Goal() : LObject(), sim(NULL), ground(NULL) {
+Goal::Goal() : LObject(), sim_(NULL), ground_(NULL) {
 }
 
-Goal::Goal(SysObject *source) : LObject(source), sim(NULL), ground(NULL) {
+Goal::Goal(SysObject *source) : LObject(source), sim_(NULL), ground_(NULL) {
 }
 
-Goal::Goal(_Fact *target, Code *actor, float32 psln_thr) : LObject(), sim(NULL), ground(NULL) {
+Goal::Goal(_Fact *target, Code *actor, float32 psln_thr) : LObject(), sim_(NULL), ground_(NULL) {
 
   code(0) = Atom::Object(Opcodes::Goal, GOAL_ARITY);
   code(GOAL_TARGET) = Atom::RPointer(0);
@@ -646,8 +646,8 @@ Goal::Goal(_Fact *target, Code *actor, float32 psln_thr) : LObject(), sim(NULL),
 
 bool Goal::invalidate() { // return false when was not invalidated, true otherwise.
 
-  if (sim != NULL)
-    sim->invalidate();
+  if (sim_ != NULL)
+    sim_->invalidate();
   return LObject::invalidate();
 }
 
@@ -655,7 +655,7 @@ bool Goal::is_invalidated() {
 
   if (LObject::is_invalidated())
     return true;
-  if (sim != NULL && sim->super_goal != NULL && sim->super_goal->is_invalidated()) {
+  if (sim_ != NULL && sim_->super_goal_ != NULL && sim_->super_goal_->is_invalidated()) {
 
     invalidate();
     return true;
@@ -665,14 +665,14 @@ bool Goal::is_invalidated() {
 
 bool Goal::ground_invalidated(_Fact *evidence) {
 
-  if (ground != NULL)
-    return ground->get_pred()->grounds_invalidated(evidence);
+  if (ground_ != NULL)
+    return ground_->get_pred()->grounds_invalidated(evidence);
   return false;
 }
 
 bool Goal::is_requirement() const {
 
-  if (sim != NULL && sim->is_requirement)
+  if (sim_ != NULL && sim_->is_requirement_)
     return true;
   return false;
 }
@@ -684,7 +684,7 @@ inline bool Goal::is_self_goal() const {
 
 inline bool Goal::is_drive() const {
 
-  return (sim == NULL && is_self_goal());
+  return (sim_ == NULL && is_self_goal());
 }
 
 inline _Fact *Goal::get_target() const {
@@ -694,7 +694,7 @@ inline _Fact *Goal::get_target() const {
 
 inline _Fact *Goal::get_super_goal() const {
 
-  return sim->super_goal;
+  return sim_->super_goal_;
 }
 
 inline Code *Goal::get_actor() const {
@@ -710,25 +710,25 @@ inline float32 Goal::get_strength(Timestamp now) const {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Sim::Sim(Sim *s) : _Object(), mode(s->mode), thz(s->thz), super_goal(s->super_goal), root(s->root), sol(s->sol), is_requirement(false), opposite(s->opposite), invalidated(0), sol_cfd(s->sol_cfd), sol_before(s->sol_before) {
+Sim::Sim(Sim *s) : _Object(), mode_(s->mode_), thz_(s->thz_), super_goal_(s->super_goal_), root_(s->root_), sol_(s->sol_), is_requirement_(false), opposite_(s->opposite_), invalidated_(0), sol_cfd_(s->sol_cfd_), sol_before_(s->sol_before_) {
 }
 
-Sim::Sim(SimMode mode, microseconds thz, Fact *super_goal, bool opposite, Controller *root) : _Object(), mode(mode), thz(thz), super_goal(super_goal), root(root), sol(NULL), is_requirement(false), opposite(opposite), invalidated(0), sol_cfd(0), sol_before(seconds(0)) {
+Sim::Sim(SimMode mode, microseconds thz, Fact *super_goal, bool opposite, Controller *root) : _Object(), mode_(mode), thz_(thz), super_goal_(super_goal), root_(root), sol_(NULL), is_requirement_(false), opposite_(opposite), invalidated_(0), sol_cfd_(0), sol_before_(seconds(0)) {
 }
 
-Sim::Sim(SimMode mode, microseconds thz, Fact *super_goal, bool opposite, Controller *root, Controller *sol, float32 sol_cfd, Timestamp sol_before) : _Object(), mode(mode), thz(thz), super_goal(super_goal), root(root), sol(sol), is_requirement(false), opposite(opposite), invalidated(0), sol_cfd(sol_cfd), sol_before(sol_before) {
+Sim::Sim(SimMode mode, microseconds thz, Fact *super_goal, bool opposite, Controller *root, Controller *sol, float32 sol_cfd, Timestamp sol_before) : _Object(), mode_(mode), thz_(thz), super_goal_(super_goal), root_(root), sol_(sol), is_requirement_(false), opposite_(opposite), invalidated_(0), sol_cfd_(sol_cfd), sol_before_(sol_before) {
 }
 
 void Sim::invalidate() {
 
-  invalidated = 1;
+  invalidated_ = 1;
 }
 
 bool Sim::is_invalidated() {
 
-  if (invalidated == 1)
+  if (invalidated_ == 1)
     return true;
-  if (super_goal != NULL && super_goal->is_invalidated()) {
+  if (super_goal_ != NULL && super_goal_->is_invalidated()) {
 
     invalidate();
     return true;
@@ -738,13 +738,13 @@ bool Sim::is_invalidated() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-MkRdx::MkRdx() : LObject(), bindings(NULL) {
+MkRdx::MkRdx() : LObject(), bindings_(NULL) {
 }
 
-MkRdx::MkRdx(SysObject *source) : LObject(source), bindings(NULL) {
+MkRdx::MkRdx(SysObject *source) : LObject(source), bindings_(NULL) {
 }
 
-MkRdx::MkRdx(Code *imdl_fact, Code *input, Code *output, float32 psln_thr, BindingMap *binding_map) : LObject(), bindings(binding_map) {
+MkRdx::MkRdx(Code *imdl_fact, Code *input, Code *output, float32 psln_thr, BindingMap *binding_map) : LObject(), bindings_(binding_map) {
 
   uint16 extent_index = MK_RDX_ARITY + 1;
   code(0) = Atom::Marker(Opcodes::MkRdx, MK_RDX_ARITY);
@@ -808,9 +808,9 @@ bool ICST::is_invalidated() {
   if (LObject::is_invalidated()) {
     //std::cout<<Time::ToString_seconds(Now()-Utils::GetTimeReference())<<" "<<std::hex<<this<<std::dec<<" icst was invalidated"<<std::endl;
     return true; }
-  for (uint32 i = 0; i < components.size(); ++i) {
+  for (uint32 i = 0; i < components_.size(); ++i) {
 
-    if (components[i]->is_invalidated()) {
+    if (components_[i]->is_invalidated()) {
 
       invalidate();
       //std::cout<<Time::ToString_seconds(Now()-Utils::GetTimeReference())<<" "<<std::hex<<this<<std::dec<<" icst invalidated"<<std::endl;
@@ -822,9 +822,9 @@ bool ICST::is_invalidated() {
 
 bool ICST::contains(_Fact *component, uint16 &component_index) const {
 
-  for (uint32 i = 0; i < components.size(); ++i) {
+  for (uint32 i = 0; i < components_.size(); ++i) {
 
-    if (components[i] == component) {
+    if (components_[i] == component) {
 
       component_index = i;
       return true;

@@ -116,7 +116,7 @@ void decompile(r_comp::Decompiler &decompiler, r_comp::Image *image, Timestamp::
   uint32 object_count = decompiler.decompile(image, &decompiled_code, time_offset, false);
   std::cout << "... done\n";
   std::cout << "\n\nDECOMPILATION\n\n" << decompiled_code.str() << std::endl;
-  std::cout << "Image taken at: " << Time::ToString_year(image->timestamp) << std::endl << std::endl;
+  std::cout << "Image taken at: " << Time::ToString_year(image->timestamp_) << std::endl << std::endl;
   std::cout << object_count << " objects\n";
 #endif
 }
@@ -130,7 +130,7 @@ int32 main(int argc, char **argv) {
     return 1;
 
   std::cout << "compiling ...\n";
-  r_exec::Init(settings.usr_operator_path.c_str(), Time::Get, settings.usr_class_path.c_str());
+  r_exec::Init(settings.usr_operator_path_.c_str(), Time::Get, settings.usr_class_path_.c_str());
   std::cout << "... done\n";
 
   r_comp::Decompiler decompiler;
@@ -141,9 +141,9 @@ int32 main(int argc, char **argv) {
   // Feed the Correlator incrementally with episodes related to the pursuit of one goal.
 
   // First, get an image containing all the episodes.
-  std::string image_path = settings.use_case_path;
+  std::string image_path = settings.use_case_path_;
   image_path += "/";
-  image_path += settings.image_name;
+  image_path += settings.image_name_;
 
   ifstream input(image_path.c_str(), ios::binary | ios::in);
   if (!input.good())
@@ -166,7 +166,7 @@ int32 main(int argc, char **argv) {
   uint32 stdin_oid;
   std::string stdin_str("stdin");
   UNORDERED_MAP<uint32, std::string>::const_iterator n;
-  for (n = _i->object_names.symbols.begin(); n != _i->object_names.symbols.end(); ++n)
+  for (n = _i->object_names_.symbols_.begin(); n != _i->object_names_.symbols_.end(); ++n)
     if (n->second == stdin_str) {
 
       stdin_oid = n->first;
@@ -181,12 +181,12 @@ int32 main(int argc, char **argv) {
       continue;
 
     UNORDERED_SET<View *, View::Hash, View::Equal>::const_iterator v;
-    for (v = object->views.begin(); v != object->views.end(); ++v) {
+    for (v = object->views_.begin(); v != object->views_.end(); ++v) {
 
-      if (!(*v)->references[0])
+      if (!(*v)->references_[0])
         continue;
 
-      if ((*v)->references[0]->get_oid() == stdin_oid) {
+      if ((*v)->references_[0]->get_oid() == stdin_oid) {
 
         correlator_inputs.insert(*v);
         break;
@@ -197,13 +197,13 @@ int32 main(int argc, char **argv) {
   // Third, feed the Correlator with the episodes, one by one.
   // Episodes are delimited with an object of the class episode_end (See user.classes.replicode).
   std::string episode_end_class_name = "episode_end";
-  uint16 episode_end_opcode = r_exec::Metadata.get_class(episode_end_class_name)->atom.asOpcode();
+  uint16 episode_end_opcode = r_exec::Metadata.get_class(episode_end_class_name)->atom_.asOpcode();
   uint16 episode_count = 0;
 
   std::set<r_code::View *, r_code::View::Less>::const_iterator v;
   for (v = correlator_inputs.begin(); v != correlator_inputs.end(); ++v) {
 
-    if ((*v)->object->code(0).asOpcode() == episode_end_opcode) {
+    if ((*v)->object_->code(0).asOpcode() == episode_end_opcode) {
 
       // Get the result.
       CorrelatorOutput *output = correlator.get_output();

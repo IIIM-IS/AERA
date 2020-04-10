@@ -89,10 +89,10 @@ namespace r_exec {
 class DelegatedCore :
   public Thread {
 private:
-  Timer timer;
-  Timestamp target_time;
-  std::chrono::microseconds time_to_wait;
-  P<TimeJob> job;
+  Timer timer_;
+  Timestamp target_time_;
+  std::chrono::microseconds time_to_wait_;
+  P<TimeJob> job_;
 public:
   static thread_ret thread_function_call Wait(void *args);
 

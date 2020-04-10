@@ -98,122 +98,122 @@ CorrelatorCore::~CorrelatorCore() {
 }
 
 void CorrelatorCore::initializeOneStepPrediction(int nC, int nB, std::vector<std::vector <double> >& dataSequence) {
-  nCells = nC;
-  nBlocks = nB;
-  nInputs = dataSequence[0].size();
-  nOutputs = nInputs;
+  nCells_ = nC;
+  nBlocks_ = nB;
+  nInputs_ = dataSequence[0].size();
+  nOutputs_ = nInputs_;
   //dataSeqLength = dataSequence.size();
-  buffersLength = dataSequence.size() - 1;
+  buffersLength_ = dataSequence.size() - 1;
 
-  inputSequenceBuffer.assign(dataSequence.begin(), dataSequence.end() - 1);
-  trainingSequenceBuffer.assign(dataSequence.begin() + 1, dataSequence.end()); // shifted copy of the input sequence
-  outputErrorBuffer.assign(trainingSequenceBuffer.begin(), trainingSequenceBuffer.end());
+  inputSequenceBuffer_.assign(dataSequence.begin(), dataSequence.end() - 1);
+  trainingSequenceBuffer_.assign(dataSequence.begin() + 1, dataSequence.end()); // shifted copy of the input sequence
+  outputErrorBuffer_.assign(trainingSequenceBuffer_.begin(), trainingSequenceBuffer_.end());
 
-  std::vector<LstmBlockState> lstmBlockState(buffersLength);
-  lstmStateBuffer.assign(nBlocks, lstmBlockState);
-  if (nCells > 1) { // cells need to be added
-    for (int i = 0; i < nBlocks; i++) {
-      for (int j = 0; j < lstmStateBuffer.size(); j++) {
-        for (int k = 0; k < nCells - 1; k++) {
-          lstmStateBuffer[i][j].addCell();
+  std::vector<LstmBlockState> lstmBlockState(buffersLength_);
+  lstmStateBuffer_.assign(nBlocks_, lstmBlockState);
+  if (nCells_ > 1) { // cells need to be added
+    for (int i = 0; i < nBlocks_; i++) {
+      for (int j = 0; j < lstmStateBuffer_.size(); j++) {
+        for (int k = 0; k < nCells_ - 1; k++) {
+          lstmStateBuffer_[i][j].addCell();
         }
       }
     }
   }
 
   ForwardLayerState outputState;
-  outputState.ak.assign(nOutputs, 0.);
-  outputState.bk.assign(nOutputs, 0.);
-  outputState.ek.assign(nOutputs, 0.);
-  outputState.dk.assign(nOutputs, 0.);
+  outputState.ak.assign(nOutputs_, 0.);
+  outputState.bk.assign(nOutputs_, 0.);
+  outputState.ek.assign(nOutputs_, 0.);
+  outputState.dk.assign(nOutputs_, 0.);
 
-  outputLayerStateBuffer.assign(buffersLength, outputState); // initialize output layer state buffer
+  outputLayerStateBuffer_.assign(buffersLength_, outputState); // initialize output layer state buffer
 
-  std::vector<double> zeroVector(nInputs, 0.);
-  inputLayerErrorBuffer.assign(buffersLength, zeroVector);
+  std::vector<double> zeroVector(nInputs_, 0.);
+  inputLayerErrorBuffer_.assign(buffersLength_, zeroVector);
 
-  lstmNetwork = new LstmNetwork(nCells, nInputs, nOutputs, nBlocks);
+  lstmNetwork_ = new LstmNetwork(nCells_, nInputs_, nOutputs_, nBlocks_);
 
 }
 
 void CorrelatorCore::appendBuffers(std::vector<std::vector <double> >& dataSequence) {
-  buffersLength += dataSequence.size();
-  inputSequenceBuffer.push_back(trainingSequenceBuffer.back()); // first element is taken from the back of the training buffer
-  inputSequenceBuffer.insert(inputSequenceBuffer.end(), dataSequence.begin() + 1, dataSequence.end()); // append the rest of the data
-  trainingSequenceBuffer.insert(trainingSequenceBuffer.end(), dataSequence.begin(), dataSequence.end()); // copy the whole new part to the training buffer
-  outputErrorBuffer.insert(outputErrorBuffer.end(), dataSequence.begin(), dataSequence.end()); // does not matter, what's inside
+  buffersLength_ += dataSequence.size();
+  inputSequenceBuffer_.push_back(trainingSequenceBuffer_.back()); // first element is taken from the back of the training buffer
+  inputSequenceBuffer_.insert(inputSequenceBuffer_.end(), dataSequence.begin() + 1, dataSequence.end()); // append the rest of the data
+  trainingSequenceBuffer_.insert(trainingSequenceBuffer_.end(), dataSequence.begin(), dataSequence.end()); // copy the whole new part to the training buffer
+  outputErrorBuffer_.insert(outputErrorBuffer_.end(), dataSequence.begin(), dataSequence.end()); // does not matter, what's inside
 
   std::vector<LstmBlockState> lstmBlockState(dataSequence.size());
-  if (nCells > 1) {
+  if (nCells_ > 1) {
     for (int j = 0; j < lstmBlockState.size(); j++) {
-      for (int k = 0; k < nCells - 1; k++) {
+      for (int k = 0; k < nCells_ - 1; k++) {
         lstmBlockState[j].addCell();
       }
     }
   } // it's easier to addCell just once and then copy the whole buffer nBlocks times.
-  for (int i = 0; i < nBlocks; i++) {
-    lstmStateBuffer[i].insert(lstmStateBuffer[i].end(), lstmBlockState.begin(), lstmBlockState.end());
+  for (int i = 0; i < nBlocks_; i++) {
+    lstmStateBuffer_[i].insert(lstmStateBuffer_[i].end(), lstmBlockState.begin(), lstmBlockState.end());
   }
 
   ForwardLayerState outputState;
-  outputState.ak.assign(nOutputs, 0.);
-  outputState.bk.assign(nOutputs, 0.);
-  outputState.ek.assign(nOutputs, 0.);
-  outputState.dk.assign(nOutputs, 0.);
+  outputState.ak.assign(nOutputs_, 0.);
+  outputState.bk.assign(nOutputs_, 0.);
+  outputState.ek.assign(nOutputs_, 0.);
+  outputState.dk.assign(nOutputs_, 0.);
 
-  std::vector<double> zeroVector(nInputs, 0.);
+  std::vector<double> zeroVector(nInputs_, 0.);
 
   for (int i = 0; i < dataSequence.size(); i++) {
-    outputLayerStateBuffer.push_back(outputState);
-    inputLayerErrorBuffer.push_back(zeroVector);
+    outputLayerStateBuffer_.push_back(outputState);
+    inputLayerErrorBuffer_.push_back(zeroVector);
   }
 }
 
 void CorrelatorCore::forwardPass() {
-  lstmNetwork->forwardPass(0, buffersLength, lstmStateBuffer, outputLayerStateBuffer,
-    inputSequenceBuffer);
+  lstmNetwork_->forwardPass(0, buffersLength_, lstmStateBuffer_, outputLayerStateBuffer_,
+    inputSequenceBuffer_);
 }
 
 void CorrelatorCore::backwardPass() {
-  lstmNetwork->backwardPass(0, buffersLength, lstmStateBuffer, outputLayerStateBuffer,
-    outputErrorBuffer, inputLayerErrorBuffer, inputSequenceBuffer);
+  lstmNetwork_->backwardPass(0, buffersLength_, lstmStateBuffer_, outputLayerStateBuffer_,
+    outputErrorBuffer_, inputLayerErrorBuffer_, inputSequenceBuffer_);
 }
 
 double CorrelatorCore::trainingEpoch(double learningRate, double momentum) {
-  lstmNetwork->resetDerivs();
+  lstmNetwork_->resetDerivs();
 
   forwardPass();
 
-  lstmNetwork->outputLayer->updateOutputError(outputLayerStateBuffer, trainingSequenceBuffer, outputErrorBuffer);
+  lstmNetwork_->outputLayer_->updateOutputError(outputLayerStateBuffer_, trainingSequenceBuffer_, outputErrorBuffer_);
 
-  /*for(int i=0;i<outputErrorBuffer.size();i++){
-      for(int j=0;j<outputErrorBuffer[0].size();j++){
-          std::cout << outputErrorBuffer[i][j] << " ";
+  /*for(int i=0;i<outputErrorBuffer_.size();i++){
+      for(int j=0;j<outputErrorBuffer_[0].size();j++){
+          std::cout << outputErrorBuffer_[i][j] << " ";
       }std::cout << std::endl;
   }*/
 
   double error = 0.;
-  for (int i = 0; i < outputErrorBuffer.size(); i++) {
-    error += mse(outputErrorBuffer[i].begin(), outputErrorBuffer[i].end(), 0.);
+  for (int i = 0; i < outputErrorBuffer_.size(); i++) {
+    error += mse(outputErrorBuffer_[i].begin(), outputErrorBuffer_[i].end(), 0.);
   }
   backwardPass();
-  lstmNetwork->updateWeights(learningRate /*/ trainingSequenceBuffer.size()*/, momentum);
-  return error / (outputErrorBuffer.size() * outputErrorBuffer[0].size());
+  lstmNetwork_->updateWeights(learningRate /*/ trainingSequenceBuffer_.size()*/, momentum);
+  return error / (outputErrorBuffer_.size() * outputErrorBuffer_[0].size());
 }
 
 void CorrelatorCore::snapshot(int t1, int t2) {
   std::vector<LstmBlockState> tmpState;
 
-  inputSequenceBufferSnapshot.assign(this->inputSequenceBuffer.begin() + t1, this->inputSequenceBuffer.begin() + t2);
-  lstmStateBufferSnapshot.clear();
-  for (int i = 0; i < lstmStateBuffer.size(); i++) { // all buffers for all lstm blocks
-    tmpState.assign(this->lstmStateBuffer[i].begin() + t1, this->lstmStateBuffer[i].begin() + t2);
-    lstmStateBufferSnapshot.push_back(tmpState);
+  inputSequenceBufferSnapshot_.assign(inputSequenceBuffer_.begin() + t1, inputSequenceBuffer_.begin() + t2);
+  lstmStateBufferSnapshot_.clear();
+  for (int i = 0; i < lstmStateBuffer_.size(); i++) { // all buffers for all lstm blocks
+    tmpState.assign(lstmStateBuffer_[i].begin() + t1, lstmStateBuffer_[i].begin() + t2);
+    lstmStateBufferSnapshot_.push_back(tmpState);
   }
-  outputLayerStateBufferSnapshot.assign(this->outputLayerStateBuffer.begin() + t1, this->outputLayerStateBuffer.begin() + t2);
-  trainingSequenceBufferSnapshot.assign(this->trainingSequenceBuffer.begin() + t1, this->trainingSequenceBuffer.begin() + t2);
-  inputLayerErrorBufferSnapshot.assign(this->inputLayerErrorBuffer.begin() + t1, this->inputLayerErrorBuffer.begin() + t2);
-  outputErrorBufferSnapshot.assign(this->outputErrorBuffer.begin() + t1, this->outputErrorBuffer.begin() + t2); // could be taken out, it is not useful in getJacobian
+  outputLayerStateBufferSnapshot_.assign(outputLayerStateBuffer_.begin() + t1, outputLayerStateBuffer_.begin() + t2);
+  trainingSequenceBufferSnapshot_.assign(trainingSequenceBuffer_.begin() + t1, trainingSequenceBuffer_.begin() + t2);
+  inputLayerErrorBufferSnapshot_.assign(inputLayerErrorBuffer_.begin() + t1, inputLayerErrorBuffer_.begin() + t2);
+  outputErrorBufferSnapshot_.assign(outputErrorBuffer_.begin() + t1, outputErrorBuffer_.begin() + t2); // could be taken out, it is not useful in getJacobian
   // a copy of the lstm network is needed as well, because the weight derivatives get messed up with backpropagation (TODO)
   // input vector buffer is not needed, it's just used to update the weight derivatives
 
@@ -226,13 +226,13 @@ void CorrelatorCore::getJacobian(int t1, int t2, std::vector<std::vector <double
 
   int sLength = t2 - t1; // length of the snapshot
   std::vector<double> deltaVector;
-  deltaVector.assign(trainingSequenceBuffer[t2 - 1].begin(), trainingSequenceBuffer[t2 - 1].end()); // use the training vector to propagate back as delta (it's expected to be sparse vector of 0s and 1s)
+  deltaVector.assign(trainingSequenceBuffer_[t2 - 1].begin(), trainingSequenceBuffer_[t2 - 1].end()); // use the training vector to propagate back as delta (it's expected to be sparse vector of 0s and 1s)
   std::vector<double> zeroVector(deltaVector.size(), 0.);
-  outputErrorBufferSnapshot.assign(sLength - 1, zeroVector); // t2-1
-  outputErrorBufferSnapshot.push_back(deltaVector); // add the delta vector to the end
+  outputErrorBufferSnapshot_.assign(sLength - 1, zeroVector); // t2-1
+  outputErrorBufferSnapshot_.push_back(deltaVector); // add the delta vector to the end
 
-  lstmNetwork->backwardPass(0, sLength, lstmStateBufferSnapshot, outputLayerStateBufferSnapshot,
-    outputErrorBufferSnapshot, jacobian, inputSequenceBufferSnapshot);
+  lstmNetwork_->backwardPass(0, sLength, lstmStateBufferSnapshot_, outputLayerStateBufferSnapshot_,
+    outputErrorBufferSnapshot_, jacobian, inputSequenceBufferSnapshot_);
   abs_matrix(jacobian);
   rescale_matrix(jacobian); // scale into (0, 1)
 }
@@ -289,26 +289,26 @@ int main() {
   ccore->initializeOneStepPrediction(nCells, nBlocks, data);
 
   //setup the weights to have some values (manually for testing)
-  ccore->lstmNetwork->setConstantWeights(.5);
+  ccore->lstmNetwork_->setConstantWeights(.5);
 
   //or randomize them
   srand(time(0));
-  ccore->lstmNetwork->setRandomWeights(0.5);
+  ccore->lstmNetwork_->setRandomWeights(0.5);
 
-  //ccore->lstmNetwork->printSerializedWeights(6);
+  //ccore->lstmNetwork_->printSerializedWeights(6);
 
   for (int i = 0; i < 30; i++) {
     std::cout << i << " MSE = " << ccore->trainingEpoch(0.001, 0.001) << std::endl;
-    // ccore->lstmNetwork->printSerializedWeights(6);
+    // ccore->lstmNetwork_->printSerializedWeights(6);
   }
-  //ccore->lstmNetwork->printSerializedWeights(6);
+  //ccore->lstmNetwork_->printSerializedWeights(6);
   // copy the data there once more
   /*
   ccore->appendBuffers(data);
 
   for(int i=0;i<1000;i++){
       std::cout << i <<" MSE = "<< ccore->trainingEpoch(0.1,0.01) << std::endl;
-      // ccore->lstmNetwork->printSerializedWeights(6);
+      // ccore->lstmNetwork_->printSerializedWeights(6);
   }*/
 
   // sequential Jacobian

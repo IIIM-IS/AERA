@@ -82,16 +82,16 @@
 
 namespace r_exec {
 
-HLPController::HLPController(r_code::View *view) : OController(view), strong_requirement_count(0), weak_requirement_count(0), requirement_count(0) {
+HLPController::HLPController(r_code::View *view) : OController(view), strong_requirement_count_(0), weak_requirement_count_(0), requirement_count_(0) {
 
-  bindings = new HLPBindingMap();
+  bindings_ = new HLPBindingMap();
 
   Code *object = get_unpacked_object();
-  bindings->init_from_hlp(object); // init a binding map from the patterns.
+  bindings_->init_from_hlp(object); // init a binding map from the patterns.
 
-  _has_tpl_args = object->code(object->code(HLP_TPL_ARGS).asIndex()).getAtomCount() > 0;
-  ref_count = 0;
-  last_match_time = Now();
+  has_tpl_args_ = object->code(object->code(HLP_TPL_ARGS).asIndex()).getAtomCount() > 0;
+  ref_count_ = 0;
+  last_match_time_ = Now();
 }
 
 HLPController::~HLPController() {
@@ -99,49 +99,49 @@ HLPController::~HLPController() {
 
 void HLPController::invalidate() {
 
-  invalidated = 1;
-  controllers.clear();
+  invalidated_ = 1;
+  controllers_.clear();
 }
 
 void HLPController::add_requirement(bool strong) {
 
-  reductionCS.enter();
+  reductionCS_.enter();
   if (strong)
-    ++strong_requirement_count;
+    ++strong_requirement_count_;
   else
-    ++weak_requirement_count;
-  ++requirement_count;
-  reductionCS.leave();
+    ++weak_requirement_count_;
+  ++requirement_count_;
+  reductionCS_.leave();
 }
 
 void HLPController::remove_requirement(bool strong) {
 
-  reductionCS.enter();
+  reductionCS_.enter();
   if (strong)
-    --strong_requirement_count;
+    --strong_requirement_count_;
   else
-    --weak_requirement_count;
-  --requirement_count;
-  reductionCS.leave();
+    --weak_requirement_count_;
+  --requirement_count_;
+  reductionCS_.leave();
 }
 
 uint32 HLPController::get_requirement_count(uint32 &weak_requirement_count, uint32 &strong_requirement_count) {
 
   uint32 r_c;
-  reductionCS.enter();
-  r_c = requirement_count;
-  weak_requirement_count = this->weak_requirement_count;
-  strong_requirement_count = this->strong_requirement_count;
-  reductionCS.leave();
+  reductionCS_.enter();
+  r_c = requirement_count_;
+  weak_requirement_count = weak_requirement_count_;
+  strong_requirement_count = strong_requirement_count_;
+  reductionCS_.leave();
   return r_c;
 }
 
 uint32 HLPController::get_requirement_count() {
 
   uint32 r_c;
-  reductionCS.enter();
-  r_c = requirement_count;
-  reductionCS.leave();
+  reductionCS_.enter();
+  r_c = requirement_count_;
+  reductionCS_.leave();
   return r_c;
 }
 
@@ -181,47 +181,47 @@ void HLPController::inject_prediction(Fact *prediction, float32 confidence) cons
 MatchResult HLPController::check_evidences(_Fact *target, _Fact *&evidence) {
 
   MatchResult r = MATCH_FAILURE;
-  evidences.CS.enter();
+  evidences_.CS.enter();
   auto now = Now();
   r_code::list<EvidenceEntry>::const_iterator e;
-  for (e = evidences.evidences.begin(); e != evidences.evidences.end();) {
+  for (e = evidences_.evidences.begin(); e != evidences_.evidences.end();) {
 
     if ((*e).is_too_old(now)) // garbage collection. // garbage collection.
-      e = evidences.evidences.erase(e);
+      e = evidences_.evidences.erase(e);
     else {
 
-      if ((r = (*e).evidence->is_evidence(target)) != MATCH_FAILURE) {
+      if ((r = (*e).evidence_->is_evidence(target)) != MATCH_FAILURE) {
 
-        evidence = (*e).evidence;
-        evidences.CS.leave();
+        evidence = (*e).evidence_;
+        evidences_.CS.leave();
         return r;
       }
       ++e;
     }
   }
   evidence = NULL;
-  evidences.CS.leave();
+  evidences_.CS.leave();
   return r;
 }
 
 MatchResult HLPController::check_predicted_evidences(_Fact *target, _Fact *&evidence) {
 
   MatchResult r = MATCH_FAILURE;
-  predicted_evidences.CS.enter();
+  predicted_evidences_.CS.enter();
   auto now = Now();
   r_code::list<PredictedEvidenceEntry>::const_iterator e;
-  for (e = predicted_evidences.evidences.begin(); e != predicted_evidences.evidences.end();) {
+  for (e = predicted_evidences_.evidences.begin(); e != predicted_evidences_.evidences.end();) {
 
     if ((*e).is_too_old(now)) // garbage collection. // garbage collection.
-      e = predicted_evidences.evidences.erase(e);
+      e = predicted_evidences_.evidences.erase(e);
     else {
 
-      if ((r = (*e).evidence->is_evidence(target)) != MATCH_FAILURE) {
+      if ((r = (*e).evidence_->is_evidence(target)) != MATCH_FAILURE) {
 
-        if (target->get_cfd() < (*e).evidence->get_cfd()) {
+        if (target->get_cfd() < (*e).evidence_->get_cfd()) {
 
-          evidence = (*e).evidence;
-          predicted_evidences.CS.leave();
+          evidence = (*e).evidence_;
+          predicted_evidences_.CS.leave();
           return r;
         } else
           r = MATCH_FAILURE;
@@ -230,7 +230,7 @@ MatchResult HLPController::check_predicted_evidences(_Fact *target, _Fact *&evid
     }
   }
   evidence = NULL;
-  predicted_evidences.CS.leave();
+  predicted_evidences_.CS.leave();
   return r;
 }
 
@@ -239,9 +239,9 @@ bool HLPController::become_invalidated() {
   if (is_invalidated())
     return true;
 
-  for (uint16 i = 0; i < controllers.size(); ++i) {
+  for (uint16 i = 0; i < controllers_.size(); ++i) {
 
-    if (controllers[i] != NULL && controllers[i]->is_invalidated()) {
+    if (controllers_[i] != NULL && controllers_[i]->is_invalidated()) {
 
       kill_views();
       return true;
@@ -250,12 +250,12 @@ bool HLPController::become_invalidated() {
 
   if (has_tpl_args()) {
 
-    if (refCount == 1 && ref_count > 1) { // the ctrler was referenced by others, is no longer and has tpl args: it will not be able to predict: kill.
+    if (refCount_ == 1 && ref_count_ > 1) { // the ctrler was referenced by others, is no longer and has tpl args: it will not be able to predict: kill.
 
       kill_views();
       return true;
     } else
-      ref_count = refCount;
+      ref_count_ = refCount_;
   }
 
   return false;
@@ -263,7 +263,7 @@ bool HLPController::become_invalidated() {
 
 bool HLPController::is_orphan() {
 
-  if (_has_tpl_args) {
+  if (has_tpl_args_) {
 
     if (get_requirement_count() == 0) {
 
@@ -276,24 +276,24 @@ bool HLPController::is_orphan() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-HLPController::EvidenceEntry::EvidenceEntry() : evidence(NULL) {
+HLPController::EvidenceEntry::EvidenceEntry() : evidence_(NULL) {
 }
 
-HLPController::EvidenceEntry::EvidenceEntry(_Fact *evidence) : evidence(evidence) {
+HLPController::EvidenceEntry::EvidenceEntry(_Fact *evidence) : evidence_(evidence) {
 
   load_data(evidence);
 }
 
-HLPController::EvidenceEntry::EvidenceEntry(_Fact *evidence, _Fact *payload) : evidence(evidence) {
+HLPController::EvidenceEntry::EvidenceEntry(_Fact *evidence, _Fact *payload) : evidence_(evidence) {
 
   load_data(payload);
 }
 
 void HLPController::EvidenceEntry::load_data(_Fact *evidence) {
 
-  after = evidence->get_after();
-  before = evidence->get_before();
-  confidence = evidence->get_cfd();
+  after_ = evidence->get_after();
+  before_ = evidence->get_before();
+  confidence_ = evidence->get_cfd();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

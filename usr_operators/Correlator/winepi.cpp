@@ -90,10 +90,10 @@ extern std::ofstream* outfile;
 
 
 WinEpi::WinEpi(/*std::multimap<timestamp_t,event_t>& seq_, int win_, double min_fr_, double min_conf_, int max_size_*/)
-  : win(5)
-  , min_fr(0.1)
-  , min_conf(0.5)
-  , max_size(-1)
+  : win_(5)
+  , min_fr_(0.1)
+  , min_conf_(0.5)
+  , max_size_(-1)
   // , seq(seq_)
 {
   // for(std::multimap<timestamp_t,event_t>::iterator it = seq.seq.begin(); it != seq.seq.end(); ++it)
@@ -109,10 +109,10 @@ void WinEpi::setSeq(InputIterator it, InputIterator end) {
 }
 */
 void WinEpi::setParams(int win_, double min_fr_, double min_conf_, int max_size_) {
-  win = win_;
-  min_fr = min_fr_;
-  min_conf = min_conf_;
-  max_size = max_size_;
+  win_ = win_;
+  min_fr_ = min_fr_;
+  min_conf_ = min_conf_;
+  max_size_ = max_size_;
 }
 
 void WinEpi::algorithm_1(std::vector<Rule>& out) {
@@ -144,7 +144,7 @@ void WinEpi::algorithm_1(std::vector<Rule>& out) {
           continue;
 
         double conf = fr_a / fr(*it3);
-        if (conf >= min_conf) {
+        if (conf >= min_conf_) {
           out.push_back(Rule(*it3, a, conf));
         }
       }
@@ -167,7 +167,7 @@ void WinEpi::algorithm_2(std::vector<std::vector<Candidate> >& F) {
   int el = 1;
   std::vector<std::vector<Candidate> > C(2);
 
-  C[el].assign(event_types.begin(), event_types.end());
+  C[el].assign(event_types_.begin(), event_types_.end());
 
   while (!C[el].empty()) {
 # ifdef WINEPI_DEBUG
@@ -176,7 +176,7 @@ void WinEpi::algorithm_2(std::vector<std::vector<Candidate> >& F) {
 # endif
 
     F.resize(F.size() + 1);
-    algorithm_4(C[el], min_fr, F[el]);
+    algorithm_4(C[el], min_fr_, F[el]);
 
 # ifdef WINEPI_DEBUG
     clock_t t2 = clock();
@@ -185,7 +185,7 @@ void WinEpi::algorithm_2(std::vector<std::vector<Candidate> >& F) {
 
     ++el;
     //# ifdef MAX_SIZE
-    if (max_size >= 0 && el > max_size)
+    if (max_size_ >= 0 && el > max_size_)
       break;
     //# endif
 
@@ -209,12 +209,12 @@ void WinEpi::algorithm_3(std::vector<Candidate>& F, int el, std::vector<Candidat
   int k = -1;
   if (el == 1)
     for (size_t i = 0; i < F.size(); ++i)
-      F[i].block_start = 0;
+      F[i].block_start_ = 0;
 
   for (size_t i = 0; i < F.size(); ++i) {
     int current_block_start = k + 1;
     size_t j = i;
-    while (j < F.size() && F[j].block_start == F[i].block_start) {
+    while (j < F.size() && F[j].block_start_ == F[i].block_start_) {
 
       Candidate a;
       for (int x = 1; x <= el; ++x)
@@ -239,7 +239,7 @@ void WinEpi::algorithm_3(std::vector<Candidate>& F, int el, std::vector<Candidat
       if (cont)
         continue;
       ++k;
-      a.block_start = current_block_start;
+      a.block_start_ = current_block_start;
       C.push_back(a);
     }
   }
@@ -252,16 +252,16 @@ void WinEpi::algorithm_4(std::vector<Candidate>& C, double min_fr, std::vector<C
 
   for (std::vector<Candidate>::iterator it = C.begin(); it != C.end(); ++it) {
     Candidate& a = *it;
-    for (std::map<event_t, size_t, event_compare>::iterator it2 = a.type_count.begin(); it2 != a.type_count.end(); ++it2) {
+    for (std::map<event_t, size_t, event_compare>::iterator it2 = a.type_count_.begin(); it2 != a.type_count_.end(); ++it2) {
       contains[*it2].push_back(&a);
     }
-    a.event_count = 0;
-    a.freq_count = 0;
+    a.event_count_ = 0;
+    a.freq_count_ = 0;
   }
 
-  for (timestamp_t start = seq.start - win + 1; start <= seq.end; /*++start*/) {
+  for (timestamp_t start = seq_.start_ - win_ + 1; start <= seq_.end_; /*++start*/) {
 
-    std::pair<std::multimap<timestamp_t, event_t>::iterator, std::multimap<timestamp_t, event_t>::iterator> range = seq.seq.equal_range(start + win - 1);
+    std::pair<std::multimap<timestamp_t, event_t>::iterator, std::multimap<timestamp_t, event_t>::iterator> range = seq_.seq_.equal_range(start + win_ - 1);
     for (std::multimap<timestamp_t, event_t>::iterator it = range.first; it != range.second; ++it) {
       event_t& A = it->second;
       // if(count.find(A) != count.end()) {
@@ -271,15 +271,15 @@ void WinEpi::algorithm_4(std::vector<Candidate>& C, double min_fr, std::vector<C
         std::vector<Candidate*>& as = it2->second;
         for (size_t i = 0; i < as.size(); ++i) {
           Candidate& a = *as[i];
-          a.event_count += count[A];
-          if (a.event_count == a.size())
-            a.inwindow = start;
+          a.event_count_ += count[A];
+          if (a.event_count_ == a.size())
+            a.inwindow_ = start;
         }
       }
       // }
     }
 
-    range = seq.seq.equal_range(start - 1);
+    range = seq_.seq_.equal_range(start - 1);
     for (std::multimap<timestamp_t, event_t>::iterator it = range.first; it != range.second; ++it) {
       event_t& A = it->second;
       // if(count.find(A) != count.end()) {
@@ -288,9 +288,9 @@ void WinEpi::algorithm_4(std::vector<Candidate>& C, double min_fr, std::vector<C
         std::vector<Candidate*>& as = it2->second;
         for (size_t i = 0; i < as.size(); ++i) {
           Candidate& a = *as[i];
-          if (a.event_count == a.size())
-            a.freq_count += start - a.inwindow;
-          a.event_count -= count[A];
+          if (a.event_count_ == a.size())
+            a.freq_count_ += start - a.inwindow_;
+          a.event_count_ -= count[A];
         }
       }
       --count[A];
@@ -298,44 +298,44 @@ void WinEpi::algorithm_4(std::vector<Candidate>& C, double min_fr, std::vector<C
     }
 
 
-    if (start == seq.end)
+    if (start == seq_.end_)
       break;
 
-    std::multimap<timestamp_t, event_t>::iterator it = seq.seq.lower_bound(start + 1);
-    if (it == seq.seq.end()) {
-      start = seq.end;
+    std::multimap<timestamp_t, event_t>::iterator it = seq_.seq_.lower_bound(start + 1);
+    if (it == seq_.seq_.end()) {
+      start = seq_.end_;
       continue;
     }
     timestamp_t lodiff = it->first - start;
 
-    it = seq.seq.lower_bound(start + win);
-    if (it == seq.seq.end()) {
+    it = seq_.seq_.lower_bound(start + win_);
+    if (it == seq_.seq_.end()) {
       start += lodiff + 1;
     }
     else {
-      timestamp_t hidiff = it->first - start - win;
+      timestamp_t hidiff = it->first - start - win_;
       start += min(lodiff, hidiff) + 1;
     }
   }
 
-  timestamp_t n = seq.end - seq.start + win - 1;
+  timestamp_t n = seq_.end_ - seq_.start_ + win_ - 1;
   for (std::vector<Candidate>::iterator it = C.begin(); it != C.end(); ++it) {
     Candidate& a = *it;
-    if ((double)a.freq_count / n >= min_fr)
+    if ((double)a.freq_count_ / n >= min_fr)
       F.push_back(a);
   }
   std::sort(F.begin(), F.end());
 }
 
 double WinEpi::fr(Candidate& a) {
-  if (a.freq_count < 0) {
+  if (a.freq_count_ < 0) {
     std::vector<Candidate> C, F;
     C.push_back(a);
     algorithm_4(C, 0, F);
     a = F[0];
   }
 
-  return (double)a.freq_count / (seq.end - seq.start + win - 1);
+  return (double)a.freq_count_ / (seq_.end_ - seq_.start_ + win_ - 1);
 }
 
 

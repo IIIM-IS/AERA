@@ -92,17 +92,17 @@ template<class O, class S> Mem<O, S>::Mem() : S() {
 
 template<class O, class S> Mem<O, S>::~Mem() {
 
-  if (state == RUNNING)
+  if (state_ == RUNNING)
     stop();
-  deleted = true;
-  objects.clear();
+  deleted_ = true;
+  objects_.clear();
 }
 
 ////////////////////////////////////////////////////////////////
 
 template<class O, class S> r_code::Code *Mem<O, S>::build_object(r_code::SysObject *source) const {
 
-  Atom head = source->code[0];
+  Atom head = source->code_[0];
   switch (head.getDescriptor()) {
   case Atom::GROUP:
     return new Group(source);

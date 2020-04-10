@@ -84,14 +84,14 @@ namespace r_exec {
 
 Monitor::Monitor(MDLController *controller,
   BindingMap *bindings,
-  Fact *target) : _Object(), controller(controller) {
+  Fact *target) : _Object(), controller_(controller) {
 
-  this->bindings = bindings;
-  this->target = target;
+  bindings_ = bindings;
+  target_ = target;
 }
 
 bool Monitor::is_alive() const {
 
-  return !controller->is_invalidated() && controller->is_activated() && !target->is_invalidated();
+  return !controller_->is_invalidated() && controller_->is_activated() && !target_->is_invalidated();
 }
 }

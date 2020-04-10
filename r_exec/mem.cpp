@@ -85,17 +85,17 @@ using namespace std::chrono;
 
 namespace r_exec {
 
-_Mem::_Mem() : r_code::Mem(), state(NOT_STARTED), deleted(false) {
+_Mem::_Mem() : r_code::Mem(), state_(NOT_STARTED), deleted_(false) {
 
   new ModelBase();
-  objects.reserve(1024);
+  objects_.reserve(1024);
 }
 
 _Mem::~_Mem() {
 
   for (uint32 i = 0; i < DebugStreamCount; ++i)
-    if (debug_streams[i] != NULL)
-      delete debug_streams[i];
+    if (debug_streams_[i] != NULL)
+      delete debug_streams_[i];
 }
 
 void _Mem::init(microseconds base_period,
@@ -120,90 +120,90 @@ void _Mem::init(microseconds base_period,
   uint32 traces,
   bool enable_assumptions) {
 
-  this->base_period = base_period;
+  base_period_ = base_period;
 
-  this->reduction_core_count = reduction_core_count;
-  this->time_core_count = time_core_count;
+  reduction_core_count_ = reduction_core_count;
+  time_core_count_ = time_core_count;
 
-  this->mdl_inertia_sr_thr = mdl_inertia_sr_thr;
-  this->mdl_inertia_cnt_thr = mdl_inertia_cnt_thr;
-  this->tpx_dsr_thr = tpx_dsr_thr;
-  this->min_sim_time_horizon = min_sim_time_horizon;
-  this->max_sim_time_horizon = max_sim_time_horizon;
-  this->sim_time_horizon_factor = sim_time_horizon_factor;
-  this->tpx_time_horizon = tpx_time_horizon;
-  this->perf_sampling_period = perf_sampling_period;
-  this->float_tolerance = float_tolerance;
-  this->time_tolerance = time_tolerance;
-  this->primary_thz = primary_thz;
-  this->secondary_thz = secondary_thz;
+  mdl_inertia_sr_thr_ = mdl_inertia_sr_thr;
+  mdl_inertia_cnt_thr_ = mdl_inertia_cnt_thr;
+  tpx_dsr_thr_ = tpx_dsr_thr;
+  min_sim_time_horizon_ = min_sim_time_horizon;
+  max_sim_time_horizon_ = max_sim_time_horizon;
+  sim_time_horizon_factor_ = sim_time_horizon_factor;
+  tpx_time_horizon_ = tpx_time_horizon;
+  perf_sampling_period_ = perf_sampling_period;
+  float_tolerance_ = float_tolerance;
+  time_tolerance_ = time_tolerance;
+  primary_thz_ = primary_thz;
+  secondary_thz_ = secondary_thz;
 
-  this->debug = debug;
+  debug_ = debug;
   if (debug)
-    this->ntf_mk_res = ntf_mk_res;
+    ntf_mk_res_ = ntf_mk_res;
   else
-    this->ntf_mk_res = 1;
-  this->goal_pred_success_res = goal_pred_success_res;
+    ntf_mk_res_ = 1;
+  goal_pred_success_res_ = goal_pred_success_res;
 
-  this->probe_level = probe_level;
-  this->enable_assumptions = enable_assumptions;
+  probe_level_ = probe_level;
+  enable_assumptions_ = enable_assumptions;
 
-  reduction_job_count = time_job_count = 0;
-  reduction_job_avg_latency = _reduction_job_avg_latency = microseconds(0);
-  time_job_avg_latency = _time_job_avg_latency = microseconds(0);
+  reduction_job_count_ = time_job_count_ = 0;
+  reduction_job_avg_latency_ = _reduction_job_avg_latency_ = microseconds(0);
+  time_job_avg_latency_ = _time_job_avg_latency_ = microseconds(0);
 
   uint32 mask = 1;
   for (uint32 i = 0; i < DebugStreamCount; ++i) {
 
     if (traces & mask)
-      debug_streams[i] = NULL;
+      debug_streams_[i] = NULL;
     else
-      debug_streams[i] = new NullOStream();
+      debug_streams_[i] = new NullOStream();
     mask <<= 1;
   }
 }
 
 std::ostream &_Mem::Output(TraceLevel l) {
 
-  return (_Mem::Get()->debug_streams[l] == NULL ? std::cout : *(_Mem::Get()->debug_streams[l]));
+  return (_Mem::Get()->debug_streams_[l] == NULL ? std::cout : *(_Mem::Get()->debug_streams_[l]));
 }
 
 void _Mem::reset() {
 
   uint32 i;
-  for (i = 0; i < reduction_core_count; ++i)
-    delete reduction_cores[i];
-  delete[] reduction_cores;
-  for (i = 0; i < time_core_count; ++i)
-    delete time_cores[i];
-  delete[] time_cores;
+  for (i = 0; i < reduction_core_count_; ++i)
+    delete reduction_cores_[i];
+  delete[] reduction_cores_;
+  for (i = 0; i < time_core_count_; ++i)
+    delete time_cores_[i];
+  delete[] time_cores_;
 
-  delete reduction_job_queue;
-  delete time_job_queue;
+  delete reduction_job_queue_;
+  delete time_job_queue_;
 
-  delete stop_sem;
+  delete stop_sem_;
 }
 
 ////////////////////////////////////////////////////////////////
 
 Code *_Mem::get_root() const {
 
-  return _root;
+  return root_;
 }
 
 Code *_Mem::get_stdin() const {
 
-  return _stdin;
+  return stdin_;
 }
 
 Code *_Mem::get_stdout() const {
 
-  return _stdout;
+  return stdout_;
 }
 
 Code *_Mem::get_self() const {
 
-  return _self;
+  return self_;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -211,27 +211,27 @@ Code *_Mem::get_self() const {
 _Mem::State _Mem::check_state() {
 
   State s;
-  stateCS.enter();
-  s = state;
-  stateCS.leave();
+  stateCS_.enter();
+  s = state_;
+  stateCS_.leave();
 
   return s;
 }
 
 void _Mem::start_core() {
 
-  core_countCS.enter();
-  if (++core_count == 1)
-    stop_sem->acquire();
-  core_countCS.leave();
+  core_countCS_.enter();
+  if (++core_count_ == 1)
+    stop_sem_->acquire();
+  core_countCS_.leave();
 }
 
 void _Mem::shutdown_core() {
 
-  core_countCS.enter();
-  if (--core_count == 0)
-    stop_sem->release();
-  core_countCS.leave();
+  core_countCS_.enter();
+  if (--core_count_ == 0)
+    stop_sem_->release();
+  core_countCS_.leave();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -239,26 +239,26 @@ void _Mem::shutdown_core() {
 void _Mem::store(Code *object) {
 
   int32 location;
-  objects.push_back(object, location);
+  objects_.push_back(object, location);
   object->set_stroage_index(location);
 }
 
 bool _Mem::load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid) { // no cov at init time.
 
   uint32 i;
-  reduction_cores = new ReductionCore *[reduction_core_count];
-  for (i = 0; i < reduction_core_count; ++i)
-    reduction_cores[i] = new ReductionCore();
-  time_cores = new TimeCore *[time_core_count];
-  for (i = 0; i < time_core_count; ++i)
-    time_cores[i] = new TimeCore();
+  reduction_cores_ = new ReductionCore *[reduction_core_count_];
+  for (i = 0; i < reduction_core_count_; ++i)
+    reduction_cores_[i] = new ReductionCore();
+  time_cores_ = new TimeCore *[time_core_count_];
+  for (i = 0; i < time_core_count_; ++i)
+    time_cores_[i] = new TimeCore();
 
-  Utils::SetReferenceValues(base_period, float_tolerance, time_tolerance);
+  Utils::SetReferenceValues(base_period_, float_tolerance_, time_tolerance_);
 
   // load root (always comes first).
-  _root = (Group *)(*objects)[0];
-  store((Code *)_root);
-  initial_groups.push_back(_root);
+  root_ = (Group *)(*objects)[0];
+  store((Code *)root_);
+  initial_groups_.push_back(root_);
 
   set_last_oid(objects->size() - 1);
 
@@ -268,11 +268,11 @@ bool _Mem::load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 s
     store(object);
 
     if (object->get_oid() == stdin_oid)
-      _stdin = (Group *)(*objects)[i];
+      stdin_ = (Group *)(*objects)[i];
     else if (object->get_oid() == stdout_oid)
-      _stdout = (Group *)(*objects)[i];
+      stdout_ = (Group *)(*objects)[i];
     else if (object->get_oid() == self_oid)
-      _self = (*objects)[i];
+      self_ = (*objects)[i];
 
     switch (object->code(0).getDescriptor()) {
     case Atom::MODEL:
@@ -294,7 +294,7 @@ bool _Mem::load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 s
     }
 
     UNORDERED_SET<r_code::View *, r_code::View::Hash, r_code::View::Equal>::const_iterator v;
-    for (v = object->views.begin(); v != object->views.end(); ++v) {
+    for (v = object->views_.begin(); v != object->views_.end(); ++v) {
 
       // init hosts' member_set.
       View *view = (r_exec::View *)*v;
@@ -306,7 +306,7 @@ bool _Mem::load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 s
     }
 
     if (object->code(0).getDescriptor() == Atom::GROUP)
-      initial_groups.push_back((Group *)object); // convenience to create initial update jobs - see start().
+      initial_groups_.push_back((Group *)object); // convenience to create initial update jobs - see start().
   }
 
   return true;
@@ -316,7 +316,7 @@ void _Mem::init_timings(Timestamp now) const { // called at the beginning of _Me
 
   auto time_tolerance = Utils::GetTimeTolerance() * 2;
   r_code::list<P<Code> >::const_iterator o;
-  for (o = objects.begin(); o != objects.end(); ++o) {
+  for (o = objects_.begin(); o != objects_.end(); ++o) {
 
     uint16 opcode = (*o)->code(0).asOpcode();
     if (opcode == Opcodes::Fact || opcode == Opcodes::AntiFact) {
@@ -337,26 +337,26 @@ void _Mem::init_timings(Timestamp now) const { // called at the beginning of _Me
 
 Timestamp _Mem::start() {
 
-  if (state != STOPPED && state != NOT_STARTED)
+  if (state_ != STOPPED && state_ != NOT_STARTED)
     return Timestamp(seconds(0));
 
-  core_count = 0;
-  stop_sem = new Semaphore(1, 1);
+  core_count_ = 0;
+  stop_sem_ = new Semaphore(1, 1);
 
-  time_job_queue = new PipeNN<P<TimeJob>, 1024>();
-  reduction_job_queue = new PipeNN<P<_ReductionJob>, 1024>();
+  time_job_queue_ = new PipeNN<P<TimeJob>, 1024>();
+  reduction_job_queue_ = new PipeNN<P<_ReductionJob>, 1024>();
 
   std::vector<std::pair<View *, Group *> > initial_reduction_jobs;
 
   uint32 i;
   auto now = Now();
   Utils::SetTimeReference(now);
-  ModelBase::Get()->set_thz(secondary_thz);
+  ModelBase::Get()->set_thz(secondary_thz_);
   init_timings(now);
 
-  for (i = 0; i < initial_groups.size(); ++i) {
+  for (i = 0; i < initial_groups_.size(); ++i) {
 
-    Group *g = initial_groups[i];
+    Group *g = initial_groups_[i];
     bool c_active = g->get_c_act() > g->get_c_act_thr();
     bool c_salient = g->get_c_sln() > g->get_c_sln_thr();
 
@@ -369,22 +369,22 @@ Timestamp _Mem::start() {
         UNORDERED_MAP<uint32, P<View> >::const_iterator v;
 
         // build signaling jobs for active input-less overlays.
-        for (v = g->input_less_ipgm_views.begin(); v != g->input_less_ipgm_views.end(); ++v) {
+        for (v = g->input_less_ipgm_views_.begin(); v != g->input_less_ipgm_views_.end(); ++v) {
 
-          if (v->second->controller != NULL && v->second->controller->is_activated()) {
+          if (v->second->controller_ != NULL && v->second->controller_->is_activated()) {
             // The time scope is stored as a timestamp, but it is actually a duration.
-            P<TimeJob> j = new InputLessPGMSignalingJob(v->second, now + Utils::GetTimestamp<Code>(v->second->object, IPGM_TSC).time_since_epoch());
-            time_job_queue->push(j);
+            P<TimeJob> j = new InputLessPGMSignalingJob(v->second, now + Utils::GetTimestamp<Code>(v->second->object_, IPGM_TSC).time_since_epoch());
+            time_job_queue_->push(j);
           }
         }
 
         // build signaling jobs for active anti-pgm overlays.
-        for (v = g->anti_ipgm_views.begin(); v != g->anti_ipgm_views.end(); ++v) {
+        for (v = g->anti_ipgm_views_.begin(); v != g->anti_ipgm_views_.end(); ++v) {
 
-          if (v->second->controller != NULL && v->second->controller->is_activated()) {
+          if (v->second->controller_ != NULL && v->second->controller_->is_activated()) {
             // The time scope is stored as a timestamp, but it is actually a duration.
-            P<TimeJob> j = new AntiPGMSignalingJob(v->second, now + Utils::GetTimestamp<Code>(v->second->object, IPGM_TSC).time_since_epoch());
-            time_job_queue->push(j);
+            P<TimeJob> j = new AntiPGMSignalingJob(v->second, now + Utils::GetTimestamp<Code>(v->second->object_, IPGM_TSC).time_since_epoch());
+            time_job_queue_->push(j);
           }
         }
       }
@@ -396,7 +396,7 @@ Timestamp _Mem::start() {
 
         if (v->second->get_sln() > g->get_sln_thr()) { // salient view.
 
-          g->newly_salient_views.insert(v->second);
+          g->newly_salient_views_.insert(v->second);
           initial_reduction_jobs.push_back(std::pair<View *, Group *>(v->second, g));
         }
       FOR_ALL_VIEWS_END
@@ -405,21 +405,21 @@ Timestamp _Mem::start() {
     if (g->get_upr() > 0) { // inject the next update job for the group.
 
       P<TimeJob> j = new UpdateJob(g, g->get_next_upr_time(now));
-      time_job_queue->push(j);
+      time_job_queue_->push(j);
     }
   }
 
-  initial_groups.clear();
+  initial_groups_.clear();
 
-  state = RUNNING;
+  state_ = RUNNING;
 
-  P<TimeJob> j = new PerfSamplingJob(now + perf_sampling_period, perf_sampling_period);
-  time_job_queue->push(j);
+  P<TimeJob> j = new PerfSamplingJob(now + perf_sampling_period_, perf_sampling_period_);
+  time_job_queue_->push(j);
 
-  for (i = 0; i < reduction_core_count; ++i)
-    reduction_cores[i]->start(ReductionCore::Run);
-  for (i = 0; i < time_core_count; ++i)
-    time_cores[i]->start(TimeCore::Run);
+  for (i = 0; i < reduction_core_count_; ++i)
+    reduction_cores_[i]->start(ReductionCore::Run);
+  for (i = 0; i < time_core_count_; ++i)
+    time_cores_[i]->start(TimeCore::Run);
 
   for (uint32 i = 0; i < initial_reduction_jobs.size(); ++i)
     initial_reduction_jobs[i].second->inject_reduction_jobs(initial_reduction_jobs[i].first);
@@ -428,7 +428,7 @@ Timestamp _Mem::start() {
 }
 
 void _Mem::runInDiagnosticTime(milliseconds runTime) {
-  if (!(reduction_core_count == 0 && time_core_count == 0))
+  if (!(reduction_core_count_ == 0 && time_core_count_ == 0))
     // This should only be called if there are no running core threads.
     return;
 
@@ -447,7 +447,7 @@ void _Mem::runInDiagnosticTime(milliseconds runTime) {
 
   // Loop until the runTimeMilliseconds expires.
   while (true) {
-    if (state == STOPPED)
+    if (state_ == STOPPED)
       break;
 
     // Reduction jobs can add more reduction jobs, so make a few passes.
@@ -485,7 +485,7 @@ void _Mem::runInDiagnosticTime(milliseconds runTime) {
     }
 
     // Transfer all time jobs to orderedTimeJobQueue,
-    // sorted on target_time.
+    // sorted on target_time_.
     while (true) {
       P<TimeJob> timeJob = popTimeJob(false);
       if (timeJob == NULL)
@@ -504,18 +504,18 @@ void _Mem::runInDiagnosticTime(milliseconds runTime) {
 
     // The entry at the front is the earliest.
     if (orderedTimeJobQueue.size() == 0 ||
-      orderedTimeJobQueue.front()->target_time >=
-        tickTime + Mem_sampling_period) {
+      orderedTimeJobQueue.front()->target_time_ >=
+        tickTime + Mem_sampling_period_) {
       // There is no time job before the next tick time, so tick.
-      tickTime += Mem_sampling_period;
+      tickTime += Mem_sampling_period_;
       // Increase the diagnostic time to the tick time.
-      DiagnosticTimeNow = tickTime;
+      DiagnosticTimeNow_ = tickTime;
       // We are beginning a new sampling period.
       nReductionJobsThisSamplingPeriod = 0;
       onDiagnosticTimeTick();
 
       if (orderedTimeJobQueue.size() == 0 ||
-        orderedTimeJobQueue.front()->target_time > tickTime)
+        orderedTimeJobQueue.front()->target_time_ > tickTime)
         // Loop again in case a reduction job will add more time jobs.
         continue;
     }
@@ -524,9 +524,9 @@ void _Mem::runInDiagnosticTime(milliseconds runTime) {
       // No time jobs. Loop again in case a reduction job will add one.
       continue;
 
-    if (orderedTimeJobQueue.front()->target_time > Now())
+    if (orderedTimeJobQueue.front()->target_time_ > Now())
       // Increase the diagnostic time to the job's target time.
-      DiagnosticTimeNow = orderedTimeJobQueue.front()->target_time;
+      DiagnosticTimeNow_ = orderedTimeJobQueue.front()->target_time_;
 
     // Only process one job in case it adds more jobs.
     P<TimeJob> timeJob = orderedTimeJobQueue.front();
@@ -546,7 +546,7 @@ void _Mem::runInDiagnosticTime(milliseconds runTime) {
 
     if (next_target.time_since_epoch().count() != 0) {
       // The job wants to run again, so re-insert into the queue.
-      timeJob->target_time = next_target;
+      timeJob->target_time_ = next_target;
       orderedTimeJobQueue.insert
       (upper_bound(orderedTimeJobQueue.begin(),
         orderedTimeJobQueue.end(), timeJob, timeJobCompare_),
@@ -557,39 +557,39 @@ void _Mem::runInDiagnosticTime(milliseconds runTime) {
   }
 }
 
-Timestamp _Mem::DiagnosticTimeNow = Timestamp(microseconds(1));
+Timestamp _Mem::DiagnosticTimeNow_ = Timestamp(microseconds(1));
 
-Timestamp _Mem::getDiagnosticTimeNow() { return DiagnosticTimeNow; }
+Timestamp _Mem::getDiagnosticTimeNow() { return DiagnosticTimeNow_; }
 
 void _Mem::onDiagnosticTimeTick() {}
 
 void _Mem::stop() {
 
-  stateCS.enter();
-  if (state != RUNNING) {
+  stateCS_.enter();
+  if (state_ != RUNNING) {
 
-    stateCS.leave();
+    stateCS_.leave();
     return;
   }
 
   uint32 i;
   P<_ReductionJob> r;
-  for (i = 0; i < reduction_core_count; ++i)
-    reduction_job_queue->push(r = new ShutdownReductionCore());
+  for (i = 0; i < reduction_core_count_; ++i)
+    reduction_job_queue_->push(r = new ShutdownReductionCore());
   P<TimeJob> t;
-  for (i = 0; i < time_core_count; ++i)
-    time_job_queue->push(t = new ShutdownTimeCore());
+  for (i = 0; i < time_core_count_; ++i)
+    time_job_queue_->push(t = new ShutdownTimeCore());
 
-  state = STOPPED;
-  stateCS.leave();
+  state_ = STOPPED;
+  stateCS_.leave();
 
-  for (i = 0; i < time_core_count; ++i)
-    Thread::Wait(time_cores[i]);
+  for (i = 0; i < time_core_count_; ++i)
+    Thread::Wait(time_cores_[i]);
 
-  for (i = 0; i < reduction_core_count; ++i)
-    Thread::Wait(reduction_cores[i]);
+  for (i = 0; i < reduction_core_count_; ++i)
+    Thread::Wait(reduction_cores_[i]);
 
-  stop_sem->acquire(); // wait for delegates.
+  stop_sem_->acquire(); // wait for delegates.
 
   reset();
 }
@@ -598,33 +598,33 @@ void _Mem::stop() {
 
 P<_ReductionJob> _Mem::popReductionJob(bool waitForItem) {
 
-  if (state == STOPPED)
+  if (state_ == STOPPED)
     return NULL;
-  return reduction_job_queue->pop(waitForItem);
+  return reduction_job_queue_->pop(waitForItem);
 }
 
 void _Mem::pushReductionJob(_ReductionJob *j) {
 
-  if (state == STOPPED)
+  if (state_ == STOPPED)
     return;
-  j->ijt = Now();
+  j->ijt_ = Now();
   P<_ReductionJob> _j = j;
-  reduction_job_queue->push(_j);
+  reduction_job_queue_->push(_j);
 }
 
 P<TimeJob> _Mem::popTimeJob(bool waitForItem) {
 
-  if (state == STOPPED)
+  if (state_ == STOPPED)
     return NULL;
-  return time_job_queue->pop(waitForItem);
+  return time_job_queue_->pop(waitForItem);
 }
 
 void _Mem::pushTimeJob(TimeJob *j) {
 
-  if (state == STOPPED)
+  if (state_ == STOPPED)
     return;
   P<TimeJob> _j = j;
-  time_job_queue->push(_j);
+  time_job_queue_->push(_j);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -635,7 +635,7 @@ void _Mem::eject(View *view, uint16 nodeID) {
 void _Mem::eject(Code *command) {
   // This is only for debugging
   /*
-  uint16 function = (command->code(CMD_FUNCTION).atom >> 8) & 0x000000FF;
+  uint16 function = (command->code(CMD_FUNCTION).atom_ >> 8) & 0x000000FF;
   if (function == r_exec::GetOpcode("speak")) {
       std::cout << "Speak" << std::endl;
       //command->trace();
@@ -648,7 +648,7 @@ void _Mem::eject(Code *command) {
 void _Mem::inject_copy(View *view, Group *destination) {
 
   View *copied_view = new View(view, destination); // ctrl values are morphed.
-  inject_existing_object(copied_view, view->object, destination);
+  inject_existing_object(copied_view, view->object_, destination);
 }
 
 void _Mem::inject_existing_object(View *view, Code *object, Group *host) {
@@ -667,7 +667,7 @@ void _Mem::inject_null_program(Controller *c, Group *group, microseconds time_to
   uint32 res = Utils::GetResilience(now, time_to_live, group->get_upr() * Utils::GetBasePeriod().count());
 
   View *view = new View(View::SYNC_ONCE, now, 0, res, group, NULL, null_pgm, 1);
-  view->controller = c;
+  view->controller_ = c;
 
   c->set_view(view);
 
@@ -678,7 +678,7 @@ void _Mem::inject_new_object(View *view) {
 
   Group *host = view->get_host();
   //uint64 t0,t1,t2;
-  switch (view->object->code(0).getDescriptor()) {
+  switch (view->object_->code(0).getDescriptor()) {
   case Atom::GROUP:
     bind(view);
 
@@ -697,7 +697,7 @@ void _Mem::inject_new_object(View *view) {
 
 void _Mem::inject(View *view) {
 
-  if (view->object->is_invalidated())
+  if (view->object_->is_invalidated())
     return;
 
   Group *host = view->get_host();
@@ -708,14 +708,14 @@ void _Mem::inject(View *view) {
   auto now = Now();
   auto ijt = view->get_ijt();
 
-  if (view->object->is_registered()) { // existing object.
+  if (view->object_->is_registered()) { // existing object.
 
     if (ijt <= now)
-      inject_existing_object(view, view->object, host);
+      inject_existing_object(view, view->object_, host);
     else {
 
       P<TimeJob> j = new EInjectionJob(view, ijt);
-      time_job_queue->push(j);
+      time_job_queue_->push(j);
     }
   } else { // new object.
 
@@ -724,14 +724,14 @@ void _Mem::inject(View *view) {
     else {
 
       P<TimeJob> j = new InjectionJob(view, ijt);
-      time_job_queue->push(j);
+      time_job_queue_->push(j);
     }
   }
 }
 
 void _Mem::inject_async(View *view) {
 
-  if (view->object->is_invalidated())
+  if (view->object_->is_invalidated())
     return;
 
   Group *host = view->get_host();
@@ -745,17 +745,17 @@ void _Mem::inject_async(View *view) {
   if (ijt <= now) {
 
     P<_ReductionJob> j = new AsyncInjectionJob(view);
-    reduction_job_queue->push(j);
+    reduction_job_queue_->push(j);
   } else {
 
-    if (view->object->is_registered()) { // existing object.
+    if (view->object_->is_registered()) { // existing object.
 
       P<TimeJob> j = new EInjectionJob(view, ijt);
-      time_job_queue->push(j);
+      time_job_queue_->push(j);
     } else {
 
       P<TimeJob> j = new InjectionJob(view, ijt);
-      time_job_queue->push(j);
+      time_job_queue_->push(j);
     }
   }
 }
@@ -782,54 +782,54 @@ void _Mem::inject_notification(View *view, bool lock) { // no notification for n
 
 void _Mem::register_reduction_job_latency(microseconds latency) {
 
-  reduction_jobCS.enter();
-  ++reduction_job_count;
-  reduction_job_avg_latency += latency;
-  reduction_jobCS.leave();
+  reduction_jobCS_.enter();
+  ++reduction_job_count_;
+  reduction_job_avg_latency_ += latency;
+  reduction_jobCS_.leave();
 }
 void _Mem::register_time_job_latency(microseconds latency) {
 
-  time_jobCS.enter();
-  ++time_job_count;
-  time_job_avg_latency += latency;
-  time_jobCS.leave();
+  time_jobCS_.enter();
+  ++time_job_count_;
+  time_job_avg_latency_ += latency;
+  time_jobCS_.leave();
 }
 
 void _Mem::inject_perf_stats() {
 
-  reduction_jobCS.enter();
-  time_jobCS.enter();
+  reduction_jobCS_.enter();
+  time_jobCS_.enter();
 
   microseconds d_reduction_job_avg_latency;
-  if (reduction_job_count > 0) {
+  if (reduction_job_count_ > 0) {
 
-    reduction_job_avg_latency /= reduction_job_count;
-    d_reduction_job_avg_latency = reduction_job_avg_latency - _reduction_job_avg_latency;
+    reduction_job_avg_latency_ /= reduction_job_count_;
+    d_reduction_job_avg_latency = reduction_job_avg_latency_ - _reduction_job_avg_latency_;
   } else
-    reduction_job_avg_latency = d_reduction_job_avg_latency = microseconds(0);
+    reduction_job_avg_latency_ = d_reduction_job_avg_latency = microseconds(0);
 
   microseconds d_time_job_avg_latency;
-  if (time_job_count > 0) {
+  if (time_job_count_ > 0) {
 
-    time_job_avg_latency /= time_job_count;
-    d_time_job_avg_latency = time_job_avg_latency - _time_job_avg_latency;
+    time_job_avg_latency_ /= time_job_count_;
+    d_time_job_avg_latency = time_job_avg_latency_ - _time_job_avg_latency_;
   } else
-    time_job_avg_latency = d_time_job_avg_latency = microseconds(0);
+    time_job_avg_latency_ = d_time_job_avg_latency = microseconds(0);
 
-  Code *perf = new Perf(reduction_job_avg_latency, d_reduction_job_avg_latency, time_job_avg_latency, d_time_job_avg_latency);
+  Code *perf = new Perf(reduction_job_avg_latency_, d_reduction_job_avg_latency, time_job_avg_latency_, d_time_job_avg_latency);
 
   // reset stats.
-  reduction_job_count = time_job_count = 0;
-  _reduction_job_avg_latency = reduction_job_avg_latency;
-  _time_job_avg_latency = time_job_avg_latency;
+  reduction_job_count_ = time_job_count_ = 0;
+  _reduction_job_avg_latency_ = reduction_job_avg_latency_;
+  _time_job_avg_latency_ = time_job_avg_latency_;
 
-  time_jobCS.leave();
-  reduction_jobCS.leave();
+  time_jobCS_.leave();
+  reduction_jobCS_.leave();
 
   // inject f->perf in stdin.
   auto now = Now();
-  Code *f_perf = new Fact(perf, now, now + perf_sampling_period, 1, 1);
-  View *view = new View(View::SYNC_ONCE, now, 1, 1, _stdin, NULL, f_perf); // sync front, sln=1, res=1.
+  Code *f_perf = new Fact(perf, now, now + perf_sampling_period_, 1, 1);
+  View *view = new View(View::SYNC_ONCE, now, 1, 1, stdin_, NULL, f_perf); // sync front, sln=1, res=1.
   inject(view);
 }
 
@@ -843,7 +843,7 @@ void _Mem::propagate_sln(Code *object, float32 change, float32 source_sln_thr) {
   // - to avoid this, have the psln_thr set to 1 in o2: this is applicaton-dependent.
   object->acq_views();
 
-  if (object->views.size() == 0) {
+  if (object->views_.size() == 0) {
 
     object->invalidate();
     object->rel_views();
@@ -851,11 +851,11 @@ void _Mem::propagate_sln(Code *object, float32 change, float32 source_sln_thr) {
   }
 
   UNORDERED_SET<r_code::View *, r_code::View::Hash, r_code::View::Equal>::const_iterator it;
-  for (it = object->views.begin(); it != object->views.end(); ++it) {
+  for (it = object->views_.begin(); it != object->views_.end(); ++it) {
 
     float32 morphed_sln_change = View::MorphChange(change, source_sln_thr, ((r_exec::View*)*it)->get_host()->get_sln_thr());
     if (morphed_sln_change != 0)
-      ((r_exec::View*)*it)->get_host()->pending_operations.push_back(new Group::Mod(((r_exec::View*)*it)->get_oid(), VIEW_SLN, morphed_sln_change));
+      ((r_exec::View*)*it)->get_host()->pending_operations_.push_back(new Group::Mod(((r_exec::View*)*it)->get_oid(), VIEW_SLN, morphed_sln_change));
   }
   object->rel_views();
 }
@@ -907,7 +907,7 @@ void _Mem::propagate_sln(Code *object, float32 change, float32 source_sln_thr) {
     uint32 self_oid;
     std::string self_symbol("self");
     UNORDERED_MAP<uint32,std::string>::const_iterator n;
-    for(n=r_exec::Seed.object_names.symbols.begin();n!=r_exec::Seed.object_names.symbols.end();++n){
+    for(n=r_exec::Seed.object_names_.symbols_.begin();n!=r_exec::Seed.object_names_.symbols_.end();++n){
 
         if(n->second==stdin_symbol)
             stdin_oid=n->first;
@@ -1174,7 +1174,7 @@ Code *_Mem::clone(Code *original) const { // shallow copy; oid not copied.
 r_comp::Image *_Mem::get_models() {
 
   r_comp::Image *image = new r_comp::Image();
-  image->timestamp = Now();
+  image->timestamp_ = Now();
 
   r_code::list<P<Code> > models;
   ModelBase::Get()->get_models(models); // protected by ModelBase.
@@ -1185,7 +1185,7 @@ r_comp::Image *_Mem::get_models() {
 
 ////////////////////////////////////////////////////////////////
 
-MemStatic::MemStatic() : _Mem(), last_oid(-1) {
+MemStatic::MemStatic() : _Mem(), last_oid_(-1) {
 }
 
 MemStatic::~MemStatic() {
@@ -1193,50 +1193,50 @@ MemStatic::~MemStatic() {
 
 void MemStatic::bind(View *view) {
 
-  Code *object = view->object;
-  object->views.insert(view);
-  objectsCS.enter();
-  object->set_oid(++last_oid);
+  Code *object = view->object_;
+  object->views_.insert(view);
+  objectsCS_.enter();
+  object->set_oid(++last_oid_);
   if (object->code(0).getDescriptor() == Atom::NULL_PROGRAM) {
 
-    objectsCS.leave();
+    objectsCS_.leave();
     return;
   }
   int32 location;
-  objects.push_back(object, location);
+  objects_.push_back(object, location);
   object->set_stroage_index(location);
-  objectsCS.leave();
+  objectsCS_.leave();
 }
 void MemStatic::set_last_oid(int32 oid) {
 
-  last_oid = oid;
+  last_oid_ = oid;
 }
 
 void MemStatic::delete_object(r_code::Code *object) { // called only if the object is registered, i.e. has a valid storage index.
 
-  if (deleted)
+  if (deleted_)
     return;
 
-  objectsCS.enter();
-  objects.erase(object->get_storage_index());
-  objectsCS.leave();
+  objectsCS_.enter();
+  objects_.erase(object->get_storage_index());
+  objectsCS_.leave();
 }
 
 r_comp::Image *MemStatic::get_objects() {
 
   r_comp::Image *image = new r_comp::Image();
-  image->timestamp = Now();
+  image->timestamp_ = Now();
 
-  objectsCS.enter();
-  image->add_objects(objects);
-  objectsCS.leave();
+  objectsCS_.enter();
+  image->add_objects(objects_);
+  objectsCS_.leave();
 
   return image;
 }
 
 ////////////////////////////////////////////////////////////////
 
-MemVolatile::MemVolatile() : _Mem(), last_oid(-1) {
+MemVolatile::MemVolatile() : _Mem(), last_oid_(-1) {
 }
 
 MemVolatile::~MemVolatile() {
@@ -1244,18 +1244,18 @@ MemVolatile::~MemVolatile() {
 
 uint32 MemVolatile::get_oid() {
 
-  return Atomic::Increment32(&last_oid);
+  return Atomic::Increment32(&last_oid_);
 }
 
 void MemVolatile::set_last_oid(int32 oid) {
 
-  last_oid = oid;
+  last_oid_ = oid;
 }
 
 void MemVolatile::bind(View *view) {
 
-  Code *object = view->object;
-  object->views.insert(view);
+  Code *object = view->object_;
+  object->views_.insert(view);
   object->set_oid(get_oid());
 }
 }

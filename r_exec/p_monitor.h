@@ -88,8 +88,8 @@ class MDLController;
 class PMonitor :
   public Monitor {
 private:
-  bool rate_failures;
-  _Fact *prediction_target; // f1 as in f0->pred->f1->object.
+  bool rate_failures_;
+  _Fact *prediction_target_; // f1 as in f0->pred->f1->object.
 public:
   PMonitor(MDLController *controller,
     BindingMap *bindings,

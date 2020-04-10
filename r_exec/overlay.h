@@ -96,14 +96,14 @@ class View;
 class r_exec_dll Controller :
   public _Object {
 protected:
-  volatile uint32 invalidated; // 32 bit alignment.
-  volatile uint32 activated; // 32 bit alignment.
+  volatile uint32 invalidated_; // 32 bit alignment.
+  volatile uint32 activated_; // 32 bit alignment.
 
-  std::chrono::microseconds tsc;
+  std::chrono::microseconds time_scope_;
 
-  r_code::View *view;
+  r_code::View *view_;
 
-  CriticalSection reductionCS;
+  CriticalSection reductionCS_;
 
   virtual void take_input(r_exec::View *input) {}
   template<class C> void __take_input(r_exec::View *input) { // utility: to be called by sub-classes.
@@ -117,18 +117,18 @@ protected:
 public:
   virtual ~Controller();
 
-  std::chrono::microseconds get_tsc() { return tsc; }
+  std::chrono::microseconds get_tsc() { return time_scope_; }
 
-  virtual void invalidate() { invalidated = 1; }
-  bool is_invalidated() { return invalidated == 1; };
-  void activate(bool a) { activated = (a ? 1 : 0); }
-  bool is_activated() const { return activated == 1; }
-  bool is_alive() const { return invalidated == 0 && activated == 1; }
+  virtual void invalidate() { invalidated_ = 1; }
+  bool is_invalidated() { return invalidated_ == 1; };
+  void activate(bool a) { activated_ = (a ? 1 : 0); }
+  bool is_activated() const { return activated_ == 1; }
+  bool is_alive() const { return invalidated_ == 0 && activated_ == 1; }
 
   virtual Code *get_core_object() const = 0;
 
-  r_code::Code *getObject() const { return view->object; } // return the reduction object (e.g. ipgm, icpp_pgm, cst, mdl).
-  r_exec::View *getView() const { return (r_exec::View *)view; } // return the reduction object's view.
+  r_code::Code *getObject() const { return view_->object_; } // return the reduction object (e.g. ipgm, icpp_pgm, cst, mdl).
+  r_exec::View *getView() const { return (r_exec::View *)view_; } // return the reduction object's view.
 
   void _take_input(r_exec::View *input); // called by the rMem at update time and at injection time.
 
@@ -150,20 +150,20 @@ class r_exec_dll Overlay :
   friend class IPGMContext;
   friend class HLPContext;
 protected:
-  volatile uint32 invalidated;
+  volatile uint32 invalidated_;
 
-  Controller *controller;
+  Controller *controller_;
 
-  r_code::vector<Atom> values; // value array: stores the results of computations.
+  r_code::vector<Atom> values_; // value array: stores the results of computations.
   // Copy of the pgm/hlp code. Will be patched during matching and evaluation:
   // any area indexed by a vl_ptr will be overwritten with:
   //   the evaluation result if it fits in a single atom,
   //   a ptr to the value array if the result is larger than a single atom,
   //   a ptr to an input if the result is a pattern input.
-  Atom *code;
-  uint16 code_size;
-  std::vector<uint16> patch_indices; // indices where patches are applied; used for rollbacks.
-  uint16 value_commit_index; // index of the last computed value+1; used for rollbacks.
+  Atom *code_;
+  uint16 code_size_;
+  std::vector<uint16> patch_indices_; // indices where patches are applied; used for rollbacks.
+  uint16 value_commit_index_; // index of the last computed value_+1; used for rollbacks.
 
   void load_code();
   void patch_code(uint16 index, Atom value);
@@ -171,7 +171,7 @@ protected:
   void unpatch_code(uint16 patch_index);
 
   void rollback(); // reset the overlay to the last commited state: unpatch code and values.
-  void commit(); // empty the patch_indices and set value_commit_index to values.size().
+  void commit(); // empty the patch_indices_ and set value_commit_index_ to values.size().
 
   Code *get_core_object() const; // pgm, mdl, cst.
 
@@ -183,11 +183,11 @@ public:
   virtual void reset(); // reset to original state.
   virtual Overlay *reduce(r_exec::View *input); // returns an offspring in case of a match.
 
-  void invalidate() { invalidated = 1; }
-  virtual bool is_invalidated() { return invalidated == 1; }
+  void invalidate() { invalidated_ = 1; }
+  virtual bool is_invalidated() { return invalidated_ == 1; }
 
-  r_code::Code *getObject() const { return ((Controller *)controller)->getObject(); }
-  r_exec::View *getView() const { return ((Controller *)controller)->getView(); }
+  r_code::Code *getObject() const { return ((Controller *)controller_)->getObject(); }
+  r_exec::View *getView() const { return ((Controller *)controller_)->getView(); }
 
   r_code::Code *build_object(Atom head) const;
 };
@@ -195,7 +195,7 @@ public:
 class r_exec_dll OController :
   public Controller {
 protected:
-  r_code::list<P<Overlay> > overlays;
+  r_code::list<P<Overlay> > overlays_;
 
   OController(r_code::View *view);
 public:

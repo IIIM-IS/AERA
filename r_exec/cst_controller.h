@@ -99,13 +99,13 @@ namespace r_exec {
 class CSTOverlay :
   public HLPOverlay {
 protected:
-  Timestamp match_deadline; // before deadline after the last match.
-  float32 lowest_cfd; // among the inputs (forward chaining).
+  Timestamp match_deadline_; // before deadline after the last match.
+  float32 lowest_cfd_; // among the inputs (forward chaining).
 
-  std::vector<P<_Fact> > inputs;
+  std::vector<P<_Fact> > inputs_;
 
-  UNORDERED_SET<P<_Fact>, PHash<_Fact> > predictions; // f0->pred->f1->obj.
-  UNORDERED_SET<P<Sim>, PHash<Sim> > simulations;
+  UNORDERED_SET<P<_Fact>, PHash<_Fact> > predictions_; // f0->pred->f1->obj.
+  UNORDERED_SET<P<Sim>, PHash<Sim> > simulations_;
 
   void inject_production();
   void update(HLPBindingMap *map, _Fact *input, _Fact *bound_pattern);
@@ -130,7 +130,7 @@ public:
 class CSTController :
   public HLPController {
 private:
-  Group *secondary_host;
+  Group *secondary_host_;
 
   void abduce(HLPBindingMap *bm, Fact *super_goal); // super_goal is f->g->f->icst.
   void inject_goal(HLPBindingMap *bm,

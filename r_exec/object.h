@@ -97,13 +97,13 @@ r_exec_dll bool IsNotification(Code *object);
 template<class C, class U> class Object :
   public C {
 private:
-  size_t hash_value;
+  size_t hash_value_;
 
-  volatile uint32 invalidated; // must be aligned on 32 bits.
+  volatile uint32 invalidated_; // must be aligned on 32 bits.
 
-  CriticalSection psln_thr_sem;
-  CriticalSection views_sem;
-  CriticalSection markers_sem;
+  CriticalSection psln_thrCS_;
+  CriticalSection viewsCS_;
+  CriticalSection markersCS_;
 protected:
   Object();
   Object(r_code::Mem *mem);
@@ -122,10 +122,10 @@ public:
 
   float32 get_psln_thr();
 
-  void acq_views() { views_sem.enter(); }
-  void rel_views() { views_sem.leave(); }
-  void acq_markers() { markers_sem.enter(); }
-  void rel_markers() { markers_sem.leave(); }
+  void acq_views() { viewsCS_.enter(); }
+  void rel_views() { viewsCS_.leave(); }
+  void acq_markers() { markersCS_.enter(); }
+  void rel_markers() { markersCS_.leave(); }
 
   // Target psln_thr only.
   void set(uint16 member_index, float32 value);
@@ -139,15 +139,15 @@ public:
   public:
     size_t operator ()(U *o) const {
 
-      if (o->hash_value == 0)
+      if (o->hash_value_ == 0)
         o->compute_hash_value();
-      return o->hash_value;
+      return o->hash_value_;
     }
   };
 
   class Equal {
   public:
-    bool operator ()(const U *lhs, const U *rhs) const { // lhs and rhs have the same hash value, i.e. same opcode, same code size and same reference size.
+    bool operator ()(const U *lhs, const U *rhs) const { // lhs and rhs have the same hash value_, i.e. same opcode, same code size and same reference size.
 
       if (lhs->code(0).asOpcode() == Opcodes::Ent || rhs->code(0).asOpcode() == Opcodes::Ent)
         return lhs == rhs;

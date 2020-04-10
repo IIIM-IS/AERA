@@ -90,10 +90,10 @@ class MDLController;
 class Monitor :
   public _Object {
 protected:
-  P<BindingMap> bindings;
-  P<Fact> target; // f->g or f->p.
+  P<BindingMap> bindings_;
+  P<Fact> target_; // f->g or f->p.
 
-  MDLController *controller;
+  MDLController *controller_;
 
   Monitor(MDLController *controller,
     BindingMap *bindings,

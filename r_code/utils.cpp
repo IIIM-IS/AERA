@@ -120,16 +120,16 @@ bool Utils::Synchronous(Timestamp l, Timestamp r) {
 
 Timestamp Utils::GetTimestamp(const Atom *iptr) {
 
-  uint64 high = iptr[1].atom;
-  return Timestamp(microseconds(high << 32 | iptr[2].atom));
+  uint64 high = iptr[1].atom_;
+  return Timestamp(microseconds(high << 32 | iptr[2].atom_));
 }
 
 void Utils::SetTimestamp(Atom *iptr, Timestamp timestamp) {
 
   uint64 t = duration_cast<microseconds>(timestamp.time_since_epoch()).count();
   iptr[0] = Atom::Timestamp();
-  iptr[1].atom = t >> 32;
-  iptr[2].atom = t & 0x00000000FFFFFFFF;
+  iptr[1].atom_ = t >> 32;
+  iptr[2].atom_ = t & 0x00000000FFFFFFFF;
 }
 
 void Utils::SetTimestamp(Code *object, uint16 index, Timestamp timestamp) {
@@ -144,7 +144,7 @@ std::string Utils::GetString(const Atom *iptr) {
 
   std::string s;
   char buffer[255];
-  uint8 char_count = (iptr[0].atom & 0x000000FF);
+  uint8 char_count = (iptr[0].atom_ & 0x000000FF);
   memcpy(buffer, iptr + 1, char_count);
   buffer[char_count] = 0;
   s += buffer;
@@ -156,21 +156,21 @@ void Utils::SetString(Atom *iptr, const std::string &s) {
   uint8 l = (uint8)s.length();
   uint8 index = 0;
   iptr[index] = Atom::String(l);
-  uint32 _st = 0;
+  uint32 st = 0;
   int8 shift = 0;
   for (uint8 i = 0; i < l; ++i) {
 
-    _st |= s[i] << shift;
+    st |= s[i] << shift;
     shift += 8;
     if (shift == 32) {
 
-      iptr[++index] = _st;
-      _st = 0;
+      iptr[++index] = st;
+      st = 0;
       shift = 0;
     }
   }
   if (l % 4)
-    iptr[++index] = _st;
+    iptr[++index] = st;
 }
 
 int32 Utils::GetResilience(Timestamp now, microseconds time_to_live, uint64 upr) {

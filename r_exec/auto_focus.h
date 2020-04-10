@@ -92,55 +92,55 @@ class r_exec_dll AutoFocusController :
   public Controller {
 private:
   // icpp_pgm parameters.
-  bool _pass_through;
-  bool _ctpx_on;
-  bool _gtpx_on;
-  bool _ptpx_on;
-  bool _trace_injections;
-  bool _decompile_models;
-  std::vector<Group *> output_groups; // 1st is the primary, 2nd the secondary, followed by other groups if any.
+  bool pass_through_;
+  bool ctpx_on_;
+  bool gtpx_on_;
+  bool ptpx_on_;
+  bool trace_injections_;
+  bool decompile_models_;
+  std::vector<Group *> output_groups_; // 1st is the primary, 2nd the secondary, followed by other groups if any.
 
   class Rating {
   public:
-    uint32 evidences;
-    uint32 positive_evidences;
-    float32 success_rate;
-    float32 delta_success_rate;
+    uint32 evidences_;
+    uint32 positive_evidences_;
+    float32 success_rate_;
+    float32 delta_success_rate_;
 
     static bool DeltaSuccessRate(float32 delta_success_rate) {
 
       return delta_success_rate > 0 && delta_success_rate < _Mem::Get()->get_tpx_dsr_thr();
     }
 
-    Rating() : evidences(0), positive_evidences(0), success_rate(0), delta_success_rate(1) {}
+    Rating() : evidences_(0), positive_evidences_(0), success_rate_(0), delta_success_rate_(1) {}
 
     void add_evidence(bool success) {
 
-      ++evidences;
+      ++evidences_;
       if (success)
-        ++positive_evidences;
-      delta_success_rate = success_rate;
-      success_rate = positive_evidences / evidences;
-      delta_success_rate = success_rate - delta_success_rate;
+        ++positive_evidences_;
+      delta_success_rate_ = success_rate_;
+      success_rate_ = positive_evidences_ / evidences_;
+      delta_success_rate_ = success_rate_ - delta_success_rate_;
     }
   };
 
   typedef UNORDERED_MAP<P<_Fact>, P<TPX>, PHash<_Fact> > TPXMap;
 
-  TPXMap goals; // f->g->f->target.
-  TPXMap predictions; // f->p->f->target.
+  TPXMap goals_; // f->g->f->target.
+  TPXMap predictions_; // f->p->f->target.
 
   typedef UNORDERED_MAP<P<_Fact>, Rating, PHash<_Fact> > RatingMap;
 
   // entries are patterns, i.e. abstract targets.
-  RatingMap goal_ratings;
-  RatingMap prediction_ratings;
+  RatingMap goal_ratings_;
+  RatingMap prediction_ratings_;
 
   static const uint32 CacheInitialSize = 128;
   static const uint32 CrossBufferInitialSize = 1024;
 
-  time_buffer<CInput, CInput::IsInvalidated> cache; // contains all inputs we don't no yet if they are relevant or not; thz==sampling period.
-  time_buffer<Input, Input::IsInvalidated> cross_buffer; // contains all relevant inputs.
+  time_buffer<CInput, CInput::IsInvalidated> cache_; // contains all inputs we don't no yet if they are relevant or not; thz==sampling period.
+  time_buffer<Input, Input::IsInvalidated> cross_buffer_; // contains all relevant inputs.
 
   void notify(_Fact *target, View *input, TPXMap &map);
   void dispatch_pred_success(_Fact *predicted_f, TPXMap &map);
@@ -148,7 +148,7 @@ private:
   void dispatch_no_inject(View *input, _Fact *abstract_input, BindingMap *bm, TPXMap &map);
   template<class T> TPX *build_tpx(_Fact *target, _Fact *pattern, BindingMap *bm, RatingMap &map, Fact *f_imdl, bool wr_enabled) {
 
-    if (!_gtpx_on && !_ptpx_on)
+    if (!gtpx_on_ && !ptpx_on_)
       return new TPX(this, target, pattern, bm);
 
     if (wr_enabled)
@@ -157,7 +157,7 @@ private:
     RatingMap::const_iterator r = map.find(pattern);
     if (r != map.end()) {
 
-      if (Rating::DeltaSuccessRate(r->second.delta_success_rate)) // target for which we don't see much improvement over time.
+      if (Rating::DeltaSuccessRate(r->second.delta_success_rate_)) // target for which we don't see much improvement over time.
         return new TPX(this, target, pattern, bm);
       else
         return new T(this, target, pattern, bm, f_imdl);
@@ -179,13 +179,13 @@ public:
   void inject_input(View *input, _Fact *abstract_input, BindingMap *bm); // inject a filtered input into the output groups.
   void inject_hlps(const std::vector<P<Code> > &hlps) const; // called by TPX; hlp is a mdl or a cst.
 
-  bool decompile_models() const { return _decompile_models; }
-  bool gtpx_on() const { return _gtpx_on; }
-  bool ptpx_on() const { return _ptpx_on; }
-  Group *get_primary_group() const { return output_groups[0]; }
+  bool decompile_models() const { return decompile_models_; }
+  bool gtpx_on() const { return gtpx_on_; }
+  bool ptpx_on() const { return ptpx_on_; }
+  Group *get_primary_group() const { return output_groups_[0]; }
 
   void copy_cross_buffer(r_code::list<Input> &destination);
-  time_buffer<CInput, CInput::IsInvalidated> &get_cache() { return cache; }
+  time_buffer<CInput, CInput::IsInvalidated> &get_cache() { return cache_; }
 };
 }
 

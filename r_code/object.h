@@ -97,8 +97,8 @@ namespace r_code {
 
 class dll_export ImageObject {
 public:
-  r_code::vector<Atom> code;
-  r_code::vector<uint16> references;
+  r_code::vector<Atom> code_;
+  r_code::vector<uint16> references_;
 
   virtual void write(word32 *data) = 0;
   virtual void read(word32 *data) = 0;
@@ -124,14 +124,14 @@ class Code;
 class dll_export SysObject :
   public ImageObject {
 private:
-  static uint32 LastOID;
+  static uint32 lastOID_;
 public:
-  r_code::vector<uint32> markers; // indexes in the relocation segment
-  r_code::vector<SysView *> views;
+  r_code::vector<uint32> markers_; // indexes in the relocation segment
+  r_code::vector<SysView *> views_;
 
-  uint32 oid;
+  uint32 oid_;
 #ifdef WITH_DEBUG_OID
-  uint32 debug_oid;
+  uint32 debug_oid_;
 #endif
 
   SysObject();
@@ -152,30 +152,30 @@ class Object;
 class dll_export View :
   public _Object {
 private:
-  uint16 index; // for unpacking: index is the index of the view in the SysObject.
+  uint16 index_; // for unpacking: index is the index of the view in the SysObject.
 protected:
-  Atom _code[VIEW_CODE_MAX_SIZE]; // dimensioned to hold the largest view (group view): head atom, iptr to ijt, sln, res, rptr to grp, rptr to org, vis, cov, 3 atoms for ijt's timestamp; oid is the last word32 (not an atom).
+  Atom code_[VIEW_CODE_MAX_SIZE]; // dimensioned to hold the largest view (group view): head atom, iptr to ijt, sln, res, rptr to grp, rptr to org, vis, cov, 3 atoms for ijt's timestamp; oid is the last word32 (not an atom).
 public:
-  Code *references[2]; // does not include the viewed object; no smart pointer here (a view is held by a group and holds a ref to said group in references[0]).
-  P<Code> object; // viewed object.
+  Code *references_[2]; // does not include the viewed object; no smart pointer here (a view is held by a group and holds a ref to said group in references[0]).
+  P<Code> object_; // viewed object.
 
-  View() : object(NULL) {
+  View() : object_(NULL) {
 
-    references[0] = references[1] = NULL;
+    references_[0] = references_[1] = NULL;
   }
 
   View(SysView *source, Code *object) {
 
-    for (uint16 i = 0; i < source->code.size(); ++i)
-      _code[i] = source->code[i];
-    references[0] = references[1] = NULL;
-    this->object = object;
+    for (uint16 i = 0; i < source->code_.size(); ++i)
+      code_[i] = source->code_[i];
+    references_[0] = references_[1] = NULL;
+    object_ = object;
   }
 
   virtual ~View() {}
 
-  Atom &code(uint16 i) { return _code[i]; }
-  Atom code(uint16 i) const { return _code[i]; }
+  Atom &code(uint16 i) { return code_[i]; }
+  Atom code(uint16 i) const { return code_[i]; }
 
   typedef enum {
     SYNC_ONCE = 0,
@@ -185,21 +185,21 @@ public:
     SYNC_ONCE_AXIOM = 4
   }SyncMode;
 
-  SyncMode get_sync() const { return (SyncMode)(uint32)_code[VIEW_SYNC].asFloat(); }
-  Timestamp get_ijt() const { return Utils::GetTimestamp(_code + _code[VIEW_IJT].asIndex()); }
-  void set_ijt(Timestamp ijt) { Utils::SetTimestamp(_code + _code[VIEW_IJT].asIndex(), ijt); }
+  SyncMode get_sync() const { return (SyncMode)(uint32)code_[VIEW_SYNC].asFloat(); }
+  Timestamp get_ijt() const { return Utils::GetTimestamp(code_ + code_[VIEW_IJT].asIndex()); }
+  void set_ijt(Timestamp ijt) { Utils::SetTimestamp(code_ + code_[VIEW_IJT].asIndex(), ijt); }
 
   class Hash {
   public:
     size_t operator ()(View *v) const {
-      return (size_t)(Code *)v->references[0]; // i.e. the group the view belongs to.
+      return (size_t)(Code *)v->references_[0]; // i.e. the group the view belongs to.
     }
   };
 
   class Equal {
   public:
     bool operator ()(const View *lhs, const View *rhs) const {
-      return lhs->references[0] == rhs->references[0];
+      return lhs->references_[0] == rhs->references_[0];
     }
   };
 
@@ -217,22 +217,22 @@ public:
   static const int32 null_storage_index = -1;
   static const uint32 CodeMarkersInitialSize = 8;
 protected:
-  int32 storage_index; // -1: not sored; >0 index of the object in a vector-based container.
+  int32 storage_index_; // -1: not sored; >0 index of the object in a vector-based container.
 
   void load(SysObject *source) {
 
-    for (uint16 i = 0; i < source->code.size(); ++i)
-      code(i) = source->code[i];
-    set_oid(source->oid);
+    for (uint16 i = 0; i < source->code_.size(); ++i)
+      code(i) = source->code_[i];
+    set_oid(source->oid_);
   }
   template<class V> View *build_view(SysView *source) {
 
     return new V(source, this);
   }
 public:
-  void set_stroage_index(int32 i) { storage_index = i; }
-  bool is_registered() const { return storage_index > null_storage_index; }
-  int32 get_storage_index() const { return storage_index; }
+  void set_stroage_index(int32 i) { storage_index_ = i; }
+  bool is_registered() const { return storage_index_ > null_storage_index; }
+  int32 get_storage_index() const { return storage_index_; }
 
   virtual uint32 get_oid() const = 0;
   virtual void set_oid(uint32 oid) = 0;
@@ -251,8 +251,8 @@ public:
   virtual bool is_invalidated() { return false; }
   virtual bool invalidate() { return false; }
 
-  r_code::list<Code *> markers;
-  UNORDERED_SET<View *, View::Hash, View::Equal> views; // indexed by groups.
+  r_code::list<Code *> markers_;
+  UNORDERED_SET<View *, View::Hash, View::Equal> views_; // indexed by groups.
 
   virtual View *build_view(SysView *source) = 0;
 
@@ -263,7 +263,7 @@ public:
 
   virtual float32 get_psln_thr() { return 1; }
 
-  Code() : storage_index(null_storage_index) { markers.reserve(CodeMarkersInitialSize); }
+  Code() : storage_index_(null_storage_index) { markers_.reserve(CodeMarkersInitialSize); }
   virtual ~Code() {}
 
   virtual void mod(uint16 member_index, float32 value) {};
@@ -273,7 +273,7 @@ public:
   void remove_marker(Code *m) {
 
     acq_markers();
-    markers.remove(m);
+    markers_.remove(m);
     rel_markers();
   }
 
@@ -340,9 +340,9 @@ public:
 class dll_export LObject :
   public Code {
 protected:
-  uint32 _oid;
-  r_code::vector<Atom> _code;
-  r_code::vector<P<Code> > _references;
+  uint32 oid_;
+  r_code::vector<Atom> code_;
+  r_code::vector<P<Code> > references_;
 public:
   LObject() : Code() {}
   LObject(SysObject *source) : Code() {
@@ -356,24 +356,24 @@ public:
     return Code::build_view<View>(source);
   }
 
-  uint32 get_oid() const { return _oid; }
-  void set_oid(uint32 oid) { _oid = oid; }
+  uint32 get_oid() const { return oid_; }
+  void set_oid(uint32 oid) { oid_ = oid; }
 
-  Atom &code(uint16 i) { return _code[i]; }
-  Atom &code(uint16 i) const { return (*_code.as_std())[i]; }
-  uint16 code_size() const { return _code.size(); }
-  void resize_code(uint16 new_size) { _code.as_std()->resize(new_size); }
-  void set_reference(uint16 i, Code *object) { _references[i] = object; }
-  Code *get_reference(uint16 i) const { return (*_references.as_std())[i]; }
-  uint16 references_size() const { return _references.size(); }
-  void clear_references() { _references.as_std()->clear(); }
-  void set_references(std::vector<P<Code> > &new_references) { (*_references.as_std()) = new_references; }
-  void add_reference(Code *object) const { _references.as_std()->push_back(object); }
+  Atom &code(uint16 i) { return code_[i]; }
+  Atom &code(uint16 i) const { return (*code_.as_std())[i]; }
+  uint16 code_size() const { return code_.size(); }
+  void resize_code(uint16 new_size) { code_.as_std()->resize(new_size); }
+  void set_reference(uint16 i, Code *object) { references_[i] = object; }
+  Code *get_reference(uint16 i) const { return (*references_.as_std())[i]; }
+  uint16 references_size() const { return references_.size(); }
+  void clear_references() { references_.as_std()->clear(); }
+  void set_references(std::vector<P<Code> > &new_references) { (*references_.as_std()) = new_references; }
+  void add_reference(Code *object) const { references_.as_std()->push_back(object); }
 };
 
 class dll_export Mem {
 protected:
-  static Mem *Singleton;
+  static Mem *singleton_;
   Mem();
 public:
   static Mem *Get();

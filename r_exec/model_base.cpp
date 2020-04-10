@@ -161,35 +161,35 @@ bool ModelBase::MEntry::Match(Code *lhs, Code *rhs) {
   return true;
 }
 
-ModelBase::MEntry::MEntry() : mdl(NULL), touch_time(seconds(0)), hash_code(0) {
+ModelBase::MEntry::MEntry() : mdl_(NULL), touch_time_(seconds(0)), hash_code_(0) {
 }
 
-ModelBase::MEntry::MEntry(Code *mdl, bool packed) : mdl(mdl), touch_time(Now()), hash_code(ComputeHashCode(mdl, packed)) {
+ModelBase::MEntry::MEntry(Code *mdl, bool packed) : mdl_(mdl), touch_time_(Now()), hash_code_(ComputeHashCode(mdl, packed)) {
 }
 
 bool ModelBase::MEntry::match(const MEntry &e) const { // at this point both models have the same hash code; this.mdl is packed, e.mdl is unpacked.
 
-  if (mdl == e.mdl)
+  if (mdl_ == e.mdl_)
     return true;
 
-  for (uint16 i = 0; i < mdl->code_size(); ++i) { // first check the mdl code: this checks on tpl args and guards.
+  for (uint16 i = 0; i < mdl_->code_size(); ++i) { // first check the mdl code: this checks on tpl args and guards.
 
     if (i == MDL_STRENGTH || i == MDL_CNT || i == MDL_SR || i == MDL_DSR || i == MDL_ARITY) // ignore house keeping data.
       continue;
 
-    if (mdl->code(i) != e.mdl->code(i))
+    if (mdl_->code(i) != e.mdl_->code(i))
       return false;
   }
 
-  Code *lhs_0 = mdl->get_reference(mdl->references_size() - 1)->get_reference(0); // payload of the fact.
-  if (e.mdl->get_reference(0)->references_size() < 1)
+  Code *lhs_0 = mdl_->get_reference(mdl_->references_size() - 1)->get_reference(0); // payload of the fact.
+  if (e.mdl_->get_reference(0)->references_size() < 1)
     return false;
-  Code *lhs_1 = e.mdl->get_reference(0)->get_reference(0); // payload of the fact.
+  Code *lhs_1 = e.mdl_->get_reference(0)->get_reference(0); // payload of the fact.
   if (!Match(lhs_0, lhs_1))
     return false;
 
-  Code *rhs_0 = mdl->get_reference(mdl->references_size() - 1)->get_reference(1); // payload of the fact.
-  Code *rhs_1 = e.mdl->get_reference(1)->get_reference(1); // payload of the fact.
+  Code *rhs_0 = mdl_->get_reference(mdl_->references_size() - 1)->get_reference(1); // payload of the fact.
+  Code *rhs_1 = e.mdl_->get_reference(1)->get_reference(1); // payload of the fact.
   if (!Match(rhs_0, rhs_1))
     return false;
 
@@ -198,88 +198,88 @@ bool ModelBase::MEntry::match(const MEntry &e) const { // at this point both mod
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-ModelBase *ModelBase::Singleton = NULL;
+ModelBase *ModelBase::singleton_ = NULL;
 
 ModelBase *ModelBase::Get() {
 
-  return Singleton;
+  return singleton_;
 }
 
 ModelBase::ModelBase() {
 
-  Singleton = this;
+  singleton_ = this;
 }
 
 void ModelBase::trim_objects() {
 
-  mdlCS.enter();
+  mdlCS_.enter();
   auto now = Now();
   MdlSet::iterator m;
-  for (m = black_list.begin(); m != black_list.end();) {
+  for (m = black_list_.begin(); m != black_list_.end();) {
 
-    if (now - (*m).touch_time >= thz)
-      m = black_list.erase(m);
+    if (now - (*m).touch_time_ >= thz_)
+      m = black_list_.erase(m);
     else
       ++m;
   }
-  mdlCS.leave();
+  mdlCS_.leave();
 }
 
 void ModelBase::load(Code *mdl) { // mdl is already packed.
 
   MEntry e(mdl, true);
-  if (mdl->views.size() > 0) // no need to lock at load time.
-    white_list.insert(e);
+  if (mdl->views_.size() > 0) // no need to lock at load time.
+    white_list_.insert(e);
   else
-    black_list.insert(e);
+    black_list_.insert(e);
 }
 
 void ModelBase::get_models(r_code::list<P<Code> > &models) {
 
-  mdlCS.enter();
+  mdlCS_.enter();
   MdlSet::iterator m;
-  for (m = white_list.begin(); m != white_list.end(); ++m)
-    models.push_back((*m).mdl);
-  for (m = black_list.begin(); m != black_list.end(); ++m)
-    models.push_back((*m).mdl);
-  mdlCS.leave();
+  for (m = white_list_.begin(); m != white_list_.end(); ++m)
+    models.push_back((*m).mdl_);
+  for (m = black_list_.begin(); m != black_list_.end(); ++m)
+    models.push_back((*m).mdl_);
+  mdlCS_.leave();
 }
 
 Code *ModelBase::check_existence(Code *mdl) {
 
   MEntry e(mdl, false);
   MEntry copy;
-  mdlCS.enter();
-  MdlSet::iterator m = black_list.find(e);
+  mdlCS_.enter();
+  MdlSet::iterator m = black_list_.find(e);
 
   // jm: iterator's on sets are now immutable because of hash keey issues
   // solution is to remove and re-add
-  if (m != black_list.end()) {
+  if (m != black_list_.end()) {
 
     copy = *m;
-    copy.touch_time = Now();
-    black_list.erase(*m);
-    black_list.insert(copy);
+    copy.touch_time_ = Now();
+    black_list_.erase(*m);
+    black_list_.insert(copy);
 
-    //(*m).touch_time=Now();
-    mdlCS.leave();
+    //(*m).touch_time_=Now();
+    mdlCS_.leave();
     return NULL;
   }
-  m = white_list.find(e);
-  if (m != white_list.end())
+  m = white_list_.find(e);
+  if (m != white_list_.end())
   {
     copy = *m;
-    copy.touch_time = Now();
-    white_list.erase(*m);
-    white_list.insert(copy);
+    copy.touch_time_ = Now();
+    white_list_.erase(*m);
+    white_list_.insert(copy);
 
-    //(*m).touch_time=Now();   // jm
-    mdlCS.leave();
-    return copy.mdl;
+    //(*m).touch_time_=Now();   // jm
+    mdlCS_.leave();
+    return copy.mdl_;
   }
-  _Mem::Get()->pack_hlp(e.mdl);
-  white_list.insert(e);
-  mdlCS.leave();
+  _Mem::Get()->pack_hlp(e.mdl_);
+  white_list_.insert(e);
+  mdlCS_.leave();
   return mdl;
 }
 
@@ -287,85 +287,85 @@ void ModelBase::check_existence(Code *m0, Code *m1, Code *&_m0, Code *&_m1) { //
 
   MEntry e_m0(m0, false);
   MEntry copy;
-  mdlCS.enter();
-  MdlSet::iterator m = black_list.find(e_m0);
-  if (m != black_list.end())
+  mdlCS_.enter();
+  MdlSet::iterator m = black_list_.find(e_m0);
+  if (m != black_list_.end())
   {
     copy = *m;
-    copy.touch_time = Now();
-    black_list.erase(*m);
-    black_list.insert(copy);
+    copy.touch_time_ = Now();
+    black_list_.erase(*m);
+    black_list_.insert(copy);
 
-    // (*m).touch_time=Now();  jm
-    mdlCS.leave();
+    // (*m).touch_time_=Now();  jm
+    mdlCS_.leave();
     _m0 = _m1 = NULL;
     return;
   }
-  m = white_list.find(e_m0);
-  if (m != white_list.end()) {
+  m = white_list_.find(e_m0);
+  if (m != white_list_.end()) {
 
     copy = *m;
-    copy.touch_time = Now();
-    white_list.erase(*m);
-    white_list.insert(copy);
+    copy.touch_time_ = Now();
+    white_list_.erase(*m);
+    white_list_.insert(copy);
 
-    //(*m).touch_time=Now();  //jm
-    _m0 = copy.mdl;
+    //(*m).touch_time_=Now();  //jm
+    _m0 = copy.mdl_;
     Code *rhs = m1->get_reference(m1->code(m1->code(MDL_OBJS).asIndex() + 2).asIndex());
     Code *im0 = rhs->get_reference(0);
     im0->set_reference(0, _m0); // change imdl m0 into imdl _m0.
   } else
     _m0 = m0;
   MEntry e_m1(m1, false);
-  m = black_list.find(e_m1);
-  if (m != black_list.end()) {
+  m = black_list_.find(e_m1);
+  if (m != black_list_.end()) {
     copy = *m;
-    copy.touch_time = Now();
-    black_list.erase(*m);
-    black_list.insert(copy);
+    copy.touch_time_ = Now();
+    black_list_.erase(*m);
+    black_list_.insert(copy);
 
-    //(*m).touch_time=Now();
-    mdlCS.leave();
+    //(*m).touch_time_=Now();
+    mdlCS_.leave();
     _m1 = NULL;
     return;
   }
-  m = white_list.find(e_m1);
-  if (m != white_list.end()) {
+  m = white_list_.find(e_m1);
+  if (m != white_list_.end()) {
     copy = *m;
-    copy.touch_time = Now();
-    white_list.erase(*m);
-    white_list.insert(copy);
+    copy.touch_time_ = Now();
+    white_list_.erase(*m);
+    white_list_.insert(copy);
 
-    //(*m).touch_time=Now();  //jm
-    mdlCS.leave();
-    _m1 = copy.mdl;
+    //(*m).touch_time_=Now();  //jm
+    mdlCS_.leave();
+    _m1 = copy.mdl_;
     return;
   }
   if (_m0 == m0) {
 
     _Mem::Get()->pack_hlp(m0);
-    white_list.insert(e_m0);
+    white_list_.insert(e_m0);
   }
   _Mem::Get()->pack_hlp(m1);
-  white_list.insert(e_m1);
-  mdlCS.leave();
+  white_list_.insert(e_m1);
+  mdlCS_.leave();
   _m1 = m1;
 }
 
 void ModelBase::register_mdl_failure(Code *mdl) { // mdl is packed.
 
   MEntry e(mdl, true);
-  mdlCS.enter();
-  white_list.erase(e);
-  black_list.insert(e);
-  mdlCS.leave();
+  mdlCS_.enter();
+  white_list_.erase(e);
+  black_list_.insert(e);
+  mdlCS_.leave();
 }
 
 void ModelBase::register_mdl_timeout(Code *mdl) { // mdl is packed.
 
   MEntry e(mdl, true);
-  mdlCS.enter();
-  white_list.erase(e);
-  mdlCS.leave();
+  mdlCS_.enter();
+  white_list_.erase(e);
+  mdlCS_.leave();
 }
 }
