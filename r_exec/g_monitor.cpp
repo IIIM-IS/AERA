@@ -87,16 +87,16 @@ namespace r_exec {
 _GMonitor::_GMonitor(PMDLController *controller,
   BindingMap *bindings,
   Timestamp deadline,
-  Timestamp sim_thz,
+  Timestamp sim_thz_timestamp,
   Fact *goal,
   Fact *f_imdl) : Monitor(controller,
     bindings,
     goal),
   deadline_(deadline),
-  sim_thz_(sim_thz),
+  sim_thz_timestamp_(sim_thz_timestamp),
   f_imdl_(f_imdl) { // goal is f0->g->f1->object.
 
-  simulating_ = (sim_thz > Now());
+  simulating_ = (sim_thz_timestamp > Now());
   sim_mode_ = goal->get_goal()->sim_->mode_;
   goal_target_ = target_->get_goal()->get_target(); // f1.
 }
@@ -152,19 +152,19 @@ void _GMonitor::invalidate_sim_outcomes() {
 GMonitor::GMonitor(PMDLController *controller,
   BindingMap *bindings,
   Timestamp deadline,
-  Timestamp sim_thz,
+  Timestamp sim_thz_timestamp,
   Fact *goal,
   Fact *f_imdl,
   _Fact *predicted_evidence) : _GMonitor(controller,
     bindings,
     deadline,
-    sim_thz,
+    sim_thz_timestamp,
     goal,
     f_imdl),
   predicted_evidence_(predicted_evidence) { // goal is f0->g->f1->object.
 
   injected_goal_ = (predicted_evidence == NULL);
-  MonitoringJob<GMonitor> *j = new MonitoringJob<GMonitor>(this, simulating_ ? sim_thz : deadline);
+  MonitoringJob<GMonitor> *j = new MonitoringJob<GMonitor>(this, simulating_ ? sim_thz_timestamp : deadline);
   _Mem::Get()->pushTimeJob(j);
 }
 
@@ -337,12 +337,12 @@ void GMonitor::update(Timestamp &next_target) { // executed by a time core.
 RMonitor::RMonitor(PrimaryMDLController *controller,
   BindingMap *bindings,
   Timestamp deadline,
-  Timestamp sim_thz,
+  Timestamp sim_thz_timestamp,
   Fact *goal,
   Fact *f_imdl) : GMonitor(controller,
     bindings,
     deadline,
-    sim_thz,
+    sim_thz_timestamp,
     goal,
     f_imdl,
     NULL) { // goal is f0->g->f1->object.
@@ -423,16 +423,16 @@ void RMonitor::update(Timestamp &next_target) {
 
 SGMonitor::SGMonitor(PrimaryMDLController *controller,
   BindingMap *bindings,
-  Timestamp sim_thz,
+  Timestamp sim_thz_timestamp,
   Fact *goal,
   Fact *f_imdl) : _GMonitor(controller,
     bindings,
     Timestamp(seconds(0)),
-    sim_thz,
+    sim_thz_timestamp,
     goal,
     f_imdl) { // goal is f0->g->f1->object.
 
-  MonitoringJob<SGMonitor> *j = new MonitoringJob<SGMonitor>(this, sim_thz);
+  MonitoringJob<SGMonitor> *j = new MonitoringJob<SGMonitor>(this, sim_thz_timestamp);
   _Mem::Get()->pushTimeJob(j);
 }
 
@@ -518,15 +518,15 @@ void SGMonitor::update(Timestamp &next_target) { // executed by a time core.
 
 SRMonitor::SRMonitor(PrimaryMDLController *controller,
   BindingMap *bindings,
-  Timestamp sim_thz,
+  Timestamp sim_thz_timestamp,
   Fact *goal,
   Fact *f_imdl) : SGMonitor(controller,
     bindings,
-    sim_thz,
+    sim_thz_timestamp,
     goal,
     f_imdl) { // goal is f0->g->f1->object.
 
-  MonitoringJob<SRMonitor> *j = new MonitoringJob<SRMonitor>(this, sim_thz);
+  MonitoringJob<SRMonitor> *j = new MonitoringJob<SRMonitor>(this, sim_thz_timestamp);
   _Mem::Get()->pushTimeJob(j);
 }
 

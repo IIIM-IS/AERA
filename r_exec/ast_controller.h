@@ -97,7 +97,7 @@ template<class U> class ASTController :
 protected:
   P<CTPX> tpx_;
   P<_Fact> target_; // the repeated fact to be monitored.
-  Timestamp thz_; // time horizon: if an input is caught with ijt<thz (meaning it's too old), discard it.
+  Timestamp thz_timestamp_; // time horizon: if an input is caught with ijt<thz (meaning it's too old), discard it.
 
   void kill();
 
