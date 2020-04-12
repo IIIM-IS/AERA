@@ -262,19 +262,19 @@ public:
   virtual bool load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid); // call before start; no mod/set/eje will be executed (only inj);
                                                                                                                   // return false on error.
   Timestamp start(); // return the starting time.
-  /**
-   * When reduction and core count == 0, start() does not start
-   * any core threads, so call this instead of Thread::Sleep(runTimeMilliseconds)
-   * to run in the current thread using "diagnostic time". As opposed to
-   * real time which uses Time::Get, diagnostic time uses getDiagnosticTimeNow()
-   * which simply returns DiagnosticTimeNow. (The main() function should call
-   * r_exec::Init where time_base is getDiagnosticTimeNow.) So, runInDiagnosticTime
-   * updates DiagnosticTimeNow based on the next time job (which always
-   * runs on time). This way, the return value of Now() does not move with real time, but moves
-   * step-by-step when DiagnosticTimeNow is updated, making it possible to set
-   * break points and diagnose the program.
-   * @param runTime The number of milliseconds (in diagnostic time) to run for.
-   */
+
+  /// <summary>
+  /// When reduction and core count == 0, start() does not start any core threads, 
+  /// so call this instead of Thread::Sleep(runTimeMilliseconds) to run in the current 
+  /// thread using "diagnostic time".As opposed to real time which uses Time::Get, 
+  /// diagnostic time uses getDiagnosticTimeNow() which simply returns DiagnosticTimeNow. 
+  /// (The main() function should call r_exec::Init where time_base is getDiagnosticTimeNow.) 
+  /// So, runInDiagnosticTime updates DiagnosticTimeNow based on the next time job(which always
+  /// runs on time).This way, the return value of Now() does not move with real time, but moves
+  /// step-by-step when DiagnosticTimeNow is updated, making it possible to set break points 
+  /// and diagnose the program.
+  /// </summary>
+  /// <param name="runTime">The number of milliseconds (in diagnostic time) to run for.</param>
   void runInDiagnosticTime(std::chrono::milliseconds runTime);
   static Timestamp DiagnosticTimeNow_;
   static Timestamp getDiagnosticTimeNow();

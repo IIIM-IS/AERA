@@ -92,12 +92,12 @@ namespace r_code {
 // To define bigger constructs (e.g. large matrices), define hooks to RAM (and derive classes from Object).
 class dll_export Atom {
 public:
-  /**
-   * Atom::TraceContext holds the indentation level and other context info
-   * for the trace method. Before iterating over Atom objects (which may have
-   * different indentation levels or other details), create an
-   * Atom::TraceContext and pass it to Atom::trace.
-   */
+  /// <summary>
+  /// Atom::TraceContext holds the indentation level and other context info
+  /// for the trace method.Before iterating over Atom objects(which may have
+  /// different indentation levels or other details), create an
+  /// Atom::TraceContext and pass it to Atom::trace.
+  /// </summary>
   class dll_export TraceContext {
   public:
     uint8 Members_to_go;
@@ -242,21 +242,21 @@ public:
   void trace(TraceContext& context, std::ostream& out) const;
 };
 
-/**
- * Add to the names for the opcode. This is searched by GetOpcodeName.
- * @param opcode The opcode.
- * @param name The opcode name, which is copied. (We pass a char*
- * because we don't want to export a DLL function with std::string.)
- */
+/// <summary>
+/// Add to the names for the opcode. This is searched by GetOpcodeName.
+/// because we don't want to export a DLL function with std::string.)</param>
+/// </summary>
+/// <param name="opcode">The opcode.</param>
+/// <param name="name">The opcode name, which is copied. (We pass a char*
 void __declspec(dllexport) AddOpcodeName(uint16 opcode, const char* name);
 
-/**
- * Get the name or set of names of the opcode. (The same opcode can be
- * re-used for different purposes.)
- * @param opcode The opcode.
- * @return The opcode name, or a set of names separated by a slash.
- * If not found, return "unknown".
- */
+/// <summary>
+/// Get the name or set of names of the opcode. (The same opcode can be
+/// re - used for different purposes.)
+/// </summary>
+/// <param name="opcode">The opcode.</param>
+/// <returns>The opcode name, or a set of names separated by a slash.
+/// If not found, return "unknown".</returns>
 std::string GetOpcodeName(uint16 opcode);
 }
 

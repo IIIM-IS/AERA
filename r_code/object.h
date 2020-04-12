@@ -277,9 +277,12 @@ public:
     rel_markers();
   }
 
-  /**
-   * Print the trace of code(i) to the out stream, using the given TraceContext.
-   */
+  /// <summary>
+  /// Print the trace of code(i) to the out stream, using the given TraceContext.
+  /// </summary>
+  /// <param name="i"></param>
+  /// <param name="out"></param>
+  /// <param name="context"></param>
   void trace(uint16 i, std::ostream& out, Atom::TraceContext& context) const {
     Atom& atom = code(i);
     atom.trace(context, out);
@@ -295,17 +298,20 @@ public:
     }
   }
 
-  /**
-   * Print the trace of code(i) to the out stream, using a default TraceContext (no indentation).
-   */
+  /// <summary>
+  /// Print the trace of code(i) to the out stream, using a default TraceContext (no indentation).
+  /// </summary>
+  /// <param name="i"></param>
+  /// <param name="out"></param>
   void trace(uint16 i, std::ostream& out) const {
     Atom::TraceContext context;
     trace(i, out, context);
   }
 
-  /**
-   * Print the trace of this Code to the out stream.
-   */
+  /// <summary>
+  /// Print the trace of this Code to the out stream.
+  /// </summary>
+  /// <param name="out"></param>
   void trace(std::ostream& out) const {
 
     out << "--------\n";
@@ -325,10 +331,10 @@ public:
 
   void trace() const { trace(std::cout); }
 
-  /**
-   * Return the trace as a string.
-   * For debugging purposes only (can be inefficient).
-   */
+  /// <summary>
+  /// Return the trace as a string. For debugging purposes only(can be inefficient).
+  /// </summary>
+  /// <returns></returns>
   std::string traceString() const {
     std::ostringstream out;
     trace(out);
