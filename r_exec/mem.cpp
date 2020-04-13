@@ -28,6 +28,8 @@
 //	(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 //	SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#include	<algorithm>
+#include	<deque>
 #include	"mem.h"
 #include	"mdl_controller.h"
 
@@ -203,6 +205,7 @@ namespace	r_exec{
 
 		uint32	i;
 		uint64	now=starting_time=Now();
+		Utils::SetTimeReference(now);
 		for(i=0;i<initial_groups.size();++i){
 
 			Group	*g=initial_groups[i];
@@ -286,6 +289,144 @@ namespace	r_exec{
 		return	now;
 	}
 
+    void _Mem::runInDiagnosticTime(uint64 runTime_ms) {
+      if (!(reduction_core_count == 0 && time_core_count == 0))
+        // This should only be called if there are no running core threads.
+        return;
+
+      // The maximum number of reduction jobs to run before trying a time job.
+      // Average job time is 333us. 300 jobs is 100000us, which is the sampling period.
+      // Assume 8 threads (on 4 cores), so allow 300 * 8 = 2400 jobs per cycle.
+      const size_t maxReductionJobsPerCycle = 2400;
+      size_t nReductionJobsThisSamplingPeriod = 0;
+      std::vector<P<_ReductionJob>> reductionJobQueue;
+      // Use a deque so we can efficiently remove from the front.
+      std::deque<P<TimeJob>> orderedTimeJobQueue;
+
+      auto tickTime = Now();
+      onDiagnosticTimeTick();
+      auto endTime = Now() + runTime_ms * 1000;
+
+      // Loop until the runTimeMilliseconds expires.
+      while (true) {
+        if (state == STOPPED)
+          break;
+
+        // Reduction jobs can add more reduction jobs, so make a few passes.
+        for (int passNumber = 1; passNumber <= 3; ++passNumber) {
+          // Transfer all reduction jobs to a local queue and run only these.
+          // Below, we only run one time job, so any extra jobs that these reduction
+          // jobs add will be run on the next pass after running the time job.
+          while (true) {
+            P<_ReductionJob> reductionJob = popReductionJob(false);
+            if (reductionJob == NULL)
+              // No more reduction jobs.
+              break;
+            reductionJobQueue.push_back(reductionJob);
+          }
+
+          size_t nJobsToRun = min(reductionJobQueue.size(), maxReductionJobsPerCycle);
+          if (nJobsToRun == 0)
+            break;
+          for (size_t i = 0; i < nJobsToRun; ++i) {
+#if 0
+            cout << "ReductionJob " << reductionJobQueue[i]->get_job_id() << "(" <<
+              reductionJobQueue[i]->get_debug_oid() << ") " << Utils::RelativeTime(Now()) << endl;
+            if (reductionJobQueue[i]->get_job_id() == 0)
+              int debug1 = 1;
+#endif
+            reductionJobQueue[i]->update();
+            reductionJobQueue[i] = NULL;
+          }
+          nReductionJobsThisSamplingPeriod += nJobsToRun;
+
+          if (reductionJobQueue.size() > maxReductionJobsPerCycle)
+            // There are remaining jobs to be run. Shift them to the front.
+            reductionJobQueue.erase
+            (reductionJobQueue.begin(), reductionJobQueue.begin() + maxReductionJobsPerCycle);
+          else
+            reductionJobQueue.clear();
+
+          if (nReductionJobsThisSamplingPeriod >= maxReductionJobsPerCycle)
+            // We have hit the limit of reduction jobs this sampling period.
+            break;
+        }
+
+        // Transfer all time jobs to orderedTimeJobQueue,
+        // sorted on target_time_.
+        while (true) {
+          P<TimeJob> timeJob = popTimeJob(false);
+          if (timeJob == NULL)
+            // No more time jobs.
+            break;
+
+          orderedTimeJobQueue.insert
+          (upper_bound(orderedTimeJobQueue.begin(),
+            orderedTimeJobQueue.end(), timeJob, timeJobCompare_),
+            timeJob);
+        }
+
+        if (Now() >= endTime)
+          // Finished.
+          break;
+
+        // The entry at the front is the earliest.
+        if (orderedTimeJobQueue.size() == 0 ||
+          orderedTimeJobQueue.front()->target_time >=
+          tickTime + Mem_sampling_period_us_) {
+          // There is no time job before the next tick time, so tick.
+          tickTime += Mem_sampling_period_us_;
+          // Increase the diagnostic time to the tick time.
+          DiagnosticTimeNow_ = tickTime;
+          // We are beginning a new sampling period.
+          nReductionJobsThisSamplingPeriod = 0;
+          onDiagnosticTimeTick();
+
+          if (orderedTimeJobQueue.size() == 0 ||
+            orderedTimeJobQueue.front()->target_time > tickTime)
+            // Loop again in case a reduction job will add more time jobs.
+            continue;
+        }
+
+        if (orderedTimeJobQueue.size() == 0)
+          // No time jobs. Loop again in case a reduction job will add one.
+          continue;
+
+        if (orderedTimeJobQueue.front()->target_time > Now())
+          // Increase the diagnostic time to the job's target time.
+          DiagnosticTimeNow_ = orderedTimeJobQueue.front()->target_time;
+
+        // Only process one job in case it adds more jobs.
+        P<TimeJob> timeJob = orderedTimeJobQueue.front();
+        orderedTimeJobQueue.erase(orderedTimeJobQueue.begin());
+
+        if (!timeJob->is_alive()) {
+          timeJob = NULL;
+          continue;
+        }
+
+#if 0
+        cout << "TimeJob " << timeJob->get_job_id() << "(" <<
+          timeJob->get_debug_oid() << ") " << Utils::RelativeTime(timeJob->target_time) << endl;
+        if (timeJob->get_job_id() == 0)
+          auto debug2 = 2;
+#endif
+        if (!timeJob->update()) {
+          // update() says to stop running.
+          timeJob = NULL;
+          break;
+        }
+
+        timeJob = NULL;
+      }
+    }
+
+    uint64 _Mem::DiagnosticTimeNow_ = 1;
+
+    uint64 _Mem::getDiagnosticTimeNow() { return DiagnosticTimeNow_; }
+
+    void _Mem::onDiagnosticTimeTick() {}
+
 	void	_Mem::stop(){
 
 		stateCS.enter();
@@ -358,11 +499,11 @@ namespace	r_exec{
 
 	////////////////////////////////////////////////////////////////
 
-	_ReductionJob	*_Mem::popReductionJob(){
+	_ReductionJob	*_Mem::popReductionJob(bool waitForItem){
 
 		if(state==STOPPED)
 			return	NULL;
-		return	reduction_job_queue->pop();
+		return	reduction_job_queue->pop(waitForItem);
 	}
 
 	void	_Mem::pushReductionJob(_ReductionJob	*j){
@@ -373,11 +514,11 @@ namespace	r_exec{
 		reduction_job_queue->push(_j);
 	}
 
-	TimeJob	*_Mem::popTimeJob(){
+	TimeJob	*_Mem::popTimeJob(bool waitForItem){
 
 		if(state==STOPPED)
 			return	NULL;
-		return	time_job_queue->pop();
+		return	time_job_queue->pop(waitForItem);
 	}
 
 	void	_Mem::pushTimeJob(TimeJob	*j){

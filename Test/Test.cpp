@@ -106,8 +106,19 @@ int32	main(int	argc,char	**argv){
 		return	1;
 
 	std::cout<<"compiling ...\n";
-	if(!r_exec::Init(settings.usr_operator_path.c_str(),Time::Get,settings.usr_class_path.c_str()))
-		return	2;
+	if (settings.reduction_core_count == 0 && settings.time_core_count == 0) {
+		// Below, we will use runInDiagnosticTime.
+		// Initialize the diagnostic time to the real now.
+		r_exec::_Mem::DiagnosticTimeNow_ = Time::Get();
+		if (!r_exec::Init
+		    (settings.usr_operator_path.c_str(), r_exec::_Mem::getDiagnosticTimeNow,
+			 settings.usr_class_path.c_str()))
+			return 2;
+	}
+	else {
+		if(!r_exec::Init(settings.usr_operator_path.c_str(),Time::Get,settings.usr_class_path.c_str()))
+			return	2;
+	}
 
 	srand(r_exec::Now());
 	Random::Init();
@@ -164,8 +175,14 @@ int32	main(int	argc,char	**argv){
 			return	4;
 		uint64	starting_time=mem->start();
 		
-		std::cout<<"\nRunning for "<<settings.run_time<<" ms"<<std::endl;
-		Thread::Sleep(settings.run_time);
+		if (settings.reduction_core_count == 0 && settings.time_core_count == 0) {
+			std::cout << "> running for " << settings.run_time << " ms in diagnostic time" << std::endl;
+			mem->runInDiagnosticTime(settings.run_time);
+		}
+		else {
+			std::cout<<"\nRunning for "<<settings.run_time<<" ms"<<std::endl;
+			Thread::Sleep(settings.run_time);
+		}
 
 		//TimeProbe	probe;
 		//probe.set();

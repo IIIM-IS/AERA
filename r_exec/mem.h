@@ -82,6 +82,7 @@ namespace	r_exec{
 		ReductionCore	**reduction_cores;
 		uint32			time_core_count;
 		TimeCore		**time_cores;
+		TimeJob::Compare timeJobCompare_;
 
 		uint32			core_count;
 		CriticalSection	core_countCS;
@@ -185,6 +186,24 @@ namespace	r_exec{
 		bool	suspend_core();		//	called by cores upon receiving a suspend job.
 
 		uint64	start();	//	return the starting time.
+
+		/// <summary>
+		/// When reduction and core count == 0, start() does not start any core threads, 
+		/// so call this instead of Thread::Sleep(runTimeMilliseconds) to run in the current 
+		/// thread using "diagnostic time".As opposed to real time which uses Time::Get, 
+		/// diagnostic time uses getDiagnosticTimeNow() which simply returns DiagnosticTimeNow. 
+		/// (The main() function should call r_exec::Init where time_base is getDiagnosticTimeNow.) 
+		/// So, runInDiagnosticTime updates DiagnosticTimeNow based on the next time job(which always
+		/// runs on time).This way, the return value of Now() does not move with real time, but moves
+		/// step-by-step when DiagnosticTimeNow is updated, making it possible to set break points 
+		/// and diagnose the program.
+		/// </summary>
+		/// <param name="runTime">The number of milliseconds (in diagnostic time) to run for.</param>
+		void runInDiagnosticTime(uint64 runTime_ms);
+		static uint64 DiagnosticTimeNow_;
+		static uint64 getDiagnosticTimeNow();
+		// Tell an inheriting class (with inject) when the time is changed.
+		virtual void onDiagnosticTimeTick();
 		void	stop();		//	after stop() the content is cleared and one has to call load() and start() again.
 		void	suspend();
 		void	resume();
@@ -198,9 +217,9 @@ namespace	r_exec{
 
 		//	Internal core processing	////////////////////////////////////////////////////////////////
 
-		_ReductionJob	*popReductionJob();
+		_ReductionJob	*popReductionJob(bool waitForItem = true);
 		void			pushReductionJob(_ReductionJob	*j);
-		TimeJob			*popTimeJob();
+		TimeJob			*popTimeJob(bool waitForItem = true);
 		void			pushTimeJob(TimeJob	*j);
 
 		//	Called at each update period.
@@ -253,6 +272,9 @@ namespace	r_exec{
 		void	abstract_object(r_code::Code	*object,BindingMap	*bm);
 		void	abstract_object_member(r_code::Code	*object,uint16	index,BindingMap	*bm);
 	};
+
+	// Note: This should match the definition in user.classes.replicode.
+	const uint64 Mem_sampling_period_us_ = 100000;
 
 	//	O is the class of the objects held by the rMem (except groups and notifications):
 	//		r_exec::LObject if non distributed, or
