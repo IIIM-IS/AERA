@@ -47,6 +47,19 @@ namespace	r_exec{
 		virtual	bool	is_alive()	const;
 		uint32 get_job_id() { return job_id_; }
 
+        /// <summary>
+        /// Compare P<TimeJob> based only on target_time_.
+        /// </summary>
+        class Compare {
+        public:
+			bool
+			  operator()
+			  (const P<TimeJob>& x, const P<TimeJob>& y) const
+			{
+				return x->target_time < y->target_time;
+			}
+		};
+
 	private:
 		static uint32 job_count_;
 		int job_id_;
