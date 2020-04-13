@@ -28,10 +28,19 @@
 //	(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 //	SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#include	"../../CoreLibrary/trunk/CoreLibrary/utils.h"
 #include	"utils.h"
 
 
 namespace	r_code{
+
+	uint64 Utils::TimeReference = 0;
+	uint64 Utils::GetTimeReference() { return TimeReference; }
+
+	void Utils::SetTimeReference(uint64 time_reference) {
+
+		TimeReference = time_reference;
+	}
 
 	uint64	Utils::GetTimestamp(const	Atom	*iptr){
 
@@ -85,5 +94,10 @@ namespace	r_code{
 		if(time_to_live%upr>1)
 			++r;
 		return	r;
+	}
+
+	std::string Utils::RelativeTime(uint64 t) {
+
+		return Time::ToString_seconds(t - TimeReference);
 	}
 }

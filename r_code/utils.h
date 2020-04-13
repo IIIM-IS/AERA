@@ -37,7 +37,11 @@
 namespace	r_code{
 
 	class	dll_export	Utils{
+    private:
+		static uint64 TimeReference; // starting time.
 	public:
+		static uint64 GetTimeReference();
+		static void SetTimeReference(uint64 time_reference);
 		static	uint64	GetTimestamp(const	Atom	*iptr);
 		static	void	SetTimestamp(Atom	*iptr,uint64	t);
 
@@ -94,7 +98,9 @@ namespace	r_code{
 		}
 
 		static	int32	GetResilience(uint64	time_to_live,uint64	upr);	//	ttl: us, upr: us.
-	};
+
+		static std::string RelativeTime(uint64 t);
+    };
 }
 
 
