@@ -43,7 +43,11 @@ namespace	r_exec{
 		_ReductionJob();
 	public:
 		virtual	bool	update()=0;	//	return false to shutdown the reduction core.
-	};
+		uint32 get_job_id() { return job_id_; }
+	private:
+		static uint32 job_count_;
+		int job_id_;
+    };
 
 	template<class	T>	class	ReductionJob:
 	public	_ReductionJob{

@@ -35,7 +35,11 @@
 
 namespace	r_exec{
 
+	uint32 TimeJob::job_count_ = 0;
+
 	TimeJob::TimeJob(uint64	ijt):_Object(),target_time(ijt){
+		// Increment without thread lock. It's only for tracing.
+		job_id_ = ++job_count_;
 	}
 
 	bool	TimeJob::is_alive()	const{

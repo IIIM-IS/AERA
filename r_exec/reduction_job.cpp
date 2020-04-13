@@ -34,7 +34,11 @@
 
 namespace	r_exec{
 
+	uint32 _ReductionJob::job_count_ = 0;
+
 	_ReductionJob::_ReductionJob():_Object(){
+		// Increment without thread lock. It's only for tracing.
+		job_id_ = ++job_count_;
 	}
 
 	////////////////////////////////////////////////////////////

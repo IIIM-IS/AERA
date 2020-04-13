@@ -45,7 +45,12 @@ namespace	r_exec{
 		int64			target_time;		//	0 means ASAP.
 		virtual	bool	update()=0;	//	return false to shutdown the time core.
 		virtual	bool	is_alive()	const;
-	};
+		uint32 get_job_id() { return job_id_; }
+
+	private:
+		static uint32 job_count_;
+		int job_id_;
+    };
 
 	class	r_exec_dll	UpdateJob:
 	public	TimeJob{
