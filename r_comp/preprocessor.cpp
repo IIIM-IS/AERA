@@ -635,11 +635,13 @@ int32	RepliStruct::process(){
 				// we want to remove the !load line, so get the next line
 				iter++;
 				args.remove(tempStruct);
-				// and because we changed the list, repeat
-				tempStruct = (*iter); 
-				iter = args.begin();
-				iterEnd = args.end();
-				while ((*iter) != tempStruct) iter++;
+				if (iter != iterEnd) {
+					// and because we changed the list, repeat
+					tempStruct = (*iter); 
+					iter = args.begin();
+					iterEnd = args.end();
+					while ((*iter) != tempStruct) iter++;
+				}
 				// now we have replaced the !load line with the loaded lines
 				changes++;
 			}
