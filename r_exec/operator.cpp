@@ -244,7 +244,7 @@ namespace	r_exec{
 
 				if(lhs[0]!=Atom::PlusInfinity()){
 
-					index=context.setTimestampResult(Utils::GetTimestamp(&rhs[0])+lhs[0].asFloat());
+					index=context.setTimestampResult(Utils::GetTimestamp(&rhs[0])+(int64)lhs[0].asFloat());
 					return	true;
 				}
 			}
@@ -258,7 +258,7 @@ namespace	r_exec{
 
 				if(rhs[0]!=Atom::PlusInfinity()){
 
-					index=context.setTimestampResult(Utils::GetTimestamp(&lhs[0])+rhs[0].asFloat());
+					index=context.setTimestampResult(Utils::GetTimestamp(&lhs[0])+(int64)rhs[0].asFloat());
 					return	true;
 				}
 			}
@@ -304,7 +304,7 @@ namespace	r_exec{
 
 				if(rhs[0]!=Atom::PlusInfinity()){
 
-					index=context.setTimestampResult(Utils::GetTimestamp(&lhs[0])-rhs[0].asFloat());
+					index=context.setTimestampResult(Utils::GetTimestamp(&lhs[0])-(int64)rhs[0].asFloat());
 					return	true;
 				}
 			}
