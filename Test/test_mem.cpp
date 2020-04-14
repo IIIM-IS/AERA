@@ -230,8 +230,8 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
     auto now = r_exec::Now();
     lastCommandTime_ = now;
     uint16 args_set_index = command->code(CMD_ARGS).asIndex();
-    Code* obj = command->get_reference
-    (command->code(args_set_index + 1).asIndex());
+    Code* obj = command->get_reference(
+      command->code(args_set_index + 1).asIndex());
     if (!position_y_obj_) {
       // This is the first call. Remember the object whose speed we're setting.
       position_y_obj_ = obj;
@@ -262,8 +262,8 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
     auto now = r_exec::Now();
 
     uint16 args_set_index = command->code(CMD_ARGS).asIndex();
-    Code* obj = command->get_reference
-    (command->code(args_set_index + 1).asIndex());
+    Code* obj = command->get_reference(
+      command->code(args_set_index + 1).asIndex());
     if (!discretePositionObj_) {
       // This is the first call. Remember the object whose position we're setting.
       discretePositionObj_ = obj;
@@ -315,11 +315,11 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
       lastInjectTime_ = now;
       // Inject the speed and position.
       // It seems that speed_y needs SYNC_HOLD for building models.
-      injectMarkerValue
-      (position_y_obj_, speed_y_property_, Atom::Float(speed_y_),
+      injectMarkerValue(
+        position_y_obj_, speed_y_property_, Atom::Float(speed_y_),
         now, now + Mem_sampling_period_, r_exec::View::SYNC_HOLD);
-      injectMarkerValue
-      (position_y_obj_, position_y_property_, Atom::Float(position_y_),
+      injectMarkerValue(
+        position_y_obj_, position_y_property_, Atom::Float(position_y_),
         now, now + Mem_sampling_period_);
     }
   }
@@ -338,8 +338,8 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
       }
 
       lastInjectTime_ = now;
-      injectMarkerValue
-      (discretePositionObj_, position_property_, discretePosition_,
+      injectMarkerValue(
+        discretePositionObj_, position_property_, discretePosition_,
         now, now + Mem_sampling_period_);
 
       const microseconds babbleStopTime(2000000);
@@ -374,8 +374,8 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
         cmd->code(5) = Atom::RPointer(0); // obj
         cmd->set_reference(0, discretePositionObj_);
 
-        r_exec::Fact* factCmd = new r_exec::Fact
-        (cmd, now + Mem_sampling_period_, now + 2 * Mem_sampling_period_, 1, 1);
+        r_exec::Fact* factCmd = new r_exec::Fact(
+          cmd, now + Mem_sampling_period_, now + 2 * Mem_sampling_period_, 1, 1);
         r_exec::Goal* goal = new r_exec::Goal(factCmd, get_self(), 1);
         injectFact(goal, now + Mem_sampling_period_, now + Mem_sampling_period_, primary_group_);
       }

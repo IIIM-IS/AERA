@@ -474,8 +474,8 @@ void _Mem::runInDiagnosticTime(milliseconds runTime) {
 
       if (reductionJobQueue.size() > maxReductionJobsPerCycle)
         // There are remaining jobs to be run. Shift them to the front.
-        reductionJobQueue.erase
-        (reductionJobQueue.begin(), reductionJobQueue.begin() + maxReductionJobsPerCycle);
+        reductionJobQueue.erase(
+          reductionJobQueue.begin(), reductionJobQueue.begin() + maxReductionJobsPerCycle);
       else
         reductionJobQueue.clear();
 
@@ -492,9 +492,9 @@ void _Mem::runInDiagnosticTime(milliseconds runTime) {
         // No more time jobs.
         break;
 
-      orderedTimeJobQueue.insert
-      (upper_bound(orderedTimeJobQueue.begin(),
-        orderedTimeJobQueue.end(), timeJob, timeJobCompare_),
+      orderedTimeJobQueue.insert(
+        upper_bound(orderedTimeJobQueue.begin(),
+          orderedTimeJobQueue.end(), timeJob, timeJobCompare_),
         timeJob);
     }
 
@@ -547,9 +547,9 @@ void _Mem::runInDiagnosticTime(milliseconds runTime) {
     if (next_target.time_since_epoch().count() != 0) {
       // The job wants to run again, so re-insert into the queue.
       timeJob->target_time_ = next_target;
-      orderedTimeJobQueue.insert
-      (upper_bound(orderedTimeJobQueue.begin(),
-        orderedTimeJobQueue.end(), timeJob, timeJobCompare_),
+      orderedTimeJobQueue.insert(
+        upper_bound(orderedTimeJobQueue.begin(),
+          orderedTimeJobQueue.end(), timeJob, timeJobCompare_),
         timeJob);
     }
     else

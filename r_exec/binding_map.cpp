@@ -1144,8 +1144,8 @@ void HLPBindingMap::reset_bwd_timings(_Fact *reference_fact) { // valuate at aft
 bool HLPBindingMap::match_bwd_timings(const _Fact *f_object, const _Fact *f_pattern, bool use_f_pattern_timings) {
 
   if (use_f_pattern_timings)
-    return match_timings
-    (f_pattern->get_after(), f_pattern->get_before(), f_object->get_after(), f_object->get_before(), bwd_after_index_, bwd_before_index_);
+    return match_timings(
+      f_pattern->get_after(), f_pattern->get_before(), f_object->get_after(), f_object->get_before(), bwd_after_index_, bwd_before_index_);
   else
     return match_timings(get_bwd_after(), get_bwd_before(), f_object->get_after(), f_object->get_before(), bwd_after_index_, bwd_before_index_);
 }
