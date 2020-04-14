@@ -827,7 +827,7 @@ return_false:
 		if(symbol_expr_set(r)){
 
 			UNORDERED_MAP<std::string,Reference>::iterator	it=local_references.find(r);
-			if(it!=local_references.end()	&&	(t==ANY	||	(t!=ANY	&&	it->second._class.type==t))){
+			if(it!=local_references.end()	&&	(t==ANY || it->second._class.type==ANY	||	(t!=ANY	&&	it->second._class.type==t))){
 
 				index=it->second.index;
 				return	true;
