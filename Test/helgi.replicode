@@ -13,7 +13,7 @@ ProgPing:(pgm
    |[]
    |[]
 []
-   (inj [(Pong now 1) [SYNC_FRONT now 1 forever stdout nil]])
+   (inj [(Pong now 1) [SYNC_FRONT (+ now 100000) 1 forever stdout nil]])
 1; psln_thr
 )
 |[]
@@ -26,7 +26,7 @@ ProgPong:(pgm
    |[]
    |[]
 []
-   (inj [(Ping now 1) [SYNC_FRONT now 1 forever stdin nil]])
+   (inj [(Ping now 1) [SYNC_FRONT (+ now 100000) 1 forever stdin nil]])
 1; psln_thr
 )
 |[]
