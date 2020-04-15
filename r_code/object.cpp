@@ -97,6 +97,9 @@ namespace	r_code{
 	uint32	SysObject::LastOID=0;
 
 	SysObject::SysObject():oid(LastOID++){
+#ifdef WITH_DEBUG_OID
+		debug_oid_ = 0;
+#endif
 	}
 
 	SysObject::SysObject(Code	*source){
@@ -110,6 +113,9 @@ namespace	r_code{
 			views[i]=new	SysView(*v);
 
 		oid=source->getOID();
+#ifdef WITH_DEBUG_OID
+		debug_oid_ = source->get_debug_oid();
+#endif
 
 		for(i=0;i<source->references_size();++i)	//	to get the right size in Image::addObject().
 			references.push_back(0);

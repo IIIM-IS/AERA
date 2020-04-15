@@ -81,6 +81,9 @@ namespace	r_code{
 		r_code::vector<SysView	*>	views;
 
 		uint32	oid;
+#ifdef WITH_DEBUG_OID
+		uint32	debug_oid_;
+#endif
 
 		SysObject();
 		SysObject(Code	*source);
