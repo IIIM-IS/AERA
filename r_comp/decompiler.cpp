@@ -187,6 +187,15 @@ namespace	r_comp{
 				return;
 		}
 
+		if (sys_object->oid != UNDEFINED_OID)
+          *out_stream << sys_object->oid;
+#ifdef WITH_DEBUG_OID
+		*out_stream << "(" << sys_object->debug_oid_ << ") ";
+#else
+		if (sys_object->oid != UNDEFINED_OID)
+			*out_stream << " ";
+#endif
+
 		std::string	s=object_names[object_index];
 		s+=":";
 		*out_stream<<s;
