@@ -124,7 +124,6 @@ namespace	r_comp{
 		for(it=metadata->sys_classes.begin();it!=metadata->sys_classes.end();++it)
 			object_ID_per_class[&(it->second)]=0;
 
-		char		buffer[255];
 		std::string	s;
 
 		this->image=image;
@@ -141,11 +140,15 @@ namespace	r_comp{
 			else{
 			
 				c=metadata->getClass(sys_object->code[0].asOpcode());
-				last_object_ID=object_ID_per_class[c];
-				object_ID_per_class[c]=last_object_ID+1;
-				sprintf(buffer,"%d",last_object_ID);
-				s=c->str_opcode;
-				s+=buffer;
+				if (sys_object->oid != UNDEFINED_OID)
+					// Use the object's OID.
+					s = c->str_opcode + "_" + std::to_string(sys_object->oid);
+				else {
+					// Create a name with a unique ID.
+					last_object_ID = object_ID_per_class[c];
+					object_ID_per_class[c] = last_object_ID + 1;
+					s = c->str_opcode + std::to_string(last_object_ID);
+				}
 			}
 
 			object_names[i]=s;
