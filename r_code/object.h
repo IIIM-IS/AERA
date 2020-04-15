@@ -216,16 +216,43 @@ namespace	r_code{
 		bool								is_registered;
 		std::list<Code	*>::const_iterator	position_in_objects;
 
+        /// <summary>
+        /// Print the trace of code(i) to std::cout.
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="out"></param>
+        void trace(uint16 i) const {
+          Atom& atom = code(i);
+          atom.trace();
+          if (atom.getDescriptor() == Atom::R_PTR) {
+            if (atom.asIndex() < references_size()) {
+              std::cout << " -> " << get_reference(atom.asIndex())->getOID();
+#ifdef WITH_DEBUG_OID
+              std::cout << "(" << get_reference(atom.asIndex())->get_debug_oid() << ")";
+#endif
+            }
+            else
+              std::cout << " (unassigned) ";
+          }
+        }
+
+		/// <summary>
+		/// Print the trace of this Code to std::cout.
+		/// </summary>
 		void	trace()	const{
 
 			std::cout<<"--------\n";
 			for(uint16	i=0;i<code_size();++i){
 
 				std::cout<<i<<"\t";
-				code(i).trace();
+				trace(i);
 				std::cout<<std::endl;
 			}
-			std::cout<<"OID: "<<getOID()<<std::endl;
+			std::cout<<"OID: "<<getOID();
+#ifdef WITH_DEBUG_OID
+			std::cout << "(" << get_debug_oid() << ")";
+#endif
+			std::cout << std::endl;
 		}
 	};
 
