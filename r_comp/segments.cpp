@@ -518,7 +518,7 @@ void Image::add_object(Code *object) {
   for (uint16 i = 0; i < reference_count; ++i) { // follow reference pointers and recurse.
 
     Code *reference = object->get_reference(i);
-    if (reference->get_oid() == 0xFFFFFFFF ||
+    if (reference->get_oid() == UNDEFINED_OID ||
       reference->is_invalidated()) // the referenced object is not in the image and will not be added otherwise.
       add_object(reference);
   }
@@ -543,7 +543,7 @@ SysObject *Image::add_object(Code *object, std::vector<SysObject *> &imported_ob
   for (uint16 i = 0; i < reference_count; ++i) { // follow the object's reference pointers and recurse.
 
     Code *reference = object->get_reference(i);
-    if (reference->get_oid() == 0xFFFFFFFF) // the referenced object is not in the image and will not be added otherwise.
+    if (reference->get_oid() == UNDEFINED_OID) // the referenced object is not in the image and will not be added otherwise.
       add_object(reference, imported_objects);
     else { // add the referenced object if not present in the list.
 

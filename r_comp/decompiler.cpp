@@ -279,12 +279,12 @@ void Decompiler::decompile_object(uint16 object_index, std::ostringstream *strea
         return;
       else
         *out_stream_ << "imported";
-    } else if (sys_object->oid_ != 0xFFFFFFFF)
+    } else if (sys_object->oid_ != UNDEFINED_OID)
       *out_stream_ << sys_object->oid_;
 #ifdef WITH_DEBUG_OID
     *out_stream_ << "(" << sys_object->debug_oid_ << ") ";
 #else
-    if (sys_object->oid_ != 0xFFFFFFFF)
+    if (sys_object->oid_ != UNDEFINED_OID)
       *out_stream_ << " ";
 #endif
   }
