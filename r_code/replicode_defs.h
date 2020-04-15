@@ -172,5 +172,6 @@
 #define	MK_SUCCESS_OBJ		1
 #define	MK_SUCCESS_ARITY	2
 
+#define	UNDEFINED_OID	0xFFFFFFFF
 
 #endif
