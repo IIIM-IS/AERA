@@ -185,6 +185,23 @@ namespace	r_code{
 		void	trace()	const;
 		static	void	Trace(Atom	*base,uint16	count);
 	};
+
+    /// <summary>
+    /// Add to the names for the opcode. This is searched by GetOpcodeName.
+    /// because we don't want to export a DLL function with std::string.)</param>
+    /// </summary>
+    /// <param name="opcode">The opcode.</param>
+    /// <param name="name">The opcode name, which is copied. (We pass a char*
+    void __declspec(dllexport) AddOpcodeName(uint16 opcode, const char* name);
+
+    /// <summary>
+    /// Get the name or set of names of the opcode. (The same opcode can be
+    /// re - used for different purposes.)
+    /// </summary>
+    /// <param name="opcode">The opcode.</param>
+    /// <returns>The opcode name, or a set of names separated by a slash.
+    /// If not found, return "unknown".</returns>
+    std::string GetOpcodeName(uint16 opcode);
 }
 
 namespace std {
