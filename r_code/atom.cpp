@@ -192,6 +192,14 @@ namespace	r_code{
 	void	Atom::trace()	const{
 
 		write_indents();
+		if (Timestamp_data) {
+			// Output the timestamp value now. Otherwise, it could be interpreted
+			// as an op code, etc.
+			--Timestamp_data;
+			std::cout << atom;
+			return;
+		}
+
 		switch(getDescriptor()){
 		case	NIL:					std::cout<<"nil";return;
 		case	BOOLEAN_:				std::cout<<"bl: "<<std::boolalpha<<asBoolean();return;
@@ -232,11 +240,7 @@ namespace	r_code{
 		case	BOOLEAN_VARIABLE:		std::cout<<"bool_var: "<<std::dec<<getVariableID();return;
 		case	STRUCTURAL_VARIABLE:	std::cout<<"struct_var: "<<std::dec<<getVariableID()<<" "<<std::fixed<<getFloatTolerance();return;
 		default:
-			if(Timestamp_data){
-				
-				--Timestamp_data;
-				std::cout<<atom;
-			}else	if(String_data){
+			if(String_data){
 
 				--String_data;
 				std::string	s;
