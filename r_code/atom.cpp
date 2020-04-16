@@ -29,6 +29,7 @@
 //	SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include	"atom.h"
+#include	"utils.h"
 
 #include	<iostream>
 #include	<set>
@@ -40,6 +41,7 @@ namespace	r_code{
 	uint8	Atom::Timestamp_data=0;
 	uint8	Atom::String_data=0;
 	uint8	Atom::Char_count=0;
+	uint64	Atom::Timestamp_high=0;
 
 	uint8	Atom::GetFloatTolerance(float32	t){
 
@@ -198,6 +200,15 @@ namespace	r_code{
 			// as an op code, etc.
 			--Timestamp_data;
 			std::cout << atom;
+
+			if (Timestamp_data == 1)
+				// Save for the next step.
+				Timestamp_high = atom;
+			else {
+				// Imitate Utils::GetTimestamp.
+				auto timestamp = Timestamp_high << 32 | atom;
+				std::cout << " " << Utils::RelativeTime(timestamp).c_str();
+			}
 			return;
 		}
 

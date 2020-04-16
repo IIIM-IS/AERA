@@ -49,6 +49,7 @@ namespace	r_code{
 		static	uint8	Timestamp_data;
 		static	uint8	String_data;
 		static	uint8	Char_count;
+		static	uint64	Timestamp_high;
 		void	write_indents()	const;
 	public:
 		typedef	enum{
