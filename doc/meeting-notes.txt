@@ -205,13 +205,21 @@
   Laptop "eric_workdir": v1.2 August 1, 2012 0f9b1a4d1948954bbd7f3aa4089d5a4493cc7c76
   Laptop "eric_from_home": v1.1 April 10, 2011 (more or less) 
 
+2020-04-17
+* Review merge pull request to fix timestamp offset https://github.com/IIIM-IS/CoreLibrary/pull/7
+* DONE. Pull request for CTPX::reduce icst components.
+* DONE. Pull request for CSTController original_patterns_size_.
+* DONE. Diagnostic time for v1.1.
+* DONE. Add relevant bug fixes from v1.2 to v1.1.
+* v1.1 test.1.2011-04-13.v1_0.replicode: Goal for the_right_hand position:
+  It generates subgoals but does not appear to be in simulation.
+* DONE. Mock up an explanation session.
+* DONE. Start a design specification.
+
 TODO
-* Diagnostic time for v1.1.
-* Simple v1.1 program with two actions to achieve a goal. Does it simulate and choose only one?
-* Pull request for CSTController original_patterns_size .
-* Mock up an explanation session.
-* Start a program specification Word document.
+* Visualizer: Add side window for query session.
 * Document methods, starting with those related to the simulator.
+* Simple v1.1 program with two actions to achieve a goal. Does it simulate and choose only one?
 * If min_sim_time_horizon > 0, how is the behavior different?
 * In babbling, issue a goal for a position, an "unrelated" speed_x, and move the position there. Is GTPX invoked?
 * Abduce a goal more in the future than the next sampling period. (Need simulation.)
