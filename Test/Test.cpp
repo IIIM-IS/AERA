@@ -232,13 +232,15 @@ void decompile(Decompiler &decompiler, r_comp::Image *image, Timestamp::duration
     }
     std::ostringstream decompiled_code;
     decompiler.decompile_object(index, &decompiled_code, time_offset);
-    std::cout << "\n\n> DECOMPILATION\n\n" << decompiled_code.str() << std::endl;
+    std::cout << "\n\n> DECOMPILATION\n\n" << Time::ToString_seconds(time_offset) << "\n\n" <<
+      decompiled_code.str() << std::endl;
   }
 #else
   std::ostringstream decompiled_code;
   uint32 object_count = decompiler.decompile(image, &decompiled_code, time_offset, ignore_named_objects);
   //uint32 object_count=image->code_segment_.objects.size();
-  std::cout << "\n\n> DECOMPILATION\n\n" << decompiled_code.str() << std::endl;
+  std::cout << "\n\n> DECOMPILATION. time_offset " << Time::ToString_seconds(time_offset) << "\n\n" << 
+    decompiled_code.str() << std::endl;
   std::cout << "> image taken at: " << Time::ToString_year(image->timestamp_) << std::endl;
   std::cout << "> " << object_count << " objects\n";
 #endif
