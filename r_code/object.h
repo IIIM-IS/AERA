@@ -230,7 +230,7 @@ protected:
     return new V(source, this);
   }
 public:
-  void set_stroage_index(int32 i) { storage_index_ = i; }
+  void set_strorage_index(int32 i) { storage_index_ = i; }
   bool is_registered() const { return storage_index_ > null_storage_index; }
   int32 get_storage_index() const { return storage_index_; }
 

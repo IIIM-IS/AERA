@@ -240,7 +240,7 @@ void _Mem::store(Code *object) {
 
   int32 location;
   objects_.push_back(object, location);
-  object->set_stroage_index(location);
+  object->set_strorage_index(location);
 }
 
 bool _Mem::load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid) { // no cov at init time.
@@ -1204,7 +1204,7 @@ void MemStatic::bind(View *view) {
   }
   int32 location;
   objects_.push_back(object, location);
-  object->set_stroage_index(location);
+  object->set_strorage_index(location);
   objectsCS_.leave();
 }
 void MemStatic::set_last_oid(int32 oid) {
