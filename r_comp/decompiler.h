@@ -115,7 +115,7 @@ private:
   void write_indent(uint16 i);
   void write_expression_head(uint16 read_index); // decodes the leading atom of an expression.
   void write_expression_tail(uint16 read_index, bool apply_time_offset, bool vertical = false); // decodes the elements of an expression following the head.
-  void write_set(uint16 read_index, bool aply_time_offset, uint16 write_as_view_index = 0);
+  void write_set(uint16 read_index, bool apply_time_offset, uint16 write_as_view_index = 0);
   void write_any(uint16 read_index, bool &after_tail_wildcard, bool apply_time_offset, uint16 write_as_view_index = 0); // decodes any element in an expression or a set.
 
   typedef void (Decompiler::*Renderer)(uint16);

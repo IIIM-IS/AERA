@@ -656,7 +656,7 @@ void Decompiler::write_view(uint16 read_index, uint16 arity) {
   *out_stream_ << "]";
 }
 
-void Decompiler::write_set(uint16 read_index, bool aply_time_offset, uint16 write_as_view_index) { // read_index points to a set atom.
+void Decompiler::write_set(uint16 read_index, bool apply_time_offset, uint16 write_as_view_index) { // read_index points to a set atom.
 
   uint16 arity = current_object_->code_[read_index].getAtomCount();
   bool after_tail_wildcard = false;
@@ -664,7 +664,7 @@ void Decompiler::write_set(uint16 read_index, bool aply_time_offset, uint16 writ
   if (arity == 1) { // write [element]
 
     out_stream_->push('[', read_index);
-    write_any(++read_index, after_tail_wildcard, aply_time_offset);
+    write_any(++read_index, after_tail_wildcard, apply_time_offset);
     *out_stream_ << ']';
   } else if (write_as_view_index > 0 && write_as_view_index == read_index)
     write_view(read_index, arity);
@@ -676,9 +676,9 @@ void Decompiler::write_set(uint16 read_index, bool aply_time_offset, uint16 writ
       if (i > 0)
         *out_stream_ << ' ';
       if (after_tail_wildcard)
-        write_any(++read_index, after_tail_wildcard, aply_time_offset);
+        write_any(++read_index, after_tail_wildcard, apply_time_offset);
       else
-        write_any(++read_index, after_tail_wildcard, aply_time_offset, write_as_view_index);
+        write_any(++read_index, after_tail_wildcard, apply_time_offset, write_as_view_index);
     }
     *out_stream_ << ']';
     closing_set = true;
@@ -689,11 +689,11 @@ void Decompiler::write_set(uint16 read_index, bool aply_time_offset, uint16 writ
     for (uint16 i = 0; i < arity; ++i) {
 
       if (after_tail_wildcard)
-        write_any(++read_index, after_tail_wildcard, aply_time_offset);
+        write_any(++read_index, after_tail_wildcard, apply_time_offset);
       else {
 
         write_indent(indents_);
-        write_any(++read_index, after_tail_wildcard, aply_time_offset, write_as_view_index);
+        write_any(++read_index, after_tail_wildcard, apply_time_offset, write_as_view_index);
       }
     }
     closing_set = true;
