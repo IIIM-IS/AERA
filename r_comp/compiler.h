@@ -203,7 +203,20 @@ private:
   bool global_indirection(std::vector<int16> &v, const ReturnType t); // ex: p.res where p is a label/variable declared outside the object.
   bool wildcard();
   bool tail_wildcard();
+  /// <summary>
+  /// Read a timestamp of the form XXXus, where XXX is a decimal.
+  /// </summary>
+  /// <param name="ts">Set ts to the timestamp in microseconds.</param>
+  /// <returns>True for success, false if this is not a timestamp (and in_stream_ is not advanced)</returns>
   bool timestamp(uint64 &ts);
+  /// <summary>
+  /// Read a timestamp of the form XXXs:YYYms:ZZZus, where XXX, YYY and ZZZ are decimal
+  /// seconds, milliseconds and microseconds. This is the reverse of the output of
+  /// Time::ToString_seconds used by the decompiler.
+  /// </summary>
+  /// <param name="ts">Set ts to the timestamp in microseconds.</param>
+  /// <returns>True for success, false if this is not a timestamp (and in_stream_ is not advanced)</returns>
+  bool timestamp_s_ms_us(uint64 &ts);
   bool str(std::string &s);
   bool number(float32 &n);
   bool hex(uint32 &h);
