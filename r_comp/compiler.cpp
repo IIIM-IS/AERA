@@ -83,6 +83,8 @@ namespace r_comp {
 
 static bool Output = true;
 
+static inline bool is_decimal(char c) { return c >= '0' && c <= '9'; }
+
 Compiler::Compiler() : out_stream_(NULL), current_object_(NULL), error_(std::string("")) {
 }
 
@@ -852,7 +854,7 @@ bool Compiler::nil_st() {
 bool Compiler::label(std::string &l) {
 
   std::streampos i = in_stream_->tellg();
-  if (symbol_expr(l) && (char)in_stream_->get() == ':')
+  if (symbol_expr(l) && !is_decimal(l[0]) && (char)in_stream_->get() == ':')
     return true;
   in_stream_->clear();
   in_stream_->seekg(i);
@@ -862,7 +864,7 @@ bool Compiler::label(std::string &l) {
 bool Compiler::variable(std::string &l) {
 
   std::streampos i = in_stream_->tellg();
-  if (symbol_expr(l) && (char)in_stream_->get() == ':') {
+  if (symbol_expr(l) && !is_decimal(l[0]) && (char)in_stream_->get() == ':') {
 
     in_stream_->seekg(i);
     std::string _l = l + ':';
