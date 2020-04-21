@@ -199,8 +199,9 @@ public:
   static std::string RelativeTime(Timestamp t);
 };
 
-// Timestamp is int64, not uint64. So use the max signed value.
-const Timestamp Utils_MaxTime(std::chrono::microseconds(0x7FFFFFFFFFFFFFFF));
+// Timestamp is int64, not uint64. So use the max signed value (which is stored in nanoseconds).
+const Timestamp Utils_MaxTime(std::chrono::duration_cast<std::chrono::microseconds>
+                              (std::chrono::nanoseconds(0x7FFFFFFFFFFFFFFFll)));
 
 }
 
