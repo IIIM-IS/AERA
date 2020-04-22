@@ -75,12 +75,28 @@
 //_/_/
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
+#include <algorithm>
 #include "decompiler.h"
 #include "../submodules/CoreLibrary/CoreLibrary/utils.h"
 
 using namespace std::chrono;
 
 namespace r_comp {
+
+// Get a string for the value such as "a", "b" ... "z", "aa", "ab" ....
+static std::string make_suffix(uint32 value) {
+  string result;
+  do {
+    // Get the lowest digit as base 26 and prepend a char from 'a' to 'z'.
+    uint32 lowest = value % 26;
+    result = (char)('a' + lowest) + result;
+
+    // Shift.
+    value /= 26;
+  } while (value != 0);
+
+  return result;
+}
 
 Decompiler::Decompiler() : out_stream_(NULL), current_object_(NULL), metadata_(NULL), image_(NULL), in_hlp_(false) {
 }
@@ -203,6 +219,7 @@ uint32 Decompiler::decompile_references(r_comp::Image *image) {
   image_ = image;
 
   // populate object names first so they can be referenced in any order.
+  // First pass: Add the user-defined names to object_names_ and object_indices_.
   for (uint16 i = 0; i < image->code_segment_.objects_.size(); ++i) {
 
     SysObject *sys_object = (SysObject *)image->code_segment_.objects_[i];
@@ -211,17 +228,44 @@ uint32 Decompiler::decompile_references(r_comp::Image *image) {
 
       s = n->second;
       named_objects_.insert(sys_object->oid_);
-    } else {
 
-      Class *c = metadata_->get_class(sys_object->code_[0].asOpcode());
-      if (sys_object->oid_ != UNDEFINED_OID)
-        // Use the object's OID.
-        s = c->str_opcode + "_" + std::to_string(sys_object->oid_);
-      else {
-        // Create a name with a unique ID.
-        uint16 last_object_ID = object_ID_per_class[c];
-        object_ID_per_class[c] = last_object_ID + 1;
-        s = c->str_opcode + std::to_string(last_object_ID);
+      object_names_[i] = s;
+      object_indices_[s] = i;
+    }
+  }
+
+  // Second pass: Create names for the remaining objects, making sure they are unique.
+  for (uint16 i = 0; i < image->code_segment_.objects_.size(); ++i) {
+    SysObject *sys_object = (SysObject *)image->code_segment_.objects_[i];
+
+    UNORDERED_MAP<uint32, std::string>::const_iterator n = image->object_names_.symbols_.find(sys_object->oid_);
+    if (n != image->object_names_.symbols_.end())
+      // Already set the user-defined name in the first pass.
+      continue;
+
+    Class *c = metadata_->get_class(sys_object->code_[0].asOpcode());
+    string className = c->str_opcode;
+    // A class name like mk.val has a dot, but this isn't allowed as an identifier.
+    replace(className.begin(), className.end(), '.', '_');
+    if (sys_object->oid_ != UNDEFINED_OID)
+      // Use the object's OID.
+      s = className + "_" + std::to_string(sys_object->oid_);
+    else {
+      // Create a name with a unique ID.
+      uint16 last_object_ID = object_ID_per_class[c];
+      object_ID_per_class[c] = last_object_ID + 1;
+      s = className + std::to_string(last_object_ID);
+    }
+
+    if (object_indices_.find(s) != object_indices_.end()) {
+      // The created name matches an existing name. Keep trying an added
+      // suffix until it is unique.
+      for (uint32 value = 1; true; ++value) {
+        std::string new_s = s + make_suffix(value);
+        if (object_indices_.find(new_s) == object_indices_.end()) {
+          s = new_s;
+          break;
+        }
       }
     }
 
