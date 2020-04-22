@@ -203,8 +203,6 @@ uint32 Decompiler::decompile_references(r_comp::Image *image) {
   image_ = image;
 
   // populate object names first so they can be referenced in any order.
-  Class *c;
-  uint16 last_object_ID;
   for (uint16 i = 0; i < image->code_segment_.objects_.size(); ++i) {
 
     SysObject *sys_object = (SysObject *)image->code_segment_.objects_[i];
@@ -215,13 +213,13 @@ uint32 Decompiler::decompile_references(r_comp::Image *image) {
       named_objects_.insert(sys_object->oid_);
     } else {
 
-      c = metadata_->get_class(sys_object->code_[0].asOpcode());
+      Class *c = metadata_->get_class(sys_object->code_[0].asOpcode());
       if (sys_object->oid_ != UNDEFINED_OID)
         // Use the object's OID.
         s = c->str_opcode + "_" + std::to_string(sys_object->oid_);
       else {
         // Create a name with a unique ID.
-        last_object_ID = object_ID_per_class[c];
+        uint16 last_object_ID = object_ID_per_class[c];
         object_ID_per_class[c] = last_object_ID + 1;
         s = c->str_opcode + std::to_string(last_object_ID);
       }
