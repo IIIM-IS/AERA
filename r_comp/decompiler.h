@@ -91,7 +91,7 @@ class dll_export Decompiler {
 private:
   OutStream *out_stream_;
   uint16 indents_; // in chars.
-  bool closing_set; // set after writing the last element of a set: any element in an expression finding closing_set will indent and set closing_set to false.
+  bool closing_set_; // set after writing the last element of a set: any element in an expression finding closing_set_ will indent and set closing_set_ to false.
   bool in_hlp_;
   bool hlp_postfix_;
   bool horizontal_set_;

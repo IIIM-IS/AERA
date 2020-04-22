@@ -229,7 +229,7 @@ uint32 Decompiler::decompile_references(r_comp::Image *image) {
     object_indices_[s] = i;
   }
 
-  closing_set = false;
+  closing_set_ = false;
 
   return image->code_segment_.objects_.size();
 }
@@ -368,9 +368,9 @@ void Decompiler::write_expression_tail(uint16 read_index, bool apply_time_offset
       write_any(++read_index, after_tail_wildcard, apply_time_offset);
     else {
 
-      if (closing_set) {
+      if (closing_set_) {
 
-        closing_set = false;
+        closing_set_ = false;
         if (!horizontal_set_)
           write_indent(indents_);
         else
@@ -380,7 +380,7 @@ void Decompiler::write_expression_tail(uint16 read_index, bool apply_time_offset
 
       write_any(++read_index, after_tail_wildcard, apply_time_offset);
 
-      if (!closing_set && vertical)
+      if (!closing_set_ && vertical)
         *out_stream_ << NEWLINE;
     }
   }
@@ -388,17 +388,17 @@ void Decompiler::write_expression_tail(uint16 read_index, bool apply_time_offset
 
 void Decompiler::write_expression(uint16 read_index) {
 
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, true);
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   *out_stream_ << ')';
@@ -406,17 +406,17 @@ void Decompiler::write_expression(uint16 read_index) {
 
 void Decompiler::write_group(uint16 read_index) {
 
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, false);
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   *out_stream_ << ')';
@@ -424,17 +424,17 @@ void Decompiler::write_group(uint16 read_index) {
 
 void Decompiler::write_marker(uint16 read_index) {
 
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, false);
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   *out_stream_ << ')';
@@ -442,17 +442,17 @@ void Decompiler::write_marker(uint16 read_index) {
 
 void Decompiler::write_pgm(uint16 read_index) {
 
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, true);
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   *out_stream_ << ')';
@@ -461,17 +461,17 @@ void Decompiler::write_pgm(uint16 read_index) {
 
 void Decompiler::write_ipgm(uint16 read_index) {
 
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, false);
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   *out_stream_ << ')';
@@ -480,9 +480,9 @@ void Decompiler::write_ipgm(uint16 read_index) {
 void Decompiler::write_hlp(uint16 read_index) {
 
   in_hlp_ = true;
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   out_stream_->push('(', read_index);
@@ -498,9 +498,9 @@ void Decompiler::write_hlp(uint16 read_index) {
       write_any(++read_index, after_tail_wildcard, false);
     else {
 
-      if (closing_set) {
+      if (closing_set_) {
 
-        closing_set = false;
+        closing_set_ = false;
         write_indent(indents_);
       }
 
@@ -509,14 +509,14 @@ void Decompiler::write_hlp(uint16 read_index) {
       write_any(++read_index, after_tail_wildcard, false);
       hlp_postfix_ = false;
 
-      if (!closing_set)
+      if (!closing_set_)
         *out_stream_ << NEWLINE;
     }
   }
 
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   *out_stream_ << ')';
@@ -527,17 +527,17 @@ void Decompiler::write_ihlp(uint16 read_index) {
 
   if (!in_hlp_)
     horizontal_set_ = true;
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, true);
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   *out_stream_ << ')';
@@ -547,9 +547,9 @@ void Decompiler::write_ihlp(uint16 read_index) {
 
 void Decompiler::write_icmd(uint16 read_index) {
 
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   out_stream_->push('(', read_index);
@@ -572,9 +572,9 @@ void Decompiler::write_icmd(uint16 read_index) {
       write_any(++read_index, after_tail_wildcard, true);
     else {
 
-      if (closing_set) {
+      if (closing_set_) {
 
-        closing_set = false;
+        closing_set_ = false;
         write_indent(indents_);
       } else
         *out_stream_ << ' ';
@@ -583,9 +583,9 @@ void Decompiler::write_icmd(uint16 read_index) {
     }
   }
 
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   *out_stream_ << ')';
@@ -595,17 +595,17 @@ void Decompiler::write_cmd(uint16 read_index) {
 
   if (!in_hlp_)
     horizontal_set_ = true;
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, false);
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   *out_stream_ << ')';
@@ -617,17 +617,17 @@ void Decompiler::write_fact(uint16 read_index) {
 
   if (in_hlp_)
     horizontal_set_ = true;
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, true);
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   *out_stream_ << ')';
@@ -679,7 +679,7 @@ void Decompiler::write_set(uint16 read_index, bool apply_time_offset, uint16 wri
         write_any(++read_index, after_tail_wildcard, apply_time_offset, write_as_view_index);
     }
     *out_stream_ << ']';
-    closing_set = true;
+    closing_set_ = true;
   } else { // write []+indented elements.
 
     out_stream_->push("[]", read_index);
@@ -694,7 +694,7 @@ void Decompiler::write_set(uint16 read_index, bool apply_time_offset, uint16 wri
         write_any(++read_index, after_tail_wildcard, apply_time_offset, write_as_view_index);
       }
     }
-    closing_set = true;
+    closing_set_ = true;
     indents_ -= 3; // don't call write_indents() here as the last set member can be a set.
   }
 }
