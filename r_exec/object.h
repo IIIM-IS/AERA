@@ -88,7 +88,23 @@
 
 namespace r_exec {
 
-r_exec_dll bool IsNotification(Code *object);
+static inline bool IsNotification(Code *object) {
+
+  switch (object->code(0).getDescriptor()) {
+  case Atom::MARKER:
+    return object->code(0).asOpcode() == Opcodes::MkActChg ||
+      object->code(0).asOpcode() == Opcodes::MkHighAct ||
+      object->code(0).asOpcode() == Opcodes::MkHighSln ||
+      object->code(0).asOpcode() == Opcodes::MkLowAct ||
+      object->code(0).asOpcode() == Opcodes::MkLowRes ||
+      object->code(0).asOpcode() == Opcodes::MkLowSln ||
+      object->code(0).asOpcode() == Opcodes::MkNew ||
+      object->code(0).asOpcode() == Opcodes::MkRdx ||
+      object->code(0).asOpcode() == Opcodes::MkSlnChg;
+  default:
+    return false;
+  }
+}
 
 // Shared resources:
 // views: accessed by Mem::injectNow (via various sub calls) and Mem::update.
