@@ -137,16 +137,8 @@ template<class O, class S> bool TestMem<O, S>::load
 template<class O, class S> Code*
 TestMem<O, S>::findObject(std::vector<Code*> *objects, const char* name) {
   // Find the object OID.
-  uint32 oid = 0;
-  for (UNORDERED_MAP<uint32, std::string>::const_iterator it = r_exec::Seed.object_names_.symbols_.begin();
-    it != r_exec::Seed.object_names_.symbols_.end(); ++it) {
-    if (it->second == name) {
-      oid = it->first;
-      break;
-    }
-  }
-
-  if (oid == 0)
+  uint32 oid = r_exec::Seed.object_names_.findSymbol(name);
+  if (oid == UNDEFINED_OID)
     return NULL;
 
   // Find the object. (Imitate the code in _Mem::load.)
