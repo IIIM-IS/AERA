@@ -448,6 +448,15 @@ uint32 ObjectNames::get_size() {
   return size;
 }
 
+uint32 ObjectNames::findSymbol(const std::string& name) {
+  for (auto entry = symbols_.begin(); entry != symbols_.end(); ++entry) {
+    if (entry->second == name)
+      return entry->first;
+  }
+
+  return UNDEFINED_OID;
+}
+
 ////////////////////////////////////////////////////////////////
 
 Image::Image() : map_offset_(0), timestamp_(seconds(0)) {

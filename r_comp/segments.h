@@ -159,6 +159,13 @@ public:
   void write(word32 *data);
   void read(word32 *data);
   uint32 get_size();
+
+  /// <summary>
+  /// Find the name in symbols_.
+  /// </summary>
+  /// <param name="name">The symbol name to search for.</param>
+  /// <returns>The OID, or UNDEFINED_OID if not found.</returns>
+  uint32 findSymbol(const std::string& name);
 };
 
 class dll_export Image {
