@@ -83,6 +83,7 @@
 
 #include "out_stream.h"
 #include "segments.h"
+#include "image.h"
 
 
 using namespace r_code;
