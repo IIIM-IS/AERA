@@ -78,6 +78,7 @@
 #ifndef mem_h
 #define mem_h
 
+#include <sstream>
 #include "reduction_core.h"
 #include "time_core.h"
 #include "pgm_overlay.h"
@@ -344,6 +345,11 @@ public:
   r_comp::Image *get_models(); // create an image; fill with all models; call only when stopped.
 
   //std::vector<uint64> timings_report; // debug facility.
+
+  /// <summary>
+  /// The TraceLevel enum defines bit positions for the "trace_levels" parameter
+  /// for "Debug" in settings.xml.
+  /// </summary>
   typedef enum {
     CST_IN = 0,
     CST_OUT = 1,
@@ -354,13 +360,31 @@ public:
     MDL_REV = 6,
     HLP_INJ = 7
   }TraceLevel;
+  /// <summary>
+  /// Get the output stream for the trace level.
+  /// </summary>
+  /// <param name="l">The TraceLevel.</param>
+  /// <returns>A reference to the output stream, which may be a null stream
+  /// if the bit in settings.xml "trace_levels" was zero.</returns>
   static std::ostream &Output(TraceLevel l);
 };
 
 // Note: This should match the definition in user.classes.replicode.
 const std::chrono::microseconds Mem_sampling_period_ = std::chrono::milliseconds(100);
 
-#define OUTPUT(c) _Mem::Output(_Mem::c)
+/// <summary>
+/// Call  _Mem::Output to get the output stream for the trace level.
+/// </summary>
+#define OUTPUT(level) _Mem::Output(_Mem::level)
+
+/// <summary>
+/// This similar to "OUTPUT(level) << vals << endl", where vals can be "x << y << z". Except
+/// that we first use an ostringstream to buffer the values plus the line terminator, and
+/// then send the entire string to the output stream and flush. Assuming that the output
+/// stream will output the entire string as a single operation, then when all threads use
+/// OUTPUT_LINE it will avoid scrambling output of individual values.
+/// </summary>
+#define OUTPUT_LINE(level, vals) (OUTPUT(l) << (ostringstream() << vals << '\n').str()).flush()
 
 // _Mem that stores the objects as long as they are not invalidated.
 class r_exec_dll MemStatic :
