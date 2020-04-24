@@ -518,11 +518,7 @@ void Image::add_object(Code *object) {
   if (it != ptrs_to_indices_.end()) // object already there.
     return;
 
-  uint16 object_index;
-  ptrs_to_indices_[object] = object_index = code_segment_.objects_.as_std()->size();
-  SysObject *sys_object = new SysObject(object);
-  add_sys_object(sys_object);
-
+  // Add the references first so that they are defined when referenced.
   uint16 reference_count = get_reference_count(object);
   for (uint16 i = 0; i < reference_count; ++i) { // follow reference pointers and recurse.
 
@@ -531,6 +527,11 @@ void Image::add_object(Code *object) {
       reference->is_invalidated()) // the referenced object is not in the image and will not be added otherwise.
       add_object(reference);
   }
+
+  uint16 object_index;
+  ptrs_to_indices_[object] = object_index = code_segment_.objects_.as_std()->size();
+  SysObject *sys_object = new SysObject(object);
+  add_sys_object(sys_object);
 
   uint32 _object = (uint32)object;
   sys_object->references_[0] = (_object & 0x0000FFFF);
