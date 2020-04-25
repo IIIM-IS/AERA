@@ -83,6 +83,8 @@ namespace r_comp {
 
 static bool Output = true;
 
+static inline bool is_decimal(char c) { return c >= '0' && c <= '9'; }
+
 Compiler::Compiler() : out_stream_(NULL), current_object_(NULL), error_(std::string("")) {
 }
 
@@ -852,7 +854,7 @@ bool Compiler::nil_st() {
 bool Compiler::label(std::string &l) {
 
   std::streampos i = in_stream_->tellg();
-  if (symbol_expr(l) && (char)in_stream_->get() == ':')
+  if (symbol_expr(l) && !is_decimal(l[0]) && (char)in_stream_->get() == ':')
     return true;
   in_stream_->clear();
   in_stream_->seekg(i);
@@ -862,7 +864,7 @@ bool Compiler::label(std::string &l) {
 bool Compiler::variable(std::string &l) {
 
   std::streampos i = in_stream_->tellg();
-  if (symbol_expr(l) && (char)in_stream_->get() == ':') {
+  if (symbol_expr(l) && !is_decimal(l[0]) && (char)in_stream_->get() == ':') {
 
     in_stream_->seekg(i);
     std::string _l = l + ':';
@@ -1205,7 +1207,13 @@ bool Compiler::number(float32 &n) {
     return false;
   }
   if (match_symbol("us", true)) {
-
+    // Assume this is a timestamp, not a number.
+    in_stream_->clear();
+    in_stream_->seekg(i);
+    return false;
+  }
+  if (match_symbol("s", true)) {
+    // Assume this is a timestamp, not a number.
     in_stream_->clear();
     in_stream_->seekg(i);
     return false;
@@ -1272,6 +1280,58 @@ bool Compiler::timestamp(uint64 &ts) {
     in_stream_->seekg(i);
     return false;
   }
+  return true;
+}
+
+bool Compiler::timestamp_s_ms_us(uint64 &ts) {
+
+  std::streampos i = in_stream_->tellg();
+  if (match_symbol("0x", true)) {
+    in_stream_->clear();
+    in_stream_->seekg(i);
+    return false;
+  }
+
+  uint64 s;
+  *in_stream_ >> std::dec >> s;
+  if (in_stream_->fail() || in_stream_->eof()) {
+    in_stream_->clear();
+    in_stream_->seekg(i);
+    return false;
+  }
+  if (!match_symbol("s:", false)) {
+    in_stream_->clear();
+    in_stream_->seekg(i);
+    return false;
+  }
+
+  uint64 ms;
+  *in_stream_ >> std::dec >> ms;
+  if (in_stream_->fail() || in_stream_->eof()) {
+    in_stream_->clear();
+    in_stream_->seekg(i);
+    return false;
+  }
+  if (!match_symbol("ms:", false)) {
+    in_stream_->clear();
+    in_stream_->seekg(i);
+    return false;
+  }
+
+  uint64 us;
+  *in_stream_ >> std::dec >> us;
+  if (in_stream_->fail() || in_stream_->eof()) {
+    in_stream_->clear();
+    in_stream_->seekg(i);
+    return false;
+  }
+  if (!match_symbol("us", false)) {
+    in_stream_->clear();
+    in_stream_->seekg(i);
+    return false;
+  }
+
+  ts = s * 1000000 + ms * 1000 + us;
   return true;
 }
 
@@ -2010,6 +2070,17 @@ bool Compiler::read_timestamp(bool &indented, bool enforce, const Class *p, uint
     }
     return true;
   }
+  if (timestamp_s_ms_us(ts)) {
+    if (write) {
+
+      current_object_->code_[write_index] = Atom::IPointer(extent_index);
+      current_object_->code_[extent_index++] = Atom::Timestamp();
+      current_object_->code_[extent_index++] = ts >> 32;
+      current_object_->code_[extent_index++] = (ts & 0x00000000FFFFFFFF);
+    }
+    return true;
+  }
+
   State s = save_state();
   if (expression(indented, TIMESTAMP, write_index, extent_index, write))
     return true;
