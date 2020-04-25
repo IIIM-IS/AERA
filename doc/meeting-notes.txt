@@ -206,7 +206,6 @@
   Laptop "eric_from_home": v1.1 April 10, 2011 (more or less) 
 
 2020-04-17
-* Review merge pull request to fix timestamp offset https://github.com/IIIM-IS/CoreLibrary/pull/7
 * DONE. Pull request for CTPX::reduce icst components.
 * DONE. Pull request for CSTController original_patterns_size_.
 * DONE. Diagnostic time for v1.1.
@@ -216,9 +215,18 @@
 * DONE. Mock up an explanation session.
 * DONE. Start a design specification.
 
+2020-04-24
+* DONE. Review merge pull request to fix timestamp offset https://github.com/IIIM-IS/CoreLibrary/pull/7
+* DONE. Review/merge pull request to parse 1s:100us:0us timestamps https://github.com/IIIM-IS/replicode/pull/80
+* DONE. Review/merge pull request for unique created names https://github.com/IIIM-IS/replicode/pull/81
+* DONE. Review/merge pull request to decompile references first https://github.com/IIIM-IS/replicode/pull/82
+* DONE. Review issue for decompiler VL_PTR error https://github.com/IIIM-IS/replicode/issues/51
+
 TODO
+* Does the compiler prevent redefining an object using the same name?
 * Visualizer: Add side window for query session.
 * Document methods, starting with those related to the simulator.
+* Update README.
 * Simple v1.1 program with two actions to achieve a goal. Does it simulate and choose only one?
 * If min_sim_time_horizon > 0, how is the behavior different?
 * In babbling, issue a goal for a position, an "unrelated" speed_x, and move the position there. Is GTPX invoked?
