@@ -89,6 +89,8 @@ _Mem::_Mem() : r_code::Mem(), state_(NOT_STARTED), deleted_(false) {
 
   new ModelBase();
   objects_.reserve(1024);
+  for (uint32 i = 0; i < DebugStreamCount; ++i)
+    debug_streams_[i] = NULL;
 }
 
 _Mem::~_Mem() {
