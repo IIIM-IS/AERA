@@ -260,7 +260,11 @@ bool _Mem::load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 s
   store((Code *)root_);
   initial_groups_.push_back(root_);
 
-  set_last_oid(objects->size() - 1);
+  // Get the highest existing OID.
+  uint32 highest_oid = 0;
+  for (uint32 i = 0; i < objects->size(); ++i)
+    highest_oid = max(highest_oid, (*objects)[i]->get_oid());
+  set_last_oid(max(highest_oid, objects->size() - 1));
 
   for (uint32 i = 1; i < objects->size(); ++i) { // skip root as it has no initial views.
 
