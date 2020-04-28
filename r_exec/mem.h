@@ -177,8 +177,6 @@ protected:
 
   std::vector<Group *> initial_groups_; // convenience; cleared after start();
 
-  void init_timings(Timestamp now) const;
-
   void store(Code *object);
   virtual void set_last_oid(int32 oid) = 0;
   virtual void bind(View *view) = 0;
@@ -343,6 +341,15 @@ public:
   // External device I/O ////////////////////////////////////////////////////////////////
   virtual r_comp::Image *get_objects() = 0; // create an image; fill with all objects; call only when stopped.
   r_comp::Image *get_models(); // create an image; fill with all models; call only when stopped.
+
+  /// <summary>
+  /// This is called on starting the executive to adjust the timestamps of all the initial 
+  /// user-supplied facts by adding now. Therefore, if a the initial fact is defined with a
+  /// timestamp of 100us, it is changed to now + 100us.
+  /// </summary>
+  /// <param name="now">The value to add to the timestamps of all the initial facts.</param>
+  /// <param name="objects">The list of objects to search for facts.</param>
+  static void init_timings(Timestamp now, const r_code::list<P<Code>>& objects);
 
   //std::vector<uint64> timings_report; // debug facility.
 

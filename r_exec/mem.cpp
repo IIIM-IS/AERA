@@ -352,11 +352,11 @@ bool _Mem::load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 s
   return true;
 }
 
-void _Mem::init_timings(Timestamp now) const { // called at the beginning of _Mem::start(); use initial user-supplied facts' times as offsets from now.
+void _Mem::init_timings(Timestamp now, const r_code::list<P<Code>>& objects) {
 
   auto time_tolerance = Utils::GetTimeTolerance() * 2;
   r_code::list<P<Code> >::const_iterator o;
-  for (o = objects_.begin(); o != objects_.end(); ++o) {
+  for (o = objects.begin(); o != objects.end(); ++o) {
 
     uint16 opcode = (*o)->code(0).asOpcode();
     if (opcode == Opcodes::Fact || opcode == Opcodes::AntiFact) {
@@ -392,7 +392,7 @@ Timestamp _Mem::start() {
   auto now = Now();
   Utils::SetTimeReference(now);
   ModelBase::Get()->set_thz(secondary_thz_);
-  init_timings(now);
+  init_timings(now, objects_);
 
   for (i = 0; i < initial_groups_.size(); ++i) {
 
