@@ -512,8 +512,12 @@ bool Group::load(View *view, Code *object) {
     bool inject_in_secondary_group;
     MDLController *c = MDLController::New(view, inject_in_secondary_group);
     view->controller_ = c;
-    if (inject_in_secondary_group)
-      get_secondary_group()->load_secondary_mdl_controller(view);
+    if (inject_in_secondary_group) {
+      Group* secondary_group = get_secondary_group();
+      // We don't expect the secondary_group to be NULL, but check anyway.
+      if (secondary_group)
+        secondary_group->load_secondary_mdl_controller(view);
+    }
     if (is_active_pgm(view))
       c->gain_activation();
     break;
