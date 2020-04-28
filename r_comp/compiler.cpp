@@ -198,8 +198,13 @@ bool Compiler::read_sys_object() {
     if (current_class_.str_opcode == "mdl" || current_class_.str_opcode == "cst")
       in_hlp_ = true;
     current_object_ = new SysObject();
-    if (lbl)
+    if (lbl) {
+      if (global_references_.find(l) != global_references_.end()) {
+        set_error("error: redefinition of label `" + l + "`");
+        return false;
+      }
       global_references_[l] = Reference(image_->code_segment_.objects_.size(), current_class_, Class());
+    }
   }
 
   current_object_->code_[0] = current_class_.atom_;
