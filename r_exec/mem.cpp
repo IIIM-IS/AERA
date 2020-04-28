@@ -963,7 +963,7 @@ void _Mem::propagate_sln(Code *object, float32 change, float32 source_sln_thr) {
 }*/
 ////////////////////////////////////////////////////////////////
 
-void _Mem::unpack_hlp(Code *hlp) const { // produces a new object (featuring a set of pattern objects instread of a set of embedded pattern expressions) and add it as a hidden reference to the original (still packed) hlp.
+void _Mem::unpack_hlp(Code *hlp) { // produces a new object (featuring a set of pattern objects instread of a set of embedded pattern expressions) and add it as a hidden reference to the original (still packed) hlp.
 
   Code *unpacked_hlp = new LObject(); // will not be transmitted nor decompiled.
 
@@ -1016,7 +1016,7 @@ void _Mem::unpack_hlp(Code *hlp) const { // produces a new object (featuring a s
   hlp->add_reference(unpacked_hlp);
 }
 
-Code *_Mem::unpack_fact(Code *hlp, uint16 fact_index) const {
+Code *_Mem::unpack_fact(Code *hlp, uint16 fact_index) {
 
   Code *fact = new LObject();
   Code *fact_object;
@@ -1043,14 +1043,14 @@ Code *_Mem::unpack_fact(Code *hlp, uint16 fact_index) const {
   return fact;
 }
 
-Code *_Mem::unpack_fact_object(Code *hlp, uint16 fact_object_index) const {
+Code *_Mem::unpack_fact_object(Code *hlp, uint16 fact_object_index) {
 
   Code *fact_object = new LObject();
   _unpack_code(hlp, fact_object_index, fact_object, fact_object_index);
   return fact_object;
 }
 
-void _Mem::_unpack_code(Code *hlp, uint16 fact_object_index, Code *fact_object, uint16 read_index) const {
+void _Mem::_unpack_code(Code *hlp, uint16 fact_object_index, Code *fact_object, uint16 read_index) {
 
   Atom h_atom = hlp->code(read_index);
   uint16 code_size = h_atom.getAtomCount() + 1;
@@ -1135,7 +1135,7 @@ void _Mem::pack_hlp(Code *hlp) const { // produces a new object where a set of p
   hlp->add_reference(unpacked_hlp); // hidden reference.
 }
 
-void _Mem::pack_fact(Code *fact, Code *hlp, uint16 &write_index, std::vector<P<Code> > *references) const {
+void _Mem::pack_fact(Code *fact, Code *hlp, uint16 &write_index, std::vector<P<Code> > *references) {
 
   uint16 extent_index = write_index + fact->code_size();
   for (uint16 i = 0; i < fact->code_size(); ++i) {
@@ -1156,7 +1156,7 @@ void _Mem::pack_fact(Code *fact, Code *hlp, uint16 &write_index, std::vector<P<C
   write_index = extent_index;
 }
 
-void _Mem::pack_fact_object(Code *fact_object, Code *hlp, uint16 &write_index, std::vector<P<Code> > *references) const {
+void _Mem::pack_fact_object(Code *fact_object, Code *hlp, uint16 &write_index, std::vector<P<Code> > *references) {
 
   uint16 extent_index = write_index + fact_object->code_size();
   uint16 offset = write_index;

@@ -190,7 +190,7 @@ protected:
 
   _Mem();
 
-  void _unpack_code(Code *hlp, uint16 fact_object_index, Code *fact_object, uint16 read_index) const;
+  static void _unpack_code(Code *hlp, uint16 fact_object_index, Code *fact_object, uint16 read_index);
 public:
   static _Mem *Get() { return (_Mem *)Mem::Get(); }
 
@@ -329,14 +329,14 @@ public:
   virtual r_code::Code *build_object(Atom head) const = 0;
 
   // unpacking of high-level patterns: upon loading or reception.
-  void unpack_hlp(Code *hlp) const;
-  Code *unpack_fact(Code *hlp, uint16 fact_index) const;
-  Code *unpack_fact_object(Code *hlp, uint16 fact_object_index) const;
+  static void unpack_hlp(Code *hlp);
+  static Code *unpack_fact(Code *hlp, uint16 fact_index);
+  static Code *unpack_fact_object(Code *hlp, uint16 fact_object_index);
 
   // packing of high-level patterns: upon dynamic generation or transmission.
   void pack_hlp(Code *hlp) const;
-  void pack_fact(Code *fact, Code *hlp, uint16 &write_index, std::vector<P<Code> > *references) const;
-  void pack_fact_object(Code *fact_object, Code *hlp, uint16 &write_index, std::vector<P<Code> > *references) const;
+  static void pack_fact(Code *fact, Code *hlp, uint16 &write_index, std::vector<P<Code> > *references);
+  static void pack_fact_object(Code *fact_object, Code *hlp, uint16 &write_index, std::vector<P<Code> > *references);
 
   Code *clone(Code *original) const; // shallow copy.
 
