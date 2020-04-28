@@ -89,9 +89,9 @@ public:
 private:
   static UNORDERED_MAP<std::string, Program> Programs_;
 public:
-  static void Register(std::string &pgm_name, Program pgm);
-  static Program Get(std::string &pgm_name);
-  static Controller *New(std::string &pgm_name, r_code::View *view);
+  static void Register(const std::string &pgm_name, Program pgm);
+  static Program Get(const std::string &pgm_name);
+  static Controller *New(const std::string &pgm_name, r_code::View *view);
 };
 }
 
