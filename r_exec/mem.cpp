@@ -85,7 +85,41 @@ using namespace std::chrono;
 
 namespace r_exec {
 
-_Mem::_Mem() : r_code::Mem(), state_(NOT_STARTED), deleted_(false) {
+_Mem::_Mem() : r_code::Mem(), 
+  state_(NOT_STARTED), 
+  deleted_(false),
+  base_period_(50000),
+  reduction_core_count_(0),
+  time_core_count_(0),
+  mdl_inertia_sr_thr_(0.9),
+  mdl_inertia_cnt_thr_(6),
+  tpx_dsr_thr_(0.1),
+  min_sim_time_horizon_(0),
+  max_sim_time_horizon_(0),
+  sim_time_horizon_factor_(0.3),
+  tpx_time_horizon_(5000000),
+  perf_sampling_period_(250000),
+  float_tolerance_(0.00001),
+  time_tolerance_(10000),
+  primary_thz_(seconds(3600000)),
+  secondary_thz_(seconds(7200000)),
+  debug_(true),
+  ntf_mk_res_(1),
+  goal_pred_success_res_(1000),
+  probe_level_(2),
+  enable_assumptions_(true),
+  reduction_cores_(0),
+  time_cores_(0),
+  reduction_job_count_(0),
+  time_job_count_(0),
+  time_job_avg_latency_(0),
+  _time_job_avg_latency_(0),
+  core_count_(0),
+  stop_sem_(0),
+  stdin_(0),
+  stdout_(0),
+  self_(0)
+{
 
   new ModelBase();
   objects_.reserve(1024);
