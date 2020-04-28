@@ -533,9 +533,19 @@ void Image::add_object(Code *object) {
   SysObject *sys_object = new SysObject(object);
   add_sys_object(sys_object);
 
+  // Temporarily store the memory address of object in sys_object->references_. This will be
+  // recovered in build_references.
+#if defined ARCH_32
   uint32 _object = (uint32)object;
   sys_object->references_[0] = (_object & 0x0000FFFF);
   sys_object->references_[1] = (_object >> 16);
+#elif defined ARCH_64
+  uint64 _object = (uint64)object;
+  sys_object->references_[0] = _object & 0x0000FFFF;
+  sys_object->references_[1] = (_object >> 16) & 0x0000FFFF;
+  sys_object->references_[2] = (_object >> 32) & 0x0000FFFF;
+  sys_object->references_[3] = (_object >> 48) & 0x0000FFFF;
+#endif
 }
 
 SysObject *Image::add_object(Code *object, std::vector<SysObject *> &imported_objects) {
@@ -586,9 +596,20 @@ SysObject *Image::add_object(Code *object, std::vector<SysObject *> &imported_ob
   }
   object->rel_views();
 
+  // Temporarily store the memory address of object in sys_object->references_. This will be
+  // recovered in build_references.
+#if defined ARCH_32
   uint32 _object = (uint32)object;
   sys_object->references_[0] = (_object & 0x0000FFFF);
   sys_object->references_[1] = (_object >> 16);
+#elif defined ARCH_64
+  uint64 _object = (uint64)object;
+  sys_object->references_[0] = _object & 0x0000FFFF;
+  sys_object->references_[1] = (_object >> 16) & 0x0000FFFF;
+  sys_object->references_[2] = (_object >> 32) & 0x0000FFFF;
+  sys_object->references_[3] = (_object >> 48) & 0x0000FFFF;
+#endif
+
   return sys_object;
 }
 
@@ -599,9 +620,18 @@ void Image::build_references() {
   for (uint32 i = 0; i < code_segment_.objects_.as_std()->size(); ++i) {
 
     sys_object = code_segment_.objects_[i];
+    // The memory address of the original object was stored in sys_object->references_, so recover it.
+#if defined ARCH_32
     uint32 _object = sys_object->references_[0];
     _object |= (sys_object->references_[1] << 16);
     object = (Code *)_object;
+#elif defined ARCH_64
+    uint64 _object = sys_object->references_[0];
+    _object |= ((uint64)(sys_object->references_[1]) << 16);
+    _object |= ((uint64)(sys_object->references_[2]) << 32);
+    _object |= ((uint64)(sys_object->references_[3]) << 48);
+    object = (Code *)_object;
+#endif
     sys_object->references_.as_std()->clear();
     build_references(sys_object, object);
   }
