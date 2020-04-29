@@ -95,11 +95,11 @@ class r_exec_dll InputLessPGMOverlay :
   friend class InputLessPGMController;
   friend class IPGMContext;
 protected:
-  std::vector<P<Code> > productions_; // receives the results of ins, inj and eje; views are retrieved (fvw) or built (reduction) in the value array.
+  std::vector<P<r_code::Code> > productions_; // receives the results of ins, inj and eje; views are retrieved (fvw) or built (reduction) in the value array.
 
   bool evaluate(uint16 index); // evaluates the pgm_code at the specified index.
 
-  virtual Code *get_mk_rdx(uint16 &extent_index) const;
+  virtual r_code::Code *get_mk_rdx(uint16 &extent_index) const;
 
   void patch_tpl_args(); // no views in tpl args; patches the ptn skeleton's first atom with IPGM_PTR with an index in the ipgm arg set; patches wildcards with similar IPGM_PTRs.
   void patch_tpl_code(uint16 pgm_code_index, uint16 ipgm_code_index); // to recurse.
@@ -140,10 +140,10 @@ protected:
   MatchResult _match(r_exec::View *input, uint16 pattern_index); // delegates to __match.
   MatchResult __match(r_exec::View *input, uint16 pattern_index); // return SUCCESS upon a successful match, IMPOSSIBLE if the input is not of the right class, FAILURE otherwise.
 
-  Code *dereference_in_ptr(Atom a);
+  r_code::Code *dereference_in_ptr(Atom a);
   void patch_input_code(uint16 pgm_code_index, uint16 input_index, uint16 input_code_index, int16 parent_index = -1);
 
-  virtual Code *get_mk_rdx(uint16 &extent_index) const;
+  virtual r_code::Code *get_mk_rdx(uint16 &extent_index) const;
 
   void init();
 

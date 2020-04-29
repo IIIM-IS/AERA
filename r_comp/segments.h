@@ -83,9 +83,6 @@
 
 #include "class.h"
 
-
-using namespace r_code;
-
 namespace r_comp {
 
 class Reference {
@@ -141,7 +138,7 @@ public:
 
 class dll_export CodeSegment {
 public:
-  r_code::vector<SysObject *> objects_;
+  r_code::vector<r_code::SysObject *> objects_;
 
   ~CodeSegment();
 
@@ -174,11 +171,11 @@ private:
   UNORDERED_MAP<r_code::Code *, uint16> ptrs_to_indices_; // used for injection in memory.
 
   void add_object(r_code::Code *object);
-  SysObject *add_object(Code *object, std::vector<SysObject *> &imported_objects);
-  uint32 get_reference_count(const Code *object) const;
+  r_code::SysObject *add_object(r_code::Code *object, std::vector<r_code::SysObject *> &imported_objects);
+  uint32 get_reference_count(const r_code::Code *object) const;
   void build_references();
-  void build_references(SysObject *sys_object, r_code::Code *object);
-  void unpack_objects(r_code::vector<Code *> &ram_objects);
+  void build_references(r_code::SysObject *sys_object, r_code::Code *object);
+  void unpack_objects(r_code::vector<r_code::Code *> &ram_objects);
 public:
   ObjectMap object_map_;
   CodeSegment code_segment_;
@@ -189,11 +186,11 @@ public:
   Image();
   ~Image();
 
-  void add_sys_object(SysObject *object, std::string name); // called by the compiler.
-  void add_sys_object(SysObject *object); // called by add_object().
+  void add_sys_object(r_code::SysObject *object, std::string name); // called by the compiler.
+  void add_sys_object(r_code::SysObject *object); // called by add_object().
 
-  void get_objects(Mem *mem, r_code::vector<r_code::Code *> &ram_objects);
-  template<class O> void get_objects(r_code::vector<Code *> &ram_objects) {
+  void get_objects(r_code::Mem *mem, r_code::vector<r_code::Code *> &ram_objects);
+  template<class O> void get_objects(r_code::vector<r_code::Code *> &ram_objects) {
 
     for (uint32 i = 0; i < code_segment_.objects_.size(); ++i) {
 
@@ -204,7 +201,7 @@ public:
   }
 
   void add_objects(r_code::list<P<r_code::Code> > &objects); // called by the rMem.
-  void add_objects(r_code::list<P<r_code::Code> > &objects, std::vector<SysObject *> &imported_objects); // called by any r_exec code for decompiling on the fly.
+  void add_objects(r_code::list<P<r_code::Code> > &objects, std::vector<r_code::SysObject *> &imported_objects); // called by any r_exec code for decompiling on the fly.
 
   template<class I> I *serialize() {
 

@@ -88,7 +88,7 @@
 
 namespace r_exec {
 
-static inline bool IsNotification(Code *object) {
+static inline bool IsNotification(r_code::Code *object) {
 
   switch (object->code(0).getDescriptor()) {
   case Atom::MARKER:
@@ -126,7 +126,7 @@ protected:
 public:
   virtual ~Object(); // un-registers from the rMem's object_register.
 
-  r_code::View *build_view(SysView *source) {
+  r_code::View *build_view(r_code::SysView *source) {
 
     return Code::build_view<r_exec::View>(source);
   }
@@ -147,7 +147,7 @@ public:
   void set(uint16 member_index, float32 value);
   void mod(uint16 member_index, float32 value);
 
-  View *get_view(Code *group, bool lock); // returns the found view if any, NULL otherwise.
+  View *get_view(r_code::Code *group, bool lock); // returns the found view if any, NULL otherwise.
 
   void kill();
 
@@ -190,7 +190,7 @@ class r_exec_dll LObject :
   public Object<r_code::LObject, LObject> {
 public:
   static bool RequiresPacking() { return false; }
-  static LObject *Pack(Code *object, r_code::Mem *mem) { return (LObject *)object; } // object is always a LObject (local operation).
+  static LObject *Pack(r_code::Code *object, r_code::Mem *mem) { return (LObject *)object; } // object is always a LObject (local operation).
   LObject(r_code::Mem *mem = NULL) : Object<r_code::LObject, LObject>(mem) {}
   LObject(r_code::SysObject *source) : Object<r_code::LObject, LObject>() {
 

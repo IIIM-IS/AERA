@@ -80,6 +80,7 @@
 #include "../r_comp/decompiler.h"
 #include "../r_exec/mem.h"
 
+using namespace r_code;
 
 class CorrelatorController :
   public r_exec::Controller {

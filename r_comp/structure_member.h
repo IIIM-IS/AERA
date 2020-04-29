@@ -83,9 +83,6 @@
 #include "../r_code/image.h"
 #include "../r_code/atom.h"
 
-
-using namespace r_code;
-
 namespace r_comp {
 
 class Class;

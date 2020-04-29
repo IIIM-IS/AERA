@@ -80,6 +80,7 @@
 #include "factory.h"
 #include "auto_focus.h"
 
+using namespace r_code;
 
 namespace r_exec {
 

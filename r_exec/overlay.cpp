@@ -79,6 +79,7 @@
 #include "mem.h"
 
 using namespace std::chrono;
+using namespace r_code;
 
 #define MAX_VALUE_SIZE 128
 

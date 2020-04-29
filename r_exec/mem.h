@@ -166,18 +166,18 @@ protected:
   CriticalSection stateCS_;
   Semaphore *stop_sem_; // blocks the rMem until all cores terminate.
 
-  r_code::list<P<Code> > objects_; // store objects in order of injection: holds the initial objects (and dynamically created ones if MemStatic is used).
+  r_code::list<P<r_code::Code> > objects_; // store objects in order of injection: holds the initial objects (and dynamically created ones if MemStatic is used).
 
   P<Group> root_; // holds everything.
-  Code *stdin_;
-  Code *stdout_;
-  Code *self_;
+  r_code::Code *stdin_;
+  r_code::Code *stdout_;
+  r_code::Code *self_;
 
   void reset(); // clear the content of the mem.
 
   std::vector<Group *> initial_groups_; // convenience; cleared after start();
 
-  void store(Code *object);
+  void store(r_code::Code *object);
   virtual void set_last_oid(int32 oid) = 0;
   virtual void bind(View *view) = 0;
 
@@ -188,7 +188,7 @@ protected:
 
   _Mem();
 
-  static void _unpack_code(Code *hlp, uint16 fact_object_index, Code *fact_object, uint16 read_index);
+  static void _unpack_code(r_code::Code *hlp, uint16 fact_object_index, r_code::Code *fact_object, uint16 read_index);
 public:
   static _Mem *Get() { return (_Mem *)Mem::Get(); }
 
@@ -246,13 +246,13 @@ public:
       return goal_pred_success_res_;
     if (time_to_live.count() == 0)
       return 1;
-    return Utils::GetResilience(now, time_to_live, host->get_upr());
+    return r_code::Utils::GetResilience(now, time_to_live, host->get_upr());
   }
 
-  Code *get_root() const;
-  Code *get_stdin() const;
-  Code *get_stdout() const;
-  Code *get_self() const;
+  r_code::Code *get_root() const;
+  r_code::Code *get_stdin() const;
+  r_code::Code *get_stdout() const;
+  r_code::Code *get_self() const;
 
   State check_state(); // called by delegates after waiting in case stop() is called in the meantime.
   void start_core(); // called upon creation of a delegate.
@@ -292,13 +292,13 @@ public:
   void inject(View *view);
   void inject_async(View *view);
   void inject_new_object(View *view);
-  void inject_existing_object(View *view, Code *object, Group *host);
+  void inject_existing_object(View *view, r_code::Code *object, Group *host);
   void inject_null_program(Controller *c, Group *group, std::chrono::microseconds time_to_live, bool take_past_inputs); // build a view v (ijt=now, act=1, sln=0, res according to time_to_live in the group), attach c to v, inject v in the group.
   void inject_hlps(std::vector<View *> views, Group *destination);
   void inject_notification(View *view, bool lock);
-  virtual Code *check_existence(Code *object) = 0; // returns the existing object if any, or object otherwise: in the latter case, packing may occur.
+  virtual r_code::Code *check_existence(r_code::Code *object) = 0; // returns the existing object if any, or object otherwise: in the latter case, packing may occur.
 
-  void propagate_sln(Code *object, float32 change, float32 source_sln_thr);
+  void propagate_sln(r_code::Code *object, float32 change, float32 source_sln_thr);
 
   // Called by groups.
   void inject_copy(View *view, Group *destination); // for cov; NB: no cov for groups, r-groups, models, pgm or notifications.
@@ -321,22 +321,22 @@ public:
 
   // From rMem to I/O device.
   // To be redefined by object transport aware subcalsses.
-  virtual void eject(Code *command);
+  virtual void eject(r_code::Code *command);
 
   virtual r_code::Code *_build_object(Atom head) const = 0;
   virtual r_code::Code *build_object(Atom head) const = 0;
 
   // unpacking of high-level patterns: upon loading or reception.
-  static void unpack_hlp(Code *hlp);
-  static Code *unpack_fact(Code *hlp, uint16 fact_index);
-  static Code *unpack_fact_object(Code *hlp, uint16 fact_object_index);
+  static void unpack_hlp(r_code::Code *hlp);
+  static r_code::Code *unpack_fact(r_code::Code *hlp, uint16 fact_index);
+  static r_code::Code *unpack_fact_object(r_code::Code *hlp, uint16 fact_object_index);
 
   // packing of high-level patterns: upon dynamic generation or transmission.
-  void pack_hlp(Code *hlp) const;
-  static void pack_fact(Code *fact, Code *hlp, uint16 &write_index, std::vector<P<Code> > *references);
-  static void pack_fact_object(Code *fact_object, Code *hlp, uint16 &write_index, std::vector<P<Code> > *references);
+  void pack_hlp(r_code::Code *hlp) const;
+  static void pack_fact(r_code::Code *fact, r_code::Code *hlp, uint16 &write_index, std::vector<P<r_code::Code> > *references);
+  static void pack_fact_object(r_code::Code *fact_object, r_code::Code *hlp, uint16 &write_index, std::vector<P<r_code::Code> > *references);
 
-  Code *clone(Code *original) const; // shallow copy.
+  r_code::Code *clone(r_code::Code *original) const; // shallow copy.
 
   // External device I/O ////////////////////////////////////////////////////////////////
   virtual r_comp::Image *get_objects() = 0; // create an image; fill with all objects; call only when stopped.
@@ -349,7 +349,7 @@ public:
   /// </summary>
   /// <param name="now">The value to add to the timestamps of all the initial facts.</param>
   /// <param name="objects">The list of objects to search for facts.</param>
-  static void init_timings(Timestamp now, const r_code::list<P<Code>>& objects);
+  static void init_timings(Timestamp now, const r_code::list<P<r_code::Code>>& objects);
 
   //std::vector<uint64> timings_report; // debug facility.
 
@@ -450,7 +450,7 @@ public:
 
   // Executive device functions ////////////////////////////////////////////////////////
 
-  Code *check_existence(Code *object);
+  r_code::Code *check_existence(r_code::Code *object);
 
   // Called by the communication device (I/O).
   void inject(O *object, View *view);

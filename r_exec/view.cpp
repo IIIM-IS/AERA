@@ -82,6 +82,8 @@
 
 #include <limits>
 
+using namespace r_code;
+
 const float32 PLUS_INFINITY = std::numeric_limits<float>::infinity();
 
 

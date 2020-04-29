@@ -85,6 +85,7 @@
 //#define DECOMPILE_ONE_BY_ONE
 
 using namespace std::chrono;
+using namespace r_code;
 using namespace r_comp;
 
 r_exec::View *build_view(Timestamp time, Code* rstdin) { // this is application dependent WRT view->sync.

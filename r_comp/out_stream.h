@@ -82,9 +82,6 @@
 
 #include "../r_code/vector.h"
 
-
-using namespace r_code;
-
 namespace r_comp {
 
 // Allows inserting data at a specified index and right shifting the current content;

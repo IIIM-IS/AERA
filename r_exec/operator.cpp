@@ -86,6 +86,7 @@
 #include <math.h>
 
 using namespace std::chrono;
+using namespace r_code;
 
 namespace r_exec {
 

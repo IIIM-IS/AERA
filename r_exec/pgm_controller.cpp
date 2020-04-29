@@ -78,6 +78,7 @@
 #include "pgm_controller.h"
 #include "mem.h"
 
+using namespace r_code;
 
 namespace r_exec {
 

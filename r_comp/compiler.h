@@ -85,9 +85,6 @@
 #include "segments.h"
 #include "../r_code/image.h"
 
-
-using namespace r_code;
-
 namespace r_comp {
 
 class dll_export Compiler {
@@ -99,7 +96,7 @@ private:
   bool trace_;
 
   Class current_class_; // the sys-class currently parsed.
-  ImageObject *current_object_; // the sys-object currently parsed.
+  r_code::ImageObject *current_object_; // the sys-object currently parsed.
   uint32 current_object_index_; // ordinal of the current sys-object in the code segment.
   int32 current_view_index_; // ordinal of a view in the sys-object's view set.
 
@@ -137,7 +134,7 @@ private:
   UNORDERED_MAP<std::string, Reference> local_references_; // labels and variables declared inside objects (cleared before parsing each sys-object): translate to value pointers.
   UNORDERED_MAP<std::string, Reference> global_references_; // labels declared outside sys-objects. translate to reference pointers.
   void addLocalReference(const std::string reference_name, const uint16 index, const Class &p); // detect cast.
-  bool getGlobalReferenceIndex(const std::string reference_name, const ReturnType t, ImageObject *object, uint16 &index, Class *&_class); // index points to the reference set.
+  bool getGlobalReferenceIndex(const std::string reference_name, const ReturnType t, r_code::ImageObject *object, uint16 &index, Class *&_class); // index points to the reference set.
                                                                                                                                                       // return false when not found.
   bool in_hlp_;
   std::vector<std::string> hlp_references_;

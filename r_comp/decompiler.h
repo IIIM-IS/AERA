@@ -96,7 +96,7 @@ private:
   bool hlp_postfix_;
   bool horizontal_set_;
 
-  ImageObject *current_object_;
+  r_code::ImageObject *current_object_;
 
   r_comp::Metadata *metadata_;
   r_comp::Image *image_;
@@ -137,7 +137,7 @@ private:
   bool partial_decompilation_; // used when decompiling on-the-fly.
   bool ignore_named_objects_;
   UNORDERED_SET<uint16> named_objects_;
-  std::vector<SysObject *> imported_objects_; // referenced objects added to the image that were not in the original list of objects to be decompiled.
+  std::vector<r_code::SysObject *> imported_objects_; // referenced objects added to the image that were not in the original list of objects to be decompiled.
 public:
   Decompiler();
   ~Decompiler();
@@ -150,7 +150,7 @@ public:
   uint32 decompile(r_comp::Image *image,
     std::ostringstream *stream,
     Timestamp::duration time_offset,
-    std::vector<SysObject *> &imported_objects); // idem, ignores named objects if in the imported object list.
+    std::vector<r_code::SysObject *> &imported_objects); // idem, ignores named objects if in the imported object list.
   uint32 decompile_references(r_comp::Image *image); // initialize a reference table so that objects can be decompiled individually; returns the number of objects.
   void decompile_object(uint16 object_index, std::ostringstream *stream, Timestamp::duration time_offset); // decompiles a single object; object_index is the position of the object in the vector returned by Image::getObject.
   void decompile_object(const std::string object_name, std::ostringstream *stream, Timestamp::duration time_offset); // decompiles a single object given its name: use this function to follow references.

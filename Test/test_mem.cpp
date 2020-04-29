@@ -78,6 +78,7 @@
 #include "test_mem.h"
 
 using namespace std::chrono;
+using namespace r_code;
 using namespace r_exec;
 
 template<class O, class S> TestMem<O, S>::TestMem()

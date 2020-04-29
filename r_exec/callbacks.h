@@ -85,7 +85,7 @@ namespace r_exec {
 
 class r_exec_dll Callbacks {
 public:
-  typedef bool (*Callback)(std::chrono::microseconds relative_time, bool suspended, const char *msg, uint8 object_count, Code **objects);
+  typedef bool (*Callback)(std::chrono::microseconds relative_time, bool suspended, const char *msg, uint8 object_count, r_code::Code **objects);
 private:
   static UNORDERED_MAP<std::string, Callback> Callbacks_;
 public:
