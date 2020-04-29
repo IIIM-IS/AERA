@@ -164,6 +164,14 @@ public:
   PipeOStream &operator <<(const char *s);
 };
 
+/// <summary>
+/// Use the given metadata (not r_exec::Metatdata) to initialize
+/// r_exec::_Opcodes, r_code::OpcodeNames, View::ViewOpcode_,  and the
+/// values in the Opcodes class such as Opcodes::Fact. Also call
+/// Operator::Register to set up standard operators in Operator::Operators_.
+/// </summary>
+void r_exec_dll InitOpcodes(const r_comp::Metadata& metadata);
+
 // Initialize Now, compile user.classes.replicode, builds the Seed and loads the user-defined operators.
 // Return false in case of a problem (e.g. file not found, operator not found, etc.).
 bool r_exec_dll Init(const char *user_operator_library_path,
