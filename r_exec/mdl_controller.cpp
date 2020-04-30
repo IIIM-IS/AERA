@@ -2044,35 +2044,35 @@ void PrimaryMDLController::rate_model(bool success) {
   }
 
   float32 strength = model->code(MDL_STRENGTH).asFloat();
-  float32 instance_count = model->code(MDL_CNT).asFloat();
-  float32 success_count = model->code(MDL_SR).asFloat()*instance_count;
+  float32 evidence_count = model->code(MDL_CNT).asFloat();
+  float32 success_count = model->code(MDL_SR).asFloat()*evidence_count;
 
-  ++instance_count;
+  ++evidence_count;
   model->code(MDL_DSR) = model->code(MDL_SR);
 
   float32 success_rate;
   if (success) { // leave the model active in the primary group.
 
     ++success_count;
-    success_rate = success_count / instance_count;
-    uint32 instance_count_base = _Mem::Get()->get_mdl_inertia_cnt_thr();
-    if (success_rate >= _Mem::Get()->get_mdl_inertia_sr_thr() && instance_count >= instance_count_base) { // make the model strong if not already; trim the instance count to reduce the rating's inertia.
+    success_rate = success_count / evidence_count;
+    uint32 evidence_count_base = _Mem::Get()->get_mdl_inertia_cnt_thr();
+    if (success_rate >= _Mem::Get()->get_mdl_inertia_sr_thr() && evidence_count >= evidence_count_base) { // make the model strong if not already; trim the evidence count to reduce the rating's inertia.
 
-      instance_count = (uint32)(1 / success_rate);
+      evidence_count = (uint32)(1 / success_rate);
       success_rate = 1;
       model->code(MDL_STRENGTH) = Atom::Float(1);
     }
 
-    model->code(MDL_CNT) = Atom::Float(instance_count);
+    model->code(MDL_CNT) = Atom::Float(evidence_count);
     model->code(MDL_SR) = Atom::Float(success_rate);
     getView()->set_act(success_rate);
     codeCS_.leave();
   } else {
 
-    success_rate = success_count / instance_count;
+    success_rate = success_count / evidence_count;
     if (success_rate > get_host()->get_act_thr()) { // model still good enough to remain in the primary group.
 
-      model->code(MDL_CNT) = Atom::Float(instance_count);
+      model->code(MDL_CNT) = Atom::Float(evidence_count);
       model->code(MDL_SR) = Atom::Float(success_rate);
       getView()->set_act(success_rate);
       codeCS_.leave();
@@ -2090,7 +2090,7 @@ void PrimaryMDLController::rate_model(bool success) {
       OUTPUT(MDL_REV) << Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " deleted " << std::endl;
     }
   }
-  OUTPUT(MDL_REV) << Utils::RelativeTime(Now()) << " mdl " << model->get_oid() << " cnt:" << instance_count << " sr:" << success_rate << std::endl;
+  OUTPUT(MDL_REV) << Utils::RelativeTime(Now()) << " mdl " << model->get_oid() << " cnt:" << evidence_count << " sr:" << success_rate << std::endl;
 }
 
 void PrimaryMDLController::assume(_Fact *input) {
@@ -2300,15 +2300,15 @@ void SecondaryMDLController::rate_model() { // acknowledge successes only; the p
     return;
   }
 
-  uint32 instance_count = model->code(MDL_CNT).asFloat();
-  uint32 success_count = model->code(MDL_SR).asFloat()*instance_count;
+  uint32 evidence_count = model->code(MDL_CNT).asFloat();
+  uint32 success_count = model->code(MDL_SR).asFloat()*evidence_count;
 
-  ++instance_count;
+  ++evidence_count;
   model->code(MDL_DSR) = model->code(MDL_SR);
-  model->code(MDL_CNT) = Atom::Float(instance_count);
+  model->code(MDL_CNT) = Atom::Float(evidence_count);
 
   ++success_count;
-  float32 success_rate = success_count / instance_count; // no trimming.
+  float32 success_rate = success_count / evidence_count; // no trimming.
   model->code(MDL_SR) = Atom::Float(success_rate);
 
   if (success_rate > primary_->getView()->get_host()->get_act_thr()) {
