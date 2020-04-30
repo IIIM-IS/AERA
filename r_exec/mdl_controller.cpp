@@ -2090,7 +2090,7 @@ void PrimaryMDLController::rate_model(bool success) {
       OUTPUT(MDL_REV) << Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " deleted " << std::endl;
     }
   }
-  OUTPUT(MDL_REV) << "mdl " << model->get_oid() << " cnt:" << instance_count << " sr:" << success_rate << std::endl;
+  OUTPUT(MDL_REV) << Utils::RelativeTime(Now()) << " mdl " << model->get_oid() << " cnt:" << instance_count << " sr:" << success_rate << std::endl;
 }
 
 void PrimaryMDLController::assume(_Fact *input) {
