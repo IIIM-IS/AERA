@@ -108,7 +108,7 @@ public:
   /// Override eject to check for (cmd set_speed_y ...) and other implemented commands.
   /// </summary>
   /// <param name="command"></param>
-  virtual void eject(Code *command);
+  virtual void eject(r_code::Code *command);
 
   /// <summary>
   /// This is called when runInDiagnosticTime() updates the tickTime. Just call
@@ -127,7 +127,7 @@ protected:
   /// <param name="name"> The name of the symbol.</param>
   /// <returns>The object, or NULL if not found.</returns>
   ///
-  static Code* findObject(
+  static r_code::Code* findObject(
     std::vector<r_code::Code *> *objects, const char* name);
 
   /// <summary>
@@ -144,8 +144,8 @@ protected:
   /// <param name="group"></param>
   /// <returns>The created View.</returns>
   r_exec::View* injectMarkerValue(
-    Code* obj, Code* prop, Atom val, Timestamp after, Timestamp before,
-    r_exec::View::SyncMode syncMode, Code* group);
+    r_code::Code* obj, r_code::Code* prop, Atom val, Timestamp after, Timestamp before,
+    r_exec::View::SyncMode syncMode, r_code::Code* group);
 
   /// <summary>
   /// Inject (fact (mk.val obj prop val 1) after before 1 1)
@@ -160,7 +160,7 @@ protected:
   /// <param name="syncMode"></param>
   /// <returns>The created View.</returns>
   r_exec::View* injectMarkerValue(
-    Code* obj, Code* prop, Atom val, Timestamp after, Timestamp before,
+    r_code::Code* obj, r_code::Code* prop, Atom val, Timestamp after, Timestamp before,
     r_exec::View::SyncMode syncMode)
   {
     return injectMarkerValue(obj, prop, val, after, before, syncMode, get_stdin());
@@ -179,7 +179,7 @@ protected:
   /// <param name="group"></param>
   /// <returns>The created View.</returns>
   r_exec::View* injectMarkerValue(
-    Code* obj, Code* prop, Atom val, Timestamp after, Timestamp before, Code* group)
+    r_code::Code* obj, r_code::Code* prop, Atom val, Timestamp after, Timestamp before, r_code::Code* group)
   {
     return injectMarkerValue(
       obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, group);
@@ -197,7 +197,7 @@ protected:
   /// <param name="before"></param>
   /// <returns>The created View.</returns>
   r_exec::View* injectMarkerValue(
-    Code* obj, Code* prop, Atom val, Timestamp after, Timestamp before)
+    r_code::Code* obj, r_code::Code* prop, Atom val, Timestamp after, Timestamp before)
   {
     return injectMarkerValue(
       obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, get_stdin());
@@ -217,8 +217,8 @@ protected:
   /// <param name="group"></param>
   /// <returns>The created View.</returns>
   r_exec::View* injectMarkerValue(
-    Code* obj, Code* prop, Code* val, Timestamp after, Timestamp before,
-    r_exec::View::SyncMode syncMode, Code* group);
+    r_code::Code* obj, r_code::Code* prop, r_code::Code* val, Timestamp after, Timestamp before,
+    r_exec::View::SyncMode syncMode, r_code::Code* group);
 
   /// <summary>
   /// Inject (fact (mk.val obj prop val 1) after before 1 1)
@@ -233,7 +233,7 @@ protected:
   /// <param name="syncMode"></param>
   /// <returns>The created View.</returns>
   r_exec::View* injectMarkerValue(
-    Code* obj, Code* prop, Code* val, Timestamp after, Timestamp before,
+    r_code::Code* obj, r_code::Code* prop, r_code::Code* val, Timestamp after, Timestamp before,
     r_exec::View::SyncMode syncMode)
   {
     return injectMarkerValue(obj, prop, val, after, before, syncMode, get_stdin());
@@ -252,7 +252,7 @@ protected:
   /// <param name="group"></param>
   /// <returns>The created View.</returns>
   r_exec::View* injectMarkerValue(
-    Code* obj, Code* prop, Code* val, Timestamp after, Timestamp before, Code* group)
+    r_code::Code* obj, r_code::Code* prop, r_code::Code* val, Timestamp after, Timestamp before, r_code::Code* group)
   {
     return injectMarkerValue(
       obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, group);
@@ -270,7 +270,7 @@ protected:
   /// <param name="before"></param>
   /// <returns>The created View.</returns>
   r_exec::View* injectMarkerValue(
-    Code* obj, Code* prop, Code* val, Timestamp after, Timestamp before)
+    r_code::Code* obj, r_code::Code* prop, r_code::Code* val, Timestamp after, Timestamp before)
   {
     return injectMarkerValue(
       obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, get_stdin());
@@ -287,8 +287,8 @@ protected:
   /// <param name="group"></param>
   /// <returns>The created View.</returns>
   r_exec::View* injectFact(
-    Code* object, Timestamp after, Timestamp before, r_exec::View::SyncMode syncMode,
-    Code* group);
+    r_code::Code* object, Timestamp after, Timestamp before, r_exec::View::SyncMode syncMode,
+    r_code::Code* group);
 
   /// <summary>
   /// Inject (fact object after before 1 1)
@@ -299,7 +299,7 @@ protected:
   /// <param name="before"></param>
   /// <param name="group"></param>
   /// <returns>The created View.</returns>
-  r_exec::View* injectFact(Code* object, Timestamp after, Timestamp before, Code* group) {
+  r_exec::View* injectFact(r_code::Code* object, Timestamp after, Timestamp before, r_code::Code* group) {
     return injectFact(
       object, after, before, r_exec::View::SYNC_PERIODIC, group);
   }
@@ -324,20 +324,20 @@ protected:
   Timestamp lastInjectTime_;
   float speed_y_;
   float position_y_;
-  Code* position_y_obj_;
-  Code* position_property_;
-  Code* position_y_property_;
-  Code* speed_y_property_;
-  Code* primary_group_;
+  r_code::Code* position_y_obj_;
+  r_code::Code* position_property_;
+  r_code::Code* position_y_property_;
+  r_code::Code* speed_y_property_;
+  r_code::Code* primary_group_;
   uint16 set_speed_y_opcode_;
   uint16 move_y_plus_opcode_;
   uint16 move_y_minus_opcode_;
   Timestamp lastCommandTime_;
 
-  Code* yEnt_[10];
-  Code* discretePositionObj_;
-  Code* discretePosition_;
-  Code* nextDiscretePosition_;
+  r_code::Code* yEnt_[10];
+  r_code::Code* discretePositionObj_;
+  r_code::Code* discretePosition_;
+  r_code::Code* nextDiscretePosition_;
   int babbleState_;
 };
 

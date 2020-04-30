@@ -83,8 +83,7 @@
 #include "../r_code/object.h"
 #include "dll.h"
 
-
-using namespace r_code;
+using r_code::Atom;
 
 namespace r_exec {
 
@@ -125,7 +124,7 @@ public:
   bool is_activated() const { return activated_ == 1; }
   bool is_alive() const { return invalidated_ == 0 && activated_ == 1; }
 
-  virtual Code *get_core_object() const = 0;
+  virtual r_code::Code *get_core_object() const = 0;
 
   r_code::Code *getObject() const { return view_->object_; } // return the reduction object (e.g. ipgm, icpp_pgm, cst, mdl).
   r_exec::View *getView() const { return (r_exec::View *)view_; } // return the reduction object's view.
@@ -154,26 +153,26 @@ protected:
 
   Controller *controller_;
 
-  r_code::vector<Atom> values_; // value array: stores the results of computations.
+  r_code::vector<r_code::Atom> values_; // value array: stores the results of computations.
   // Copy of the pgm/hlp code. Will be patched during matching and evaluation:
   // any area indexed by a vl_ptr will be overwritten with:
   //   the evaluation result if it fits in a single atom,
   //   a ptr to the value array if the result is larger than a single atom,
   //   a ptr to an input if the result is a pattern input.
-  Atom *code_;
+  r_code::Atom *code_;
   uint16 code_size_;
   std::vector<uint16> patch_indices_; // indices where patches are applied; used for rollbacks.
   uint16 value_commit_index_; // index of the last computed value_+1; used for rollbacks.
 
   void load_code();
-  void patch_code(uint16 index, Atom value);
+  void patch_code(uint16 index, r_code::Atom value);
   uint16 get_last_patch_index();
   void unpatch_code(uint16 patch_index);
 
   void rollback(); // reset the overlay to the last commited state: unpatch code and values.
   void commit(); // empty the patch_indices_ and set value_commit_index_ to values.size().
 
-  Code *get_core_object() const; // pgm, mdl, cst.
+  r_code::Code *get_core_object() const; // pgm, mdl, cst.
 
   Overlay();
   Overlay(Controller *c, bool load_code = true);
@@ -189,7 +188,7 @@ public:
   r_code::Code *getObject() const { return ((Controller *)controller_)->getObject(); }
   r_exec::View *getView() const { return ((Controller *)controller_)->getView(); }
 
-  r_code::Code *build_object(Atom head) const;
+  r_code::Code *build_object(r_code::Atom head) const;
 };
 
 class r_exec_dll OController :

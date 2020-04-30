@@ -173,10 +173,10 @@ public:
 
   void invalidate();
 
-  Code *get_core_object() const { return getObject(); } // cst or mdl.
-  Code *get_unpacked_object() const { // the unpacked version of the core object.
+  r_code::Code *get_core_object() const { return getObject(); } // cst or mdl.
+  r_code::Code *get_unpacked_object() const { // the unpacked version of the core object.
 
-    Code *core_object = get_core_object();
+    r_code::Code *core_object = get_core_object();
     return core_object->get_reference(core_object->references_size() - MDL_HIDDEN_REFS);
   }
 
@@ -192,7 +192,7 @@ public:
   virtual Fact *get_f_ihlp(HLPBindingMap *bindings, bool wr_enabled) const = 0;
 
   uint16 get_out_group_count() const;
-  Code *get_out_group(uint16 i) const; // i starts at 1.
+  r_code::Code *get_out_group(uint16 i) const; // i starts at 1.
   Group *get_host() const;
   bool has_tpl_args() const { return has_tpl_args_; }
 

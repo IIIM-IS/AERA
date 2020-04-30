@@ -78,6 +78,7 @@
 #include "compiler.h"
 #include <string.h>
 
+using namespace r_code;
 
 namespace r_comp {
 

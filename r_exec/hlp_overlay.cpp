@@ -80,6 +80,7 @@
 #include "hlp_context.h"
 #include "mem.h"
 
+using namespace r_code;
 
 namespace r_exec {
 

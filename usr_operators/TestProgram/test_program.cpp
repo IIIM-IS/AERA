@@ -79,6 +79,7 @@
 
 #include "../r_exec/mem.h"
 
+using namespace r_code;
 
 // Sample c++ user-defined program.
 class TestController :

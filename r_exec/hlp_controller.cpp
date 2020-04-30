@@ -79,6 +79,7 @@
 #include "hlp_overlay.h"
 #include "mem.h"
 
+using namespace r_code;
 
 namespace r_exec {
 

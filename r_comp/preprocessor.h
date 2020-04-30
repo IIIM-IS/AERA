@@ -83,8 +83,6 @@
 #include <sstream>
 #include <fstream>
 
-using namespace r_code;
-
 namespace r_comp {
 
 class RepliMacro;

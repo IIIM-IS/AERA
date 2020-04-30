@@ -102,15 +102,15 @@ private:
 
   class MEntry {
   private:
-    static bool Match(Code *lhs, Code *rhs);
+    static bool Match(r_code::Code *lhs, r_code::Code *rhs);
     static uint32 _ComputeHashCode(_Fact *component); // use for lhs/rhs.
   public:
-    static uint32 ComputeHashCode(Code *mdl, bool packed);
+    static uint32 ComputeHashCode(r_code::Code *mdl, bool packed);
 
     MEntry();
-    MEntry(Code *mdl, bool packed);
+    MEntry(r_code::Code *mdl, bool packed);
 
-    P<Code> mdl_;
+    P<r_code::Code> mdl_;
     Timestamp touch_time_; // last time the mdl was successfully compared to.
     uint32 hash_code_;
 
@@ -139,13 +139,13 @@ private:
 public:
   static ModelBase *Get();
 
-  void load(Code *mdl); // called by _Mem::load(); models with no views go to the black_list_.
-  void get_models(r_code::list<P<Code> > &models); // white_list_ first, black_list_ next.
+  void load(r_code::Code *mdl); // called by _Mem::load(); models with no views go to the black_list_.
+  void get_models(r_code::list<P<r_code::Code> > &models); // white_list_ first, black_list_ next.
 
-  Code *check_existence(Code *mdl); // caveat: mdl is unpacked; return (a) NULL if the model is in the black list, (b) a model in the white list if the mdl has been registered there or (c) the mdl itself if not in the model base, in which case the mdl is added to the white list.
-  void check_existence(Code *m0, Code *m1, Code *&_m0, Code *&_m1); // m1 is a requirement on m0; _m0 and _m1 are the return values as defined above; m0 added only if m1 is not black listed.
-  void register_mdl_failure(Code *mdl); // moves the mdl from the white to the black list; happens to bad models.
-  void register_mdl_timeout(Code *mdl); // deletes the mdl from the white list; happen to models that have been unused for primary_thz.
+  r_code::Code *check_existence(r_code::Code *mdl); // caveat: mdl is unpacked; return (a) NULL if the model is in the black list, (b) a model in the white list if the mdl has been registered there or (c) the mdl itself if not in the model base, in which case the mdl is added to the white list.
+  void check_existence(r_code::Code *m0, r_code::Code *m1, r_code::Code *&_m0, r_code::Code *&_m1); // m1 is a requirement on m0; _m0 and _m1 are the return values as defined above; m0 added only if m1 is not black listed.
+  void register_mdl_failure(r_code::Code *mdl); // moves the mdl from the white to the black list; happens to bad models.
+  void register_mdl_timeout(r_code::Code *mdl); // deletes the mdl from the white list; happen to models that have been unused for primary_thz.
 };
 }
 

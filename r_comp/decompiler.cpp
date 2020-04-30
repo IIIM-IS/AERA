@@ -80,6 +80,7 @@
 #include "../submodules/CoreLibrary/CoreLibrary/utils.h"
 
 using namespace std::chrono;
+using namespace r_code;
 
 namespace r_comp {
 

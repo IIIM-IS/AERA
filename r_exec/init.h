@@ -121,7 +121,7 @@ private:
   _Thread *thread_;
   volatile uint32 spawned_;
 
-  r_code::list<P<Code> > objects_;
+  r_code::list<P<r_code::Code> > objects_;
 
   uint32 ostream_id_; // 0 is std::cout.
 
@@ -130,9 +130,9 @@ public:
   TDecompiler(uint32 ostream_id, std::string header);
   ~TDecompiler();
 
-  void add_object(Code *object);
-  void add_objects(const r_code::list<P<Code> > &objects);
-  void add_objects(const std::vector<P<Code> > &objects);
+  void add_object(r_code::Code *object);
+  void add_objects(const r_code::list<P<r_code::Code> > &objects);
+  void add_objects(const std::vector<P<r_code::Code> > &objects);
   void decompile();
 };
 

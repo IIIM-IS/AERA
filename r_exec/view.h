@@ -112,13 +112,13 @@ private:
   float32 initial_sln_;
   float32 initial_act_;
 
-  void init(SyncMode sync,
+  void init(r_code::View::SyncMode sync,
     Timestamp ijt,
     float32 sln,
     int32 res,
-    Code *host,
-    Code *origin,
-    Code *object);
+    r_code::Code *host,
+    r_code::Code *origin,
+    r_code::Code *object);
 protected:
   void reset_init_sln();
   void reset_init_act();
@@ -139,20 +139,20 @@ public:
   View(r_code::SysView *source, r_code::Code *object);
   View(View *view, Group *group); // copy the view and assigns it to the group (used for cov); morph ctrl values.
   View(const View *view, bool new_OID = false); // simple copy.
-  View(SyncMode sync,
+  View(r_code::View::SyncMode sync,
     Timestamp ijt,
     float32 sln,
     int32 res,
-    Code *host,
-    Code *origin,
-    Code *object); // regular view; res set to -1 means forever.
-  View(SyncMode sync,
+    r_code::Code *host,
+    r_code::Code *origin,
+    r_code::Code *object); // regular view; res set to -1 means forever.
+  View(r_code::View::SyncMode sync,
     Timestamp ijt,
     float32 sln,
     int32 res,
-    Code *host,
-    Code *origin,
-    Code *object,
+    r_code::Code *host,
+    r_code::Code *origin,
+    r_code::Code *object,
     float32 act); // pgm/mdl view; res set to -1 means forever.
   ~View();
 
@@ -165,7 +165,7 @@ public:
 
   Group *get_host();
 
-  SyncMode get_sync();
+  r_code::View::SyncMode get_sync();
   float32 get_res();
   float32 get_sln();
   float32 get_act();
@@ -204,7 +204,7 @@ public:
 class r_exec_dll NotificationView :
   public View {
 public:
-  NotificationView(Code *origin, Code *destination, Code *marker); // res=1, sln=1.
+  NotificationView(r_code::Code *origin, r_code::Code *destination, r_code::Code *marker); // res=1, sln=1.
 
   bool isNotification() const;
 };

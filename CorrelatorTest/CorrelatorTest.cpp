@@ -86,6 +86,7 @@
 #include "correlator.h"
 
 using namespace std::chrono;
+using namespace r_code;
 
 //#define DECOMPILE_ONE_BY_ONE
 

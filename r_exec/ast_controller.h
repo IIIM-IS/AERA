@@ -105,7 +105,7 @@ protected:
 public:
   virtual ~ASTController();
 
-  Code *get_core_object() const { return getObject(); }
+  r_code::Code *get_core_object() const { return getObject(); }
 
   void take_input(r_exec::View *input);
   void reduce(View *input);

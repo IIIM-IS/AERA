@@ -78,6 +78,7 @@
 #include "auto_focus.h"
 #include "ast_controller.h"
 
+using namespace r_code;
 
 namespace r_exec {
 

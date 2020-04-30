@@ -104,8 +104,8 @@ protected:
 
   std::vector<P<_Fact> > inputs_;
 
-  UNORDERED_SET<P<_Fact>, PHash<_Fact> > predictions_; // f0->pred->f1->obj.
-  UNORDERED_SET<P<Sim>, PHash<Sim> > simulations_;
+  UNORDERED_SET<P<_Fact>, r_code::PHash<_Fact> > predictions_; // f0->pred->f1->obj.
+  UNORDERED_SET<P<Sim>, r_code::PHash<Sim> > simulations_;
 
   void inject_production();
   void update(HLPBindingMap *map, _Fact *input, _Fact *bound_pattern);
@@ -139,7 +139,7 @@ private:
     Sim *sim,
     Timestamp now,
     float32 confidence,
-    Code *group) const;
+    r_code::Code *group) const;
 
   void kill_views();
   void check_last_match_time(bool match); // kill if no match after primary_thz;
