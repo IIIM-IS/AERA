@@ -222,8 +222,15 @@
 * DONE. Review/merge pull request to decompile references first https://github.com/IIIM-IS/replicode/pull/82
 * DONE. Review issue for decompiler VL_PTR error https://github.com/IIIM-IS/replicode/issues/51
 
-TODO
+2020-04-30
+* DONE. Review/merge pull request to update Integration_OpenAI https://github.com/IIIM-IS/Integration_OpenAI/pull/4
+* DONE. Review/merge pull request for "using namespace r_comp" https://github.com/IIIM-IS/replicode/pull/84
 * Does the compiler prevent redefining an object using the same name?
+  ANSWER: No. See the pull request:
+  DONE. Review/merge pull request to check redefined labels https://github.com/IIIM-IS/replicode/pull/83
+* YES. Can you switch to Visual Studio 2019.
+
+TODO
 * Visualizer: Add side window for query session.
 * Document methods, starting with those related to the simulator.
 * Update README.
