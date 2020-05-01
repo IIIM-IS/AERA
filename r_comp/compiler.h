@@ -137,6 +137,7 @@ private:
   bool getGlobalReferenceIndex(const std::string reference_name, const ReturnType t, r_code::ImageObject *object, uint16 &index, Class *&_class); // index points to the reference set.
                                                                                                                                                       // return false when not found.
   bool in_hlp_;
+  bool allow_wildcards_outside_pattern_skeleton_;
   std::vector<std::string> hlp_references_;
   uint8 add_hlp_reference(std::string reference_name);
   uint8 get_hlp_reference(std::string reference_name);
@@ -244,7 +245,16 @@ private:
 
   bool read_sys_object(); // compiles one object; return false when there is an error.
 public:
-  Compiler();
+  /**
+   * Create a Compiler instance.
+   * \param allow_wildcards_outside_pattern_skeleton (optional) Normally, a wildcard 
+   * character : is not allowed in a statement, so this is false by default. But the decompiler 
+   * output contains expressions that are part of a prediction, and these have wildcards. So, if you 
+   * are compiling the decompiler output, you can set this true to allow it. (Note that the
+   * decompiled output repeats objects which were defined in the original user-supplied code
+   * which was compiled with this flag false, so it was already checked for no wildcards.)
+   */
+  Compiler(bool allow_wildcards_outside_pattern_skeleton = false);
   ~Compiler();
 
   bool compile(std::istream *stream, // stream must be open.

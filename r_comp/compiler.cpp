@@ -86,7 +86,10 @@ static bool Output = true;
 
 static inline bool is_decimal(char c) { return c >= '0' && c <= '9'; }
 
-Compiler::Compiler() : out_stream_(NULL), current_object_(NULL), error_(std::string("")) {
+Compiler::Compiler(bool allow_wildcards_outside_pattern_skeleton)
+: out_stream_(NULL), current_object_(NULL), error_(std::string("")),
+  allow_wildcards_outside_pattern_skeleton_(allow_wildcards_outside_pattern_skeleton)
+{
 }
 
 Compiler::~Compiler() {
@@ -2607,7 +2610,7 @@ bool Compiler::read_wildcard(uint16 write_index, uint16 &extent_index, bool writ
 
   if (wildcard()) {
 
-    if (state_.pattern_lvl) {
+    if (state_.pattern_lvl || allow_wildcards_outside_pattern_skeleton_) {
 
       if (write)
         current_object_->code_[write_index] = Atom::Wildcard();
