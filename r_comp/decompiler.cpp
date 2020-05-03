@@ -331,6 +331,8 @@ void Decompiler::decompile_object(uint16 object_index, std::ostringstream *strea
       *out_stream_ << " ";
 #endif
   }
+  if (sys_object->oid_ == 53)
+    int debug1 = 1;
 
   std::string s = object_names_[object_index];
   s += ":";
@@ -550,9 +552,15 @@ void Decompiler::write_hlp(uint16 read_index) {
       }
 
       if (i == 0 || i == 1)
+        // Put a colon after variables for template arguments and the facts.
         hlp_postfix_ = true;
+      bool save_horizontal_set = horizontal_set_;
+      if (i == 0)
+        // Write the set of template arguments horizontally.
+        horizontal_set_ = true;
       write_any(++read_index, after_tail_wildcard, false);
       hlp_postfix_ = false;
+      horizontal_set_ = save_horizontal_set;
 
       if (!closing_set_)
         *out_stream_ << NEWLINE;
