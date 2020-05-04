@@ -131,7 +131,7 @@ public:
 
   uint32 oid_;
 #ifdef WITH_DEBUG_OID
-  uint32 debug_oid_;
+  uint64 debug_oid_;
 #endif
 
   SysObject();
