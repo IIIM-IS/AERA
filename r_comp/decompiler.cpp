@@ -331,8 +331,6 @@ void Decompiler::decompile_object(uint16 object_index, std::ostringstream *strea
       *out_stream_ << " ";
 #endif
   }
-  if (sys_object->oid_ == 53)
-    int debug1 = 1;
 
   std::string s = object_names_[object_index];
   s += ":";
