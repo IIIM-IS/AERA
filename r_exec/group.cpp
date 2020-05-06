@@ -839,7 +839,11 @@ void Group::inject_hlps(std::vector<View *> &views) {
       CSTController *c = new CSTController(*view);
       (*view)->controller_ = c;
       c->set_secondary_host(get_secondary_group());
+#ifdef WITH_DEBUG_OID
+      OUTPUT(CST_OUT) << Utils::RelativeTime(Now()) << " -> cst " << (*view)->object_->get_oid() << ", CSTController(" << c->get_debug_oid() << ")" << std::endl;
+#else
       OUTPUT(CST_OUT) << Utils::RelativeTime(Now()) << " -> cst " << (*view)->object_->get_oid() << std::endl;
+#endif
       break;
     }
     case Atom::MODEL: {
@@ -849,7 +853,11 @@ void Group::inject_hlps(std::vector<View *> &views) {
       (*view)->controller_ = c;
       if (inject_in_secondary_group)
         get_secondary_group()->inject_secondary_mdl_controller(*view);
+#ifdef WITH_DEBUG_OID
+      OUTPUT(MDL_OUT) << Utils::RelativeTime(Now()) << " -> mdl " << (*view)->object_->get_oid() << ", MDLController(" << c->get_debug_oid() << ")" << std::endl;
+#else
       OUTPUT(MDL_OUT) << Utils::RelativeTime(Now()) << " -> mdl " << (*view)->object_->get_oid() << std::endl;
+#endif
       break;
     }
     }
