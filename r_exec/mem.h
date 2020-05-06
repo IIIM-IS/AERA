@@ -391,7 +391,7 @@ const std::chrono::microseconds Mem_sampling_period_ = std::chrono::milliseconds
 /// stream will output the entire string as a single operation, then when all threads use
 /// OUTPUT_LINE it will avoid scrambling output of individual values.
 /// </summary>
-#define OUTPUT_LINE(level, vals) (OUTPUT(l) << (ostringstream() << vals << '\n').str()).flush()
+#define OUTPUT_LINE(level, vals) (OUTPUT(level) << (ostringstream() << vals << '\n').str()).flush()
 
 // _Mem that stores the objects as long as they are not invalidated.
 class r_exec_dll MemStatic :
