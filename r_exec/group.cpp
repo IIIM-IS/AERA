@@ -835,21 +835,21 @@ void Group::inject_hlps(std::vector<View *> &views) {
     Atom a = (*view)->object_->code(0);
     switch (a.getDescriptor()) {
     case Atom::COMPOSITE_STATE: {
-      std::cout << Time::ToString_seconds(Now() - Utils::GetTimeReference()) << " -> cst " << (*view)->object_->get_oid() << std::endl;
       ipgm_views_[(*view)->get_oid()] = *view;
       CSTController *c = new CSTController(*view);
       (*view)->controller_ = c;
       c->set_secondary_host(get_secondary_group());
+      OUTPUT(CST_OUT) << Utils::RelativeTime(Now()) << " -> cst " << (*view)->object_->get_oid() << std::endl;
       break;
     }
     case Atom::MODEL: {
-      std::cout << Time::ToString_seconds(Now() - Utils::GetTimeReference()) << " -> mdl " << (*view)->object_->get_oid() << std::endl;
       ipgm_views_[(*view)->get_oid()] = *view;
       bool inject_in_secondary_group;
       MDLController *c = MDLController::New(*view, inject_in_secondary_group);
       (*view)->controller_ = c;
       if (inject_in_secondary_group)
         get_secondary_group()->inject_secondary_mdl_controller(*view);
+      OUTPUT(MDL_OUT) << Utils::RelativeTime(Now()) << " -> mdl " << (*view)->object_->get_oid() << std::endl;
       break;
     }
     }
