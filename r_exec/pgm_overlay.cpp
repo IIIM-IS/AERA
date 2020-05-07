@@ -481,6 +481,11 @@ bool InputLessPGMOverlay::inject_productions() {
       NotificationView *v = new NotificationView(getView()->get_host(), getView()->get_host()->get_ntf_grp(i), mk_rdx);
       _Mem::Get()->inject_notification(v, true);
     }
+
+#ifdef WITH_DEBUG_OID
+    std::cout << Utils::RelativeTime(Now()) << " PGMController(" << controller_->get_debug_oid() <<
+      ") -> mk.rdx " << mk_rdx->get_oid() << std::endl;
+#endif
   }
 
   return true;
