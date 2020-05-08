@@ -228,10 +228,18 @@
 * Does the compiler prevent redefining an object using the same name?
   ANSWER: No. See the pull request:
   DONE. Review/merge pull request to check redefined labels https://github.com/IIIM-IS/replicode/pull/83
-* YES. Can you switch to Visual Studio 2019.
+* YES. Can you switch to Visual Studio 2019?
+
+2020-05-07
+* Visualizer
+  * DONE. Add side window for query session.
+  * DONE. In console output, include the mk.rdx for program execution (inject).
+  * DONE. In console output, include controller OID for new mdl and cst.
+  * DONE. In console output, include the mk.rdx for the prediction.
 
 TODO
-* Visualizer: Add side window for query session.
+* Can we show mk_rdx_58 before the new model which is made from it?
+* Show the time job queue sorted by time.
 * Document methods, starting with those related to the simulator.
 * Update README.
 * Simple v1.1 program with two actions to achieve a goal. Does it simulate and choose only one?
