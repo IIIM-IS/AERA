@@ -201,7 +201,6 @@ public:
   }
 
   void add_objects(r_code::list<P<r_code::Code> > &objects); // called by the rMem.
-  void add_objects(const std::vector<r_code::Code*> &objects);
   void add_objects(r_code::list<P<r_code::Code> > &objects, std::vector<r_code::SysObject *> &imported_objects); // called by any r_exec code for decompiling on the fly.
 
   template<class I> I *serialize() {

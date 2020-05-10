@@ -492,15 +492,6 @@ void Image::add_objects(r_code::list<P<r_code::Code> > &objects) {
   build_references();
 }
 
-void Image::add_objects(const std::vector<r_code::Code*> &objects) {
-  for (auto o = objects.begin(); o != objects.end(); ++o) {
-    if (!(*o)->is_invalidated())
-      add_object(*o);
-  }
-
-  build_references();
-}
-
 void Image::add_objects(r_code::list<P<r_code::Code> > &objects, std::vector<SysObject *> &imported_objects) {
 
   r_code::list<P<r_code::Code> >::const_iterator o;
