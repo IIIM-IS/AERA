@@ -480,12 +480,12 @@ void Image::add_sys_object(SysObject *object) {
   map_offset_ += object->get_size();
 }
 
-void Image::add_objects(r_code::list<P<r_code::Code> > &objects) {
+void Image::add_objects(r_code::list<P<r_code::Code> > &objects, bool include_invalidated) {
 
   r_code::list<P<r_code::Code> >::const_iterator o;
   for (o = objects.begin(); o != objects.end(); ++o) {
 
-    if (!(*o)->is_invalidated())
+    if (include_invalidated || !(*o)->is_invalidated())
       add_object(*o);
   }
 

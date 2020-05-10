@@ -200,7 +200,14 @@ public:
     unpack_objects(ram_objects);
   }
 
-  void add_objects(r_code::list<P<r_code::Code> > &objects); // called by the rMem.
+  /**
+   * Add all the objects to this Image. (Called by the rMem.)
+   * \param objects The list of objects to add.
+   * \param include_invalidated (optional) If true add all the objects, if false only
+   * add object o if not o->is_invalidated(). If omitted, don't include invalidated.
+   */
+  void add_objects(r_code::list<P<r_code::Code> > &objects, bool include_invalidated = false);
+
   void add_objects(r_code::list<P<r_code::Code> > &objects, std::vector<r_code::SysObject *> &imported_objects); // called by any r_exec code for decompiling on the fly.
 
   template<class I> I *serialize() {
