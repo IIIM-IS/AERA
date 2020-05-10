@@ -339,7 +339,7 @@ public:
   r_code::Code *clone(r_code::Code *original) const; // shallow copy.
 
   // External device I/O ////////////////////////////////////////////////////////////////
-  virtual r_comp::Image *get_objects() = 0; // create an image; fill with all objects; call only when stopped.
+  virtual r_comp::Image *get_objects(bool include_invalidated = false) = 0; // create an image; fill with all objects; call only when stopped.
   r_comp::Image *get_models(); // create an image; fill with all models; call only when stopped.
 
   /// <summary>
@@ -407,8 +407,8 @@ public:
   virtual ~MemStatic();
 
   void delete_object(r_code::Code *object); // erase the object from objects if needed.
-
-  r_comp::Image *get_objects(); // return an image containing valid objects.
+  // return an image containing valid objects, or all objects if include_invalidated.
+  r_comp::Image *get_objects(bool include_invalidated = false);
 };
 
 // _Mem that does not store objects.
@@ -426,7 +426,7 @@ public:
 
   void delete_object(r_code::Code *object) {}
 
-  r_comp::Image *get_objects() { return NULL; }
+  r_comp::Image *get_objects(bool include_invalidated = false) { return NULL; }
 };
 
 // O is the class of the objects held by the rMem (except groups and notifications):

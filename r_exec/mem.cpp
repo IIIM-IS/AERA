@@ -1263,13 +1263,13 @@ void MemStatic::delete_object(r_code::Code *object) { // called only if the obje
   objectsCS_.leave();
 }
 
-r_comp::Image *MemStatic::get_objects() {
+r_comp::Image *MemStatic::get_objects(bool include_invalidated) {
 
   r_comp::Image *image = new r_comp::Image();
   image->timestamp_ = Now();
 
   objectsCS_.enter();
-  image->add_objects(objects_);
+  image->add_objects(objects_, include_invalidated);
   objectsCS_.leave();
 
   return image;
