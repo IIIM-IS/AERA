@@ -76,17 +76,19 @@ Debug
   Resilience
     ntf_mk_resilience: in upr (i.e. relative to the ntf group).
     goal_pred_success_resilience: in upr (i.e. relative to the ntf group).
-  Image
-    get_image: yes or no; the image will contain all valid objects after the Mem shuts down.
-    decompile_image: yes or no.
+  Objects
+    get_objects: yes or no; the image will contain all valid objects after the Mem shuts down.
+    decompile_objects: yes or no.
     decompile_to_file: yes or no.
+    decompilation_file_path: The path of the decompiled output file if decompile_to_file is yes
     ignore_named_objects: yes or no; if yes, objects provided by the deveoper are not decompiled.
-    write_image: yes or no.
+    write_objects: yes or no.
+    objects_path: The path of the image file if write_objects is yes.
     test_objects: yes or no (yes: reads back and decompiles).
 Run
   run_time: in ms.
   probe_level: any probe set to a level >= this level will not be executed. 0 means no probe will be executed.
   enable_assumptions: yes or no to enable injecting assumptions.
   Models
-    same as for Debug/Image.
+    same as for Debug/Objects.
 -->
