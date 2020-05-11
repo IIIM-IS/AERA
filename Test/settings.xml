@@ -82,7 +82,7 @@ Debug
     decompile_to_file: yes or no.
     ignore_named_objects: yes or no; if yes, objects provided by the deveoper are not decompiled.
     write_image: yes or no.
-    test_image: yes or no (yes: reads back and decompiles).
+    test_objects: yes or no (yes: reads back and decompiles).
 Run
   run_time: in ms.
   probe_level: any probe set to a level >= this level will not be executed. 0 means no probe will be executed.
