@@ -231,14 +231,35 @@
 * YES. Can you switch to Visual Studio 2019?
 
 2020-05-07
-* Visualizer
-  * DONE. Add side window for query session.
+* Replicode
   * DONE. In console output, include the mk.rdx for program execution (inject).
   * DONE. In console output, include controller OID for new mdl and cst.
   * DONE. In console output, include the mk.rdx for the prediction.
+* Visualizer
+  * DONE. Add side window for query session. (Solves problem of fact before prediction.)
+
+2020-05-14
+* Replicode
+  * DONE. In console output, log when storing an object in the cst overlay.
+  * DONE. Talk about "Exposed values" for second set in imdl. Change in Replicode language spec?
+* Visualizer
+  * DONE. Show events at the same timestamp all at once.
+  * DONE. Only show program reductions as an explanation for program outputs.
+  * DONE. If a template arguments is assigned elsewhere and ignored, change it to a wildcard in Visualizer.
 
 TODO
-* Can we show mk_rdx_58 before the new model which is made from it?
+* Gotchas: If a model's guards assigns a variable, the one passed in is ignored.
+* When highlighting the RHS orange, include the fact and timestamps.
+* Always make LHS red and RHS green.
+* Add dotted vertical lines and clearly separate the scene into sampling periods.
+* Put an outbound arrowhead at the beginning of arrows.
+* Don't show a fact until the view activates it.
+* Creation timestamp in gray at upper-right.
+* Use the term "frame" for our 100ms interval.
+* Split scene into three panels with externally-generated facts, in-memory objects, and "timeless" models/cst.
+* In prediction item, use "Hide iModel", and change "Original Model" to "Show Model"
+* Updated PR #85. Add settings flag keep_invalidated_object.
+  * Review/merge pull request for option to keep invalidated objects https://github.com/IIIM-IS/replicode/pull/85
 * Show the time job queue sorted by time.
 * Document methods, starting with those related to the simulator.
 * Update README.
