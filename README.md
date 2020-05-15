@@ -59,4 +59,4 @@ This is a list of unintuitive issues with using Replicode, to help new users.
   Such a goal abduced from a mdl is put in primary, so the program must be instantiated in primary.
   [Maybe not in primary. Need to understand how simulated goals are committed, and to which group.]
 * Prediction failures may come from false assumptions. In settings.xml, try enable_assumptions="no".
-* Objects with a short resilience aren't in decompiled_objects.txt. In settings.xml, lower run_time to when it was made.
+* Objects with a short resilience aren't in decompiled_objects.txt. In settings.xml, try `keep_invalidated_objects=yes` .
