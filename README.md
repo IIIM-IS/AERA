@@ -48,12 +48,12 @@ This is a list of unintuitive issues with using Replicode, to help new users.
   omitted from the definitions in there. But it must be included when you write code.
 * "icmd" means "internal command", not "instantiated command" (like "imdl" for "instantiated model").
 * imdl set of exposed values doesn't have LHS fact timestamps. See: HLPBindingMap::build_f_ihlp:1037
-* If a model's guard assigns a variable, the one passed in is ignored.
+* If a model's guard assigns a variable, the value passed in with the same template variable is ignored.
 * The timestamps of facts defined at the top level automatically have the start time added.
 * min_sim_time_horizon is really "time allowance for the simulated predictions".
 * Need CSTController::inject_goal:462 new View resilience 9999 to keep goal commands until used.
 * OIDs are not in order of creation. (Only order of binding to a view.)
-* Program boolean "guards" are different than model assignment "guards".
+* Program "guards" which check boolean constraints are different than model "guards" which assign values to variables.
 * pong.2.simplified.replicode: Prediction is made after the actual fact.
 * For external cmd, need a program to intercept (fact (goal (fact (cmd ...)))) and eject the cmd.
   Such a goal abduced from a mdl is put in primary, so the program must be instantiated in primary.
