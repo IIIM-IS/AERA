@@ -49,14 +49,14 @@ This is a list of unintuitive issues with using Replicode, to help new users.
 * "icmd" means "internal command", not "instantiated command" (like "imdl" for "instantiated model").
 * imdl set of exposed values doesn't have LHS fact timestamps. See: HLPBindingMap::build_f_ihlp:1037
 * If a model's guard assigns a variable, the value passed in with the same template variable is ignored.
-* The timestamps of facts defined at the top level automatically have the start time added.
+* The timestamps of facts defined at the top level automatically have the start time added (and subtracted in `decompiled_objects.txt`).
 * min_sim_time_horizon is really "time allowance for the simulated predictions".
-* Need CSTController::inject_goal:462 new View resilience 9999 to keep goal commands until used.
+* Need CSTController::inject_goal:461 new View resilience 9999 to keep goal commands until used.
 * OIDs are not in order of creation. (Only order of binding to a view.)
 * Program "guards" which check boolean constraints are different than model "guards" which assign values to variables.
-* pong.2.simplified.replicode: Prediction is made after the actual fact.
+* `pong.2.simplified.replicode`: Prediction is made after the actual fact is injected. (But the prediction doesn't look at it.)
 * For external cmd, need a program to intercept (fact (goal (fact (cmd ...)))) and eject the cmd.
   Such a goal abduced from a mdl is put in primary, so the program must be instantiated in primary.
   [Maybe not in primary. Need to understand how simulated goals are committed, and to which group.]
-* Prediction failures may come from false assumptions. In settings.xml, try enable_assumptions="no".
-* Objects with a short resilience aren't in decompiled_objects.txt. In settings.xml, try `keep_invalidated_objects=yes` .
+* Prediction failures may come from false assumptions. In `settings.xml`, try `enable_assumptions="no"` .
+* Objects with a short resilience aren't in `decompiled_objects.txt`. In `settings.xml`, try `keep_invalidated_objects=yes` .
