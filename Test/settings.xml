@@ -30,6 +30,7 @@
     />
     <Objects
       get_objects="yes"
+      keep_invalidated_objects="no"
       decompile_objects="yes"
       decompile_to_file="yes"
       decompilation_file_path="decompiled_objects.txt"
@@ -77,7 +78,12 @@ Debug
     ntf_mk_resilience: in upr (i.e. relative to the ntf group).
     goal_pred_success_resilience: in upr (i.e. relative to the ntf group).
   Objects
-    get_objects: yes or no; the image will contain all valid objects after the Mem shuts down.
+    get_objects: yes or no.
+      If yes, then after the Mem shuts down the image will contain all valid objects, or all valid and invalid
+        objects if keep_invalidated_objects is also yes.
+      If no, ignore the rest of this section.
+    keep_invalidated_objects: yes or no; if yes, the image will contain all valid and invalidated objects after 
+      the Mem shuts down. Use with caution: Invalidated objects are not deleted at run-time, which can consume memory.
     decompile_objects: yes or no.
     decompile_to_file: yes or no.
     decompilation_file_path: The path of the decompiled output file if decompile_to_file is yes

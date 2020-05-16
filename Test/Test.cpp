@@ -347,7 +347,8 @@ int32 main(int argc, char **argv) {
       settings.goal_pred_success_resilience_,
       settings.probe_level_,
       settings.trace_levels_,
-      settings.enable_assumptions_);
+      settings.enable_assumptions_,
+      settings.keep_invalidated_objects_);
 
     uint32 stdin_oid;
     std::string stdin_symbol("stdin");
@@ -392,7 +393,7 @@ int32 main(int argc, char **argv) {
     if (settings.get_objects_) {
       //TimeProbe probe;
       //probe.set();
-      image = mem->get_objects();
+      image = mem->get_objects(settings.keep_invalidated_objects_);
       //probe.check();
       image->object_names_.symbols_ = r_exec::Seed.object_names_.symbols_;
 
