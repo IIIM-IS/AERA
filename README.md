@@ -49,7 +49,8 @@ This is a list of unintuitive issues with using Replicode, to help new users.
 * "icmd" means "internal command", not "instantiated command" (like "imdl" for "instantiated model").
 * imdl set of exposed values doesn't have LHS fact timestamps. See: HLPBindingMap::build_f_ihlp:1037
 * If a model's guard assigns a variable, the value passed in with the same template variable is ignored.
-* The timestamps of facts defined at the top level automatically have the start time added (and subtracted in `decompiled_objects.txt`).
+* The timestamps of facts defined at the top level automatically have the start time added for run time 
+  (and subtracted after run time for `decompiled_objects.txt`).
 * min_sim_time_horizon is really "time allowance for the simulated predictions".
 * Need CSTController::inject_goal:461 new View resilience 9999 to keep goal commands until used.
 * OIDs are not in order of creation. (Only order of binding to a view.)
