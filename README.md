@@ -55,7 +55,8 @@ This is a list of unintuitive issues with using Replicode, to help new users.
 * Need CSTController::inject_goal:461 new View resilience 9999 to keep goal commands until used.
 * OIDs are not in order of creation. (Only order of binding to a view.)
 * Program "guards" which check boolean constraints are different than model "guards" which assign values to variables.
-* `pong.2.simplified.replicode`: Prediction is made after the actual fact is injected. (But the prediction doesn't look at it.)
+* `pong.2.simplified.replicode`: Prediction is made after the actual fact is injected. (But the prediction doesn't look at it,
+  and the prediction check uses the output of auto focus which correctly doesn't appear until the next frame.)
 * For external cmd, need a program to intercept (fact (goal (fact (cmd ...)))) and eject the cmd.
   Such a goal abduced from a mdl is put in primary, so the program must be instantiated in primary.
   [Maybe not in primary. Need to understand how simulated goals are committed, and to which group.]
