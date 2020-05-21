@@ -133,7 +133,7 @@ Overlay *PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController
     Overlay *o;
     Fact *f_imdl = ((MDLController *)controller_)->get_f_ihlp(bm, false);
     RequirementsPair r_p;
-    Fact *ground = f_p_f_imdl;
+    Fact *ground = f_p_f_imdl; // JTNote: retrieve_imdl_fwd assigns ground, so this assignment is not used.
     bool wr_enabled;
     bool stop = (req_controller != NULL);
     ChainingStatus c_s = ((MDLController *)controller_)->retrieve_imdl_fwd(bm, f_imdl, r_p, ground, req_controller, wr_enabled);
@@ -172,7 +172,7 @@ Overlay *PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController
       }
     case WEAK_REQUIREMENT_ENABLED:
       if (evaluate_fwd_guards()) { // may update bindings.
-//std::cout<<" match\n";
+        // JTNote: The prediction is made from the bindings that made f_imdl, but it is not used directly.
         f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
         ((PrimaryMDLController *)controller_)->predict(bindings_, input, f_imdl, c_a, r_p, ground);
         o = this;
@@ -698,7 +698,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
   if (!sr_count) { // no strong req., some weak req.: true if there is one f->imdl complying with timings and bindings.
 
     wr_enabled = false;
-
+    // JTNote: We set ground = NULL above, so this is never true.
     if (ground != NULL) { // an imdl triggered the reduction of the cache.
 
       r_p.first.controllers.push_back(req_controller);
@@ -1914,15 +1914,11 @@ void PrimaryMDLController::register_pred_outcome(Fact *f_pred, bool success, _Fa
   Success *success_object = new Success(f_pred, f_evidence, 1);
   Code *f_success_object;
   auto now = Now();
-  if (success) {
-
+  // We print the result to the output below, after injecting f_success_object to get its OID.
+  if (success)
     f_success_object = new Fact(success_object, now, now, confidence, 1);
-    OUTPUT(PRED_MON) << Utils::RelativeTime(now) << " fact " << evidence->get_oid() << " -> fact " << f_pred->get_oid() << " pred success" << std::endl;
-  } else {
-
+  else
     f_success_object = new AntiFact(success_object, now, now, confidence, 1);
-    OUTPUT(PRED_MON) << Utils::RelativeTime(now) << " fact " << f_pred->get_oid() << " pred failure" << std::endl;
-  }
 
   Group *primary_host = get_host();
   uint16 out_group_count = get_out_group_count();
@@ -1939,6 +1935,13 @@ void PrimaryMDLController::register_pred_outcome(Fact *f_pred, bool success, _Fa
       _Mem::Get()->inject(view);
     }
   }
+
+  if (success)
+    OUTPUT_LINE(PRED_MON, Utils::RelativeTime(now) << " fact " << evidence->get_oid() << " -> fact " <<
+      f_success_object->get_oid() << " success fact " << f_pred->get_oid() << " pred");
+  else
+    OUTPUT_LINE(PRED_MON, Utils::RelativeTime(now) << " |fact " << f_success_object->get_oid() <<
+    " fact " << f_pred->get_oid() << " pred failure");
 }
 
 void PrimaryMDLController::register_req_outcome(Fact *f_pred, bool success, bool rate_failures) {
