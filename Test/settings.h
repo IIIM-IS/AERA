@@ -114,6 +114,7 @@ public:
   core::uint32 debug_windows_;
   core::uint32 trace_levels_;
   bool get_objects_;
+  bool keep_invalidated_objects_;
   bool decompile_objects_;
   bool decompile_to_file_;
   std::string decompilation_file_path_;
@@ -232,6 +233,7 @@ public:
       if (!!objects) {
 
         const char *get_objects = objects.getAttribute("get_objects");
+        const char *keep_invalidated_objects = objects.getAttribute("keep_invalidated_objects");
         const char *decompile_objects = objects.getAttribute("decompile_objects");
         const char *decompile_to_file = objects.getAttribute("decompile_to_file");
         decompilation_file_path_ = objects.getAttribute("decompilation_file_path");
@@ -240,6 +242,7 @@ public:
         const char *test_objects = objects.getAttribute("test_objects");
 
         get_objects_ = (strcmp(get_objects, "yes") == 0);
+        keep_invalidated_objects_ = (strcmp(keep_invalidated_objects, "yes") == 0);
         decompile_objects_ = (strcmp(decompile_objects, "yes") == 0);
         decompile_to_file_ = (strcmp(decompile_to_file, "yes") == 0);
         ignore_named_objects_ = (strcmp(ignore_named_objects, "yes") == 0);

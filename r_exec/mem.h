@@ -137,6 +137,7 @@ protected:
   bool debug_;
   uint32 ntf_mk_res_;
   uint32 goal_pred_success_res_;
+  bool keep_invalidated_objects_;
 
   // Parameters::Run.
   uint32 probe_level_;
@@ -219,7 +220,8 @@ public:
     uint32 goal_pred_success_res,
     uint32 probe_level,
     uint32 traces,
-    bool enable_assumptions);
+    bool enable_assumptions,
+    bool keep_invalidated_objects);
 
   uint64 get_probe_level() const { return probe_level_; }
   bool get_enable_assumptions() const { return enable_assumptions_; }
