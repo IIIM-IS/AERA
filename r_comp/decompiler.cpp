@@ -76,6 +76,7 @@
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
 #include <algorithm>
+#include <regex>
 #include "decompiler.h"
 #include "../submodules/CoreLibrary/CoreLibrary/utils.h"
 
@@ -235,6 +236,7 @@ uint32 Decompiler::decompile_references(r_comp::Image *image) {
     }
   }
 
+  regex verticalBarRegex("\\|");
   // Second pass: Create names for the remaining objects, making sure they are unique.
   for (uint16 i = 0; i < image->code_segment_.objects_.size(); ++i) {
     SysObject *sys_object = (SysObject *)image->code_segment_.objects_[i];
@@ -248,6 +250,10 @@ uint32 Decompiler::decompile_references(r_comp::Image *image) {
     string className = c->str_opcode;
     // A class name like mk.val has a dot, but this isn't allowed as an identifier.
     replace(className.begin(), className.end(), '.', '_');
+    // A class name like |fact has a bar, but this isn't allowed as an identifier.
+    // (Use regex_replace because it can handle multi-character strings.)
+    className = regex_replace(className, verticalBarRegex, "anti_");
+
     if (sys_object->oid_ != UNDEFINED_OID)
       // Use the object's OID.
       s = className + "_" + std::to_string(sys_object->oid_);
