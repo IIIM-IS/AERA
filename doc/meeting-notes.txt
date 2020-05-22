@@ -247,19 +247,34 @@
   * DONE. Only show program reductions as an explanation for program outputs.
   * DONE. If a template arguments is assigned elsewhere and ignored, change it to a wildcard in Visualizer.
 
+2020-05-22
+* Replicode
+  * DONE. Gotchas: If a model's guard assigns a variable, the one passed in is ignored.
+  * DONE. Moved Gotchas to the README. https://github.com/IIIM-IS/replicode/blob/master/README.md#Gotchas
+  * DONE. Review/merge pull request for keep_invalidated_objects https://github.com/IIIM-IS/replicode/pull/85
+  * DONE. Review/merge pull request to change | to anti_ in labels https://github.com/IIIM-IS/replicode/pull/86
+  * DONE. For success, output the fact success OID:
+    0s:300ms:0us fact 75 -> fact 79 success fact 60 pred
+* Visualizer
+  * DONE. In prediction item, use "Hide iModel", and change "Original Model" to "Show Model"
+  * DONE. Put an outbound arrowhead at the beginning of arrows.
+  * DONE. Add creation timestamp in gray at upper-right.
+  * DONE. Always highlight the LHS red and the RHS green. Include the timestamps.
+  * DONE. Add dotted vertical lines and clearly separate the scene into frames.
+  * DONE. Don't show a fact until the view activates it.
+    For now, only showing auto focus output which correctly appears in the next frame
+    (and after the prediction is made).
+  
 TODO
-* Gotchas: If a model's guards assigns a variable, the one passed in is ignored.
-* When highlighting the RHS orange, include the fact and timestamps.
-* Always make LHS red and RHS green.
-* Add dotted vertical lines and clearly separate the scene into sampling periods.
-* Put an outbound arrowhead at the beginning of arrows.
-* Don't show a fact until the view activates it.
-* Creation timestamp in gray at upper-right.
-* Use the term "frame" for our 100ms interval.
-* Split scene into three panels with externally-generated facts, in-memory objects, and "timeless" models/cst.
-* In prediction item, use "Hide iModel", and change "Original Model" to "Show Model"
-* Updated PR #85. Add settings flag keep_invalidated_object.
-  * Review/merge pull request for option to keep invalidated objects https://github.com/IIIM-IS/replicode/pull/85
+* For new item, change blink color to green.
+* On hover, instead of blinking, change just change the color to blue.
+* Make auto focus of same mk.val line up horizontally.
+* View menu: Check boxes for types of items to show.
+* When the visualizer starts, show a dialog to select the replicode output files (with defaults).
+* STARTED. Split scene into panels with in-memory objects, and "timeless" models/cst.
+* Split scene to put injected facts at the top.
+  * Replace Program Output item with a dot and fact_xxx in the injected/ejected facts panel.
+* Try Visualizer with pong.2.goal. 
 * Show the time job queue sorted by time.
 * Document methods, starting with those related to the simulator.
 * Update README.
