@@ -486,7 +486,7 @@ void Image::add_objects(r_code::list<P<r_code::Code> > &objects, bool include_in
   for (o = objects.begin(); o != objects.end(); ++o) {
 
     if (include_invalidated || !(*o)->is_invalidated())
-      add_object(*o);
+      add_object(*o, include_invalidated);
   }
 
   build_references();
@@ -513,7 +513,7 @@ inline uint32 Image::get_reference_count(const Code *object) const {
   }
 }
 
-void Image::add_object(Code *object) {
+void Image::add_object(Code *object, bool include_invalidated) {
 
   UNORDERED_MAP<Code *, uint16>::iterator it = ptrs_to_indices_.find(object);
   if (it != ptrs_to_indices_.end()) // object already there.
@@ -524,9 +524,9 @@ void Image::add_object(Code *object) {
   for (uint16 i = 0; i < reference_count; ++i) { // follow reference pointers and recurse.
 
     Code *reference = object->get_reference(i);
-    if (reference->get_oid() == UNDEFINED_OID ||
+    if (include_invalidated || reference->get_oid() == UNDEFINED_OID ||
       reference->is_invalidated()) // the referenced object is not in the image and will not be added otherwise.
-      add_object(reference);
+      add_object(reference, include_invalidated);
   }
 
   uint16 object_index;

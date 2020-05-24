@@ -170,7 +170,7 @@ private:
   uint32 map_offset_;
   UNORDERED_MAP<r_code::Code *, uint16> ptrs_to_indices_; // used for injection in memory.
 
-  void add_object(r_code::Code *object);
+  void add_object(r_code::Code *object, bool include_invalidated);
   r_code::SysObject *add_object(r_code::Code *object, std::vector<r_code::SysObject *> &imported_objects);
   uint32 get_reference_count(const r_code::Code *object) const;
   void build_references();
