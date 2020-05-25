@@ -559,8 +559,8 @@ void Decompiler::write_hlp(uint16 read_index) {
         // Put a colon after variables for template arguments and the facts.
         hlp_postfix_ = true;
       bool save_horizontal_set = horizontal_set_;
-      if (i == 0)
-        // Write the set of template arguments horizontally.
+      if (i == 0 || i == 4)
+        // Write the set of template arguments and set of output groups horizontally.
         horizontal_set_ = true;
       write_any(++read_index, after_tail_wildcard, false);
       hlp_postfix_ = false;
