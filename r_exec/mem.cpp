@@ -196,6 +196,7 @@ void _Mem::init(microseconds base_period,
   for (uint32 i = 0; i < DebugStreamCount; ++i) {
 
     if (traces & mask)
+      // NULL means Output() will use cout . 
       debug_streams_[i] = NULL;
     else
       debug_streams_[i] = new NullOStream();
@@ -737,6 +738,14 @@ void _Mem::inject_new_object(View *view) {
     //timings_report.push_back(t2-t0);
     break;
   }
+}
+
+void _Mem::injectFromEnvironment(View *view) {
+  // Inject first to set the OID.
+  inject(view);
+  // The view injection time may be different than now, so log it too.
+  OUTPUT_LINE(ENVIRONMENT_INJ_EJT, Utils::RelativeTime(Now()) << " environment inject " <<
+    view->object_->get_oid() << ", ijt " << Utils::RelativeTime(view->get_ijt()));
 }
 
 void _Mem::inject(View *view) {

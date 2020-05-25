@@ -184,7 +184,7 @@ protected:
 
   bool deleted_;
 
-  static const uint32 DebugStreamCount = 8;
+  static const uint32 DebugStreamCount = 9;
   ostream *debug_streams_[DebugStreamCount];
 
   _Mem();
@@ -290,6 +290,13 @@ public:
   P<TimeJob> popTimeJob(bool waitForItem = true);
   void pushTimeJob(TimeJob *j);
 
+  /**
+   * This is called from the external environment to call the normal inject(view), then 
+   * log the injection event.
+   * \param view The View for inject(view).
+   */
+  void injectFromEnvironment(View *view);
+
   // Called upon successful reduction.
   void inject(View *view);
   void inject_async(View *view);
@@ -358,6 +365,7 @@ public:
   /// <summary>
   /// The TraceLevel enum defines bit positions for the "trace_levels" parameter
   /// for "Debug" in settings.xml.
+  /// The number of bits should match DebugStreamCount.
   /// </summary>
   typedef enum {
     CST_IN = 0,
@@ -367,7 +375,8 @@ public:
     PRED_MON = 4,
     GOAL_MON = 5,
     MDL_REV = 6,
-    HLP_INJ = 7
+    HLP_INJ = 7,
+    ENVIRONMENT_INJ_EJT = 8
   }TraceLevel;
   /// <summary>
   /// Get the output stream for the trace level.
