@@ -464,6 +464,8 @@ bool InputLessPGMOverlay::inject_productions() {
       Code *fact = new Fact(command, now, now + Utils::GetBasePeriod(), 1, 1);
       View *view = new View(View::SYNC_ONCE, now, 1, 1, _Mem::Get()->get_stdin(), getView()->get_host(), fact); // SYNC_ONCE, sln=1, res=1,
       _Mem::Get()->inject(view);
+      OUTPUT_LINE(ENVIRONMENT_INJ_EJT, Utils::RelativeTime(Now()) << " environment eject " <<
+        fact->get_oid());
 
       if (mk_rdx) {
 
