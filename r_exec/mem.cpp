@@ -120,7 +120,8 @@ _Mem::_Mem() : r_code::Mem(),
   stop_sem_(0),
   stdin_(0),
   stdout_(0),
-  self_(0)
+  self_(0),
+  defaultDebugStream_(&std::cout)
 {
 
   new ModelBase();
@@ -196,7 +197,7 @@ void _Mem::init(microseconds base_period,
   for (uint32 i = 0; i < DebugStreamCount; ++i) {
 
     if (traces & mask)
-      // NULL means Output() will use cout . 
+      // NULL means Output() will use defaultDebugStream_ . 
       debug_streams_[i] = NULL;
     else
       debug_streams_[i] = new NullOStream();
@@ -206,7 +207,8 @@ void _Mem::init(microseconds base_period,
 
 std::ostream &_Mem::Output(TraceLevel l) {
 
-  return (_Mem::Get()->debug_streams_[l] == NULL ? std::cout : *(_Mem::Get()->debug_streams_[l]));
+  return (_Mem::Get()->debug_streams_[l] == NULL ? 
+    *_Mem::Get()->defaultDebugStream_ : *(_Mem::Get()->debug_streams_[l]));
 }
 
 void _Mem::reset() {

@@ -186,6 +186,9 @@ protected:
 
   static const uint32 DebugStreamCount = 9;
   ostream *debug_streams_[DebugStreamCount];
+  // Use defaultDebugStream_ if debug_streams_[i] is NULL. For no output,
+  // debug_streams_[i] will be set to new NullOStream().
+  ostream *defaultDebugStream_;
 
   _Mem();
 
@@ -378,11 +381,13 @@ public:
     HLP_INJ = 7,
     ENVIRONMENT_INJ_EJT = 8
   }TraceLevel;
+
   /// <summary>
-  /// Get the output stream for the trace level.
+  /// Get the output stream for the trace level based on (_Mem::Get()->debug_streams_[l].
+  /// If (_Mem::Get()->debug_streams_[l] is NULL, use defaultDebugStream_.
   /// </summary>
   /// <param name="l">The TraceLevel.</param>
-  /// <returns>A reference to the output stream, which may be a null stream
+  /// <returns>A reference to the output stream, which may be a NullOStream
   /// if the bit in settings.xml "trace_levels" was zero.</returns>
   static std::ostream &Output(TraceLevel l);
 };
