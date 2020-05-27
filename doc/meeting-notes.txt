@@ -265,16 +265,25 @@
     For now, only showing auto focus output which correctly appears in the next frame
     (and after the prediction is made).
   
+2020-05-27
+* Replicode
+  * DONE. Review/merge pull request for debug_stream_file_path https://github.com/IIIM-IS/replicode/pull/87
+  * DONE. Log inject and eject to the debug stream.
+* Visualizer
+  * DONE. Split scene into panels with in-memory objects, and "timeless" models/cst.
+  * DONE. For new items, change blink color to green.
+  * DONE. On hover, instead of blinking, change just change the color to blue.
+  * DONE. Use Visualizer with pong.2.goal. 
+  * DONE. Put injected facts and ejected commands at the top.
+  * DONE. Make auto focus of same mk.val line up horizontally.
+    This is hacked for this example. We need a more general layout algorithm.
+  * YES, OPTIONAL. Should draw an arrow from the auto focus fact to the injected fact?
+
 TODO
-* For new item, change blink color to green.
-* On hover, instead of blinking, change just change the color to blue.
-* Make auto focus of same mk.val line up horizontally.
 * View menu: Check boxes for types of items to show.
-* When the visualizer starts, show a dialog to select the replicode output files (with defaults).
-* STARTED. Split scene into panels with in-memory objects, and "timeless" models/cst.
-* Split scene to put injected facts at the top.
-  * Replace Program Output item with a dot and fact_xxx in the injected/ejected facts panel.
-* Try Visualizer with pong.2.goal. 
+* Optional arrows from auto focus to injected fact. Maybe only when hover.
+* When the visualizer starts, show a dialog to select the settings.xml file (with defaults).
+* Use uniform spacing for each frame, adjustable.
 * Show the time job queue sorted by time.
 * Document methods, starting with those related to the simulator.
 * Update README.
