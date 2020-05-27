@@ -284,6 +284,15 @@ int32 main(int argc, char **argv) {
   if (!settings.load(file_name))
     return 1;
 
+  ofstream debugStream;
+  if (settings.debug_stream_file_path_ != "") {
+    debugStream.open(settings.debug_stream_file_path_);
+    if (!debugStream.is_open()) {
+      std::cout << "Cannot open debug_stream_file_path \"" << settings.debug_stream_file_path_ << "\"" << std::endl;
+      return 2;
+    }
+  }
+
   std::cout << "> compiling ...\n";
   if (settings.reduction_core_count_ == 0 && settings.time_core_count_ == 0) {
     // Below, we will use runInDiagnosticTime.
@@ -323,6 +332,10 @@ int32 main(int argc, char **argv) {
       mem = new TestMem<r_exec::LObject, r_exec::MemStatic>();
     else
       mem = new TestMem<r_exec::LObject, r_exec::MemVolatile>();
+
+    if (debugStream.is_open())
+      // Use the debug stream from settings.xml.
+      mem->setDefaultDebugStream(&debugStream);
 
     r_code::vector<r_code::Code *> ram_objects;
     r_exec::Seed.get_objects(mem, ram_objects);
