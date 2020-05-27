@@ -383,6 +383,14 @@ public:
   }TraceLevel;
 
   /**
+   * Set the debug debug stream which Output returns when a trace level is NULL.
+   * \param defaultDebugStream The stream.
+   */
+  void setDefaultDebugStream(std::ostream *defaultDebugStream) {
+    defaultDebugStream_ = defaultDebugStream;
+  }
+
+  /**
    * Get the output stream for the trace level based on (_Mem::Get()->debug_streams_[l].
    * If (_Mem::Get()->debug_streams_[l] is NULL, use defaultDebugStream_.
    * \param l The TraceLevel.
