@@ -23,7 +23,7 @@
     primary_thz="3600000"
     secondary_thz="7200000"
   />
-  <Debug debug="yes" debug_windows="1" trace_levels="FFFF"> <!--FFFF sets all Debug Streams to the std::cout-->
+  <Debug debug="yes" debug_windows="1" debug_stream_file_path="" trace_levels="FFFF">
     <Resilience
       ntf_mk_resilience="1"
       goal_pred_success_resilience="1000"
@@ -73,7 +73,11 @@ System
   primary_thz: time after which states/models that did not match are pushed down to secondary group (models) or sent to oblivion (states); in seconds.
   secondary_thz: time after which states/models that did not match are sent to oblivion; in seconds.
 Debug
-  trace_levels: ORed values (numbers indicate the location from right to left): 0:cst inputs, 1: cst outputs, 2: mdl inputs, 3: mdl outputs, 4 prediction monitoring, 5: goal monitoring, 6: model revision, 7:mdl/cst injections, 8: environment injections/ejections. ex: 3 means cst inputs and cst outputs, ignore others.
+  debug_windows: The number of debug windows to show created models. (Not to be confused with the debug stream below.)
+  debug_stream_file_path: The file path for the debug stream of the trace_levels selected below. If "" then use std::cout.
+  trace_levels: Hexadecimal ORed values of traces for the debug stream (numbers indicate the location from right to left): 
+    0: cst inputs, 1: cst outputs, 2: mdl inputs, 3: mdl outputs, 4 prediction monitoring, 5: goal monitoring, 6: model revision, 7:mdl/cst injections, 8: environment injections/ejections.
+    e.g.: 3 means cst inputs and cst outputs, ignore others. FFFF enables all trace levels.
   Resilience
     ntf_mk_resilience: in upr (i.e. relative to the ntf group).
     goal_pred_success_resilience: in upr (i.e. relative to the ntf group).
