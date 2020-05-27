@@ -56,7 +56,7 @@ start:(pgm |[] |[] |[] []
    (cmd set_speed_y [b 0.0001] 1)
 1) |[]
 
-istart:(ipgm start |[] RUN_ONCE sampling_period VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+istart:(ipgm start |[] RUN_ONCE sampling_period VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
 
 ; Run once to inject the drive that will abduce a goal to set a new speed.
 pgm_set_speed:(pgm
