@@ -111,11 +111,10 @@ public:
   virtual bool contains(const Atom *s) const { return false; }
   virtual bool contains(const r_code::Code *o) const { return false; }
 
-  /// <summary>
-  /// Return the trace of the value as a string by creating a temporary Code
-  /// object and calling valuate(). For debugging purposes only(can be inefficient).
-  /// </summary>
-  /// <returns></returns>
+  /**
+   * Return the trace of the value as a string by creating a temporary Code
+   * object and calling valuate(). For debugging purposes only(can be inefficient).
+   */
   std::string traceString() const {
     P<LObject> code = new LObject();
     uint16 extent_index = 1;

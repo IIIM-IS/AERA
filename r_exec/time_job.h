@@ -95,9 +95,9 @@ public:
   virtual void report(std::chrono::microseconds lag) const;
   uint32 get_job_id() { return job_id_; }
 
-  /// <summary>
-  /// Compare P<TimeJob> based only on target_time_.
-  /// </summary>
+  /**
+   * Compare P<TimeJob> based only on target_time_.
+   */
   class Compare {
   public:
     bool

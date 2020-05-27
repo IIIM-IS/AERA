@@ -95,16 +95,16 @@
 
 namespace r_exec {
 
-// The rMem.
-// Maintains 2 pipes of jobs (injection, update, etc.). each job is processed asynchronously by instances of ReductionCore and TimeCore.
-// Pipes and threads are created at starting time and deleted at stopping time.
-// Groups and IPGMControllers are cleared up when only held by jobs;
-// - when a group is not projected anywhere anymore, it is invalidated (it releases all its views) and when a job attempts an update, the latter is cancelled.
-// - when a reduction core attempts to perform a reduction for an ipgm-controller that is not projected anywhere anymore, the reduction is cancelled.
-// In addition:
-// - when an object is scheduled for injection and the target group does not exist anymore (or is invalidated), the injection is cancelled.
-// - when an object is scheduled for propagation of sln changes and has no view anymore, the operation is cancelled.
-// Main processing in _Mem::update().
+/** The rMem.
+ * Maintains 2 pipes of jobs (injection, update, etc.). each job is processed asynchronously by instances of ReductionCore and TimeCore.
+ * Pipes and threads are created at starting time and deleted at stopping time.
+ * Groups and IPGMControllers are cleared up when only held by jobs;
+ * - when a group is not projected anywhere anymore, it is invalidated (it releases all its views) and when a job attempts an update, the latter is cancelled.
+ * - when a reduction core attempts to perform a reduction for an ipgm-controller that is not projected anywhere anymore, the reduction is cancelled.
+ * In addition:
+ * - when an object is scheduled for injection and the target group does not exist anymore (or is invalidated), the injection is cancelled.
+ * - when an object is scheduled for propagation of sln changes and has no view anymore, the operation is cancelled.
+ */
 class r_exec_dll _Mem :
   public r_code::Mem {
 public:
@@ -185,10 +185,10 @@ protected:
   bool deleted_;
 
   static const uint32 DebugStreamCount = 9;
-  ostream *debug_streams_[DebugStreamCount];
+  std::ostream *debug_streams_[DebugStreamCount];
   // Use defaultDebugStream_ if debug_streams_[i] is NULL. For no output,
   // debug_streams_[i] will be set to new NullOStream().
-  ostream *defaultDebugStream_;
+  std::ostream *defaultDebugStream_;
 
   _Mem();
 
@@ -267,18 +267,18 @@ public:
                                                                                                                   // return false on error.
   Timestamp start(); // return the starting time.
 
-  /// <summary>
-  /// When reduction and core count == 0, start() does not start any core threads, 
-  /// so call this instead of Thread::Sleep(runTimeMilliseconds) to run in the current 
-  /// thread using "diagnostic time".As opposed to real time which uses Time::Get, 
-  /// diagnostic time uses getDiagnosticTimeNow() which simply returns DiagnosticTimeNow. 
-  /// (The main() function should call r_exec::Init where time_base is getDiagnosticTimeNow.) 
-  /// So, runInDiagnosticTime updates DiagnosticTimeNow based on the next time job(which always
-  /// runs on time).This way, the return value of Now() does not move with real time, but moves
-  /// step-by-step when DiagnosticTimeNow is updated, making it possible to set break points 
-  /// and diagnose the program.
-  /// </summary>
-  /// <param name="runTime">The number of milliseconds (in diagnostic time) to run for.</param>
+  /**
+   * When reduction and core count == 0, start() does not start any core threads,
+   * so call this instead of Thread::Sleep(runTimeMilliseconds) to run in the current
+   * thread using "diagnostic time".As opposed to real time which uses Time::Get,
+   * diagnostic time uses getDiagnosticTimeNow() which simply returns DiagnosticTimeNow.
+   * (The main() function should call r_exec::Init where time_base is getDiagnosticTimeNow.)
+   * So, runInDiagnosticTime updates DiagnosticTimeNow based on the next time job(which always
+   * runs on time).This way, the return value of Now() does not move with real time, but moves
+   * step-by-step when DiagnosticTimeNow is updated, making it possible to set break points
+   * and diagnose the program.
+   * \param runTime The number of milliseconds (in diagnostic time) to run for.
+   */
   void runInDiagnosticTime(std::chrono::milliseconds runTime);
   static Timestamp DiagnosticTimeNow_;
   static Timestamp getDiagnosticTimeNow();
@@ -354,22 +354,22 @@ public:
   virtual r_comp::Image *get_objects(bool include_invalidated = false) = 0; // create an image; fill with all objects; call only when stopped.
   r_comp::Image *get_models(); // create an image; fill with all models; call only when stopped.
 
-  /// <summary>
-  /// This is called on starting the executive to adjust the timestamps of all the initial 
-  /// user-supplied facts by adding now. Therefore, if a the initial fact is defined with a
-  /// timestamp of 100us, it is changed to now + 100us.
-  /// </summary>
-  /// <param name="now">The value to add to the timestamps of all the initial facts.</param>
-  /// <param name="objects">The list of objects to search for facts.</param>
+  /**
+   * This is called on starting the executive to adjust the timestamps of all the initial
+   * user-supplied facts by adding now. Therefore, if a the initial fact is defined with a
+   * timestamp of 100us, it is changed to now + 100us.
+   * \param now The value to add to the timestamps of all the initial facts.
+   * \param objects he list of objects to search for facts.
+   */
   static void init_timings(Timestamp now, const r_code::list<P<r_code::Code>>& objects);
 
   //std::vector<uint64> timings_report; // debug facility.
 
-  /// <summary>
-  /// The TraceLevel enum defines bit positions for the "trace_levels" parameter
-  /// for "Debug" in settings.xml.
-  /// The number of bits should match DebugStreamCount.
-  /// </summary>
+  /**
+   * The TraceLevel enum defines bit positions for the "trace_levels" parameter
+   * for "Debug" in settings.xml.
+   * The number of bits should match DebugStreamCount.
+   */
   typedef enum {
     CST_IN = 0,
     CST_OUT = 1,
@@ -382,31 +382,31 @@ public:
     ENVIRONMENT_INJ_EJT = 8
   }TraceLevel;
 
-  /// <summary>
-  /// Get the output stream for the trace level based on (_Mem::Get()->debug_streams_[l].
-  /// If (_Mem::Get()->debug_streams_[l] is NULL, use defaultDebugStream_.
-  /// </summary>
-  /// <param name="l">The TraceLevel.</param>
-  /// <returns>A reference to the output stream, which may be a NullOStream
-  /// if the bit in settings.xml "trace_levels" was zero.</returns>
+  /**
+   * Get the output stream for the trace level based on (_Mem::Get()->debug_streams_[l].
+   * If (_Mem::Get()->debug_streams_[l] is NULL, use defaultDebugStream_.
+   * \param l The TraceLevel.
+   * \return A reference to the output stream, which may be a NullOStream if the bit in 
+   * settings.xml "trace_levels" was zero.
+   */
   static std::ostream &Output(TraceLevel l);
 };
 
 // Note: This should match the definition in user.classes.replicode.
 const std::chrono::microseconds Mem_sampling_period_ = std::chrono::milliseconds(100);
 
-/// <summary>
-/// Call  _Mem::Output to get the output stream for the trace level.
-/// </summary>
+/**
+ * Call  _Mem::Output to get the output stream for the trace level.
+ */
 #define OUTPUT(level) _Mem::Output(_Mem::level)
 
-/// <summary>
-/// This similar to "OUTPUT(level) << vals << endl", where vals can be "x << y << z". Except
-/// that we first use an ostringstream to buffer the values plus the line terminator, and
-/// then send the entire string to the output stream and flush. Assuming that the output
-/// stream will output the entire string as a single operation, then when all threads use
-/// OUTPUT_LINE it will avoid scrambling output of individual values.
-/// </summary>
+/**
+ * This similar to "OUTPUT(level) << vals << endl", where vals can be "x << y << z". Except
+ * that we first use an ostringstream to buffer the values plus the line terminator, and
+ * then send the entire string to the output stream and flush. Assuming that the output
+ * stream will output the entire string as a single operation, then when all threads use
+ * OUTPUT_LINE it will avoid scrambling output of individual values.
+ */
 #define OUTPUT_LINE(level, vals) (OUTPUT(level) << (ostringstream() << vals << '\n').str()).flush()
 
 // _Mem that stores the objects as long as they are not invalidated.
@@ -445,12 +445,13 @@ public:
   r_comp::Image *get_objects(bool include_invalidated = false) { return NULL; }
 };
 
-// O is the class of the objects held by the rMem (except groups and notifications):
-//   r_exec::LObject if non distributed, or
-//   RObject (see the integration project) when network-aware.
-// Notification objects and groups are instances of r_exec::LObject (they are not network-aware).
-// Objects are built at reduction time as r_exec:LObjects and packed into instances of O when O is network-aware.
-// S is the super-class.
+/** O is the class of the objects held by the rMem (except groups and notifications):
+ *    r_exec::LObject if non distributed, or
+ *    RObject (see the integration project) when network-aware.
+ * Notification objects and groups are instances of r_exec::LObject (they are not network-aware).
+ * Objects are built at reduction time as r_exec:LObjects and packed into instances of O when O is network-aware.
+ * S is the super-class.
+ */
 template<class O, class S> class Mem :
   public S {
 public:
@@ -472,15 +473,8 @@ public:
   void inject(O *object, View *view);
 };
 
-/* DEPRECATED
-r_exec_dll r_exec::Mem<r_exec::LObject> *Run(const char *user_operator_library_path,
-                                            uint64 (*time_base)(),
-                                            const char *seed_path,
-                                            const char *source_file_name);*/
 }
 
-
 #include "mem.tpl.cpp"
-
 
 #endif

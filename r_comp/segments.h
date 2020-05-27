@@ -157,11 +157,11 @@ public:
   void read(word32 *data);
   uint32 get_size();
 
-  /// <summary>
-  /// Find the name in symbols_.
-  /// </summary>
-  /// <param name="name">The symbol name to search for.</param>
-  /// <returns>The OID, or UNDEFINED_OID if not found.</returns>
+  /**
+   * Find the name in symbols_.
+   * \param name The symbol name to search for.
+   * \return The OID, or UNDEFINED_OID if not found.
+   */
   uint32 findSymbol(const std::string& name);
 };
 
