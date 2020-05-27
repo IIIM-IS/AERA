@@ -184,7 +184,7 @@ protected:
 
   bool deleted_;
 
-  static const uint32 DebugStreamCount = 9;
+  static const uint32 DebugStreamCount = 10;
   std::ostream *debug_streams_[DebugStreamCount];
   // Use defaultDebugStream_ if debug_streams_[i] is NULL. For no output,
   // debug_streams_[i] will be set to new NullOStream().
@@ -379,7 +379,8 @@ public:
     GOAL_MON = 5,
     MDL_REV = 6,
     HLP_INJ = 7,
-    ENVIRONMENT_INJ_EJT = 8
+    ENVIRONMENT_INJ_EJT = 8,
+    AUTO_FOCUS = 9
   }TraceLevel;
 
   /**
