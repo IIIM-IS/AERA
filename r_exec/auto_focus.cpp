@@ -75,6 +75,7 @@
 //_/_/
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
+#include "mem.h"
 #include "auto_focus.h"
 #include "ast_controller.h"
 
@@ -226,13 +227,15 @@ inline View *AutoFocusController::inject_input(View *input) {
 
   if (trace_injections_) {
 
-    std::cout << Utils::RelativeTime(Now()) << " A/F -> " << input->object_->get_oid() << "|" << primary_view->object_->get_oid();
+    const char* syncString = "";
     switch (input->get_sync()) {
-    case View::SYNC_HOLD:std::cout << " (HOLD)"; break;
-    case View::SYNC_ONCE:std::cout << " (ONCE)"; break;
-    case View::SYNC_PERIODIC:std::cout << " (PERIODIC)"; break;
-    case View::SYNC_AXIOM:std::cout << " (AXIOM)"; break;
-    }std::cout << std::endl;
+    case View::SYNC_HOLD: syncString = "(HOLD)"; break;
+    case View::SYNC_ONCE: syncString = "(ONCE)"; break;
+    case View::SYNC_PERIODIC: syncString = "(PERIODIC)"; break;
+    case View::SYNC_AXIOM: syncString = "(AXIOM)"; break;
+    }
+    OUTPUT_LINE(AUTO_FOCUS, Utils::RelativeTime(Now()) << " A/F -> " << input->object_->get_oid() << "|" <<
+      primary_view->object_->get_oid() << " " << syncString);
   }
 
   return primary_view;
