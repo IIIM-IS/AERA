@@ -211,6 +211,10 @@ std::ostream &_Mem::Output(TraceLevel l) {
     *_Mem::Get()->defaultDebugStream_ : *(_Mem::Get()->debug_streams_[l]));
 }
 
+// This is declared at the r_exec namespace level in overlay.h, so that all headers
+// don't need to include mem.h.
+std::ostream &_Mem_Output(TraceLevel l) { return _Mem::Output(l); }
+
 void _Mem::reset() {
 
   uint32 i;

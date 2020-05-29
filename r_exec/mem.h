@@ -366,24 +366,6 @@ public:
   //std::vector<uint64> timings_report; // debug facility.
 
   /**
-   * The TraceLevel enum defines bit positions for the "trace_levels" parameter
-   * for "Debug" in settings.xml.
-   * The number of bits should match DebugStreamCount.
-   */
-  typedef enum {
-    CST_IN = 0,
-    CST_OUT = 1,
-    MDL_IN = 2,
-    MDL_OUT = 3,
-    PRED_MON = 4,
-    GOAL_MON = 5,
-    MDL_REV = 6,
-    HLP_INJ = 7,
-    ENVIRONMENT_INJ_EJT = 8,
-    AUTO_FOCUS = 9
-  }TraceLevel;
-
-  /**
    * Set the debug debug stream which Output returns when a trace level is NULL.
    * \param defaultDebugStream The stream.
    */
@@ -403,20 +385,6 @@ public:
 
 // Note: This should match the definition in user.classes.replicode.
 const std::chrono::microseconds Mem_sampling_period_ = std::chrono::milliseconds(100);
-
-/**
- * Call  _Mem::Output to get the output stream for the trace level.
- */
-#define OUTPUT(level) _Mem::Output(_Mem::level)
-
-/**
- * This similar to "OUTPUT(level) << vals << endl", where vals can be "x << y << z". Except
- * that we first use an ostringstream to buffer the values plus the line terminator, and
- * then send the entire string to the output stream and flush. Assuming that the output
- * stream will output the entire string as a single operation, then when all threads use
- * OUTPUT_LINE it will avoid scrambling output of individual values.
- */
-#define OUTPUT_LINE(level, vals) (OUTPUT(level) << (ostringstream() << vals << '\n').str()).flush()
 
 // _Mem that stores the objects as long as they are not invalidated.
 class r_exec_dll MemStatic :
