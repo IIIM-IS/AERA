@@ -279,14 +279,26 @@
     This is hacked for this example. We need a more general layout algorithm.
   * YES, OPTIONAL. Should draw an arrow from the auto focus fact to the injected fact?
 
+2020-06-01
+* Visualizer
+  * DONE. Highlight connected arrows when hovering on an item.
+  * DONE. When the visualizer starts, show a dialog to select the settings.xml file (with defaults).
+  * DONE. Check boxes for types of items to show.
+  * DONE. Base the prediction on the reduction, and mention the input cause in the explanation.
+  * DONE. Add explanation for the imdl template values.
+    * Include the requirement along with the input in the mdl_63 reduction marker?
+    * Also need a reduction marker for mdl_64.
+
 TODO
-* View menu: Check boxes for types of items to show.
-* Optional arrows from auto focus to injected fact. Maybe only when hover.
-* When the visualizer starts, show a dialog to select the settings.xml file (with defaults).
+* Change "right-hand side" to RHS, same for LHS.
+* Change (success) to refer to the prediction mk.val instead of the prediction.
+* Add a item for prediction reduction, initially hidden.
+* Make minimal pong.2.goal .
 * Use uniform spacing for each frame, adjustable.
 * Show the time job queue sorted by time.
 * Document methods, starting with those related to the simulator.
 * Update README.
+* Ability to launch Replicode from the Visualizer.
 * Simple v1.1 program with two actions to achieve a goal. Does it simulate and choose only one?
 * If min_sim_time_horizon > 0, how is the behavior different?
 * In babbling, issue a goal for a position, an "unrelated" speed_x, and move the position there. Is GTPX invoked?
