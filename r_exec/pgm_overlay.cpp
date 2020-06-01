@@ -484,10 +484,8 @@ bool InputLessPGMOverlay::inject_productions() {
       _Mem::Get()->inject_notification(v, true);
     }
 
-#ifdef WITH_DEBUG_OID
     OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(Now()) << " pgm " << controller_->getObject()->get_oid() <<
       " -> mk.rdx " << mk_rdx->get_oid());
-#endif
   }
 
   return true;
