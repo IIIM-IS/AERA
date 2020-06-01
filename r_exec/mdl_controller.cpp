@@ -1484,10 +1484,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
         Group *secondary_host = secondary_->getView()->get_host(); // inject f_imdl in secondary group.
         View *view = new View(View::SYNC_ONCE, now, confidence, 1, getView()->get_host(), secondary_host, f_imdl); // SYNC_ONCE,res=resilience.
         _Mem::Get()->inject(view);
-#ifdef WITH_DEBUG_OID
-        OUTPUT(MDL_OUT) << Utils::RelativeTime(Now()) << " MDLController(" << get_debug_oid() << 
-          ") predict -> mk.rdx " << mk_rdx->get_oid() << std::endl;
-#endif
+        OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " predict -> mk.rdx " << mk_rdx->get_oid());
         OUTPUT(MDL_OUT) << Utils::RelativeTime(Now()) << " fact " << f_imdl->get_oid();
 #ifdef WITH_DEBUG_OID
         OUTPUT(MDL_OUT) << "(" << f_imdl->get_debug_oid() << ")";
