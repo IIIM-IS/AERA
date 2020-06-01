@@ -485,8 +485,8 @@ bool InputLessPGMOverlay::inject_productions() {
     }
 
 #ifdef WITH_DEBUG_OID
-    std::cout << Utils::RelativeTime(Now()) << " PGMController(" << controller_->get_debug_oid() <<
-      ") -> mk.rdx " << mk_rdx->get_oid() << std::endl;
+    OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(Now()) << " pgm " << controller_->getObject()->get_oid() <<
+      " -> mk.rdx " << mk_rdx->get_oid());
 #endif
   }
 
