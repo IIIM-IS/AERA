@@ -304,6 +304,7 @@ public:
   MkRdx();
   MkRdx(r_code::SysObject *source);
   MkRdx(r_code::Code *imdl_fact, r_code::Code *input, r_code::Code *output, float32 psln_thr, BindingMap *binding_map); // for mdl.
+  MkRdx(r_code::Code *imdl_fact, r_code::Code *input1, r_code::Code *input2, r_code::Code *output, float32 psln_thr, BindingMap *binding_map); // for mdl.
 
   P<BindingMap> bindings_; // NULL when produced by programs.
 };
