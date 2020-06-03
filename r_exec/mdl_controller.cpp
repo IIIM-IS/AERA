@@ -1400,6 +1400,19 @@ void PrimaryMDLController::take_input(r_exec::View *input) {
 void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground) {
 
   _Fact *bound_rhs = (_Fact *)bm->bind_pattern(rhs_); // fact or |fact.
+  Code* bound_rhs_value = bound_rhs->get_reference(0);
+  if (bound_rhs_value->code(0).asOpcode() == Opcodes::IMdl ||
+      bound_rhs_value->code(0).asOpcode() == Opcodes::ICst) {
+    // Change all VL_PTR in the set of exposed values to wildcard so that a future 
+    // prediction can include it as "ground" in the mk.rdx, and it can be decompiled.
+    uint16 exposed_values_index = bound_rhs_value->code(I_HLP_EXPOSED_ARGS).asIndex();
+    uint16 exposed_values_count = bound_rhs_value->code(exposed_values_index).getAtomCount();
+    for (uint16 i = 1; i <= exposed_values_count; ++i) {
+      Atom atom = bound_rhs_value->code(exposed_values_index + i);
+      if (atom.getDescriptor() == Atom::VL_PTR)
+        bound_rhs_value->code(exposed_values_index + i) = Atom::Wildcard();
+    }
+  }
 
   bool simulation;
   float32 confidence;
@@ -1477,7 +1490,11 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
         OUTPUT(MDL_OUT) << std::endl;
       } else {
 
-        Code *mk_rdx = new MkRdx(f_imdl, (Code *)input, production, 1, bindings_);
+        Code *mk_rdx;
+        if (ground)
+          mk_rdx = new MkRdx(f_imdl, (Code *)input, ground, production, 1, bindings_);
+        else
+          mk_rdx = new MkRdx(f_imdl, (Code *)input, production, 1, bindings_);
         bool rate_failures = inject_prediction(production, f_imdl, confidence, before - now, mk_rdx);
         PMonitor *m = new PMonitor(this, bm, production, rate_failures); // not-injected predictions are monitored for rating the model that produced them (successes only).
         MDLController::add_monitor(m);
