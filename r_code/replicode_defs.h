@@ -221,7 +221,7 @@
 
 #define I_HLP_OBJ 1
 #define I_HLP_TPL_ARGS 2
-#define I_HLP_ARGS 3
+#define I_HLP_EXPOSED_ARGS 3
 #define I_HLP_WEAK_REQUIREMENT_ENABLED 4
 #define I_HLP_ARITY 5
 

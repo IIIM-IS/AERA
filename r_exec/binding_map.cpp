@@ -383,9 +383,9 @@ _Fact *BindingMap::abstract_f_ihlp(_Fact *f_ihlp) const { // bindings are set al
     _ihlp->code(extent_index + i) = Atom::VLPointer(map_index++);
   extent_index += tpl_arg_count;
 
-  uint16 arg_set_index = ihlp->code(I_HLP_ARGS).asIndex();
+  uint16 arg_set_index = ihlp->code(I_HLP_EXPOSED_ARGS).asIndex();
   uint16 arg_count = ihlp->code(arg_set_index).getAtomCount();
-  _ihlp->code(I_HLP_ARGS) = Atom::IPointer(extent_index);
+  _ihlp->code(I_HLP_EXPOSED_ARGS) = Atom::IPointer(extent_index);
   _ihlp->code(extent_index) = Atom::Set(arg_count);
   for (uint16 i = 1; i <= arg_count; ++i)
     _ihlp->code(extent_index + i) = Atom::VLPointer(map_index++);
@@ -457,7 +457,7 @@ Code *BindingMap::abstract_object(Code *object, bool force_sync) { // abstract v
     abstracted_object = _Mem::Get()->build_object(object->code(0));
     abstract_member(object, I_HLP_OBJ, abstracted_object, I_HLP_OBJ, extent_index);
     abstract_member(object, I_HLP_TPL_ARGS, abstracted_object, I_HLP_TPL_ARGS, extent_index);
-    abstract_member(object, I_HLP_ARGS, abstracted_object, I_HLP_ARGS, extent_index);
+    abstract_member(object, I_HLP_EXPOSED_ARGS, abstracted_object, I_HLP_EXPOSED_ARGS, extent_index);
     abstracted_object->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Wildcard();
     abstracted_object->code(I_HLP_ARITY) = Atom::Wildcard();
   } else
@@ -983,7 +983,7 @@ void HLPBindingMap::init_from_f_ihlp(const _Fact *f_ihlp) { // source is f->icst
     }
   }
 
-  uint16 val_set_index = ihlp->code(I_HLP_ARGS).asIndex() + 1;
+  uint16 val_set_index = ihlp->code(I_HLP_EXPOSED_ARGS).asIndex() + 1;
   uint32 i = 0;
   for (uint32 j = first_index_; j < map_.size(); ++j) { // valuate args.
 
@@ -1034,7 +1034,7 @@ Fact *HLPBindingMap::build_f_ihlp(Code *hlp, uint16 opcode, bool wr_enabled) con
     ++write_index;
   }
 
-  ihlp->code(I_HLP_ARGS) = Atom::IPointer(extent_index);
+  ihlp->code(I_HLP_EXPOSED_ARGS) = Atom::IPointer(extent_index);
   uint16 exposed_arg_start = first_index_;
   uint16 exposed_arg_count = map_.size() - exposed_arg_start - 2; // -2: do not expose the first after/before timestamps.
   ihlp->code(extent_index) = Atom::Set(exposed_arg_count);
