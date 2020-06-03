@@ -170,8 +170,6 @@
 #define MK_RDX_ARITY 4
 
 #define MK_RDX_IHLP_REF 0
-#define MK_RDX_MDL_INPUT_REF 1
-#define MK_RDX_MDL_PRODUCTION_REF 2
 
 
 #define CMD_FUNCTION 1
