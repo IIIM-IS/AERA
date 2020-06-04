@@ -289,17 +289,25 @@
     * Include the requirement along with the input in the mdl_63 reduction marker?
     * Also need a reduction marker for mdl_64.
 
+2020-06-04
+* Replicode
+  * DONE. Review/merge pull request to change prediction VL_PTR to wildcard https://github.com/IIIM-IS/replicode/pull/88
+  * DONE. In settings.xml, rename TestConfiguration? YES. AERAConfiguration.
+* Visualizer
+  * DONE. Change "right-hand side" to RHS, same for LHS.
+  * DONE. Make minimal pong seed program.
+  * DONE. Fix bug for arrow to hidden item.
+  * DONE. Make a version of the seed without ejecting the start command.
+
 TODO
-* Change "right-hand side" to RHS, same for LHS.
-* Change (success) to refer to the prediction mk.val instead of the prediction.
-* Add a item for prediction reduction, initially hidden.
-* Make minimal pong.2.goal .
+* Add an item for prediction reduction, initially hidden.
+* Make a mk.rdx for (fact (pred (fact (imdl ...)))). (May affect other code that expects the other kind of prediction.)
+* Change (success) to refer to the prediction mk.rdx instead of the prediction. (Affects other code.)
 * Use uniform spacing for each frame, adjustable.
 * Show the time job queue sorted by time.
 * Document methods, starting with those related to the simulator.
 * Update README.
 * Ability to launch Replicode from the Visualizer.
-* Simple v1.1 program with two actions to achieve a goal. Does it simulate and choose only one?
 * If min_sim_time_horizon > 0, how is the behavior different?
 * In babbling, issue a goal for a position, an "unrelated" speed_x, and move the position there. Is GTPX invoked?
 * Abduce a goal more in the future than the next sampling period. (Need simulation.)
