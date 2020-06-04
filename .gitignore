@@ -2,6 +2,7 @@
 *
 !/**/
 !*.*
+!/doc/Doxyfile
 
 # Release folders
 /Release/*
