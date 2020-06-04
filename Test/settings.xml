@@ -1,4 +1,4 @@
-<TestConfiguration>
+<AERAConfiguration>
   <Load
     usr_operator_path="./usr_operators.dll"
     usr_class_path="../Test/V1.2/user.classes.replicode"
@@ -50,7 +50,7 @@
       test_models="no"
     />
   </Run>
-</TestConfiguration>
+</AERAConfiguration>
 
 <!--Usage
 Init

@@ -137,10 +137,10 @@ public:
 
   bool load(const char *file_name) {
 
-    core::XMLNode mainNode = core::XMLNode::openFileHelper(file_name, "TestConfiguration");
+    core::XMLNode mainNode = core::XMLNode::openFileHelper(file_name, "AERAConfiguration");
     if (!mainNode) {
 
-      std::cerr << "> Error: TestConfiguration is unreadable" << std::endl;
+      std::cerr << "> Error: AERAConfiguration is unreadable" << std::endl;
       return false;
     }
 
