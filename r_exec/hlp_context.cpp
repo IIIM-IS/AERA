@@ -130,15 +130,6 @@ HLPContext HLPContext::operator *() const {
   }
 }
 
-inline bool HLPContext::evaluate(uint16 &result_index) const {
-
-  if (data_ == BINDING_MAP || data_ == VALUE_ARRAY)
-    return true;
-
-  HLPContext c = **this;
-  return c.evaluate_no_dereference(result_index);
-}
-
 bool HLPContext::evaluate_no_dereference(uint16 &result_index) const {
 
   switch (data_) {
