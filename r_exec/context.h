@@ -93,12 +93,12 @@ class InputLessPGMOverlay;
 class dll_export IPGMContext :
   public _Context {
 private:
-  Code *object_; // the object the code belongs to; unchanged when the context is dereferenced to the overlay's value array.
+  r_code::Code *object_; // the object the code belongs to; unchanged when the context is dereferenced to the overlay's value array.
   View *view_; // the object's view, can be NULL when the context is dereferenced to a reference_set or a marker_set.
 
   bool is_cmd_with_cptr() const;
 
-  void addReference(Code *destination, uint16 write_index, Code *referenced_object) const {
+  void addReference(r_code::Code *destination, uint16 write_index, r_code::Code *referenced_object) const {
 
     for (uint16 i = 0; i < destination->references_size(); ++i)
       if (referenced_object == destination->get_reference(i)) {
@@ -111,7 +111,7 @@ private:
     destination->code(write_index) = Atom::RPointer(destination->references_size() - 1);
   }
 
-  void addReference(View *destination, uint16 write_index, Code *referenced_object) const { // view references are set in order (index 0 then 1).
+  void addReference(View *destination, uint16 write_index, r_code::Code *referenced_object) const { // view references are set in order (index 0 then 1).
 
     uint16 r_ptr_index;
     if (destination->references_[0]) // first ref already in place.
@@ -315,9 +315,9 @@ public:
   static IPGMContext GetContextFromInput(View *input, InputLessPGMOverlay *overlay) { return IPGMContext(input->object_, input, &input->object_->code(0), 0, overlay, REFERENCE); }
 
   IPGMContext() : _Context(NULL, 0, NULL, UNDEFINED), object_(NULL), view_(NULL) {} // undefined context (happens when accessing the view of an object when it has not been provided).
-  IPGMContext(Code *object, View *view, Atom *code, uint16 index, InputLessPGMOverlay *const overlay, Data data = STEM) : _Context(code, index, overlay, data), object_(object), view_(view) {}
-  IPGMContext(Code *object, uint16 index) : _Context(&object->code(0), index, NULL, REFERENCE), object_(object), view_(NULL) {}
-  IPGMContext(Code *object, Data data) : _Context(&object->code(0), index_, NULL, data), object_(object), view_(NULL) {}
+  IPGMContext(r_code::Code *object, View *view, Atom *code, uint16 index, InputLessPGMOverlay *const overlay, Data data = STEM) : _Context(code, index, overlay, data), object_(object), view_(view) {}
+  IPGMContext(r_code::Code *object, uint16 index) : _Context(&object->code(0), index, NULL, REFERENCE), object_(object), view_(NULL) {}
+  IPGMContext(r_code::Code *object, Data data) : _Context(&object->code(0), index_, NULL, data), object_(object), view_(NULL) {}
 
   // _Context implementation.
   _Context *assign(const _Context *c) {
@@ -391,7 +391,7 @@ public:
     case MKS: {
 
       uint16 i = 0;
-      r_code::list<Code *>::const_iterator m;
+      r_code::list<r_code::Code *>::const_iterator m;
       object_->acq_markers();
       for (m = object_->markers_.begin(); i < index - 1; ++i, ++m) {
 
@@ -425,7 +425,7 @@ public:
     }
   }
   Atom &operator [](uint16 i) const { return code_[index_ + i]; }
-  Code *getObject() const { return object_; }
+  r_code::Code *getObject() const { return object_; }
   uint16 getIndex() const { return index_; }
 
   IPGMContext operator *() const;
@@ -436,7 +436,7 @@ public:
 
   void patch_input_code(uint16 pgm_code_index, uint16 input_index) const { ((InputLessPGMOverlay *)overlay_)->patch_input_code(pgm_code_index, input_index, 0); }
 
-  uint16 addProduction(Code *object, bool check_for_existence) const; // if check_for_existence==false, the object is assumed not to be new.
+  uint16 addProduction(r_code::Code *object, bool check_for_existence) const; // if check_for_existence==false, the object is assumed not to be new.
 
   template<class C> void copy(C *destination, uint16 write_index) const {
 

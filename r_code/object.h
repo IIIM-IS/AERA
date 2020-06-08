@@ -131,7 +131,7 @@ public:
 
   uint32 oid_;
 #ifdef WITH_DEBUG_OID
-  uint32 debug_oid_;
+  uint64 debug_oid_;
 #endif
 
   SysObject();
@@ -230,7 +230,7 @@ protected:
     return new V(source, this);
   }
 public:
-  void set_stroage_index(int32 i) { storage_index_ = i; }
+  void set_strorage_index(int32 i) { storage_index_ = i; }
   bool is_registered() const { return storage_index_ > null_storage_index; }
   int32 get_storage_index() const { return storage_index_; }
 
@@ -277,12 +277,9 @@ public:
     rel_markers();
   }
 
-  /// <summary>
-  /// Print the trace of code(i) to the out stream, using the given TraceContext.
-  /// </summary>
-  /// <param name="i"></param>
-  /// <param name="out"></param>
-  /// <param name="context"></param>
+  /**
+   * Print the trace of code(i) to the out stream, using the given TraceContext.
+   */
   void trace(uint16 i, std::ostream& out, Atom::TraceContext& context) const {
     Atom& atom = code(i);
     atom.trace(context, out);
@@ -298,20 +295,17 @@ public:
     }
   }
 
-  /// <summary>
-  /// Print the trace of code(i) to the out stream, using a default TraceContext (no indentation).
-  /// </summary>
-  /// <param name="i"></param>
-  /// <param name="out"></param>
+  /**
+   * Print the trace of code(i) to the out stream, using a default TraceContext (no indentation).
+   */
   void trace(uint16 i, std::ostream& out) const {
     Atom::TraceContext context;
     trace(i, out, context);
   }
 
-  /// <summary>
-  /// Print the trace of this Code to the out stream.
-  /// </summary>
-  /// <param name="out"></param>
+  /**
+   * Print the trace of this Code to the out stream.
+   */
   void trace(std::ostream& out) const {
 
     out << "--------\n";
@@ -331,10 +325,9 @@ public:
 
   void trace() const { trace(std::cout); }
 
-  /// <summary>
-  /// Return the trace as a string. For debugging purposes only(can be inefficient).
-  /// </summary>
-  /// <returns></returns>
+  /**
+   * Return the trace as a string. For debugging purposes only(can be inefficient).
+   */
   std::string traceString() const {
     std::ostringstream out;
     trace(out);

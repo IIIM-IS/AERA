@@ -139,7 +139,7 @@ private:
     Sim *sim,
     Timestamp now,
     float32 confidence,
-    Code *group) const;
+    r_code::Code *group) const;
 
   void kill_views();
   void check_last_match_time(bool match); // kill if no match after primary_thz;

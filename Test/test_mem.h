@@ -80,13 +80,13 @@
 
 #include "../r_exec/mem.h"
 
-/// <summary>
-/// TestMem extends Mem so that we can override load and eject, and to implement
-/// the behavior of the external environment for pong.2.goal.replicode, etc.
-/// If a program does not call a(cmd ...) for the implemented external environment,
-/// then it does nothing. (If this external environment is not needed, then main()
-/// can just create the parent class r_exec::Mem .)
-/// </summary>
+/**
+ * TestMem extends Mem so that we can override load and eject, and to implement
+ * the behavior of the external environment for pong.2.goal.replicode, etc.
+ * If a program does not call a(cmd ...) for the implemented external environment,
+ * then it does nothing. (If this external environment is not needed, then main()
+ * can just create the parent class r_exec::Mem .)
+ */
 template<class O, class S> class TestMem :
   public r_exec::Mem<O, S> {
 public:
@@ -94,250 +94,243 @@ public:
 
   ~TestMem();
 
-  /// <summary>
-  /// Call the parent class load(), then set up the objects for the external environment.
-  /// </summary>
-  /// <param name="objects"></param>
-  /// <param name="stdin_oid"></param>
-  /// <param name="stdout_oid"></param>
-  /// <param name="self_oid"></param>
-  /// <returns></returns>
+  /**
+   * Call the parent class load(), then set up the objects for the external environment.
+   */
   virtual bool load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid);
 
-  /// <summary>
-  /// Override eject to check for (cmd set_speed_y ...) and other implemented commands.
-  /// </summary>
-  /// <param name="command"></param>
-  virtual void eject(Code *command);
+  /**
+   * Override eject to check for (cmd set_speed_y ...) and other implemented commands.
+   */
+  virtual void eject(r_code::Code *command);
 
-  /// <summary>
-  /// This is called when runInDiagnosticTime() updates the tickTime. Just call
-  /// onTimeTick(), because there is no real - time timer thread to call it.
-  /// </summary>
+  /**
+   * This is called when runInDiagnosticTime() updates the tickTime. Just call
+   * onTimeTick(), because there is no real - time timer thread to call it.
+   */
   virtual void onDiagnosticTimeTick() { onTimeTick(); }
 
 protected:
   class _Thread : public Thread {
   };
 
-  /// <summary>
-  /// Find the object in r_exec::Seed and objects with the given name.
-  /// </summary>
-  /// <param name="objects">The objects array from load().</param>
-  /// <param name="name"> The name of the symbol.</param>
-  /// <returns>The object, or NULL if not found.</returns>
-  ///
-  static Code* findObject
-  (std::vector<r_code::Code *> *objects, const char* name);
+  /**
+   * Find the object in r_exec::Seed and objects with the given name.
+   * \param objects The objects array from load().
+   * \param name The name of the symbol.
+   * \return The object, or NULL if not found.
+   */
+  static r_code::Code* findObject(
+    std::vector<r_code::Code *> *objects, const char* name);
 
-  /// <summary>
-  /// Inject (fact (mk.val obj prop val 1) after before 1 1)
-  /// [syncMode after 1 1 group nil]
-  /// where val is a simple Atom.
-  /// </summary>
-  /// <param name="obj"></param>
-  /// <param name="prop"></param>
-  /// <param name="val"></param>
-  /// <param name="after"></param>
-  /// <param name="before"></param>
-  /// <param name="syncMode"></param>
-  /// <param name="group"></param>
-  /// <returns>The created View.</returns>
-  r_exec::View* injectMarkerValue
-  (Code* obj, Code* prop, Atom val, Timestamp after, Timestamp before,
-    r_exec::View::SyncMode syncMode, Code* group);
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * [syncMode after 1 1 group nil]
+   * where val is a simple Atom.
+   * \param obj
+   * \param prop
+   * \param val
+   * \param after
+   * \param before
+   * \param syncMode
+   * \param group
+   * \return The created View.
+   */
+  r_exec::View* injectMarkerValue(
+    r_code::Code* obj, r_code::Code* prop, Atom val, Timestamp after, Timestamp before,
+    r_exec::View::SyncMode syncMode, r_code::Code* group);
 
-  /// <summary>
-  /// Inject (fact (mk.val obj prop val 1) after before 1 1)
-  /// [syncMode after 1 1 stdin nil]
-  /// where val is a simple Atom.
-  /// </summary>
-  /// <param name="obj"></param>
-  /// <param name="prop"></param>
-  /// <param name="val"></param>
-  /// <param name="after"></param>
-  /// <param name="before"></param>
-  /// <param name="syncMode"></param>
-  /// <returns>The created View.</returns>
-  r_exec::View* injectMarkerValue
-  (Code* obj, Code* prop, Atom val, Timestamp after, Timestamp before,
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * [syncMode after 1 1 stdin nil]
+   * where val is a simple Atom.
+   * \param obj
+   * \param prop
+   * \param val
+   * \param after
+   * \param before
+   * \param syncMode
+   * \return The created View.
+   */
+  r_exec::View* injectMarkerValue(
+    r_code::Code* obj, r_code::Code* prop, Atom val, Timestamp after, Timestamp before,
     r_exec::View::SyncMode syncMode)
   {
     return injectMarkerValue(obj, prop, val, after, before, syncMode, get_stdin());
   }
 
-  /// <summary>
-  /// Inject (fact (mk.val obj prop val 1) after before 1 1)
-  /// [SYNC_PERIODIC after 1 1 group nil]
-  /// where val is a simple Atom.
-  /// </summary>
-  /// <param name="obj"></param>
-  /// <param name="prop"></param>
-  /// <param name="val"></param>
-  /// <param name="after"></param>
-  /// <param name="before"></param>
-  /// <param name="group"></param>
-  /// <returns>The created View.</returns>
-  r_exec::View* injectMarkerValue
-  (Code* obj, Code* prop, Atom val, Timestamp after, Timestamp before, Code* group)
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * [SYNC_PERIODIC after 1 1 group nil]
+   * where val is a simple Atom.
+   * \param obj
+   * \param pro
+   * \param val
+   * \param after
+   * \param before
+   * \param group
+   * \return The created View.
+   */
+  r_exec::View* injectMarkerValue(
+    r_code::Code* obj, r_code::Code* prop, Atom val, Timestamp after, Timestamp before, r_code::Code* group)
   {
-    return injectMarkerValue
-    (obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, group);
+    return injectMarkerValue(
+      obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, group);
   }
 
-  /// <summary>
-  /// Inject (fact (mk.val obj prop val 1) after before 1 1)
-  /// [SYNC_PERIODIC after 1 1 stdin nil]
-  /// where val is a simple Atom.
-  /// </summary>
-  /// <param name="obj"></param>
-  /// <param name="prop"></param>
-  /// <param name="val"></param>
-  /// <param name="after"></param>
-  /// <param name="before"></param>
-  /// <returns>The created View.</returns>
-  r_exec::View* injectMarkerValue
-  (Code* obj, Code* prop, Atom val, Timestamp after, Timestamp before)
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * [SYNC_PERIODIC after 1 1 stdin nil]
+   * where val is a simple Atom.
+   * \param obj
+   * \param prop
+   * \param val
+   * \param after
+   * \param before
+   * \return The created View.
+   */
+  r_exec::View* injectMarkerValue(
+    r_code::Code* obj, r_code::Code* prop, Atom val, Timestamp after, Timestamp before)
   {
-    return injectMarkerValue
-    (obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, get_stdin());
+    return injectMarkerValue(
+      obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, get_stdin());
   }
 
-  /// <summary>
-  /// Inject (fact (mk.val obj prop val 1) after before 1 1)
-  /// [syncMode after 1 1 group nil]
-  /// where val is a simple Atom.
-  /// </summary>
-  /// <param name="obj"></param>
-  /// <param name="prop"></param>
-  /// <param name="val"></param>
-  /// <param name="after"></param>
-  /// <param name="before"></param>
-  /// <param name="syncMode"></param>
-  /// <param name="group"></param>
-  /// <returns>The created View.</returns>
-  r_exec::View* injectMarkerValue
-  (Code* obj, Code* prop, Code* val, Timestamp after, Timestamp before,
-    r_exec::View::SyncMode syncMode, Code* group);
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * [syncMode after 1 1 group nil]
+   * where val is a simple Atom.
+   * \param obj
+   * \param prop
+   * \param val
+   * \param after
+   * \param before
+   * \param syncMode
+   * \param group
+   * \return The created View.
+   */
+  r_exec::View* injectMarkerValue(
+    r_code::Code* obj, r_code::Code* prop, r_code::Code* val, Timestamp after, Timestamp before,
+    r_exec::View::SyncMode syncMode, r_code::Code* group);
 
-  /// <summary>
-  /// Inject (fact (mk.val obj prop val 1) after before 1 1)
-  /// [syncMode after 1 1 stdin nil]
-  /// where val is a simple Atom.
-  /// </summary>
-  /// <param name="obj"></param>
-  /// <param name="prop"></param>
-  /// <param name="val"></param>
-  /// <param name="after"></param>
-  /// <param name="before"></param>
-  /// <param name="syncMode"></param>
-  /// <returns>The created View.</returns>
-  r_exec::View* injectMarkerValue
-  (Code* obj, Code* prop, Code* val, Timestamp after, Timestamp before,
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * [syncMode after 1 1 stdin nil]
+   * where val is a simple Atom.
+   * \param obj
+   * \param prop
+   * \param val
+   * \param after
+   * \param before
+   * \param syncMode
+   * \return The created View.
+   */
+  r_exec::View* injectMarkerValue(
+    r_code::Code* obj, r_code::Code* prop, r_code::Code* val, Timestamp after, Timestamp before,
     r_exec::View::SyncMode syncMode)
   {
     return injectMarkerValue(obj, prop, val, after, before, syncMode, get_stdin());
   }
 
-  /// <summary>
-  /// Inject (fact (mk.val obj prop val 1) after before 1 1)
-  /// [SYNC_PERIODIC after 1 1 group nil]
-  /// where val is a simple Atom.
-  /// </summary>
-  /// <param name="obj"></param>
-  /// <param name="prop"></param>
-  /// <param name="val"></param>
-  /// <param name="after"></param>
-  /// <param name="before"></param>
-  /// <param name="group"></param>
-  /// <returns>The created View.</returns>
-  r_exec::View* injectMarkerValue
-  (Code* obj, Code* prop, Code* val, Timestamp after, Timestamp before, Code* group)
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * [SYNC_PERIODIC after 1 1 group nil]
+   * where val is a simple Atom.
+   * \param obj
+   * \param prop
+   * \param val
+   * \param after
+   * \param before
+   * \param group
+   * \return The created View.
+   */
+  r_exec::View* injectMarkerValue(
+    r_code::Code* obj, r_code::Code* prop, r_code::Code* val, Timestamp after, Timestamp before, r_code::Code* group)
   {
-    return injectMarkerValue
-    (obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, group);
+    return injectMarkerValue(
+      obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, group);
   }
 
-  /// <summary>
-  /// Inject (fact (mk.val obj prop val 1) after before 1 1)
-  /// [SYNC_PERIODIC after 1 1 stdin nil]
-  /// where val is a simple Atom.
-  /// </summary>
-  /// <param name="obj"></param>
-  /// <param name="prop"></param>
-  /// <param name="val"></param>
-  /// <param name="after"></param>
-  /// <param name="before"></param>
-  /// <returns>The created View.</returns>
-  r_exec::View* injectMarkerValue
-  (Code* obj, Code* prop, Code* val, Timestamp after, Timestamp before)
+  /**
+   *  Inject (fact (mk.val obj prop val 1) after before 1 1)
+   *  [SYNC_PERIODIC after 1 1 stdin nil]
+   *  where val is a simple Atom.
+   * \param obj
+   * \param prop
+   * \param val
+   * \param after
+   * \param before
+   * \return The created View.
+   */
+  r_exec::View* injectMarkerValue(
+    r_code::Code* obj, r_code::Code* prop, r_code::Code* val, Timestamp after, Timestamp before)
   {
-    return injectMarkerValue
-    (obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, get_stdin());
+    return injectMarkerValue(
+      obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, get_stdin());
   }
 
-  /// <summary>
-  /// Inject (fact object after before 1 1)
-  /// [syncMode after 1 1 group nil]
-  /// </summary>
-  /// <param name="object"></param>
-  /// <param name="after"></param>
-  /// <param name="before"></param>
-  /// <param name="syncMode"></param>
-  /// <param name="group"></param>
-  /// <returns>The created View.</returns>
-  r_exec::View* injectFact
-  (Code* object, Timestamp after, Timestamp before, r_exec::View::SyncMode syncMode,
-    Code* group);
+  /**
+   *  Inject (fact object after before 1 1)
+   *  [syncMode after 1 1 group nil]
+   * \param object
+   * \param after
+   * \param before
+   * \param syncMode
+   * \param group
+   * \return The created View.
+   */
+  r_exec::View* injectFact(
+    r_code::Code* object, Timestamp after, Timestamp before, r_exec::View::SyncMode syncMode,
+    r_code::Code* group);
 
-  /// <summary>
-  /// Inject (fact object after before 1 1)
-  /// [SYNC_PERIODIC after 1 1 group nil]
-  /// </summary>
-  /// <param name="object"></param>
-  /// <param name="after"></param>
-  /// <param name="before"></param>
-  /// <param name="group"></param>
-  /// <returns>The created View.</returns>
-  r_exec::View* injectFact(Code* object, Timestamp after, Timestamp before, Code* group) {
-    return injectFact
-    (object, after, before, r_exec::View::SYNC_PERIODIC, group);
+  /**
+   *  Inject (fact object after before 1 1)
+   *  [SYNC_PERIODIC after 1 1 group nil]
+   * \param object
+   * \param after
+   * \param before
+   * \param group
+   * \return The created View.
+   */
+  r_exec::View* injectFact(r_code::Code* object, Timestamp after, Timestamp before, r_code::Code* group) {
+    return injectFact(
+      object, after, before, r_exec::View::SYNC_PERIODIC, group);
   }
 
   void onTimeTick();
 
-  /// <summary>
-  /// If not running in diagnostic time, start the timeTickThread_.
-  /// If it is already started, do nothing.
-  /// </summary>
+  /**
+   * If not running in diagnostic time, start the timeTickThread_.
+   * If it is already started, do nothing.
+   */
   void startTimeTickThread();
 
-  /// <summary>
-  /// This runs in the timeTickThread_ to periodicaly call onTimeTick().
-  /// (Only used if not running in diagnostic time.)
-  /// </summary>
-  /// <param name="args"></param>
-  /// <returns></returns>
+  /**
+   * This runs in the timeTickThread_ to periodicaly call onTimeTick().
+   * (Only used if not running in diagnostic time.)
+   * \param args
+   * \return 
+   */
   static thread_ret thread_function_call timeTickRun(void *args);
 
   Thread* timeTickThread_;
   Timestamp lastInjectTime_;
   float speed_y_;
   float position_y_;
-  Code* position_y_obj_;
-  Code* position_property_;
-  Code* position_y_property_;
-  Code* speed_y_property_;
-  Code* primary_group_;
+  r_code::Code* position_y_obj_;
+  r_code::Code* position_property_;
+  r_code::Code* position_y_property_;
+  r_code::Code* speed_y_property_;
+  r_code::Code* primary_group_;
   uint16 set_speed_y_opcode_;
   uint16 move_y_plus_opcode_;
   uint16 move_y_minus_opcode_;
   Timestamp lastCommandTime_;
 
-  Code* yEnt_[10];
-  Code* discretePositionObj_;
-  Code* discretePosition_;
-  Code* nextDiscretePosition_;
+  r_code::Code* yEnt_[10];
+  r_code::Code* discretePositionObj_;
+  r_code::Code* discretePosition_;
+  r_code::Code* nextDiscretePosition_;
   int babbleState_;
 };
 

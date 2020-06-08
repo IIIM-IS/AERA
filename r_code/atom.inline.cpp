@@ -318,10 +318,14 @@ inline Atom Atom::NullProgram(bool take_past_inputs) {
   return Atom((NULL_PROGRAM << 24) + (take_past_inputs ? 1 : 0));
 }
 
+// RawPointer is not used. In any case, only define it for ARCH_32. If we want to
+// define it for ARCH_64, we need to change the byte code to use two uint32 code elements.
+#if defined ARCH_32
 inline Atom Atom::RawPointer(void *pointer) {
 
   return Atom((uint32)pointer);
 }
+#endif
 
 inline Atom::Atom(uint32 a) : atom_(a) {
 }

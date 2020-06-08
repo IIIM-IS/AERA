@@ -95,11 +95,11 @@ class r_exec_dll InputLessPGMOverlay :
   friend class InputLessPGMController;
   friend class IPGMContext;
 protected:
-  std::vector<P<Code> > productions_; // receives the results of ins, inj and eje; views are retrieved (fvw) or built (reduction) in the value array.
+  std::vector<P<r_code::Code> > productions_; // receives the results of ins, inj and eje; views are retrieved (fvw) or built (reduction) in the value array.
 
   bool evaluate(uint16 index); // evaluates the pgm_code at the specified index.
 
-  virtual Code *get_mk_rdx(uint16 &extent_index) const;
+  virtual r_code::Code *get_mk_rdx(uint16 &extent_index) const;
 
   void patch_tpl_args(); // no views in tpl args; patches the ptn skeleton's first atom with IPGM_PTR with an index in the ipgm arg set; patches wildcards with similar IPGM_PTRs.
   void patch_tpl_code(uint16 pgm_code_index, uint16 ipgm_code_index); // to recurse.
@@ -138,12 +138,26 @@ protected:
   bool check_guards(); // return true upon successful evaluation.
 
   MatchResult _match(r_exec::View *input, uint16 pattern_index); // delegates to __match.
-  MatchResult __match(r_exec::View *input, uint16 pattern_index); // return SUCCESS upon a successful match, IMPOSSIBLE if the input is not of the right class, FAILURE otherwise.
 
-  Code *dereference_in_ptr(Atom a);
+  /**
+   * \return SUCCESS upon a successful match, IMPOSSIBLE if the input is not of the right class, 
+   * FAILURE otherwise.
+   */
+  MatchResult __match(r_exec::View *input, uint16 pattern_index) {
+    // The input has just been pushed on input_views (see match).
+    // pgm_code[pattern_index+1].asIndex() is the structure pointed by the pattern's skeleton.
+    patch_input_code(code_[pattern_index + 1].asIndex(), input_views.size() - 1, 0);
+    // match: evaluate the set of guards.
+    uint16 guard_set_index = code_[pattern_index + 2].asIndex();
+    if (!evaluate(guard_set_index))
+      return FAILURE;
+    return SUCCESS;
+  }
+
+  r_code::Code *dereference_in_ptr(Atom a);
   void patch_input_code(uint16 pgm_code_index, uint16 input_index, uint16 input_code_index, int16 parent_index = -1);
 
-  virtual Code *get_mk_rdx(uint16 &extent_index) const;
+  virtual r_code::Code *get_mk_rdx(uint16 &extent_index) const;
 
   void init();
 
@@ -152,7 +166,13 @@ protected:
 public:
   virtual ~PGMOverlay();
 
-  void reset();
+  void reset() {
+    InputLessPGMOverlay::reset();
+    patch_indices_.clear();
+    input_views.clear();
+    input_pattern_indices.clear();
+    init();
+  }
 
   virtual Overlay *reduce(r_exec::View *input); // called upon the processing of a reduction job.
 
@@ -171,8 +191,9 @@ class r_exec_dll AntiPGMOverlay :
   public PGMOverlay {
   friend class AntiPGMController;
 private:
-  AntiPGMOverlay(Controller *c);
-  AntiPGMOverlay(AntiPGMOverlay *original, uint16 last_input_index, uint16 value_limit);
+  AntiPGMOverlay(Controller *c) : PGMOverlay(c) {}
+  AntiPGMOverlay(AntiPGMOverlay *original, uint16 last_input_index, uint16 value_limit)
+  : PGMOverlay(original, last_input_index, value_limit) {}
 public:
   ~AntiPGMOverlay();
 

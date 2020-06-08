@@ -93,7 +93,7 @@ start:(pgm |[] |[] |[] []
    )
    (prb [1 "print" "started..." |[]])
 1) |[]
-istart:(ipgm start |[] RUN_ONCE sampling_period VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+istart:(ipgm start |[] RUN_ONCE sampling_period VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
 
 ; This program intercepts an abduced goal to run a command and directly
 ; calls the command, which will call the override of _Mem::eject().

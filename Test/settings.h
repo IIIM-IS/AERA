@@ -112,8 +112,10 @@ public:
   core::uint32 ntf_mk_resilience_;
   core::uint32 goal_pred_success_resilience_;
   core::uint32 debug_windows_;
+  std::string debug_stream_file_path_;
   core::uint32 trace_levels_;
   bool get_objects_;
+  bool keep_invalidated_objects_;
   bool decompile_objects_;
   bool decompile_to_file_;
   std::string decompilation_file_path_;
@@ -135,10 +137,10 @@ public:
 
   bool load(const char *file_name) {
 
-    core::XMLNode mainNode = core::XMLNode::openFileHelper(file_name, "TestConfiguration");
+    core::XMLNode mainNode = core::XMLNode::openFileHelper(file_name, "AERAConfiguration");
     if (!mainNode) {
 
-      std::cerr << "> Error: TestConfiguration is unreadable" << std::endl;
+      std::cerr << "> Error: AERAConfiguration is unreadable" << std::endl;
       return false;
     }
 
@@ -209,10 +211,12 @@ public:
 
       const char *debug_string = debug.getAttribute("debug");
       const char *debug_windows = debug.getAttribute("debug_windows");
+      const char *debug_stream_file_path = debug.getAttribute("debug_stream_file_path");
       const char *trace_levels = debug.getAttribute("trace_levels");
 
       debug_ = (strcmp(debug_string, "yes") == 0);
       debug_windows_ = atoi(debug_windows);
+      debug_stream_file_path_ = debug_stream_file_path;
       sscanf(trace_levels, "%x", &trace_levels_);
 
       core::XMLNode resilience = debug.getChildNode("Resilience");
@@ -232,6 +236,7 @@ public:
       if (!!objects) {
 
         const char *get_objects = objects.getAttribute("get_objects");
+        const char *keep_invalidated_objects = objects.getAttribute("keep_invalidated_objects");
         const char *decompile_objects = objects.getAttribute("decompile_objects");
         const char *decompile_to_file = objects.getAttribute("decompile_to_file");
         decompilation_file_path_ = objects.getAttribute("decompilation_file_path");
@@ -240,6 +245,7 @@ public:
         const char *test_objects = objects.getAttribute("test_objects");
 
         get_objects_ = (strcmp(get_objects, "yes") == 0);
+        keep_invalidated_objects_ = (strcmp(keep_invalidated_objects, "yes") == 0);
         decompile_objects_ = (strcmp(decompile_objects, "yes") == 0);
         decompile_to_file_ = (strcmp(decompile_to_file, "yes") == 0);
         ignore_named_objects_ = (strcmp(ignore_named_objects, "yes") == 0);

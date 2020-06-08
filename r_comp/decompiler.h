@@ -91,12 +91,12 @@ class dll_export Decompiler {
 private:
   OutStream *out_stream_;
   uint16 indents_; // in chars.
-  bool closing_set; // set after writing the last element of a set: any element in an expression finding closing_set will indent and set closing_set to false.
+  bool closing_set_; // set after writing the last element of a set: any element in an expression finding closing_set_ will indent and set closing_set_ to false.
   bool in_hlp_;
   bool hlp_postfix_;
   bool horizontal_set_;
 
-  ImageObject *current_object_;
+  r_code::ImageObject *current_object_;
 
   r_comp::Metadata *metadata_;
   r_comp::Image *image_;
@@ -115,7 +115,7 @@ private:
   void write_indent(uint16 i);
   void write_expression_head(uint16 read_index); // decodes the leading atom of an expression.
   void write_expression_tail(uint16 read_index, bool apply_time_offset, bool vertical = false); // decodes the elements of an expression following the head.
-  void write_set(uint16 read_index, bool aply_time_offset, uint16 write_as_view_index = 0);
+  void write_set(uint16 read_index, bool apply_time_offset, uint16 write_as_view_index = 0);
   void write_any(uint16 read_index, bool &after_tail_wildcard, bool apply_time_offset, uint16 write_as_view_index = 0); // decodes any element in an expression or a set.
 
   typedef void (Decompiler::*Renderer)(uint16);
@@ -137,7 +137,7 @@ private:
   bool partial_decompilation_; // used when decompiling on-the-fly.
   bool ignore_named_objects_;
   UNORDERED_SET<uint16> named_objects_;
-  std::vector<SysObject *> imported_objects_; // referenced objects added to the image that were not in the original list of objects to be decompiled.
+  std::vector<r_code::SysObject *> imported_objects_; // referenced objects added to the image that were not in the original list of objects to be decompiled.
 public:
   Decompiler();
   ~Decompiler();
@@ -150,7 +150,7 @@ public:
   uint32 decompile(r_comp::Image *image,
     std::ostringstream *stream,
     Timestamp::duration time_offset,
-    std::vector<SysObject *> &imported_objects); // idem, ignores named objects if in the imported object list.
+    std::vector<r_code::SysObject *> &imported_objects); // idem, ignores named objects if in the imported object list.
   uint32 decompile_references(r_comp::Image *image); // initialize a reference table so that objects can be decompiled individually; returns the number of objects.
   void decompile_object(uint16 object_index, std::ostringstream *stream, Timestamp::duration time_offset); // decompiles a single object; object_index is the position of the object in the vector returned by Image::getObject.
   void decompile_object(const std::string object_name, std::ostringstream *stream, Timestamp::duration time_offset); // decompiles a single object given its name: use this function to follow references.

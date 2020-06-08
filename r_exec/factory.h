@@ -94,49 +94,49 @@ namespace r_exec {
 class r_exec_dll MkNew :
   public LObject {
 public:
-  MkNew(r_code::Mem *m, Code *object);
+  MkNew(r_code::Mem *m, r_code::Code *object);
 };
 
 class r_exec_dll MkLowRes :
   public LObject {
 public:
-  MkLowRes(r_code::Mem *m, Code *object);
+  MkLowRes(r_code::Mem *m, r_code::Code *object);
 };
 
 class r_exec_dll MkLowSln :
   public LObject {
 public:
-  MkLowSln(r_code::Mem *m, Code *object);
+  MkLowSln(r_code::Mem *m, r_code::Code *object);
 };
 
 class r_exec_dll MkHighSln :
   public LObject {
 public:
-  MkHighSln(r_code::Mem *m, Code *object);
+  MkHighSln(r_code::Mem *m, r_code::Code *object);
 };
 
 class r_exec_dll MkLowAct :
   public LObject {
 public:
-  MkLowAct(r_code::Mem *m, Code *object);
+  MkLowAct(r_code::Mem *m, r_code::Code *object);
 };
 
 class r_exec_dll MkHighAct :
   public LObject {
 public:
-  MkHighAct(r_code::Mem *m, Code *object);
+  MkHighAct(r_code::Mem *m, r_code::Code *object);
 };
 
 class r_exec_dll MkSlnChg :
   public LObject {
 public:
-  MkSlnChg(r_code::Mem *m, Code *object, float32 value);
+  MkSlnChg(r_code::Mem *m, r_code::Code *object, float32 value);
 };
 
 class r_exec_dll MkActChg :
   public LObject {
 public:
-  MkActChg(r_code::Mem *m, Code *object, float32 value);
+  MkActChg(r_code::Mem *m, r_code::Code *object, float32 value);
 };
 
 class Pred;
@@ -146,22 +146,27 @@ class r_exec_dll _Fact :
   public LObject {
 private:
   static bool MatchAtom(Atom lhs, Atom rhs);
-  static bool MatchStructure(const Code *lhs, uint16 lhs_base_index, uint16 lhs_index, const Code *rhs, uint16 rhs_index);
-  static bool Match(const Code *lhs, uint16 lhs_base_index, uint16 lhs_index, const Code *rhs, uint16 rhs_index, uint16 lhs_arity);
-  static bool CounterEvidence(const Code *lhs, const Code *rhs);
+  static bool MatchStructure(const r_code::Code *lhs, uint16 lhs_base_index, uint16 lhs_index, const r_code::Code *rhs, uint16 rhs_index);
+  static bool Match(const r_code::Code *lhs, uint16 lhs_base_index, uint16 lhs_index, const r_code::Code *rhs, uint16 rhs_index, uint16 lhs_arity);
+  static bool CounterEvidence(const r_code::Code *lhs, const r_code::Code *rhs);
 protected:
   _Fact();
-  _Fact(SysObject *source);
+  _Fact(r_code::SysObject *source);
   _Fact(_Fact *f);
-  _Fact(uint16 opcode, Code *object, Timestamp after, Timestamp before, float32 confidence, float32 psln_thr);
+  _Fact(uint16 opcode, r_code::Code *object, Timestamp after, Timestamp before, float32 confidence, float32 psln_thr);
 public:
-  static bool MatchObject(const Code *lhs, const Code *rhs);
+  static bool MatchObject(const r_code::Code *lhs, const r_code::Code *rhs);
 
   virtual bool is_invalidated();
 
-  bool is_fact() const;
-  bool is_anti_fact() const;
-  void set_opposite() const;
+  bool is_fact() const { return (code(0).asOpcode() == Opcodes::Fact); }
+  bool is_anti_fact() const { return (code(0).asOpcode() == Opcodes::AntiFact); }
+  void set_opposite() const {
+    if (is_fact())
+      code(0) = Atom::Object(Opcodes::AntiFact, FACT_ARITY);
+    else
+      code(0) = Atom::Object(Opcodes::Fact, FACT_ARITY);
+  }
   _Fact *get_absentee() const;
 
   bool match_timings_sync(const _Fact *evidence) const;
@@ -171,16 +176,26 @@ public:
   MatchResult is_evidence(const _Fact *target) const;
   MatchResult is_timeless_evidence(const _Fact *target) const;
 
-  bool has_after() const { return Utils::HasTimestamp<Code>(this, FACT_AFTER); }
-  bool has_before() const { return Utils::HasTimestamp<Code>(this, FACT_BEFORE); }
+  bool has_after() const { return r_code::Utils::HasTimestamp<r_code::Code>(this, FACT_AFTER); }
+  bool has_before() const { return r_code::Utils::HasTimestamp<r_code::Code>(this, FACT_BEFORE); }
   Timestamp get_after() const;
   Timestamp get_before() const;
-  float32 get_cfd() const;
+  float32 get_cfd() const { return code(FACT_CFD).asFloat(); }
 
-  void set_cfd(float32 cfd);
+  void set_cfd(float32 cfd) { code(FACT_CFD) = Atom::Float(cfd); }
 
-  Pred *get_pred() const;
-  Goal *get_goal() const;
+  Pred *get_pred() const {
+    Code *pred = get_reference(0);
+    if (pred->code(0).asOpcode() == Opcodes::Pred)
+      return (Pred *)pred;
+    return NULL;
+  }
+  Goal *get_goal() const {
+    Code *goal = get_reference(0);
+    if (goal->code(0).asOpcode() == Opcodes::Goal)
+      return (Goal *)goal;
+    return NULL;
+  }
 
   void trace() const;
 };
@@ -224,9 +239,9 @@ class r_exec_dll Fact :
 public:
   void *operator new(size_t s);
   Fact();
-  Fact(SysObject *source);
+  Fact(r_code::SysObject *source);
   Fact(Fact *f);
-  Fact(Code *object, Timestamp after, Timestamp before, float32 confidence, float32 psln_thr);
+  Fact(r_code::Code *object, Timestamp after, Timestamp before, float32 confidence, float32 psln_thr);
 };
 
 // Caveat: as for Fact.
@@ -235,9 +250,9 @@ class r_exec_dll AntiFact :
 public:
   void *operator new(size_t s);
   AntiFact();
-  AntiFact(SysObject *source);
+  AntiFact(r_code::SysObject *source);
   AntiFact(AntiFact *f);
-  AntiFact(Code *object, Timestamp after, Timestamp before, float32 confidence, float32 psln_thr);
+  AntiFact(r_code::Code *object, Timestamp after, Timestamp before, float32 confidence, float32 psln_thr);
 };
 
 // Goals and predictions:
@@ -257,18 +272,18 @@ class r_exec_dll Pred :
   public LObject {
 public:
   Pred();
-  Pred(SysObject *source);
+  Pred(r_code::SysObject *source);
   Pred(_Fact *target, float32 psln_thr);
 
   bool is_invalidated();
   bool grounds_invalidated(_Fact *evidence);
 
-  _Fact *get_target() const;
+  _Fact *get_target() const { return (_Fact *)get_reference(0); }
 
   std::vector<P<_Fact> > grounds_; // f1->obj; predictions that were used to build this predictions (i.e. antecedents); empty if simulated.
   std::vector<P<Sim> > simulations_;
 
-  bool is_simulation() const;
+  bool is_simulation() const { return simulations_.size() > 0; }
   Sim *get_simulation(Controller *root) const; // return true if there is a simulation for the goal.
 };
 
@@ -276,8 +291,8 @@ class r_exec_dll Goal :
   public LObject {
 public:
   Goal();
-  Goal(SysObject *source);
-  Goal(_Fact *target, Code *actor, float32 psln_thr);
+  Goal(r_code::SysObject *source);
+  Goal(_Fact *target, r_code::Code *actor, float32 psln_thr);
 
   bool invalidate();
   bool is_invalidated();
@@ -286,24 +301,29 @@ public:
   bool is_requirement() const;
 
   bool is_self_goal() const;
-  bool is_drive() const;
+  bool is_drive() const { return (sim_ == NULL && is_self_goal()); }
 
-  _Fact *get_target() const;
-  _Fact *get_super_goal() const;
-  Code *get_actor() const;
+  _Fact *get_target() const { return (_Fact *)get_reference(0); }
+  _Fact *get_super_goal() const { return sim_->super_goal_; }
+  r_code::Code *get_actor() const { return get_reference(code(GOAL_ACTR).asIndex()); }
 
   P<Sim> sim_;
   P<_Fact> ground_; // f->p->f->imdl (weak requirement) that allowed backward chaining, if any.
 
-  float32 get_strength(Timestamp now) const; // goal->target->cfd/(before-now).
+  // goal->target->cfd/(before-now).
+  float32 get_strength(Timestamp now) const {
+    _Fact *target = get_target();
+    return target->get_cfd() / std::chrono::duration_cast<std::chrono::microseconds>(target->get_before() - now).count();
+  }
 };
 
 class r_exec_dll MkRdx :
   public LObject {
 public:
   MkRdx();
-  MkRdx(SysObject *source);
-  MkRdx(Code *imdl_fact, Code *input, Code *output, float32 psln_thr, BindingMap *binding_map); // for mdl.
+  MkRdx(r_code::SysObject *source);
+  MkRdx(r_code::Code *imdl_fact, r_code::Code *input, r_code::Code *output, float32 psln_thr, BindingMap *binding_map); // for mdl.
+  MkRdx(r_code::Code *imdl_fact, r_code::Code *input1, r_code::Code *input2, r_code::Code *output, float32 psln_thr, BindingMap *binding_map); // for mdl.
 
   P<BindingMap> bindings_; // NULL when produced by programs.
 };
@@ -326,7 +346,7 @@ class r_exec_dll ICST :
   public LObject {
 public:
   ICST();
-  ICST(SysObject *source);
+  ICST(r_code::SysObject *source);
 
   bool is_invalidated();
 

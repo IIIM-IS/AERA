@@ -80,6 +80,7 @@
 #include "model_base.h"
 
 using namespace std::chrono;
+using namespace r_code;
 
 namespace r_exec {
 
@@ -132,7 +133,7 @@ Overlay *PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController
     Overlay *o;
     Fact *f_imdl = ((MDLController *)controller_)->get_f_ihlp(bm, false);
     RequirementsPair r_p;
-    Fact *ground = f_p_f_imdl;
+    Fact *ground = f_p_f_imdl; // JTNote: retrieve_imdl_fwd assigns ground, so this assignment is not used.
     bool wr_enabled;
     bool stop = (req_controller != NULL);
     ChainingStatus c_s = ((MDLController *)controller_)->retrieve_imdl_fwd(bm, f_imdl, r_p, ground, req_controller, wr_enabled);
@@ -171,7 +172,7 @@ Overlay *PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController
       }
     case WEAK_REQUIREMENT_ENABLED:
       if (evaluate_fwd_guards()) { // may update bindings.
-//std::cout<<" match\n";
+        // JTNote: The prediction is made from the bindings that made f_imdl, but it is not used directly.
         f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
         ((PrimaryMDLController *)controller_)->predict(bindings_, input, f_imdl, c_a, r_p, ground);
         o = this;
@@ -697,7 +698,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
   if (!sr_count) { // no strong req., some weak req.: true if there is one f->imdl complying with timings and bindings.
 
     wr_enabled = false;
-
+    // JTNote: We set ground = NULL above, so this is never true.
     if (ground != NULL) { // an imdl triggered the reduction of the cache.
 
       r_p.first.controllers.push_back(req_controller);
@@ -1399,6 +1400,19 @@ void PrimaryMDLController::take_input(r_exec::View *input) {
 void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground) {
 
   _Fact *bound_rhs = (_Fact *)bm->bind_pattern(rhs_); // fact or |fact.
+  Code* bound_rhs_value = bound_rhs->get_reference(0);
+  if (bound_rhs_value->code(0).asOpcode() == Opcodes::IMdl ||
+      bound_rhs_value->code(0).asOpcode() == Opcodes::ICst) {
+    // Change all VL_PTR in the set of exposed values to wildcard so that a future 
+    // prediction can include it as "ground" in the mk.rdx, and it can be decompiled.
+    uint16 exposed_values_index = bound_rhs_value->code(I_HLP_EXPOSED_ARGS).asIndex();
+    uint16 exposed_values_count = bound_rhs_value->code(exposed_values_index).getAtomCount();
+    for (uint16 i = 1; i <= exposed_values_count; ++i) {
+      Atom atom = bound_rhs_value->code(exposed_values_index + i);
+      if (atom.getDescriptor() == Atom::VL_PTR)
+        bound_rhs_value->code(exposed_values_index + i) = Atom::Wildcard();
+    }
+  }
 
   bool simulation;
   float32 confidence;
@@ -1476,13 +1490,18 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
         OUTPUT(MDL_OUT) << std::endl;
       } else {
 
-        Code *mk_rdx = new MkRdx(f_imdl, (Code *)input, production, 1, bindings_);
+        Code *mk_rdx;
+        if (ground)
+          mk_rdx = new MkRdx(f_imdl, (Code *)input, ground, production, 1, bindings_);
+        else
+          mk_rdx = new MkRdx(f_imdl, (Code *)input, production, 1, bindings_);
         bool rate_failures = inject_prediction(production, f_imdl, confidence, before - now, mk_rdx);
         PMonitor *m = new PMonitor(this, bm, production, rate_failures); // not-injected predictions are monitored for rating the model that produced them (successes only).
         MDLController::add_monitor(m);
         Group *secondary_host = secondary_->getView()->get_host(); // inject f_imdl in secondary group.
         View *view = new View(View::SYNC_ONCE, now, confidence, 1, getView()->get_host(), secondary_host, f_imdl); // SYNC_ONCE,res=resilience.
         _Mem::Get()->inject(view);
+        OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " predict -> mk.rdx " << mk_rdx->get_oid());
         OUTPUT(MDL_OUT) << Utils::RelativeTime(Now()) << " fact " << f_imdl->get_oid();
 #ifdef WITH_DEBUG_OID
         OUTPUT(MDL_OUT) << "(" << f_imdl->get_debug_oid() << ")";
@@ -1909,15 +1928,11 @@ void PrimaryMDLController::register_pred_outcome(Fact *f_pred, bool success, _Fa
   Success *success_object = new Success(f_pred, f_evidence, 1);
   Code *f_success_object;
   auto now = Now();
-  if (success) {
-
+  // We print the result to the output below, after injecting f_success_object to get its OID.
+  if (success)
     f_success_object = new Fact(success_object, now, now, confidence, 1);
-    OUTPUT(PRED_MON) << Utils::RelativeTime(now) << " fact " << evidence->get_oid() << " -> fact " << f_pred->get_oid() << " pred success" << std::endl;
-  } else {
-
+  else
     f_success_object = new AntiFact(success_object, now, now, confidence, 1);
-    OUTPUT(PRED_MON) << Utils::RelativeTime(now) << " fact " << f_pred->get_oid() << " pred failure" << std::endl;
-  }
 
   Group *primary_host = get_host();
   uint16 out_group_count = get_out_group_count();
@@ -1934,6 +1949,13 @@ void PrimaryMDLController::register_pred_outcome(Fact *f_pred, bool success, _Fa
       _Mem::Get()->inject(view);
     }
   }
+
+  if (success)
+    OUTPUT_LINE(PRED_MON, Utils::RelativeTime(now) << " fact " << evidence->get_oid() << " -> fact " <<
+      f_success_object->get_oid() << " success fact " << f_pred->get_oid() << " pred");
+  else
+    OUTPUT_LINE(PRED_MON, Utils::RelativeTime(now) << " |fact " << f_success_object->get_oid() <<
+    " fact " << f_pred->get_oid() << " pred failure");
 }
 
 void PrimaryMDLController::register_req_outcome(Fact *f_pred, bool success, bool rate_failures) {
@@ -2044,35 +2066,35 @@ void PrimaryMDLController::rate_model(bool success) {
   }
 
   float32 strength = model->code(MDL_STRENGTH).asFloat();
-  float32 instance_count = model->code(MDL_CNT).asFloat();
-  float32 success_count = model->code(MDL_SR).asFloat()*instance_count;
+  float32 evidence_count = model->code(MDL_CNT).asFloat();
+  float32 success_count = model->code(MDL_SR).asFloat()*evidence_count;
 
-  ++instance_count;
+  ++evidence_count;
   model->code(MDL_DSR) = model->code(MDL_SR);
 
   float32 success_rate;
   if (success) { // leave the model active in the primary group.
 
     ++success_count;
-    success_rate = success_count / instance_count;
-    uint32 instance_count_base = _Mem::Get()->get_mdl_inertia_cnt_thr();
-    if (success_rate >= _Mem::Get()->get_mdl_inertia_sr_thr() && instance_count >= instance_count_base) { // make the model strong if not already; trim the instance count to reduce the rating's inertia.
+    success_rate = success_count / evidence_count;
+    uint32 evidence_count_base = _Mem::Get()->get_mdl_inertia_cnt_thr();
+    if (success_rate >= _Mem::Get()->get_mdl_inertia_sr_thr() && evidence_count >= evidence_count_base) { // make the model strong if not already; trim the evidence count to reduce the rating's inertia.
 
-      instance_count = (uint32)(1 / success_rate);
+      evidence_count = (uint32)(1 / success_rate);
       success_rate = 1;
       model->code(MDL_STRENGTH) = Atom::Float(1);
     }
 
-    model->code(MDL_CNT) = Atom::Float(instance_count);
+    model->code(MDL_CNT) = Atom::Float(evidence_count);
     model->code(MDL_SR) = Atom::Float(success_rate);
     getView()->set_act(success_rate);
     codeCS_.leave();
   } else {
 
-    success_rate = success_count / instance_count;
+    success_rate = success_count / evidence_count;
     if (success_rate > get_host()->get_act_thr()) { // model still good enough to remain in the primary group.
 
-      model->code(MDL_CNT) = Atom::Float(instance_count);
+      model->code(MDL_CNT) = Atom::Float(evidence_count);
       model->code(MDL_SR) = Atom::Float(success_rate);
       getView()->set_act(success_rate);
       codeCS_.leave();
@@ -2090,7 +2112,7 @@ void PrimaryMDLController::rate_model(bool success) {
       OUTPUT(MDL_REV) << Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " deleted " << std::endl;
     }
   }
-  OUTPUT(MDL_REV) << "mdl " << model->get_oid() << " cnt:" << instance_count << " sr:" << success_rate << std::endl;
+  OUTPUT(MDL_REV) << Utils::RelativeTime(Now()) << " mdl " << model->get_oid() << " cnt:" << evidence_count << " sr:" << success_rate << std::endl;
 }
 
 void PrimaryMDLController::assume(_Fact *input) {
@@ -2300,15 +2322,15 @@ void SecondaryMDLController::rate_model() { // acknowledge successes only; the p
     return;
   }
 
-  uint32 instance_count = model->code(MDL_CNT).asFloat();
-  uint32 success_count = model->code(MDL_SR).asFloat()*instance_count;
+  uint32 evidence_count = model->code(MDL_CNT).asFloat();
+  uint32 success_count = model->code(MDL_SR).asFloat()*evidence_count;
 
-  ++instance_count;
+  ++evidence_count;
   model->code(MDL_DSR) = model->code(MDL_SR);
-  model->code(MDL_CNT) = Atom::Float(instance_count);
+  model->code(MDL_CNT) = Atom::Float(evidence_count);
 
   ++success_count;
-  float32 success_rate = success_count / instance_count; // no trimming.
+  float32 success_rate = success_count / evidence_count; // no trimming.
   model->code(MDL_SR) = Atom::Float(success_rate);
 
   if (success_rate > primary_->getView()->get_host()->get_act_thr()) {

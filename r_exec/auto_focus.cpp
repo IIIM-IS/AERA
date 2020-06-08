@@ -75,9 +75,11 @@
 //_/_/
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
+#include "mem.h"
 #include "auto_focus.h"
 #include "ast_controller.h"
 
+using namespace r_code;
 
 namespace r_exec {
 
@@ -225,13 +227,15 @@ inline View *AutoFocusController::inject_input(View *input) {
 
   if (trace_injections_) {
 
-    std::cout << Utils::RelativeTime(Now()) << " A/F -> " << input->object_->get_oid() << "|" << primary_view->object_->get_oid();
+    const char* syncString = "";
     switch (input->get_sync()) {
-    case View::SYNC_HOLD:std::cout << " (HOLD)"; break;
-    case View::SYNC_ONCE:std::cout << " (ONCE)"; break;
-    case View::SYNC_PERIODIC:std::cout << " (PERIODIC)"; break;
-    case View::SYNC_AXIOM:std::cout << " (AXIOM)"; break;
-    }std::cout << std::endl;
+    case View::SYNC_HOLD: syncString = "(HOLD)"; break;
+    case View::SYNC_ONCE: syncString = "(ONCE)"; break;
+    case View::SYNC_PERIODIC: syncString = "(PERIODIC)"; break;
+    case View::SYNC_AXIOM: syncString = "(AXIOM)"; break;
+    }
+    OUTPUT_LINE(AUTO_FOCUS, Utils::RelativeTime(Now()) << " A/F -> " << input->object_->get_oid() << "|" <<
+      primary_view->object_->get_oid() << " " << syncString);
   }
 
   return primary_view;
@@ -312,7 +316,6 @@ void AutoFocusController::reduce(r_exec::View *input) {
 
   if (opcode == Opcodes::MkRdx) {
 
-    Code *production = input_object->get_reference(MK_RDX_MDL_PRODUCTION_REF); // fact, if an ihlp was the producer.
     Fact *f_ihlp = (Fact *)input_object->get_reference(MK_RDX_IHLP_REF);
     BindingMap *bm = ((MkRdx *)input_object)->bindings_;
     if (f_ihlp->get_reference(0)->code(0).asOpcode() == Opcodes::IMdl) { // handle new goals/predictions as new targets.
@@ -320,6 +323,11 @@ void AutoFocusController::reduce(r_exec::View *input) {
       Code *mdl = f_ihlp->get_reference(0)->get_reference(0);
       Code *unpacked_mdl = mdl->get_reference(mdl->references_size() - MDL_HIDDEN_REFS);
       uint16 obj_set_index = unpacked_mdl->code(MDL_OBJS).asIndex();
+
+      // Get the first production in the set of productions.
+      uint16 production_set_index = input_object->code(MK_RDX_PRODS).asIndex();
+      uint16 production_reference_index = input_object->code(production_set_index + 1).asIndex();
+      Code *production = input_object->get_reference(production_reference_index);
 
       _Fact *pattern;
       TPX *tpx;

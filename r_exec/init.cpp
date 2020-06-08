@@ -90,6 +90,7 @@
 #include <process.h>
 
 using namespace std::chrono;
+using namespace r_code;
 
 namespace r_exec {
 
@@ -330,19 +331,15 @@ uint16 RetrieveOpcode(const char *name) {
   return _Opcodes.find(name)->second;
 }
 
-bool Init(const char *user_operator_library_path,
-          Timestamp (*time_base)()) {
-
-  Now = time_base;
-
-  UNORDERED_MAP<std::string, r_comp::Class>::iterator it;
-  for (it = Metadata.classes_.begin(); it != Metadata.classes_.end(); ++it) {
+void InitOpcodes(const r_comp::Metadata& metadata) {
+  UNORDERED_MAP<std::string, r_comp::Class>::const_iterator it;
+  for (it = metadata.classes_.begin(); it != metadata.classes_.end(); ++it) {
 
     _Opcodes[it->first] = it->second.atom_.asOpcode();
     r_code::AddOpcodeName(it->second.atom_.asOpcode(), it->first.c_str());
     //std::cout<<it->first<<":"<<it->second.atom_.asOpcode()<<std::endl;
   }
-  for (it = Metadata.sys_classes_.begin(); it != Metadata.sys_classes_.end(); ++it) {
+  for (it = metadata.sys_classes_.begin(); it != metadata.sys_classes_.end(); ++it) {
 
     _Opcodes[it->first] = it->second.atom_.asOpcode();
     r_code::AddOpcodeName(it->second.atom_.asOpcode(), it->first.c_str());
@@ -443,6 +440,14 @@ bool Init(const char *user_operator_library_path,
   Operator::Register(operator_opcode++, ins);
   Operator::Register(operator_opcode++, red);
   Operator::Register(operator_opcode++, fvw);
+}
+
+bool Init(const char *user_operator_library_path,
+          Timestamp (*time_base)()) {
+
+  Now = time_base;
+
+  InitOpcodes(Metadata);
 
   if (!user_operator_library_path) // when no rMem is used.
     return true;

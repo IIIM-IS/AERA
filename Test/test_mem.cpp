@@ -78,6 +78,7 @@
 #include "test_mem.h"
 
 using namespace std::chrono;
+using namespace r_code;
 using namespace r_exec;
 
 template<class O, class S> TestMem<O, S>::TestMem()
@@ -137,16 +138,8 @@ template<class O, class S> bool TestMem<O, S>::load
 template<class O, class S> Code*
 TestMem<O, S>::findObject(std::vector<Code*> *objects, const char* name) {
   // Find the object OID.
-  uint32 oid = 0;
-  for (UNORDERED_MAP<uint32, std::string>::const_iterator it = r_exec::Seed.object_names_.symbols_.begin();
-    it != r_exec::Seed.object_names_.symbols_.end(); ++it) {
-    if (it->second == name) {
-      oid = it->first;
-      break;
-    }
-  }
-
-  if (oid == 0)
+  uint32 oid = r_exec::Seed.object_names_.findSymbol(name);
+  if (oid == UNDEFINED_OID)
     return NULL;
 
   // Find the object. (Imitate the code in _Mem::load.)
@@ -210,7 +203,7 @@ template<class O, class S> r_exec::View* TestMem<O, S>::injectFact
   r_exec::View *view = new r_exec::View(syncMode, after, 1, 1, group, NULL, fact);
 
   // Inject the view.
-  ((_Mem *)this)->inject(view);
+  ((_Mem *)this)->injectFromEnvironment(view);
   return view;
 }
 
@@ -230,8 +223,8 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
     auto now = r_exec::Now();
     lastCommandTime_ = now;
     uint16 args_set_index = command->code(CMD_ARGS).asIndex();
-    Code* obj = command->get_reference
-    (command->code(args_set_index + 1).asIndex());
+    Code* obj = command->get_reference(
+      command->code(args_set_index + 1).asIndex());
     if (!position_y_obj_) {
       // This is the first call. Remember the object whose speed we're setting.
       position_y_obj_ = obj;
@@ -262,8 +255,8 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
     auto now = r_exec::Now();
 
     uint16 args_set_index = command->code(CMD_ARGS).asIndex();
-    Code* obj = command->get_reference
-    (command->code(args_set_index + 1).asIndex());
+    Code* obj = command->get_reference(
+      command->code(args_set_index + 1).asIndex());
     if (!discretePositionObj_) {
       // This is the first call. Remember the object whose position we're setting.
       discretePositionObj_ = obj;
@@ -315,11 +308,11 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
       lastInjectTime_ = now;
       // Inject the speed and position.
       // It seems that speed_y needs SYNC_HOLD for building models.
-      injectMarkerValue
-      (position_y_obj_, speed_y_property_, Atom::Float(speed_y_),
+      injectMarkerValue(
+        position_y_obj_, speed_y_property_, Atom::Float(speed_y_),
         now, now + Mem_sampling_period_, r_exec::View::SYNC_HOLD);
-      injectMarkerValue
-      (position_y_obj_, position_y_property_, Atom::Float(position_y_),
+      injectMarkerValue(
+        position_y_obj_, position_y_property_, Atom::Float(position_y_),
         now, now + Mem_sampling_period_);
     }
   }
@@ -338,8 +331,8 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
       }
 
       lastInjectTime_ = now;
-      injectMarkerValue
-      (discretePositionObj_, position_property_, discretePosition_,
+      injectMarkerValue(
+        discretePositionObj_, position_property_, discretePosition_,
         now, now + Mem_sampling_period_);
 
       const microseconds babbleStopTime(2000000);
@@ -374,8 +367,8 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
         cmd->code(5) = Atom::RPointer(0); // obj
         cmd->set_reference(0, discretePositionObj_);
 
-        r_exec::Fact* factCmd = new r_exec::Fact
-        (cmd, now + Mem_sampling_period_, now + 2 * Mem_sampling_period_, 1, 1);
+        r_exec::Fact* factCmd = new r_exec::Fact(
+          cmd, now + Mem_sampling_period_, now + 2 * Mem_sampling_period_, 1, 1);
         r_exec::Goal* goal = new r_exec::Goal(factCmd, get_self(), 1);
         injectFact(goal, now + Mem_sampling_period_, now + Mem_sampling_period_, primary_group_);
       }

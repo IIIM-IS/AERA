@@ -174,7 +174,6 @@
     </ClCompile>
     <ClCompile Include="model_base.cpp" />
     <ClCompile Include="monitor.cpp" />
-    <ClCompile Include="object.cpp" />
     <ClCompile Include="object.tpl.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugVisualizer|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>

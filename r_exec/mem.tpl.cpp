@@ -190,7 +190,7 @@ template<class O, class S> r_code::Code *Mem<O, S>::build_object(Atom head) cons
 
 ////////////////////////////////////////////////////////////////
 
-template<class O, class S> Code *Mem<O, S>::check_existence(Code *object) {
+template<class O, class S> r_code::Code *Mem<O, S>::check_existence(r_code::Code *object) {
 
   if (object->code(0).getDescriptor() == Atom::GROUP) // groups are always new.
     return object;

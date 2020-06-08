@@ -91,7 +91,7 @@ protected:
   _PGMController(r_code::View *ipgm_view);
   virtual ~_PGMController();
 public:
-  Code *get_core_object() const { return getObject()->get_reference(0); }
+  r_code::Code *get_core_object() const { return getObject()->get_reference(0); }
 };
 
 // TimeCores holding InputLessPGMSignalingJob trigger the injection of the productions.

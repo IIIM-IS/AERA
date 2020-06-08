@@ -83,9 +83,7 @@
 
 #include "out_stream.h"
 #include "segments.h"
-
-
-using namespace r_code;
+#include "../r_code/image.h"
 
 namespace r_comp {
 
@@ -98,7 +96,7 @@ private:
   bool trace_;
 
   Class current_class_; // the sys-class currently parsed.
-  ImageObject *current_object_; // the sys-object currently parsed.
+  r_code::ImageObject *current_object_; // the sys-object currently parsed.
   uint32 current_object_index_; // ordinal of the current sys-object in the code segment.
   int32 current_view_index_; // ordinal of a view in the sys-object's view set.
 
@@ -136,9 +134,10 @@ private:
   UNORDERED_MAP<std::string, Reference> local_references_; // labels and variables declared inside objects (cleared before parsing each sys-object): translate to value pointers.
   UNORDERED_MAP<std::string, Reference> global_references_; // labels declared outside sys-objects. translate to reference pointers.
   void addLocalReference(const std::string reference_name, const uint16 index, const Class &p); // detect cast.
-  bool getGlobalReferenceIndex(const std::string reference_name, const ReturnType t, ImageObject *object, uint16 &index, Class *&_class); // index points to the reference set.
+  bool getGlobalReferenceIndex(const std::string reference_name, const ReturnType t, r_code::ImageObject *object, uint16 &index, Class *&_class); // index points to the reference set.
                                                                                                                                                       // return false when not found.
   bool in_hlp_;
+  bool allow_wildcards_outside_pattern_skeleton_;
   std::vector<std::string> hlp_references_;
   uint8 add_hlp_reference(std::string reference_name);
   uint8 get_hlp_reference(std::string reference_name);
@@ -203,7 +202,20 @@ private:
   bool global_indirection(std::vector<int16> &v, const ReturnType t); // ex: p.res where p is a label/variable declared outside the object.
   bool wildcard();
   bool tail_wildcard();
+  /**
+   * Read a timestamp of the form XXXus, where XXX is a decimal.
+   * \param ts Set ts to the timestamp in microseconds.
+   * \return True for success, false if this is not a timestamp (and in_stream_ is not advanced).
+   */
   bool timestamp(uint64 &ts);
+  /**
+   * Read a timestamp of the form XXXs:YYYms:ZZZus, where XXX, YYY and ZZZ are decimal
+   * seconds, milliseconds and microseconds. This is the reverse of the output of
+   * Time::ToString_seconds used by the decompiler.
+   * \param ts Set ts to the timestamp in microseconds.
+   * \return True for success, false if this is not a timestamp (and in_stream_ is not advanced).
+   */
+  bool timestamp_s_ms_us(uint64 &ts);
   bool str(std::string &s);
   bool number(float32 &n);
   bool hex(uint32 &h);
@@ -233,7 +245,16 @@ private:
 
   bool read_sys_object(); // compiles one object; return false when there is an error.
 public:
-  Compiler();
+  /**
+   * Create a Compiler instance.
+   * \param allow_wildcards_outside_pattern_skeleton (optional) Normally, a wildcard 
+   * character : is not allowed in a statement, so this is false by default. But the decompiler 
+   * output contains expressions that are part of a prediction, and these have wildcards. So, if you 
+   * are compiling the decompiler output, you can set this true to allow it. (Note that the
+   * decompiled output repeats objects which were defined in the original user-supplied code
+   * which was compiled with this flag false, so it was already checked for no wildcards.)
+   */
+  Compiler(bool allow_wildcards_outside_pattern_skeleton = false);
   ~Compiler();
 
   bool compile(std::istream *stream, // stream must be open.

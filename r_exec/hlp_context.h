@@ -111,7 +111,15 @@ public:
     return HLPContext(code_, index_ + index, (HLPOverlay *)overlay_);
   }
 
-  bool evaluate(uint16 &result_index) const; // index is set to the index of the result, undefined in case of failure.
+  // index is set to the index of the result, undefined in case of failure.
+  bool evaluate(uint16 &result_index) const {
+    if (data_ == BINDING_MAP || data_ == VALUE_ARRAY)
+      return true;
+
+    HLPContext c = **this;
+    return c.evaluate_no_dereference(result_index);
+  }
+
   bool evaluate_no_dereference(uint16 &result_index) const;
 
   // __Context implementation.

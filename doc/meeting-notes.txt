@@ -205,13 +205,109 @@
   Laptop "eric_workdir": v1.2 August 1, 2012 0f9b1a4d1948954bbd7f3aa4089d5a4493cc7c76
   Laptop "eric_from_home": v1.1 April 10, 2011 (more or less) 
 
+2020-04-17
+* DONE. Pull request for CTPX::reduce icst components.
+* DONE. Pull request for CSTController original_patterns_size_.
+* DONE. Diagnostic time for v1.1.
+* DONE. Add relevant bug fixes from v1.2 to v1.1.
+* v1.1 test.1.2011-04-13.v1_0.replicode: Goal for the_right_hand position:
+  It generates subgoals but does not appear to be in simulation.
+* DONE. Mock up an explanation session.
+* DONE. Start a design specification.
+
+2020-04-24
+* DONE. Review merge pull request to fix timestamp offset https://github.com/IIIM-IS/CoreLibrary/pull/7
+* DONE. Review/merge pull request to parse 1s:100us:0us timestamps https://github.com/IIIM-IS/replicode/pull/80
+* DONE. Review/merge pull request for unique created names https://github.com/IIIM-IS/replicode/pull/81
+* DONE. Review/merge pull request to decompile references first https://github.com/IIIM-IS/replicode/pull/82
+* DONE. Review issue for decompiler VL_PTR error https://github.com/IIIM-IS/replicode/issues/51
+
+2020-04-30
+* DONE. Review/merge pull request to update Integration_OpenAI https://github.com/IIIM-IS/Integration_OpenAI/pull/4
+* DONE. Review/merge pull request for "using namespace r_comp" https://github.com/IIIM-IS/replicode/pull/84
+* Does the compiler prevent redefining an object using the same name?
+  ANSWER: No. See the pull request:
+  DONE. Review/merge pull request to check redefined labels https://github.com/IIIM-IS/replicode/pull/83
+* YES. Can you switch to Visual Studio 2019?
+
+2020-05-07
+* Replicode
+  * DONE. In console output, include the mk.rdx for program execution (inject).
+  * DONE. In console output, include controller OID for new mdl and cst.
+  * DONE. In console output, include the mk.rdx for the prediction.
+* Visualizer
+  * DONE. Add side window for query session. (Solves problem of fact before prediction.)
+
+2020-05-14
+* Replicode
+  * DONE. In console output, log when storing an object in the cst overlay.
+  * DONE. Talk about "Exposed values" for second set in imdl. Change in Replicode language spec?
+* Visualizer
+  * DONE. Show events at the same timestamp all at once.
+  * DONE. Only show program reductions as an explanation for program outputs.
+  * DONE. If a template arguments is assigned elsewhere and ignored, change it to a wildcard in Visualizer.
+
+2020-05-22
+* Replicode
+  * DONE. Gotchas: If a model's guard assigns a variable, the one passed in is ignored.
+  * DONE. Moved Gotchas to the README. https://github.com/IIIM-IS/replicode/blob/master/README.md#Gotchas
+  * DONE. Review/merge pull request for keep_invalidated_objects https://github.com/IIIM-IS/replicode/pull/85
+  * DONE. Review/merge pull request to change | to anti_ in labels https://github.com/IIIM-IS/replicode/pull/86
+  * DONE. For success, output the fact success OID:
+    0s:300ms:0us fact 75 -> fact 79 success fact 60 pred
+* Visualizer
+  * DONE. In prediction item, use "Hide iModel", and change "Original Model" to "Show Model"
+  * DONE. Put an outbound arrowhead at the beginning of arrows.
+  * DONE. Add creation timestamp in gray at upper-right.
+  * DONE. Always highlight the LHS red and the RHS green. Include the timestamps.
+  * DONE. Add dotted vertical lines and clearly separate the scene into frames.
+  * DONE. Don't show a fact until the view activates it.
+    For now, only showing auto focus output which correctly appears in the next frame
+    (and after the prediction is made).
+  
+2020-05-27
+* Replicode
+  * DONE. Review/merge pull request for debug_stream_file_path https://github.com/IIIM-IS/replicode/pull/87
+  * DONE. Log inject and eject to the debug stream.
+* Visualizer
+  * DONE. Split scene into panels with in-memory objects, and "timeless" models/cst.
+  * DONE. For new items, change blink color to green.
+  * DONE. On hover, instead of blinking, change just change the color to blue.
+  * DONE. Use Visualizer with pong.2.goal. 
+  * DONE. Put injected facts and ejected commands at the top.
+  * DONE. Make auto focus of same mk.val line up horizontally.
+    This is hacked for this example. We need a more general layout algorithm.
+  * YES, OPTIONAL. Should draw an arrow from the auto focus fact to the injected fact?
+
+2020-06-01
+* Visualizer
+  * DONE. Highlight connected arrows when hovering on an item.
+  * DONE. When the visualizer starts, show a dialog to select the settings.xml file (with defaults).
+  * DONE. Check boxes for types of items to show.
+  * DONE. Base the prediction on the reduction, and mention the input cause in the explanation.
+  * DONE. Add explanation for the imdl template values.
+    * Include the requirement along with the input in the mdl_63 reduction marker?
+    * Also need a reduction marker for mdl_64.
+
+2020-06-04
+* Replicode
+  * DONE. Review/merge pull request to change prediction VL_PTR to wildcard https://github.com/IIIM-IS/replicode/pull/88
+  * DONE. In settings.xml, rename TestConfiguration? YES. AERAConfiguration.
+* Visualizer
+  * DONE. Change "right-hand side" to RHS, same for LHS.
+  * DONE. Make minimal pong seed program.
+  * DONE. Fix bug for arrow to hidden item.
+  * DONE. Make a version of the seed without ejecting the start command.
+
 TODO
-* Diagnostic time for v1.1.
-* Simple v1.1 program with two actions to achieve a goal. Does it simulate and choose only one?
-* Pull request for CSTController original_patterns_size .
-* Mock up an explanation session.
-* Start a program specification Word document.
+* Add an item for prediction reduction, initially hidden.
+* Make a mk.rdx for (fact (pred (fact (imdl ...)))). (May affect other code that expects the other kind of prediction.)
+* Change (success) to refer to the prediction mk.rdx instead of the prediction. (Affects other code.)
+* Use uniform spacing for each frame, adjustable.
+* Show the time job queue sorted by time.
 * Document methods, starting with those related to the simulator.
+* Update README.
+* Ability to launch Replicode from the Visualizer.
 * If min_sim_time_horizon > 0, how is the behavior different?
 * In babbling, issue a goal for a position, an "unrelated" speed_x, and move the position there. Is GTPX invoked?
 * Abduce a goal more in the future than the next sampling period. (Need simulation.)

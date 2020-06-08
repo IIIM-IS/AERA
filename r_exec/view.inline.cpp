@@ -96,7 +96,7 @@ inline View::View(r_code::SysView *source, r_code::Code *object) : r_code::View(
 inline View::View(const View *view, bool new_OID) : r_code::View(), controller_(NULL) {
 
   object_ = view->object_;
-  memcpy(code_, view->code_, VIEW_CODE_MAX_SIZE * sizeof(Atom) + 2 * sizeof(Code *)); // reference_set is contiguous to code; memcpy in one go.
+  memcpy(code_, view->code_, VIEW_CODE_MAX_SIZE * sizeof(Atom) + 2 * sizeof(r_code::Code *)); // reference_set is contiguous to code; memcpy in one go.
   if (new_OID)
     code_[VIEW_OID].atom_ = GetOID();
   controller_ = NULL; // deprecated: controller=view->controller;
@@ -107,9 +107,9 @@ inline View::View(SyncMode sync,
   Timestamp ijt,
   float32 sln,
   int32 res,
-  Code *destination,
-  Code *origin,
-  Code *object) : r_code::View(), controller_(NULL) {
+  r_code::Code *destination,
+  r_code::Code *origin,
+  r_code::Code *object) : r_code::View(), controller_(NULL) {
 
   code(VIEW_OPCODE) = Atom::SSet(Opcodes::View, VIEW_ARITY);
   init(sync, ijt, sln, res, destination, origin, object);
@@ -119,9 +119,9 @@ inline View::View(SyncMode sync,
   Timestamp ijt,
   float32 sln,
   int32 res,
-  Code *destination,
-  Code *origin,
-  Code *object,
+  r_code::Code *destination,
+  r_code::Code *origin,
+  r_code::Code *object,
   float32 act) : r_code::View(), controller_(NULL) {
 
   code(VIEW_OPCODE) = Atom::SSet(Opcodes::PgmView, PGM_VIEW_ARITY);
@@ -133,16 +133,16 @@ inline void View::init(SyncMode sync,
   Timestamp ijt,
   float32 sln,
   int32 res,
-  Code *destination,
-  Code *origin,
-  Code *object) {
+  r_code::Code *destination,
+  r_code::Code *origin,
+  r_code::Code *object) {
 
   code_[VIEW_OID].atom_ = GetOID();
   reset_ctrl_values();
 
   code(VIEW_SYNC) = Atom::Float(sync);
   code(VIEW_IJT) = Atom::IPointer(code(VIEW_OPCODE).getAtomCount() + 1);
-  Utils::SetTimestamp<View>(this, VIEW_IJT, ijt);
+  r_code::Utils::SetTimestamp<View>(this, VIEW_IJT, ijt);
   code(VIEW_SLN) = Atom::Float(sln);
   code(VIEW_RES) = res < 0 ? Atom::PlusInfinity() : Atom::Float(res);
   code(VIEW_HOST) = Atom::RPointer(0);

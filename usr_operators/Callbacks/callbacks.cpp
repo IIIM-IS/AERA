@@ -81,6 +81,7 @@
 #include "../r_exec/mem.h"
 
 using namespace std::chrono;
+using namespace r_code;
 
 bool print(microseconds relative_time, bool suspended, const char *msg, uint8 object_count, Code **objects) { // return true to resume the executive (applies when called from a suspend call, i.e. suspended==true).
 

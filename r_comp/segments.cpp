@@ -80,6 +80,7 @@
 #include <iostream>
 
 using namespace std::chrono;
+using namespace r_code;
 
 namespace r_comp {
 
@@ -448,6 +449,15 @@ uint32 ObjectNames::get_size() {
   return size;
 }
 
+uint32 ObjectNames::findSymbol(const std::string& name) {
+  for (auto entry = symbols_.begin(); entry != symbols_.end(); ++entry) {
+    if (entry->second == name)
+      return entry->first;
+  }
+
+  return UNDEFINED_OID;
+}
+
 ////////////////////////////////////////////////////////////////
 
 Image::Image() : map_offset_(0), timestamp_(seconds(0)) {
@@ -470,13 +480,13 @@ void Image::add_sys_object(SysObject *object) {
   map_offset_ += object->get_size();
 }
 
-void Image::add_objects(r_code::list<P<r_code::Code> > &objects) {
+void Image::add_objects(r_code::list<P<r_code::Code> > &objects, bool include_invalidated) {
 
   r_code::list<P<r_code::Code> >::const_iterator o;
   for (o = objects.begin(); o != objects.end(); ++o) {
 
-    if (!(*o)->is_invalidated())
-      add_object(*o);
+    if (include_invalidated || !(*o)->is_invalidated())
+      add_object(*o, include_invalidated);
   }
 
   build_references();
@@ -503,29 +513,40 @@ inline uint32 Image::get_reference_count(const Code *object) const {
   }
 }
 
-void Image::add_object(Code *object) {
+void Image::add_object(Code *object, bool include_invalidated) {
 
   UNORDERED_MAP<Code *, uint16>::iterator it = ptrs_to_indices_.find(object);
   if (it != ptrs_to_indices_.end()) // object already there.
     return;
+
+  // Add the references first so that they are defined when referenced.
+  uint16 reference_count = get_reference_count(object);
+  for (uint16 i = 0; i < reference_count; ++i) { // follow reference pointers and recurse.
+
+    Code *reference = object->get_reference(i);
+    if (include_invalidated || reference->get_oid() == UNDEFINED_OID ||
+      reference->is_invalidated()) // the referenced object is not in the image and will not be added otherwise.
+      add_object(reference, include_invalidated);
+  }
 
   uint16 object_index;
   ptrs_to_indices_[object] = object_index = code_segment_.objects_.as_std()->size();
   SysObject *sys_object = new SysObject(object);
   add_sys_object(sys_object);
 
-  uint16 reference_count = get_reference_count(object);
-  for (uint16 i = 0; i < reference_count; ++i) { // follow reference pointers and recurse.
-
-    Code *reference = object->get_reference(i);
-    if (reference->get_oid() == 0xFFFFFFFF ||
-      reference->is_invalidated()) // the referenced object is not in the image and will not be added otherwise.
-      add_object(reference);
-  }
-
+  // Temporarily store the memory address of object in sys_object->references_. This will be
+  // recovered in build_references.
+#if defined ARCH_32
   uint32 _object = (uint32)object;
   sys_object->references_[0] = (_object & 0x0000FFFF);
   sys_object->references_[1] = (_object >> 16);
+#elif defined ARCH_64
+  uint64 _object = (uint64)object;
+  sys_object->references_[0] = _object & 0x0000FFFF;
+  sys_object->references_[1] = (_object >> 16) & 0x0000FFFF;
+  sys_object->references_[2] = (_object >> 32) & 0x0000FFFF;
+  sys_object->references_[3] = (_object >> 48) & 0x0000FFFF;
+#endif
 }
 
 SysObject *Image::add_object(Code *object, std::vector<SysObject *> &imported_objects) {
@@ -543,7 +564,7 @@ SysObject *Image::add_object(Code *object, std::vector<SysObject *> &imported_ob
   for (uint16 i = 0; i < reference_count; ++i) { // follow the object's reference pointers and recurse.
 
     Code *reference = object->get_reference(i);
-    if (reference->get_oid() == 0xFFFFFFFF) // the referenced object is not in the image and will not be added otherwise.
+    if (reference->get_oid() == UNDEFINED_OID) // the referenced object is not in the image and will not be added otherwise.
       add_object(reference, imported_objects);
     else { // add the referenced object if not present in the list.
 
@@ -576,9 +597,20 @@ SysObject *Image::add_object(Code *object, std::vector<SysObject *> &imported_ob
   }
   object->rel_views();
 
+  // Temporarily store the memory address of object in sys_object->references_. This will be
+  // recovered in build_references.
+#if defined ARCH_32
   uint32 _object = (uint32)object;
   sys_object->references_[0] = (_object & 0x0000FFFF);
   sys_object->references_[1] = (_object >> 16);
+#elif defined ARCH_64
+  uint64 _object = (uint64)object;
+  sys_object->references_[0] = _object & 0x0000FFFF;
+  sys_object->references_[1] = (_object >> 16) & 0x0000FFFF;
+  sys_object->references_[2] = (_object >> 32) & 0x0000FFFF;
+  sys_object->references_[3] = (_object >> 48) & 0x0000FFFF;
+#endif
+
   return sys_object;
 }
 
@@ -589,9 +621,18 @@ void Image::build_references() {
   for (uint32 i = 0; i < code_segment_.objects_.as_std()->size(); ++i) {
 
     sys_object = code_segment_.objects_[i];
+    // The memory address of the original object was stored in sys_object->references_, so recover it.
+#if defined ARCH_32
     uint32 _object = sys_object->references_[0];
     _object |= (sys_object->references_[1] << 16);
     object = (Code *)_object;
+#elif defined ARCH_64
+    uint64 _object = sys_object->references_[0];
+    _object |= ((uint64)(sys_object->references_[1]) << 16);
+    _object |= ((uint64)(sys_object->references_[2]) << 32);
+    _object |= ((uint64)(sys_object->references_[3]) << 48);
+    object = (Code *)_object;
+#endif
     sys_object->references_.as_std()->clear();
     build_references(sys_object, object);
   }

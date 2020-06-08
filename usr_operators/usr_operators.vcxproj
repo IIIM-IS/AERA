@@ -143,7 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="auto_focus.cpp" />
+    <ClCompile Include="auto_focus_callback.cpp" />
     <ClCompile Include="Callbacks\callbacks.cpp" />
     <ClCompile Include="Correlator\correlator.cpp" />
     <ClCompile Include="Correlator\CorrelatorCore.cpp" />
@@ -157,7 +157,7 @@
     <ClCompile Include="usr_operators.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="auto_focus.h" />
+    <ClInclude Include="auto_focus_callback.h" />
     <ClInclude Include="Callbacks\callbacks.h" />
     <ClInclude Include="Correlator\correlator.h" />
     <ClInclude Include="Correlator\CorrelatorCore.h" />

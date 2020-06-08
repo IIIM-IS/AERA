@@ -2,6 +2,7 @@
 *
 !/**/
 !*.*
+!/doc/Doxyfile
 
 # Release folders
 /Release/*
@@ -24,4 +25,8 @@
 # Ignore log files
 *.log
 /Test/decompiled.txt
+/Test/debug_out.txt
 /Test/decompiled_objects.txt
+
+# Generated docs
+/doc/html

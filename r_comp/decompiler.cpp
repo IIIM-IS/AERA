@@ -75,12 +75,30 @@
 //_/_/
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
+#include <algorithm>
+#include <regex>
 #include "decompiler.h"
 #include "../submodules/CoreLibrary/CoreLibrary/utils.h"
 
 using namespace std::chrono;
+using namespace r_code;
 
 namespace r_comp {
+
+// Get a string for the value such as "a", "b" ... "z", "aa", "ab" ....
+static std::string make_suffix(uint32 value) {
+  string result;
+  do {
+    // Get the lowest digit as base 26 and prepend a char from 'a' to 'z'.
+    uint32 lowest = value % 26;
+    result = (char)('a' + lowest) + result;
+
+    // Shift.
+    value /= 26;
+  } while (value != 0);
+
+  return result;
+}
 
 Decompiler::Decompiler() : out_stream_(NULL), current_object_(NULL), metadata_(NULL), image_(NULL), in_hlp_(false) {
 }
@@ -203,8 +221,7 @@ uint32 Decompiler::decompile_references(r_comp::Image *image) {
   image_ = image;
 
   // populate object names first so they can be referenced in any order.
-  Class *c;
-  uint16 last_object_ID;
+  // First pass: Add the user-defined names to object_names_ and object_indices_.
   for (uint16 i = 0; i < image->code_segment_.objects_.size(); ++i) {
 
     SysObject *sys_object = (SysObject *)image->code_segment_.objects_[i];
@@ -213,17 +230,49 @@ uint32 Decompiler::decompile_references(r_comp::Image *image) {
 
       s = n->second;
       named_objects_.insert(sys_object->oid_);
-    } else {
 
-      c = metadata_->get_class(sys_object->code_[0].asOpcode());
-      if (sys_object->oid_ != UNDEFINED_OID)
-        // Use the object's OID.
-        s = c->str_opcode + "_" + std::to_string(sys_object->oid_);
-      else {
-        // Create a name with a unique ID.
-        last_object_ID = object_ID_per_class[c];
-        object_ID_per_class[c] = last_object_ID + 1;
-        s = c->str_opcode + std::to_string(last_object_ID);
+      object_names_[i] = s;
+      object_indices_[s] = i;
+    }
+  }
+
+  regex verticalBarRegex("\\|");
+  // Second pass: Create names for the remaining objects, making sure they are unique.
+  for (uint16 i = 0; i < image->code_segment_.objects_.size(); ++i) {
+    SysObject *sys_object = (SysObject *)image->code_segment_.objects_[i];
+
+    UNORDERED_MAP<uint32, std::string>::const_iterator n = image->object_names_.symbols_.find(sys_object->oid_);
+    if (n != image->object_names_.symbols_.end())
+      // Already set the user-defined name in the first pass.
+      continue;
+
+    Class *c = metadata_->get_class(sys_object->code_[0].asOpcode());
+    string className = c->str_opcode;
+    // A class name like mk.val has a dot, but this isn't allowed as an identifier.
+    replace(className.begin(), className.end(), '.', '_');
+    // A class name like |fact has a bar, but this isn't allowed as an identifier.
+    // (Use regex_replace because it can handle multi-character strings.)
+    className = regex_replace(className, verticalBarRegex, "anti_");
+
+    if (sys_object->oid_ != UNDEFINED_OID)
+      // Use the object's OID.
+      s = className + "_" + std::to_string(sys_object->oid_);
+    else {
+      // Create a name with a unique ID.
+      uint16 last_object_ID = object_ID_per_class[c];
+      object_ID_per_class[c] = last_object_ID + 1;
+      s = className + std::to_string(last_object_ID);
+    }
+
+    if (object_indices_.find(s) != object_indices_.end()) {
+      // The created name matches an existing name. Keep trying an added
+      // suffix until it is unique.
+      for (uint32 value = 1; true; ++value) {
+        std::string new_s = s + make_suffix(value);
+        if (object_indices_.find(new_s) == object_indices_.end()) {
+          s = new_s;
+          break;
+        }
       }
     }
 
@@ -231,7 +280,7 @@ uint32 Decompiler::decompile_references(r_comp::Image *image) {
     object_indices_[s] = i;
   }
 
-  closing_set = false;
+  closing_set_ = false;
 
   return image->code_segment_.objects_.size();
 }
@@ -279,12 +328,12 @@ void Decompiler::decompile_object(uint16 object_index, std::ostringstream *strea
         return;
       else
         *out_stream_ << "imported";
-    } else if (sys_object->oid_ != 0xFFFFFFFF)
+    } else if (sys_object->oid_ != UNDEFINED_OID)
       *out_stream_ << sys_object->oid_;
 #ifdef WITH_DEBUG_OID
     *out_stream_ << "(" << sys_object->debug_oid_ << ") ";
 #else
-    if (sys_object->oid_ != 0xFFFFFFFF)
+    if (sys_object->oid_ != UNDEFINED_OID)
       *out_stream_ << " ";
 #endif
   }
@@ -370,9 +419,9 @@ void Decompiler::write_expression_tail(uint16 read_index, bool apply_time_offset
       write_any(++read_index, after_tail_wildcard, apply_time_offset);
     else {
 
-      if (closing_set) {
+      if (closing_set_) {
 
-        closing_set = false;
+        closing_set_ = false;
         if (!horizontal_set_)
           write_indent(indents_);
         else
@@ -382,7 +431,7 @@ void Decompiler::write_expression_tail(uint16 read_index, bool apply_time_offset
 
       write_any(++read_index, after_tail_wildcard, apply_time_offset);
 
-      if (!closing_set && vertical)
+      if (!closing_set_ && vertical)
         *out_stream_ << NEWLINE;
     }
   }
@@ -390,17 +439,17 @@ void Decompiler::write_expression_tail(uint16 read_index, bool apply_time_offset
 
 void Decompiler::write_expression(uint16 read_index) {
 
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, true);
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   *out_stream_ << ')';
@@ -408,17 +457,17 @@ void Decompiler::write_expression(uint16 read_index) {
 
 void Decompiler::write_group(uint16 read_index) {
 
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, false);
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   *out_stream_ << ')';
@@ -426,17 +475,17 @@ void Decompiler::write_group(uint16 read_index) {
 
 void Decompiler::write_marker(uint16 read_index) {
 
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, false);
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   *out_stream_ << ')';
@@ -444,17 +493,17 @@ void Decompiler::write_marker(uint16 read_index) {
 
 void Decompiler::write_pgm(uint16 read_index) {
 
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, true);
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   *out_stream_ << ')';
@@ -463,17 +512,17 @@ void Decompiler::write_pgm(uint16 read_index) {
 
 void Decompiler::write_ipgm(uint16 read_index) {
 
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, false);
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   *out_stream_ << ')';
@@ -482,9 +531,9 @@ void Decompiler::write_ipgm(uint16 read_index) {
 void Decompiler::write_hlp(uint16 read_index) {
 
   in_hlp_ = true;
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   out_stream_->push('(', read_index);
@@ -500,25 +549,31 @@ void Decompiler::write_hlp(uint16 read_index) {
       write_any(++read_index, after_tail_wildcard, false);
     else {
 
-      if (closing_set) {
+      if (closing_set_) {
 
-        closing_set = false;
+        closing_set_ = false;
         write_indent(indents_);
       }
 
       if (i == 0 || i == 1)
+        // Put a colon after variables for template arguments and the facts.
         hlp_postfix_ = true;
+      bool save_horizontal_set = horizontal_set_;
+      if (i == 0 || i == 4)
+        // Write the set of template arguments and set of output groups horizontally.
+        horizontal_set_ = true;
       write_any(++read_index, after_tail_wildcard, false);
       hlp_postfix_ = false;
+      horizontal_set_ = save_horizontal_set;
 
-      if (!closing_set)
+      if (!closing_set_)
         *out_stream_ << NEWLINE;
     }
   }
 
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   *out_stream_ << ')';
@@ -529,17 +584,17 @@ void Decompiler::write_ihlp(uint16 read_index) {
 
   if (!in_hlp_)
     horizontal_set_ = true;
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, true);
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   *out_stream_ << ')';
@@ -549,9 +604,9 @@ void Decompiler::write_ihlp(uint16 read_index) {
 
 void Decompiler::write_icmd(uint16 read_index) {
 
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   out_stream_->push('(', read_index);
@@ -574,9 +629,9 @@ void Decompiler::write_icmd(uint16 read_index) {
       write_any(++read_index, after_tail_wildcard, true);
     else {
 
-      if (closing_set) {
+      if (closing_set_) {
 
-        closing_set = false;
+        closing_set_ = false;
         write_indent(indents_);
       } else
         *out_stream_ << ' ';
@@ -585,9 +640,9 @@ void Decompiler::write_icmd(uint16 read_index) {
     }
   }
 
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   *out_stream_ << ')';
@@ -597,17 +652,17 @@ void Decompiler::write_cmd(uint16 read_index) {
 
   if (!in_hlp_)
     horizontal_set_ = true;
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, false);
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   *out_stream_ << ')';
@@ -619,17 +674,17 @@ void Decompiler::write_fact(uint16 read_index) {
 
   if (in_hlp_)
     horizontal_set_ = true;
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
   write_expression_tail(read_index, true);
-  if (closing_set) {
+  if (closing_set_) {
 
-    closing_set = false;
+    closing_set_ = false;
     write_indent(indents_);
   }
   *out_stream_ << ')';
@@ -656,7 +711,7 @@ void Decompiler::write_view(uint16 read_index, uint16 arity) {
   *out_stream_ << "]";
 }
 
-void Decompiler::write_set(uint16 read_index, bool aply_time_offset, uint16 write_as_view_index) { // read_index points to a set atom.
+void Decompiler::write_set(uint16 read_index, bool apply_time_offset, uint16 write_as_view_index) { // read_index points to a set atom.
 
   uint16 arity = current_object_->code_[read_index].getAtomCount();
   bool after_tail_wildcard = false;
@@ -664,7 +719,7 @@ void Decompiler::write_set(uint16 read_index, bool aply_time_offset, uint16 writ
   if (arity == 1) { // write [element]
 
     out_stream_->push('[', read_index);
-    write_any(++read_index, after_tail_wildcard, aply_time_offset);
+    write_any(++read_index, after_tail_wildcard, apply_time_offset);
     *out_stream_ << ']';
   } else if (write_as_view_index > 0 && write_as_view_index == read_index)
     write_view(read_index, arity);
@@ -676,12 +731,12 @@ void Decompiler::write_set(uint16 read_index, bool aply_time_offset, uint16 writ
       if (i > 0)
         *out_stream_ << ' ';
       if (after_tail_wildcard)
-        write_any(++read_index, after_tail_wildcard, aply_time_offset);
+        write_any(++read_index, after_tail_wildcard, apply_time_offset);
       else
-        write_any(++read_index, after_tail_wildcard, aply_time_offset, write_as_view_index);
+        write_any(++read_index, after_tail_wildcard, apply_time_offset, write_as_view_index);
     }
     *out_stream_ << ']';
-    closing_set = true;
+    closing_set_ = true;
   } else { // write []+indented elements.
 
     out_stream_->push("[]", read_index);
@@ -689,14 +744,14 @@ void Decompiler::write_set(uint16 read_index, bool aply_time_offset, uint16 writ
     for (uint16 i = 0; i < arity; ++i) {
 
       if (after_tail_wildcard)
-        write_any(++read_index, after_tail_wildcard, aply_time_offset);
+        write_any(++read_index, after_tail_wildcard, apply_time_offset);
       else {
 
         write_indent(indents_);
-        write_any(++read_index, after_tail_wildcard, aply_time_offset, write_as_view_index);
+        write_any(++read_index, after_tail_wildcard, apply_time_offset, write_as_view_index);
       }
     }
-    closing_set = true;
+    closing_set_ = true;
     indents_ -= 3; // don't call write_indents() here as the last set member can be a set.
   }
 }

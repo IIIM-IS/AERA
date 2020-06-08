@@ -170,8 +170,6 @@
 #define MK_RDX_ARITY 4
 
 #define MK_RDX_IHLP_REF 0
-#define MK_RDX_MDL_INPUT_REF 1
-#define MK_RDX_MDL_PRODUCTION_REF 2
 
 
 #define CMD_FUNCTION 1
@@ -223,7 +221,7 @@
 
 #define I_HLP_OBJ 1
 #define I_HLP_TPL_ARGS 2
-#define I_HLP_ARGS 3
+#define I_HLP_EXPOSED_ARGS 3
 #define I_HLP_WEAK_REQUIREMENT_ENABLED 4
 #define I_HLP_ARITY 5
 

@@ -1,4 +1,4 @@
-<TestConfiguration>
+<AERAConfiguration>
   <Load
     usr_operator_path="./usr_operators.dll"
     usr_class_path="../Test/V1.2/user.classes.replicode"
@@ -23,13 +23,14 @@
     primary_thz="3600000"
     secondary_thz="7200000"
   />
-  <Debug debug="yes" debug_windows="1" trace_levels="FF"> <!--FF sets all Debug Streams to the std::cout-->
+  <Debug debug="yes" debug_windows="1" debug_stream_file_path="" trace_levels="FFFF">
     <Resilience
       ntf_mk_resilience="1"
       goal_pred_success_resilience="1000"
     />
     <Objects
       get_objects="yes"
+      keep_invalidated_objects="no"
       decompile_objects="yes"
       decompile_to_file="yes"
       decompilation_file_path="decompiled_objects.txt"
@@ -49,7 +50,7 @@
       test_models="no"
     />
   </Run>
-</TestConfiguration>
+</AERAConfiguration>
 
 <!--Usage
 Init
@@ -72,21 +73,33 @@ System
   primary_thz: time after which states/models that did not match are pushed down to secondary group (models) or sent to oblivion (states); in seconds.
   secondary_thz: time after which states/models that did not match are sent to oblivion; in seconds.
 Debug
-  trace_levels: ORed values (numbers indicate the location from right to left): 0:cst inputs, 1: cst outputs, 2: mdl inputs, 3: mdl outputs, 4 prediction monitoring, 5: goal monitoring, 6: model revision, 7:mdl/cst injections. ex: 3 means cst inputs and cst outputs, ignore others.
+  debug_windows: The number of debug windows to show created models. (Not to be confused with the debug stream below.)
+  debug_stream_file_path: The file path for the debug stream of the trace_levels selected below. If "" then use std::cout.
+  trace_levels: Hexadecimal ORed values of traces for the debug stream (numbers indicate the location from right to left):
+    0: cst inputs, 1: cst outputs, 2: mdl inputs, 3: mdl outputs, 4 prediction monitoring, 5: goal monitoring,
+      6: model revision, 7:mdl/cst injections, 8: environment injections/ejections, 9: auto focus.
+    e.g.: 3 means cst inputs and cst outputs, ignore others. FFFF enables all trace levels.
   Resilience
     ntf_mk_resilience: in upr (i.e. relative to the ntf group).
     goal_pred_success_resilience: in upr (i.e. relative to the ntf group).
-  Image
-    get_image: yes or no; the image will contain all valid objects after the Mem shuts down.
-    decompile_image: yes or no.
+  Objects
+    get_objects: yes or no.
+      If yes, then after the Mem shuts down the image will contain all valid objects, or all valid and invalid
+        objects if keep_invalidated_objects is also yes.
+      If no, ignore the rest of this section.
+    keep_invalidated_objects: yes or no; if yes, the image will contain all valid and invalidated objects after 
+      the Mem shuts down. Use with caution: Invalidated objects are not deleted at run-time, which can consume memory.
+    decompile_objects: yes or no.
     decompile_to_file: yes or no.
+    decompilation_file_path: The path of the decompiled output file if decompile_to_file is yes
     ignore_named_objects: yes or no; if yes, objects provided by the deveoper are not decompiled.
-    write_image: yes or no.
-    test_image: yes or no (yes: reads back and decompiles).
+    write_objects: yes or no.
+    objects_path: The path of the image file if write_objects is yes.
+    test_objects: yes or no (yes: reads back and decompiles).
 Run
   run_time: in ms.
   probe_level: any probe set to a level >= this level will not be executed. 0 means no probe will be executed.
   enable_assumptions: yes or no to enable injecting assumptions.
   Models
-    same as for Debug/Image.
+    same as for Debug/Objects.
 -->

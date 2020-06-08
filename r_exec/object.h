@@ -88,7 +88,23 @@
 
 namespace r_exec {
 
-r_exec_dll bool IsNotification(Code *object);
+static inline bool IsNotification(r_code::Code *object) {
+
+  switch (object->code(0).getDescriptor()) {
+  case Atom::MARKER:
+    return object->code(0).asOpcode() == Opcodes::MkActChg ||
+      object->code(0).asOpcode() == Opcodes::MkHighAct ||
+      object->code(0).asOpcode() == Opcodes::MkHighSln ||
+      object->code(0).asOpcode() == Opcodes::MkLowAct ||
+      object->code(0).asOpcode() == Opcodes::MkLowRes ||
+      object->code(0).asOpcode() == Opcodes::MkLowSln ||
+      object->code(0).asOpcode() == Opcodes::MkNew ||
+      object->code(0).asOpcode() == Opcodes::MkRdx ||
+      object->code(0).asOpcode() == Opcodes::MkSlnChg;
+  default:
+    return false;
+  }
+}
 
 // Shared resources:
 // views: accessed by Mem::injectNow (via various sub calls) and Mem::update.
@@ -110,7 +126,7 @@ protected:
 public:
   virtual ~Object(); // un-registers from the rMem's object_register.
 
-  r_code::View *build_view(SysView *source) {
+  r_code::View *build_view(r_code::SysView *source) {
 
     return Code::build_view<r_exec::View>(source);
   }
@@ -131,9 +147,7 @@ public:
   void set(uint16 member_index, float32 value);
   void mod(uint16 member_index, float32 value);
 
-  View *get_view(Code *group, bool lock); // returns the found view if any, NULL otherwise.
-
-  void kill();
+  View *get_view(r_code::Code *group, bool lock); // returns the found view if any, NULL otherwise.
 
   class Hash {
   public:
@@ -174,7 +188,7 @@ class r_exec_dll LObject :
   public Object<r_code::LObject, LObject> {
 public:
   static bool RequiresPacking() { return false; }
-  static LObject *Pack(Code *object, r_code::Mem *mem) { return (LObject *)object; } // object is always a LObject (local operation).
+  static LObject *Pack(r_code::Code *object, r_code::Mem *mem) { return (LObject *)object; } // object is always a LObject (local operation).
   LObject(r_code::Mem *mem = NULL) : Object<r_code::LObject, LObject>(mem) {}
   LObject(r_code::SysObject *source) : Object<r_code::LObject, LObject>() {
 

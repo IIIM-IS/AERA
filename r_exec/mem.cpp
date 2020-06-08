@@ -82,13 +82,52 @@
 #include "model_base.h"
 
 using namespace std::chrono;
+using namespace r_code;
 
 namespace r_exec {
 
-_Mem::_Mem() : r_code::Mem(), state_(NOT_STARTED), deleted_(false) {
+_Mem::_Mem() : r_code::Mem(), 
+  state_(NOT_STARTED), 
+  deleted_(false),
+  base_period_(50000),
+  reduction_core_count_(0),
+  time_core_count_(0),
+  mdl_inertia_sr_thr_(0.9),
+  mdl_inertia_cnt_thr_(6),
+  tpx_dsr_thr_(0.1),
+  min_sim_time_horizon_(0),
+  max_sim_time_horizon_(0),
+  sim_time_horizon_factor_(0.3),
+  tpx_time_horizon_(5000000),
+  perf_sampling_period_(250000),
+  float_tolerance_(0.00001),
+  time_tolerance_(10000),
+  primary_thz_(seconds(3600000)),
+  secondary_thz_(seconds(7200000)),
+  debug_(true),
+  ntf_mk_res_(1),
+  goal_pred_success_res_(1000),
+  keep_invalidated_objects_(false),
+  probe_level_(2),
+  enable_assumptions_(true),
+  reduction_cores_(0),
+  time_cores_(0),
+  reduction_job_count_(0),
+  time_job_count_(0),
+  time_job_avg_latency_(0),
+  _time_job_avg_latency_(0),
+  core_count_(0),
+  stop_sem_(0),
+  stdin_(0),
+  stdout_(0),
+  self_(0),
+  defaultDebugStream_(&std::cout)
+{
 
   new ModelBase();
   objects_.reserve(1024);
+  for (uint32 i = 0; i < DebugStreamCount; ++i)
+    debug_streams_[i] = NULL;
 }
 
 _Mem::~_Mem() {
@@ -118,7 +157,8 @@ void _Mem::init(microseconds base_period,
   uint32 goal_pred_success_res,
   uint32 probe_level,
   uint32 traces,
-  bool enable_assumptions) {
+  bool enable_assumptions,
+  bool keep_invalidated_objects) {
 
   base_period_ = base_period;
 
@@ -147,6 +187,7 @@ void _Mem::init(microseconds base_period,
 
   probe_level_ = probe_level;
   enable_assumptions_ = enable_assumptions;
+  keep_invalidated_objects_ = keep_invalidated_objects;
 
   reduction_job_count_ = time_job_count_ = 0;
   reduction_job_avg_latency_ = _reduction_job_avg_latency_ = microseconds(0);
@@ -156,6 +197,7 @@ void _Mem::init(microseconds base_period,
   for (uint32 i = 0; i < DebugStreamCount; ++i) {
 
     if (traces & mask)
+      // NULL means Output() will use defaultDebugStream_ . 
       debug_streams_[i] = NULL;
     else
       debug_streams_[i] = new NullOStream();
@@ -165,8 +207,13 @@ void _Mem::init(microseconds base_period,
 
 std::ostream &_Mem::Output(TraceLevel l) {
 
-  return (_Mem::Get()->debug_streams_[l] == NULL ? std::cout : *(_Mem::Get()->debug_streams_[l]));
+  return (_Mem::Get()->debug_streams_[l] == NULL ? 
+    *_Mem::Get()->defaultDebugStream_ : *(_Mem::Get()->debug_streams_[l]));
 }
+
+// This is declared at the r_exec namespace level in overlay.h, so that all headers
+// don't need to include mem.h.
+std::ostream &_Mem_Output(TraceLevel l) { return _Mem::Output(l); }
 
 void _Mem::reset() {
 
@@ -240,7 +287,7 @@ void _Mem::store(Code *object) {
 
   int32 location;
   objects_.push_back(object, location);
-  object->set_stroage_index(location);
+  object->set_strorage_index(location);
 }
 
 bool _Mem::load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid) { // no cov at init time.
@@ -260,7 +307,11 @@ bool _Mem::load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 s
   store((Code *)root_);
   initial_groups_.push_back(root_);
 
-  set_last_oid(objects->size() - 1);
+  // Get the highest existing OID.
+  uint32 highest_oid = 0;
+  for (uint32 i = 0; i < objects->size(); ++i)
+    highest_oid = max(highest_oid, (*objects)[i]->get_oid());
+  set_last_oid(max(highest_oid, objects->size() - 1));
 
   for (uint32 i = 1; i < objects->size(); ++i) { // skip root as it has no initial views.
 
@@ -312,11 +363,11 @@ bool _Mem::load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 s
   return true;
 }
 
-void _Mem::init_timings(Timestamp now) const { // called at the beginning of _Mem::start(); use initial user-supplied facts' times as offsets from now.
+void _Mem::init_timings(Timestamp now, const r_code::list<P<Code>>& objects) {
 
   auto time_tolerance = Utils::GetTimeTolerance() * 2;
   r_code::list<P<Code> >::const_iterator o;
-  for (o = objects_.begin(); o != objects_.end(); ++o) {
+  for (o = objects.begin(); o != objects.end(); ++o) {
 
     uint16 opcode = (*o)->code(0).asOpcode();
     if (opcode == Opcodes::Fact || opcode == Opcodes::AntiFact) {
@@ -352,7 +403,7 @@ Timestamp _Mem::start() {
   auto now = Now();
   Utils::SetTimeReference(now);
   ModelBase::Get()->set_thz(secondary_thz_);
-  init_timings(now);
+  init_timings(now, objects_);
 
   for (i = 0; i < initial_groups_.size(); ++i) {
 
@@ -474,8 +525,8 @@ void _Mem::runInDiagnosticTime(milliseconds runTime) {
 
       if (reductionJobQueue.size() > maxReductionJobsPerCycle)
         // There are remaining jobs to be run. Shift them to the front.
-        reductionJobQueue.erase
-        (reductionJobQueue.begin(), reductionJobQueue.begin() + maxReductionJobsPerCycle);
+        reductionJobQueue.erase(
+          reductionJobQueue.begin(), reductionJobQueue.begin() + maxReductionJobsPerCycle);
       else
         reductionJobQueue.clear();
 
@@ -492,9 +543,9 @@ void _Mem::runInDiagnosticTime(milliseconds runTime) {
         // No more time jobs.
         break;
 
-      orderedTimeJobQueue.insert
-      (upper_bound(orderedTimeJobQueue.begin(),
-        orderedTimeJobQueue.end(), timeJob, timeJobCompare_),
+      orderedTimeJobQueue.insert(
+        upper_bound(orderedTimeJobQueue.begin(),
+          orderedTimeJobQueue.end(), timeJob, timeJobCompare_),
         timeJob);
     }
 
@@ -547,9 +598,9 @@ void _Mem::runInDiagnosticTime(milliseconds runTime) {
     if (next_target.time_since_epoch().count() != 0) {
       // The job wants to run again, so re-insert into the queue.
       timeJob->target_time_ = next_target;
-      orderedTimeJobQueue.insert
-      (upper_bound(orderedTimeJobQueue.begin(),
-        orderedTimeJobQueue.end(), timeJob, timeJobCompare_),
+      orderedTimeJobQueue.insert(
+        upper_bound(orderedTimeJobQueue.begin(),
+          orderedTimeJobQueue.end(), timeJob, timeJobCompare_),
         timeJob);
     }
     else
@@ -693,6 +744,14 @@ void _Mem::inject_new_object(View *view) {
     //timings_report.push_back(t2-t0);
     break;
   }
+}
+
+void _Mem::injectFromEnvironment(View *view) {
+  // Inject first to set the OID.
+  inject(view);
+  // The view injection time may be different than now, so log it too.
+  OUTPUT_LINE(ENVIRONMENT_INJ_EJT, Utils::RelativeTime(Now()) << " environment inject " <<
+    view->object_->get_oid() << ", ijt " << Utils::RelativeTime(view->get_ijt()));
 }
 
 void _Mem::inject(View *view) {
@@ -923,7 +982,7 @@ void _Mem::propagate_sln(Code *object, float32 change, float32 source_sln_thr) {
 }*/
 ////////////////////////////////////////////////////////////////
 
-void _Mem::unpack_hlp(Code *hlp) const { // produces a new object (featuring a set of pattern objects instread of a set of embedded pattern expressions) and add it as a hidden reference to the original (still packed) hlp.
+void _Mem::unpack_hlp(Code *hlp) { // produces a new object (featuring a set of pattern objects instread of a set of embedded pattern expressions) and add it as a hidden reference to the original (still packed) hlp.
 
   Code *unpacked_hlp = new LObject(); // will not be transmitted nor decompiled.
 
@@ -976,7 +1035,7 @@ void _Mem::unpack_hlp(Code *hlp) const { // produces a new object (featuring a s
   hlp->add_reference(unpacked_hlp);
 }
 
-Code *_Mem::unpack_fact(Code *hlp, uint16 fact_index) const {
+Code *_Mem::unpack_fact(Code *hlp, uint16 fact_index) {
 
   Code *fact = new LObject();
   Code *fact_object;
@@ -1003,14 +1062,14 @@ Code *_Mem::unpack_fact(Code *hlp, uint16 fact_index) const {
   return fact;
 }
 
-Code *_Mem::unpack_fact_object(Code *hlp, uint16 fact_object_index) const {
+Code *_Mem::unpack_fact_object(Code *hlp, uint16 fact_object_index) {
 
   Code *fact_object = new LObject();
   _unpack_code(hlp, fact_object_index, fact_object, fact_object_index);
   return fact_object;
 }
 
-void _Mem::_unpack_code(Code *hlp, uint16 fact_object_index, Code *fact_object, uint16 read_index) const {
+void _Mem::_unpack_code(Code *hlp, uint16 fact_object_index, Code *fact_object, uint16 read_index) {
 
   Atom h_atom = hlp->code(read_index);
   uint16 code_size = h_atom.getAtomCount() + 1;
@@ -1095,7 +1154,7 @@ void _Mem::pack_hlp(Code *hlp) const { // produces a new object where a set of p
   hlp->add_reference(unpacked_hlp); // hidden reference.
 }
 
-void _Mem::pack_fact(Code *fact, Code *hlp, uint16 &write_index, std::vector<P<Code> > *references) const {
+void _Mem::pack_fact(Code *fact, Code *hlp, uint16 &write_index, std::vector<P<Code> > *references) {
 
   uint16 extent_index = write_index + fact->code_size();
   for (uint16 i = 0; i < fact->code_size(); ++i) {
@@ -1116,7 +1175,7 @@ void _Mem::pack_fact(Code *fact, Code *hlp, uint16 &write_index, std::vector<P<C
   write_index = extent_index;
 }
 
-void _Mem::pack_fact_object(Code *fact_object, Code *hlp, uint16 &write_index, std::vector<P<Code> > *references) const {
+void _Mem::pack_fact_object(Code *fact_object, Code *hlp, uint16 &write_index, std::vector<P<Code> > *references) {
 
   uint16 extent_index = write_index + fact_object->code_size();
   uint16 offset = write_index;
@@ -1204,7 +1263,7 @@ void MemStatic::bind(View *view) {
   }
   int32 location;
   objects_.push_back(object, location);
-  object->set_stroage_index(location);
+  object->set_strorage_index(location);
   objectsCS_.leave();
 }
 void MemStatic::set_last_oid(int32 oid) {
@@ -1217,18 +1276,22 @@ void MemStatic::delete_object(r_code::Code *object) { // called only if the obje
   if (deleted_)
     return;
 
-  objectsCS_.enter();
-  objects_.erase(object->get_storage_index());
-  objectsCS_.leave();
+  // keep_invalidated_objects_ is true if settings.xml has
+  // get_objects="yes_with_invalidated", in which case don't erase.
+  if (!keep_invalidated_objects_) {
+    objectsCS_.enter();
+    objects_.erase(object->get_storage_index());
+    objectsCS_.leave();
+  }
 }
 
-r_comp::Image *MemStatic::get_objects() {
+r_comp::Image *MemStatic::get_objects(bool include_invalidated) {
 
   r_comp::Image *image = new r_comp::Image();
   image->timestamp_ = Now();
 
   objectsCS_.enter();
-  image->add_objects(objects_);
+  image->add_objects(objects_, include_invalidated);
   objectsCS_.leave();
 
   return image;

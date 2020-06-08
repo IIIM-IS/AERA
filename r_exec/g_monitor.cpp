@@ -81,6 +81,7 @@
 #include "factory.h"
 
 using namespace std::chrono;
+using namespace r_code;
 
 namespace r_exec {
 
@@ -243,7 +244,7 @@ bool GMonitor::reduce(_Fact *input) { // executed by a reduction core; invalidat
 
     _Fact *_input = prediction->get_target(); // _input is f1->obj.
     if (simulating_) { // injected_goal==true.
-
+      // Debug: It was passing target. Is it right to pass controller_?
       Sim *sim = prediction->get_simulation(controller_);
       if (sim) {
 
@@ -378,7 +379,7 @@ bool RMonitor::reduce(_Fact *input) { // catch simulated predictions only; requi
 
     _Fact *_input = prediction->get_target(); // _input is f1->obj.
     if (simulating_) { // injected_goal==true.
-
+      // Debug: It was passing target. Is it right to pass controller_?
       Sim *sim = prediction->get_simulation(controller_);
       if (sim) {
 
@@ -474,7 +475,7 @@ bool SGMonitor::reduce(_Fact *input) {
   if (prediction) { // input is f0->pred->f1->object.
 
     _input = prediction->get_target(); // _input is f1->obj.
-
+    // Debug: It was passing target. Is it right to pass controller_?
     Sim *sim = prediction->get_simulation(controller_);
     if (sim) {
 
@@ -556,7 +557,7 @@ bool SRMonitor::reduce(_Fact *input) {
   if (prediction) { // input is f0->pred->f1->object.
 
     _Fact *_input = prediction->get_target(); // _input is f1->obj.
-
+    // Debug: It was passing target. Is it right to pass controller_?
     Sim *sim = prediction->get_simulation(controller_);
     if (sim) {
 

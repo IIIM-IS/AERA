@@ -121,7 +121,7 @@ public:
   Atom *get_value_code(uint16 id) const;
   uint16 get_value_code_size(uint16 id) const;
 
-  Code *get_unpacked_object() const;
+  r_code::Code *get_unpacked_object() const;
 
   bool evaluate_bwd_guards();
 };

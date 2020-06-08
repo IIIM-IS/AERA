@@ -78,6 +78,7 @@
 #ifndef mem_h
 #define mem_h
 
+#include <sstream>
 #include "reduction_core.h"
 #include "time_core.h"
 #include "pgm_overlay.h"
@@ -94,16 +95,16 @@
 
 namespace r_exec {
 
-// The rMem.
-// Maintains 2 pipes of jobs (injection, update, etc.). each job is processed asynchronously by instances of ReductionCore and TimeCore.
-// Pipes and threads are created at starting time and deleted at stopping time.
-// Groups and IPGMControllers are cleared up when only held by jobs;
-// - when a group is not projected anywhere anymore, it is invalidated (it releases all its views) and when a job attempts an update, the latter is cancelled.
-// - when a reduction core attempts to perform a reduction for an ipgm-controller that is not projected anywhere anymore, the reduction is cancelled.
-// In addition:
-// - when an object is scheduled for injection and the target group does not exist anymore (or is invalidated), the injection is cancelled.
-// - when an object is scheduled for propagation of sln changes and has no view anymore, the operation is cancelled.
-// Main processing in _Mem::update().
+/** The rMem.
+ * Maintains 2 pipes of jobs (injection, update, etc.). each job is processed asynchronously by instances of ReductionCore and TimeCore.
+ * Pipes and threads are created at starting time and deleted at stopping time.
+ * Groups and IPGMControllers are cleared up when only held by jobs;
+ * - when a group is not projected anywhere anymore, it is invalidated (it releases all its views) and when a job attempts an update, the latter is cancelled.
+ * - when a reduction core attempts to perform a reduction for an ipgm-controller that is not projected anywhere anymore, the reduction is cancelled.
+ * In addition:
+ * - when an object is scheduled for injection and the target group does not exist anymore (or is invalidated), the injection is cancelled.
+ * - when an object is scheduled for propagation of sln changes and has no view anymore, the operation is cancelled.
+ */
 class r_exec_dll _Mem :
   public r_code::Mem {
 public:
@@ -136,6 +137,7 @@ protected:
   bool debug_;
   uint32 ntf_mk_res_;
   uint32 goal_pred_success_res_;
+  bool keep_invalidated_objects_;
 
   // Parameters::Run.
   uint32 probe_level_;
@@ -165,31 +167,32 @@ protected:
   CriticalSection stateCS_;
   Semaphore *stop_sem_; // blocks the rMem until all cores terminate.
 
-  r_code::list<P<Code> > objects_; // store objects in order of injection: holds the initial objects (and dynamically created ones if MemStatic is used).
+  r_code::list<P<r_code::Code> > objects_; // store objects in order of injection: holds the initial objects (and dynamically created ones if MemStatic is used).
 
   P<Group> root_; // holds everything.
-  Code *stdin_;
-  Code *stdout_;
-  Code *self_;
+  r_code::Code *stdin_;
+  r_code::Code *stdout_;
+  r_code::Code *self_;
 
   void reset(); // clear the content of the mem.
 
   std::vector<Group *> initial_groups_; // convenience; cleared after start();
 
-  void init_timings(Timestamp now) const;
-
-  void store(Code *object);
+  void store(r_code::Code *object);
   virtual void set_last_oid(int32 oid) = 0;
   virtual void bind(View *view) = 0;
 
   bool deleted_;
 
-  static const uint32 DebugStreamCount = 8;
-  ostream *debug_streams_[DebugStreamCount];
+  static const uint32 DebugStreamCount = 10;
+  std::ostream *debug_streams_[DebugStreamCount];
+  // Use defaultDebugStream_ if debug_streams_[i] is NULL. For no output,
+  // debug_streams_[i] will be set to new NullOStream().
+  std::ostream *defaultDebugStream_;
 
   _Mem();
 
-  void _unpack_code(Code *hlp, uint16 fact_object_index, Code *fact_object, uint16 read_index) const;
+  static void _unpack_code(r_code::Code *hlp, uint16 fact_object_index, r_code::Code *fact_object, uint16 read_index);
 public:
   static _Mem *Get() { return (_Mem *)Mem::Get(); }
 
@@ -220,7 +223,8 @@ public:
     uint32 goal_pred_success_res,
     uint32 probe_level,
     uint32 traces,
-    bool enable_assumptions);
+    bool enable_assumptions,
+    bool keep_invalidated_objects);
 
   uint64 get_probe_level() const { return probe_level_; }
   bool get_enable_assumptions() const { return enable_assumptions_; }
@@ -247,13 +251,13 @@ public:
       return goal_pred_success_res_;
     if (time_to_live.count() == 0)
       return 1;
-    return Utils::GetResilience(now, time_to_live, host->get_upr());
+    return r_code::Utils::GetResilience(now, time_to_live, host->get_upr());
   }
 
-  Code *get_root() const;
-  Code *get_stdin() const;
-  Code *get_stdout() const;
-  Code *get_self() const;
+  r_code::Code *get_root() const;
+  r_code::Code *get_stdin() const;
+  r_code::Code *get_stdout() const;
+  r_code::Code *get_self() const;
 
   State check_state(); // called by delegates after waiting in case stop() is called in the meantime.
   void start_core(); // called upon creation of a delegate.
@@ -263,18 +267,18 @@ public:
                                                                                                                   // return false on error.
   Timestamp start(); // return the starting time.
 
-  /// <summary>
-  /// When reduction and core count == 0, start() does not start any core threads, 
-  /// so call this instead of Thread::Sleep(runTimeMilliseconds) to run in the current 
-  /// thread using "diagnostic time".As opposed to real time which uses Time::Get, 
-  /// diagnostic time uses getDiagnosticTimeNow() which simply returns DiagnosticTimeNow. 
-  /// (The main() function should call r_exec::Init where time_base is getDiagnosticTimeNow.) 
-  /// So, runInDiagnosticTime updates DiagnosticTimeNow based on the next time job(which always
-  /// runs on time).This way, the return value of Now() does not move with real time, but moves
-  /// step-by-step when DiagnosticTimeNow is updated, making it possible to set break points 
-  /// and diagnose the program.
-  /// </summary>
-  /// <param name="runTime">The number of milliseconds (in diagnostic time) to run for.</param>
+  /**
+   * When reduction and core count == 0, start() does not start any core threads,
+   * so call this instead of Thread::Sleep(runTimeMilliseconds) to run in the current
+   * thread using "diagnostic time".As opposed to real time which uses Time::Get,
+   * diagnostic time uses getDiagnosticTimeNow() which simply returns DiagnosticTimeNow.
+   * (The main() function should call r_exec::Init where time_base is getDiagnosticTimeNow.)
+   * So, runInDiagnosticTime updates DiagnosticTimeNow based on the next time job(which always
+   * runs on time).This way, the return value of Now() does not move with real time, but moves
+   * step-by-step when DiagnosticTimeNow is updated, making it possible to set break points
+   * and diagnose the program.
+   * \param runTime The number of milliseconds (in diagnostic time) to run for.
+   */
   void runInDiagnosticTime(std::chrono::milliseconds runTime);
   static Timestamp DiagnosticTimeNow_;
   static Timestamp getDiagnosticTimeNow();
@@ -289,17 +293,24 @@ public:
   P<TimeJob> popTimeJob(bool waitForItem = true);
   void pushTimeJob(TimeJob *j);
 
+  /**
+   * This is called from the external environment to call the normal inject(view), then 
+   * log the injection event.
+   * \param view The View for inject(view).
+   */
+  void injectFromEnvironment(View *view);
+
   // Called upon successful reduction.
   void inject(View *view);
   void inject_async(View *view);
   void inject_new_object(View *view);
-  void inject_existing_object(View *view, Code *object, Group *host);
+  void inject_existing_object(View *view, r_code::Code *object, Group *host);
   void inject_null_program(Controller *c, Group *group, std::chrono::microseconds time_to_live, bool take_past_inputs); // build a view v (ijt=now, act=1, sln=0, res according to time_to_live in the group), attach c to v, inject v in the group.
   void inject_hlps(std::vector<View *> views, Group *destination);
   void inject_notification(View *view, bool lock);
-  virtual Code *check_existence(Code *object) = 0; // returns the existing object if any, or object otherwise: in the latter case, packing may occur.
+  virtual r_code::Code *check_existence(r_code::Code *object) = 0; // returns the existing object if any, or object otherwise: in the latter case, packing may occur.
 
-  void propagate_sln(Code *object, float32 change, float32 source_sln_thr);
+  void propagate_sln(r_code::Code *object, float32 change, float32 source_sln_thr);
 
   // Called by groups.
   void inject_copy(View *view, Group *destination); // for cov; NB: no cov for groups, r-groups, models, pgm or notifications.
@@ -322,45 +333,58 @@ public:
 
   // From rMem to I/O device.
   // To be redefined by object transport aware subcalsses.
-  virtual void eject(Code *command);
+  virtual void eject(r_code::Code *command);
 
   virtual r_code::Code *_build_object(Atom head) const = 0;
   virtual r_code::Code *build_object(Atom head) const = 0;
 
   // unpacking of high-level patterns: upon loading or reception.
-  void unpack_hlp(Code *hlp) const;
-  Code *unpack_fact(Code *hlp, uint16 fact_index) const;
-  Code *unpack_fact_object(Code *hlp, uint16 fact_object_index) const;
+  static void unpack_hlp(r_code::Code *hlp);
+  static r_code::Code *unpack_fact(r_code::Code *hlp, uint16 fact_index);
+  static r_code::Code *unpack_fact_object(r_code::Code *hlp, uint16 fact_object_index);
 
   // packing of high-level patterns: upon dynamic generation or transmission.
-  void pack_hlp(Code *hlp) const;
-  void pack_fact(Code *fact, Code *hlp, uint16 &write_index, std::vector<P<Code> > *references) const;
-  void pack_fact_object(Code *fact_object, Code *hlp, uint16 &write_index, std::vector<P<Code> > *references) const;
+  void pack_hlp(r_code::Code *hlp) const;
+  static void pack_fact(r_code::Code *fact, r_code::Code *hlp, uint16 &write_index, std::vector<P<r_code::Code> > *references);
+  static void pack_fact_object(r_code::Code *fact_object, r_code::Code *hlp, uint16 &write_index, std::vector<P<r_code::Code> > *references);
 
-  Code *clone(Code *original) const; // shallow copy.
+  r_code::Code *clone(r_code::Code *original) const; // shallow copy.
 
   // External device I/O ////////////////////////////////////////////////////////////////
-  virtual r_comp::Image *get_objects() = 0; // create an image; fill with all objects; call only when stopped.
+  virtual r_comp::Image *get_objects(bool include_invalidated = false) = 0; // create an image; fill with all objects; call only when stopped.
   r_comp::Image *get_models(); // create an image; fill with all models; call only when stopped.
 
+  /**
+   * This is called on starting the executive to adjust the timestamps of all the initial
+   * user-supplied facts by adding now. Therefore, if a the initial fact is defined with a
+   * timestamp of 100us, it is changed to now + 100us.
+   * \param now The value to add to the timestamps of all the initial facts.
+   * \param objects he list of objects to search for facts.
+   */
+  static void init_timings(Timestamp now, const r_code::list<P<r_code::Code>>& objects);
+
   //std::vector<uint64> timings_report; // debug facility.
-  typedef enum {
-    CST_IN = 0,
-    CST_OUT = 1,
-    MDL_IN = 2,
-    MDL_OUT = 3,
-    PRED_MON = 4,
-    GOAL_MON = 5,
-    MDL_REV = 6,
-    HLP_INJ = 7
-  }TraceLevel;
+
+  /**
+   * Set the debug debug stream which Output returns when a trace level is NULL.
+   * \param defaultDebugStream The stream.
+   */
+  void setDefaultDebugStream(std::ostream *defaultDebugStream) {
+    defaultDebugStream_ = defaultDebugStream;
+  }
+
+  /**
+   * Get the output stream for the trace level based on (_Mem::Get()->debug_streams_[l].
+   * If (_Mem::Get()->debug_streams_[l] is NULL, use defaultDebugStream_.
+   * \param l The TraceLevel.
+   * \return A reference to the output stream, which may be a NullOStream if the bit in 
+   * settings.xml "trace_levels" was zero.
+   */
   static std::ostream &Output(TraceLevel l);
 };
 
 // Note: This should match the definition in user.classes.replicode.
 const std::chrono::microseconds Mem_sampling_period_ = std::chrono::milliseconds(100);
-
-#define OUTPUT(c) _Mem::Output(_Mem::c)
 
 // _Mem that stores the objects as long as they are not invalidated.
 class r_exec_dll MemStatic :
@@ -376,8 +400,8 @@ public:
   virtual ~MemStatic();
 
   void delete_object(r_code::Code *object); // erase the object from objects if needed.
-
-  r_comp::Image *get_objects(); // return an image containing valid objects.
+  // return an image containing valid objects, or all objects if include_invalidated.
+  r_comp::Image *get_objects(bool include_invalidated = false);
 };
 
 // _Mem that does not store objects.
@@ -395,15 +419,16 @@ public:
 
   void delete_object(r_code::Code *object) {}
 
-  r_comp::Image *get_objects() { return NULL; }
+  r_comp::Image *get_objects(bool include_invalidated = false) { return NULL; }
 };
 
-// O is the class of the objects held by the rMem (except groups and notifications):
-//   r_exec::LObject if non distributed, or
-//   RObject (see the integration project) when network-aware.
-// Notification objects and groups are instances of r_exec::LObject (they are not network-aware).
-// Objects are built at reduction time as r_exec:LObjects and packed into instances of O when O is network-aware.
-// S is the super-class.
+/** O is the class of the objects held by the rMem (except groups and notifications):
+ *    r_exec::LObject if non distributed, or
+ *    RObject (see the integration project) when network-aware.
+ * Notification objects and groups are instances of r_exec::LObject (they are not network-aware).
+ * Objects are built at reduction time as r_exec:LObjects and packed into instances of O when O is network-aware.
+ * S is the super-class.
+ */
 template<class O, class S> class Mem :
   public S {
 public:
@@ -419,21 +444,14 @@ public:
 
   // Executive device functions ////////////////////////////////////////////////////////
 
-  Code *check_existence(Code *object);
+  r_code::Code *check_existence(r_code::Code *object);
 
   // Called by the communication device (I/O).
   void inject(O *object, View *view);
 };
 
-/* DEPRECATED
-r_exec_dll r_exec::Mem<r_exec::LObject> *Run(const char *user_operator_library_path,
-                                            uint64 (*time_base)(),
-                                            const char *seed_path,
-                                            const char *source_file_name);*/
 }
 
-
 #include "mem.tpl.cpp"
-
 
 #endif

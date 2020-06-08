@@ -1,6 +1,6 @@
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 //_/_/
-//_/_/ HUMANOBS - Replicode r_exec
+//_/_/ HUMANOBS - Replicode usr_operators
 //_/_/
 //_/_/ Eric Nivel
 //_/_/ Center for Analysis and Design of Intelligent Agents
@@ -75,28 +75,11 @@
 //_/_/
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
-#include "object.h"
-#include "group.h"
-#include "opcodes.h"
+#include "auto_focus_callback.h"
+#include "../r_exec/auto_focus.h"
 
 
-namespace r_exec {
+r_exec::Controller *auto_focus(r_code::View *view) {
 
-bool IsNotification(Code *object) {
-
-  switch (object->code(0).getDescriptor()) {
-  case Atom::MARKER:
-    return object->code(0).asOpcode() == Opcodes::MkActChg ||
-      object->code(0).asOpcode() == Opcodes::MkHighAct ||
-      object->code(0).asOpcode() == Opcodes::MkHighSln ||
-      object->code(0).asOpcode() == Opcodes::MkLowAct ||
-      object->code(0).asOpcode() == Opcodes::MkLowRes ||
-      object->code(0).asOpcode() == Opcodes::MkLowSln ||
-      object->code(0).asOpcode() == Opcodes::MkNew ||
-      object->code(0).asOpcode() == Opcodes::MkRdx ||
-      object->code(0).asOpcode() == Opcodes::MkSlnChg;
-  default:
-    return false;
-  }
-}
+  return new r_exec::AutoFocusController(view);
 }

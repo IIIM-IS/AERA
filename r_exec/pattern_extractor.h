@@ -179,18 +179,18 @@ protected:
   };
 
   r_code::list<Input> inputs_; // time-controlled buffer (inputs older than tpx_time_horizon from now are discarded).
-  std::vector<P<Code> > mdls_; // new mdls.
-  std::vector<P<Code> > csts_; // new csts.
+  std::vector<P<r_code::Code> > mdls_; // new mdls.
+  std::vector<P<r_code::Code> > csts_; // new csts.
   std::vector<P<_Fact> > icsts_; // new icsts.
 
   void filter_icst_components(ICST *icst, uint32 icst_index, std::vector<Component> &components);
   _Fact *_find_f_icst(_Fact *component, uint16 &component_index);
   _Fact *find_f_icst(_Fact *component, uint16 &component_index);
-  _Fact *find_f_icst(_Fact *component, uint16 &component_index, Code *&cst);
-  Code *build_cst(const std::vector<Component> &components, BindingMap *bm, _Fact *main_component);
+  _Fact *find_f_icst(_Fact *component, uint16 &component_index, r_code::Code *&cst);
+  r_code::Code *build_cst(const std::vector<Component> &components, BindingMap *bm, _Fact *main_component);
 
-  Code *build_mdl_head(HLPBindingMap *bm, uint16 tpl_arg_count, _Fact *lhs, _Fact *rhs, uint16 &write_index);
-  void build_mdl_tail(Code *mdl, uint16 write_index);
+  r_code::Code *build_mdl_head(HLPBindingMap *bm, uint16 tpl_arg_count, _Fact *lhs, _Fact *rhs, uint16 &write_index);
+  void build_mdl_tail(r_code::Code *mdl, uint16 write_index);
 
   void inject_hlps() const;
   void inject_hlps(Timestamp analysis_starting_time);
@@ -218,7 +218,7 @@ private:
   std::vector<P<_Fact> > predictions_; // successful predictions that may invalidate the need for model building.
 
   bool build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period);
-  bool build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period, Code *new_cst);
+  bool build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period, r_code::Code *new_cst);
 
   std::string get_header() const;
 public:
@@ -242,7 +242,7 @@ private:
   P<Fact> f_imdl_; // that produced the prediction (and for which the PTPX will find strong requirements).
 
   bool build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period);
-  bool build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period, Code *new_cst);
+  bool build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period, r_code::Code *new_cst);
 
   std::string get_header() const;
 public:
@@ -273,7 +273,7 @@ private:
   bool build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period);
   bool build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period);
 
-  bool build_requirement(HLPBindingMap *bm, Code *m0, std::chrono::microseconds period);
+  bool build_requirement(HLPBindingMap *bm, r_code::Code *m0, std::chrono::microseconds period);
 
   std::string get_header() const;
 public:

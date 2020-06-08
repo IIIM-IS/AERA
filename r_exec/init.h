@@ -121,7 +121,7 @@ private:
   _Thread *thread_;
   volatile uint32 spawned_;
 
-  r_code::list<P<Code> > objects_;
+  r_code::list<P<r_code::Code> > objects_;
 
   uint32 ostream_id_; // 0 is std::cout.
 
@@ -130,9 +130,9 @@ public:
   TDecompiler(uint32 ostream_id, std::string header);
   ~TDecompiler();
 
-  void add_object(Code *object);
-  void add_objects(const r_code::list<P<Code> > &objects);
-  void add_objects(const std::vector<P<Code> > &objects);
+  void add_object(r_code::Code *object);
+  void add_objects(const r_code::list<P<r_code::Code> > &objects);
+  void add_objects(const std::vector<P<r_code::Code> > &objects);
   void decompile();
 };
 
@@ -163,6 +163,14 @@ public:
   PipeOStream &operator <<(std::string &s);
   PipeOStream &operator <<(const char *s);
 };
+
+/**
+ * Use the given metadata (not r_exec::Metatdata) to initialize
+ * r_exec::_Opcodes, r_code::OpcodeNames, View::ViewOpcode_,  and the
+ * values in the Opcodes class such as Opcodes::Fact. Also call
+ * Operator::Register to set up standard operators in Operator::Operators_.
+ */
+void r_exec_dll InitOpcodes(const r_comp::Metadata& metadata);
 
 // Initialize Now, compile user.classes.replicode, builds the Seed and loads the user-defined operators.
 // Return false in case of a problem (e.g. file not found, operator not found, etc.).

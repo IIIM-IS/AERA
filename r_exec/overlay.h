@@ -83,10 +83,48 @@
 #include "../r_code/object.h"
 #include "dll.h"
 
-
-using namespace r_code;
+using r_code::Atom;
 
 namespace r_exec {
+
+/**
+ * The TraceLevel enum defines bit positions for the "trace_levels" parameter
+ * for "Debug" in settings.xml.
+ * The number of bits should match DebugStreamCount.
+ */
+typedef enum {
+  CST_IN = 0,
+  CST_OUT = 1,
+  MDL_IN = 2,
+  MDL_OUT = 3,
+  PRED_MON = 4,
+  GOAL_MON = 5,
+  MDL_REV = 6,
+  HLP_INJ = 7,
+  ENVIRONMENT_INJ_EJT = 8,
+  AUTO_FOCUS = 9
+} TraceLevel;
+
+/**
+ * See _Mem::Output. This namespace-level function is declared here so that it can be 
+ * used without including mem.h, which causes dependency loops if an inline header 
+ * method needs to use it.
+ */
+std::ostream __declspec(dllexport) &_Mem_Output(TraceLevel l);
+
+/**
+ * Call _Mem_Output to get the output stream for the trace level.
+ */
+#define OUTPUT(level) _Mem_Output(level)
+
+ /**
+  * This similar to "OUTPUT(level) << vals << endl", where vals can be "x << y << z". Except
+  * that we first use an ostringstream to buffer the values plus the line terminator, and
+  * then send the entire string to the output stream and flush. Assuming that the output
+  * stream will output the entire string as a single operation, then when all threads use
+  * OUTPUT_LINE it will avoid scrambling output of individual values.
+  */
+#define OUTPUT_LINE(level, vals) (OUTPUT(level) << (ostringstream() << vals << '\n').str()).flush()
 
 class View;
 
@@ -125,7 +163,7 @@ public:
   bool is_activated() const { return activated_ == 1; }
   bool is_alive() const { return invalidated_ == 0 && activated_ == 1; }
 
-  virtual Code *get_core_object() const = 0;
+  virtual r_code::Code *get_core_object() const = 0;
 
   r_code::Code *getObject() const { return view_->object_; } // return the reduction object (e.g. ipgm, icpp_pgm, cst, mdl).
   r_exec::View *getView() const { return (r_exec::View *)view_; } // return the reduction object's view.
@@ -154,26 +192,26 @@ protected:
 
   Controller *controller_;
 
-  r_code::vector<Atom> values_; // value array: stores the results of computations.
+  r_code::vector<r_code::Atom> values_; // value array: stores the results of computations.
   // Copy of the pgm/hlp code. Will be patched during matching and evaluation:
   // any area indexed by a vl_ptr will be overwritten with:
   //   the evaluation result if it fits in a single atom,
   //   a ptr to the value array if the result is larger than a single atom,
   //   a ptr to an input if the result is a pattern input.
-  Atom *code_;
+  r_code::Atom *code_;
   uint16 code_size_;
   std::vector<uint16> patch_indices_; // indices where patches are applied; used for rollbacks.
   uint16 value_commit_index_; // index of the last computed value_+1; used for rollbacks.
 
   void load_code();
-  void patch_code(uint16 index, Atom value);
+  void patch_code(uint16 index, r_code::Atom value);
   uint16 get_last_patch_index();
   void unpatch_code(uint16 patch_index);
 
   void rollback(); // reset the overlay to the last commited state: unpatch code and values.
   void commit(); // empty the patch_indices_ and set value_commit_index_ to values.size().
 
-  Code *get_core_object() const; // pgm, mdl, cst.
+  r_code::Code *get_core_object() const; // pgm, mdl, cst.
 
   Overlay();
   Overlay(Controller *c, bool load_code = true);
@@ -189,7 +227,7 @@ public:
   r_code::Code *getObject() const { return ((Controller *)controller_)->getObject(); }
   r_exec::View *getView() const { return ((Controller *)controller_)->getView(); }
 
-  r_code::Code *build_object(Atom head) const;
+  r_code::Code *build_object(r_code::Atom head) const;
 };
 
 class r_exec_dll OController :

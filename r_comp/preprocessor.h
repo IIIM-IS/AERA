@@ -83,8 +83,6 @@
 #include <sstream>
 #include <fstream>
 
-using namespace r_code;
-
 namespace r_comp {
 
 class RepliMacro;
@@ -120,22 +118,23 @@ public:
 
   RepliStruct *findAtom(const std::string &name);
 
-  /// <summary>
-  /// Load the Replicode file from the filename and call parse, which will store the
-  /// filename in any !load directives for later use.
-  /// </summary>
-  /// <param name="filename">The file path which is already combined with the directory of the code with the !load directive.</param>
-  /// <returns>The parsed code.</returns>
+  /**
+   * Load the Replicode file from the filename and call parse, which will store the
+   * filename in any !load directives for later use.
+   * \param filename The file path which is already combined with the directory of the code with 
+   * the !load directive.
+   * \return The parsed code.
+   */
   RepliStruct *loadReplicodeFile(const std::string &filename);
 
-  /// <summary>
-  /// Search RepliStruct::LoadedFilePaths_ to check if the filePath is already loaded. This checks
-  /// for equivalent file paths.So, for example, "Test/file.replicode" will match with
-  /// "/work/AERA/Test/file.replicode" and "Test/../Test/file.replicode" if they all
-  /// refer to the same file.
-  /// </summary>
-  /// <param name="filePath">The file path to check.</param>
-  /// <returns>True if an equivalend file path is already loaded, otherwise false.</returns>
+  /**
+   * Search RepliStruct::LoadedFilePaths_ to check if the filePath is already loaded. This checks
+   * for equivalent file paths.So, for example, "Test/file.replicode" will match with
+   * "/work/AERA/Test/file.replicode" and "Test/../Test/file.replicode" if they all
+   * refer to the same file.
+   * \param filePath The file path to check.
+   * \return True if an equivalend file path is already loaded, otherwise false.
+   */
   static bool isFileLoaded(const std::string& filePath);
 
   RepliStruct *clone() const;

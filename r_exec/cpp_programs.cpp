@@ -82,12 +82,12 @@ namespace r_exec {
 
 UNORDERED_MAP<std::string, CPPPrograms::Program> CPPPrograms::Programs_;
 
-void CPPPrograms::Register(std::string &pgm_name, Program pgm) {
+void CPPPrograms::Register(const std::string &pgm_name, Program pgm) {
 
   Programs_[pgm_name] = pgm;
 }
 
-CPPPrograms::Program CPPPrograms::Get(std::string &pgm_name) {
+CPPPrograms::Program CPPPrograms::Get(const std::string &pgm_name) {
 
   UNORDERED_MAP<std::string, Program>::const_iterator it = Programs_.find(pgm_name);
   if (it != Programs_.end())
@@ -95,7 +95,7 @@ CPPPrograms::Program CPPPrograms::Get(std::string &pgm_name) {
   return NULL;
 }
 
-Controller *CPPPrograms::New(std::string &pgm_name, r_code::View *view) {
+Controller *CPPPrograms::New(const std::string &pgm_name, r_code::View *view) {
 
   CPPPrograms::Program pgm = Get(pgm_name);
   if (pgm != NULL)

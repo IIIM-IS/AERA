@@ -85,6 +85,7 @@
 //#define DECOMPILE_ONE_BY_ONE
 
 using namespace std::chrono;
+using namespace r_code;
 using namespace r_comp;
 
 r_exec::View *build_view(Timestamp time, Code* rstdin) { // this is application dependent WRT view->sync.
@@ -232,13 +233,15 @@ void decompile(Decompiler &decompiler, r_comp::Image *image, Timestamp::duration
     }
     std::ostringstream decompiled_code;
     decompiler.decompile_object(index, &decompiled_code, time_offset);
-    std::cout << "\n\n> DECOMPILATION\n\n" << decompiled_code.str() << std::endl;
+    std::cout << "\n\n> DECOMPILATION. TimeReference " << Time::ToString_seconds(time_offset) << "\n\n" <<
+      decompiled_code.str() << std::endl;
   }
 #else
   std::ostringstream decompiled_code;
   uint32 object_count = decompiler.decompile(image, &decompiled_code, time_offset, ignore_named_objects);
   //uint32 object_count=image->code_segment_.objects.size();
-  std::cout << "\n\n> DECOMPILATION\n\n" << decompiled_code.str() << std::endl;
+  std::cout << "\n\n> DECOMPILATION. TimeReference " << Time::ToString_seconds(time_offset) << "\n\n" << 
+    decompiled_code.str() << std::endl;
   std::cout << "> image taken at: " << Time::ToString_year(image->timestamp_) << std::endl;
   std::cout << "> " << object_count << " objects\n";
 #endif
@@ -281,6 +284,15 @@ int32 main(int argc, char **argv) {
   if (!settings.load(file_name))
     return 1;
 
+  ofstream debugStream;
+  if (settings.debug_stream_file_path_ != "") {
+    debugStream.open(settings.debug_stream_file_path_);
+    if (!debugStream.is_open()) {
+      std::cout << "Cannot open debug_stream_file_path \"" << settings.debug_stream_file_path_ << "\"" << std::endl;
+      return 2;
+    }
+  }
+
   std::cout << "> compiling ...\n";
   if (settings.reduction_core_count_ == 0 && settings.time_core_count_ == 0) {
     // Below, we will use runInDiagnosticTime.
@@ -321,6 +333,10 @@ int32 main(int argc, char **argv) {
     else
       mem = new TestMem<r_exec::LObject, r_exec::MemVolatile>();
 
+    if (debugStream.is_open())
+      // Use the debug stream from settings.xml.
+      mem->setDefaultDebugStream(&debugStream);
+
     r_code::vector<r_code::Code *> ram_objects;
     r_exec::Seed.get_objects(mem, ram_objects);
 
@@ -344,7 +360,8 @@ int32 main(int argc, char **argv) {
       settings.goal_pred_success_resilience_,
       settings.probe_level_,
       settings.trace_levels_,
-      settings.enable_assumptions_);
+      settings.enable_assumptions_,
+      settings.keep_invalidated_objects_);
 
     uint32 stdin_oid;
     std::string stdin_symbol("stdin");
@@ -389,7 +406,7 @@ int32 main(int argc, char **argv) {
     if (settings.get_objects_) {
       //TimeProbe probe;
       //probe.set();
-      image = mem->get_objects();
+      image = mem->get_objects(settings.keep_invalidated_objects_);
       //probe.check();
       image->object_names_.symbols_ = r_exec::Seed.object_names_.symbols_;
 

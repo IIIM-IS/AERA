@@ -77,6 +77,7 @@
 
 #include "_context.h"
 
+using namespace r_code;
 
 namespace r_exec {
 

@@ -147,7 +147,8 @@
 !def RUN_ONCE false
 
 ; system internal constants.
-!def MAX_TIME 18446744073709551615us; 2^64-1.
+!def MAX_TIME 922337203685477580us; See Utils_MaxTime
+
 
 ; initial groups.
 

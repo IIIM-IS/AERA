@@ -125,12 +125,12 @@ private:
     }
   };
 
-  typedef UNORDERED_MAP<P<_Fact>, P<TPX>, PHash<_Fact> > TPXMap;
+  typedef UNORDERED_MAP<P<_Fact>, P<TPX>, r_code::PHash<_Fact> > TPXMap;
 
   TPXMap goals_; // f->g->f->target.
   TPXMap predictions_; // f->p->f->target.
 
-  typedef UNORDERED_MAP<P<_Fact>, Rating, PHash<_Fact> > RatingMap;
+  typedef UNORDERED_MAP<P<_Fact>, Rating, r_code::PHash<_Fact> > RatingMap;
 
   // entries are patterns, i.e. abstract targets.
   RatingMap goal_ratings_;
@@ -139,8 +139,8 @@ private:
   static const uint32 CacheInitialSize = 128;
   static const uint32 CrossBufferInitialSize = 1024;
 
-  time_buffer<CInput, CInput::IsInvalidated> cache_; // contains all inputs we don't no yet if they are relevant or not; thz==sampling period.
-  time_buffer<Input, Input::IsInvalidated> cross_buffer_; // contains all relevant inputs.
+  r_code::time_buffer<CInput, CInput::IsInvalidated> cache_; // contains all inputs we don't no yet if they are relevant or not; thz==sampling period.
+  r_code::time_buffer<Input, Input::IsInvalidated> cross_buffer_; // contains all relevant inputs.
 
   void notify(_Fact *target, View *input, TPXMap &map);
   void dispatch_pred_success(_Fact *predicted_f, TPXMap &map);
@@ -169,7 +169,7 @@ public:
   AutoFocusController(r_code::View *view);
   ~AutoFocusController();
 
-  Code *get_core_object() const;
+  r_code::Code *get_core_object() const;
 
   void take_input(r_exec::View *input);
   void reduce(r_exec::View *input);
@@ -177,7 +177,7 @@ public:
   View *inject_input(View *input); // inject a filtered input into the output groups starting from 0; return the view injected in the primary group.
   void inject_input(View *input, uint32 start); // inject an unfiltered input into the output groups starting from start.
   void inject_input(View *input, _Fact *abstract_input, BindingMap *bm); // inject a filtered input into the output groups.
-  void inject_hlps(const std::vector<P<Code> > &hlps) const; // called by TPX; hlp is a mdl or a cst.
+  void inject_hlps(const std::vector<P<r_code::Code> > &hlps) const; // called by TPX; hlp is a mdl or a cst.
 
   bool decompile_models() const { return decompile_models_; }
   bool gtpx_on() const { return gtpx_on_; }
@@ -185,7 +185,7 @@ public:
   Group *get_primary_group() const { return output_groups_[0]; }
 
   void copy_cross_buffer(r_code::list<Input> &destination);
-  time_buffer<CInput, CInput::IsInvalidated> &get_cache() { return cache_; }
+  r_code::time_buffer<CInput, CInput::IsInvalidated> &get_cache() { return cache_; }
 };
 }
 

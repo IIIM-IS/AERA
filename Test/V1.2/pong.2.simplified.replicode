@@ -64,7 +64,7 @@ start:(pgm |[] |[] |[] []
    )
 1) |[]
 
-istart:(ipgm start |[] RUN_ONCE sampling_period VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+istart:(ipgm start |[] RUN_ONCE sampling_period VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
 
 ; This program simulates the environment where b moves at constant speed changing position_y every sampling_period.
 ; If AERA were connected through I/O to the environment, this would not be necessary.

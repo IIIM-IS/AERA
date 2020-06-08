@@ -168,10 +168,10 @@ public:
 class r_exec_dll SaliencyPropagationJob :
   public TimeJob {
 public:
-  P<Code> object_;
+  P<r_code::Code> object_;
   float32 sln_change_;
   float32 source_sln_thr_;
-  SaliencyPropagationJob(Code *o, float32 sln_change, float32 source_sln_thr, Timestamp ijt);
+  SaliencyPropagationJob(r_code::Code *o, float32 sln_change, float32 source_sln_thr, Timestamp ijt);
   bool update(Timestamp &next_target);
   void report(int64 lag) const;
 };

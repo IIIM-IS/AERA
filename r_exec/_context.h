@@ -81,9 +81,6 @@
 #include "../r_code/atom.h"
 #include "overlay.h"
 
-
-using namespace r_code;
-
 namespace r_exec {
 
 // Base class for evaluation contexts.

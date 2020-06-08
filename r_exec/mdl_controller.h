@@ -170,8 +170,8 @@ protected:
   CriticalSection p_monitorsCS_;
   r_code::list<P<PMonitor> > p_monitors_;
 
-  P<Code> lhs_;
-  P<Code> rhs_;
+  P<r_code::Code> lhs_;
+  P<r_code::Code> rhs_;
 
   static const uint32 LHSController = 0;
   static const uint32 RHSController = 1;
@@ -189,7 +189,7 @@ protected:
   float32 get_cfd() const;
 
   CriticalSection active_requirementsCS_;
-  UNORDERED_MAP<P<_Fact>, RequirementsPair, PHash<_Fact> > active_requirements_; // P<_Fact>: f1 as in f0->pred->f1->imdl; requirements having allowed the production of prediction; first: wr, second: sr.
+  UNORDERED_MAP<P<_Fact>, RequirementsPair, r_code::PHash<_Fact> > active_requirements_; // P<_Fact>: f1 as in f0->pred->f1->imdl; requirements having allowed the production of prediction; first: wr, second: sr.
 
   template<class C> void reduce_cache(Fact *f_p_f_imdl, MDLController *controller) { // fwd; controller is the controller of the requirement which produced f_p_f_imdl.
 
@@ -346,7 +346,7 @@ private:
   CriticalSection last_match_timeCS_;
 
   CriticalSection assumptionsCS_;
-  r_code::list<P<Code> > assumptions_; // produced by the model; garbage collection at reduce() time..
+  r_code::list<P<r_code::Code> > assumptions_; // produced by the model; garbage collection at reduce() time..
 
   void rate_model(bool success);
   void kill_views(); // force res in both primary/secondary to 0.
@@ -374,7 +374,7 @@ public:
   void store_requirement(_Fact *f_imdl, MDLController *controller, bool chaining_was_allowed, bool simulation);
 
   void predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground);
-  bool inject_prediction(Fact *prediction, Fact *f_imdl, float32 confidence, Timestamp::duration time_to_live, Code *mk_rdx) const; // here, resilience=time to live, in us; returns true if the prediction has actually been injected.
+  bool inject_prediction(Fact *prediction, Fact *f_imdl, float32 confidence, Timestamp::duration time_to_live, r_code::Code *mk_rdx) const; // here, resilience=time to live, in us; returns true if the prediction has actually been injected.
 
   void register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures);
   void register_req_outcome(Fact *f_pred, bool success, bool rate_failures);
