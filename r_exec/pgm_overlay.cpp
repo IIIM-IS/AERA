@@ -140,7 +140,7 @@ InputLessPGMOverlay::InputLessPGMOverlay(Controller *c) : Overlay(c) {
 InputLessPGMOverlay::~InputLessPGMOverlay() {
 }
 
-inline void InputLessPGMOverlay::reset() {
+void InputLessPGMOverlay::reset() {
 
   Overlay::reset();
 
@@ -152,7 +152,7 @@ inline void InputLessPGMOverlay::reset() {
   productions_.clear();
 }
 
-inline bool InputLessPGMOverlay::evaluate(uint16 index) {
+bool InputLessPGMOverlay::evaluate(uint16 index) {
 
   IPGMContext c(getObject()->get_reference(0), getView(), code_, index, this);
   uint16 result_index;
@@ -542,10 +542,10 @@ PGMOverlay::PGMOverlay(PGMOverlay *original, uint16 last_input_index, uint16 val
   birth_time_ = original->birth_time_;
 }
 
-inline PGMOverlay::~PGMOverlay() {
+PGMOverlay::~PGMOverlay() {
 }
 
-inline void PGMOverlay::init() {
+void PGMOverlay::init() {
 
   // init the list of pattern indices.
   uint16 pattern_set_index = code_[PGM_INPUTS].asIndex();
@@ -554,15 +554,6 @@ inline void PGMOverlay::init() {
     input_pattern_indices.push_back(code_[pattern_set_index + i].asIndex());
 
   birth_time_ = Timestamp(seconds(0));
-}
-
-inline void PGMOverlay::reset() {
-
-  InputLessPGMOverlay::reset();
-  patch_indices_.clear();
-  input_views.clear();
-  input_pattern_indices.clear();
-  init();
 }
 
 bool PGMOverlay::is_invalidated() {
@@ -710,7 +701,7 @@ PGMOverlay::MatchResult PGMOverlay::match(r_exec::View *input, uint16 &input_ind
   return failed ? FAILURE : IMPOSSIBLE;
 }
 
-inline PGMOverlay::MatchResult PGMOverlay::_match(r_exec::View *input, uint16 pattern_index) {
+PGMOverlay::MatchResult PGMOverlay::_match(r_exec::View *input, uint16 pattern_index) {
 
   if (code_[pattern_index].asOpcode() == Opcodes::AntiPtn) {
 
@@ -735,19 +726,6 @@ inline PGMOverlay::MatchResult PGMOverlay::_match(r_exec::View *input, uint16 pa
     return __match(input, pattern_index);
   }
   return IMPOSSIBLE;
-}
-
-inline PGMOverlay::MatchResult PGMOverlay::__match(r_exec::View *input, uint16 pattern_index) {
-  //Atom::Trace(pgm_code,getObject()->get_reference(0)->code_size());
-  //input->object->trace();
-  patch_input_code(code_[pattern_index + 1].asIndex(), input_views.size() - 1, 0); // the input has just been pushed on input_views (see match); pgm_code[pattern_index+1].asIndex() is the structure pointed by the pattern's skeleton.
-//Atom::Trace(pgm_code,getObject()->get_reference(0)->code_size());
-//input->object->trace();
-        // match: evaluate the set of guards.
-  uint16 guard_set_index = code_[pattern_index + 2].asIndex();
-  if (!evaluate(guard_set_index))
-    return FAILURE;
-  return SUCCESS;
 }
 
 bool PGMOverlay::check_guards() {
@@ -787,13 +765,7 @@ Code *PGMOverlay::get_mk_rdx(uint16 &extent_index) const {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-inline AntiPGMOverlay::AntiPGMOverlay(Controller *c) : PGMOverlay(c) {
-}
-
-inline AntiPGMOverlay::AntiPGMOverlay(AntiPGMOverlay *original, uint16 last_input_index, uint16 value_limit) : PGMOverlay(original, last_input_index, value_limit) {
-}
-
-inline AntiPGMOverlay::~AntiPGMOverlay() {
+AntiPGMOverlay::~AntiPGMOverlay() {
 }
 
 Overlay *AntiPGMOverlay::reduce(r_exec::View *input) {
