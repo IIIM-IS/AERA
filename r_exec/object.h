@@ -149,8 +149,6 @@ public:
 
   View *get_view(r_code::Code *group, bool lock); // returns the found view if any, NULL otherwise.
 
-  void kill();
-
   class Hash {
   public:
     size_t operator ()(U *o) const {
