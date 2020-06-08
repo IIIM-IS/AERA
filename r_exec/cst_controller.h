@@ -106,7 +106,6 @@ protected:
 
   UNORDERED_SET<P<_Fact>, r_code::PHash<_Fact> > predictions_; // f0->pred->f1->obj.
   UNORDERED_SET<P<Sim>, r_code::PHash<Sim> > simulations_;
-  uint32 original_patterns_size_;
 
   void inject_production();
   void update(HLPBindingMap *map, _Fact *input, _Fact *bound_pattern);
