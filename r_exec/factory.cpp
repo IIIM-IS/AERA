@@ -201,24 +201,6 @@ _Fact::_Fact(uint16 opcode, Code *object, Timestamp after, Timestamp before, flo
   add_reference(object);
 }
 
-inline bool _Fact::is_fact() const {
-
-  return (code(0).asOpcode() == Opcodes::Fact);
-}
-
-inline bool _Fact::is_anti_fact() const {
-
-  return (code(0).asOpcode() == Opcodes::AntiFact);
-}
-
-inline void _Fact::set_opposite() const {
-
-  if (is_fact())
-    code(0) = Atom::Object(Opcodes::AntiFact, FACT_ARITY);
-  else
-    code(0) = Atom::Object(Opcodes::Fact, FACT_ARITY);
-}
-
 _Fact *_Fact::get_absentee() const {
 
   _Fact *absentee;
@@ -465,32 +447,6 @@ MatchResult _Fact::is_timeless_evidence(const _Fact *target) const {
   return MATCH_FAILURE;
 }
 
-inline float32 _Fact::get_cfd() const {
-
-  return code(FACT_CFD).asFloat();
-}
-
-inline void _Fact::set_cfd(float32 cfd) {
-
-  code(FACT_CFD) = Atom::Float(cfd);
-}
-
-inline Pred *_Fact::get_pred() const {
-
-  Code *pred = get_reference(0);
-  if (pred->code(0).asOpcode() == Opcodes::Pred)
-    return (Pred *)pred;
-  return NULL;
-}
-
-inline Goal *_Fact::get_goal() const {
-
-  Code *goal = get_reference(0);
-  if (goal->code(0).asOpcode() == Opcodes::Goal)
-    return (Goal *)goal;
-  return NULL;
-}
-
 Timestamp _Fact::get_after() const {
 
   return Utils::GetTimestamp<Code>(this, FACT_AFTER);
@@ -606,17 +562,7 @@ bool Pred::grounds_invalidated(_Fact *evidence) {
   return false;
 }
 
-inline _Fact *Pred::get_target() const {
-
-  return (_Fact *)get_reference(0);
-}
-
-inline bool Pred::is_simulation() const {
-
-  return simulations_.size() > 0;
-}
-
-inline Sim *Pred::get_simulation(Controller *root) const {
+Sim *Pred::get_simulation(Controller *root) const {
 
   for (uint32 i = 0; i < simulations_.size(); ++i) {
 
@@ -678,35 +624,9 @@ bool Goal::is_requirement() const {
   return false;
 }
 
-inline bool Goal::is_self_goal() const {
+bool Goal::is_self_goal() const {
 
   return (get_actor() == _Mem::Get()->get_self());
-}
-
-inline bool Goal::is_drive() const {
-
-  return (sim_ == NULL && is_self_goal());
-}
-
-inline _Fact *Goal::get_target() const {
-
-  return (_Fact *)get_reference(0);
-}
-
-inline _Fact *Goal::get_super_goal() const {
-
-  return sim_->super_goal_;
-}
-
-inline Code *Goal::get_actor() const {
-
-  return get_reference(code(GOAL_ACTR).asIndex());
-}
-
-inline float32 Goal::get_strength(Timestamp now) const {
-
-  _Fact *target = get_target();
-  return target->get_cfd() / duration_cast<microseconds>(target->get_before() - now).count();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

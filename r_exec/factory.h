@@ -159,9 +159,14 @@ public:
 
   virtual bool is_invalidated();
 
-  bool is_fact() const;
-  bool is_anti_fact() const;
-  void set_opposite() const;
+  bool is_fact() const { return (code(0).asOpcode() == Opcodes::Fact); }
+  bool is_anti_fact() const { return (code(0).asOpcode() == Opcodes::AntiFact); }
+  void set_opposite() const {
+    if (is_fact())
+      code(0) = Atom::Object(Opcodes::AntiFact, FACT_ARITY);
+    else
+      code(0) = Atom::Object(Opcodes::Fact, FACT_ARITY);
+  }
   _Fact *get_absentee() const;
 
   bool match_timings_sync(const _Fact *evidence) const;
@@ -175,12 +180,22 @@ public:
   bool has_before() const { return r_code::Utils::HasTimestamp<r_code::Code>(this, FACT_BEFORE); }
   Timestamp get_after() const;
   Timestamp get_before() const;
-  float32 get_cfd() const;
+  float32 get_cfd() const { return code(FACT_CFD).asFloat(); }
 
-  void set_cfd(float32 cfd);
+  void set_cfd(float32 cfd) { code(FACT_CFD) = Atom::Float(cfd); }
 
-  Pred *get_pred() const;
-  Goal *get_goal() const;
+  Pred *get_pred() const {
+    Code *pred = get_reference(0);
+    if (pred->code(0).asOpcode() == Opcodes::Pred)
+      return (Pred *)pred;
+    return NULL;
+  }
+  Goal *get_goal() const {
+    Code *goal = get_reference(0);
+    if (goal->code(0).asOpcode() == Opcodes::Goal)
+      return (Goal *)goal;
+    return NULL;
+  }
 
   void trace() const;
 };
@@ -263,12 +278,12 @@ public:
   bool is_invalidated();
   bool grounds_invalidated(_Fact *evidence);
 
-  _Fact *get_target() const;
+  _Fact *get_target() const { return (_Fact *)get_reference(0); }
 
   std::vector<P<_Fact> > grounds_; // f1->obj; predictions that were used to build this predictions (i.e. antecedents); empty if simulated.
   std::vector<P<Sim> > simulations_;
 
-  bool is_simulation() const;
+  bool is_simulation() const { return simulations_.size() > 0; }
   Sim *get_simulation(Controller *root) const; // return true if there is a simulation for the goal.
 };
 
@@ -286,16 +301,20 @@ public:
   bool is_requirement() const;
 
   bool is_self_goal() const;
-  bool is_drive() const;
+  bool is_drive() const { return (sim_ == NULL && is_self_goal()); }
 
-  _Fact *get_target() const;
-  _Fact *get_super_goal() const;
-  r_code::Code *get_actor() const;
+  _Fact *get_target() const { return (_Fact *)get_reference(0); }
+  _Fact *get_super_goal() const { return sim_->super_goal_; }
+  r_code::Code *get_actor() const { return get_reference(code(GOAL_ACTR).asIndex()); }
 
   P<Sim> sim_;
   P<_Fact> ground_; // f->p->f->imdl (weak requirement) that allowed backward chaining, if any.
 
-  float32 get_strength(Timestamp now) const; // goal->target->cfd/(before-now).
+  // goal->target->cfd/(before-now).
+  float32 get_strength(Timestamp now) const {
+    _Fact *target = get_target();
+    return target->get_cfd() / std::chrono::duration_cast<std::chrono::microseconds>(target->get_before() - now).count();
+  }
 };
 
 class r_exec_dll MkRdx :
