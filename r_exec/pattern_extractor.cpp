@@ -803,7 +803,7 @@ void CTPX::reduce(r_exec::View *input) {
   r_code::list<Input>::const_iterator i;
   for (i = inputs_.begin(); i != inputs_.end();) {
 
-    if (!end_bm->intersect(i->bindings_) || // discard inputs that do not share values with the target or consequent.
+    if (!(target_bindings_->intersect(i->bindings_) || end_bm->intersect(i->bindings_)) || // discard inputs that do not share values with the target or consequent.
       i->input_->get_after() >= consequent->get_after()) // discard inputs not younger than the consequent.
       i = inputs_.erase(i);
     else
