@@ -803,6 +803,26 @@ void CTPX::reduce(r_exec::View *input) {
   r_code::list<Input>::const_iterator i;
   for (i = inputs_.begin(); i != inputs_.end();) {
 
+    if (i->input_->get_reference(0)->code(0).asOpcode() == Opcodes::ICst) {
+      // Require each icst component to share values with the target or consequent.
+      bool icstIsOK = true;
+      ICST *icst = (ICST*)i->input_->get_reference(0);
+      for (uint32 j = 0; j < icst->components_.size(); ++j) {
+        P<BindingMap> component_bm = new BindingMap();
+        P<_Fact> unused = (_Fact *)component_bm->abstract_object(icst->components_[j], false);
+        if (!(target_bindings_->intersect(component_bm) || end_bm->intersect(component_bm))) {
+          icstIsOK = false;
+          break;
+        }
+      }
+
+      if (!icstIsOK ||
+        i->input_->get_after() >= consequent->get_after()) // discard inputs not younger than the consequent.
+        i = inputs_.erase(i);
+      else
+        ++i;
+      continue;
+    }
     if (!(target_bindings_->intersect(i->bindings_) || end_bm->intersect(i->bindings_)) || // discard inputs that do not share values with the target or consequent.
       i->input_->get_after() >= consequent->get_after()) // discard inputs not younger than the consequent.
       i = inputs_.erase(i);
