@@ -2,31 +2,9 @@
 
 Replicode is the programing language of AERA (Auto-catalytic Endogenous Reflective Architecture)
 
-This README file documents general setup instructions.
+This README file documents general information about Replicode.
 
-## General Prerequisites
-
-- Visual Studio 2017 (Community works fine)
-
-## Preparation
-
-Check the code out from the IIIM github:
-
-`git clone --recursive https://github.com/IIIM-IS/replicode`
-
-(We use `--recursive` to include the CoreLibrary submodule.)
-
-## Building
-
-Open the solution file at `replicode/Replicode.sln` in Visual Studio 2017 and select the `Debug Win32` or `Release Win32` configuration.
-
-## Running
-
-Set the *Test* project as the Start-Up project and add the following to the project's *Command Arguments* (found in Properties > Debugging):
-
-`settings.xml decompiled.txt`
-
-To change the settings, edit `Test/settings.xml` then re-run.
+See the file [INSTALL.md](https://github.com/IIIM-IS/replicode/blob/master/INSTALL.md) for build and install instructions.
 
 ## code structure
 The main program execution for the example happens in Test/Test.cpp
