@@ -10,11 +10,11 @@ These are instructions to build and run Replicode.
 * Click "Clone a Repository from the Internet", click URL and enter 
   `https://github.com/IIIM-IS/replicode` . It should be a recursive clone (which is the default).
 * Launch Visual Studio and open the project `Replicode.sln` from the cloned repository. E.g.:
-  `C:\Users\Jeff\Documents\GitHub\replicode\Replicode.snl`
+  `C:\Users\Jeff\Documents\GitHub\replicode\Replicode.sln`
 * On the Build menu, click Build Solution.
 * If the build fails with the error "The Windows SDK version 10.0.17134.0 was not found", then
-  close Visual Studio, launch the Visual Studio Installer and install SDK version 10.0.17134.0 .
-  Launch Visual Studio and repeat the steps to build the Replicode solution.
+  close Visual Studio and launch the Visual Studio Installer. Under "Desktop development with C++",
+  install "Windows 10 SDK (10.0.17134.0)". Launch Visual Studio and repeat the steps to build the Replicode solution.
 
   
 
