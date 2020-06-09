@@ -299,6 +299,11 @@
   * DONE. Fix bug for arrow to hidden item.
   * DONE. Make a version of the seed without ejecting the start command.
 
+next meeting
+* Replicode
+  * DONE. Make branch without-pull-requests-48-59-78-79 .
+  * DONE. Merge pull requests 48, 59, 78 and 79.
+
 TODO
 * Add an item for prediction reduction, initially hidden.
 * Make a mk.rdx for (fact (pred (fact (imdl ...)))). (May affect other code that expects the other kind of prediction.)
@@ -306,7 +311,6 @@ TODO
 * Use uniform spacing for each frame, adjustable.
 * Show the time job queue sorted by time.
 * Document methods, starting with those related to the simulator.
-* Update README.
 * Ability to launch Replicode from the Visualizer.
 * If min_sim_time_horizon > 0, how is the behavior different?
 * In babbling, issue a goal for a position, an "unrelated" speed_x, and move the position there. Is GTPX invoked?
