@@ -299,7 +299,7 @@
   * DONE. Fix bug for arrow to hidden item.
   * DONE. Make a version of the seed without ejecting the start command.
 
-next meeting
+2020-06-09
 * Replicode
   * DONE. Make branch without-pull-requests-48-59-78-79 .
   * DONE. Merge pull requests 48, 59, 78 and 79.
@@ -307,20 +307,24 @@ next meeting
 
 TODO
 * Rename Test project to AERA.
-* Document uncommenting WITH_DEBUG_OID.
+* INSTALL.md: Document uncommenting WITH_DEBUG_OID.
 * settings.xml: Make diagnostic. Add comments for using real time.
 * seetings.xml: Default 1000 milliseconds.
 * settings.xml: named_objects yes.
+* pong.external.replicode: Change start pgm command to (cmd ready ["pong"])
 * Visualizer: Last settings.xml location in registry.
-* After first release: Use OUTPUT_LINE everywhere to avoid mangling output together.
-* After first release: In prediction monitor, on failure check again at the end of the predicted period.
-* Add an item for prediction reduction, initially hidden.
+* Replicode: Rename folders V1.1 and V1.2 to replicode_v1.1 and replicode_v1.2.
+* Tag a release AERA_v0.2
+* Tag a release AERA_Visualizer_v0.2
+* Use OUTPUT_LINE everywhere to avoid mangling output together.
+* In prediction monitor, on failure check again at the end of the predicted period.
+* Visualizer: Add an item for prediction reduction, initially hidden.
+* Visualizer: Use uniform spacing for each frame, adjustable.
+* Visualizer: Ability to launch Replicode from the Visualizer.
 * Make a mk.rdx for (fact (pred (fact (imdl ...)))). (May affect other code that expects the other kind of prediction.)
 * Change (success) to refer to the prediction mk.rdx instead of the prediction. (Affects other code.)
-* Use uniform spacing for each frame, adjustable.
 * Show the time job queue sorted by time.
 * Document methods, starting with those related to the simulator.
-* Ability to launch Replicode from the Visualizer.
 * If min_sim_time_horizon > 0, how is the behavior different?
 * In babbling, issue a goal for a position, an "unrelated" speed_x, and move the position there. Is GTPX invoked?
 * Abduce a goal more in the future than the next sampling period. (Need simulation.)
