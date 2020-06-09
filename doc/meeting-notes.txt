@@ -303,8 +303,17 @@ next meeting
 * Replicode
   * DONE. Make branch without-pull-requests-48-59-78-79 .
   * DONE. Merge pull requests 48, 59, 78 and 79.
+  * DONE. Create INSTALL.md.
 
 TODO
+* Rename Test project to AERA.
+* Document uncommenting WITH_DEBUG_OID.
+* settings.xml: Make diagnostic. Add comments for using real time.
+* seetings.xml: Default 1000 milliseconds.
+* settings.xml: named_objects yes.
+* Visualizer: Last settings.xml location in registry.
+* After first release: Use OUTPUT_LINE everywhere to avoid mangling output together.
+* After first release: In prediction monitor, on failure check again at the end of the predicted period.
 * Add an item for prediction reduction, initially hidden.
 * Make a mk.rdx for (fact (pred (fact (imdl ...)))). (May affect other code that expects the other kind of prediction.)
 * Change (success) to refer to the prediction mk.rdx instead of the prediction. (Affects other code.)
