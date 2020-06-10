@@ -4,10 +4,12 @@
     usr_class_path="../Test/V1.2/user.classes.replicode"
     source_file_name="../Test/V1.2/main.replicode"
   />
+  <!--Init is set to diagnostic time by default. 
+      For real time, set reduction_core_count to "6" and time_core_count to "2" . -->
   <Init
     base_period="50000"
-    reduction_core_count="6"
-    time_core_count="2"
+    reduction_core_count="0"
+    time_core_count="0"
   />
   <System
     mdl_inertia_sr_thr="0.9"
@@ -23,7 +25,7 @@
     primary_thz="3600000"
     secondary_thz="7200000"
   />
-  <Debug debug="yes" debug_windows="1" debug_stream_file_path="" trace_levels="FFFF">
+  <Debug debug="yes" debug_windows="1" debug_stream_file_path="debug_out.txt" trace_levels="FFFF">
     <Resilience
       ntf_mk_resilience="1"
       goal_pred_success_resilience="1000"
@@ -34,13 +36,13 @@
       decompile_objects="yes"
       decompile_to_file="yes"
       decompilation_file_path="decompiled_objects.txt"
-      ignore_named_objects="yes"
+      ignore_named_objects="no"
       write_objects="no"
       objects_path="../Test/objects.replicode.image"
       test_objects="no"
     />
   </Debug>
-  <Run run_time="10000" probe_level="2" enable_assumptions="yes">
+  <Run run_time="1000" probe_level="2" enable_assumptions="no">
     <Models
       get_models="yes"
       decompile_models="yes"
