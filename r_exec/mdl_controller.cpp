@@ -896,7 +896,11 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
         _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
         //_f_imdl->get_reference(0)->trace();
         //f_imdl->get_reference(0)->trace();
-        if (bm->match_bwd_strict(_f_imdl, f_imdl)) { // tpl args will be valuated in bm, but not in f_imdl yet.
+#if 1 // Debug: Temporary solution to set use_f_pattern_timings true, to use the given f_imdl.
+        if (bm->match_bwd_strict(_f_imdl, f_imdl, true)) { // tpl args will be valuated in bm, but not in f_imdl yet.
+#else
+		if (bm->match_bwd_strict(_f_imdl, f_imdl)) { // tpl args will be valuated in bm, but not in f_imdl yet.
+#endif
 
           r = WEAK_REQUIREMENT_ENABLED;
           ground = (*e).evidence_;
