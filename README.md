@@ -6,6 +6,8 @@ This README file documents general information about Replicode.
 
 See the file [INSTALL.md](https://github.com/IIIM-IS/replicode/blob/master/INSTALL.md) for build and install instructions.
 
+See the file [CHANGELOG.md](https://github.com/IIIM-IS/replicode/blob/master/CHANGELOG.md) for version numbers and changes.
+
 ## code structure
 The main program execution for the example happens in Test/Test.cpp
 - `main()` // loads the `settings.xml` and the seed image, starts up `r_exec/mem.cpp` and then waits for run_time and ends by saving the results to disk to `decompiled.txt`
