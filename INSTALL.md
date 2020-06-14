@@ -8,7 +8,7 @@ Prerequisites
 
 * Required: On Windows, Visual Studio
 * Required: Git
-* Required: The code repository from https://github.com/IIIM-IS/replicode
+* Required: The Replicode code repository from https://github.com/IIIM-IS/replicode
 
 Following are the detailed steps for each platform to install the prerequisites.
 
@@ -20,7 +20,7 @@ In the installer, under "Desktop development with C++", check "Windows 10 SDK (1
 
 To install Git, download and install GitHub for Desktop from https://desktop.github.com .
 
-To get the code repository, launch GitHub for Desktop and sign in to GitHub. In the File menu, 
+To get the Replicode code repository, launch GitHub for Desktop and sign in to GitHub. In the File menu, 
 click "Clone a Repository". Click the URL tab and enter `https://github.com/IIIM-IS/replicode` . 
 It should be a recursive clone (which is the default).
 
