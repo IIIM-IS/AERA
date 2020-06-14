@@ -85,14 +85,15 @@ template<class O, class S> TestMem<O, S>::TestMem()
   : r_exec::Mem<O, S>() {
   timeTickThread_ = 0;
   lastInjectTime_ = Timestamp(seconds(0));
-  speed_y_ = 0;
+  speed_y_ = 0.0001;
   position_y_ = NULL;
   position_y_obj_ = NULL;
   position_property_ = NULL;
   position_y_property_ = NULL;
   speed_y_property_ = NULL;
-  primary_group_ = NULL,
-    set_speed_y_opcode_ = 0xFFFF;
+  primary_group_ = NULL;
+  ready_opcode_ = 0xFFFF;
+  set_speed_y_opcode_ = 0xFFFF;
   move_y_plus_opcode_ = 0xFFFF;
   move_y_minus_opcode_ = 0xFFFF;
   lastCommandTime_ = Timestamp(seconds(0));
@@ -118,6 +119,7 @@ template<class O, class S> bool TestMem<O, S>::load
     return false;
 
   // Find the opcodes we need.
+  ready_opcode_ = r_exec::GetOpcode("ready");
   set_speed_y_opcode_ = r_exec::GetOpcode("set_speed_y");
   move_y_plus_opcode_ = r_exec::GetOpcode("move_y_plus");
   move_y_minus_opcode_ = r_exec::GetOpcode("move_y_minus");
@@ -210,7 +212,46 @@ template<class O, class S> r_exec::View* TestMem<O, S>::injectFact
 template<class O, class S> void TestMem<O, S>::eject(Code *command) {
   uint16 function = (command->code(CMD_FUNCTION).atom_ >> 8) & 0x000000FF;
 
-  if (function == set_speed_y_opcode_) {
+  if (function == ready_opcode_) {
+    uint16 args_set_index = command->code(CMD_ARGS).asIndex();
+    if (command->code_size() >= 2 && command->code(args_set_index + 1).getDescriptor() == Atom::I_PTR &&
+        command->code(command->code(args_set_index + 1).asIndex()).getDescriptor() == Atom::STRING) {
+      string identifier = Utils::GetString(&command->code(command->code(args_set_index + 1).asIndex()));
+
+      if (identifier == "pong") {
+        if (!(command->code_size() >= 3 && command->code(args_set_index + 2).getDescriptor() == Atom::R_PTR &&
+              command->references_size() > command->code(args_set_index + 2).asIndex())) {
+          cout << "WARNING: Cannot get the object for ready \"pong\"" << endl;
+          return;
+        }
+        if (!speed_y_property_) {
+          cout << "WARNING: Can't find the speed_y property" << endl;
+          return;
+        }
+        if (!position_y_property_) {
+          cout << "WARNING: Can't find the position_y property" << endl;
+          return;
+        }
+
+        Code* obj = command->get_reference(command->code(args_set_index + 2).asIndex());
+        if (!position_y_obj_) {
+          // This is the first call. Remember the object whose speed we're setting.
+          position_y_obj_ = obj;
+          startTimeTickThread();
+        }
+        else {
+          if (position_y_obj_ != obj)
+            // For now, don't allow tracking the speed of multiple objects.
+            return;
+        }
+      }
+      else {
+        cout << "WARNING: Ignoring unrecognized ready command identifier: " << identifier << endl;
+        return;
+      }
+    }
+  }
+  else if (function == set_speed_y_opcode_) {
     if (!speed_y_property_) {
       cout << "WARNING: Can't find the speed_y property" << endl;
       return;
@@ -225,6 +266,7 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
     uint16 args_set_index = command->code(CMD_ARGS).asIndex();
     Code* obj = command->get_reference(
       command->code(args_set_index + 1).asIndex());
+    // Set up position_y_obj_ the same as the ready "pong" command.
     if (!position_y_obj_) {
       // This is the first call. Remember the object whose speed we're setting.
       position_y_obj_ = obj;
@@ -276,7 +318,7 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
 
     // nextDiscretePosition_ will become the position at the next sampling period.
     lastCommandTime_ = now;
-    const int maxYPosition = 9;
+    const int maxYPosition = 2;
     if (function == move_y_plus_opcode_) {
       for (int i = 0; i <= maxYPosition - 1; ++i) {
         if (discretePosition_ == yEnt_[i])
@@ -311,9 +353,12 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
       injectMarkerValue(
         position_y_obj_, speed_y_property_, Atom::Float(speed_y_),
         now, now + Mem_sampling_period_, r_exec::View::SYNC_HOLD);
-      injectMarkerValue(
+      r_exec::View* view = injectMarkerValue(
         position_y_obj_, position_y_property_, Atom::Float(position_y_),
         now, now + Mem_sampling_period_);
+        OUTPUT_LINE((TraceLevel)0, "Debug position_y " << position_y_ <<
+          " fact " << view->object_->get_oid() << " " << Utils::RelativeTime(now) << " " <<
+          Utils::RelativeTime(now + Mem_sampling_period_));
     }
   }
 
@@ -331,12 +376,15 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
       }
 
       lastInjectTime_ = now;
-      injectMarkerValue(
+      r_exec::View* view = injectMarkerValue(
         discretePositionObj_, position_property_, discretePosition_,
         now, now + Mem_sampling_period_);
+      OUTPUT_LINE((TraceLevel)0, "Debug position " << discretePosition_->get_oid() <<
+        " fact " << view->object_->get_oid() << " " << Utils::RelativeTime(now) << " " <<
+        Utils::RelativeTime(now + Mem_sampling_period_));
 
-      const microseconds babbleStopTime(2000000);
-      const int maxBabblePosition = 9;
+      const microseconds babbleStopTime(2800000);
+      const int maxBabblePosition = 2;
       if (now - Utils::GetTimeReference() < babbleStopTime) {
         // Babble.
         if (discretePosition_ == yEnt_[0])

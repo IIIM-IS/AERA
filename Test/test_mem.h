@@ -322,6 +322,7 @@ protected:
   r_code::Code* position_y_property_;
   r_code::Code* speed_y_property_;
   r_code::Code* primary_group_;
+  uint16 ready_opcode_;
   uint16 set_speed_y_opcode_;
   uint16 move_y_plus_opcode_;
   uint16 move_y_minus_opcode_;
