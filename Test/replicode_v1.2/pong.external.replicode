@@ -1,0 +1,16 @@
+; ball is the ontology class of all balls.
+ball:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+; Name an entity b.
+b:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+; The statement that b is a ball.
+b_is_a_ball:(mk.val b essence ball 1) |[]
+; Make b_is_a_ball a fact from now to the maximum time. 
+f_b_is_a_ball:(fact b_is_a_ball 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+; The start program ejects the command to tell the external environment it is ready for "pong". 
+; The environment will inject speed_y and position_y for the ball b.
+start:(pgm |[] |[] |[] []
+   (cmd ready ["pong" b] 1)
+1) |[]
+; Instantiate the start program to run once.
+istart:(ipgm start |[] RUN_ONCE sampling_period VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]

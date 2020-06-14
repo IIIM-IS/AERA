@@ -227,5 +227,8 @@
     <None Include="replicode_v1.2\user.classes.replicode">
       <Filter>replicode_v1.2</Filter>
     </None>
+    <None Include="replicode_v1.2\pong.external.replicode">
+      <Filter>replicode_v1.2</Filter>
+    </None>
   </ItemGroup>
 </Project>
