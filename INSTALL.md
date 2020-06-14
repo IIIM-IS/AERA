@@ -27,7 +27,8 @@ It should be a recursive clone (which is the default).
 Build
 =====
 Launch Visual Studio and open the project `Replicode.sln` from the cloned repository. E.g.:
-  `C:\Users\Alice\Documents\GitHub\replicode\Replicode.sln`
+  `C:\Users\Alice\Documents\GitHub\replicode\Replicode.sln` .
+  If a dialog box appears asking to retarget the Windows version, click cancel. 
 
 ## `WITH_DEBUG_OID`
 
