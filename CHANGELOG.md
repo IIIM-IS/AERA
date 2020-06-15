@@ -1,4 +1,4 @@
-AERA_v0.2 (2020-06-12)
+AERA_v0.2 (2020-06-15)
 ----------------------
 
 * Rename the Test project to AERA.
