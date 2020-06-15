@@ -305,19 +305,23 @@
   * DONE. Merge pull requests 48, 59, 78 and 79.
   * DONE. Create INSTALL.md.
 
-next meeting
+2020-06-15
 * Replicode
   * DONE. settings.xml: Make diagnostic the default. Add comments for using real time.
   * DONE. settings.xml: Default 1000 milliseconds.
-  * DONE. settings.xml: named_objects yes.
+  * DONE. settings.xml: ignore_named_objects no.
   * DONE. INSTALL.md: Document uncommenting WITH_DEBUG_OID.
-  * DONE. Rename Test project to AERA. Underlying folder and file names are still "Test"
+  * DONE. Rename Test project to AERA.
   * DONE. Rename folders V1.1 and V1.2 to replicode_v1.1 and replicode_v1.2.
   * DONE. pong.external.replicode: Change start pgm command to (cmd ready ["pong"])
 * Visualizer
   * DONE. Use the registry to remember the last settings.xml file path.
 
 TODO
+* Rename Test to AERA. In README, say how to get history.
+* Rename pong.external to ball.external
+* Rename debug_out.txt to runtime_out.txt
+* Copyright headers in Visualizer code.
 * Tag a release AERA_v0.2
 * Tag a release AERA_Visualizer_v0.2
 * Use OUTPUT_LINE everywhere to avoid mangling output together.
