@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AERA", "Test\AERA.vcxproj", "{689F2DDD-1858-499D-BA79-72BA02D00D45}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AERA", "AERA\AERA.vcxproj", "{689F2DDD-1858-499D-BA79-72BA02D00D45}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "r_code", "r_code\r_code.vcxproj", "{6F4E1695-BBEF-46D1-B0C0-1B71A65FAD66}"
 	ProjectSection(ProjectDependencies) = postProject
