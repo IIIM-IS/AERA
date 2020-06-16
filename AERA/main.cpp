@@ -1,6 +1,6 @@
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 //_/_/
-//_/_/ HUMANOBS - Replicode Test
+//_/_/ AERA
 //_/_/
 //_/_/ Eric Nivel
 //_/_/ Center for Analysis and Design of Intelligent Agents
