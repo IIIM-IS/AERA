@@ -63,7 +63,7 @@ This has many parameters which are documented at the bottom of the file. Followi
 ## settings.xml source_file_name
 
 The `source_file_name` parameter specifies the seed program to run. For example, a program to use with the AERA Visualizer
-is "../Test/replicode_v1.2/pong.external.replicode".
+is "../AERA/replicode_v1.2/pong.external.replicode".
 
 ## settings.xml keep_invalidated_objects
 

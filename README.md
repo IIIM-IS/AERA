@@ -9,7 +9,7 @@ See the file [INSTALL.md](https://github.com/IIIM-IS/replicode/blob/master/INSTA
 See the file [CHANGELOG.md](https://github.com/IIIM-IS/replicode/blob/master/CHANGELOG.md) for version numbers and changes.
 
 ## code structure
-The main program execution for the example happens in Test/Test.cpp
+The main program execution for the example happens in AERA/main.cpp
 - `main()` // loads the `settings.xml` and the seed image, starts up `r_exec/mem.cpp` and then waits for run_time and ends by saving the results to disk to `decompiled.txt`
 - `r_exec/mem.cpp` starts up the `runReductionCore` and the `runTimeCore` threads which do the magic
 - The `r_exec/pattern_extractor.cpp` and `r_exec/g_monitor.cpp` push new reduction and time jobs to the job queues
@@ -20,7 +20,7 @@ The main program execution for the example happens in Test/Test.cpp
 
 This is a list of unintuitive issues with using Replicode, to help new users.
 
-* Only the `Test/v1.2` examples really function due to syntax changes.
+* Only the `AERA/replicode_v1.2` examples really function due to syntax changes.
 * The term "set" is used even when it means an ordered array with repeated elements.
 * The term "hlp" just means "mdl" or "cst", which use similar structures for "high-level pattern".
 * Every object definition ends with a propagation of saliency threshold (psln_thr), usually 1.
