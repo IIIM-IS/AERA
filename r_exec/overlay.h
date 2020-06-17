@@ -90,7 +90,7 @@ namespace r_exec {
 /**
  * The TraceLevel enum defines bit positions for the "trace_levels" parameter
  * for "Debug" in settings.xml.
- * The number of bits should match DebugStreamCount.
+ * The number of bits should match RuntimeOutputStreamCount.
  */
 typedef enum {
   CST_IN = 0,
