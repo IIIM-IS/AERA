@@ -1,4 +1,4 @@
-AERA_v0.2 (2020-06-15)
+AERA_v0.2 (2020-06-17)
 ----------------------
 
 * Rename the folder Test to AERA.
