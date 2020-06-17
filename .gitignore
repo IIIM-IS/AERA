@@ -25,7 +25,7 @@
 # Ignore log files
 *.log
 /AERA/decompiled.txt
-/AERA/debug_out.txt
+/AERA/runtime_out.txt
 /AERA/decompiled_objects.txt
 
 # Generated docs

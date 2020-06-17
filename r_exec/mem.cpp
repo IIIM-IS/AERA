@@ -121,20 +121,20 @@ _Mem::_Mem() : r_code::Mem(),
   stdin_(0),
   stdout_(0),
   self_(0),
-  defaultDebugStream_(&std::cout)
+  defaultRuntimeOutputStream_(&std::cout)
 {
 
   new ModelBase();
   objects_.reserve(1024);
-  for (uint32 i = 0; i < DebugStreamCount; ++i)
-    debug_streams_[i] = NULL;
+  for (uint32 i = 0; i < RuntimeOutputStreamCount; ++i)
+    runtime_output_streams_[i] = NULL;
 }
 
 _Mem::~_Mem() {
 
-  for (uint32 i = 0; i < DebugStreamCount; ++i)
-    if (debug_streams_[i] != NULL)
-      delete debug_streams_[i];
+  for (uint32 i = 0; i < RuntimeOutputStreamCount; ++i)
+    if (runtime_output_streams_[i] != NULL)
+      delete runtime_output_streams_[i];
 }
 
 void _Mem::init(microseconds base_period,
@@ -194,21 +194,21 @@ void _Mem::init(microseconds base_period,
   time_job_avg_latency_ = _time_job_avg_latency_ = microseconds(0);
 
   uint32 mask = 1;
-  for (uint32 i = 0; i < DebugStreamCount; ++i) {
+  for (uint32 i = 0; i < RuntimeOutputStreamCount; ++i) {
 
     if (traces & mask)
       // NULL means Output() will use defaultDebugStream_ . 
-      debug_streams_[i] = NULL;
+      runtime_output_streams_[i] = NULL;
     else
-      debug_streams_[i] = new NullOStream();
+      runtime_output_streams_[i] = new NullOStream();
     mask <<= 1;
   }
 }
 
 std::ostream &_Mem::Output(TraceLevel l) {
 
-  return (_Mem::Get()->debug_streams_[l] == NULL ? 
-    *_Mem::Get()->defaultDebugStream_ : *(_Mem::Get()->debug_streams_[l]));
+  return (_Mem::Get()->runtime_output_streams_[l] == NULL ? 
+    *_Mem::Get()->defaultRuntimeOutputStream_ : *(_Mem::Get()->runtime_output_streams_[l]));
 }
 
 // This is declared at the r_exec namespace level in overlay.h, so that all headers

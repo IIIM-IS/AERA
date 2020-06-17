@@ -284,11 +284,11 @@ int32 main(int argc, char **argv) {
   if (!settings.load(file_name))
     return 1;
 
-  ofstream debugStream;
-  if (settings.debug_stream_file_path_ != "") {
-    debugStream.open(settings.debug_stream_file_path_);
-    if (!debugStream.is_open()) {
-      std::cout << "Cannot open debug_stream_file_path \"" << settings.debug_stream_file_path_ << "\"" << std::endl;
+  ofstream runtimeOutputStream;
+  if (settings.runtime_output_file_path_ != "") {
+    runtimeOutputStream.open(settings.runtime_output_file_path_);
+    if (!runtimeOutputStream.is_open()) {
+      std::cout << "Cannot open runtime_output_file_path \"" << settings.runtime_output_file_path_ << "\"" << std::endl;
       return 2;
     }
   }
@@ -333,9 +333,9 @@ int32 main(int argc, char **argv) {
     else
       mem = new TestMem<r_exec::LObject, r_exec::MemVolatile>();
 
-    if (debugStream.is_open())
+    if (runtimeOutputStream.is_open())
       // Use the debug stream from settings.xml.
-      mem->setDefaultDebugStream(&debugStream);
+      mem->setDefaultRuntimeOutputStream(&runtimeOutputStream);
 
     r_code::vector<r_code::Code *> ram_objects;
     r_exec::Seed.get_objects(mem, ram_objects);

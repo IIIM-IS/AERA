@@ -184,11 +184,11 @@ protected:
 
   bool deleted_;
 
-  static const uint32 DebugStreamCount = 10;
-  std::ostream *debug_streams_[DebugStreamCount];
-  // Use defaultDebugStream_ if debug_streams_[i] is NULL. For no output,
-  // debug_streams_[i] will be set to new NullOStream().
-  std::ostream *defaultDebugStream_;
+  static const uint32 RuntimeOutputStreamCount = 10;
+  std::ostream *runtime_output_streams_[RuntimeOutputStreamCount];
+  // Use defaultRuntimeOutputStream_ if runtime_output_streams_[i] is NULL. For no output,
+  // runtime_output_streams_[i] will be set to new NullOStream().
+  std::ostream *defaultRuntimeOutputStream_;
 
   _Mem();
 
@@ -366,16 +366,16 @@ public:
   //std::vector<uint64> timings_report; // debug facility.
 
   /**
-   * Set the debug debug stream which Output returns when a trace level is NULL.
-   * \param defaultDebugStream The stream.
+   * Set the runtime output stream which Output returns when a trace level is NULL.
+   * \param defaultRuntimeOutputStream The stream.
    */
-  void setDefaultDebugStream(std::ostream *defaultDebugStream) {
-    defaultDebugStream_ = defaultDebugStream;
+  void setDefaultRuntimeOutputStream(std::ostream *defaultRuntimeOutputStream) {
+    defaultRuntimeOutputStream_ = defaultRuntimeOutputStream;
   }
 
   /**
-   * Get the output stream for the trace level based on (_Mem::Get()->debug_streams_[l].
-   * If (_Mem::Get()->debug_streams_[l] is NULL, use defaultDebugStream_.
+   * Get the output stream for the trace level based on (_Mem::Get()->runtime_output_streams_[l].
+   * If (_Mem::Get()->runtime_output_streams_[l] is NULL, use defaultRuntimeOutputStream_.
    * \param l The TraceLevel.
    * \return A reference to the output stream, which may be a NullOStream if the bit in 
    * settings.xml "trace_levels" was zero.

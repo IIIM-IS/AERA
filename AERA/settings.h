@@ -112,7 +112,7 @@ public:
   core::uint32 ntf_mk_resilience_;
   core::uint32 goal_pred_success_resilience_;
   core::uint32 debug_windows_;
-  std::string debug_stream_file_path_;
+  std::string runtime_output_file_path_;
   core::uint32 trace_levels_;
   bool get_objects_;
   bool keep_invalidated_objects_;
@@ -211,12 +211,12 @@ public:
 
       const char *debug_string = debug.getAttribute("debug");
       const char *debug_windows = debug.getAttribute("debug_windows");
-      const char *debug_stream_file_path = debug.getAttribute("debug_stream_file_path");
+      const char *runtime_output_file_path = debug.getAttribute("runtime_output_file_path");
       const char *trace_levels = debug.getAttribute("trace_levels");
 
       debug_ = (strcmp(debug_string, "yes") == 0);
       debug_windows_ = atoi(debug_windows);
-      debug_stream_file_path_ = debug_stream_file_path;
+      runtime_output_file_path_ = runtime_output_file_path;
       sscanf(trace_levels, "%x", &trace_levels_);
 
       core::XMLNode resilience = debug.getChildNode("Resilience");
