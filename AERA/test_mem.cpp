@@ -318,7 +318,7 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
 
     // nextDiscretePosition_ will become the position at the next sampling period.
     lastCommandTime_ = now;
-    const int maxYPosition = 2;
+    const int maxYPosition = 9;
     if (function == move_y_plus_opcode_) {
       for (int i = 0; i <= maxYPosition - 1; ++i) {
         if (discretePosition_ == yEnt_[i])
@@ -353,12 +353,9 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
       injectMarkerValue(
         position_y_obj_, speed_y_property_, Atom::Float(speed_y_),
         now, now + Mem_sampling_period_, r_exec::View::SYNC_HOLD);
-      r_exec::View* view = injectMarkerValue(
+      injectMarkerValue(
         position_y_obj_, position_y_property_, Atom::Float(position_y_),
         now, now + Mem_sampling_period_);
-        OUTPUT_LINE((TraceLevel)0, "Debug position_y " << position_y_ <<
-          " fact " << view->object_->get_oid() << " " << Utils::RelativeTime(now) << " " <<
-          Utils::RelativeTime(now + Mem_sampling_period_));
     }
   }
 
@@ -376,15 +373,12 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
       }
 
       lastInjectTime_ = now;
-      r_exec::View* view = injectMarkerValue(
+      injectMarkerValue(
         discretePositionObj_, position_property_, discretePosition_,
         now, now + Mem_sampling_period_);
-      OUTPUT_LINE((TraceLevel)0, "Debug position " << discretePosition_->get_oid() <<
-        " fact " << view->object_->get_oid() << " " << Utils::RelativeTime(now) << " " <<
-        Utils::RelativeTime(now + Mem_sampling_period_));
 
-      const microseconds babbleStopTime(2800000);
-      const int maxBabblePosition = 2;
+      const microseconds babbleStopTime(2000000);
+      const int maxBabblePosition = 9;
       if (now - Utils::GetTimeReference() < babbleStopTime) {
         // Babble.
         if (discretePosition_ == yEnt_[0])
