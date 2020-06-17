@@ -218,10 +218,10 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
         command->code(command->code(args_set_index + 1).asIndex()).getDescriptor() == Atom::STRING) {
       string identifier = Utils::GetString(&command->code(command->code(args_set_index + 1).asIndex()));
 
-      if (identifier == "pong") {
+      if (identifier == "ball") {
         if (!(command->code_size() >= 3 && command->code(args_set_index + 2).getDescriptor() == Atom::R_PTR &&
               command->references_size() > command->code(args_set_index + 2).asIndex())) {
-          cout << "WARNING: Cannot get the object for ready \"pong\"" << endl;
+          cout << "WARNING: Cannot get the object for ready \"ball\"" << endl;
           return;
         }
         if (!speed_y_property_) {
@@ -266,7 +266,7 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
     uint16 args_set_index = command->code(CMD_ARGS).asIndex();
     Code* obj = command->get_reference(
       command->code(args_set_index + 1).asIndex());
-    // Set up position_y_obj_ the same as the ready "pong" command.
+    // Set up position_y_obj_ the same as the ready "ball" command.
     if (!position_y_obj_) {
       // This is the first call. Remember the object whose speed we're setting.
       position_y_obj_ = obj;
