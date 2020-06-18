@@ -274,8 +274,12 @@ bool InputLessPGMOverlay::inject_productions() {
         function[0].asOpcode() != Opcodes::Set &&
         function[0].asOpcode() != Opcodes::Prb)
         ++cmd_count;
-    } else
+    } else {
       ++cmd_count;
+      if (cmd[0].asOpcode() == Opcodes::Cmd)
+        // We will also add the fact of the ejection to the set of productions.
+        ++cmd_count;
+    }
   }
 
   Code *mk_rdx = NULL;
@@ -471,8 +475,12 @@ bool InputLessPGMOverlay::inject_productions() {
 
       if (mk_rdx) {
 
+        // Add the original command.
         mk_rdx->code(write_index++) = Atom::IPointer(extent_index);
         (*prods.getChild(i)).copy(mk_rdx, extent_index, extent_index);
+        // Add the fact of the injected command that we just made.
+        mk_rdx->code(write_index++) = Atom::RPointer(mk_rdx->references_size());
+        mk_rdx->add_reference(fact);
       }
     }
   }
