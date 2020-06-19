@@ -317,19 +317,19 @@
 * Visualizer
   * DONE. Use the registry to remember the last settings.xml file path.
 
-next meeting
+2020-06-19
 * Replicode
-  * Review/merge pull request to include the "ejection fact" in the program mk.rdx https://github.com/IIIM-IS/replicode/pull/89
+  * DONE. Review/merge pull request to include the "ejection fact" in the program mk.rdx https://github.com/IIIM-IS/replicode/pull/89
   * DONE. Rename Test to AERA. In CHANGELOG, say how to get history.
   * DONE. Rename debug_out.txt to runtime_out.txt
   * DONE. Rename pong.external to ball.external
+  * DONE. Tag a release AERA_v0.2
 * Visualizer
   * DONE. Make the windows fit the user's screen.
   * DONE. Copyright headers.
+  * DONE. Tag a release AERA_Visualizer_v0.2
 
 TODO
-* Tag a release AERA_v0.2
-* Tag a release AERA_Visualizer_v0.2
 * Use OUTPUT_LINE everywhere to avoid mangling output together.
 * In prediction monitor, on failure check again at the end of the predicted period.
 * Visualizer: Add an item for prediction reduction, initially hidden.
