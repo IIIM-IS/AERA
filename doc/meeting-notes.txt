@@ -317,11 +317,17 @@
 * Visualizer
   * DONE. Use the registry to remember the last settings.xml file path.
 
+next meeting
+* Replicode
+  * Review/merge pull request to include the "ejection fact" in the program mk.rdx https://github.com/IIIM-IS/replicode/pull/89
+  * DONE. Rename Test to AERA. In CHANGELOG, say how to get history.
+  * DONE. Rename debug_out.txt to runtime_out.txt
+  * DONE. Rename pong.external to ball.external
+* Visualizer
+  * DONE. Make the windows fit the user's screen.
+  * DONE. Copyright headers.
+
 TODO
-* Rename Test to AERA. In README, say how to get history.
-* Rename pong.external to ball.external
-* Rename debug_out.txt to runtime_out.txt
-* Copyright headers in Visualizer code.
 * Tag a release AERA_v0.2
 * Tag a release AERA_Visualizer_v0.2
 * Use OUTPUT_LINE everywhere to avoid mangling output together.
