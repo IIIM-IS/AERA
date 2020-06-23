@@ -333,6 +333,15 @@ public:
     trace(out);
     return out.str();
   }
+
+  /**
+   * Return the trace of code(i) as a string, using a default TraceContext (no indentation).
+   */
+  std::string traceString(uint16 i) const {
+    std::ostringstream out;
+    trace(i, out);
+    return out.str();
+  }
 };
 
 // Implementation for local objects (non distributed).
