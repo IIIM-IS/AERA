@@ -112,19 +112,14 @@ typedef enum {
  */
 std::ostream __declspec(dllexport) &_Mem_Output(TraceLevel l);
 
-/**
- * Call _Mem_Output to get the output stream for the trace level.
- */
-#define OUTPUT(level) _Mem_Output(level)
-
  /**
-  * This similar to "OUTPUT(level) << vals << endl", where vals can be "x << y << z". Except
+  * This similar to "_Mem_Output(level) << vals << endl", where vals can be "x << y << z". Except
   * that we first use an ostringstream to buffer the values plus the line terminator, and
   * then send the entire string to the output stream and flush. Assuming that the output
   * stream will output the entire string as a single operation, then when all threads use
   * OUTPUT_LINE it will avoid scrambling output of individual values.
   */
-#define OUTPUT_LINE(level, vals) (OUTPUT(level) << (ostringstream() << vals << '\n').str()).flush()
+#define OUTPUT_LINE(level, vals) (_Mem_Output(level) << (ostringstream() << vals << '\n').str()).flush()
 
 class View;
 
