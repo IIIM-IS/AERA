@@ -143,25 +143,27 @@ void CSTOverlay::inject_production() {
         prediction->grounds_.push_back(*pred);
       ((CSTController *)controller_)->inject_prediction(f_p_f_icst, lowest_cfd_, time_to_live); // inject a f->pred->icst in the primary group, no rdx.
 
-      OUTPUT(CST_OUT) << Utils::RelativeTime(Now()) << " fact " << f_p_f_icst->get_oid();
+      string f_p_f_icst_info;
 #ifdef WITH_DEBUG_OID
-      OUTPUT(CST_OUT) << "(" << f_p_f_icst->get_debug_oid() << ")";
+      f_p_f_icst_info = "(" + to_string(f_p_f_icst->get_debug_oid()) + ")";
 #endif
-      OUTPUT(CST_OUT) << " pred fact ";
+      string f_icst_info;
 #ifdef WITH_DEBUG_OID
-      OUTPUT(CST_OUT) << "(" << f_icst->get_debug_oid() << ") ";
+      f_icst_info = "(" + to_string(f_icst->get_debug_oid()) + ") ";
 #endif
-      OUTPUT(CST_OUT) << "icst[" << controller_->getObject()->get_oid() << "][";
+      string inputsInfo;
       for (uint32 i = 0; i < inputs_.size(); ++i)
-        OUTPUT(CST_OUT) << " " << inputs_[i]->get_oid();
-      OUTPUT(CST_OUT) << "]" << std::endl;
+        inputsInfo += " " + to_string(inputs_[i]->get_oid());
+      OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " fact " << f_p_f_icst->get_oid() << f_p_f_icst_info <<
+        " pred fact " << f_icst_info << "icst[" << controller_->getObject()->get_oid() << "][" << inputsInfo << "]");
     } else {
       ((CSTController *)controller_)->inject_icst(f_icst, lowest_cfd_, time_to_live); // inject f->icst in the primary and secondary groups, and in the output groups.
 
-      OUTPUT(CST_OUT) << Utils::RelativeTime(Now()) << " fact " << f_icst->get_oid() << " icst[" << controller_->getObject()->get_oid() << "][";
+      string inputsInfo;
       for (uint32 i = 0; i < inputs_.size(); ++i)
-        OUTPUT(CST_OUT) << " " << inputs_[i]->get_oid();
-      OUTPUT(CST_OUT) << "]" << std::endl;
+        inputsInfo += " " + to_string(inputs_[i]->get_oid());
+      OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " fact " << f_icst->get_oid() << " icst[" << controller_->getObject()->get_oid() << "][" <<
+        inputsInfo << "]");
     }
   } else { // there are simulations; the production is therefore a prediction; add the simulations to the latter.
 
@@ -189,6 +191,10 @@ void CSTOverlay::update(HLPBindingMap *map, _Fact *input, _Fact *bound_pattern) 
 
   bindings_ = map;
   inputs_.push_back(input);
+#ifdef WITH_DEBUG_OID
+  OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " CSTOverlay(" << get_debug_oid() << 
+    ") for cst " << controller_->getObject()->get_oid() << ": store input " << input->get_oid());
+#endif
   float32 last_cfd;
   Pred *prediction = input->get_pred();
   if (prediction) {
@@ -345,7 +351,7 @@ void CSTController::take_input(r_exec::View *input) {
   if (input->object_->code(0).asOpcode() == Opcodes::Fact ||
     input->object_->code(0).asOpcode() == Opcodes::AntiFact) { // discard everything but facts and |facts.
 
-    OUTPUT(CST_IN) << Utils::RelativeTime(Now()) << " cst " << getObject()->get_oid() << " <- " << input->object_->get_oid() << std::endl;
+    OUTPUT_LINE(CST_IN, Utils::RelativeTime(Now()) << " cst " << getObject()->get_oid() << " <- " << input->object_->get_oid());
     Controller::__take_input<CSTController>(input);
   }
 }

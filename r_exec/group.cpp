@@ -839,11 +839,11 @@ void Group::inject_hlps(std::vector<View *> &views) {
       CSTController *c = new CSTController(*view);
       (*view)->controller_ = c;
       c->set_secondary_host(get_secondary_group());
+      string controllerInfo;
 #ifdef WITH_DEBUG_OID
-      OUTPUT(CST_OUT) << Utils::RelativeTime(Now()) << " -> cst " << (*view)->object_->get_oid() << ", CSTController(" << c->get_debug_oid() << ")" << std::endl;
-#else
-      OUTPUT(CST_OUT) << Utils::RelativeTime(Now()) << " -> cst " << (*view)->object_->get_oid() << std::endl;
+      controllerInfo = ", CSTController(" + to_string(c->get_debug_oid()) + ")";
 #endif
+      OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " -> cst " << (*view)->object_->get_oid() << controllerInfo);
       break;
     }
     case Atom::MODEL: {
@@ -853,11 +853,11 @@ void Group::inject_hlps(std::vector<View *> &views) {
       (*view)->controller_ = c;
       if (inject_in_secondary_group)
         get_secondary_group()->inject_secondary_mdl_controller(*view);
+      string controllerInfo;
 #ifdef WITH_DEBUG_OID
-      OUTPUT(MDL_OUT) << Utils::RelativeTime(Now()) << " -> mdl " << (*view)->object_->get_oid() << ", MDLController(" << c->get_debug_oid() << ")" << std::endl;
-#else
-      OUTPUT(MDL_OUT) << Utils::RelativeTime(Now()) << " -> mdl " << (*view)->object_->get_oid() << std::endl;
+      controllerInfo = ", MDLController(" + to_string(c->get_debug_oid()) + ")";
 #endif
+      OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " -> mdl " << (*view)->object_->get_oid() << controllerInfo);
       break;
     }
     }
@@ -958,7 +958,7 @@ void Group::inject(View *view) { // the view can hold anything but groups and no
     cov(view);
     break;
   case Atom::COMPOSITE_STATE: {
-    OUTPUT(HLP_INJ) << Utils::RelativeTime(Now()) << " cst " << view->object_->get_oid() << " injected" << std::endl;
+    OUTPUT_LINE(HLP_INJ, Utils::RelativeTime(Now()) << " cst " << view->object_->get_oid() << " injected");
     ipgm_views_[view->get_oid()] = view;
     CSTController *c = new CSTController(view);
     view->controller_ = c;
@@ -972,7 +972,7 @@ void Group::inject(View *view) { // the view can hold anything but groups and no
     }
     break;
   }case Atom::MODEL: {
-    OUTPUT(HLP_INJ) << Utils::RelativeTime(Now()) << " mdl " << view->object_->get_oid() << " injected" << std::endl;
+    OUTPUT_LINE(HLP_INJ, Utils::RelativeTime(Now()) << " mdl " << view->object_->get_oid() << " injected");
     ipgm_views_[view->get_oid()] = view;
     bool inject_in_secondary_group;
     MDLController *c = MDLController::New(view, inject_in_secondary_group);

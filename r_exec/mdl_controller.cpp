@@ -107,7 +107,7 @@ PrimaryMDLOverlay::~PrimaryMDLOverlay() {
 
 Overlay *PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *req_controller) {
 
-  OUTPUT(MDL_IN) << Utils::RelativeTime(Now()) << " mdl: " << controller_->getObject()->get_oid() << " <- input: " << input->get_oid() << std::endl;
+  OUTPUT_LINE(MDL_IN, Utils::RelativeTime(Now()) << " mdl: " << controller_->getObject()->get_oid() << " <- input: " << input->get_oid());
   _Fact *input_object;
   Pred *prediction = input->get_pred();
   bool simulation;
@@ -729,9 +729,9 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
         HLPBindingMap _original = original; // matching updates the bm; always start afresh.
         if (_original.match_fwd_strict(_f_imdl, f_imdl)) { // tpl args will be valuated in bm, but not in f_imdl yet.
 #ifdef WITH_DEBUG_OID
-          OUTPUT(MDL_OUT) << Utils::RelativeTime(Now()) << " fact (" << f_imdl->get_debug_oid() << ") imdl mdl " <<
+          OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " fact (" << f_imdl->get_debug_oid() << ") imdl mdl " <<
             f_imdl->get_reference(0)->get_reference(0)->get_oid() << " matches evidence fact (" <<
-            _f_imdl->get_debug_oid() << ") imdl mdl " << _f_imdl->get_reference(0)->get_reference(0)->get_oid() << std::endl;
+            _f_imdl->get_debug_oid() << ") imdl mdl " << _f_imdl->get_reference(0)->get_reference(0)->get_oid());
 #endif
           if (r == WEAK_REQUIREMENT_DISABLED && (*e).chaining_was_allowed_) { // first match.
 
@@ -1238,7 +1238,8 @@ void TopLevelMDLController::abduce_lhs(HLPBindingMap *bm,
   if (!evidence)
     inject_goal(bm, f_sub_goal, f_imdl);
   add_g_monitor(new GMonitor(this, bm, deadline, now + sim_thz, f_sub_goal, f_imdl, evidence));
-  OUTPUT(MDL_OUT) << Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " -> fact " << f_sub_goal->get_oid() << " goal [" << Utils::RelativeTime(sub_goal_target->get_after()) << "," << Utils::RelativeTime(sub_goal_target->get_before()) << "]\n";
+  OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " -> fact " << f_sub_goal->get_oid() << 
+    " goal [" << Utils::RelativeTime(sub_goal_target->get_after()) << "," << Utils::RelativeTime(sub_goal_target->get_before()));
 }
 
 void TopLevelMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground) { // no prediction here.
@@ -1292,8 +1293,8 @@ void TopLevelMDLController::register_goal_outcome(Fact *goal, bool success, _Fac
   }
 
   register_drive_outcome(goal->get_goal()->sim_->super_goal_, success);
-  if (success) OUTPUT(GOAL_MON) << Utils::RelativeTime(Now()) << " " << goal->get_oid() << " goal success (TopLevel)\n";
-  else OUTPUT(GOAL_MON) << Utils::RelativeTime(Now()) << " " << goal->get_oid() << " goal failure (TopLevel)\n";
+  if (success) OUTPUT_LINE(GOAL_MON, Utils::RelativeTime(Now()) << " " << goal->get_oid() << " goal success (TopLevel)");
+  else OUTPUT_LINE(GOAL_MON, Utils::RelativeTime(Now()) << " " << goal->get_oid() << " goal failure (TopLevel)");
 }
 
 void TopLevelMDLController::register_drive_outcome(Fact *drive, bool success) const {
@@ -1458,11 +1459,12 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
     PrimaryMDLController *c = (PrimaryMDLController *)controllers_[RHSController]; // rhs controller: in the same view.
     c->store_requirement(production, this, chaining_was_allowed, simulation); // if not simulation, stores also in the secondary controller.
 #ifdef WITH_DEBUG_OID
-    OUTPUT(MDL_OUT) << Utils::RelativeTime(Now()) << " fact (" << f_imdl->get_debug_oid() << ") imdl mdl " << getObject()->get_oid() <<
+    OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " fact (" << f_imdl->get_debug_oid() << ") imdl mdl " << getObject()->get_oid() <<
       ": " << input->get_oid() << " -> fact (" << production->get_debug_oid() << ") pred fact (" <<
-      bound_rhs->get_debug_oid() << ") imdl mdl " << bound_rhs->get_reference(0)->get_reference(0)->get_oid() << std::endl;
+      bound_rhs->get_debug_oid() << ") imdl mdl " << bound_rhs->get_reference(0)->get_reference(0)->get_oid());
 #else
-    OUTPUT(MDL_OUT) << Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": " << input->get_oid() << " -> fact pred fact imdl mdl " << bound_rhs->get_reference(0)->get_reference(0)->get_oid() << std::endl;
+    OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": " << input->get_oid() << 
+      " -> fact pred fact imdl mdl " << bound_rhs->get_reference(0)->get_reference(0)->get_oid());
 #endif
     return;
   }
@@ -1484,14 +1486,13 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
 
         Fact *pred_f_imdl = new Fact(new Pred(f_imdl, 1), now, now, 1, 1);
         inject_prediction(production, pred_f_imdl, confidence, before - now, NULL);
+        string f_imdl_info;
 #ifdef WITH_DEBUG_OID
-        OUTPUT(MDL_OUT) << Utils::RelativeTime(Now()) << " fact (" << f_imdl->get_debug_oid() << ") imdl mdl " << getObject()->get_oid() <<
-          ": " << input->get_oid() << " -> fact " << production->get_oid() << " pred fact mk.val VALUE ";
-#else
-        OUTPUT(MDL_OUT) << Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": " << input->get_oid() << " -> fact " << production->get_oid() << " pred fact mk.val VALUE ";
+        f_imdl_info = " fact (" + to_string(f_imdl->get_debug_oid()) + ") imdl";
 #endif
-        bound_rhs->get_reference(0)->trace(MK_VAL_VALUE, OUTPUT(MDL_OUT));
-        OUTPUT(MDL_OUT) << std::endl;
+        OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << f_imdl_info << " mdl " << 
+          getObject()->get_oid() << ": " << input->get_oid() << " -> fact " << production->get_oid() << 
+          " pred fact mk.val VALUE " << bound_rhs->get_reference(0)->traceString(MK_VAL_VALUE));
       } else {
 
         Code *mk_rdx;
@@ -1506,13 +1507,13 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
         View *view = new View(View::SYNC_ONCE, now, confidence, 1, getView()->get_host(), secondary_host, f_imdl); // SYNC_ONCE,res=resilience.
         _Mem::Get()->inject(view);
         OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " predict -> mk.rdx " << mk_rdx->get_oid());
-        OUTPUT(MDL_OUT) << Utils::RelativeTime(Now()) << " fact " << f_imdl->get_oid();
+        string f_imdl_info;
 #ifdef WITH_DEBUG_OID
-        OUTPUT(MDL_OUT) << "(" << f_imdl->get_debug_oid() << ")";
+        f_imdl_info = "(" + to_string(f_imdl->get_debug_oid()) + ")";
 #endif
-        OUTPUT(MDL_OUT) << " imdl mdl " << getObject()->get_oid() << ": " << input->get_oid() << " -> fact " << production->get_oid() << " pred fact mk.val VALUE ";
-        bound_rhs->get_reference(0)->trace(MK_VAL_VALUE, OUTPUT(MDL_OUT));
-        OUTPUT(MDL_OUT) << std::endl;
+        OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " fact " << f_imdl->get_oid() << f_imdl_info << " imdl mdl " << 
+          getObject()->get_oid() << ": " << input->get_oid() << " -> fact " << production->get_oid() << 
+          " pred fact mk.val VALUE " << bound_rhs->get_reference(0)->traceString(MK_VAL_VALUE));
       }
     }
   } else { // no monitoring for simulated predictions.
@@ -1758,7 +1759,8 @@ void PrimaryMDLController::abduce_lhs(HLPBindingMap *bm, Fact *super_goal, Fact 
 
       if (!evidence) {
         inject_goal(bm, f_sub_goal, f_imdl);
-        OUTPUT(MDL_OUT) << Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " -> fact " << f_sub_goal->get_oid() << " goal [" << Utils::RelativeTime(sub_goal->get_target()->get_after()) << "," << Utils::RelativeTime(sub_goal->get_target()->get_before()) << "]\n";
+        OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " -> fact " << f_sub_goal->get_oid() << 
+          " goal [" << Utils::RelativeTime(sub_goal->get_target()->get_after()) << "," << Utils::RelativeTime(sub_goal->get_target()->get_before()) << "]");
       }
       break;
     }
@@ -1777,11 +1779,13 @@ void PrimaryMDLController::abduce_imdl(HLPBindingMap *bm, Fact *super_goal, Fact
   Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
   add_r_monitor(new RMonitor(this, bm, super_goal->get_goal()->get_target()->get_before(), now + sim->thz_, f_sub_goal, f_imdl)); // the monitor will wait until the deadline of the super-goal.
   inject_goal(bm, f_sub_goal, f_imdl);
-  OUTPUT(MDL_OUT) << Utils::RelativeTime(Now()) << " " << getObject()->get_oid() << " -> fact " << f_sub_goal->get_oid() << " goal fact " << f_imdl->get_oid();
+  string fImdlDebugInfo;
 #ifdef WITH_DEBUG_OID
-  OUTPUT(MDL_OUT) << "(" << f_imdl->get_debug_oid() << ")";
+  fImdlDebugInfo = "(" + to_string(f_imdl->get_debug_oid()) + ")";
 #endif
-  OUTPUT(MDL_OUT) << " imdl[" << f_imdl->get_reference(0)->get_reference(0)->get_oid() << "][" << Utils::RelativeTime(sub_goal->get_target()->get_after()) << "," << Utils::RelativeTime(sub_goal->get_target()->get_before()) << "]\n";
+  OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " " << getObject()->get_oid() << " -> fact " << f_sub_goal->get_oid() << " goal fact " << 
+    f_imdl->get_oid() << fImdlDebugInfo << " imdl[" << f_imdl->get_reference(0)->get_reference(0)->get_oid() << "][" << 
+    Utils::RelativeTime(sub_goal->get_target()->get_after()) << "," << Utils::RelativeTime(sub_goal->get_target()->get_before()) << "]");
 }
 
 void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim) { // goal is f->g->f->object or f->g->|f->object; called concurrently by redcue() and _GMonitor::update().
@@ -2009,12 +2013,12 @@ void PrimaryMDLController::register_goal_outcome(Fact *goal, bool success, _Fact
 
       absentee = goal->get_goal()->get_target()->get_absentee();
       success_object = new Success(goal, absentee, 1);
-      OUTPUT(PRED_MON) << Utils::RelativeTime(now) << " " << goal->get_oid() << " goal success (Primary)" << std::endl;
+      OUTPUT_LINE(PRED_MON, Utils::RelativeTime(now) << " " << goal->get_oid() << " goal success (Primary)");
     } else {
 
       absentee = NULL;
       success_object = new Success(goal, evidence, 1);
-      OUTPUT(PRED_MON) << Utils::RelativeTime(now) << " " << goal->get_oid() << " goal failure (Primary)" << std::endl;
+      OUTPUT_LINE(PRED_MON, Utils::RelativeTime(now) << " " << goal->get_oid() << " goal failure (Primary)");
     }
     f_success_object = new AntiFact(success_object, now, now, 1, 1);
   }
@@ -2107,16 +2111,16 @@ void PrimaryMDLController::rate_model(bool success) {
       getView()->set_act(0);
       secondary_->getView()->set_act(success_rate); // may trigger secondary->gain_activation().
       codeCS_.leave();
-      OUTPUT(MDL_REV) << Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " phased out " << std::endl;
+      OUTPUT_LINE(MDL_REV, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " phased out ");
     } else { // no weak models live in the secondary group.
 
       codeCS_.leave();
       ModelBase::Get()->register_mdl_failure(model);
       kill_views();
-      OUTPUT(MDL_REV) << Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " deleted " << std::endl;
+      OUTPUT_LINE(MDL_REV, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " deleted ");
     }
   }
-  OUTPUT(MDL_REV) << Utils::RelativeTime(Now()) << " mdl " << model->get_oid() << " cnt:" << evidence_count << " sr:" << success_rate << std::endl;
+  OUTPUT_LINE(MDL_REV, Utils::RelativeTime(Now()) << " mdl " << model->get_oid() << " cnt:" << evidence_count << " sr:" << success_rate);
 }
 
 void PrimaryMDLController::assume(_Fact *input) {
@@ -2188,7 +2192,7 @@ void PrimaryMDLController::assume_lhs(HLPBindingMap *bm, bool opposite, _Fact *i
   int32 resilience = _Mem::Get()->get_goal_pred_success_res(primary_host, now, time_to_live);
   View *view = new View(View::SYNC_ONCE, now, confidence, resilience, primary_host, primary_host, bound_lhs); // SYNC_ONCE,res=resilience.
   _Mem::Get()->inject(view);
-  OUTPUT(MDL_OUT) << Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " -> " << bound_lhs->get_oid() << " asmp" << std::endl;
+  OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " -> " << bound_lhs->get_oid() << " asmp");
 }
 
 void PrimaryMDLController::kill_views() {
@@ -2342,7 +2346,7 @@ void SecondaryMDLController::rate_model() { // acknowledge successes only; the p
     getView()->set_act(0);
     primary_->getView()->set_act(success_rate); // activate the primary controller in its own group g: will be performmed at the nex g->upr.
     codeCS_.leave();
-    OUTPUT(MDL_REV) << Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " phased in " << std::endl;
+    OUTPUT_LINE(MDL_REV, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " phased in ");
   } else { // will trigger primary->gain_activation() at the next g->upr.
 
     if (success_rate > getView()->get_host()->get_act_thr()) // else: leave the model in the secondary group.
