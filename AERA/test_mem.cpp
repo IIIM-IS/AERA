@@ -235,13 +235,13 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
 
         Code* obj = command->get_reference(command->code(args_set_index + 2).asIndex());
         if (!position_y_obj_) {
-          // This is the first call. Remember the object whose speed we're setting.
+          // This is the first call. Remember the object whose position we're reporting.
           position_y_obj_ = obj;
           startTimeTickThread();
         }
         else {
           if (position_y_obj_ != obj)
-            // For now, don't allow tracking the speed of multiple objects.
+            // For now, don't allow tracking multiple objects.
             return;
         }
       }
