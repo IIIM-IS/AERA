@@ -474,7 +474,7 @@ bool InputLessPGMOverlay::inject_productions() {
 #ifdef WITH_DEBUG_OID
       if (mk_rdx)
         // We don't know the mk.rdx OID yet, so use the debug OID.
-        mk_rdx_info = " mk.rdx(" + to_string(mk_rdx->get_debug_oid()) + "): ";
+        mk_rdx_info = " mk.rdx(" + to_string(mk_rdx->get_debug_oid()) + "):";
 #endif
       OUTPUT_LINE(ENVIRONMENT_INJ_EJT, Utils::RelativeTime(Now()) << mk_rdx_info << " environment eject " << fact->get_oid());
 
