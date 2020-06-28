@@ -442,7 +442,7 @@ TestMem<O, S>::timeTickRun(void *args) {
     self->onTimeTick();
 
     tickTime += Mem_sampling_period_;
-    Thread::Sleep((tickTime - r_exec::Now()) / 1000);
+    Thread::Sleep(tickTime - r_exec::Now());
   }
 
   thread_ret_val(0);
