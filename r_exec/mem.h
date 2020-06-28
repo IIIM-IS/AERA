@@ -226,6 +226,11 @@ public:
     bool enable_assumptions,
     bool keep_invalidated_objects);
 
+  /**
+   * Get the sampling period, which is 2 * base_period from settings.xml. This should
+   * match sampling_period in user.classes.replicode.
+   */
+  std::chrono::microseconds get_sampling_period() const { return 2 * base_period_; }
   uint64 get_probe_level() const { return probe_level_; }
   bool get_enable_assumptions() const { return enable_assumptions_; }
   float32 get_mdl_inertia_sr_thr() const { return mdl_inertia_sr_thr_; }
@@ -382,9 +387,6 @@ public:
    */
   static std::ostream &Output(TraceLevel l);
 };
-
-// Note: This should match the definition in user.classes.replicode.
-const std::chrono::microseconds Mem_sampling_period_ = std::chrono::milliseconds(100);
 
 // _Mem that stores the objects as long as they are not invalidated.
 class r_exec_dll MemStatic :

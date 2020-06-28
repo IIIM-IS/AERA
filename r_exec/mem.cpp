@@ -556,9 +556,9 @@ void _Mem::runInDiagnosticTime(milliseconds runTime) {
     // The entry at the front is the earliest.
     if (orderedTimeJobQueue.size() == 0 ||
       orderedTimeJobQueue.front()->target_time_ >=
-        tickTime + Mem_sampling_period_) {
+        tickTime + get_sampling_period()) {
       // There is no time job before the next tick time, so tick.
-      tickTime += Mem_sampling_period_;
+      tickTime += get_sampling_period();
       // Increase the diagnostic time to the tick time.
       DiagnosticTimeNow_ = tickTime;
       // We are beginning a new sampling period.

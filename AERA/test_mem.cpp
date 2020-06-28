@@ -339,7 +339,7 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
   if (position_y_obj_) {
     // We are updating the continuous position_y_.
     auto now = r_exec::Now();
-    if (now >= lastInjectTime_ + Mem_sampling_period_ * 8 / 10) {
+    if (now >= lastInjectTime_ + get_sampling_period() * 8 / 10) {
       // Enough time has elapsed to inject a new position.
       if (lastInjectTime_.time_since_epoch().count() == 0) {
         // This is the first call, so leave the initial position.
@@ -352,20 +352,20 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
       // It seems that speed_y needs SYNC_HOLD for building models.
       injectMarkerValue(
         position_y_obj_, speed_y_property_, Atom::Float(speed_y_),
-        now, now + Mem_sampling_period_, r_exec::View::SYNC_HOLD);
+        now, now + get_sampling_period(), r_exec::View::SYNC_HOLD);
       injectMarkerValue(
         position_y_obj_, position_y_property_, Atom::Float(position_y_),
-        now, now + Mem_sampling_period_);
+        now, now + get_sampling_period());
     }
   }
 
   if (discretePositionObj_) {
     // We are updating the discretePosition_.
     auto now = r_exec::Now();
-    if (now >= lastInjectTime_ + Mem_sampling_period_ * 8 / 10) {
+    if (now >= lastInjectTime_ + get_sampling_period() * 8 / 10) {
       // Enough time has elapsed to inject another position.
       if (nextDiscretePosition_ &&
-        now >= lastCommandTime_ + Mem_sampling_period_ * 5 / 10) {
+        now >= lastCommandTime_ + get_sampling_period() * 5 / 10) {
         // Enough time has elapsed from the move command to update the position.
         discretePosition_ = nextDiscretePosition_;
         // Clear nextDiscretePosition_ to allow another move command.
@@ -375,7 +375,7 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
       lastInjectTime_ = now;
       injectMarkerValue(
         discretePositionObj_, position_property_, discretePosition_,
-        now, now + Mem_sampling_period_);
+        now, now + get_sampling_period());
 
       const microseconds babbleStopTime(2000000);
       const int maxBabblePosition = 9;
@@ -410,9 +410,9 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
         cmd->set_reference(0, discretePositionObj_);
 
         r_exec::Fact* factCmd = new r_exec::Fact(
-          cmd, now + Mem_sampling_period_, now + 2 * Mem_sampling_period_, 1, 1);
+          cmd, now + get_sampling_period(), now + 2 * get_sampling_period(), 1, 1);
         r_exec::Goal* goal = new r_exec::Goal(factCmd, get_self(), 1);
-        injectFact(goal, now + Mem_sampling_period_, now + Mem_sampling_period_, primary_group_);
+        injectFact(goal, now + get_sampling_period(), now + get_sampling_period(), primary_group_);
       }
     }
   }
@@ -436,12 +436,13 @@ template<class O, class S> thread_ret thread_function_call
 TestMem<O, S>::timeTickRun(void *args) {
   TestMem<O, S>* self = (TestMem *)args;
 
+  auto sampling_period = Mem::Get()->get_sampling_period();
   auto tickTime = r_exec::Now();
   // Call onTimeTick at the sampling period.
   while (self->state_ == RUNNING) {
     self->onTimeTick();
 
-    tickTime += Mem_sampling_period_;
+    tickTime += sampling_period;
     Thread::Sleep(tickTime - r_exec::Now());
   }
 
