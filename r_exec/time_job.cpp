@@ -167,14 +167,19 @@ void InputLessPGMSignalingJob::report(int64 lag) const {
 
 ////////////////////////////////////////////////////////////
 
-InjectionJob::InjectionJob(View *v, Timestamp ijt) : TimeJob(ijt) {
+InjectionJob::InjectionJob(View *v, Timestamp target_time, bool isFromEnvironment) : TimeJob(target_time) {
 
   view_ = v;
+  isFromEnvironment_ = isFromEnvironment;
 }
 
 bool InjectionJob::update(Timestamp &next_target) {
 
   _Mem::Get()->inject(view_);
+  if (isFromEnvironment_)
+    // The view injection time may be different than now, so log it too.
+    OUTPUT_LINE(ENVIRONMENT_INJ_EJT, Utils::RelativeTime(Now()) << " environment inject " <<
+      view_->object_->get_oid() << ", ijt " << Utils::RelativeTime(view_->get_ijt()));
   return true;
 }
 

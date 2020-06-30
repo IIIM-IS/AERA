@@ -306,7 +306,16 @@ public:
   void injectFromEnvironment(View *view);
 
   // Called upon successful reduction.
-  void inject(View *view);
+  /**
+   * Call bind which assigns an OID to the view's object and inject the view. 
+   * However, if the view's injection time is later than now, then create
+   * an InjectionJob which will call bind and inject the view at the injection time.
+   * \param view The View to inject.
+   * \param isFromEnvironment True if this is called from injectFromEnvironment().
+   * This is only needed to pass to the InjectionJob so that it will log the 
+   * environment inject.
+   */
+  void inject(View *view, bool isFromEnvironment = false);
   void inject_async(View *view);
   void inject_new_object(View *view);
   void inject_existing_object(View *view, r_code::Code *object, Group *host);

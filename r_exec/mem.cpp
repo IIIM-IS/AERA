@@ -748,13 +748,15 @@ void _Mem::inject_new_object(View *view) {
 
 void _Mem::injectFromEnvironment(View *view) {
   // Inject first to set the OID.
-  inject(view);
-  // The view injection time may be different than now, so log it too.
-  OUTPUT_LINE(ENVIRONMENT_INJ_EJT, Utils::RelativeTime(Now()) << " environment inject " <<
-    view->object_->get_oid() << ", ijt " << Utils::RelativeTime(view->get_ijt()));
+  inject(view, true);
+  // For UNDEFINED_OID, assume that InjectionJob::update will log it.
+  if (view->object_->get_oid() != UNDEFINED_OID)
+    // The view injection time may be different than now, so log it too.
+    OUTPUT_LINE(ENVIRONMENT_INJ_EJT, Utils::RelativeTime(Now()) << " environment inject " <<
+      view->object_->get_oid() << ", ijt " << Utils::RelativeTime(view->get_ijt()));
 }
 
-void _Mem::inject(View *view) {
+void _Mem::inject(View *view, bool isFromEnvironment) {
 
   if (view->object_->is_invalidated())
     return;
@@ -782,7 +784,7 @@ void _Mem::inject(View *view) {
       inject_new_object(view);
     else {
 
-      P<TimeJob> j = new InjectionJob(view, ijt);
+      P<TimeJob> j = new InjectionJob(view, ijt, isFromEnvironment);
       time_job_queue_->push(j);
     }
   }
@@ -813,7 +815,7 @@ void _Mem::inject_async(View *view) {
       time_job_queue_->push(j);
     } else {
 
-      P<TimeJob> j = new InjectionJob(view, ijt);
+      P<TimeJob> j = new InjectionJob(view, ijt, false);
       time_job_queue_->push(j);
     }
   }

@@ -147,13 +147,25 @@ public:
   void report(int64 lag) const;
 };
 
+/**
+ * InjectionJob extends TimeJob to inject a View at a later time.
+ */
 class r_exec_dll InjectionJob :
   public TimeJob {
 public:
   P<View> view_;
-  InjectionJob(View *v, Timestamp ijt);
+  /**
+   * Create an InjectionJob to call  _Mem::Get()->inject(view_) at the target_time.
+   * \param v The View for calling inject.
+   * \param target_time The target time for the TimeJob.
+   * \param isFromEnvironment True if this is called from injectFromEnvironment().
+   * This is only needed so that this will log the environment inject.
+   */
+  InjectionJob(View *v, Timestamp target_time, bool isFromEnvironment);
   bool update(Timestamp &next_target);
   void report(int64 lag) const;
+
+  bool isFromEnvironment_;
 };
 
 class r_exec_dll EInjectionJob :
