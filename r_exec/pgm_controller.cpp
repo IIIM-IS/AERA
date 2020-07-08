@@ -151,6 +151,20 @@ void PGMController::notify_reduction() {
 
 void PGMController::take_input(r_exec::View *input) {
 
+  if (input->object_->code(0).asOpcode() == Opcodes::Fact) {
+    Goal* goal = ((_Fact *)input->object_)->get_goal();
+    if (goal) {
+      if (!!goal->sim_ && goal->sim_->thz_.count() > 0)
+        // Don't take simulated goals as program input.
+        return;
+    }
+    else {
+      Pred* prediction = ((_Fact *)input->object_)->get_pred();
+      if (prediction && prediction->is_simulation())
+        // Don't take simulated predictions as program input.
+        return;
+    }
+  }
   Controller::__take_input<PGMController>(input);
 }
 
