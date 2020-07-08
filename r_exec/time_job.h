@@ -202,6 +202,10 @@ public:
   MonitoringJob(M *monitor, Timestamp deadline) : TimeJob(deadline), monitor_(monitor) {}
   bool update(Timestamp &next_target) {
 
+#ifdef WITH_DEBUG_OID
+    OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(Now()) << " MonitoringJob " << get_job_id() <<
+      ": monitor(" << monitor_->get_debug_oid() << ")->update()");
+#endif
     monitor_->update(next_target);
     return true;
   }
