@@ -6,56 +6,17 @@ p1_is_a_paddle:(mk.val p1 essence paddle 1) |[]
 ; Even though (fact p1_is_a_paddle ::) is not used in this file, the pattern extractor needs it.
 f_p1_is_a_paddle:(fact p1_is_a_paddle 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 
-within_position0:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
-within_position1:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
-within_position2:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
-within_position3:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
-within_position4:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
-within_position5:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
-within_position6:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
-within_position7:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
-within_position8:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
-within_position9:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
-
-y0:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
-y0_is_a_within_position0:(mk.val y0 essence within_position0 1) |[]
-f_y0_is_a_within_position0:(fact y0_is_a_within_position0 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
-
-y1:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
-y1_is_a_within_position1:(mk.val y1 essence within_position1 1) |[]
-f_y1_is_a_within_position1:(fact y1_is_a_within_position1 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
-
-y2:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
-y2_is_a_within_position2:(mk.val y2 essence within_position2 1) |[]
-f_y2_is_a_within_position2:(fact y2_is_a_within_position2 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
-
-y3:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
-y3_is_a_within_position3:(mk.val y3 essence within_position3 1) |[]
-f_y3_is_a_within_position3:(fact y3_is_a_within_position3 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
-
-y4:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
-y4_is_a_within_position4:(mk.val y4 essence within_position4 1) |[]
-f_y4_is_a_within_position4:(fact y4_is_a_within_position4 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
-
-y5:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
-y5_is_a_within_position5:(mk.val y5 essence within_position5 1) |[]
-f_y5_is_a_within_position5:(fact y5_is_a_within_position5 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
-
-y6:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
-y6_is_a_within_position6:(mk.val y6 essence within_position6 1) |[]
-f_y6_is_a_within_position6:(fact y6_is_a_within_position6 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
-
-y7:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
-y7_is_a_within_position7:(mk.val y7 essence within_position7 1) |[]
-f_y7_is_a_within_position7:(fact y7_is_a_within_position7 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
-
-y8:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
-y8_is_a_within_position8:(mk.val y8 essence within_position8 1) |[]
-f_y8_is_a_within_position8:(fact y8_is_a_within_position8 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
-
-y9:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
-y9_is_a_within_position9:(mk.val y9 essence within_position9 1) |[]
-f_y9_is_a_within_position9:(fact y9_is_a_within_position9 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+; Make the discrete positions using ont instead of ent so that we don't need essence statements.
+y0:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+y1:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+y2:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+y3:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+y4:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+y5:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+y6:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+y7:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+y8:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+y9:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
 
 !def inject_drive_time 3000000us
 
