@@ -203,7 +203,7 @@ public:
   bool update(Timestamp &next_target) {
 
 #ifdef WITH_DEBUG_OID
-    OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(Now()) << " MonitoringJob " << get_job_id() <<
+    OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(Now()) << " MonitoringJob::TimeJob " << get_job_id() <<
       ": monitor(" << monitor_->get_debug_oid() << ")->update()");
 #endif
     monitor_->update(next_target);
