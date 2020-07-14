@@ -233,7 +233,7 @@ protected:
   int16 fwd_before_index_;
 
   bool match_timings(Timestamp stored_after, Timestamp stored_before, Timestamp after, Timestamp before, uint32 destination_after_index, uint32 destination_before_index);
-  bool match_fwd_timings(const _Fact *f_object, const _Fact *f_pattern);
+  bool match_fwd_timings(const _Fact *f_object, const _Fact *f_pattern, bool use_f_pattern_timings = false);
   bool match(const r_code::Code *object, uint16 o_base_index, uint16 o_index, const r_code::Code *pattern, uint16 p_index, uint16 o_arity);
 
   void abstract_member(r_code::Code *object, uint16 index, r_code::Code *abstracted_object, uint16 write_index, uint16 &extent_index);
@@ -260,7 +260,7 @@ public:
   void reset_fwd_timings(_Fact *reference_fact); // reset after and before from the timings of the reference object.
 
   MatchResult match_fwd_lenient(const _Fact *f_object, const _Fact *f_pattern); // use for facts when we are lenient about fact vs |fact.
-  bool match_fwd_strict(const _Fact *f_object, const _Fact *f_pattern); // use for facts when we need sharp match.
+  bool match_fwd_strict(const _Fact *f_object, const _Fact *f_pattern, bool use_f_pattern_timings = false); // use for facts when we need sharp match.
 
   bool has_fwd_after() const { return fwd_after_index_ >= 0 && map_.size() > fwd_after_index_ &&
       map_[fwd_after_index_]->get_code() != NULL; }

@@ -736,19 +736,23 @@ bool BindingMap::match_timings(Timestamp stored_after, Timestamp stored_before, 
   }
 }
 
-bool BindingMap::match_fwd_timings(const _Fact *f_object, const _Fact *f_pattern) {
+bool BindingMap::match_fwd_timings(const _Fact *f_object, const _Fact *f_pattern, bool use_f_pattern_timings) {
 
-  return match_timings(get_fwd_after(), get_fwd_before(), f_object->get_after(), f_object->get_before(), fwd_after_index_, fwd_before_index_);
+  if (use_f_pattern_timings)
+    return match_timings(
+      f_pattern->get_after(), f_pattern->get_before(), f_object->get_after(), f_object->get_before(), fwd_after_index_, fwd_before_index_);
+  else
+    return match_timings(get_fwd_after(), get_fwd_before(), f_object->get_after(), f_object->get_before(), fwd_after_index_, fwd_before_index_);
 }
 
-bool BindingMap::match_fwd_strict(const _Fact *f_object, const _Fact *f_pattern) {
+bool BindingMap::match_fwd_strict(const _Fact *f_object, const _Fact *f_pattern, bool use_f_pattern_timings) {
 
   if (match_object(f_object->get_reference(0), f_pattern->get_reference(0))) {
 
     if (f_object->code(0) != f_pattern->code(0))
       return false;
 
-    return match_fwd_timings(f_object, f_pattern);
+    return match_fwd_timings(f_object, f_pattern, use_f_pattern_timings);
   } else
     return false;
 }
