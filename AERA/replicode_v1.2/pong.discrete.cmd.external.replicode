@@ -18,15 +18,16 @@ y7:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
 y8:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
 y9:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
 
-!def inject_drive_time 3000000us
+!def inject_drive_time 3100000us
 
 m_run_position:(mdl |[] []
-   (fact (mk.val p1 position y0 1) t0: t1: 1 1)
+   (fact (mk.val p1 position y1 1) t0: t1: 1 1)
    (fact run t2: t3: ::)
 |[]
 []
-   t0:(+ t2 (* 5 sampling_period))
-   t1:(+ t3 (* 5 sampling_period))
+   ; The goal time is based on t3 because we can control that when we inject the drive.
+   t0:(- t3 100000us)
+   t1:(+ t3 0us)
 [stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -90,18 +91,19 @@ pgm_cmd_move_y_minus:(pgm |[]
 i_pgm_cmd_move_y_minus:(ipgm pgm_cmd_move_y_minus |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-; Run once (when babbling is finished) to inject the drive that will abduce a goal 
-; to move p1 to y0.
+; Run repeatedly (when babbling is finished) to inject the drive that will abduce a goal in m_run_position.
 pgm_inject_drive:(pgm |[]
 []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val p1 essence paddle :) after: before: ::) |[])
 []
-   (> after (+ this.vw.ijt inject_drive_time))
+   (>= after (+ this.vw.ijt inject_drive_time))
+   (<= after (+ (+ this.vw.ijt inject_drive_time) 50000us))
 []
    (inj []
       ; Delay a little to allow predictions for this sampling period before injecting the drive.
-      f_run:(fact run (+ after 10000us) before 1 1)
+      ; The end of the time interval will be used in m_run_position as the end of the goal interval.
+      f_run:(fact run (+ after 10000us) (+ (+ this.vw.ijt inject_drive_time) 200000us) 1 1)
       |[]
    )
    (inj []
@@ -114,5 +116,5 @@ pgm_inject_drive:(pgm |[]
    )
    (prb [1 "print" "injected drive" |[]])
 1) |[]
-i_pgm_inject_drive:(ipgm pgm_inject_drive |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+i_pgm_inject_drive:(ipgm pgm_inject_drive |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
