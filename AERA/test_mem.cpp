@@ -339,7 +339,7 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
   if (position_y_obj_) {
     // We are updating the continuous position_y_.
     auto now = r_exec::Now();
-    if (now >= lastInjectTime_ + get_sampling_period() * 8 / 10) {
+    if (now > lastInjectTime_ + get_sampling_period() * 8 / 10) {
       // Enough time has elapsed to inject a new position.
       if (lastInjectTime_.time_since_epoch().count() == 0) {
         // This is the first call, so leave the initial position.
@@ -362,10 +362,10 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
   if (discretePositionObj_) {
     // We are updating the discretePosition_.
     auto now = r_exec::Now();
-    if (now >= lastInjectTime_ + get_sampling_period() * 8 / 10) {
+    if (now > lastInjectTime_ + get_sampling_period() * 8 / 10) {
       // Enough time has elapsed to inject another position.
       if (nextDiscretePosition_ &&
-        now >= lastCommandTime_ + get_sampling_period() * 5 / 10) {
+        now > lastCommandTime_ + get_sampling_period() * 5 / 10) {
         // Enough time has elapsed from the move command to update the position.
         discretePosition_ = nextDiscretePosition_;
         // Clear nextDiscretePosition_ to allow another move command.
