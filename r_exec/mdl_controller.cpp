@@ -1368,7 +1368,7 @@ void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *c
     g_monitorsCS_.enter();
     for (m = r_monitors_.begin(); m != r_monitors_.end();) { // signal r-monitors.
 
-      if ((*m)->is_alive())
+      if (!(*m)->is_alive())
         m = r_monitors_.erase(m);
       else {
 
