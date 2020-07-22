@@ -329,15 +329,35 @@
   * DONE. Copyright headers.
   * DONE. Tag a release AERA_Visualizer_v0.2
 
+2020-07-22
+* Visualizer
+  * DONE. Review/close Arni's issue for screenshot https://github.com/IIIM-IS/AERA_Visualizer/issues/1
+  * DONE. Add progress window while reading runtime_out.txt.
+  * DONE. Add item for Prediction Failure anti-fact.
+* Replicode
+  * DONE. Use OUTPUT_LINE everywhere to avoid mangling output together.
+  * DONE. Real time ball.external.replicode: Predicion failure for small continuous value difference.
+  * DONE. Review/merge pull request for is_alive check https://github.com/IIIM-IS/replicode/pull/93
+  * DONE. Review/merge pull request to fix GMonitor SUCCESS_OBJ bug https://github.com/IIIM-IS/replicode/pull/90
+  * DONE. Review/merge pull request to use a copy of the binding map in retrieve_imdl_bwd https://github.com/IIIM-IS/replicode/pull/92
+  * DONE. Use ont instead of ent for discrete positions https://github.com/IIIM-IS/replicode/commit/fa69f5e1d431dbf49ef49ea611aca80ac7272aba
+Simulator
+  * OK. abduce_simulated_lhs: Also start forward simuation: predict_simulated_evidence
+
 TODO
-* Use OUTPUT_LINE everywhere to avoid mangling output together.
+* Change goal definition to (goal a-fact an-actor a-simulation). Add basic (sim mode thz super_goal).
+* Add this change to the errata.
+* Change pgm_cmd_move_y_plus, etc. to check for sim. Close pull request to not take simulated goals as program input https://github.com/IIIM-IS/replicode/pull/91
+* Make pull request for: Keep the same "deepest" abuced sim object in forward simulation.
+* Achive one command two frames later. Reevaluate problem: Command is commited near the end of the frame and is expected to be executed at beginning of next.
 * In prediction monitor, on failure check again at the end of the predicted period.
+* Visualizer: Show model failure.
 * Visualizer: Add an item for prediction reduction, initially hidden.
 * Visualizer: Use uniform spacing for each frame, adjustable.
 * Visualizer: Ability to launch Replicode from the Visualizer.
 * Make a mk.rdx for (fact (pred (fact (imdl ...)))). (May affect other code that expects the other kind of prediction.)
 * Change (success) to refer to the prediction mk.rdx instead of the prediction. (Affects other code.)
-* Show the time job queue sorted by time.
+* Visualizer: Show the time job queue sorted by time.
 * Document methods, starting with those related to the simulator.
 * If min_sim_time_horizon > 0, how is the behavior different?
 * In babbling, issue a goal for a position, an "unrelated" speed_x, and move the position there. Is GTPX invoked?
