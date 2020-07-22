@@ -251,7 +251,7 @@ bool GMonitor::reduce(_Fact *input) { // executed by a reduction core; invalidat
         Code *outcome = _input->get_reference(0);
         if (outcome->code(0).asOpcode() == Opcodes::Success) { // _input is f1->success or |f1->success.
 
-          _Fact *f_success = (_Fact *)outcome->get_reference(SUCCESS_OBJ);
+          _Fact *f_success = (_Fact *)outcome->get_reference(outcome->code(SUCCESS_OBJ).asIndex());
           Goal *affected_goal = f_success->get_goal();
           if (affected_goal) {
 
@@ -386,7 +386,7 @@ bool RMonitor::reduce(_Fact *input) { // catch simulated predictions only; requi
         Code *outcome = _input->get_reference(0);
         if (outcome->code(0).asOpcode() == Opcodes::Success) { // _input is f1->success or |f1->success.
 
-          _Fact *f_success = (_Fact *)outcome->get_reference(SUCCESS_OBJ);
+          _Fact *f_success = (_Fact *)outcome->get_reference(outcome->code(SUCCESS_OBJ).asIndex());
           Goal *affected_goal = f_success->get_goal();
           if (affected_goal) {
 
@@ -482,7 +482,7 @@ bool SGMonitor::reduce(_Fact *input) {
       Code *outcome = _input->get_reference(0);
       if (outcome->code(0).asOpcode() == Opcodes::Success) { // _input is f1->success or |f1->success.
 
-        _Fact *f_success = (_Fact *)outcome->get_reference(SUCCESS_OBJ);
+        _Fact *f_success = (_Fact *)outcome->get_reference(outcome->code(SUCCESS_OBJ).asIndex());
         Goal *affected_goal = f_success->get_goal();
         if (affected_goal) {
 
@@ -564,7 +564,7 @@ bool SRMonitor::reduce(_Fact *input) {
       Code *outcome = _input->get_reference(0);
       if (outcome->code(0).asOpcode() == Opcodes::Success) { // _input is f1->success or |f1->success.
 
-        _Fact *f_success = (_Fact *)outcome->get_reference(SUCCESS_OBJ);
+        _Fact *f_success = (_Fact *)outcome->get_reference(outcome->code(SUCCESS_OBJ).asIndex());
         Goal *affected_goal = f_success->get_goal();
         if (affected_goal) {
 
