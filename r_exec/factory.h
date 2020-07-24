@@ -217,6 +217,8 @@ public:
 
   bool invalidate();
   bool is_invalidated();
+  SimMode get_mode() const { return mode_; }
+  std::chrono::microseconds get_thz() const { return thz_; }
 
   bool is_requirement_;
 

@@ -470,7 +470,7 @@ void CSTController::inject_goal(HLPBindingMap *bm,
   View *view = new View(View::SYNC_ONCE, now, confidence, 1, group, group, sub_goal_f); // SYNC_ONCE,res=1.
   _Mem::Get()->inject(view);
 
-  if (sim->mode_ == SIM_ROOT) { // no rdx for SIM_OPTIONAL or SIM_MANDATORY.
+  if (sim->get_mode() == SIM_ROOT) { // no rdx for SIM_OPTIONAL or SIM_MANDATORY.
 
     MkRdx *mk_rdx = new MkRdx(f_icst, super_goal, sub_goal, 1, bm);
     uint16 out_group_count = get_out_group_count();

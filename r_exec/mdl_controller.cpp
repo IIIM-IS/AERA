@@ -1664,7 +1664,7 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
 
   P<Fact> f_imdl = get_f_ihlp(bm, false);
   Sim *sim = super_goal->get_goal()->sim_;
-  auto sim_thz = sim->thz_ / 2; // 0 if super-goal had not time for simulation, else use half the thz (in case there are some requirments to simulate: they'll use the other half).
+  auto sim_thz = sim->get_thz() / 2; // 0 if super-goal had not time for simulation, else use half the thz (in case there are some requirments to simulate: they'll use the other half).
   auto min_sim_thz = _Mem::Get()->get_min_sim_time_horizon() / 2; // time allowance for the simulated predictions to flow upward.
 
   Sim *sub_sim;
@@ -1675,13 +1675,13 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
     f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
 
     auto now = Now();
-    switch (sim->mode_) {
+    switch (sim->get_mode()) {
     case SIM_ROOT:
       sub_sim = new Sim(opposite ? SIM_MANDATORY : SIM_OPTIONAL, sim_thz, super_goal, opposite, sim->root_, this, confidence, Timestamp(seconds(0)));
       break;
     case SIM_OPTIONAL:
     case SIM_MANDATORY:
-      sub_sim = new Sim(sim->mode_, sim_thz, sim->super_goal_, opposite, sim->root_, sim->sol_, sim->sol_cfd_, sim->sol_before_);
+      sub_sim = new Sim(sim->get_mode(), sim_thz, sim->super_goal_, opposite, sim->root_, sim->sol_, sim->sol_cfd_, sim->sol_before_);
       break;
     }
 
@@ -1690,7 +1690,7 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
     case WEAK_REQUIREMENT_ENABLED:
       f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(true);
     case NO_REQUIREMENT:
-      if (sub_sim->mode_ == SIM_ROOT)
+      if (sub_sim->get_mode() == SIM_ROOT)
         abduce_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim, ground, true);
       else
         abduce_simulated_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim);
@@ -1700,14 +1700,14 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
       case WEAK_REQUIREMENT_ENABLED:
         f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(true);
       case NO_REQUIREMENT:
-        if (sub_sim->mode_ == SIM_ROOT)
+        if (sub_sim->get_mode() == SIM_ROOT)
           abduce_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim, NULL, true);
         else
           abduce_simulated_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim);
         break;
       default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
         sub_sim->is_requirement_ = true;
-        if (sub_sim->mode_ == SIM_ROOT)
+        if (sub_sim->get_mode() == SIM_ROOT)
           abduce_imdl(bm, super_goal, f_imdl, opposite, confidence, sub_sim);
         else
           abduce_simulated_imdl(bm, super_goal, f_imdl, opposite, confidence, sub_sim);
@@ -1718,7 +1718,7 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
   } else { // no time to simulate.
 
     Fact *ground;
-    switch (sim->mode_) {
+    switch (sim->get_mode()) {
     case SIM_ROOT:
       f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
       switch (retrieve_imdl_bwd(bm, f_imdl, ground)) {
@@ -1802,7 +1802,7 @@ void PrimaryMDLController::abduce_imdl(HLPBindingMap *bm, Fact *super_goal, Fact
 
   auto now = Now();
   Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
-  add_r_monitor(new RMonitor(this, bm, super_goal->get_goal()->get_target()->get_before(), now + sim->thz_, f_sub_goal, f_imdl)); // the monitor will wait until the deadline of the super-goal.
+  add_r_monitor(new RMonitor(this, bm, super_goal->get_goal()->get_target()->get_before(), now + sim->get_thz(), f_sub_goal, f_imdl)); // the monitor will wait until the deadline of the super-goal.
   inject_goal(bm, f_sub_goal, f_imdl);
   string fImdlDebugInfo;
 #ifdef WITH_DEBUG_OID
@@ -1849,7 +1849,7 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
         auto now = Now();
         Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
 
-        add_g_monitor(new SGMonitor(this, bm, now + sim->thz_, f_sub_goal, f_imdl));
+        add_g_monitor(new SGMonitor(this, bm, now + sim->get_thz(), f_sub_goal, f_imdl));
         inject_simulation(f_sub_goal);
         break;
       }
@@ -1868,7 +1868,7 @@ void PrimaryMDLController::abduce_simulated_imdl(HLPBindingMap *bm, Fact *super_
 
   auto now = Now();
   Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
-  add_r_monitor(new SRMonitor(this, bm, now + sim->thz_, f_sub_goal, f_imdl));
+  add_r_monitor(new SRMonitor(this, bm, now + sim->get_thz(), f_sub_goal, f_imdl));
   inject_simulation(f_sub_goal);
 }
 
