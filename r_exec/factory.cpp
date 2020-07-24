@@ -640,9 +640,15 @@ Sim::Sim(SimMode mode, microseconds thz, Fact *super_goal, bool opposite, Contro
 Sim::Sim(SimMode mode, microseconds thz, Fact *super_goal, bool opposite, Controller *root, Controller *sol, float32 sol_cfd, Timestamp sol_before) : _Object(), mode_(mode), thz_(thz), super_goal_(super_goal), root_(root), sol_(sol), is_requirement_(false), opposite_(opposite), invalidated_(0), sol_cfd_(sol_cfd), sol_before_(sol_before) {
 }
 
-void Sim::invalidate() {
+bool Sim::invalidate() {
+
+  if (invalidated_)
+    return true;
+  if (super_goal_ != NULL && super_goal_->is_invalidated())
+    return true;
 
   invalidated_ = 1;
+  return false;
 }
 
 bool Sim::is_invalidated() {

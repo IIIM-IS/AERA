@@ -215,7 +215,7 @@ public:
   Sim(SimMode mode, std::chrono::microseconds thz, Fact *super_goal, bool opposite, Controller *root); // use for SIM_ROOT.
   Sim(SimMode mode, std::chrono::microseconds thz, Fact *super_goal, bool opposite, Controller *root, Controller *sol, float32 sol_cfd, Timestamp sol_before); // USE for SIM_MANDATORY or SIM_OPTIONAL.
 
-  void invalidate();
+  bool invalidate();
   bool is_invalidated();
 
   bool is_requirement_;
