@@ -98,7 +98,7 @@ _GMonitor::_GMonitor(PMDLController *controller,
   f_imdl_(f_imdl) { // goal is f0->g->f1->object.
 
   simulating_ = (sim_thz_timestamp > Now());
-  sim_mode_ = goal->get_goal()->sim_->mode_;
+  sim_mode_ = goal->get_goal()->sim_->get_mode();
   goal_target_ = target_->get_goal()->get_target(); // f1.
 }
 
@@ -106,7 +106,7 @@ void _GMonitor::store_simulated_outcome(Goal *affected_goal, Sim *sim, bool succ
 
   if (success) {
 
-    switch (sim->mode_) {
+    switch (sim->get_mode()) {
     case SIM_MANDATORY:
       sim_successes_.mandatory_solutions.push_back(std::pair<P<Goal>, P<Sim> >(affected_goal, sim));
       break;
@@ -118,7 +118,7 @@ void _GMonitor::store_simulated_outcome(Goal *affected_goal, Sim *sim, bool succ
     }
   } else {
 
-    switch (sim->mode_) {
+    switch (sim->get_mode()) {
     case SIM_MANDATORY:
       sim_failures_.mandatory_solutions.push_back(std::pair<P<Goal>, P<Sim> >(affected_goal, sim));
       break;
