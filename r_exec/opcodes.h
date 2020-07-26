@@ -140,6 +140,8 @@ public:
   static uint16 MkSlnChg;
   static uint16 MkActChg;
 
+  static uint16 Sim;
+
   static uint16 Inject;
   static uint16 Eject;
   static uint16 Mod;

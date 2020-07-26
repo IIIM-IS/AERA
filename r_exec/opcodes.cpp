@@ -131,6 +131,8 @@ uint16 Opcodes::MkHighAct;
 uint16 Opcodes::MkSlnChg;
 uint16 Opcodes::MkActChg;
 
+uint16 Opcodes::Sim;
+
 uint16 Opcodes::Inject;
 uint16 Opcodes::Eject;
 uint16 Opcodes::Mod;

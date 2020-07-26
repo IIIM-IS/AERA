@@ -78,6 +78,7 @@
 #ifndef factory_h
 #define factory_h
 
+#include "../r_code/utils.h"
 #include "binding_map.h"
 #include "overlay.h"
 #include "dll.h"
@@ -207,25 +208,25 @@ typedef enum {
 }SimMode;
 
 class r_exec_dll Sim :
-  public _Object {
-private:
-  uint32 volatile invalidated_; // 32 bits alignment.
+  public LObject {
 public:
   Sim(Sim *s); // is_requirement=false (not copied).
-  Sim(SimMode mode, std::chrono::microseconds thz, Fact *super_goal, bool opposite, Controller *root); // use for SIM_ROOT.
-  Sim(SimMode mode, std::chrono::microseconds thz, Fact *super_goal, bool opposite, Controller *root, Controller *sol, float32 sol_cfd, Timestamp sol_before); // USE for SIM_MANDATORY or SIM_OPTIONAL.
-
+  // For SIM_MANDATORY or SIM_OPTIONAL, provide sol, sol_cfd and sol_before. Otherwise, defaults for SIM_ROOT.
+  Sim(SimMode mode, std::chrono::microseconds thz, Fact *super_goal, bool opposite, Controller *root, float32 psln_thr, Controller *sol = NULL, float32 sol_cfd = 0, Timestamp sol_before = Timestamp(std::chrono::seconds(0)));
   bool invalidate();
   bool is_invalidated();
-  SimMode get_mode() const { return mode_; }
-  std::chrono::microseconds get_thz() const { return thz_; }
+  // If SIM_MANDATORY or SIM_OPTIONAL: qualifies a sub-goal of the branch's root.
+  SimMode get_mode() const { return (SimMode)(int)code(SIM_MODE).asFloat(); }
+  // simulation time allowance (this is not the goal deadline); 0 indicates no time for simulation.
+  std::chrono::microseconds get_thz() const { 
+    // The time horizon is stored as a timestamp, but it is actually a duration.
+    return std::chrono::duration_cast<std::chrono::microseconds>(r_code::Utils::GetTimestamp<Code>(this, SIM_THZ).time_since_epoch());
+  }
 
   bool is_requirement_;
 
   bool opposite_; // of the goal the sim is attached to, i.e. the result of the match during controller->reduce(); the confidence is in the goal target.
 
-  SimMode mode_; // if SIM_MANDATORY or SIM_OPTIONAL: qualifies a sub-goal of the branch's root.
-  std::chrono::microseconds thz_; // simulation time allowance (this is not the goal deadline); 0 indicates no time for simulation.
   P<Fact> super_goal_; // of the goal the sim is attached to.
   P<Controller> root_; // controller that produced the simulation branch root (SIM_ROOT): identifies the branch.
   P<Controller> sol_; // controller that produced a sub-goal of the branch's root: identifies the model that can be a solution for the super-goal.
