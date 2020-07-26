@@ -1132,9 +1132,9 @@ void PMDLController::register_predicted_goal_outcome(Fact *goal, HLPBindingMap *
         auto deadline = g->get_target()->get_before();
         auto sim_thz = get_sim_thz(now, deadline);
 
-        Sim *new_sim = new Sim(SIM_ROOT, sim_thz, g->sim_->super_goal_, false, this);
+        Sim *new_sim = new Sim(SIM_ROOT, sim_thz, g->get_sim()->super_goal_, false, this);
 
-        g->sim_ = new_sim;
+        g->set_sim(new_sim);
 
         add_g_monitor(new GMonitor(this, bm, deadline, now + sim_thz, new_goal, f_imdl, NULL));
 
@@ -1250,15 +1250,15 @@ void TopLevelMDLController::abduce_lhs(HLPBindingMap *bm,
   Fact *f_imdl,
   _Fact *evidence) {
 
-  Goal *sub_goal = new Goal(sub_goal_target, super_goal->get_goal()->get_actor(), 1);
   auto now = Now();
-  Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
   auto deadline = sub_goal_target->get_before();
   auto sim_thz = get_sim_thz(now, deadline);
-
   Sim *sub_sim = new Sim(SIM_ROOT, sim_thz, super_goal, false, this);
 
-  sub_goal->sim_ = sub_sim;
+  Goal *sub_goal = new Goal(sub_goal_target, super_goal->get_goal()->get_actor(), 1);
+  Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
+
+  sub_goal->set_sim(sub_sim);
 
   if (!evidence)
     inject_goal(bm, f_sub_goal, f_imdl);
@@ -1317,7 +1317,7 @@ void TopLevelMDLController::register_goal_outcome(Fact *goal, bool success, _Fac
     }
   }
 
-  register_drive_outcome(goal->get_goal()->sim_->super_goal_, success);
+  register_drive_outcome(goal->get_goal()->get_sim()->super_goal_, success);
   if (success) OUTPUT_LINE(GOAL_MON, Utils::RelativeTime(Now()) << " " << goal->get_oid() << " goal success (TopLevel)");
   else OUTPUT_LINE(GOAL_MON, Utils::RelativeTime(Now()) << " " << goal->get_oid() << " goal failure (TopLevel)");
 }
@@ -1663,7 +1663,7 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
     return;
 
   P<Fact> f_imdl = get_f_ihlp(bm, false);
-  Sim *sim = super_goal->get_goal()->sim_;
+  Sim *sim = super_goal->get_goal()->get_sim();
   auto sim_thz = sim->get_thz() / 2; // 0 if super-goal had not time for simulation, else use half the thz (in case there are some requirments to simulate: they'll use the other half).
   auto min_sim_thz = _Mem::Get()->get_min_sim_time_horizon() / 2; // time allowance for the simulated predictions to flow upward.
 
@@ -1773,7 +1773,7 @@ void PrimaryMDLController::abduce_lhs(HLPBindingMap *bm, Fact *super_goal, Fact 
 
       Goal *sub_goal = new Goal(bound_lhs, super_goal->get_goal()->get_actor(), 1);
       sub_goal->ground_ = ground;
-      sub_goal->sim_ = sim;
+      sub_goal->set_sim(sim);
       if (set_before)
         sim->sol_before_ = bound_lhs->get_before();
 
@@ -1798,7 +1798,7 @@ void PrimaryMDLController::abduce_imdl(HLPBindingMap *bm, Fact *super_goal, Fact
   f_imdl->set_cfd(confidence);
 
   Goal *sub_goal = new Goal(f_imdl, super_goal->get_goal()->get_actor(), 1);
-  sub_goal->sim_ = sim;
+  sub_goal->set_sim(sim);
 
   auto now = Now();
   Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
@@ -1844,7 +1844,7 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
 
         Goal *sub_goal = new Goal(bound_lhs, super_goal->get_goal()->get_actor(), 1);
 
-        sub_goal->sim_ = sim;
+        sub_goal->set_sim(sim);
 
         auto now = Now();
         Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
@@ -1864,7 +1864,7 @@ void PrimaryMDLController::abduce_simulated_imdl(HLPBindingMap *bm, Fact *super_
   f_imdl->set_cfd(confidence);
 
   Goal *sub_goal = new Goal(f_imdl, super_goal->get_goal()->get_actor(), 1);
-  sub_goal->sim_ = sim;
+  sub_goal->set_sim(sim);
 
   auto now = Now();
   Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
@@ -1877,7 +1877,7 @@ bool PrimaryMDLController::check_imdl(Fact *goal, HLPBindingMap *bm) { // goal i
   Goal *g = goal->get_goal();
   Fact *f_imdl = (Fact *)g->get_target();
 
-  Sim *sim = g->sim_;
+  Sim *sim = g->get_sim();
   Fact *ground;
   switch (retrieve_imdl_bwd(bm, f_imdl, ground)) {
   case WEAK_REQUIREMENT_ENABLED:
@@ -1908,7 +1908,7 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, C
     c_s = retrieve_imdl_bwd(bm, f_imdl, ground);
   }
 
-  Sim *sim = g->sim_;
+  Sim *sim = g->get_sim();
   switch (c_s) {
   case WEAK_REQUIREMENT_ENABLED:
     f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(true);

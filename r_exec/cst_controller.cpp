@@ -419,7 +419,7 @@ void CSTController::abduce(HLPBindingMap *bm, Fact *super_goal) { // super_goal 
 
   float32 confidence = super_goal_target->get_cfd();
 
-  Sim *sim = g->sim_;
+  Sim *sim = g->get_sim();
 
   Code *cst = get_unpacked_object();
   uint16 obj_set_index = cst->code(CST_OBJS).asIndex();
@@ -462,7 +462,7 @@ void CSTController::inject_goal(HLPBindingMap *bm,
   sub_goal_target->set_cfd(confidence);
 
   Goal *sub_goal = new Goal(sub_goal_target, super_goal->get_goal()->get_actor(), 1);
-  sub_goal->sim_ = sim;
+  sub_goal->set_sim(sim);
 
   _Fact *f_icst = super_goal->get_goal()->get_target();
   _Fact *sub_goal_f = new Fact(sub_goal, now, now, 1, 1);

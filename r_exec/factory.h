@@ -309,6 +309,33 @@ public:
   _Fact *get_super_goal() const { return sim_->super_goal_; }
   r_code::Code *get_actor() const { return get_reference(code(GOAL_ACTR).asIndex()); }
 
+  /**
+   * Check if this Goal has a Sim object.
+   * @return True if this Goal has a Sim object, otherwise false.
+   */
+  bool has_sim() const { return !!sim_; }
+
+  /**
+   * Get the Sim object.
+   * @return The Sim object, or NULL if this Goal does not have a Sim object.
+   */
+  Sim* get_sim() const { return sim_; }
+
+  /**
+   * Set the Sim object for this Goal. If this Goal already has a Sim object, print an error and
+   * do nothing. (Normally, the Sim object is given to the Goal constructor. If code needs to set
+   * the Sim object, it should be on a Goal that was just constructed with a NULL Sim object.
+   * @param sim The Sim object.
+   */
+  void set_sim(Sim* sim) {
+    if (has_sim()) {
+      std::cerr << "Goal::set_sim: Error: The goal already has a Sim. Ignoring the new sim." << std::endl;
+      return;
+    }
+
+    sim_ = sim; 
+  }
+
   P<Sim> sim_;
   P<_Fact> ground_; // f->p->f->imdl (weak requirement) that allowed backward chaining, if any.
 

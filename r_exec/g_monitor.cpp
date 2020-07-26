@@ -98,7 +98,7 @@ _GMonitor::_GMonitor(PMDLController *controller,
   f_imdl_(f_imdl) { // goal is f0->g->f1->object.
 
   simulating_ = (sim_thz_timestamp > Now());
-  sim_mode_ = goal->get_goal()->sim_->get_mode();
+  sim_mode_ = goal->get_goal()->get_sim()->get_mode();
   goal_target_ = target_->get_goal()->get_target(); // f1.
 }
 
@@ -297,7 +297,7 @@ bool GMonitor::reduce(_Fact *input) { // executed by a reduction core; invalidat
     if (g->ground_invalidated(input)) { // invalidate the goal and abduce from the super-goal.
 
       target_->invalidate();
-      ((PrimaryMDLController *)controller_)->abduce(bindings_, g->sim_->super_goal_, g->sim_->opposite_, goal_target_->get_cfd());
+      ((PrimaryMDLController *)controller_)->abduce(bindings_, g->get_sim()->super_goal_, g->get_sim()->opposite_, goal_target_->get_cfd());
       return true;
     }
 
@@ -359,7 +359,7 @@ bool RMonitor::signal(bool simulation) {
 
   if (simulating_ && simulation) { // report the simulated outcome: this will inject a simulated prediction of the outcome, to allow any g-monitor deciding on this ground.
 
-    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_, target_->get_goal()->sim_->root_))
+    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_, target_->get_goal()->get_sim()->root_, NULL))
       ((PMDLController *)controller_)->register_simulated_goal_outcome(target_, true, target_); // report a simulated success.
     else
       ((PMDLController *)controller_)->register_simulated_goal_outcome(target_, false, NULL); // report a simulated failure.
@@ -538,7 +538,7 @@ bool SRMonitor::signal(bool simulation) {
 
   if (simulation) {
 
-    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_, target_->get_goal()->sim_->root_))
+    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_, target_->get_goal()->get_sim()->root_))
       ((PMDLController *)controller_)->register_simulated_goal_outcome(target_, true, target_); // report a simulated success.
   } else {
 
