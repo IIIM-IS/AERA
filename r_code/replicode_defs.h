@@ -243,7 +243,8 @@
 
 #define GOAL_TARGET 1
 #define GOAL_ACTR 2
-#define GOAL_ARITY 3
+#define GOAL_SIM 3
+#define GOAL_ARITY 4
 
 
 #define SUCCESS_OBJ 1

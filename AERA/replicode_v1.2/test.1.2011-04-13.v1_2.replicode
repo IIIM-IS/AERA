@@ -122,7 +122,7 @@ inj_goal:(pgm |[] |[] |[] []
       [SYNC_ONCE now 0 forever stdin nil]
    )
    (inj []
-      v2:(goal v1 self 1)
+      v2:(goal v1 self nil 1)
       [SYNC_ONCE now 0 forever stdin nil]
    )
    (inj []

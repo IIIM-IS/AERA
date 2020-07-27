@@ -1255,10 +1255,8 @@ void TopLevelMDLController::abduce_lhs(HLPBindingMap *bm,
   auto sim_thz = get_sim_thz(now, deadline);
   Sim *sub_sim = new Sim(SIM_ROOT, sim_thz, super_goal, false, this, 1);
 
-  Goal *sub_goal = new Goal(sub_goal_target, super_goal->get_goal()->get_actor(), 1);
+  Goal *sub_goal = new Goal(sub_goal_target, super_goal->get_goal()->get_actor(), sub_sim, 1);
   Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
-
-  sub_goal->set_sim(sub_sim);
 
   if (!evidence)
     inject_goal(bm, f_sub_goal, f_imdl);
@@ -1771,9 +1769,8 @@ void PrimaryMDLController::abduce_lhs(HLPBindingMap *bm, Fact *super_goal, Fact 
         break;
       }
 
-      Goal *sub_goal = new Goal(bound_lhs, super_goal->get_goal()->get_actor(), 1);
+      Goal *sub_goal = new Goal(bound_lhs, super_goal->get_goal()->get_actor(), sim, 1);
       sub_goal->ground_ = ground;
-      sub_goal->set_sim(sim);
       if (set_before)
         sim->sol_before_ = bound_lhs->get_before();
 
@@ -1797,8 +1794,7 @@ void PrimaryMDLController::abduce_imdl(HLPBindingMap *bm, Fact *super_goal, Fact
 
   f_imdl->set_cfd(confidence);
 
-  Goal *sub_goal = new Goal(f_imdl, super_goal->get_goal()->get_actor(), 1);
-  sub_goal->set_sim(sim);
+  Goal *sub_goal = new Goal(f_imdl, super_goal->get_goal()->get_actor(), sim, 1);
 
   auto now = Now();
   Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
@@ -1842,9 +1838,7 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
 
         f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
 
-        Goal *sub_goal = new Goal(bound_lhs, super_goal->get_goal()->get_actor(), 1);
-
-        sub_goal->set_sim(sim);
+        Goal *sub_goal = new Goal(bound_lhs, super_goal->get_goal()->get_actor(), sim, 1);
 
         auto now = Now();
         Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
@@ -1863,8 +1857,7 @@ void PrimaryMDLController::abduce_simulated_imdl(HLPBindingMap *bm, Fact *super_
 
   f_imdl->set_cfd(confidence);
 
-  Goal *sub_goal = new Goal(f_imdl, super_goal->get_goal()->get_actor(), 1);
-  sub_goal->set_sim(sim);
+  Goal *sub_goal = new Goal(f_imdl, super_goal->get_goal()->get_actor(), sim, 1);
 
   auto now = Now();
   Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);

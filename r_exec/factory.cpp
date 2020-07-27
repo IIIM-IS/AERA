@@ -575,26 +575,29 @@ Sim *Pred::get_simulation(Controller *root) const {
 
 ////////////////////////////////////////////////////////////////
 
-Goal::Goal() : LObject(), sim_(NULL), ground_(NULL) {
+Goal::Goal() : LObject(), ground_(NULL) {
 }
 
-Goal::Goal(SysObject *source) : LObject(source), sim_(NULL), ground_(NULL) {
+Goal::Goal(SysObject *source) : LObject(source), ground_(NULL) {
 }
 
-Goal::Goal(_Fact *target, Code *actor, float32 psln_thr) : LObject(), sim_(NULL), ground_(NULL) {
+Goal::Goal(_Fact *target, Code *actor, Sim* sim, float32 psln_thr) : LObject(), ground_(NULL) {
 
   code(0) = Atom::Object(Opcodes::Goal, GOAL_ARITY);
   code(GOAL_TARGET) = Atom::RPointer(0);
   code(GOAL_ACTR) = Atom::RPointer(1);
+  code(GOAL_SIM) = (sim ? Atom::RPointer(2) : Atom::Nil());
   code(GOAL_ARITY) = Atom::Float(psln_thr);
   add_reference(target);
   add_reference(actor);
+  if (sim)
+    add_reference(sim);
 }
 
 bool Goal::invalidate() { // return false when was not invalidated, true otherwise.
 
-  if (sim_ != NULL)
-    sim_->invalidate();
+  if (has_sim())
+    get_sim()->invalidate();
   return LObject::invalidate();
 }
 
@@ -602,7 +605,7 @@ bool Goal::is_invalidated() {
 
   if (LObject::is_invalidated())
     return true;
-  if (sim_ != NULL && sim_->super_goal_ != NULL && sim_->super_goal_->is_invalidated()) {
+  if (has_sim() && get_sim()->super_goal_ != NULL && get_sim()->super_goal_->is_invalidated()) {
 
     invalidate();
     return true;
@@ -619,7 +622,7 @@ bool Goal::ground_invalidated(_Fact *evidence) {
 
 bool Goal::is_requirement() const {
 
-  if (sim_ != NULL && sim_->is_requirement_)
+  if (has_sim() && get_sim()->is_requirement_)
     return true;
   return false;
 }

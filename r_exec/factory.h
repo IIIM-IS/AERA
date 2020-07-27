@@ -295,7 +295,7 @@ class r_exec_dll Goal :
 public:
   Goal();
   Goal(r_code::SysObject *source);
-  Goal(_Fact *target, r_code::Code *actor, float32 psln_thr);
+  Goal(_Fact *target, r_code::Code *actor, Sim* sim, float32 psln_thr);
 
   bool invalidate();
   bool is_invalidated();
@@ -304,23 +304,24 @@ public:
   bool is_requirement() const;
 
   bool is_self_goal() const;
-  bool is_drive() const { return (sim_ == NULL && is_self_goal()); }
+  bool is_drive() const { return (!has_sim() && is_self_goal()); }
 
   _Fact *get_target() const { return (_Fact *)get_reference(0); }
-  _Fact *get_super_goal() const { return sim_->super_goal_; }
+  _Fact *get_super_goal() const { return get_sim()->super_goal_; }
   r_code::Code *get_actor() const { return get_reference(code(GOAL_ACTR).asIndex()); }
 
   /**
    * Check if this Goal has a Sim object.
    * @return True if this Goal has a Sim object, otherwise false.
    */
-  bool has_sim() const { return !!sim_; }
+  bool has_sim() const { return code(GOAL_SIM).getDescriptor() == Atom::R_PTR; }
 
   /**
    * Get the Sim object.
    * @return The Sim object, or NULL if this Goal does not have a Sim object.
    */
-  Sim* get_sim() const { return sim_; }
+  // Debug: Define _Sim because if a replicode file defines (sim ...) it won't have all the fields.
+  Sim* get_sim() const { return has_sim() ? (Sim*)get_reference(code(GOAL_SIM).asIndex()) : NULL; }
 
   /**
    * Set the Sim object for this Goal. If this Goal already has a Sim object, print an error and
@@ -334,10 +335,10 @@ public:
       return;
     }
 
-    sim_ = sim; 
+    code(GOAL_SIM) = Atom::RPointer(references_size());
+    add_reference(sim);
   }
 
-  P<Sim> sim_;
   P<_Fact> ground_; // f->p->f->imdl (weak requirement) that allowed backward chaining, if any.
 
   // goal->target->cfd/(before-now).
