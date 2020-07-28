@@ -7,7 +7,7 @@ init_run_pgm:(pgm |[] |[] |[] []
       |[]
    )
    (inj []
-      g:(goal f_run self 1)
+      g:(goal f_run self nil 1)
       |[]
    )
    (inj []
@@ -27,7 +27,7 @@ success_run_pgm:(pgm |[] []
       |[]
    )
    (inj []
-      g:(goal f_run self 1)
+      g:(goal f_run self nil 1)
       |[]
    )
    (inj []
@@ -47,7 +47,7 @@ failure_run_pgm:(pgm |[] []
       |[]
    )
    (inj []
-      g:(goal f_run self 1)
+      g:(goal f_run self nil 1)
       |[]
    )
    (inj []

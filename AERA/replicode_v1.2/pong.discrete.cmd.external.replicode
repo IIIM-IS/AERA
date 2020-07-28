@@ -46,7 +46,7 @@ start:(pgm |[] |[] |[] []
       |[]
    )
    (inj []
-      g_f_c:(goal f_c self 1)
+      g_f_c:(goal f_c self nil 1)
       |[]
    )
    (inj []
@@ -63,7 +63,7 @@ pgm_cmd_move_y_plus:(pgm |[]
 []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val p1 essence paddle :) after: before: ::) |[])
-   (ptn (fact (goal (fact (cmd move_y_plus [obj:] ::) c_after: c_before: ::) ::) ::) |[])
+   (ptn (fact (goal (fact (cmd move_y_plus [obj:] ::) c_after: c_before: ::) : nil ::) ::) |[])
 []
    (< c_after before)
    (> c_before after)
@@ -74,13 +74,29 @@ pgm_cmd_move_y_plus:(pgm |[]
 i_pgm_cmd_move_y_plus:(ipgm pgm_cmd_move_y_plus |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
+pgm_cmd_move_y_plus_not_sim:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val p1 essence paddle :) after: before: ::) |[])
+   ; A sim with 0us time horizon means not simulating.
+   (ptn (fact (goal (fact (cmd move_y_plus [obj:] ::) c_after: c_before: ::) : (sim : 0us ::) ::) ::) |[])
+[]
+   (< c_after before)
+   (> c_before after)
+[]
+   (prb [1 "print" "cmd move_y_plus..." |[]])
+   (cmd move_y_plus [obj] 1)
+1) |[]
+i_pgm_cmd_move_y_plus_not_sim:(ipgm pgm_cmd_move_y_plus_not_sim |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
 ; This program intercepts an abduced goal to run a command and directly
 ; calls the command, which will call the override of _Mem::eject().
 pgm_cmd_move_y_minus:(pgm |[]
 []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val p1 essence paddle :) after: before: ::) |[])
-   (ptn (fact (goal (fact (cmd move_y_minus [obj:] ::) c_after: c_before: ::) ::) ::) |[])
+   (ptn (fact (goal (fact (cmd move_y_minus [obj:] ::) c_after: c_before: ::) : nil ::) ::) |[])
 []
    (< c_after before)
    (> c_before after)
@@ -89,6 +105,22 @@ pgm_cmd_move_y_minus:(pgm |[]
    (cmd move_y_minus [obj] 1)
 1) |[]
 i_pgm_cmd_move_y_minus:(ipgm pgm_cmd_move_y_minus |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_cmd_move_y_minus_not_sim:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val p1 essence paddle :) after: before: ::) |[])
+   ; A sim with 0us time horizon means not simulating.
+   (ptn (fact (goal (fact (cmd move_y_minus [obj:] ::) c_after: c_before: ::) : (sim : 0us ::) ::) ::) |[])
+[]
+   (< c_after before)
+   (> c_before after)
+[]
+   (prb [1 "print" "cmd move_y_minus..." |[]])
+   (cmd move_y_minus [obj] 1)
+1) |[]
+i_pgm_cmd_move_y_minus_not_sim:(ipgm pgm_cmd_move_y_minus_not_sim |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
 ; Run repeatedly (when babbling is finished) to inject the drive that will abduce a goal in m_run_position.
@@ -107,7 +139,7 @@ pgm_inject_drive:(pgm |[]
       |[]
    )
    (inj []
-      g:(goal f_run self 1)
+      g:(goal f_run self nil 1)
       |[]
    )
    (inj []

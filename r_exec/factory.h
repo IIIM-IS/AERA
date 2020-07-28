@@ -78,6 +78,7 @@
 #ifndef factory_h
 #define factory_h
 
+#include "../r_code/utils.h"
 #include "binding_map.h"
 #include "overlay.h"
 #include "dll.h"
@@ -207,25 +208,25 @@ typedef enum {
 }SimMode;
 
 class r_exec_dll Sim :
-  public _Object {
-private:
-  uint32 volatile invalidated_; // 32 bits alignment.
+  public LObject {
 public:
   Sim(Sim *s); // is_requirement=false (not copied).
-  Sim(SimMode mode, std::chrono::microseconds thz, Fact *super_goal, bool opposite, Controller *root); // use for SIM_ROOT.
-  Sim(SimMode mode, std::chrono::microseconds thz, Fact *super_goal, bool opposite, Controller *root, Controller *sol, float32 sol_cfd, Timestamp sol_before); // USE for SIM_MANDATORY or SIM_OPTIONAL.
-
+  // For SIM_MANDATORY or SIM_OPTIONAL, provide sol, sol_cfd and sol_before. Otherwise, defaults for SIM_ROOT.
+  Sim(SimMode mode, std::chrono::microseconds thz, Fact *super_goal, bool opposite, Controller *root, float32 psln_thr, Controller *sol = NULL, float32 sol_cfd = 0, Timestamp sol_before = Timestamp(std::chrono::seconds(0)));
   bool invalidate();
   bool is_invalidated();
-  SimMode get_mode() const { return mode_; }
-  std::chrono::microseconds get_thz() const { return thz_; }
+  // If SIM_MANDATORY or SIM_OPTIONAL: qualifies a sub-goal of the branch's root.
+  SimMode get_mode() const { return (SimMode)(int)code(SIM_MODE).asFloat(); }
+  // simulation time allowance (this is not the goal deadline); 0 indicates no time for simulation.
+  std::chrono::microseconds get_thz() const { 
+    // The time horizon is stored as a timestamp, but it is actually a duration.
+    return std::chrono::duration_cast<std::chrono::microseconds>(r_code::Utils::GetTimestamp<Code>(this, SIM_THZ).time_since_epoch());
+  }
 
   bool is_requirement_;
 
   bool opposite_; // of the goal the sim is attached to, i.e. the result of the match during controller->reduce(); the confidence is in the goal target.
 
-  SimMode mode_; // if SIM_MANDATORY or SIM_OPTIONAL: qualifies a sub-goal of the branch's root.
-  std::chrono::microseconds thz_; // simulation time allowance (this is not the goal deadline); 0 indicates no time for simulation.
   P<Fact> super_goal_; // of the goal the sim is attached to.
   P<Controller> root_; // controller that produced the simulation branch root (SIM_ROOT): identifies the branch.
   P<Controller> sol_; // controller that produced a sub-goal of the branch's root: identifies the model that can be a solution for the super-goal.
@@ -294,7 +295,7 @@ class r_exec_dll Goal :
 public:
   Goal();
   Goal(r_code::SysObject *source);
-  Goal(_Fact *target, r_code::Code *actor, float32 psln_thr);
+  Goal(_Fact *target, r_code::Code *actor, Sim* sim, float32 psln_thr);
 
   bool invalidate();
   bool is_invalidated();
@@ -303,23 +304,24 @@ public:
   bool is_requirement() const;
 
   bool is_self_goal() const;
-  bool is_drive() const { return (sim_ == NULL && is_self_goal()); }
+  bool is_drive() const { return (!has_sim() && is_self_goal()); }
 
   _Fact *get_target() const { return (_Fact *)get_reference(0); }
-  _Fact *get_super_goal() const { return sim_->super_goal_; }
+  _Fact *get_super_goal() const { return get_sim()->super_goal_; }
   r_code::Code *get_actor() const { return get_reference(code(GOAL_ACTR).asIndex()); }
 
   /**
    * Check if this Goal has a Sim object.
    * @return True if this Goal has a Sim object, otherwise false.
    */
-  bool has_sim() const { return !!sim_; }
+  bool has_sim() const { return code(GOAL_SIM).getDescriptor() == Atom::R_PTR; }
 
   /**
    * Get the Sim object.
    * @return The Sim object, or NULL if this Goal does not have a Sim object.
    */
-  Sim* get_sim() const { return sim_; }
+  // Debug: Define _Sim because if a replicode file defines (sim ...) it won't have all the fields.
+  Sim* get_sim() const { return has_sim() ? (Sim*)get_reference(code(GOAL_SIM).asIndex()) : NULL; }
 
   /**
    * Set the Sim object for this Goal. If this Goal already has a Sim object, print an error and
@@ -333,10 +335,10 @@ public:
       return;
     }
 
-    sim_ = sim; 
+    code(GOAL_SIM) = Atom::RPointer(references_size());
+    add_reference(sim);
   }
 
-  P<Sim> sim_;
   P<_Fact> ground_; // f->p->f->imdl (weak requirement) that allowed backward chaining, if any.
 
   // goal->target->cfd/(before-now).

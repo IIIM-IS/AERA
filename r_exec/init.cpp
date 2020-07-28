@@ -400,6 +400,8 @@ void InitOpcodes(const r_comp::Metadata& metadata) {
   Opcodes::MkSlnChg = _Opcodes.find("mk.sln_chg")->second;
   Opcodes::MkActChg = _Opcodes.find("mk.act_chg")->second;
 
+  Opcodes::Sim = _Opcodes.find("sim")->second;
+
   // load executive function Opcodes.
   Opcodes::Inject = _Opcodes.find("_inj")->second;
   Opcodes::Eject = _Opcodes.find("_eje")->second;

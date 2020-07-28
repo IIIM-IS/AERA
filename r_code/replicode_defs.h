@@ -243,7 +243,8 @@
 
 #define GOAL_TARGET 1
 #define GOAL_ACTR 2
-#define GOAL_ARITY 3
+#define GOAL_SIM 3
+#define GOAL_ARITY 4
 
 
 #define SUCCESS_OBJ 1
@@ -261,6 +262,10 @@
 #define PERF_TIME_LTCY 3
 #define PERF_D_TIME_LTCY 4
 #define PERF_ARITY 5
+
+#define SIM_MODE 1
+#define SIM_THZ 2
+#define SIM_ARITY 3
 
 #define UNDEFINED_OID 0xFFFFFFFF
 
