@@ -344,12 +344,18 @@
 Simulator
   * OK. abduce_simulated_lhs: Also start forward simuation: predict_simulated_evidence
 
+2020-07-28
+* DONE. Review/merge change goal definition to (goal a-fact an-actor a-simulation). Add basic (sim mode thz). https://github.com/IIIM-IS/replicode/pull/94
+* DONE. Add goal and sim changes to the errata.
+* DONE. Close pull request to not take simulated goals as program input https://github.com/IIIM-IS/replicode/pull/91
+
 TODO
-* Change goal definition to (goal a-fact an-actor a-simulation). Add basic (sim mode thz super_goal).
-* Add this change to the errata.
-* Change pgm_cmd_move_y_plus, etc. to check for sim. Close pull request to not take simulated goals as program input https://github.com/IIIM-IS/replicode/pull/91
+* Google Meet: Full shared screen?
+* Possibly make bug issue: Uwarranted cast to (Goal*) in _Fact::get_goal(). (Try _Goal base class.)
+* Update all std.replicode to include (sim ...) definition and (goal : : sim), including Integration_OpenAI.
 * Make pull request for: Keep the same "deepest" abuced sim object in forward simulation.
-* Achive one command two frames later. Reevaluate problem: Command is commited near the end of the frame and is expected to be executed at beginning of next.
+* Errata: Prop of saliency typo: " defines "
+* Achieve one command two frames later. Reevaluate problem: Command is commited near the end of the frame and is expected to be executed at beginning of next.
 * In prediction monitor, on failure check again at the end of the predicted period.
 * Visualizer: Show model failure.
 * Visualizer: Add an item for prediction reduction, initially hidden.
