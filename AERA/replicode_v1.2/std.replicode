@@ -37,6 +37,13 @@
 !class (mk.act_chg (_obj {obj: chg:nb}))
 !class (mk.new (_obj obj:))
 
+; simulator
+!class (sim (_obj {mode:nb thz:us}))
+; values for sim mode
+!def SIM_ROOT 0
+!def SIM_OPTIONAL 1
+!def SIM_MANDATORY 2
+
 ; mapping high-level objects -> r-code.
 !class (mk.val (_obj {obj: attr:ont val:}))
 !class (mk.act (_obj {actr:ent cmd:cmd}))
@@ -53,13 +60,6 @@
 
 ; performance counters (latencies).
 !class (perf (_obj {rj_ltcy:nb d_rj_ltcy:nb tj_ltcy:nb d_tj_ltcy:nb})); latencies and derivatives in us encoded as floats.
-
-; simulator
-!class (sim (_obj {mode:nb thz:us}))
-; values for sim mode
-!def SIM_ROOT 0
-!def SIM_OPTIONAL 1
-!def SIM_MANDATORY 2
 
 ; mapping operator opcodes -> r-atoms.
 !op (_now):us
