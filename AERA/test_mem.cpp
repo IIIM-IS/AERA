@@ -411,7 +411,7 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
 
         r_exec::Fact* factCmd = new r_exec::Fact(
           cmd, now + get_sampling_period(), now + 2 * get_sampling_period(), 1, 1);
-        r_exec::Goal* goal = new r_exec::Goal(factCmd, get_self(), 1);
+        r_exec::Goal* goal = new r_exec::Goal(factCmd, get_self(), NULL, 1);
         injectFact(goal, now + get_sampling_period(), now + get_sampling_period(), primary_group_);
       }
     }
