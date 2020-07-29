@@ -382,21 +382,6 @@ void MDLController::remove_monitor(PMonitor *m) {
   p_monitorsCS_.leave();
 }
 
-inline _Fact *MDLController::get_lhs() const {
-
-  return lhs_;
-}
-
-inline _Fact *MDLController::get_rhs() const {
-
-  return rhs_;
-}
-
-inline Fact *MDLController::get_f_ihlp(HLPBindingMap *bindings, bool wr_enabled) const {
-
-  return bindings->build_f_ihlp(getObject(), Opcodes::IMdl, wr_enabled);
-}
-
 void MDLController::add_requirement_to_rhs() {
 
   if (is_requirement_ != NOT_A_REQUIREMENT) {
@@ -1262,7 +1247,7 @@ void TopLevelMDLController::abduce_lhs(HLPBindingMap *bm,
     inject_goal(bm, f_sub_goal, f_imdl);
   add_g_monitor(new GMonitor(this, bm, deadline, now + sim_thz, f_sub_goal, f_imdl, evidence));
   OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " -> fact " << f_sub_goal->get_oid() << 
-    " goal [" << Utils::RelativeTime(sub_goal_target->get_after()) << "," << Utils::RelativeTime(sub_goal_target->get_before()));
+    " goal [" << Utils::RelativeTime(sub_goal_target->get_after()) << "," << Utils::RelativeTime(sub_goal_target->get_before()) << "]");
 }
 
 void TopLevelMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground) { // no prediction here.

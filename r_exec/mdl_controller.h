@@ -225,9 +225,11 @@ public:
   void add_monitor(PMonitor *m);
   void remove_monitor(PMonitor *m);
 
-  _Fact *get_lhs() const;
-  _Fact *get_rhs() const;
-  Fact *get_f_ihlp(HLPBindingMap *bindings, bool wr_enabled) const;
+  _Fact *get_lhs() const { return lhs_; }
+  _Fact *get_rhs() const { return rhs_; }
+  Fact *get_f_ihlp(HLPBindingMap *bindings, bool wr_enabled) const {
+    return bindings->build_f_ihlp(getObject(), Opcodes::IMdl, wr_enabled);
+  }
 
   virtual void store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed, bool simulation) = 0;
   ChainingStatus retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl, RequirementsPair &r_p, Fact *&ground, MDLController *req_controller, bool &wr_enabled); // checks the requirement instances during fwd; r_p: all wrs in first, all srs in second.
