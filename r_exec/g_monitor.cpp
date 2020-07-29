@@ -359,7 +359,7 @@ bool RMonitor::signal(bool simulation) {
 
   if (simulating_ && simulation) { // report the simulated outcome: this will inject a simulated prediction of the outcome, to allow any g-monitor deciding on this ground.
 
-    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_, target_->get_goal()->get_sim()->root_, NULL))
+    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_, target_->get_goal()->get_sim()->root_))
       ((PMDLController *)controller_)->register_simulated_goal_outcome(target_, true, target_); // report a simulated success.
     else
       ((PMDLController *)controller_)->register_simulated_goal_outcome(target_, false, NULL); // report a simulated failure.
