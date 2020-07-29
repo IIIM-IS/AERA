@@ -461,8 +461,7 @@ void CSTController::inject_goal(HLPBindingMap *bm,
 
   sub_goal_target->set_cfd(confidence);
 
-  Goal *sub_goal = new Goal(sub_goal_target, super_goal->get_goal()->get_actor(), 1);
-  sub_goal->set_sim(sim);
+  Goal *sub_goal = new Goal(sub_goal_target, super_goal->get_goal()->get_actor(), sim, 1);
 
   _Fact *f_icst = super_goal->get_goal()->get_target();
   _Fact *sub_goal_f = new Fact(sub_goal, now, now, 1, 1);
