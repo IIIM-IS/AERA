@@ -352,13 +352,17 @@ Simulator
 2020-07-31
 * DONE. Update all std.replicode to include (sim ...) definition and (goal : : sim), including Integration_OpenAI.
 * DONE. Make bug issue: Uwarranted cast to (Goal*) in _Fact::get_goal(). https://github.com/IIIM-IS/replicode/issues/95
-* Review/merge pull request: retrieve_imdl_bwd to use match_fwd https://github.com/IIIM-IS/replicode/pull/96
+
+2020-08-04
+* DONE. Review/merge pull request: retrieve_imdl_bwd to use match_fwd https://github.com/IIIM-IS/replicode/pull/96
+
+next meeting
+* Review/merge pull request: Keep the same abduced sim object in forward simulation. https://github.com/IIIM-IS/replicode/pull/98
+* Discuss issue: Predict members of simulated future composite states https://github.com/IIIM-IS/replicode/issues/97
 
 TODO
 * Make pull request: In model builder, remove template variables that are also assigned.
-* Make pull request: Keep the same "deepest" abduced sim object in forward simulation.
 * Make pull request: In retrieve_simulated_imdl_fwd, fix is_out_of_range(now).
-* Make pull request: Make a cst for a future simulated fact when other members are missing, e.g. essence.
 * Achieve one command two frames later. Reevaluate problem: Command is commited near the end of the frame and is expected to be executed at beginning of next.
 * In prediction monitor, on failure check again at the end of the predicted period.
 * Visualizer: Show model failure.
