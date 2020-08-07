@@ -736,23 +736,19 @@ bool BindingMap::match_timings(Timestamp stored_after, Timestamp stored_before, 
   }
 }
 
-bool BindingMap::match_fwd_timings(const _Fact *f_object, const _Fact *f_pattern, bool use_f_pattern_timings) {
+bool BindingMap::match_fwd_timings(const _Fact *f_object, const _Fact *f_pattern) {
 
-  if (use_f_pattern_timings)
-    return match_timings(
-      f_pattern->get_after(), f_pattern->get_before(), f_object->get_after(), f_object->get_before(), fwd_after_index_, fwd_before_index_);
-  else
-    return match_timings(get_fwd_after(), get_fwd_before(), f_object->get_after(), f_object->get_before(), fwd_after_index_, fwd_before_index_);
+  return match_timings(get_fwd_after(), get_fwd_before(), f_object->get_after(), f_object->get_before(), fwd_after_index_, fwd_before_index_);
 }
 
-bool BindingMap::match_fwd_strict(const _Fact *f_object, const _Fact *f_pattern, bool use_f_pattern_timings) {
+bool BindingMap::match_fwd_strict(const _Fact *f_object, const _Fact *f_pattern) {
 
   if (match_object(f_object->get_reference(0), f_pattern->get_reference(0))) {
 
     if (f_object->code(0) != f_pattern->code(0))
       return false;
 
-    return match_fwd_timings(f_object, f_pattern, use_f_pattern_timings);
+    return match_fwd_timings(f_object, f_pattern);
   } else
     return false;
 }
@@ -1146,23 +1142,19 @@ void HLPBindingMap::reset_bwd_timings(_Fact *reference_fact) { // valuate at aft
     map_[bwd_before_index_] = new StructureValue(this, reference_fact, reference_fact->code(FACT_BEFORE).asIndex());
 }
 
-bool HLPBindingMap::match_bwd_timings(const _Fact *f_object, const _Fact *f_pattern, bool use_f_pattern_timings) {
+bool HLPBindingMap::match_bwd_timings(const _Fact *f_object, const _Fact *f_pattern) {
 
-  if (use_f_pattern_timings)
-    return match_timings(
-      f_pattern->get_after(), f_pattern->get_before(), f_object->get_after(), f_object->get_before(), bwd_after_index_, bwd_before_index_);
-  else
-    return match_timings(get_bwd_after(), get_bwd_before(), f_object->get_after(), f_object->get_before(), bwd_after_index_, bwd_before_index_);
+  return match_timings(get_bwd_after(), get_bwd_before(), f_object->get_after(), f_object->get_before(), bwd_after_index_, bwd_before_index_);
 }
 
-bool HLPBindingMap::match_bwd_strict(const _Fact *f_object, const _Fact *f_pattern, bool use_f_pattern_timings) {
+bool HLPBindingMap::match_bwd_strict(const _Fact *f_object, const _Fact *f_pattern) {
 
   if (match_object(f_object->get_reference(0), f_pattern->get_reference(0))) {
 
     if (f_object->code(0) != f_pattern->code(0))
       return false;
 
-    return match_bwd_timings(f_object, f_pattern, use_f_pattern_timings);
+    return match_bwd_timings(f_object, f_pattern);
   } else
     return false;
 }
