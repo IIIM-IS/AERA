@@ -201,7 +201,7 @@ public:
   P<M> monitor_;
   MonitoringJob(M *monitor, Timestamp deadline) : TimeJob(deadline), monitor_(monitor) {
 #ifdef WITH_DEBUG_OID
-    OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(Now()) << " make MonitoringJob::TimeJob " << get_job_id() <<
+    OUTPUT_LINE((TraceLevel)0, "  make MonitoringJob::TimeJob " << get_job_id() <<
       "(" << get_debug_oid() << ") for monitor(" << monitor_->get_debug_oid() << "), deadline " <<
       Utils::RelativeTime(deadline));
 #endif
