@@ -153,7 +153,7 @@ Overlay *PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController
         }
       }
     case NO_REQUIREMENT:
-      if (((MDLController *)controller_)->has_tpl_args()) { // there are tpl args, abort.
+      if (!chaining_allowed && ((MDLController *)controller_)->has_tpl_args()) { // there are tpl args, abort.
 
         o = NULL;
         break;
