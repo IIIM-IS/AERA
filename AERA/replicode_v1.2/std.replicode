@@ -83,6 +83,8 @@
 !op (ins : :[] :bl :us :bl :bl):
 !op (red :[] :[] :[]):[]
 !op (fvw : :):
+; true if pred or goal is a simulation.
+!op (is_sim :):bl
 
 ; operator aliases.
 !def now (_now)

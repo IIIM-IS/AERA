@@ -89,22 +89,12 @@ i_pgm_set_speed:(ipgm pgm_set_speed |[] RUN_ONCE 20000us VOLATILE NOTIFY 1) []
 ; calls the command, which will call the override of _Mem::eject().
 pgm_cmd_set_speed_y:(pgm |[]
 []
-   (ptn (fact (goal (fact c:(cmd set_speed_y [obj: sy:] ::) ::) : nil ::) ::) |[])
+   (ptn (fact g:(goal (fact c:(cmd set_speed_y [obj: sy:] ::) ::) ::) ::) |[])
 |[]
 []
+   (= (is_sim g) false)
    (cmd set_speed_y [obj sy] 1)
    (prb [1 "print" "cmd set_speed_y" [c]])
 1) |[]
 i_pgm_cmd_set_speed_y:(ipgm pgm_cmd_set_speed_y |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
-   [SYNC_ONCE now 0 forever primary nil 1]; Use primary since abduced goals go in there.
-
-pgm_cmd_set_speed_y_not_sim:(pgm |[]
-[]
-   (ptn (fact (goal (fact c:(cmd set_speed_y [obj: sy:] ::) ::) : (sim : 0us ::) ::) ::) |[])
-|[]
-[]
-   (cmd set_speed_y [obj sy] 1)
-   (prb [1 "print" "cmd set_speed_y" [c]])
-1) |[]
-i_pgm_cmd_set_speed_y_not_sim:(ipgm pgm_cmd_set_speed_y_not_sim |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]; Use primary since abduced goals go in there.

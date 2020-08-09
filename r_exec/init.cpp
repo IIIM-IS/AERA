@@ -442,6 +442,7 @@ void InitOpcodes(const r_comp::Metadata& metadata) {
   Operator::Register(operator_opcode++, ins);
   Operator::Register(operator_opcode++, red);
   Operator::Register(operator_opcode++, fvw);
+  Operator::Register(operator_opcode++, is_sim);
 }
 
 bool Init(const char *user_operator_library_path,
