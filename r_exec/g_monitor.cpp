@@ -216,10 +216,10 @@ void GMonitor::commit() { // the purpose is to invalidate damaging simulations; 
 
   if (best_sol) {
 
-    ((PrimaryMDLController *)best_sol->sol_)->abduce(bindings_, best_sol->super_goal_, best_sol->opposite_, goal_target_->get_cfd());
+    ((PrimaryMDLController *)best_sol->sol_controller_)->abduce(bindings_, best_sol->super_goal_, best_sol->opposite_, goal_target_->get_cfd());
 
     for (sol = sim_successes_.mandatory_solutions.begin(); sol != sim_successes_.mandatory_solutions.end(); ++sol) // commit to all mandatory solutions.
-      ((PrimaryMDLController *)(*sol).second->sol_)->abduce(bindings_, (*sol).second->super_goal_, (*sol).second->opposite_, goal_target_->get_cfd());
+      ((PrimaryMDLController *)(*sol).second->sol_controller_)->abduce(bindings_, (*sol).second->super_goal_, (*sol).second->opposite_, goal_target_->get_cfd());
   }
 }
 
