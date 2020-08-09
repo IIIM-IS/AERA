@@ -138,14 +138,14 @@ Overlay *PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController
     bool stop = (req_controller != NULL);
     ChainingStatus c_s = ((MDLController *)controller_)->retrieve_imdl_fwd(bm, f_imdl, r_p, ground, req_controller, wr_enabled);
     f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(wr_enabled);
-    bool c_a = (c_s >= WEAK_REQUIREMENT_ENABLED);
+    bool chaining_allowed = (c_s >= WEAK_REQUIREMENT_ENABLED);
     switch (c_s) {
     case WEAK_REQUIREMENT_DISABLED:
     case STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT: // silent monitoring of a prediction that will not be injected.
       if (simulation) { // if there is simulated imdl for the root of one sim in prediction, allow forward chaining.
 
         if (check_simulated_chaining(bm, f_imdl, prediction))
-          c_a = true;
+          chaining_allowed = true;
         else {
 
           o = NULL;
@@ -163,7 +163,7 @@ Overlay *PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController
       if (simulation) { // if there is simulated imdl for the root of one sim in prediction, allow forward chaining.
 
         if (check_simulated_chaining(bm, f_imdl, prediction))
-          c_a = true;
+          chaining_allowed = true;
         else {
 
           o = NULL;
@@ -174,7 +174,7 @@ Overlay *PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController
       if (evaluate_fwd_guards()) { // may update bindings.
         // JTNote: The prediction is made from the bindings that made f_imdl, but it is not used directly.
         f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
-        ((PrimaryMDLController *)controller_)->predict(bindings_, input, f_imdl, c_a, r_p, ground);
+        ((PrimaryMDLController *)controller_)->predict(bindings_, input, f_imdl, chaining_allowed, r_p, ground);
         o = this;
       } else {
         //std::cout<<" guards failed\n";
@@ -239,7 +239,7 @@ Overlay *SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLControll
     bool wr_enabled;
     ChainingStatus c_s = ((MDLController *)controller_)->retrieve_imdl_fwd(bm, f_imdl, r_p, ground, req_controller, wr_enabled);
     f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(wr_enabled);
-    bool c_a = (c_s >= NO_REQUIREMENT);
+    bool chaining_allowed = (c_s >= NO_REQUIREMENT);
     switch (c_s) {
     case WEAK_REQUIREMENT_DISABLED:
     case STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT: // silent monitoring of a prediction that will not be injected.
