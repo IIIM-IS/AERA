@@ -339,6 +339,16 @@ public:
     add_reference(sim);
   }
 
+  /**
+   * Check if this goal is a simulation, specifically if there is a simulation object whose
+   * time horizon is not zero.
+   * @return True if this is a simulation.
+   */
+  bool is_simulation() const {
+    Sim* sim = get_sim();
+    return sim && sim->get_thz() != seconds(0);
+  }
+
   P<_Fact> ground_; // f->p->f->imdl (weak requirement) that allowed backward chaining, if any.
 
   // goal->target->cfd/(before-now).
