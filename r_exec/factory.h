@@ -346,7 +346,7 @@ public:
    */
   bool is_simulation() const {
     Sim* sim = get_sim();
-    return sim && sim->get_thz() != seconds(0);
+    return sim && sim->get_thz() != std::chrono::seconds(0);
   }
 
   P<_Fact> ground_; // f->p->f->imdl (weak requirement) that allowed backward chaining, if any.
