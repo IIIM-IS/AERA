@@ -365,7 +365,7 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
     if (now > lastInjectTime_ + get_sampling_period() * 8 / 10) {
       // Enough time has elapsed to inject another position.
       if (nextDiscretePosition_ &&
-        now > lastCommandTime_ + get_sampling_period() * 5 / 10) {
+        now >= lastCommandTime_ + get_sampling_period() * 4 / 10) {
         // Enough time has elapsed from the move command to update the position.
         discretePosition_ = nextDiscretePosition_;
         // Clear nextDiscretePosition_ to allow another move command.
