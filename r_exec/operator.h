@@ -179,6 +179,8 @@ bool e10(const Context &context, uint16 &index);
 bool ins(const Context &context, uint16 &index); // executive-dependent.
 
 bool fvw(const Context &context, uint16 &index); // executive-dependent.
+
+bool is_sim(const Context &context, uint16 &index);
 }
 
 

@@ -648,4 +648,23 @@ bool fvw(const Context &context, uint16 &index) {
 
   return IPGMContext::Fvw(*(IPGMContext *)context.get_implementation(), index);
 }
+
+////////////////////////////////////////////////////////////////////////////////
+
+bool is_sim(const Context &context, uint16 &index) {
+
+  const IPGMContext &ipgm_context = *(IPGMContext *)context.get_implementation();
+  IPGMContext arg = *ipgm_context.getChild(1);
+  Code* obj = arg.getObject();
+
+  bool result = false;
+  if (obj->code(0).asOpcode() == Opcodes::Goal)
+    result = ((Goal*)obj)->is_simulation();
+  else if (obj->code(0).asOpcode() == Opcodes::Pred)
+    result = ((Pred*)obj)->is_simulation();
+
+  index = context.setAtomicResult(Atom::Boolean(result));
+  return true;
+}
+
 }
