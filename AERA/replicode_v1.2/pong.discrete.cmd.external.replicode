@@ -67,7 +67,7 @@ pgm_cmd_move_y_plus:(pgm |[]
 []
    (= (is_sim g) false)
    (< c_after before)
-   (> c_before after)
+   (>= c_after after)
 []
    (prb [1 "print" "cmd move_y_plus..." |[]])
    (cmd move_y_plus [obj] 1)
@@ -85,7 +85,7 @@ pgm_cmd_move_y_minus:(pgm |[]
 []
    (= (is_sim g) false)
    (< c_after before)
-   (> c_before after)
+   (>= c_after after)
 []
    (prb [1 "print" "cmd move_y_minus..." |[]])
    (cmd move_y_minus [obj] 1)
