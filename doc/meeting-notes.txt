@@ -356,11 +356,21 @@ Simulator
 2020-08-04
 * DONE. Review/merge pull request: retrieve_imdl_bwd to use match_fwd https://github.com/IIIM-IS/replicode/pull/96
 
-next meeting
-* Review/merge pull request: Keep the same abduced sim object in forward simulation. https://github.com/IIIM-IS/replicode/pull/98
+2020-08-13
+* DONE. Review/merge pull request: Add is_sim operator https://github.com/IIIM-IS/replicode/pull/101
+* DONE. Review/merge pull request: Don't abort if chaining_allowed https://github.com/IIIM-IS/replicode/pull/102
+* DONE. Review/merge pull request: Start forward chaining in the simulator https://github.com/IIIM-IS/replicode/pull/103
+* NOT YET. Review/merge pull request: In abduce, use the current model controller for the new Sim https://github.com/IIIM-IS/replicode/pull/104
 * Discuss issue: Predict members of simulated future composite states https://github.com/IIIM-IS/replicode/issues/97
+  Try making the auto focus controller predict the same fact until the external environment contradicts it.
+
+next meeting
+* Review/merge pull request: Copy simulation objects to new requirement https://github.com/IIIM-IS/replicode/pull/100
+* Review/merge pull request: Keep the same abduced sim object in forward simulation. https://github.com/IIIM-IS/replicode/pull/98
 
 TODO
+* Try simulator to re repeatedly restart the simulation from the solution under the root.
+* Rename sol to solution.
 * Make pull request: In model builder, remove template variables that are also assigned.
 * Make pull request: In retrieve_simulated_imdl_fwd, fix is_out_of_range(now).
 * Achieve one command two frames later. Reevaluate problem: Command is commited near the end of the frame and is expected to be executed at beginning of next.
