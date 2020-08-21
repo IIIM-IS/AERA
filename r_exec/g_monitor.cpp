@@ -352,7 +352,7 @@ RMonitor::RMonitor(PrimaryMDLController *controller,
   _Mem::Get()->pushTimeJob(j);
 }
 
-bool RMonitor::signal(bool is_simulation, Sim* forwardSimulation) {
+bool RMonitor::signal(bool is_simulation) {
 
   if (target_->is_invalidated())
     return true;
