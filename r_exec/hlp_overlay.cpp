@@ -286,11 +286,11 @@ Code *HLPOverlay::get_unpacked_object() const {
   return ((HLPController *)controller_)->get_unpacked_object();
 }
 
-void HLPOverlay::store_evidence(_Fact *evidence, bool prediction, bool simulation) {
+void HLPOverlay::store_evidence(_Fact *evidence, bool prediction, bool is_simulation) {
 
   if (prediction) {
 
-    if (!simulation)
+    if (!is_simulation)
       ((HLPController *)controller_)->store_predicted_evidence(evidence);
   } else
     ((HLPController *)controller_)->store_evidence(evidence);

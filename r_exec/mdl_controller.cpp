@@ -110,15 +110,15 @@ Overlay *PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController
   OUTPUT_LINE(MDL_IN, Utils::RelativeTime(Now()) << " mdl: " << controller_->getObject()->get_oid() << " <- input: " << input->get_oid());
   _Fact *input_object;
   Pred *prediction = input->get_pred();
-  bool simulation;
+  bool is_simulation;
   if (prediction) {
 
     input_object = prediction->get_target();
-    simulation = prediction->is_simulation();
+    is_simulation = prediction->is_simulation();
   } else {
 
     input_object = input;
-    simulation = false;
+    is_simulation = false;
   }
 
   P<HLPBindingMap> bm = new HLPBindingMap(bindings_);
@@ -142,7 +142,7 @@ Overlay *PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController
     switch (c_s) {
     case WEAK_REQUIREMENT_DISABLED:
     case STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT: // silent monitoring of a prediction that will not be injected.
-      if (simulation) { // if there is simulated imdl for the root of one sim in prediction, allow forward chaining.
+      if (is_simulation) { // if there is simulated imdl for the root of one sim in prediction, allow forward chaining.
 
         if (check_simulated_chaining(bm, f_imdl, prediction))
           chaining_allowed = true;
@@ -160,7 +160,7 @@ Overlay *PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController
       } else
         f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(false);
     case STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT: // silent monitoring of a prediction that will not be injected.
-      if (simulation) { // if there is simulated imdl for the root of one sim in prediction, allow forward chaining.
+      if (is_simulation) { // if there is simulated imdl for the root of one sim in prediction, allow forward chaining.
 
         if (check_simulated_chaining(bm, f_imdl, prediction))
           chaining_allowed = true;
@@ -187,11 +187,11 @@ Overlay *PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController
     code_ = NULL;
     bindings_ = original_bindings;
     if (f_p_f_imdl == NULL) // i.e. if reduction not triggered a requirement.
-      store_evidence(input, prediction, simulation);
+      store_evidence(input, prediction, is_simulation);
     return o;
   }case MATCH_SUCCESS_NEGATIVE: // counter-evidence WRT the lhs.
     if (f_p_f_imdl == NULL) // i.e. if reduction not triggered a requirement.
-      store_evidence(input, prediction, simulation);
+      store_evidence(input, prediction, is_simulation);
   case MATCH_FAILURE:
     //std::cout<<" no match\n";
     return NULL;
@@ -1153,7 +1153,7 @@ inline microseconds PMDLController::get_sim_thz(Timestamp now, Timestamp deadlin
 TopLevelMDLController::TopLevelMDLController(r_code::View *view) : PMDLController(view) {
 }
 
-void TopLevelMDLController::store_requirement(_Fact *f_imdl, MDLController *controller, bool chaining_was_allowed, bool simulation) {
+void TopLevelMDLController::store_requirement(_Fact *f_imdl, MDLController *controller, bool chaining_was_allowed, bool is_simulation) {
 }
 
 void TopLevelMDLController::take_input(r_exec::View *input) {
@@ -1369,7 +1369,7 @@ void PrimaryMDLController::set_secondary(SecondaryMDLController *secondary) {
   secondary->add_requirement_to_rhs();
 }
 
-void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed, bool simulation) {
+void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed, bool is_simulation) {
 
   _Fact *f_imdl = f_p_f_imdl->get_pred()->get_target();
   Code *mdl = f_imdl->get_reference(0);
@@ -1384,7 +1384,7 @@ void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *c
         m = r_monitors_.erase(m);
       else {
 
-        if ((*m)->signal(simulation))
+        if ((*m)->signal(is_simulation))
           m = r_monitors_.erase(m);
         else
           ++m;
@@ -1392,15 +1392,15 @@ void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *c
     }
     g_monitorsCS_.leave();
 
-    if (simulation)
+    if (is_simulation)
       _store_requirement(&simulated_requirements_.positive_evidences, e);
     else
       _store_requirement(&requirements_.positive_evidences, e);
     reduce_cache<PrimaryMDLController>((Fact *)f_p_f_imdl, controller);
-  } else if (!simulation)
+  } else if (!is_simulation)
     _store_requirement(&requirements_.negative_evidences, e);
 
-  if (!simulation)
+  if (!is_simulation)
     secondary_->store_requirement(f_p_f_imdl, controller, chaining_was_allowed, false);
 }
 
@@ -1431,19 +1431,19 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
     }
   }
 
-  bool simulation;
+  bool is_simulation;
   float32 confidence;
   Pred *prediction = input->get_pred();
   if (prediction) { // the input was a prediction.
 
-    simulation = prediction->is_simulation();
+    is_simulation = prediction->is_simulation();
     if (chaining_was_allowed)
       confidence = prediction->get_target()->get_cfd()*get_cfd();
     else
       return;
   } else {
 
-    simulation = false;
+    is_simulation = false;
     if (chaining_was_allowed)
       confidence = input->get_cfd()*get_cfd();
     else
@@ -1456,7 +1456,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
   auto now = Now();
   Fact *production = new Fact(pred, now, now, 1, 1);
 
-  if (prediction && !simulation) { // store the antecedents.
+  if (prediction && !is_simulation) { // store the antecedents.
 
     pred->grounds_.push_back(input);
     if (ground)
@@ -1469,7 +1469,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
       // Another thread has invalidated this controller which clears the controllers.
       return;
     PrimaryMDLController *c = (PrimaryMDLController *)controllers_[RHSController]; // rhs controller: in the same view.
-    c->store_requirement(production, this, chaining_was_allowed, simulation); // if not simulation, stores also in the secondary controller.
+    c->store_requirement(production, this, chaining_was_allowed, is_simulation); // if not simulation, stores also in the secondary controller.
 #ifdef WITH_DEBUG_OID
     OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " fact (" << f_imdl->get_debug_oid() << ") imdl mdl " << getObject()->get_oid() <<
       ": " << input->get_oid() << " -> fact (" << production->get_debug_oid() << ") pred fact (" <<
@@ -1481,7 +1481,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
     return;
   }
 
-  if (!simulation) { // rdx and monitor only for predictions built from actual inputs.
+  if (!is_simulation) { // rdx and monitor only for predictions built from actual inputs.
 
     register_requirement(production, r_p);
 
@@ -2315,7 +2315,7 @@ void SecondaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_im
   add_monitor(m);
 }
 
-void SecondaryMDLController::store_requirement(_Fact *f_imdl, MDLController *controller, bool chaining_was_allowed, bool simulation) {
+void SecondaryMDLController::store_requirement(_Fact *f_imdl, MDLController *controller, bool chaining_was_allowed, bool is_simulation) {
 
   Code *mdl = f_imdl->get_reference(0);
   RequirementEntry e(f_imdl, controller, chaining_was_allowed);

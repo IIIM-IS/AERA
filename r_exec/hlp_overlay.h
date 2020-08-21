@@ -105,7 +105,7 @@ protected:
   bool scan_location(uint16 index);
   bool scan_variable(uint16 index);
 
-  void store_evidence(_Fact *evidence, bool prediction, bool simulation); // stores both actual and non-simulated predicted evidences.
+  void store_evidence(_Fact *evidence, bool prediction, bool is_simulation); // stores both actual and non-simulated predicted evidences.
 
   HLPOverlay(Controller *c, HLPBindingMap *bindings);
 public:

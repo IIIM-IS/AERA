@@ -236,15 +236,15 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
   // std::cout<<Time::ToString_seconds(Now()-st)<<" "<<std::hex<<this<<std::dec<<" ("<<Time::ToString_seconds(match_deadline-st)<<") "<<input->object->get_oid()<<std::endl;
   _Fact *input_object;
   Pred *prediction = ((_Fact *)input->object_)->get_pred();
-  bool simulation;
+  bool is_simulation;
   if (prediction) {
 
     input_object = prediction->get_target(); // input_object is f1 as in f0->pred->f1->object.
-    simulation = prediction->is_simulation();
+    is_simulation = prediction->is_simulation();
   } else {
 
     input_object = (_Fact *)input->object_;
-    simulation = false;
+    is_simulation = false;
   }
 
   P<HLPBindingMap> bm = new HLPBindingMap();
@@ -281,7 +281,7 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
           inject_production();
           invalidate();
           offspring = NULL;
-          store_evidence(input->object_, prediction, simulation);
+          store_evidence(input->object_, prediction, is_simulation);
           return true;
         } else {
           //std::cout<<" guards failed\n";
@@ -296,13 +296,13 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
         if (inputs_.size() == original_patterns_size_) inject_production();
         invalidate();
         offspring = NULL;
-        store_evidence(input->object_, prediction, simulation);
+        store_evidence(input->object_, prediction, is_simulation);
         return true;
       }
     } else {
       //std::cout<<" match\n";
       offspring = get_offspring(bm, (_Fact *)input->object_, bound_pattern);
-      store_evidence(input->object_, prediction, simulation);
+      store_evidence(input->object_, prediction, is_simulation);
       return true;
     }
   } else {
