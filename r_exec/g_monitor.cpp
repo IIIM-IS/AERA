@@ -196,30 +196,34 @@ void GMonitor::commit() { // the purpose is to invalidate damaging simulations; 
       (*solution).second->invalidate();
   }
 
-  Sim *best_sol = NULL;
-  for (solution = sim_successes_.optional_solutions.begin(); solution != sim_successes_.optional_solutions.end(); ++solution) { // find the best optional solution left.
+  Sim *best_solution = NULL;
+  // Find the best optional solution.
+  for (solution = sim_successes_.optional_solutions.begin(); solution != sim_successes_.optional_solutions.end(); ++solution) {
 
     if ((*solution).second->is_invalidated())
       continue;
-    if (!best_sol)
-      best_sol = (*solution).second;
+    if (!best_solution)
+      best_solution = (*solution).second;
     else {
 
       float32 s = (*solution).second->solution_cfd_ / duration_cast<microseconds>((*solution).second->solution_before_ - now).count();
-      float32 _s = best_sol->solution_cfd_ / duration_cast<microseconds>(best_sol->solution_before_ - now).count();
+      float32 _s = best_solution->solution_cfd_ / duration_cast<microseconds>(best_solution->solution_before_ - now).count();
       if (s > _s)
-        best_sol = (*solution).second;
+        best_solution = (*solution).second;
     }
   }
 
   invalidate_sim_outcomes(); // this stops any further propagation of the goal simulation.
 
-  if (best_sol) {
+  if (best_solution) {
 
-    ((PrimaryMDLController *)best_sol->solution_controller_)->abduce(bindings_, best_sol->super_goal_, best_sol->opposite_, goal_target_->get_cfd());
+    ((PrimaryMDLController *)best_solution->solution_controller_)->abduce(
+      bindings_, best_solution->super_goal_, best_solution->opposite_, goal_target_->get_cfd());
 
-    for (solution = sim_successes_.mandatory_solutions.begin(); solution != sim_successes_.mandatory_solutions.end(); ++solution) // commit to all mandatory solutions.
-      ((PrimaryMDLController *)(*solution).second->solution_controller_)->abduce(bindings_, (*solution).second->super_goal_, (*solution).second->opposite_, goal_target_->get_cfd());
+    // Commit to all mandatory solutions.
+    for (solution = sim_successes_.mandatory_solutions.begin(); solution != sim_successes_.mandatory_solutions.end(); ++solution)
+      ((PrimaryMDLController *)(*solution).second->solution_controller_)->abduce(
+        bindings_, (*solution).second->super_goal_, (*solution).second->opposite_, goal_target_->get_cfd());
   }
 }
 
