@@ -211,8 +211,8 @@ class r_exec_dll Sim :
   public LObject {
 public:
   Sim(Sim *s); // is_requirement=false (not copied).
-  // For SIM_MANDATORY or SIM_OPTIONAL, provide sol, sol_cfd and sol_before. Otherwise, defaults for SIM_ROOT.
-  Sim(SimMode mode, std::chrono::microseconds thz, Fact *super_goal, bool opposite, Controller *root, float32 psln_thr, Controller *sol_controller = NULL, float32 sol_cfd = 0, Timestamp sol_before = Timestamp(std::chrono::seconds(0)));
+  // For SIM_MANDATORY or SIM_OPTIONAL, provide solution_controller, solution_cfd and solution_before. Otherwise, defaults for SIM_ROOT.
+  Sim(SimMode mode, std::chrono::microseconds thz, Fact *super_goal, bool opposite, Controller *root, float32 psln_thr, Controller *solution_controller = NULL, float32 solution_cfd = 0, Timestamp solution_before = Timestamp(std::chrono::seconds(0)));
   bool invalidate();
   bool is_invalidated();
   // If SIM_MANDATORY or SIM_OPTIONAL: qualifies a sub-goal of the branch's root.
@@ -229,9 +229,9 @@ public:
 
   P<Fact> super_goal_; // of the goal the sim is attached to.
   P<Controller> root_; // controller that produced the simulation branch root (SIM_ROOT): identifies the branch.
-  P<Controller> sol_controller_; // controller that produced a sub-goal of the branch's root: identifies the model that can be a solution for the super-goal.
-  float32 sol_cfd_; // confidence of the solution goal.
-  Timestamp sol_before_; // deadline of the solution goal.
+  P<Controller> solution_controller_; // controller that produced a sub-goal of the branch's root: identifies the model that can be a solution for the super-goal.
+  float32 solution_cfd_; // confidence of the solution goal.
+  Timestamp solution_before_; // deadline of the solution goal.
 };
 
 // Caveat: instances of Fact can becone instances of AntiFact (set_opposite() upon MATCH_SUCCESS_NEGATIVE during backward chaining).

@@ -634,15 +634,15 @@ bool Goal::is_self_goal() const {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Sim::Sim(Sim *s) : super_goal_(s->super_goal_), root_(s->root_), sol_controller_(s->sol_controller_), is_requirement_(false),
-                               opposite_(s->opposite_), sol_cfd_(s->sol_cfd_), sol_before_(s->sol_before_) {
+Sim::Sim(Sim *s) : super_goal_(s->super_goal_), root_(s->root_), solution_controller_(s->solution_controller_), is_requirement_(false),
+                               opposite_(s->opposite_), solution_cfd_(s->solution_cfd_), solution_before_(s->solution_before_) {
   for (uint16 i = 0; i < s->code_size(); ++i)
     code(i) = s->code(i);
 }
 
-Sim::Sim(SimMode mode, microseconds thz, Fact *super_goal, bool opposite, Controller *root, float32 psln_thr, Controller *sol_controller, 
-         float32 sol_cfd, Timestamp sol_before) : super_goal_(super_goal), root_(root), sol_controller_(sol_controller), is_requirement_(false), 
-         opposite_(opposite), sol_cfd_(sol_cfd), sol_before_(sol_before) {
+Sim::Sim(SimMode mode, microseconds thz, Fact *super_goal, bool opposite, Controller *root, float32 psln_thr, Controller *solution_controller, 
+         float32 solution_cfd, Timestamp solution_before) : super_goal_(super_goal), root_(root), solution_controller_(solution_controller), is_requirement_(false), 
+         opposite_(opposite), solution_cfd_(solution_cfd), solution_before_(solution_before) {
   code(0) = Atom::Object(Opcodes::Sim, SIM_ARITY);
   code(SIM_MODE) = Atom::Float(mode);
   code(SIM_THZ) = Atom::IPointer(SIM_ARITY + 1);

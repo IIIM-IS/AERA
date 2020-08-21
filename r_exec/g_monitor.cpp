@@ -133,19 +133,19 @@ void _GMonitor::store_simulated_outcome(Goal *affected_goal, Sim *sim, bool succ
 
 void _GMonitor::invalidate_sim_outcomes() {
 
-  SolutionList::const_iterator sol;
+  SolutionList::const_iterator solution;
 
-  for (sol = sim_failures_.mandatory_solutions.begin(); sol != sim_failures_.mandatory_solutions.end(); ++sol)
-    (*sol).second->invalidate();
+  for (solution = sim_failures_.mandatory_solutions.begin(); solution != sim_failures_.mandatory_solutions.end(); ++solution)
+    (*solution).second->invalidate();
 
-  for (sol = sim_failures_.optional_solutions.begin(); sol != sim_failures_.optional_solutions.end(); ++sol)
-    (*sol).second->invalidate();
+  for (solution = sim_failures_.optional_solutions.begin(); solution != sim_failures_.optional_solutions.end(); ++solution)
+    (*solution).second->invalidate();
 
-  for (sol = sim_successes_.mandatory_solutions.begin(); sol != sim_successes_.mandatory_solutions.end(); ++sol)
-    (*sol).second->invalidate();
+  for (solution = sim_successes_.mandatory_solutions.begin(); solution != sim_successes_.mandatory_solutions.end(); ++solution)
+    (*solution).second->invalidate();
 
-  for (sol = sim_successes_.optional_solutions.begin(); sol != sim_successes_.optional_solutions.end(); ++sol)
-    (*sol).second->invalidate();
+  for (solution = sim_successes_.optional_solutions.begin(); solution != sim_successes_.optional_solutions.end(); ++solution)
+    (*solution).second->invalidate();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,40 +175,40 @@ void GMonitor::commit() { // the purpose is to invalidate damaging simulations; 
 
   auto now = Now();
 
-  SolutionList::const_iterator sol;
+  SolutionList::const_iterator solution;
 
-  for (sol = sim_failures_.mandatory_solutions.begin(); sol != sim_failures_.mandatory_solutions.end(); ++sol) { // check if any mandatory solution could result in the failure of more important a goal.
+  for (solution = sim_failures_.mandatory_solutions.begin(); solution != sim_failures_.mandatory_solutions.end(); ++solution) { // check if any mandatory solution could result in the failure of more important a goal.
 
-    if ((*sol).second->is_invalidated())
+    if ((*solution).second->is_invalidated())
       continue;
-    if ((*sol).first->get_strength(now) > monitored_goal->get_strength(now)) { // cave in.
+    if ((*solution).first->get_strength(now) > monitored_goal->get_strength(now)) { // cave in.
 
       invalidate_sim_outcomes(); // this stops any further propagation of the goal simulation.
       return;
     }
   }
 
-  for (sol = sim_failures_.optional_solutions.begin(); sol != sim_failures_.optional_solutions.end(); ++sol) { // check if any optional solutions could result in the failure of more important a goal; invalidate the culprits.
+  for (solution = sim_failures_.optional_solutions.begin(); solution != sim_failures_.optional_solutions.end(); ++solution) { // check if any optional solutions could result in the failure of more important a goal; invalidate the culprits.
 
-    if ((*sol).second->is_invalidated())
+    if ((*solution).second->is_invalidated())
       continue;
-    if ((*sol).first->get_strength(now) > monitored_goal->get_strength(now))
-      (*sol).second->invalidate();
+    if ((*solution).first->get_strength(now) > monitored_goal->get_strength(now))
+      (*solution).second->invalidate();
   }
 
   Sim *best_sol = NULL;
-  for (sol = sim_successes_.optional_solutions.begin(); sol != sim_successes_.optional_solutions.end(); ++sol) { // find the best optional solution left.
+  for (solution = sim_successes_.optional_solutions.begin(); solution != sim_successes_.optional_solutions.end(); ++solution) { // find the best optional solution left.
 
-    if ((*sol).second->is_invalidated())
+    if ((*solution).second->is_invalidated())
       continue;
     if (!best_sol)
-      best_sol = (*sol).second;
+      best_sol = (*solution).second;
     else {
 
-      float32 s = (*sol).second->sol_cfd_ / duration_cast<microseconds>((*sol).second->sol_before_ - now).count();
-      float32 _s = best_sol->sol_cfd_ / duration_cast<microseconds>(best_sol->sol_before_ - now).count();
+      float32 s = (*solution).second->solution_cfd_ / duration_cast<microseconds>((*solution).second->solution_before_ - now).count();
+      float32 _s = best_sol->solution_cfd_ / duration_cast<microseconds>(best_sol->solution_before_ - now).count();
       if (s > _s)
-        best_sol = (*sol).second;
+        best_sol = (*solution).second;
     }
   }
 
@@ -216,10 +216,10 @@ void GMonitor::commit() { // the purpose is to invalidate damaging simulations; 
 
   if (best_sol) {
 
-    ((PrimaryMDLController *)best_sol->sol_controller_)->abduce(bindings_, best_sol->super_goal_, best_sol->opposite_, goal_target_->get_cfd());
+    ((PrimaryMDLController *)best_sol->solution_controller_)->abduce(bindings_, best_sol->super_goal_, best_sol->opposite_, goal_target_->get_cfd());
 
-    for (sol = sim_successes_.mandatory_solutions.begin(); sol != sim_successes_.mandatory_solutions.end(); ++sol) // commit to all mandatory solutions.
-      ((PrimaryMDLController *)(*sol).second->sol_controller_)->abduce(bindings_, (*sol).second->super_goal_, (*sol).second->opposite_, goal_target_->get_cfd());
+    for (solution = sim_successes_.mandatory_solutions.begin(); solution != sim_successes_.mandatory_solutions.end(); ++solution) // commit to all mandatory solutions.
+      ((PrimaryMDLController *)(*solution).second->solution_controller_)->abduce(bindings_, (*solution).second->super_goal_, (*solution).second->opposite_, goal_target_->get_cfd());
   }
 }
 
@@ -443,25 +443,25 @@ void SGMonitor::commit() { // the purpose is to invalidate damaging simulations 
 
   auto now = Now();
 
-  SolutionList::const_iterator sol;
+  SolutionList::const_iterator solution;
 
-  for (sol = sim_failures_.mandatory_solutions.begin(); sol != sim_failures_.mandatory_solutions.end(); ++sol) { // check if any mandatory solution could result in the failure of more important a goal.
+  for (solution = sim_failures_.mandatory_solutions.begin(); solution != sim_failures_.mandatory_solutions.end(); ++solution) { // check if any mandatory solution could result in the failure of more important a goal.
 
-    if ((*sol).second->is_invalidated())
+    if ((*solution).second->is_invalidated())
       continue;
-    if ((*sol).first->get_strength(now) > monitored_goal->get_strength(now)) { // cave in.
+    if ((*solution).first->get_strength(now) > monitored_goal->get_strength(now)) { // cave in.
 
-      (*sol).second->invalidate();
+      (*solution).second->invalidate();
       return;
     }
   }
 
-  for (sol = sim_failures_.optional_solutions.begin(); sol != sim_failures_.optional_solutions.end(); ++sol) { // check if any optional solutions could result in the failure of more important a goal; invalidate the culprits.
+  for (solution = sim_failures_.optional_solutions.begin(); solution != sim_failures_.optional_solutions.end(); ++solution) { // check if any optional solutions could result in the failure of more important a goal; invalidate the culprits.
 
-    if ((*sol).second->is_invalidated())
+    if ((*solution).second->is_invalidated())
       continue;
-    if ((*sol).first->get_strength(now) > monitored_goal->get_strength(now))
-      (*sol).second->invalidate();
+    if ((*solution).first->get_strength(now) > monitored_goal->get_strength(now))
+      (*solution).second->invalidate();
   }
 }
 
