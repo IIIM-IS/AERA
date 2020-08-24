@@ -356,14 +356,14 @@ RMonitor::RMonitor(PrimaryMDLController *controller,
   _Mem::Get()->pushTimeJob(j);
 }
 
-bool RMonitor::signal(bool is_simulation) {
+bool RMonitor::signal(bool is_simulation, Sim* forwardSimulation) {
 
   if (target_->is_invalidated())
     return true;
 
   if (simulating_ && is_simulation) { // report the simulated outcome: this will inject a simulated prediction of the outcome, to allow any g-monitor deciding on this ground.
 
-    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_, target_->get_goal()->get_sim()->root_))
+    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_, target_->get_goal()->get_sim()->root_, NULL))
       ((PMDLController *)controller_)->register_simulated_goal_outcome(target_, true, target_); // report a simulated success.
     else
       ((PMDLController *)controller_)->register_simulated_goal_outcome(target_, false, NULL); // report a simulated failure.
@@ -535,18 +535,18 @@ SRMonitor::SRMonitor(PrimaryMDLController *controller,
   _Mem::Get()->pushTimeJob(j);
 }
 
-bool SRMonitor::signal(bool is_simulation) {
+bool SRMonitor::signal(bool is_simulation, Sim* forwardSimulation) {
 
   if (target_->is_invalidated())
     return true;
 
   if (is_simulation) {
 
-    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_, target_->get_goal()->get_sim()->root_))
+    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_, target_->get_goal()->get_sim()->root_, forwardSimulation))
       ((PMDLController *)controller_)->register_simulated_goal_outcome(target_, true, target_); // report a simulated success.
   } else {
 
-    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_, NULL))
+    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_, NULL, NULL))
       ((PMDLController *)controller_)->register_simulated_goal_outcome(target_, false, NULL); // report a simulated failure.
   }
   return false;

@@ -1381,7 +1381,10 @@ void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *c
         m = r_monitors_.erase(m);
       else {
 
-        if ((*m)->signal(is_simulation))
+        // If the requirement is simulated, then pass its Sim as the forwardSimulation for check_simulated_imdl.
+        if (f_p_f_imdl->get_pred()->get_simulations_size() > 1)
+          std::cerr << "WARNING: store_requirement: Prediction has multiple simulations. Passing NULL forwardSimulation to r-monitor" << std::endl;
+        if ((*m)->signal(is_simulation, f_p_f_imdl->get_pred()->get_simulations_size() == 1 ? f_p_f_imdl->get_pred()->get_simulation((uint16)0) : NULL))
           m = r_monitors_.erase(m);
         else
           ++m;
@@ -1681,7 +1684,7 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
       if (sub_sim->get_mode() == SIM_ROOT)
         abduce_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim, ground, true);
       else
-        abduce_simulated_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim);
+        abduce_simulated_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim, NULL);
       break;
     default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
       switch (retrieve_simulated_imdl_bwd(bm, f_imdl, sim->root_)) {
@@ -1691,7 +1694,7 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
         if (sub_sim->get_mode() == SIM_ROOT)
           abduce_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim, NULL, true);
         else
-          abduce_simulated_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim);
+          abduce_simulated_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim, NULL);
         break;
       default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
         sub_sim->is_requirement_ = true;
@@ -1799,7 +1802,7 @@ void PrimaryMDLController::abduce_imdl(HLPBindingMap *bm, Fact *super_goal, Fact
     Utils::RelativeTime(sub_goal->get_target()->get_after()) << "," << Utils::RelativeTime(sub_goal->get_target()->get_before()) << "]");
 }
 
-void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim) { // goal is f->g->f->object or f->g->|f->object; called concurrently by redcue() and _GMonitor::update().
+void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim, Sim* forwardSimulation) { // goal is f->g->f->object or f->g->|f->object; called concurrently by redcue() and _GMonitor::update().
 
   if (evaluate_bwd_guards(bm)) { // bm may be updated.
 
@@ -1825,8 +1828,7 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
         register_simulated_goal_outcome(super_goal, false, evidence);
         break;
       case MATCH_FAILURE: {
-
-        predict_simulated_evidence(bound_lhs, sim);
+        predict_simulated_evidence(bound_lhs, forwardSimulation ? forwardSimulation : sim);
         f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
 
         Goal *sub_goal = new Goal(bound_lhs, super_goal->get_goal()->get_actor(), sim, 1);
@@ -1879,7 +1881,7 @@ bool PrimaryMDLController::check_imdl(Fact *goal, HLPBindingMap *bm) { // goal i
   }
 }
 
-bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, Controller *root) { // goal is f->g->f->imdl; called by sr-monitors.
+bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, Controller *root, Sim* forwardSimulation) { // goal is f->g->f->imdl; called by sr-monitors.
 
   Goal *g = goal->get_goal();
   Fact *f_imdl = (Fact *)g->get_target();
@@ -1900,7 +1902,7 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, C
     if (evaluate_bwd_guards(bm)) { // bm may be updated.
 
       f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
-      abduce_simulated_lhs(bm, sim->super_goal_, f_imdl, sim->opposite_, f_imdl->get_cfd(), new Sim(sim));
+      abduce_simulated_lhs(bm, sim->super_goal_, f_imdl, sim->opposite_, f_imdl->get_cfd(), new Sim(sim), forwardSimulation);
       return true;
     }
     return false;
