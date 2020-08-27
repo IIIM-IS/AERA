@@ -364,14 +364,20 @@ Simulator
 * Discuss issue: Predict members of simulated future composite states https://github.com/IIIM-IS/replicode/issues/97
   Try making the auto focus controller predict the same fact until the external environment contradicts it.
 
+2020-08-25
+* DONE. Rename sol to solution.
+
 next meeting
 * Review/merge pull request: Copy simulation objects to new requirement https://github.com/IIIM-IS/replicode/pull/100
 * Review/merge pull request: Keep the same abduced sim object in forward simulation. https://github.com/IIIM-IS/replicode/pull/98
+* Try simulator to re repeatedly restart the simulation from the solution under the root.
+  NO. Instead, do backward chaining once, then keep the "deepest goal" during forward chaining:
+  "When the abduction steps stop, predictions are simulated, i.e. they are marked with the solution markers of the goals that 
+   could not be simulated (the deepest goals)."
 
 TODO
-* Try simulator to re repeatedly restart the simulation from the solution under the root.
-* Rename sol to solution.
-* Make pull request: In model builder, remove template variables that are also assigned.
+* How to ensure that stored requirements are from the same simulation branch?
+* Make pull request: In model builder, don't share timestamp variables with template args. (Watch Eric's lecture on pattern matching.)
 * Make pull request: In retrieve_simulated_imdl_fwd, fix is_out_of_range(now).
 * Achieve one command two frames later. Reevaluate problem: Command is commited near the end of the frame and is expected to be executed at beginning of next.
 * In prediction monitor, on failure check again at the end of the predicted period.
