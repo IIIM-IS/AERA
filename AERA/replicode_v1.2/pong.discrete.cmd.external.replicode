@@ -18,7 +18,7 @@ y7:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
 y8:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
 y9:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
 
-!def inject_drive_time 3100000us
+!def inject_drive_time 4000000us
 
 m_run_position:(mdl |[] []
    (fact (mk.val p1 position y1 1) t0: t1: 1 1)
@@ -100,7 +100,7 @@ pgm_inject_drive:(pgm |[]
    (ptn (fact (mk.val p1 essence paddle :) after: before: ::) |[])
 []
    (>= after (+ this.vw.ijt inject_drive_time))
-   (<= after (+ (+ this.vw.ijt inject_drive_time) 50000us))
+   ;(<= after (+ (+ this.vw.ijt inject_drive_time) 50000us))
 []
    (inj []
       ; Delay a little to allow predictions for this sampling period before injecting the drive.

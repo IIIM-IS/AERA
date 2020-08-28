@@ -377,7 +377,7 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
         discretePositionObj_, position_property_, discretePosition_,
         now, now + get_sampling_period());
 
-      const microseconds babbleStopTime(2000000);
+      const microseconds babbleStopTime(3700000);
       const int maxBabblePosition = 9;
       if (now - Utils::GetTimeReference() < babbleStopTime) {
         // Babble.
