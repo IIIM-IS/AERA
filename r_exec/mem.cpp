@@ -484,9 +484,9 @@ void _Mem::runInDiagnosticTime(milliseconds runTime) {
     return;
 
   // The maximum number of reduction jobs to run before trying a time job.
-  // Average job time is 333us. 300 jobs is 100000us, which is the sampling period.
-  // Assume 8 threads (on 4 cores), so allow 300 * 8 = 2400 jobs per cycle.
-  const size_t maxReductionJobsPerCycle = 2400;
+  // Average job time is 10us. 10000 jobs is 100000us, which is the sampling period.
+  // Assume 8 threads (on 4 cores), so allow 10000 * 8 = 80000 jobs per cycle.
+  const size_t maxReductionJobsPerCycle = 80000;
   size_t nReductionJobsThisSamplingPeriod = 0;
   std::vector<P<_ReductionJob>> reductionJobQueue;
   // Use a deque so we can efficiently remove from the front.
@@ -502,7 +502,7 @@ void _Mem::runInDiagnosticTime(milliseconds runTime) {
       break;
 
     // Reduction jobs can add more reduction jobs, so make a few passes.
-    for (int passNumber = 1; passNumber <= 3; ++passNumber) {
+    for (int passNumber = 1; passNumber <= 100; ++passNumber) {
       // Transfer all reduction jobs to a local queue and run only these.
       // Below, we only run one time job, so any extra jobs that these reduction
       // jobs add will be run on the next pass after running the time job.
