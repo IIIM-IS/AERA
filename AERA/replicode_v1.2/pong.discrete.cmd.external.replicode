@@ -100,7 +100,7 @@ pgm_inject_drive:(pgm |[]
    (ptn (fact (mk.val p1 essence paddle :) after: before: ::) |[])
 []
    (>= after (+ this.vw.ijt inject_drive_time))
-   ;(<= after (+ (+ this.vw.ijt inject_drive_time) 50000us))
+   (<= after (+ (+ this.vw.ijt inject_drive_time) 1150000us))
 []
    (inj []
       ; Delay a little to allow predictions for this sampling period before injecting the drive.
