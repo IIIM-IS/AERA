@@ -262,10 +262,16 @@ public:
   MatchResult match_fwd_lenient(const _Fact *f_object, const _Fact *f_pattern); // use for facts when we are lenient about fact vs |fact.
   bool match_fwd_strict(const _Fact *f_object, const _Fact *f_pattern); // use for facts when we need sharp match.
 
-  bool has_fwd_after() const { return fwd_after_index_ >= 0 && map_.size() > fwd_after_index_ &&
-      map_[fwd_after_index_]->get_code() != NULL; }
-  bool has_fwd_before() const { return fwd_before_index_ >= 0 && map_.size() > fwd_before_index_ &&
-      map_[fwd_before_index_]->get_code() != NULL; }
+  /**
+   * Check if the map entry at i is bound to a timestamp.
+   * @return True if it is a timestamp.
+   */
+  bool is_timestamp(uint16 i) const {
+    return i >= 0 && i < map_.size() && map_[i]->get_code() != NULL &&
+      map_[i]->get_code()[0].getDescriptor() == Atom::TIMESTAMP;
+  }
+  bool has_fwd_after() const { return is_timestamp(fwd_after_index_); }
+  bool has_fwd_before() const { return is_timestamp(fwd_before_index_); }
   Timestamp get_fwd_after() const; // assumes the timings are valuated.
   Timestamp get_fwd_before() const; // idem.
 
@@ -319,10 +325,8 @@ public:
   MatchResult match_bwd_lenient(const _Fact *f_object, const _Fact *f_pattern); // use for facts when we are lenient about fact vs |fact.
   bool match_bwd_strict(const _Fact *f_object, const _Fact *f_pattern); // use for facts when we need sharp match.
 
-  bool has_bwd_after() const { return bwd_after_index_ >= 0 && map_.size() > bwd_after_index_ &&
-      map_[bwd_after_index_]->get_code() != NULL; }
-  bool has_bwd_before() const { return bwd_before_index_ >= 0 && map_.size() > bwd_before_index_ &&
-      map_[bwd_before_index_]->get_code() != NULL; }
+  bool has_bwd_after() const { return is_timestamp(bwd_after_index_); }
+  bool has_bwd_before() const { return is_timestamp(bwd_before_index_); }
   Timestamp get_bwd_after() const; // assumes the timings are valuated.
   Timestamp get_bwd_before() const; // idem.
 };
