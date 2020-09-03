@@ -366,20 +366,28 @@ Simulator
 
 2020-08-25
 * DONE. Rename sol to solution.
-
-next meeting
-* Review/merge pull request: Copy simulation objects to new requirement https://github.com/IIIM-IS/replicode/pull/100
-* Review/merge pull request: Keep the same abduced sim object in forward simulation. https://github.com/IIIM-IS/replicode/pull/98
 * Try simulator to re repeatedly restart the simulation from the solution under the root.
   NO. Instead, do backward chaining once, then keep the "deepest goal" during forward chaining:
   "When the abduction steps stop, predictions are simulated, i.e. they are marked with the solution markers of the goals that 
    could not be simulated (the deepest goals)."
 
+2020-09-03
+* DONE. Review/merge pull request for don't reduce sim->get_thz() in simulated backward chaining https://github.com/IIIM-IS/replicode/pull/105
+* Try one command two frames later. Use a goal time interval for "now to end of goal frame"? YES
+
+next meeting
+* Review/merge pull request: Copy simulation objects to new requirement https://github.com/IIIM-IS/replicode/pull/100
+* Review/merge pull request: Keep the same abduced sim object in forward simulation. https://github.com/IIIM-IS/replicode/pull/98
+* Review/merge pull request for super_goal in new Sim https://github.com/IIIM-IS/replicode/pull/106
+
 TODO
+* Try integer positions. It should learn models like position n to n+1.
+* pull request for matchesAnySuperGoal
+* pull request for template timings in abduce_imdl
+* pull request for calling abduce in GMonitor::commit()
 * How to ensure that stored requirements are from the same simulation branch?
 * Make pull request: In model builder, don't share timestamp variables with template args. (Watch Eric's lecture on pattern matching.)
 * Make pull request: In retrieve_simulated_imdl_fwd, fix is_out_of_range(now).
-* Achieve one command two frames later. Reevaluate problem: Command is commited near the end of the frame and is expected to be executed at beginning of next.
 * In prediction monitor, on failure check again at the end of the predicted period.
 * Visualizer: Show model failure.
 * Visualizer: Add an item for prediction reduction, initially hidden.
@@ -391,13 +399,8 @@ TODO
 * Document methods, starting with those related to the simulator.
 * If min_sim_time_horizon > 0, how is the behavior different?
 * In babbling, issue a goal for a position, an "unrelated" speed_x, and move the position there. Is GTPX invoked?
-* Abduce a goal more in the future than the next sampling period. (Need simulation.)
-* Try integer positions. It should learn models like position n to n+1.
 * Decompiler error for VL_PTR in imdl https://github.com/IIIM-IS/replicode/issues/51
-* Why does A/F choose the (fact (cmd ...)) injected by inject_productions over pgm_cmd_move_y_minus?
-* Pull request? for MDLController::retrieve_imdl_bwd:897 Make match_bwd_timings use f_pattern .
 * Treat move commands at the same time step as impulses and have them accumulate?
 * Issue #2: Try to reproduce.
 * Issue #25: Reproduce running in real-time, and see if it happens in diagnostic time.
 * Run pong.2.goal.replicode in real time and reproduce/isolate crash. Post issue. Depends on SYNC_PERIODIC change to SYNC_HOLD.
-* DEFER until design session on temporal strictness: Pull request to offset (fact (cmd)) to allow it to be a cause. https://github.com/IIIM-IS/replicode/pull/59
