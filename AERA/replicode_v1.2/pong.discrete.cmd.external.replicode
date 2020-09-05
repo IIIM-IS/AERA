@@ -57,17 +57,13 @@ start:(pgm |[] |[] |[] []
 1) |[]
 istart:(ipgm start |[] RUN_ONCE sampling_period VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
 
-; This program intercepts an abduced goal to run a command and directly
+; This program intercepts a goal to run a command and directly
 ; calls the command, which will call the override of _Mem::eject().
 pgm_cmd_move_y_plus:(pgm |[]
 []
-   ; This fact repeats periodically. We use it as a "heartbeat".
-   (ptn (fact (mk.val p1 essence paddle :) after: before: ::) |[])
-   (ptn (fact g:(goal (fact (cmd move_y_plus [obj:] ::) c_after: c_before: ::) ::) ::) |[])
+   (ptn (fact g:(goal (fact (cmd move_y_plus [obj:] ::) ::) ::) ::) |[])
 []
    (= (is_sim g) false)
-   (< c_after before)
-   (>= c_after after)
 []
    (prb [1 "print" "cmd move_y_plus..." |[]])
    (cmd move_y_plus [obj] 1)
@@ -75,17 +71,13 @@ pgm_cmd_move_y_plus:(pgm |[]
 i_pgm_cmd_move_y_plus:(ipgm pgm_cmd_move_y_plus |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-; This program intercepts an abduced goal to run a command and directly
+; This program intercepts a goal to run a command and directly
 ; calls the command, which will call the override of _Mem::eject().
 pgm_cmd_move_y_minus:(pgm |[]
 []
-   ; This fact repeats periodically. We use it as a "heartbeat".
-   (ptn (fact (mk.val p1 essence paddle :) after: before: ::) |[])
-   (ptn (fact g:(goal (fact (cmd move_y_minus [obj:] ::) c_after: c_before: ::) ::) ::) |[])
+   (ptn (fact g:(goal (fact (cmd move_y_minus [obj:] ::) ::) ::) ::) |[])
 []
    (= (is_sim g) false)
-   (< c_after before)
-   (>= c_after after)
 []
    (prb [1 "print" "cmd move_y_minus..." |[]])
    (cmd move_y_minus [obj] 1)
