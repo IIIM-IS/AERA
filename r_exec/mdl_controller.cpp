@@ -1782,6 +1782,13 @@ void PrimaryMDLController::abduce_lhs(HLPBindingMap *bm, Fact *super_goal, Fact 
 
 void PrimaryMDLController::abduce_imdl(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim) { // goal is f->g->f->object or f->g->|f->object; called concurrently by redcue() and _GMonitor::update().
 
+  // Use the timestamps in the template parameters from the prerequisite model.
+  // This is to make it symmetric with the timestamp in the forward chaining requirement.
+  Timestamp f_imdl_after, f_imdl_before;
+  if (get_template_timings(bm, f_imdl_after, f_imdl_before)) {
+    Utils::SetTimestamp<Code>(f_imdl, FACT_AFTER, f_imdl_after);
+    Utils::SetTimestamp<Code>(f_imdl, FACT_BEFORE, f_imdl_before);
+  }
   f_imdl->set_cfd(confidence);
 
   Goal *sub_goal = new Goal(f_imdl, super_goal->get_goal()->get_actor(), sim, 1);
@@ -1846,6 +1853,13 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
 
 void PrimaryMDLController::abduce_simulated_imdl(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim) { // goal is f->g->f->object or f->g->|f->object; called concurrently by redcue() and _GMonitor::update().
 
+  // Use the timestamps in the template parameters from the prerequisite model.
+  // This is to make it symmetric with the timestamp in the forward chaining requirement.
+  Timestamp f_imdl_after, f_imdl_before;
+  if (get_template_timings(bm, f_imdl_after, f_imdl_before)) {
+    Utils::SetTimestamp<Code>(f_imdl, FACT_AFTER, f_imdl_after);
+    Utils::SetTimestamp<Code>(f_imdl, FACT_BEFORE, f_imdl_before);
+  }
   f_imdl->set_cfd(confidence);
 
   Goal *sub_goal = new Goal(f_imdl, super_goal->get_goal()->get_actor(), sim, 1);
@@ -2243,6 +2257,47 @@ bool PrimaryMDLController::abduction_allowed(HLPBindingMap *bm) { // true if fwd
     return false;
   if (!HLPOverlay::ScanBWDGuards(this, bm))
     return false;
+  return true;
+}
+
+bool PrimaryMDLController::get_template_timings(HLPBindingMap *bm, Timestamp& after, Timestamp& before) {
+  // Find the variable indexes of the last two template parameters.
+  Code* model = get_core_object();
+  auto template_set_index = model->code(MDL_TPL_ARGS).asIndex();
+  auto template_set_count = model->code(template_set_index).getAtomCount();
+  if (template_set_count < 2)
+    // Not enough template parameters.
+    return false;
+  auto after_code_index = template_set_index + (template_set_count - 1);
+  auto before_code_index = template_set_index + template_set_count;
+  if (model->code(after_code_index).getDescriptor() != Atom::VL_PTR ||
+      model->code(before_code_index).getDescriptor() != Atom::VL_PTR)
+    // Parameters are not variables.
+    return false;
+  auto after_map_index = model->code(after_code_index).asIndex();
+  auto before_map_index = model->code(before_code_index).asIndex();
+
+  if (bm->get_code(after_map_index) != NULL && bm->get_code(before_map_index) != NULL) {
+    // The map entries are already evaluated, so check now.
+
+    if (!bm->is_timestamp(after_map_index) || !bm->is_timestamp(before_map_index))
+      // They are not timestamps.
+      return false;
+    after = Utils::GetTimestamp(bm->get_code(after_map_index));
+    before = Utils::GetTimestamp(bm->get_code(before_map_index));
+    return true;
+  }
+
+  // Make a copy of the binding map and evaluate to backward guards.
+  P<HLPBindingMap> bm_copy = new HLPBindingMap(bm);
+  if (!evaluate_bwd_guards(bm_copy))
+    return false;
+
+  if (!bm_copy->is_timestamp(after_map_index) || !bm_copy->is_timestamp(before_map_index))
+    // They are still not timestamps.
+    return false;
+  after = Utils::GetTimestamp(bm_copy->get_code(after_map_index));
+  before = Utils::GetTimestamp(bm_copy->get_code(before_map_index));
   return true;
 }
 
