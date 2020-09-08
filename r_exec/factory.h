@@ -223,6 +223,13 @@ public:
     return std::chrono::duration_cast<std::chrono::microseconds>(r_code::Utils::GetTimestamp<Code>(this, SIM_THZ).time_since_epoch());
   }
 
+  /**
+   * Check if obj matches the target of any super goal, recursively following the chain of Sim objects up to
+   * the root.
+   * @return True if obj matches any super goal.
+   */
+  bool matchesAnySuperGoal(const Code* obj);
+
   bool is_requirement_;
 
   bool opposite_; // of the goal the sim is attached to, i.e. the result of the match during controller->reduce(); the confidence is in the goal target.
