@@ -507,6 +507,10 @@ bool Group::load(View *view, Code *object) {
     c->set_secondary_host(get_secondary_group());
     if (is_active_pgm(view))
       c->gain_activation();
+#ifdef WITH_DEBUG_OID
+    OUTPUT_LINE(MDL_OUT, "load cst " << view->object_->get_oid() <<
+      ", CSTController(" + to_string(c->get_debug_oid()) + ")");
+#endif
     break;
   }case Atom::MODEL: {
     ipgm_views_[view->get_oid()] = view;
@@ -521,6 +525,10 @@ bool Group::load(View *view, Code *object) {
     }
     if (is_active_pgm(view))
       c->gain_activation();
+#ifdef WITH_DEBUG_OID
+    OUTPUT_LINE(MDL_OUT, "load mdl " << view->object_->get_oid() << 
+      ", MDLController(" + to_string(c->get_debug_oid()) + ")");
+#endif
     break;
   }case Atom::MARKER: // populate the marker set of the referenced objects.
     for (uint32 i = 0; i < object->references_size(); ++i)
