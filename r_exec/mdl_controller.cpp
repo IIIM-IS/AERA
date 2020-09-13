@@ -200,9 +200,9 @@ Overlay *PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController
 
 bool PrimaryMDLOverlay::check_simulated_chaining(HLPBindingMap *bm, Fact *f_imdl, Pred *prediction) {
 
-  for (uint32 i = 0; i < prediction->simulations_.size(); ++i) {
+  for (uint32 i = 0; i < prediction->get_simulations_size(); ++i) {
 
-    switch (((MDLController *)controller_)->retrieve_simulated_imdl_fwd(bm, f_imdl, prediction->simulations_[i]->root_)) {
+    switch (((MDLController *)controller_)->retrieve_simulated_imdl_fwd(bm, f_imdl, prediction->get_simulation(i)->root_)) {
     case NO_REQUIREMENT:
     case WEAK_REQUIREMENT_ENABLED:
       return true;
@@ -1342,10 +1342,7 @@ void TopLevelMDLController::register_simulated_goal_outcome(Fact *goal, bool suc
   else
     f_success_object = new AntiFact(success_object, now, now, confidence, 1);
 
-  Pred *pred = new Pred(f_success_object, 1);
-  for (uint16 i = 0; i < evidence_pred->simulations_.size(); ++i)
-    pred->simulations_.push_back(evidence_pred->simulations_[i]);
-
+  Pred *pred = new Pred(f_success_object, evidence_pred, 1);
   Fact *f_pred = new Fact(pred, now, now, 1, 1);
 
   Group *primary_host = get_host();
@@ -1452,7 +1449,11 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
 
   bound_rhs->set_cfd(confidence);
 
-  Pred *pred = new Pred(bound_rhs, 1);
+  Pred *pred;
+  if (is_simulation)
+    pred = new Pred(bound_rhs, prediction, 1);
+  else
+    pred = new Pred(bound_rhs, 1);
   auto now = Now();
   Fact *production = new Fact(pred, now, now, 1, 1);
 
@@ -1468,11 +1469,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
     if (is_invalidated())
       // Another thread has invalidated this controller which clears the controllers.
       return;
-    if (is_simulation) {
-      // Copy the simulation, the same as below for a non-requirement prediction.
-      for (uint16 i = 0; i < prediction->simulations_.size(); ++i)
-        pred->simulations_.push_back(prediction->simulations_[i]);
-    }
+    // In the Pred constructor, we already copied the simulations from prediction.
     PrimaryMDLController *c = (PrimaryMDLController *)controllers_[RHSController]; // rhs controller: in the same view.
     c->store_requirement(production, this, chaining_was_allowed, is_simulation); // if not simulation, stores also in the secondary controller.
 #ifdef WITH_DEBUG_OID
@@ -1535,8 +1532,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
     }
   } else { // no monitoring for simulated predictions.
 
-    for (uint16 i = 0; i < prediction->simulations_.size(); ++i)
-      pred->simulations_.push_back(prediction->simulations_[i]);
+    // In the Pred constructor, we already copied the simulations from prediction.
     HLPController::inject_prediction(production, confidence); // inject a simulated prediction in the primary group.
   }
 }
@@ -1925,8 +1921,7 @@ inline void PrimaryMDLController::predict_simulated_lhs(HLPBindingMap *bm, bool 
 
 inline void PrimaryMDLController::predict_simulated_evidence(_Fact *evidence, Sim *sim) {
 
-  Pred *pred = new Pred(evidence, 1);
-  pred->simulations_.push_back(sim);
+  Pred *pred = new Pred(evidence, sim, 1);
 
   auto now = Now();
   inject_simulation(new Fact(pred, now, now, 1, 1));

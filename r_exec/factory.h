@@ -276,7 +276,43 @@ class r_exec_dll Pred :
 public:
   Pred();
   Pred(r_code::SysObject *source);
-  Pred(_Fact *target, float32 psln_thr);
+  /**
+   * Create a Pred with the given values.
+   * \param target The prediction target.
+   * \param simulations Copy the list of simulations.
+   * \param psln_thr The propagation of saliency threshold.
+   */
+  Pred(_Fact *target, const std::vector<P<Sim> >& simulations, float32 psln_thr) : LObject() {
+    construct(target, simulations, psln_thr);
+  }
+  /**
+   * Create a Pred with the given values and no simulations.
+   * \param target The prediction target.
+   * \param psln_thr The propagation of saliency threshold.
+   */
+  Pred(_Fact *target, float32 psln_thr) : LObject() {
+    construct(target, std::vector<P<Sim>>(), psln_thr);
+  }
+  /**
+   * Create a Pred with the given values.
+   * \param target The prediction target.
+   * \param sim The one simulation for the list of simulations.
+   * \param psln_thr The propagation of saliency threshold.
+   */
+  Pred(_Fact *target, Sim* sim, float32 psln_thr) : LObject() {
+    std::vector<P<Sim>> simulations;
+    simulations.push_back(sim);
+    construct(target, simulations, psln_thr);
+  }
+  /**
+   * Create a Pred with the given values.
+   * \param target The prediction target.
+   * \param simulations_source The Pred with the list of simulations to copy.
+   * \param psln_thr The propagation of saliency threshold.
+   */
+  Pred(_Fact *target, const Pred* simulations_source, float32 psln_thr) : LObject() {
+    construct(target, simulations_source->simulations_, psln_thr);
+  }
 
   bool is_invalidated();
   bool grounds_invalidated(_Fact *evidence);
@@ -284,9 +320,21 @@ public:
   _Fact *get_target() const { return (_Fact *)get_reference(0); }
 
   std::vector<P<_Fact> > grounds_; // f1->obj; predictions that were used to build this predictions (i.e. antecedents); empty if simulated.
-  std::vector<P<Sim> > simulations_;
 
   bool is_simulation() const { return simulations_.size() > 0; }
+
+  /**
+   * Get the size of the list of simulations.
+   * \return The size of the list of simulations.
+   */
+  size_t get_simulations_size() const { return simulations_.size(); }
+
+  /**
+   * Get the simulation in the list of simulations at index i.
+   * \param i The index of the simulation, from 0 to   get_simulations_size() - 1.
+   * \return The simulation at index i.
+   */
+  Sim* get_simulation(uint16 i) const { return simulations_[i]; }
 
   /**
    * Get the simulation whose root is the given root Controller.
@@ -294,6 +342,11 @@ public:
    * \return The simulation with the root, or NULL if not found.
    */
   Sim *get_simulation(Controller *root) const;
+
+private:
+  void construct(_Fact *target, const std::vector<P<Sim> >& simulations, float32 psln_thr);
+
+  std::vector<P<Sim> > simulations_;
 };
 
 class r_exec_dll Goal :

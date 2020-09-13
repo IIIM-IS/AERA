@@ -167,11 +167,13 @@ void CSTOverlay::inject_production() {
     }
   } else { // there are simulations; the production is therefore a prediction; add the simulations to the latter.
 
-    Pred *prediction = new Pred(f_icst, 1);
+    // Make a temporary copy of simulations_ for calling the Pred constructor.
+    std::vector<P<Sim>> simulations_copy;
+    for (auto sim = simulations_.begin(); sim != simulations_.end(); ++sim)
+      simulations_copy.push_back(*sim);
+    // Add the simulations to the prediction.
+    Pred *prediction = new Pred(f_icst, simulations_copy, 1);
     Fact *f_p_f_icst = new Fact(prediction, now, now, 1, 1);
-    UNORDERED_SET<P<Sim>, PHash<Sim> >::const_iterator sim;
-    for (sim = simulations_.begin(); sim != simulations_.end(); ++sim) // add simulations to the prediction.
-      prediction->simulations_.push_back(*sim);
     ((HLPController *)controller_)->inject_prediction(f_p_f_icst, lowest_cfd_); // inject a simulated prediction in the main group.
   }
 }
@@ -202,8 +204,8 @@ void CSTOverlay::update(HLPBindingMap *map, _Fact *input, _Fact *bound_pattern) 
     last_cfd = prediction->get_target()->get_cfd();
     if (prediction->is_simulation()) {
 
-      for (uint16 i = 0; i < prediction->simulations_.size(); ++i)
-        simulations_.insert(prediction->simulations_[i]);
+      for (uint16 i = 0; i < prediction->get_simulations_size(); ++i)
+        simulations_.insert(prediction->get_simulation(i));
     } else
       predictions_.insert(input);
   } else

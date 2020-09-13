@@ -512,10 +512,12 @@ Pred::Pred() : LObject() {
 Pred::Pred(SysObject *source) : LObject(source) {
 }
 
-Pred::Pred(_Fact *target, float32 psln_thr) : LObject() {
+void Pred::construct(_Fact *target, const std::vector<P<Sim> >& simulations, float32 psln_thr) {
 
   code(0) = Atom::Object(Opcodes::Pred, PRED_ARITY);
   code(PRED_TARGET) = Atom::RPointer(0);
+  for (auto i = 0; i < simulations.size(); ++i)
+    simulations_.push_back(simulations[i]);
   code(PRED_ARITY) = Atom::Float(psln_thr);
   add_reference(target);
 }
