@@ -526,9 +526,9 @@ bool Pred::is_invalidated() {
 
   if (LObject::is_invalidated())
     return true;
-  for (uint32 i = 0; i < simulations_.size(); ++i) {
+  for (uint16 i = 0; i < get_simulations_size(); ++i) {
 
-    if (simulations_[i]->is_invalidated()) {
+    if (get_simulation(i)->is_invalidated()) {
 
       invalidate();
       return true;
@@ -566,10 +566,11 @@ bool Pred::grounds_invalidated(_Fact *evidence) {
 
 Sim *Pred::get_simulation(Controller *root) const {
 
-  for (uint32 i = 0; i < simulations_.size(); ++i) {
+  for (uint16 i = 0; i < get_simulations_size(); ++i) {
 
-    if (simulations_[i]->root_ == root)
-      return simulations_[i];
+    auto sim = get_simulation(i);
+    if (sim->root_ == root)
+      return sim;
   }
 
   return NULL;
