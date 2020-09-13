@@ -1468,6 +1468,11 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
     if (is_invalidated())
       // Another thread has invalidated this controller which clears the controllers.
       return;
+    if (is_simulation) {
+      // Copy the simulation, the same as below for a non-requirement prediction.
+      for (uint16 i = 0; i < prediction->simulations_.size(); ++i)
+        pred->simulations_.push_back(prediction->simulations_[i]);
+    }
     PrimaryMDLController *c = (PrimaryMDLController *)controllers_[RHSController]; // rhs controller: in the same view.
     c->store_requirement(production, this, chaining_was_allowed, is_simulation); // if not simulation, stores also in the secondary controller.
 #ifdef WITH_DEBUG_OID
