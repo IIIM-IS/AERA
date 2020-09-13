@@ -287,7 +287,13 @@ public:
   std::vector<P<Sim> > simulations_;
 
   bool is_simulation() const { return simulations_.size() > 0; }
-  Sim *get_simulation(Controller *root) const; // return true if there is a simulation for the goal.
+
+  /**
+   * Get the simulation whose root is the given root Controller.
+   * \param root The root Controller to search for.
+   * \return The simulation with the root, or NULL if not found.
+   */
+  Sim *get_simulation(Controller *root) const;
 };
 
 class r_exec_dll Goal :
