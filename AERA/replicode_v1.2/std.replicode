@@ -53,7 +53,7 @@
 !class (mdl (_obj {tpl_args:[] objs:[] fwd_guards:[] bwd_guards:[] out_grps:[::grp] str:nb cnt:nb sr:nb dsr:nb}))
 !class (icst (_obj {cst:cst tpl_args:[] args:[] wr_e:bl}))
 !class (imdl (_obj {mdl:mdl tpl_args:[] args:[] wr_e:bl}))
-!class (pred (_obj {obj:}))
+!class (pred (_obj {obj: sims:[::sim]}))
 !class (goal (_obj {obj: actr:ent sim:}))
 !class (success (_obj {obj: evd:}))
 !class (mk.grp_pair (_obj {primary:grp secondary:grp}))
