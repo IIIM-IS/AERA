@@ -236,7 +236,8 @@
 
 
 #define PRED_TARGET 1
-#define PRED_ARITY 2
+#define PRED_SIMS 2
+#define PRED_ARITY 3
 
 #define PRED_TARGET_REF 0
 
