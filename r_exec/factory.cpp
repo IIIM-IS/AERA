@@ -676,6 +676,20 @@ bool Sim::is_invalidated() {
   return false;
 }
 
+bool Sim::matchesAnySuperGoal(const Code* obj) {
+  if (get_mode() == SIM_ROOT)
+    // The super goal of the ROOT Sim is the drive, so stop checking here.
+    return false;
+
+  Goal* super_goal_goal = super_goal_->get_goal();
+  if (_Fact::MatchObject(obj, super_goal_goal->get_reference(0)->get_reference(0)))
+    return true;
+
+  // Recurse.
+  return super_goal_goal->get_sim()->matchesAnySuperGoal(obj);
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 MkRdx::MkRdx() : LObject(), bindings_(NULL) {
