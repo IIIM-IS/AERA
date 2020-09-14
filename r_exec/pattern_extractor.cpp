@@ -379,12 +379,12 @@ Code *_TPX::build_cst(const std::vector<Component> &components, BindingMap *bm, 
   return cst;
 }
 
-Code *_TPX::build_mdl_head(HLPBindingMap *bm, uint16 tpl_arg_count, _Fact *lhs, _Fact *rhs, uint16 &write_index) {
+Code *_TPX::build_mdl_head(HLPBindingMap *bm, uint16 tpl_arg_count, _Fact *lhs, _Fact *rhs, uint16 &write_index, bool allow_shared_timing_vars) {
 
   Code *mdl = _Mem::Get()->build_object(Atom::Model(Opcodes::Mdl, MDL_ARITY));
 
-  mdl->add_reference(bm->abstract_object(lhs, false)); // reference lhs.
-  mdl->add_reference(bm->abstract_object(rhs, false)); // reference rhs.
+  mdl->add_reference(bm->abstract_object(lhs, false, allow_shared_timing_vars)); // reference lhs.
+  mdl->add_reference(bm->abstract_object(rhs, false, allow_shared_timing_vars)); // reference rhs.
 
   write_index = MDL_ARITY;
 
@@ -972,7 +972,8 @@ bool CTPX::build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builde
   bm->init(target_, FACT_BEFORE);
 
   uint16 write_index;
-  P<Code> m0 = build_mdl_head(bm, 3, cause, consequent, write_index);
+  // Set allow_shared_timing_vars false. See BindingMap::abstract_fact .
+  P<Code> m0 = build_mdl_head(bm, 3, cause, consequent, write_index, false);
   guard_builder->build(m0, NULL, cause, write_index);
   build_mdl_tail(m0, write_index);
   //std::cout<<Utils::RelativeTime(Now())<<" found --------------------- M0\n";
