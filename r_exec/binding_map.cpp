@@ -465,7 +465,7 @@ Code *BindingMap::abstract_object(Code *object, bool force_sync) { // abstract v
   return abstracted_object;
 }
 
-void BindingMap::abstract_member(Code *object, uint16 index, Code *abstracted_object, uint16 write_index, uint16 &extent_index) {
+void BindingMap::abstract_member(Code *object, uint16 index, Code *abstracted_object, uint16 write_index, uint16 &extent_index, bool allow_shared_variable) {
 
   Atom a = object->code(index);
   uint16 ai = a.asIndex();
@@ -494,9 +494,9 @@ void BindingMap::abstract_member(Code *object, uint16 index, Code *abstracted_ob
       uint16 _write_index = extent_index;
       extent_index += element_count + 1;
       for (uint16 i = 1; i <= element_count; ++i)
-        abstract_member(object, ai + i, abstracted_object, _write_index + i, extent_index);
+        abstract_member(object, ai + i, abstracted_object, _write_index + i, extent_index, allow_shared_variable);
     } else
-      abstracted_object->code(write_index) = get_structure_variable(object, ai);
+      abstracted_object->code(write_index) = get_structure_variable(object, ai, allow_shared_variable);
     break;
   default:
     abstracted_object->code(write_index) = get_atom_variable(a);
@@ -533,12 +533,14 @@ Atom BindingMap::get_atom_variable(Atom a) {
   return Atom::VLPointer(size);
 }
 
-Atom BindingMap::get_structure_variable(Code *object, uint16 index) {
+Atom BindingMap::get_structure_variable(Code *object, uint16 index, bool allow_shared_variable) {
 
-  for (uint32 i = 0; i < map_.size(); ++i) {
+  if (allow_shared_variable) {
+    for (uint32 i = 0; i < map_.size(); ++i) {
 
-    if (map_[i]->contains(&object->code(index)))
-      return Atom::VLPointer(i);
+      if (map_[i]->contains(&object->code(index)))
+        return Atom::VLPointer(i);
+    }
   }
 
   uint32 size = map_.size();
