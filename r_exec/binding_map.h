@@ -264,8 +264,16 @@ public:
   void init(r_code::Code *object, uint16 index);
 
   _Fact *abstract_f_ihlp(_Fact *fact) const; // for icst and imdl.
-  _Fact *abstract_fact(_Fact *fact, _Fact *original, bool force_sync);
-  r_code::Code *abstract_object(r_code::Code *object, bool force_sync);
+
+  /**
+   * Fill in the fresh fact object as an abstract copy of the original fact, creating new bindings as needed.
+   * \param fact A fresh Fact or AntiFact object.
+   * \param original The original object to copy.
+   * \param allow_shared_timing_vars (optional) Use this for allow_shared_variable when calling
+   * abstract_member() for the fact's timing values. If omitted, use true.
+   */
+  _Fact *abstract_fact(_Fact *fact, _Fact *original, bool force_sync, bool allow_shared_timing_vars = true);
+  r_code::Code *abstract_object(r_code::Code *object, bool force_sync, bool allow_shared_timing_vars = true);
 
   void reset_fwd_timings(_Fact *reference_fact); // reset after and before from the timings of the reference object.
 
