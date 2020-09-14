@@ -1672,7 +1672,7 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
       break;
     case SIM_OPTIONAL:
     case SIM_MANDATORY:
-      sub_sim = new Sim(sim->get_mode(), sim_thz, sim->super_goal_, opposite, sim->root_, 1, sim->solution_controller_, sim->solution_cfd_, sim->solution_before_);
+      sub_sim = new Sim(sim->get_mode(), sim_thz, super_goal, opposite, sim->root_, 1, sim->solution_controller_, sim->solution_cfd_, sim->solution_before_);
       break;
     }
 
