@@ -236,9 +236,19 @@ protected:
   bool match_fwd_timings(const _Fact *f_object, const _Fact *f_pattern);
   bool match(const r_code::Code *object, uint16 o_base_index, uint16 o_index, const r_code::Code *pattern, uint16 p_index, uint16 o_arity);
 
-  void abstract_member(r_code::Code *object, uint16 index, r_code::Code *abstracted_object, uint16 write_index, uint16 &extent_index);
+  void abstract_member(r_code::Code *object, uint16 index, r_code::Code *abstracted_object, uint16 write_index, uint16 &extent_index, bool allow_shared_variable = true);
   Atom get_atom_variable(Atom a);
-  Atom get_structure_variable(r_code::Code *object, uint16 index);
+
+  /**
+   * Get a VLPointer for the structre at object->code(index), adding a new binding if needed.
+   * \param object The code with the structure.
+   * \param index The index in the object code of the structure.
+   * \param allow_shared_variable (optional) If true then check if the bindings already contains the structure and
+   * return a VLPointer to the binding index if found. If false, then always add the structure as a new binding.
+   * If omitted, then use true.
+   * \return A VLPointer to the index in the bindings of the structure (possible of a new binding).
+   */
+  Atom get_structure_variable(r_code::Code *object, uint16 index, bool allow_shared_variable = true);
   Atom get_object_variable(r_code::Code *object);
 public:
   BindingMap();
@@ -254,8 +264,16 @@ public:
   void init(r_code::Code *object, uint16 index);
 
   _Fact *abstract_f_ihlp(_Fact *fact) const; // for icst and imdl.
-  _Fact *abstract_fact(_Fact *fact, _Fact *original, bool force_sync);
-  r_code::Code *abstract_object(r_code::Code *object, bool force_sync);
+
+  /**
+   * Fill in the fresh fact object as an abstract copy of the original fact, creating new bindings as needed.
+   * \param fact A fresh Fact or AntiFact object.
+   * \param original The original object to copy.
+   * \param allow_shared_timing_vars (optional) Use this for allow_shared_variable when calling
+   * abstract_member() for the fact's timing values. If omitted, use true.
+   */
+  _Fact *abstract_fact(_Fact *fact, _Fact *original, bool force_sync, bool allow_shared_timing_vars = true);
+  r_code::Code *abstract_object(r_code::Code *object, bool force_sync, bool allow_shared_timing_vars = true);
 
   void reset_fwd_timings(_Fact *reference_fact); // reset after and before from the timings of the reference object.
 

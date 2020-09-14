@@ -398,7 +398,7 @@ _Fact *BindingMap::abstract_f_ihlp(_Fact *f_ihlp) const { // bindings are set al
   return _f_ihlp;
 }
 
-_Fact *BindingMap::abstract_fact(_Fact *fact, _Fact *original, bool force_sync) { // abstract values as they are encountered.
+_Fact *BindingMap::abstract_fact(_Fact *fact, _Fact *original, bool force_sync, bool allow_shared_timing_vars) { // abstract values as they are encountered.
 
   if (fwd_after_index_ == -1)
     first_index_ = map_.size();
@@ -411,8 +411,8 @@ _Fact *BindingMap::abstract_fact(_Fact *fact, _Fact *original, bool force_sync) 
     fact->code(FACT_BEFORE) = Atom::VLPointer(fwd_before_index_);
   } else {
 
-    abstract_member(original, FACT_AFTER, fact, FACT_AFTER, extent_index);
-    abstract_member(original, FACT_BEFORE, fact, FACT_BEFORE, extent_index);
+    abstract_member(original, FACT_AFTER, fact, FACT_AFTER, extent_index, allow_shared_timing_vars);
+    abstract_member(original, FACT_BEFORE, fact, FACT_BEFORE, extent_index, allow_shared_timing_vars);
   }
   fact->code(FACT_CFD) = Atom::Wildcard();
   fact->code(FACT_ARITY) = Atom::Wildcard();
@@ -427,15 +427,15 @@ _Fact *BindingMap::abstract_fact(_Fact *fact, _Fact *original, bool force_sync) 
   return fact;
 }
 
-Code *BindingMap::abstract_object(Code *object, bool force_sync) { // abstract values as they are encountered.
+Code *BindingMap::abstract_object(Code *object, bool force_sync, bool allow_shared_timing_vars) { // abstract values as they are encountered.
 
   Code *abstracted_object = NULL;
 
   uint16 opcode = object->code(0).asOpcode();
   if (opcode == Opcodes::Fact)
-    return abstract_fact(new Fact(), (_Fact *)object, force_sync);
+    return abstract_fact(new Fact(), (_Fact *)object, force_sync, allow_shared_timing_vars);
   else if (opcode == Opcodes::AntiFact)
-    return abstract_fact(new AntiFact(), (_Fact *)object, force_sync);
+    return abstract_fact(new AntiFact(), (_Fact *)object, force_sync, allow_shared_timing_vars);
   else if (opcode == Opcodes::Cmd) {
 
     uint16 extent_index = CMD_ARITY + 1;
@@ -457,7 +457,8 @@ Code *BindingMap::abstract_object(Code *object, bool force_sync) { // abstract v
     abstracted_object = _Mem::Get()->build_object(object->code(0));
     abstract_member(object, I_HLP_OBJ, abstracted_object, I_HLP_OBJ, extent_index);
     abstract_member(object, I_HLP_TPL_ARGS, abstracted_object, I_HLP_TPL_ARGS, extent_index);
-    abstract_member(object, I_HLP_EXPOSED_ARGS, abstracted_object, I_HLP_EXPOSED_ARGS, extent_index);
+    // Set allow_shared_variable false because exposed args are "output values" which can't be assume to be the same as other values.
+    abstract_member(object, I_HLP_EXPOSED_ARGS, abstracted_object, I_HLP_EXPOSED_ARGS, extent_index, false);
     abstracted_object->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Wildcard();
     abstracted_object->code(I_HLP_ARITY) = Atom::Wildcard();
   } else
@@ -465,7 +466,7 @@ Code *BindingMap::abstract_object(Code *object, bool force_sync) { // abstract v
   return abstracted_object;
 }
 
-void BindingMap::abstract_member(Code *object, uint16 index, Code *abstracted_object, uint16 write_index, uint16 &extent_index) {
+void BindingMap::abstract_member(Code *object, uint16 index, Code *abstracted_object, uint16 write_index, uint16 &extent_index, bool allow_shared_variable) {
 
   Atom a = object->code(index);
   uint16 ai = a.asIndex();
@@ -494,9 +495,9 @@ void BindingMap::abstract_member(Code *object, uint16 index, Code *abstracted_ob
       uint16 _write_index = extent_index;
       extent_index += element_count + 1;
       for (uint16 i = 1; i <= element_count; ++i)
-        abstract_member(object, ai + i, abstracted_object, _write_index + i, extent_index);
+        abstract_member(object, ai + i, abstracted_object, _write_index + i, extent_index, allow_shared_variable);
     } else
-      abstracted_object->code(write_index) = get_structure_variable(object, ai);
+      abstracted_object->code(write_index) = get_structure_variable(object, ai, allow_shared_variable);
     break;
   default:
     abstracted_object->code(write_index) = get_atom_variable(a);
@@ -533,12 +534,14 @@ Atom BindingMap::get_atom_variable(Atom a) {
   return Atom::VLPointer(size);
 }
 
-Atom BindingMap::get_structure_variable(Code *object, uint16 index) {
+Atom BindingMap::get_structure_variable(Code *object, uint16 index, bool allow_shared_variable) {
 
-  for (uint32 i = 0; i < map_.size(); ++i) {
+  if (allow_shared_variable) {
+    for (uint32 i = 0; i < map_.size(); ++i) {
 
-    if (map_[i]->contains(&object->code(index)))
-      return Atom::VLPointer(i);
+      if (map_[i]->contains(&object->code(index)))
+        return Atom::VLPointer(i);
+    }
   }
 
   uint32 size = map_.size();

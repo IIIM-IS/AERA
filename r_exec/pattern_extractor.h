@@ -189,7 +189,7 @@ protected:
   _Fact *find_f_icst(_Fact *component, uint16 &component_index, r_code::Code *&cst);
   r_code::Code *build_cst(const std::vector<Component> &components, BindingMap *bm, _Fact *main_component);
 
-  r_code::Code *build_mdl_head(HLPBindingMap *bm, uint16 tpl_arg_count, _Fact *lhs, _Fact *rhs, uint16 &write_index);
+  r_code::Code *build_mdl_head(HLPBindingMap *bm, uint16 tpl_arg_count, _Fact *lhs, _Fact *rhs, uint16 &write_index, bool allow_shared_timing_vars = true);
   void build_mdl_tail(r_code::Code *mdl, uint16 write_index);
 
   void inject_hlps() const;
