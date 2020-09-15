@@ -270,7 +270,8 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
     //} else{
     // std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" "<<std::hex<<this<<std::dec<<" ("<<Time::ToString_seconds(match_deadline-Utils::GetTimeReference())<<") ";
     //}
-    if (patterns_.size() == 1) { // last match.
+    // Debug: If simulating then make the icst after matching one member, as a temporary solution to https://github.com/IIIM-IS/replicode/issues/97
+    if (is_simulation || patterns_.size() == 1) { // last match.
 
       if (!code_) {
 
@@ -294,10 +295,12 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
         }
       } else { // guards already evaluated, full match.
 //std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" full match\n";
+        // Debug: If simulating then make the icst after matching one member, as a temporary solution to https://github.com/IIIM-IS/replicode/issues/97
+        if (is_simulation) offspring = new CSTOverlay(this); else offspring = NULL;
         update(bm, (_Fact *)input->object_, bound_pattern);
-        if (inputs_.size() == original_patterns_size_) inject_production();
+        // Debug: If simulating then make the icst after matching one member, as a temporary solution to https://github.com/IIIM-IS/replicode/issues/97
+        if (is_simulation || inputs_.size() == original_patterns_size_) inject_production();
         invalidate();
-        offspring = NULL;
         store_evidence(input->object_, prediction, is_simulation);
         return true;
       }
