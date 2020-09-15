@@ -1835,12 +1835,52 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
         register_simulated_goal_outcome(super_goal, false, evidence);
         break;
       case MATCH_FAILURE: {
-        predict_simulated_evidence(bound_lhs, forwardSimulation ? forwardSimulation : sim);
+
+        if (forwardSimulation) {
+          // Keep simulating forward. Don't loop by abducing the LHS as a goal again.
+          predict_simulated_evidence(bound_lhs, forwardSimulation);
+          break;
+        }
+
+        auto now = Now();
+        if (sim && sim->get_thz() != seconds(0)) {
+          // We are simulating.
+          // TODO: If we have reached the time horizon for simulated backward chaining, start forward chaining.
+
+          if (is_cmd()) {
+            // The LHS is a command, so stop the backward chaining and start forward chaining to predict.
+            // Create a new simulation which will be carried throughout forward chaining until (if) we reach the drive goal.
+            // Use this as the simulation's solution_controller so that, if we commit to this solution, then we 
+            // will abduce the LHS to execute the command.
+            // TODO: Also start simulated forward chaining if we passed the time horizon for simulated backward chaining.
+            predict_simulated_evidence(bound_lhs, new Sim(
+              sim->get_mode(), sim->get_thz(), super_goal, opposite, sim->root_, 1, this, sim->solution_cfd_,
+              sim->solution_before_));
+            break;
+          }
+          else if (super_goal->get_goal()->is_requirement()) {
+            // Turn the simulated imdl goal into a requirement and add it to the model which abduced the imdl goal.
+            // This requirement will be matched later by simulated forward chaining.
+            _Fact* rhs_f_imdl = (_Fact*)super_goal->get_goal()->get_reference(0);
+            Pred *rhs_pred_f_imdl = new Pred(rhs_f_imdl, sim, 1);
+            Fact *rhs_f_pred_f_imdl = new Fact(rhs_pred_f_imdl, now, now, 1, 1);
+            PrimaryMDLController *c = (PrimaryMDLController *)controllers_[RHSController];
+            // Call _store_requirement instead of store_requirement because we don't want to signal the
+            // matching of a requirement. This will be done during simulated forward chaining.
+            RequirementEntry e(rhs_f_pred_f_imdl, this, true);
+            c->_store_requirement(&c->simulated_requirements_.positive_evidences, e);
+#ifdef WITH_DEBUG_OID
+            OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " -> fact (" << rhs_f_pred_f_imdl->get_debug_oid() << ") pred fact (" <<
+              rhs_f_imdl->get_debug_oid() << ") imdl mdl " << rhs_f_imdl->get_reference(0)->get_reference(0)->get_oid());
+#endif
+            // Continue below to abduce the LHS.
+          }
+        }
+
         f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
 
         Goal *sub_goal = new Goal(bound_lhs, super_goal->get_goal()->get_actor(), sim, 1);
 
-        auto now = Now();
         Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
 
         add_g_monitor(new SGMonitor(this, bm, now + sim->get_thz(), f_sub_goal, f_imdl));
