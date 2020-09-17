@@ -542,8 +542,12 @@ bool SRMonitor::signal(bool is_simulation, Sim* forwardSimulation) {
 
   if (is_simulation) {
 
-    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_, target_->get_goal()->get_sim()->root_, forwardSimulation))
+    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_, target_->get_goal()->get_sim()->root_, forwardSimulation)) {
       ((PMDLController *)controller_)->register_simulated_goal_outcome(target_, true, target_); // report a simulated success.
+      // check_simulated_imdl did an abduction, so return true to remove this monitor. Otherwise it will do the same
+      // abduction again and cause a loop.
+      return true;
+    }
   } else {
 
     if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_, NULL, NULL))
