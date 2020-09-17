@@ -1726,6 +1726,26 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
   }
 }
 
+void PrimaryMDLController::abduce_no_simulation(Fact *f_super_goal, bool opposite, float32 confidence)
+{
+  // Imitate PrimaryMDLController::reduce to set up the binding map.
+  _Fact *goal_target = f_super_goal->get_goal()->get_target();
+  P<HLPBindingMap> bm = new HLPBindingMap(bindings_);
+  bm->reset_bwd_timings(goal_target);
+  MatchResult match_result = bm->match_bwd_lenient(goal_target, get_rhs());
+  if (!(match_result == MATCH_SUCCESS_NEGATIVE || match_result == MATCH_SUCCESS_POSITIVE))
+    return;
+
+  Sim* sim = f_super_goal->get_goal()->get_sim();
+  // Make a copy of sim and set mode to ROOT and time horizon to 0 so that abduce doesn't start another simulation.
+  Sim* sim_copy = new Sim(SIM_ROOT, seconds(0), sim->super_goal_, sim->opposite_, sim->root_, 1);
+  // Make a copy of the goal so that we can use sim_copy.
+  Goal *goal_copy = new Goal(goal_target, f_super_goal->get_goal()->get_actor(), sim_copy, 1);
+  Fact* f_super_goal_copy = new Fact(goal_copy, f_super_goal->get_after(), f_super_goal->get_before(), 1, 1);
+
+  abduce(bm, f_super_goal_copy, opposite, confidence);
+}
+
 void PrimaryMDLController::abduce_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim, Fact *ground, bool set_before) { // goal is f->g->f->object or f->g->|f->object; called concurrently by reduce() and _GMonitor::update().
 
   if (evaluate_bwd_guards(bm)) { // bm may be updated.

@@ -407,6 +407,15 @@ public:
   bool check_simulated_imdl(Fact *goal, HLPBindingMap *bm, Controller *root, Sim* forwardSimulation);
   void abduce(HLPBindingMap *bm, Fact *super_goal, bool opposite, float32 confidence);
 
+  /**
+   * Make a copy of the super goal with a Sim object set to ROOT so that we don't start another simulation,
+   * then call abduce() to inject the LHS as an actual goal.
+   * \param super_goal A goal of the model RHS.
+   * \param opposite See abduce().
+   * \param confidence See abduce().
+   */
+  void abduce_no_simulation(Fact *super_goal, bool opposite, float32 confidence);
+
   void debug(View *input);
 };
 
