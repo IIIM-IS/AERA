@@ -206,8 +206,8 @@ void GMonitor::commit() { // the purpose is to invalidate damaging simulations; 
       best_solution = (*solution).second;
     else {
 
-      float32 s = (*solution).second->solution_cfd_ / duration_cast<microseconds>((*solution).second->solution_before_ - now).count();
-      float32 _s = best_solution->solution_cfd_ / duration_cast<microseconds>(best_solution->solution_before_ - now).count();
+      float32 s = (*solution).second->get_solution_cfd() / duration_cast<microseconds>((*solution).second->get_solution_before() - now).count();
+      float32 _s = best_solution->get_solution_cfd() / duration_cast<microseconds>(best_solution->get_solution_before() - now).count();
       if (s > _s)
         best_solution = (*solution).second;
     }
@@ -218,12 +218,12 @@ void GMonitor::commit() { // the purpose is to invalidate damaging simulations; 
   if (best_solution) {
 
     ((PrimaryMDLController *)best_solution->solution_controller_)->abduce(
-      bindings_, best_solution->super_goal_, best_solution->opposite_, goal_target_->get_cfd());
+      bindings_, best_solution->get_f_super_goal(), best_solution->get_opposite(), goal_target_->get_cfd());
 
     // Commit to all mandatory solutions.
     for (solution = sim_successes_.mandatory_solutions.begin(); solution != sim_successes_.mandatory_solutions.end(); ++solution)
       ((PrimaryMDLController *)(*solution).second->solution_controller_)->abduce(
-        bindings_, (*solution).second->super_goal_, (*solution).second->opposite_, goal_target_->get_cfd());
+        bindings_, (*solution).second->get_f_super_goal(), (*solution).second->get_opposite(), goal_target_->get_cfd());
   }
 }
 
@@ -301,7 +301,7 @@ bool GMonitor::reduce(_Fact *input) { // executed by a reduction core; invalidat
     if (g->ground_invalidated(input)) { // invalidate the goal and abduce from the super-goal.
 
       target_->invalidate();
-      ((PrimaryMDLController *)controller_)->abduce(bindings_, g->get_sim()->super_goal_, g->get_sim()->opposite_, goal_target_->get_cfd());
+      ((PrimaryMDLController *)controller_)->abduce(bindings_, g->get_sim()->get_f_super_goal(), g->get_sim()->get_opposite(), goal_target_->get_cfd());
       return true;
     }
 

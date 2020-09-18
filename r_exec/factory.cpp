@@ -608,7 +608,7 @@ bool Goal::is_invalidated() {
 
   if (LObject::is_invalidated())
     return true;
-  if (has_sim() && get_sim()->super_goal_ != NULL && get_sim()->super_goal_->is_invalidated()) {
+  if (has_sim() && get_sim()->get_f_super_goal()->is_invalidated()) {
 
     invalidate();
     return true;

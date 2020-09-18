@@ -1121,7 +1121,7 @@ void PMDLController::register_predicted_goal_outcome(Fact *goal, HLPBindingMap *
         auto deadline = g->get_target()->get_before();
         auto sim_thz = get_sim_thz(now, deadline);
 
-        Sim *new_sim = new Sim(SIM_ROOT, sim_thz, g->get_sim()->super_goal_, false, this, 1);
+        Sim *new_sim = new Sim(SIM_ROOT, sim_thz, g->get_sim()->get_f_super_goal(), false, this, 1);
 
         g->set_sim(new_sim);
 
@@ -1304,7 +1304,7 @@ void TopLevelMDLController::register_goal_outcome(Fact *goal, bool success, _Fac
     }
   }
 
-  register_drive_outcome(goal->get_goal()->get_sim()->super_goal_, success);
+  register_drive_outcome(goal->get_goal()->get_sim()->get_f_super_goal(), success);
   if (success) OUTPUT_LINE(GOAL_MON, Utils::RelativeTime(Now()) << " " << goal->get_oid() << " goal success (TopLevel)");
   else OUTPUT_LINE(GOAL_MON, Utils::RelativeTime(Now()) << " " << goal->get_oid() << " goal failure (TopLevel)");
 }
@@ -1669,7 +1669,7 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
       break;
     case SIM_OPTIONAL:
     case SIM_MANDATORY:
-      sub_sim = new Sim(sim->get_mode(), sim_thz, sim->super_goal_, opposite, sim->root_, 1, sim->solution_controller_, sim->solution_cfd_, sim->solution_before_);
+      sub_sim = new Sim(sim->get_mode(), sim_thz, sim->get_f_super_goal(), opposite, sim->root_, 1, sim->solution_controller_, sim->get_solution_cfd(), sim->get_solution_before());
       break;
     }
 
@@ -1762,7 +1762,7 @@ void PrimaryMDLController::abduce_lhs(HLPBindingMap *bm, Fact *super_goal, Fact 
       Goal *sub_goal = new Goal(bound_lhs, super_goal->get_goal()->get_actor(), sim, 1);
       sub_goal->ground_ = ground;
       if (set_before)
-        sim->solution_before_ = bound_lhs->get_before();
+        sim->get_solution_before() = bound_lhs->get_before();
 
       auto now = Now();
       Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
@@ -1869,7 +1869,7 @@ bool PrimaryMDLController::check_imdl(Fact *goal, HLPBindingMap *bm) { // goal i
     if (evaluate_bwd_guards(bm)) { // bm may be updated.
 
       f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
-      abduce_lhs(bm, sim->super_goal_, f_imdl, sim->opposite_, f_imdl->get_cfd(), new Sim(SIM_ROOT, seconds(0), sim->super_goal_, sim->opposite_, this, 1), ground, false);
+      abduce_lhs(bm, sim->get_f_super_goal(), f_imdl, sim->get_opposite(), f_imdl->get_cfd(), new Sim(SIM_ROOT, seconds(0), sim->get_f_super_goal(), sim->get_opposite(), this, 1), ground, false);
       return true;
     }
     return false;
@@ -1899,7 +1899,7 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, C
     if (evaluate_bwd_guards(bm)) { // bm may be updated.
 
       f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
-      abduce_simulated_lhs(bm, sim->super_goal_, f_imdl, sim->opposite_, f_imdl->get_cfd(), new Sim(sim));
+      abduce_simulated_lhs(bm, sim->get_f_super_goal(), f_imdl, sim->get_opposite(), f_imdl->get_cfd(), new Sim(sim));
       return true;
     }
     return false;
