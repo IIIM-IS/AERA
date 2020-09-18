@@ -224,6 +224,27 @@ public:
   }
 
   /**
+   * Get the (fact of the) super goal of the goal the sim is attached to.
+   */
+  Fact* get_f_super_goal() const { return super_goal_; }
+
+  /**
+   * Get the opposite flag of the goal the sim is attached to, i.e. the result of the 
+   * match during controller->reduce(); the confidence is in the goal target.
+   */
+  bool get_opposite() const { return opposite_; }
+
+  /**
+   * Get the confidence of the solution goal.
+   */
+  float32 get_solution_cfd() const { return solution_cfd_; }
+
+  /**
+   * Get the  deadline of the solution goal.
+   */
+  Timestamp get_solution_before() const { return solution_before_; }
+
+  /**
    * Check if obj matches the target of any super goal, recursively following the chain of Sim objects up to
    * the root.
    * @return True if obj matches any super goal.
@@ -232,13 +253,14 @@ public:
 
   bool is_requirement_;
 
-  bool opposite_; // of the goal the sim is attached to, i.e. the result of the match during controller->reduce(); the confidence is in the goal target.
-
-  P<Fact> super_goal_; // of the goal the sim is attached to.
   P<Controller> root_; // controller that produced the simulation branch root (SIM_ROOT): identifies the branch.
   P<Controller> solution_controller_; // controller that produced a sub-goal of the branch's root: identifies the model that can be a solution for the super-goal.
-  float32 solution_cfd_; // confidence of the solution goal.
-  Timestamp solution_before_; // deadline of the solution goal.
+
+private:
+  P<Fact> super_goal_;
+  bool opposite_;
+  float32 solution_cfd_;
+  Timestamp solution_before_;
 };
 
 // Caveat: instances of Fact can becone instances of AntiFact (set_opposite() upon MATCH_SUCCESS_NEGATIVE during backward chaining).
@@ -376,7 +398,7 @@ public:
   bool is_drive() const { return (!has_sim() && is_self_goal()); }
 
   _Fact *get_target() const { return (_Fact *)get_reference(0); }
-  _Fact *get_super_goal() const { return get_sim()->super_goal_; }
+  _Fact *get_super_goal() const { return get_sim()->get_f_super_goal(); }
   r_code::Code *get_actor() const { return get_reference(code(GOAL_ACTR).asIndex()); }
 
   /**
