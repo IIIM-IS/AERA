@@ -226,23 +226,23 @@ public:
   /**
    * Get the (fact of the) super goal of the goal the sim is attached to.
    */
-  Fact* get_f_super_goal() const { return super_goal_; }
+  Fact* get_f_super_goal() const { return (Fact*)get_reference(0); }
 
   /**
    * Get the opposite flag of the goal the sim is attached to, i.e. the result of the 
    * match during controller->reduce(); the confidence is in the goal target.
    */
-  bool get_opposite() const { return opposite_; }
+  bool get_opposite() const { return code(SIM_OPPOSITE).asBoolean(); }
 
   /**
    * Get the confidence of the solution goal.
    */
-  float32 get_solution_cfd() const { return solution_cfd_; }
+  float32 get_solution_cfd() const { return code(SIM_SOLUTION_CFD).asFloat(); }
 
   /**
    * Get the  deadline of the solution goal.
    */
-  Timestamp get_solution_before() const { return solution_before_; }
+  Timestamp get_solution_before() const { return r_code::Utils::GetTimestamp<Code>(this, SIM_SOLUTION_BEFORE); }
 
   /**
    * Check if obj matches the target of any super goal, recursively following the chain of Sim objects up to
@@ -255,12 +255,6 @@ public:
 
   P<Controller> root_; // controller that produced the simulation branch root (SIM_ROOT): identifies the branch.
   P<Controller> solution_controller_; // controller that produced a sub-goal of the branch's root: identifies the model that can be a solution for the super-goal.
-
-private:
-  P<Fact> super_goal_;
-  bool opposite_;
-  float32 solution_cfd_;
-  Timestamp solution_before_;
 };
 
 // Caveat: instances of Fact can becone instances of AntiFact (set_opposite() upon MATCH_SUCCESS_NEGATIVE during backward chaining).
