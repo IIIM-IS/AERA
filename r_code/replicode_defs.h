@@ -266,7 +266,7 @@
 
 #define SIM_MODE 1
 #define SIM_THZ 2
-#define SIM_SUPER_GOAL 3
+#define SIM_F_SUPER_GOAL 3
 #define SIM_OPPOSITE 4
 #define SIM_ROOT_MODEL 5
 #define SIM_SOLUTION_MODEL 6

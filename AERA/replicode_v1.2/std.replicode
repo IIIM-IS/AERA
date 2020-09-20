@@ -38,7 +38,7 @@
 !class (mk.new (_obj obj:))
 
 ; simulator
-!class (sim (_obj {mode:nb thz:us super_goal: opposite:bl root_model:mdl solution_model:mdl solution_cfd:nb solution_before:us}))
+!class (sim (_obj {mode:nb thz:us f_super_goal: opposite:bl root_model:mdl solution_model:mdl solution_cfd:nb solution_before:us}))
 ; values for sim mode
 !def SIM_ROOT 0
 !def SIM_OPTIONAL 1

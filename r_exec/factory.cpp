@@ -663,7 +663,7 @@ Sim::Sim(SimMode mode, microseconds thz, Fact *super_goal, bool opposite, Contro
   code(0) = Atom::Object(Opcodes::Sim, SIM_ARITY);
   code(SIM_MODE) = Atom::Float(mode);
   code(SIM_THZ) = Atom::IPointer(SIM_ARITY + 1);
-  code(SIM_SUPER_GOAL) = Atom::RPointer(0);
+  code(SIM_F_SUPER_GOAL) = Atom::RPointer(0);
   add_reference(super_goal);
   code(SIM_OPPOSITE) = Atom::Boolean(opposite);
 
