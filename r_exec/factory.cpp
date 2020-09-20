@@ -719,7 +719,7 @@ bool Sim::matchesAnySuperGoal(const Code* obj) {
     // The super goal of the ROOT Sim is the drive, so stop checking here.
     return false;
 
-  Goal* super_goal_goal = super_goal_->get_goal();
+  Goal* super_goal_goal = get_f_super_goal()->get_goal();
   if (_Fact::MatchObject(obj, super_goal_goal->get_reference(0)->get_reference(0)))
     return true;
 
