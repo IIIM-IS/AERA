@@ -637,28 +637,52 @@ bool Goal::is_self_goal() const {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Sim::Sim(Sim *s) : super_goal_(s->super_goal_), root_(s->root_), solution_controller_(s->solution_controller_), is_requirement_(false),
-                               opposite_(s->opposite_), solution_cfd_(s->solution_cfd_), solution_before_(s->solution_before_) {
+Sim::Sim(Sim *s) : root_(s->root_), solution_controller_(s->solution_controller_), is_requirement_(false) {
   for (uint16 i = 0; i < s->code_size(); ++i)
     code(i) = s->code(i);
+  for (uint16 i = 0; i < s->references_size(); ++i)
+    add_reference(s->get_reference(i));
 }
 
-Sim::Sim(SimMode mode, microseconds thz, Fact *super_goal, bool opposite, Controller *root, float32 psln_thr, Controller *solution_controller, 
-         float32 solution_cfd, Timestamp solution_before) : super_goal_(super_goal), root_(root), solution_controller_(solution_controller), is_requirement_(false), 
-         opposite_(opposite), solution_cfd_(solution_cfd), solution_before_(solution_before) {
+Sim::Sim(SimMode mode, microseconds thz, Fact *super_goal, bool opposite, Controller *root, float32 psln_thr, Controller *solution_controller,
+  float32 solution_cfd, Timestamp solution_before) : root_(root), solution_controller_(solution_controller), is_requirement_(false) {
   code(0) = Atom::Object(Opcodes::Sim, SIM_ARITY);
   code(SIM_MODE) = Atom::Float(mode);
   code(SIM_THZ) = Atom::IPointer(SIM_ARITY + 1);
+  code(SIM_F_SUPER_GOAL) = Atom::RPointer(0);
+  add_reference(super_goal);
+  code(SIM_OPPOSITE) = Atom::Boolean(opposite);
+
+  // Special case: Put the controller's model in the code so that it appears in the decompiled output,
+  // otherwise the C++ code doesn't look at these objects.
+  // This only works because the seed code never creates a sim object or changes its controllers.
+  if (root) {
+    code(SIM_ROOT_MODEL) = Atom::RPointer(references_size());
+    add_reference(root->get_core_object());
+  }
+  else
+    code(SIM_ROOT_MODEL) = Atom::Nil();
+  if (solution_controller) {
+    code(SIM_SOLUTION_MODEL) = Atom::RPointer(references_size());
+    add_reference(solution_controller->get_core_object());
+  }
+  else
+    code(SIM_SOLUTION_MODEL) = Atom::Nil();
+
+  code(SIM_SOLUTION_CFD) = Atom::Float(solution_cfd);
+  code(SIM_SOLUTION_BEFORE) = Atom::IPointer(SIM_ARITY + 4);
   code(SIM_ARITY) = Atom::Float(psln_thr);
+
   // The time horizon is stored as a timestamp, but it is actually a duration.
   Utils::SetTimestamp<Code>(this, SIM_THZ, Timestamp(thz));
+  Utils::SetTimestamp<Code>(this, SIM_SOLUTION_BEFORE, solution_before);
 }
 
 bool Sim::invalidate() {
 
   if (LObject::is_invalidated())
     return true;
-  if (super_goal_ != NULL && super_goal_->is_invalidated())
+  if (get_f_super_goal()->is_invalidated())
     return true;
 
   return LObject::invalidate();
@@ -668,7 +692,7 @@ bool Sim::is_invalidated() {
 
   if (LObject::is_invalidated())
     return true;
-  if (super_goal_ != NULL && super_goal_->is_invalidated()) {
+  if (get_f_super_goal()->is_invalidated()) {
 
     invalidate();
     return true;
