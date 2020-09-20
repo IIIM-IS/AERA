@@ -178,6 +178,8 @@ void Decompiler::init(r_comp::Metadata *metadata) {
       renderers_[i] = &Decompiler::write_hlp;
     else if (class_name == "icst" || class_name == "imdl")
       renderers_[i] = &Decompiler::write_ihlp;
+    else if (class_name == "sim")
+      renderers_[i] = &Decompiler::write_sim;
     else
       renderers_[i] = &Decompiler::write_expression;
   }
@@ -709,6 +711,56 @@ void Decompiler::write_view(uint16 read_index, uint16 arity) {
       *out_stream_ << " ";
   }
   *out_stream_ << "]";
+}
+
+void Decompiler::write_sim(uint16 read_index) {
+  // Imitate write_expression, except set apply_time_offset false for the time horizon.
+
+  if (closing_set_) {
+
+    closing_set_ = false;
+    write_indent(indents_);
+  }
+  out_stream_->push('(', read_index);
+  write_expression_head(read_index);
+
+  // Imitate write_expression_tail, except set apply_time_offset false for the time horizon.
+  bool vertical = false;
+  uint16 arity = current_object_->code_[read_index].getAtomCount();
+  bool after_tail_wildcard = false;
+
+  for (uint16 i = 0; i < arity; ++i) {
+    // Don't use the time offset for the time horizon.
+    bool apply_time_offset = (i != (SIM_THZ - 1));
+
+    if (after_tail_wildcard)
+      write_any(++read_index, after_tail_wildcard, apply_time_offset);
+    else {
+
+      if (closing_set_) {
+
+        closing_set_ = false;
+        if (!horizontal_set_)
+          write_indent(indents_);
+        else
+          *out_stream_ << ' ';
+      }
+      else if (!vertical)
+        *out_stream_ << ' ';
+
+      write_any(++read_index, after_tail_wildcard, apply_time_offset);
+
+      if (!closing_set_ && vertical)
+        *out_stream_ << NEWLINE;
+    }
+  }
+
+  if (closing_set_) {
+
+    closing_set_ = false;
+    write_indent(indents_);
+  }
+  *out_stream_ << ')';
 }
 
 void Decompiler::write_set(uint16 read_index, bool apply_time_offset, uint16 write_as_view_index) { // read_index points to a set atom.

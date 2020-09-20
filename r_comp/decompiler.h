@@ -132,6 +132,7 @@ private:
   void write_fact(uint16 read_index);
   void write_hlp(uint16 read_index);
   void write_ihlp(uint16 read_index);
+  void write_sim(uint16 read_index);
   void write_view(uint16 read_index, uint16 arity);
 
   bool partial_decompilation_; // used when decompiling on-the-fly.
