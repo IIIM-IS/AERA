@@ -207,7 +207,7 @@ protected:
       if ((*_e).is_too_old(now)) // garbage collection.
         _e = cache->evidences.erase(_e);
       else if ((*_e).evidence_->get_before() <= now)
-        // Require the evidence time interval to be stricly before now. This is a little
+        // Skip the evidence if its time interval ends at exactly now. This is a little
         // more strict than is_too_old() which only checks get_before() < now.
         ++_e;
       else {
