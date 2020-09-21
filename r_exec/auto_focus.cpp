@@ -183,9 +183,9 @@ inline View *AutoFocusController::inject_input(View *input) {
   case View::SYNC_HOLD: { // inject a copy, add a controller, sync_once, morph res, after=now+time_tolerance (de-sync as it can have the same effect as a cmd), before=now+output_grp.upr+time_tolerance.
     auto offset = 2 * Utils::GetTimeTolerance();
     if (input_fact->is_anti_fact())
-      copy = new AntiFact(input_fact->get_reference(0), now + offset, now + offset + ref_group->get_upr()*Utils::GetBasePeriod(), 1, 1);
+      copy = new AntiFact(input_fact->get_reference(0), now + offset, now + ref_group->get_upr()*Utils::GetBasePeriod(), 1, 1);
     else
-      copy = new Fact(input_fact->get_reference(0), now + offset, now + offset + ref_group->get_upr()*Utils::GetBasePeriod(), 1, 1);
+      copy = new Fact(input_fact->get_reference(0), now + offset, now + ref_group->get_upr()*Utils::GetBasePeriod(), 1, 1);
     for (uint16 i = 0; i < output_groups_.size(); ++i) {
 
       Group *output_group = output_groups_[i];
