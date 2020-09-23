@@ -217,6 +217,7 @@
     <None Include="replicode_v1.1\test.rgrp.1.replicode" />
     <None Include="replicode_v1.1\test.visualizer.replicode" />
     <None Include="replicode_v1.1\user.classes.replicode" />
+    <None Include="replicode_v1.2\ball.goal.external.replicode" />
     <None Include="replicode_v1.2\drives.replicode" />
     <None Include="replicode_v1.2\helgi.replicode" />
     <None Include="replicode_v1.2\hello.world.1.replicode" />
@@ -226,7 +227,6 @@
     <None Include="replicode_v1.2\main.replicode" />
     <None Include="replicode_v1.2\pattern.replicode" />
     <None Include="replicode_v1.2\pong.1.replicode" />
-    <None Include="replicode_v1.2\pong.2.goal.replicode" />
     <None Include="replicode_v1.2\pong.2.replicode" />
     <None Include="replicode_v1.2\pong.2.simplified.replicode" />
     <None Include="replicode_v1.2\pong.3.replicode" />

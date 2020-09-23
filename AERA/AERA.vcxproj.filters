@@ -185,9 +185,6 @@
     <None Include="replicode_v1.2\pong.1.replicode">
       <Filter>replicode_v1.2</Filter>
     </None>
-    <None Include="replicode_v1.2\pong.2.goal.replicode">
-      <Filter>replicode_v1.2</Filter>
-    </None>
     <None Include="replicode_v1.2\pong.2.replicode">
       <Filter>replicode_v1.2</Filter>
     </None>
@@ -228,6 +225,9 @@
       <Filter>replicode_v1.2</Filter>
     </None>
     <None Include="replicode_v1.2\ball.external.replicode">
+      <Filter>replicode_v1.2</Filter>
+    </None>
+    <None Include="replicode_v1.2\ball.goal.external.replicode">
       <Filter>replicode_v1.2</Filter>
     </None>
   </ItemGroup>

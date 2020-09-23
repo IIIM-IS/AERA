@@ -1,0 +1,78 @@
+; ball is the ontology class of all balls.
+ball:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+; Name an entity b.
+b:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+; The statement that b is a ball.
+b_is_a_ball:(mk.val b essence ball 1) |[]
+; Make b_is_a_ball a fact from now to the maximum time. 
+f_b_is_a_ball:(fact b_is_a_ball 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+!def inject_drive_time 500000us
+
+; The start program ejects the command to tell the external environment it is ready for "ball". 
+; The environment will inject speed_y and position_y for the ball b.
+start:(pgm |[] |[] |[] []
+   (cmd ready ["ball" b] 1)
+1) |[]
+; Instantiate the start program to run once.
+istart:(ipgm start |[] RUN_ONCE sampling_period VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+
+; This program intercepts a goal to run a command and directly
+; calls the command, which will call the override of _Mem::eject().
+pgm_cmd_set_speed_y:(pgm |[]
+[]
+   (ptn (fact g:(goal (fact c:(cmd set_speed_y [obj: speed_y:] ::) ::) ::) ::) |[])
+[]
+   (= (is_sim g) false)
+[]
+   (prb [1 "print" "cmd set_speed_y..." [c]])
+   (cmd set_speed_y [obj speed_y] 1)
+1) |[]
+i_pgm_cmd_set_speed_y:(ipgm pgm_cmd_set_speed_y |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+mdl_set_speed_y:(mdl |[]
+[]
+   (fact (cmd set_speed_y [b: speed_y:] 1) v2: v3: : :)
+   (fact (mk.val b: speed_y speed_y: :) v4: v5: : :)
+[]
+   v4:(add v2 0s:80ms:0us)
+   v5:(add v3 0s:100ms:0us)
+[]
+   v2:(sub v4 0s:80ms:0us)
+   v3:(sub v5 0s:100ms:0us)
+[stdin] 0 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_run_position:(mdl |[] []
+   ; The goal target timings are the same as the drive timings.
+   (fact (mk.val b position_y 100 1) t0: t1: 1 1)
+   (fact run t0: t1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+pgm_inject_drive:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val b essence ball :) after: before: ::) |[])
+[]
+   (>= after (+ this.vw.ijt inject_drive_time))
+[]
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; The end of the time interval will be used in mdl_run_position as the end of the goal interval.
+      f_run:(fact run (+ after 10000us) (+ (+ this.vw.ijt inject_drive_time) 1000000us) 1 1)
+      |[]
+   )
+   (inj []
+      g:(goal f_run self nil 1)
+      |[]
+   )
+   (inj []
+      (fact g t1:(+ after 10000us) t1 1 1)
+      [SYNC_ONCE t1 1 forever primary nil]
+   )
+   (prb [1 "print" "injected drive" |[]])
+1) |[]
+i_pgm_inject_drive:(ipgm pgm_inject_drive |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
