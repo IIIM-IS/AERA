@@ -31,6 +31,8 @@ pgm_cmd_set_speed_y:(pgm |[]
 i_pgm_cmd_set_speed_y:(ipgm pgm_cmd_set_speed_y |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
+; This model says that a command to set the speed to a value causes the speed to have that
+; value in the next frame. AERA could learn this from babbling, but we state it here for simplicity.
 mdl_set_speed_y:(mdl |[]
 []
    (fact (cmd set_speed_y [b: speed_y:] 1) v2: v3: : :)
@@ -43,6 +45,7 @@ mdl_set_speed_y:(mdl |[]
    v3:(sub v5 0s:100ms:0us)
 [stdin] 0 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
+; This model activates when the RHS drive is injected to make a goal to achieve the LHS.
 mdl_run_position:(mdl |[] []
    ; The goal target timings are the same as the drive timings.
    (fact (mk.val b position_y 100 1) t0: t1: 1 1)
@@ -51,6 +54,7 @@ mdl_run_position:(mdl |[] []
 |[]
 [stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
+; This program runs once at inject_drive_time to inject the drive which activates mdl_run_position.
 pgm_inject_drive:(pgm |[]
 []
    ; This fact repeats periodically. We use it as a "heartbeat".
@@ -61,7 +65,7 @@ pgm_inject_drive:(pgm |[]
    (inj []
       ; Delay a little to allow predictions for this sampling period before injecting the drive.
       ; The end of the time interval will be used in mdl_run_position as the end of the goal interval.
-      f_run:(fact run (+ after 10000us) (+ (+ this.vw.ijt inject_drive_time) 1000000us) 1 1)
+      f_run:(fact run (+ after 10000us) (+ (+ this.vw.ijt inject_drive_time) 300000us) 1 1)
       |[]
    )
    (inj []
