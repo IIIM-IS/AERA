@@ -1297,7 +1297,7 @@ void TopLevelMDLController::register_goal_outcome(Fact *goal, bool success, _Fac
   }
 
   register_drive_outcome(goal->get_goal()->get_sim()->get_f_super_goal(), success);
-  if (success) OUTPUT_LINE(GOAL_MON, Utils::RelativeTime(Now()) << " " << goal->get_oid() << " goal success (TopLevel)");
+  if (success) OUTPUT_LINE(GOAL_MON, Utils::RelativeTime(Now()) << " fact " << f_goal_success->get_oid() << ": " << goal->get_oid() << " goal success (TopLevel)");
   else OUTPUT_LINE(GOAL_MON, Utils::RelativeTime(Now()) << " " << goal->get_oid() << " goal failure (TopLevel)");
 }
 
