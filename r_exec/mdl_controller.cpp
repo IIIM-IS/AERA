@@ -1072,6 +1072,9 @@ void PMDLController::inject_goal(HLPBindingMap *bm, Fact *goal, Fact *f_imdl) co
     View *view = new NotificationView(primary_grp, out_group, mk_rdx);
     _Mem::Get()->inject_notification(view, true);
   }
+
+  OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl "
+    << f_imdl->get_reference(0)->get_reference(0)->get_oid() << " abduce -> mk.rdx " << mk_rdx->get_oid());
 }
 
 void PMDLController::inject_simulation(Fact *goal_pred) const { // f->pred->f->obj or f->goal->f->obj.
