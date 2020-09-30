@@ -2310,6 +2310,8 @@ void PrimaryMDLController::check_last_match_time(bool match) {
 
 bool PrimaryMDLController::abduction_allowed(HLPBindingMap *bm) { // true if fwd timings valuated and all values used by the bwd guards can be evaluated (excepted the values in the tpl args).
 
+  if (!bm)
+    return false;
   if (!HLPOverlay::CheckFWDTimings(this, bm))
     return false;
   if (!HLPOverlay::ScanBWDGuards(this, bm))
