@@ -121,6 +121,13 @@ Overlay *PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController
     is_simulation = false;
   }
 
+  if (!is_simulation) {
+    if (f_p_f_imdl && f_p_f_imdl->get_pred() && f_p_f_imdl->get_pred()->is_simulation())
+      // The input is not a simulation, but the triggering f_p_f_imdl is part of a
+      // simulation, so don't make predictions from the non-simulated input.
+      return false;
+  }
+
   P<HLPBindingMap> bm = new HLPBindingMap(bindings_);
   bm->reset_fwd_timings(input_object);
   switch (bm->match_fwd_lenient(input_object, ((MDLController *)controller_)->get_lhs())) {
