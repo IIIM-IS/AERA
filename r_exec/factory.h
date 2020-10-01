@@ -332,9 +332,7 @@ public:
    * \param simulations_source The Pred with the list of simulations to copy.
    * \param psln_thr The propagation of saliency threshold.
    */
-  Pred(_Fact *target, const Pred* simulations_source, float32 psln_thr) : LObject() {
-    construct(target, simulations_source->simulations_, psln_thr);
-  }
+  Pred(_Fact *target, const Pred* simulations_source, float32 psln_thr);
 
   bool is_invalidated();
   bool grounds_invalidated(_Fact *evidence);
@@ -343,20 +341,27 @@ public:
 
   std::vector<P<_Fact> > grounds_; // f1->obj; predictions that were used to build this predictions (i.e. antecedents); empty if simulated.
 
-  bool is_simulation() const { return simulations_.size() > 0; }
+  bool is_simulation() const { return get_simulations_size() > 0; }
 
   /**
    * Get the size of the list of simulations.
    * \return The size of the list of simulations.
    */
-  size_t get_simulations_size() const { return simulations_.size(); }
+  uint16 get_simulations_size() const {
+    auto sim_set_index = code(PRED_SIMS).asIndex();
+    return code(sim_set_index).getAtomCount();
+  }
 
   /**
    * Get the simulation in the list of simulations at index i.
    * \param i The index of the simulation, from 0 to   get_simulations_size() - 1.
    * \return The simulation at index i.
    */
-  Sim* get_simulation(uint16 i) const { return simulations_[i]; }
+  Sim* get_simulation(uint16 i) const {
+    auto sim_set_index = code(PRED_SIMS).asIndex();
+    auto atom = code(sim_set_index + i);
+    return (Sim*)get_reference(atom.asIndex());
+  }
 
   /**
    * Get the simulation whose root is the given root Controller.
@@ -367,8 +372,6 @@ public:
 
 private:
   void construct(_Fact *target, const std::vector<P<Sim> >& simulations, float32 psln_thr);
-
-  std::vector<P<Sim> > simulations_;
 };
 
 class r_exec_dll Goal :

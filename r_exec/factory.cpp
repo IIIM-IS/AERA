@@ -512,14 +512,28 @@ Pred::Pred() : LObject() {
 Pred::Pred(SysObject *source) : LObject(source) {
 }
 
+Pred::Pred(_Fact *target, const Pred* simulations_source, float32 psln_thr) : LObject() {
+  std::vector<P<Sim>> simulations_copy;
+  for (uint16 i = 0; i < simulations_source->get_simulations_size(); ++i)
+    simulations_copy.push_back(simulations_source->get_simulation(i));
+  construct(target, simulations_copy, psln_thr);
+}
+
 void Pred::construct(_Fact *target, const std::vector<P<Sim> >& simulations, float32 psln_thr) {
 
+  uint16 write_index = PRED_ARITY;
   code(0) = Atom::Object(Opcodes::Pred, PRED_ARITY);
   code(PRED_TARGET) = Atom::RPointer(0);
-  for (auto i = 0; i < simulations.size(); ++i)
-    simulations_.push_back(simulations[i]);
-  code(PRED_ARITY) = Atom::Float(psln_thr);
   add_reference(target);
+
+  code(PRED_SIMS) = Atom::IPointer(++write_index);
+  code(write_index) = Atom::Set(simulations.size());
+  for (auto i = 0; i < simulations.size(); ++i) {
+    code(++write_index) = Atom::RPointer(references_size());
+    add_reference(simulations[i]);
+  }
+
+  code(PRED_ARITY) = Atom::Float(psln_thr);
 }
 
 bool Pred::is_invalidated() {
