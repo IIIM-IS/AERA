@@ -388,22 +388,27 @@ Simulator
 * PTPX: What is "pass through"? It prevents auto focus from remembering inputs needed for PTPX.
   -> Don't know what "pass through" is. Presumably an optimization. Try to get AERA to work without it.
 
+2020-10-01
+* OK. Visualizer: initial simulator - overlay on main timeline.
+* DONE. Review/merge pull request for list of sims in (pred) https://github.com/IIIM-IS/replicode/pull/109
+* DONE. Review/merge pull request for full (sim) syntax https://github.com/IIIM-IS/replicode/pull/117
+
 next meeting
-* Review/merge pull request for list of sims in (pred) https://github.com/IIIM-IS/replicode/pull/109
-* Review/merge pull request for full (sim) syntax https://github.com/IIIM-IS/replicode/pull/117
+* Review/merge pull request for matchesAnySuperGoal in simulated backward chaining https://github.com/IIIM-IS/replicode/pull/108
 * Review/merge pull request: Keep the same abduced sim object in forward simulation. https://github.com/IIIM-IS/replicode/pull/98
 * Review/merge pull request for GMonitor::commit() calling abduce_no_simulation https://github.com/IIIM-IS/replicode/pull/114
 * Review/merge pull request for template timings in abduce_imdl https://github.com/IIIM-IS/replicode/pull/107
 * Review/merge pull request for super_goal in new Sim https://github.com/IIIM-IS/replicode/pull/106
-* Review/merge pull request for matchesAnySuperGoal in simulated backward chaining https://github.com/IIIM-IS/replicode/pull/108
 * Review/merge pull request to not share timing variables when building the model https://github.com/IIIM-IS/replicode/pull/110
 * Review/merge pull request for simulation control in abduce_simulated_lhs https://github.com/IIIM-IS/replicode/pull/111
 * Review/merge pull request for is_out_of_range(now) in retrieve_simulated_imdl_fwd https://github.com/IIIM-IS/replicode/pull/113
 * Review/merge pull request for NoArgCmdGuardBuilder backward guard https://github.com/IIIM-IS/replicode/pull/115
 * Review/merge pull request for check_simulated_imdl in SRMonitor::signal https://github.com/IIIM-IS/replicode/pull/116
 * Review/merge pull request for SYNC_HOLD timings https://github.com/IIIM-IS/replicode/pull/118
+* Review/merge pull request for simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
 
 TODO
+* Rename speed to velocity.
 * Try to get AERA to work without "pass through".
 * Try integer positions. It should learn models like position n to n+1, and an exception at end-of-travel.
   Need to make PTPX learning on failed prediction work.
