@@ -85,15 +85,15 @@ template<class O, class S> TestMem<O, S>::TestMem()
   : r_exec::Mem<O, S>() {
   timeTickThread_ = 0;
   lastInjectTime_ = Timestamp(seconds(0));
-  speed_y_ = 0.0001;
+  velocity_y_ = 0.0001;
   position_y_ = NULL;
   position_y_obj_ = NULL;
   position_property_ = NULL;
   position_y_property_ = NULL;
-  speed_y_property_ = NULL;
+  velocity_y_property_ = NULL;
   primary_group_ = NULL;
   ready_opcode_ = 0xFFFF;
-  set_speed_y_opcode_ = 0xFFFF;
+  set_velocity_y_opcode_ = 0xFFFF;
   move_y_plus_opcode_ = 0xFFFF;
   move_y_minus_opcode_ = 0xFFFF;
   lastCommandTime_ = Timestamp(seconds(0));
@@ -120,14 +120,14 @@ template<class O, class S> bool TestMem<O, S>::load
 
   // Find the opcodes we need.
   ready_opcode_ = r_exec::GetOpcode("ready");
-  set_speed_y_opcode_ = r_exec::GetOpcode("set_speed_y");
+  set_velocity_y_opcode_ = r_exec::GetOpcode("set_velocity_y");
   move_y_plus_opcode_ = r_exec::GetOpcode("move_y_plus");
   move_y_minus_opcode_ = r_exec::GetOpcode("move_y_minus");
 
   // Find the objects we need.
   position_property_ = findObject(objects, "position");
   position_y_property_ = findObject(objects, "position_y");
-  speed_y_property_ = findObject(objects, "speed_y");
+  velocity_y_property_ = findObject(objects, "velocity_y");
   primary_group_ = findObject(objects, "primary");
 
   // Find the entities we need.
@@ -224,8 +224,8 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
           cout << "WARNING: Cannot get the object for ready \"ball\"" << endl;
           return;
         }
-        if (!speed_y_property_) {
-          cout << "WARNING: Can't find the speed_y property" << endl;
+        if (!velocity_y_property_) {
+          cout << "WARNING: Can't find the velocity_y property" << endl;
           return;
         }
         if (!position_y_property_) {
@@ -251,9 +251,9 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
       }
     }
   }
-  else if (function == set_speed_y_opcode_) {
-    if (!speed_y_property_) {
-      cout << "WARNING: Can't find the speed_y property" << endl;
+  else if (function == set_velocity_y_opcode_) {
+    if (!velocity_y_property_) {
+      cout << "WARNING: Can't find the velocity_y property" << endl;
       return;
     }
     if (!position_y_property_) {
@@ -268,18 +268,18 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
       command->code(args_set_index + 1).asIndex());
     // Set up position_y_obj_ the same as the ready "ball" command.
     if (!position_y_obj_) {
-      // This is the first call. Remember the object whose speed we're setting.
+      // This is the first call. Remember the object whose velocity we're setting.
       position_y_obj_ = obj;
       startTimeTickThread();
     }
     else {
       if (position_y_obj_ != obj)
-        // For now, don't allow tracking the speed of multiple objects.
+        // For now, don't allow tracking the velocity of multiple objects.
         return;
     }
 
-    speed_y_ = command->code(args_set_index + 2).asFloat();
-    // Let onTimeTick inject the new speed_y.
+    velocity_y_ = command->code(args_set_index + 2).asFloat();
+    // Let onTimeTick inject the new velocity_y.
   }
   else if (function == move_y_plus_opcode_ ||
     function == move_y_minus_opcode_) {
@@ -345,13 +345,13 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
         // This is the first call, so leave the initial position.
       }
       else
-        position_y_ += speed_y_ * duration_cast<microseconds>(now - lastInjectTime_).count();
+        position_y_ += velocity_y_ * duration_cast<microseconds>(now - lastInjectTime_).count();
 
       lastInjectTime_ = now;
-      // Inject the speed and position.
-      // It seems that speed_y needs SYNC_HOLD for building models.
+      // Inject the velocity and position.
+      // It seems that velocity_y needs SYNC_HOLD for building models.
       injectMarkerValue(
-        position_y_obj_, speed_y_property_, Atom::Float(speed_y_),
+        position_y_obj_, velocity_y_property_, Atom::Float(velocity_y_),
         now, now + get_sampling_period(), r_exec::View::SYNC_HOLD);
       injectMarkerValue(
         position_y_obj_, position_y_property_, Atom::Float(position_y_),

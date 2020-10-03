@@ -1,5 +1,5 @@
 ; Same as pong.2.replicode, but remove the drive to keep re-injecting the "run" goal (apparently unnecessary).
-; Here the ball travels without walls at a constant speed
+; Here the ball travels without walls at a constant velocity
 
 ;(apparently unnecessary) !load drives.replicode
 
@@ -41,9 +41,9 @@ f_b_is_a_ball:(fact b_is_a_ball 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever std
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; input generators ;;
 
-; This program runs once to set the initial position_y at 0, and speed_y at 0.0001.
+; This program runs once to set the initial position_y at 0, and velocity_y at 0.0001.
 ; The initial position_y is a fact at some time from now until now plus the sampling_period.
-; The initial speed_y is a fact at any time from now until MAX_TIME.
+; The initial velocity_y is a fact at any time from now until MAX_TIME.
 start:(pgm |[] |[] |[] []
    (prb [1 "print" "starting..." |[]])
    (inj []
@@ -55,7 +55,7 @@ start:(pgm |[] |[] |[] []
       [SYNC_PERIODIC now 1 1 stdin nil]
    )
    (inj []
-      s:(mk.val b speed_y 0.0001 1)
+      s:(mk.val b velocity_y 0.0001 1)
       |[]
    )
    (inj []
@@ -66,17 +66,17 @@ start:(pgm |[] |[] |[] []
 
 istart:(ipgm start |[] RUN_ONCE sampling_period VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
 
-; This program simulates the environment where b moves at constant speed changing position_y every sampling_period.
+; This program simulates the environment where b moves at constant velocity changing position_y every sampling_period.
 ; If AERA were connected through I/O to the environment, this would not be necessary.
 pgm0:(pgm
 |[]; template arguments
 [];  patterns defining the inputs
    (ptn f:(fact (mk.val b position_y py: :) after: before: ::) |[])
-   (ptn (fact (mk.val b speed_y sy: :) ::) |[])
+   (ptn (fact (mk.val b velocity_y sy: :) ::) |[])
 |[]; guards
 [];  productions
    (inj []
-      p:(mk.val b position_y (+ py (* sy sampling_period)) 1); The new position_y is the starting position plus speed times the sampling_period.
+      p:(mk.val b position_y (+ py (* sy sampling_period)) 1); The new position_y is the starting position plus velocity times the sampling_period.
       |[]
    )
    (inj []

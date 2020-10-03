@@ -11,7 +11,7 @@ f_b_is_a_ball:(fact b_is_a_ball 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever std
 
 wall_detected:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 
-!def speed 0.0001
+!def velocity 0.0001
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; input generators ;;
@@ -38,7 +38,7 @@ pgm_loop:(pgm
    (ptn f:(fact (mk.val b position_y py: :) after: before: ::) |[])
 |[] []
    (inj []
-      p:(mk.val b position_y (+ py (* (* speed direction) sampling_period)) 1)
+      p:(mk.val b position_y (+ py (* (* velocity direction) sampling_period)) 1)
       |[]
    )
    (inj []
@@ -94,7 +94,7 @@ pgm_right_wall:(pgm |[] []
 
 ipgm_right_wall:(ipgm pgm_right_wall |[] RUN_ALWAYS MAX_TIME VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
 
-;; Sets the initial speed and turns the ball around when position_y==0
+;; Sets the initial velocity and turns the ball around when position_y==0
 ;pgm_left_wall:(pgm |[] []
 ;   (ptn f:(fact (mk.val b position_y py: :) ::) [(< py 5)])
 ;|[] []
