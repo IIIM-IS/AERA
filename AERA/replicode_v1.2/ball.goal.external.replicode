@@ -10,7 +10,7 @@ f_b_is_a_ball:(fact b_is_a_ball 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever std
 !def inject_drive_time 500000us
 
 ; The start program ejects the command to tell the external environment it is ready for "ball". 
-; The environment will inject speed_y and position_y for the ball b.
+; The environment will inject velocity_y and position_y for the ball b.
 start:(pgm |[] |[] |[] []
    (cmd ready ["ball" b] 1)
 1) |[]
@@ -19,24 +19,24 @@ istart:(ipgm start |[] RUN_ONCE sampling_period VOLATILE NOTIFY 1) [[SYNC_ONCE n
 
 ; This program intercepts a goal to run a command and directly
 ; calls the command, which will call the override of _Mem::eject().
-pgm_cmd_set_speed_y:(pgm |[]
+pgm_cmd_set_velocity_y:(pgm |[]
 []
-   (ptn (fact g:(goal (fact c:(cmd set_speed_y [obj: speed_y:] ::) ::) ::) ::) |[])
+   (ptn (fact g:(goal (fact c:(cmd set_velocity_y [obj: velocity_y:] ::) ::) ::) ::) |[])
 []
    (= (is_sim g) false)
 []
-   (prb [1 "print" "cmd set_speed_y..." [c]])
-   (cmd set_speed_y [obj speed_y] 1)
+   (prb [1 "print" "cmd set_velocity_y..." [c]])
+   (cmd set_velocity_y [obj velocity_y] 1)
 1) |[]
-i_pgm_cmd_set_speed_y:(ipgm pgm_cmd_set_speed_y |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+i_pgm_cmd_set_velocity_y:(ipgm pgm_cmd_set_velocity_y |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-; This model says that a command to set the speed to a value causes the speed to have that
+; This model says that a command to set the velocity to a value causes the velocity to have that
 ; value in the next frame. AERA could learn this from babbling, but we state it here for simplicity.
-mdl_set_speed_y:(mdl |[]
+mdl_set_velocity_y:(mdl |[]
 []
-   (fact (cmd set_speed_y [b: speed_y:] 1) v2: v3: : :)
-   (fact (mk.val b: speed_y speed_y: :) v4: v5: : :)
+   (fact (cmd set_velocity_y [b: velocity_y:] 1) v2: v3: : :)
+   (fact (mk.val b: velocity_y velocity_y: :) v4: v5: : :)
 []
    v4:(add v2 0s:80ms:0us)
    v5:(add v3 0s:100ms:0us)

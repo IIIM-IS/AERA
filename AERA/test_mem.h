@@ -100,7 +100,7 @@ public:
   virtual bool load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid);
 
   /**
-   * Override eject to check for (cmd set_speed_y ...) and other implemented commands.
+   * Override eject to check for (cmd set_velocity_y ...) and other implemented commands.
    */
   virtual void eject(r_code::Code *command);
 
@@ -315,15 +315,15 @@ protected:
 
   Thread* timeTickThread_;
   Timestamp lastInjectTime_;
-  float speed_y_;
+  float velocity_y_;
   float position_y_;
   r_code::Code* position_y_obj_;
   r_code::Code* position_property_;
   r_code::Code* position_y_property_;
-  r_code::Code* speed_y_property_;
+  r_code::Code* velocity_y_property_;
   r_code::Code* primary_group_;
   uint16 ready_opcode_;
-  uint16 set_speed_y_opcode_;
+  uint16 set_velocity_y_opcode_;
   uint16 move_y_plus_opcode_;
   uint16 move_y_minus_opcode_;
   Timestamp lastCommandTime_;

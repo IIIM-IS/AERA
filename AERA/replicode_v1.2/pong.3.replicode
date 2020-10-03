@@ -1,7 +1,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Dynamic Program Production ;;
 ;; This example keeps track of the previous position of the ball with (mk.val b last_known m 1)
-;; The ball in this example travels continuously forward at a fixed speed
+;; The ball in this example travels continuously forward at a fixed velocity
 ;; See Replicode_A_constructivist_programming_paradigm_and_language_2013.pdf at page 17
 
 ;;;;;;;;;;;;;
