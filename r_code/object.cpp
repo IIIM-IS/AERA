@@ -83,11 +83,25 @@
 
 namespace r_code {
 
+#ifdef WITH_DEBUG_OID
+// Start with a big number so it doesn't look like SysObject::debug_oid_.
+static uint64 last_SysView_debug_oid = 1000;
+#endif
 SysView::SysView() {
+#ifdef WITH_DEBUG_OID
+  debug_oid_ = ++last_SysView_debug_oid;
+  if (debug_oid_ == 0)
+    int set_breakpoint_here = 1;
+#endif
 }
 
 SysView::SysView(View *source) {
 
+#ifdef WITH_DEBUG_OID
+  debug_oid_ = ++last_SysView_debug_oid;
+  if (debug_oid_ == 0)
+    int set_breakpoint_here = 1;
+#endif
   for (uint32 i = 0; i < VIEW_CODE_MAX_SIZE; ++i)
     code_[i] = source->code(i);
 
