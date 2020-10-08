@@ -393,7 +393,19 @@ Simulator
 * DONE. Review/merge pull request for list of sims in (pred) https://github.com/IIIM-IS/replicode/pull/109
 * DONE. Review/merge pull request for full (sim) syntax https://github.com/IIIM-IS/replicode/pull/117
 
+2020-10-08
+* DONE. Rename speed to velocity.
+* DONE. Why doesn't the PTPX see the (cmd) which made the position prediction fail?
+    PTPX::reduce:666 if (i->input_ == Opcodes::Cmd) // no cmds as req lhs (because no bwd-operational); prefer: cmd->effect, effect->imdl.
+    TRY COMMENTING OUT.
+* Try to get AERA to work without "pass through".
+  "Pass through" is to avoid the autofocus requirement for "relevance" to goals or predictions, without relevance no
+  auto focus for the pattern extractor. What is the best way to learn patterns when no existing goals or predictions?
+
 next meeting
+* Try integer positions. It should learn models like position n to n+1, and an exception at end-of-travel.
+  Models from PTPX don't seem to use specific facts which caused the failure.
+* Review/merge pull request for binding map in the prediction's mk.rdx https://github.com/IIIM-IS/replicode/pull/120
 * Review/merge pull request for matchesAnySuperGoal in simulated backward chaining https://github.com/IIIM-IS/replicode/pull/108
 * Review/merge pull request: Keep the same abduced sim object in forward simulation. https://github.com/IIIM-IS/replicode/pull/98
 * Review/merge pull request for GMonitor::commit() calling abduce_no_simulation https://github.com/IIIM-IS/replicode/pull/114
@@ -408,11 +420,7 @@ next meeting
 * Review/merge pull request for simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
 
 TODO
-* Rename speed to velocity.
-* Try to get AERA to work without "pass through".
-* Try integer positions. It should learn models like position n to n+1, and an exception at end-of-travel.
-  Need to make PTPX learning on failed prediction work.
-  Why doen't the PTPX see the (cmd) which made the position prediction fail?
+* Try commenting out PTPX::reduce:666 if (i->input_ == Opcodes::Cmd)
 * Visualizer: Show prediction failure.
 * When a failed model is in the secondary group and the pattern extractor learns a model from new inputs, does it check if it's the same as the failed model?
 * Keep the controller in the C++ object, but use the model in the decompiled (sim) code. Include all extra Sim fields.
