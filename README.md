@@ -42,3 +42,14 @@ This is a list of unintuitive issues with using Replicode, to help new users.
   [Maybe not in primary. Need to understand how simulated goals are committed, and to which group.]
 * Prediction failures may come from false assumptions. In `settings.xml`, try `enable_assumptions="no"` .
 * Objects with a short resilience aren't in `decompiled_objects.txt`. In `settings.xml`, try `keep_invalidated_objects=yes` .
+* Some conversion of types in math expressions are not obvious. Below 'nb' is a floating-point number and 'us' is a 64-bit timestamp in microseconds.
+  - (+ nb us) -> us
+  - (+ us nb) -> us
+  - (- nb us) not allowed
+  - (- us nb) -> us
+  - (* nb us) -> nb
+  - (* us nb) -> us ... different than (* nb us)!
+  - (* us us) -> nb ... counter-intuitive
+  - (/ nb us) -> nb
+  - (/ us nb) -> us
+  - (/ us us) -> nb
