@@ -17,9 +17,6 @@
 ; device functions.
 
 !dfn (ready :); arg0: a string identifying the external environment to start, arg1: an object.
-;!dfn (grab_hand :); arg0: a hand, arg1: deadline.
-;!dfn (release_hand :); arg0: a hand, arg1: deadline.
-;!dfn (move_hand :); arg0: a hand, arg1: target position, arg2: deadline.
 !dfn (speak :); arg0: a word, arg1: deadline.
 !dfn (look_at :); arg0: a vec3, arg1: deadline.
 !dfn (point_at :); arg0: a hand, arg1: target position, arg2: deadline.
