@@ -47,6 +47,9 @@ position_z:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 velocity_x:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 velocity_y:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 velocity_z:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+acceleration_x:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+acceleration_y:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+acceleration_z:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 
 attachment:(ont 1) [[SYNC_ONCE now 0 forever root nil]]; usage: (mk.val self_right_hand attachment a_thing 1)
 spoken:(ont 1) [[SYNC_ONCE now 0 forever root nil]]; usage: (mk.val an_actor spoken a_sentence 1)
