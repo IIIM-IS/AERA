@@ -525,7 +525,7 @@ void GTPX::reduce(r_exec::View *input) { // input->object: f->success.
   r_code::list<Input>::const_iterator i;
   for (i = inputs_.begin(); i != inputs_.end();) {
 
-    if (i->input_->get_after() >= consequent->get_after()) { // discard inputs younger than the consequent.
+    if (i->input_->get_after() >= consequent->get_after()) { // discard inputs not younger than the consequent.
 
       i = inputs_.erase(i);
       continue;
