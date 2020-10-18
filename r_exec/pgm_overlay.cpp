@@ -465,9 +465,11 @@ bool InputLessPGMOverlay::inject_productions() {
 
       // Build a fact of the command and inject it in stdin. Give the fact an uncertainty range since we don't know when
       // it will be executed. Otherwise a fact with zero duration may not overlap a fact, making predictions fail.
-      // We offset the beginning of the uncertainty range by 2*GetTimeTolerance() (the same as SYNC_HOLD)
+      // We offset the beginning of the uncertainty range at a minimum by 2*GetTimeTolerance() from the frame start (the same as SYNC_HOLD)
       // so that CTPX::reduce will not fail due to "cause in sync with the premise".
-      Code *fact = new Fact(command, now + 2 * Utils::GetTimeTolerance(), now + _Mem::Get()->get_sampling_period(), 1, 1);
+      auto relativeTime = duration_cast<microseconds>(now - Utils::GetTimeReference());
+      auto frameStart = now - (relativeTime % _Mem::Get()->get_sampling_period());
+      Code *fact = new Fact(command, max(now, frameStart + 2 * Utils::GetTimeTolerance()), now + _Mem::Get()->get_sampling_period(), 1, 1);
       View *view = new View(View::SYNC_ONCE, now, 1, 1, _Mem::Get()->get_stdin(), getView()->get_host(), fact); // SYNC_ONCE, sln=1, res=1,
       _Mem::Get()->inject(view);
       string mk_rdx_info = "";
