@@ -101,8 +101,13 @@ public:
 
   /**
    * Override eject to check for (cmd set_velocity_y ...) and other implemented commands.
+   * \param command The command from the Replicode (cmd ...).
+   * \return The given command if it is executed as-is, or a new command object of the command
+   * that is actually executed. The program controller will make a fact from the command and
+   * inject it as the efferent copy. However, if the command is not executed, then return NULL
+   * and the program controller will put an anti-fact of the command in the mk.rdx reduction.
    */
-  virtual void eject(r_code::Code *command);
+  virtual r_code::Code* eject(r_code::Code *command);
 
   /**
    * This is called when runInDiagnosticTime() updates the tickTime. Just call

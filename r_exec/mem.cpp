@@ -683,7 +683,7 @@ void _Mem::pushTimeJob(TimeJob *j) {
 void _Mem::eject(View *view, uint16 nodeID) {
 }
 
-void _Mem::eject(Code *command) {
+r_code::Code* _Mem::eject(Code *command) {
   // This is only for debugging
   /*
   uint16 function = (command->code(CMD_FUNCTION).atom_ >> 8) & 0x000000FF;
@@ -692,6 +692,7 @@ void _Mem::eject(Code *command) {
       //command->trace();
   }
   */
+  return NULL;
 }
 
 ////////////////////////////////////////////////////////////////
