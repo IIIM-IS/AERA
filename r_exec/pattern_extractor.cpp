@@ -525,7 +525,7 @@ void GTPX::reduce(r_exec::View *input) { // input->object: f->success.
   r_code::list<Input>::const_iterator i;
   for (i = inputs_.begin(); i != inputs_.end();) {
 
-    if (i->input_->get_after() >= consequent->get_after()) { // discard inputs younger than the consequent.
+    if (i->input_->get_after() >= consequent->get_after()) { // discard inputs not younger than the consequent.
 
       i = inputs_.erase(i);
       continue;
@@ -666,7 +666,7 @@ void PTPX::reduce(r_exec::View *input) {
     if (i->input_->code(0).asOpcode() == Opcodes::Cmd) // no cmds as req lhs (because no bwd-operational); prefer: cmd->effect, effect->imdl.
       i = inputs_.erase(i);
     else if (!end_bm->intersect(i->bindings_) || // discard inputs that do not share values with the consequent.
-      i->input_->get_after() >= consequent->get_after()) // discard inputs younger than the consequent.
+      i->input_->get_after() >= consequent->get_after()) // discard inputs not younger than the consequent.
       i = inputs_.erase(i);
     else
       ++i;

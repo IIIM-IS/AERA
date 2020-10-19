@@ -1516,9 +1516,9 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
 
         Code *mk_rdx;
         if (ground)
-          mk_rdx = new MkRdx(f_imdl, (Code *)input, ground, production, 1, bindings_);
+          mk_rdx = new MkRdx(f_imdl, (Code *)input, ground, production, 1, bm);
         else
-          mk_rdx = new MkRdx(f_imdl, (Code *)input, production, 1, bindings_);
+          mk_rdx = new MkRdx(f_imdl, (Code *)input, production, 1, bm);
         bool rate_failures = inject_prediction(production, f_imdl, confidence, before - now, mk_rdx);
         PMonitor *m = new PMonitor(this, bm, production, rate_failures); // not-injected predictions are monitored for rating the model that produced them (successes only).
         MDLController::add_monitor(m);
@@ -1908,6 +1908,10 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
 
         add_g_monitor(new SGMonitor(this, bm, now + sim->get_thz(), f_sub_goal, f_imdl));
         inject_simulation(f_sub_goal);
+#ifdef WITH_DEBUG_OID
+        OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": fact " <<
+          super_goal->get_oid() << " super_goal -> fact " << f_sub_goal->get_oid() << " simulated goal");
+#endif
         break;
       }
       }

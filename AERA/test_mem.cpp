@@ -209,7 +209,7 @@ template<class O, class S> r_exec::View* TestMem<O, S>::injectFact
   return view;
 }
 
-template<class O, class S> void TestMem<O, S>::eject(Code *command) {
+template<class O, class S> Code* TestMem<O, S>::eject(Code *command) {
   uint16 function = (command->code(CMD_FUNCTION).atom_ >> 8) & 0x000000FF;
 
   if (function == ready_opcode_) {
@@ -222,15 +222,15 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
         if (!(command->code_size() >= 3 && command->code(args_set_index + 2).getDescriptor() == Atom::R_PTR &&
               command->references_size() > command->code(args_set_index + 2).asIndex())) {
           cout << "WARNING: Cannot get the object for ready \"ball\"" << endl;
-          return;
+          return NULL;
         }
         if (!velocity_y_property_) {
           cout << "WARNING: Can't find the velocity_y property" << endl;
-          return;
+          return NULL;
         }
         if (!position_y_property_) {
           cout << "WARNING: Can't find the position_y property" << endl;
-          return;
+          return NULL;
         }
 
         Code* obj = command->get_reference(command->code(args_set_index + 2).asIndex());
@@ -238,27 +238,28 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
           // This is the first call. Remember the object whose position we're reporting.
           position_y_obj_ = obj;
           startTimeTickThread();
+          return command;
         }
         else {
           if (position_y_obj_ != obj)
             // For now, don't allow tracking multiple objects.
-            return;
+            return NULL;
         }
       }
       else {
         cout << "WARNING: Ignoring unrecognized ready command identifier: " << identifier << endl;
-        return;
+        return NULL;
       }
     }
   }
   else if (function == set_velocity_y_opcode_) {
     if (!velocity_y_property_) {
       cout << "WARNING: Can't find the velocity_y property" << endl;
-      return;
+      return NULL;
     }
     if (!position_y_property_) {
       cout << "WARNING: Can't find the position_y property" << endl;
-      return;
+      return NULL;
     }
 
     auto now = r_exec::Now();
@@ -275,22 +276,23 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
     else {
       if (position_y_obj_ != obj)
         // For now, don't allow tracking the velocity of multiple objects.
-        return;
+        return NULL;
     }
 
     velocity_y_ = command->code(args_set_index + 2).asFloat();
     // Let onTimeTick inject the new velocity_y.
+    return command;
   }
   else if (function == move_y_plus_opcode_ ||
     function == move_y_minus_opcode_) {
     if (!position_property_) {
       cout << "WARNING: Can't find the position property" << endl;
-      return;
+      return NULL;
     }
     for (int i = 0; i <= 9; ++i) {
       if (!yEnt_[i]) {
         cout << "WARNING: Can't find the entities y0, y1, etc." << endl;
-        return;
+        return NULL;
       }
     }
 
@@ -304,17 +306,16 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
       discretePositionObj_ = obj;
       discretePosition_ = yEnt_[0];
       startTimeTickThread();
-      return;
     }
     else {
       if (discretePositionObj_ != obj)
         // For now, don't allow tracking multiple objects.
-        return;
+        return NULL;
     }
 
     if (nextDiscretePosition_)
       // A previous move command is still pending execution.
-      return;
+      return NULL;
 
     // nextDiscretePosition_ will become the position at the next sampling period.
     lastCommandTime_ = now;
@@ -332,7 +333,10 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
       }
     }
     // Let onTimeTick inject the new position.
+    return command;
   }
+
+  return NULL;
 }
 
 template<class O, class S> void TestMem<O, S>::onTimeTick() {

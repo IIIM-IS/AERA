@@ -117,6 +117,9 @@ public:
   void read(word32 *data);
   uint32 get_size() const;
   void trace(std::ostream& out);
+#ifdef WITH_DEBUG_OID
+  int debug_oid_;
+#endif
 };
 
 class Code;

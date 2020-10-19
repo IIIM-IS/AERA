@@ -17,9 +17,6 @@
 ; device functions.
 
 !dfn (ready :); arg0: a string identifying the external environment to start, arg1: an object.
-;!dfn (grab_hand :); arg0: a hand, arg1: deadline.
-;!dfn (release_hand :); arg0: a hand, arg1: deadline.
-!dfn (move_hand :); arg0: a hand, arg1: target position, arg2: deadline.
 !dfn (speak :); arg0: a word, arg1: deadline.
 !dfn (look_at :); arg0: a vec3, arg1: deadline.
 !dfn (point_at :); arg0: a hand, arg1: target position, arg2: deadline.
@@ -27,6 +24,7 @@
 !dfn (lift_hand :); arg0: a hand, arg1: a distance.
 !dfn (grab_hand :); arg0: a hand.
 !dfn (release_hand :); arg0: a hand.
+!dfn (move_hand :); arg0: a hand, arg1: target position
 !dfn (set_velocity_y :); arg0: an object, arg1: velocity.
 !dfn (move_y_plus :); arg0: an object.
 !dfn (move_y_minus :); arg0: an object.
@@ -49,6 +47,9 @@ position_z:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 velocity_x:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 velocity_y:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 velocity_z:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+acceleration_x:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+acceleration_y:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+acceleration_z:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 
 attachment:(ont 1) [[SYNC_ONCE now 0 forever root nil]]; usage: (mk.val self_right_hand attachment a_thing 1)
 spoken:(ont 1) [[SYNC_ONCE now 0 forever root nil]]; usage: (mk.val an_actor spoken a_sentence 1)
@@ -67,3 +68,4 @@ interviewee:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 hand:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 head:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 cube:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+sphere:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
