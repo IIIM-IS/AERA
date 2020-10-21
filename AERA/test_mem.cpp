@@ -409,10 +409,10 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
         cmd->code(5) = Atom::RPointer(0); // obj
         cmd->set_reference(0, discretePositionObj_);
 
-        r_exec::Fact* factCmd = new r_exec::Fact(
-          cmd, now + get_sampling_period(), now + 2 * get_sampling_period(), 1, 1);
+        auto after = now + get_sampling_period() + 2 * Utils::GetTimeTolerance();
+        r_exec::Fact* factCmd = new r_exec::Fact(cmd, after, now + 2 * get_sampling_period(), 1, 1);
         r_exec::Goal* goal = new r_exec::Goal(factCmd, get_self(), NULL, 1);
-        injectFact(goal, now + get_sampling_period(), now + get_sampling_period(), primary_group_);
+        injectFact(goal, after, now + get_sampling_period(), primary_group_);
       }
     }
   }
