@@ -23,10 +23,10 @@ f_b_is_a_ball:(fact b_is_a_ball 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever std
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; Top-level model ;;
-; From a RHS goal to have a speed, abduce the LHS goal to run a command to set the speed.
+; From a RHS goal to have a velocity, abduce the LHS goal to run a command to set the velocity.
 m_run_cmd:(mdl |[] []
-   (fact (cmd set_speed_y [b: speed_y:] 1) t0: t1: 1 1)
-   (fact (mk.val b: speed_y speed_y: :) t0: t1: ::); In abduction, matched as (fact (goal (fact ...)))
+   (fact (cmd set_velocity_y [b: velocity_y:] 1) t0: t1: 1 1)
+   (fact (mk.val b: velocity_y velocity_y: :) t0: t1: ::); In abduction, matched as (fact (goal (fact ...)))
 |[]
 |[]
 [stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
@@ -34,7 +34,7 @@ m_run_cmd:(mdl |[] []
 m_run_0:(mdl 
 |[]; template arguments
 []; LHS and RHS patterns of the model
-   (fact (mk.val b speed_y 0.0002 1) t0: t1: 1 1); LHS
+   (fact (mk.val b velocity_y 0.0002 1) t0: t1: 1 1); LHS
    (fact run t0: t1: ::);                 drive. RHS
 |[]; forward guards
 |[]; backward guards
@@ -49,17 +49,17 @@ m_run_0:(mdl
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; input generators ;;
 
-; This program runs once to set the initial speed_y at 0.0001.
+; This program runs once to set the initial velocity_y at 0.0001.
 start:(pgm |[] |[] |[] []
    (prb [1 "print" "starting..." |[]])
-   ; Set the initial speed in the external environment. This will inject speed_y.
-   (cmd set_speed_y [b 0.0001] 1)
+   ; Set the initial velocity in the external environment. This will inject velocity_y.
+   (cmd set_velocity_y [b 0.0001] 1)
 1) |[]
 
 istart:(ipgm start |[] RUN_ONCE sampling_period VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
 
-; Run once to inject the drive that will abduce a goal to set a new speed.
-pgm_set_speed:(pgm
+; Run once to inject the drive that will abduce a goal to set a new velocity.
+pgm_set_velocity:(pgm
 |[]; template arguments
 [];  patterns defining the inputs
    (ptn (fact (mk.val b position_y py: :) after: before: ::) |[])
@@ -82,19 +82,19 @@ pgm_set_speed:(pgm
    (prb [1 "print" "injected run" |[]])
 1) |[]
 
-i_pgm_set_speed:(ipgm pgm_set_speed |[] RUN_ONCE 20000us VOLATILE NOTIFY 1) []
+i_pgm_set_velocity:(ipgm pgm_set_velocity |[] RUN_ONCE 20000us VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever stdin nil 1]
 
 ; This program intercepts an abduced goal to run a command and directly
 ; calls the command, which will call the override of _Mem::eject().
-pgm_cmd_set_speed_y:(pgm |[]
+pgm_cmd_set_velocity_y:(pgm |[]
 []
-   (ptn (fact g:(goal (fact c:(cmd set_speed_y [obj: sy:] ::) ::) ::) ::) |[])
+   (ptn (fact g:(goal (fact c:(cmd set_velocity_y [obj: sy:] ::) ::) ::) ::) |[])
 |[]
 []
    (= (is_sim g) false)
-   (cmd set_speed_y [obj sy] 1)
-   (prb [1 "print" "cmd set_speed_y" [c]])
+   (cmd set_velocity_y [obj sy] 1)
+   (prb [1 "print" "cmd set_velocity_y" [c]])
 1) |[]
-i_pgm_cmd_set_speed_y:(ipgm pgm_cmd_set_speed_y |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+i_pgm_cmd_set_velocity_y:(ipgm pgm_cmd_set_velocity_y |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]; Use primary since abduced goals go in there.
