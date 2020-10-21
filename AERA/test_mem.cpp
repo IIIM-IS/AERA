@@ -238,13 +238,13 @@ template<class O, class S> Code* TestMem<O, S>::eject(Code *command) {
           // This is the first call. Remember the object whose position we're reporting.
           position_y_obj_ = obj;
           startTimeTickThread();
-          return command;
         }
         else {
           if (position_y_obj_ != obj)
             // For now, don't allow tracking multiple objects.
             return NULL;
         }
+        return command;
       }
       else {
         cout << "WARNING: Ignoring unrecognized ready command identifier: " << identifier << endl;
