@@ -360,7 +360,11 @@ private:
 
   void abduce_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim, Fact *ground, bool set_before);
   void abduce_imdl(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim);
-  void abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim);
+
+  /**
+   * @param forwardSimulation If forwardSimulation is NULL, then pass sim to predict_simulated_evidence, otherwise pass forwardSimulation.
+   */
+  void abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim, Sim* forwardSimulation);
   void abduce_simulated_imdl(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim);
   void predict_simulated_lhs(HLPBindingMap *bm, bool opposite, float32 confidence, Sim *sim);
   void predict_simulated_evidence(_Fact *evidence, Sim *sim);
@@ -389,7 +393,12 @@ public:
   void register_simulated_goal_outcome(Fact *goal, bool success, _Fact *evidence) const;
 
   bool check_imdl(Fact *goal, HLPBindingMap *bm);
-  bool check_simulated_imdl(Fact *goal, HLPBindingMap *bm, Controller *root);
+
+  /**
+   * @param forwardSimulation If forwardSimulation is NULL, then use the goal->get_goal()->get_sim() when calling abduce_simulated_lhs. 
+   * Otherwise, use the given forwardSimulation, which is carried throughout forward simulation.
+   */
+  bool check_simulated_imdl(Fact *goal, HLPBindingMap *bm, Controller *root, Sim* forwardSimulation);
   void abduce(HLPBindingMap *bm, Fact *super_goal, bool opposite, float32 confidence);
 
   void debug(View *input);
