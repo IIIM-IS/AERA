@@ -402,12 +402,15 @@ Simulator
   "Pass through" is to avoid the autofocus requirement for "relevance" to goals or predictions, without relevance no
   auto focus for the pattern extractor. What is the best way to learn patterns when no existing goals or predictions?
 
+2020-10-22
+* DONE. Review/merge pull request: Keep the same abduced sim object in forward simulation. https://github.com/IIIM-IS/replicode/pull/98
+* OK. Try integer positions. It should learn models like position n to n+1, and an exception at end-of-travel.
+  Hand-coded exception model works: The main model is not killed for failing. (Needed to offset babbling command.)
+* Models from PTPX don't seem to use specific facts which caused the failure. Basic question of general vs. specific models.
+
 next meeting
-* Try integer positions. It should learn models like position n to n+1, and an exception at end-of-travel.
-  Models from PTPX don't seem to use specific facts which caused the failure.
 * Review/merge pull request for binding map in the prediction's mk.rdx https://github.com/IIIM-IS/replicode/pull/120
 * Review/merge pull request for matchesAnySuperGoal in simulated backward chaining https://github.com/IIIM-IS/replicode/pull/108
-* Review/merge pull request: Keep the same abduced sim object in forward simulation. https://github.com/IIIM-IS/replicode/pull/98
 * Review/merge pull request for GMonitor::commit() calling abduce_no_simulation https://github.com/IIIM-IS/replicode/pull/114
 * Review/merge pull request for template timings in abduce_imdl https://github.com/IIIM-IS/replicode/pull/107
 * Review/merge pull request for super_goal in new Sim https://github.com/IIIM-IS/replicode/pull/106
@@ -418,6 +421,7 @@ next meeting
 * Review/merge pull request for check_simulated_imdl in SRMonitor::signal https://github.com/IIIM-IS/replicode/pull/116
 * Review/merge pull request for SYNC_HOLD timings https://github.com/IIIM-IS/replicode/pull/118
 * Review/merge pull request for simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
+* Review/merge pull request to allow eject to return the actally-executed command https://github.com/IIIM-IS/replicode/pull/125
 
 TODO
 * Try commenting out PTPX::reduce:666 if (i->input_ == Opcodes::Cmd)
