@@ -7,8 +7,8 @@ b_is_a_ball:(mk.val b essence ball 1) |[]
 ; Make b_is_a_ball a fact from now to the maximum time. 
 f_b_is_a_ball:(fact b_is_a_ball 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 
-; The start program ejects the command to tell the external environment it is ready for "ball". 
-; The environment will inject velocity_y and position_y for the ball b.
+; The start program ejects the command to tell the I/O device it is ready for "ball". 
+; The I/O device will simulate the motion and inject velocity_y and position_y for the ball b.
 start:(pgm |[] |[] |[] []
    (cmd ready ["ball" b] 1)
 1) |[]
