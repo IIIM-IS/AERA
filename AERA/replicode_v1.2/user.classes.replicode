@@ -23,11 +23,14 @@
 
 !dfn (lift_hand :); arg0: a hand, arg1: a distance.
 !dfn (grab_hand :); arg0: a hand.
+; Some programs use grab instead of grab_hand.
+!dfn (grab :); arg0: an object.
 !dfn (release_hand :); arg0: a hand.
 !dfn (move_hand :); arg0: a hand, arg1: target position
 !dfn (set_velocity_y :); arg0: an object, arg1: velocity.
 !dfn (move_y_plus :); arg0: an object.
 !dfn (move_y_minus :); arg0: an object.
+!dfn (set_acceleration_y :); arg0: an object, arg1: acceleration.
 
 ; The sampling_period should be 2 * base_period, where base_period is from settings.xml.
 !def sampling_period 100000us
