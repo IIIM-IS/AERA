@@ -1,0 +1,222 @@
+; AGI-13 Summer School - AERA 6. Example by Eric Nivel.
+; https://www.youtube.com/watch?v=LDbOHxUtVlU&t=5561
+; A robotic arm is holding a cube and needs to put a sphere somewhere.
+; It has only one hand; effectors: move, grab, release.
+; ontology: essence ("is a"), position, attached.
+; inputs: position, attached, efferent copies of commands.
+
+attached:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+
+; Hand H has position P.
+S0:(cst |[]
+[]
+   (fact (mk.val H: essence hand :) T0: T1: : :); Changed X to hand.
+   (fact (mk.val H: position P: :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; When I move H by offset DeltaP, then H will be at position P1.
+M0:(mdl [H: P0: T0: T1:]
+[]
+   (fact (cmd move [H: DeltaP:] :) T2: T1: : :)
+   (fact (mk.val H: position P1: :) T1: T3: : :)
+[]
+   P1:(+ P0 DeltaP)
+   T3:(+ T1 0s:100ms:0us)
+[]
+   DeltaP:(- P1 P0)
+   T2:(- T1 0s:80ms:0us)
+[stdin] 0 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; If we observe state S0 (hand H has position P0), then if M0 predicts something (position P1) it will be right.
+M1:(mdl |[]
+[]
+   (fact (icst S0 |[] [H: P0:] : :) T0: T1: : :)
+   (fact (imdl M0 [H: P0: T0: T1:] [DeltaP: P1: T3:] : :) T0: T1: : :); T2: is not exposed from M0.
+|[]
+|[]
+[stdin] 0 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; A thing C of kind X occupies position P. (Modified to exclude when C is a hand.)
+S3:(cst |[]
+[]
+   (fact (mk.val C: essence X: :) T0: T1: : :)
+   (fact (mk.val C: position P: :) T0: T1: : :)
+   (|fact (mk.val C: essence hand :) T0: T1: : :); Don't duplicate S0, which is for hands.
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; One hand H is at a position P and another thing C is at the same position and is not attached to the hand.
+S1:(cst |[]
+[]
+   (fact (icst S0 |[] [H: P:] : :) T0: T1: : :)
+   (fact (icst S3 |[] [C: X: P:] : :) T0: T1: : :); X is also exposed from S3.
+   (|fact (mk.val H: attached C: :) T0: T1: : :); Change O to C.
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; When the hand H is asked to grab whatever, then it will be attached to hand H.
+M2:(mdl [H: C: T0: T1:]
+[]
+   (fact (cmd grab [H:] :) T2: T1: : :)
+   (fact (mk.val H: attached C: :) T1: T3: : :)
+[]
+   T3:(+ T1 0s:100ms:0us); Copy from M2.
+[]
+   T2:(- T1 0s:80ms:0us); Copy from M2.
+[stdin] 0 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; M2 will work (some C will be attached to hand H) if it is at the same position as hand H and it is not already attached.
+M3:(mdl |[]
+[]
+   (fact (icst S1 |[] [H: P: C: X:] : :) T0: T1: : :); X is also exposed from S1.
+   (fact (imdl M2 [H: C: T0: T1:] [T3:] : :) T0: T1: : :); T2 is not exposed from M2.
+|[]
+|[]
+[stdin] 0 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; Hand H and object C are at the same position P and they are already attached.
+S2:(cst |[]
+[]
+   (fact (icst S0 |[] [H: P:] : :) T0: T1: : :)
+   (fact (icst S3 |[] [C: X: P:] : :) T0: T1: : :); X is also exposed from S3.
+   (fact (mk.val H: attached C: :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; When I release my hand H, a thing C is not attached anymore.
+M4:(mdl [H: C: T0: T1:]
+[]
+   (fact (cmd release [H:] :) T2: T1: : :)
+   (|fact (mk.val H: attached C: :) T1: T3: : :)
+[]
+   T3:(+ T1 0s:100ms:0us); Copy from M2.
+[]
+   T2:(- T1 0s:80ms:0us); Copy from M2.
+[stdin] 0 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; M4 will work (some C will not be attached to hand H) if it is at the same position as hand H and it is already attached.
+M5:(mdl |[]
+[]
+   (fact (icst S2 |[] [H: P: C: X:] : :) T0: T1: : :); X is also exposed from S2.
+   (fact (imdl M4 [H: C: T0: T1:] [T2: T3:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 0 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; When model M0 fires the prediction of the next position P1 of hand H, something C will also be at the same position P1.
+M6:(mdl [H: C: P0: T0: T1:]
+[]
+   (fact (imdl M0 [H: P0: T0: T1:] [DeltaP: P1: T3:] : :) T0: T1: : :); Change timings from T1 T3 to T0 T1. T2 is not exposed from M0.
+   (fact (mk.val C: position P1: :) T1: T3: : :); Fix bug as explained: Change C to P1.
+|[]
+|[]
+[stdin] 0 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; When some C is attached to hand H and the hand moves to position P1, then C will also be at P1.
+M7:(mdl |[]
+[]
+   (fact (icst S2 |[] [H: P: C: X:] : :) T0: T1: : :); X is also exposed from S2.
+   (fact (imdl M6 [H: C: P: T0: T1:] [DeltaP: P1: T3:] : :) T0: T1: : :); M6 template needs P. DeltaP and P1 are exposed. T2 is not exposed from M6.
+|[]
+|[]
+[stdin] 0 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+h:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+h_is_a_hand:(mk.val h essence hand 1) |[]
+(fact h_is_a_hand 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+c:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+c_is_a_cube:(mk.val c essence cube 1) |[]
+(fact c_is_a_cube 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+c_is_a_hand:(mk.val c essence hand 1) |[]
+; This is needed for S3.
+(|fact c_is_a_hand 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+s:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+s_is_a_sphere:(mk.val s essence sphere 1) |[]
+(fact s_is_a_sphere 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+s_is_a_hand:(mk.val s essence hand 1) |[]
+; This is needed for S3.
+(|fact s_is_a_hand 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+!def pH0 25
+!def pS0 0
+!def pS1 15
+
+; Initial conditions.
+start:(pgm |[] |[] |[] []
+   (inj []
+      h_position_pH0:(mk.val h position pH0 1)
+      |[]
+   )
+   (inj []
+      (fact h_position_pH0 after:(now) (+ after sampling_period) 1 1)
+      [SYNC_PERIODIC now 1 1 stdin nil]
+   )
+
+   (inj []
+      c_position_pH0:(mk.val c position pH0 1)
+      |[]
+   )
+   (inj []
+      (fact c_position_pH0 after (+ after sampling_period) 1 1)
+      [SYNC_PERIODIC now 1 1 stdin nil]
+   )
+
+   (inj []
+      s_position_pS0:(mk.val s position pS0 1)
+      |[]
+   )
+
+   (inj []
+      (fact s_position_pS0 after (+ after sampling_period) 1 1)
+      [SYNC_PERIODIC now 1 1 stdin nil]
+   )
+
+   (inj []
+      h_attached_c:(mk.val h attached c 1)
+      |[]
+   )
+   (inj []
+      (fact h_attached_c after (+ after sampling_period) 1 1)
+      [SYNC_PERIODIC now 1 1 stdin nil]
+   )
+1) |[]
+(ipgm start |[] RUN_ONCE sampling_period VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+
+m_run:(mdl |[] []
+   ; The goal target timings are the same as the drive timings.
+   (fact (mk.val s position pS1 1) t0: t1: 1 1)
+   (fact run t0: t1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+pgm_inject_drive:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) after: before: ::) |[])
+[]
+   (>= after (+ this.vw.ijt 0s:100ms:0us))
+[]
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; The end of the time interval will be used in m_run_position as the end of the goal interval.
+      f_run:(fact run (+ after 10000us) (+ this.vw.ijt 0s:900ms:0us) 1 1)
+      |[]
+   )
+   (inj []
+      g:(goal f_run self nil 1)
+      |[]
+   )
+   (inj []
+      (fact g t1:(+ after 10000us) t1 1 1)
+      [SYNC_ONCE t1 1 forever primary nil]
+   )
+   (prb [1 "print" "injected drive" |[]])
+1) |[]
+i_pgm_inject_drive:(ipgm pgm_inject_drive |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
