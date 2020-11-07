@@ -830,23 +830,21 @@ void Decompiler::write_any(uint16 read_index, bool &after_tail_wildcard, bool ap
   uint16 index;
   switch (a.getDescriptor()) {
   case Atom::VL_PTR:
-    if (in_hlp_) {
+    // JTNote: The opcode 0x0FFE doesn't seem to be used.
+    if (a.asCastOpcode() == 0x0FFE)
+      out_stream_->push(':', read_index);
+    else {
 
-      if (a.asCastOpcode() == 0x0FFE)
-        out_stream_->push(':', read_index);
-      else {
-
-        std::string s = get_hlp_variable_name(a.asIndex());
-        out_stream_->push(s, read_index);
-      }
-      break;
+      std::string s = get_hlp_variable_name(a.asIndex());
+      out_stream_->push(s, read_index);
     }
+    break;
   case Atom::ASSIGN_PTR:
-    if (in_hlp_) {
-
-      out_stream_->push(get_hlp_variable_name(a.asAssignmentIndex()), read_index);
-      *out_stream_ << ":";
-    }
+    // Output the assignment index, then fall through to process like an I_PTR.
+    out_stream_->push(get_hlp_variable_name(a.asAssignmentIndex()), read_index);
+    *out_stream_ << ":";
+  case Atom::CODE_VL_PTR:
+    // Fall through to start processing like an I_PTR. Will print the get_variable_name() and break.
   case Atom::I_PTR:
     index = a.asIndex();
     atom = current_object_->code_[index];
@@ -855,7 +853,7 @@ void Decompiler::write_any(uint16 read_index, bool &after_tail_wildcard, bool ap
       index = atom.asIndex();
       atom = current_object_->code_[index];
     }
-    if (index < read_index) { // reference to a label or variable.
+    if (index < read_index) { // reference to a label or variable, including CODE_VL_PTR.
 
       std::string s = get_variable_name(index, atom.getDescriptor() != Atom::WILDCARD); // post-fix labels with ':' (no need for variables since they are inserted just before wildcards).
       out_stream_->push(s, read_index);
@@ -913,7 +911,7 @@ void Decompiler::write_any(uint16 read_index, bool &after_tail_wildcard, bool ap
         out_stream_->push("this", read_index);
         opcode = metadata_->sys_classes_["ipgm"].atom_.asOpcode();
         break;
-      case Atom::VL_PTR: {
+      case Atom::CODE_VL_PTR: {
 
         uint8 cast_opcode = atom.asCastOpcode();
         while (current_object_->code_[atom.asIndex()].getDescriptor() == Atom::I_PTR) // position to a structure or an atomic value_.
