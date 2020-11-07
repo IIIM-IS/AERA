@@ -130,9 +130,9 @@ inline Atom Atom::IPointer(uint16 index) {
   return Atom((I_PTR << 24) + (index & 0x0FFF));
 }
 
-inline Atom Atom::VLPointer(uint16 index, uint16 cast_opcode) {
+inline Atom Atom::VLPointer(uint16 index) {
 
-  return Atom((VL_PTR << 24) + ((cast_opcode & 0x0FFF) << 12) + (index & 0x0FFF));
+  return Atom((VL_PTR << 24) + (index & 0x0FFF));
 }
 
 inline Atom Atom::RPointer(uint16 index) {
@@ -173,6 +173,11 @@ inline Atom Atom::ProductionPointer(uint16 index) {
 inline Atom Atom::AssignmentPointer(uint8 variable_index, uint16 index) {
 
   return Atom((ASSIGN_PTR << 24) + (variable_index << 16) + (index & 0x0FFF));
+}
+
+inline Atom Atom::CodeVLPointer(uint16 index, uint16 cast_opcode) {
+
+  return Atom((CODE_VL_PTR << 24) + ((cast_opcode & 0x0FFF) << 12) + (index & 0x0FFF));
 }
 
 inline Atom Atom::This() {

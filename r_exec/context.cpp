@@ -170,7 +170,7 @@ void IPGMContext::dereference_once() {
 IPGMContext IPGMContext::operator *() const {
 
   switch ((*this)[0].getDescriptor()) {
-  case Atom::VL_PTR: { // evaluate the code if necessary.
+  case Atom::CODE_VL_PTR: { // evaluate the code if necessary.
       // TODO: OPTIMIZATION: if not in a cptr and if this eventually points to an r-ptr or in-obj-ptr,
       // patch the code at this->index, i.e. replace the vl ptr by the in-obj-ptr or rptr.
     Atom a = code_[(*this)[0].asIndex()];
@@ -182,7 +182,7 @@ IPGMContext IPGMContext::operator *() const {
       IPGMContext s(object_, view_, code_, structure_index, (InputLessPGMOverlay *)overlay_, data_);
       uint16 unused_index;
       if (s.evaluate_no_dereference(unused_index))
-        return s; // patched code: atom at VL_PTR's index changed to VALUE_PTR or 32 bits result.
+        return s; // patched code: atom at CODE_VL_PTR's index changed to VALUE_PTR or 32 bits result.
       else // evaluation failed, return undefined context.
         return IPGMContext();
     } else
@@ -374,7 +374,7 @@ dereference:
   head = code_[_index];
   switch (head.getDescriptor()) { // dereference until either we reach some non-pointer or a reference or a value pointer.
   case Atom::I_PTR:
-  case Atom::VL_PTR:
+  case Atom::CODE_VL_PTR:
     _index = head.asIndex();
     goto dereference;
   case Atom::VALUE_PTR:
