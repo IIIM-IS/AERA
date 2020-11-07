@@ -2508,7 +2508,7 @@ bool Compiler::read_reference(uint16 write_index, uint16 &extent_index, bool wri
   if (local_reference(index, t)) {
 
     if (write)
-      current_object_->code_[write_index] = Atom::VLPointer(index); // local references are always pointing to the value array
+      current_object_->code_[write_index] = Atom::CodeVLPointer(index); // local references are always pointing to the value array
     return true;
   }
   if (global_reference(index, t)) { // index is the index held by a reference pointer
@@ -2552,7 +2552,7 @@ bool Compiler::read_reference(uint16 write_index, uint16 &extent_index, bool wri
 
       current_object_->code_[write_index] = Atom::IPointer(extent_index);
       current_object_->code_[extent_index++] = Atom::CPointer(v.size());
-      current_object_->code_[extent_index++] = Atom::VLPointer(v[0], cast_opcode);
+      current_object_->code_[extent_index++] = Atom::CodeVLPointer(v[0], cast_opcode);
       for (uint16 i = 1; i < v.size(); ++i) {
 
         switch (v[i]) {
