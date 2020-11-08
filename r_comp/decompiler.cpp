@@ -101,6 +101,8 @@ static std::string make_suffix(uint32 value) {
 }
 
 Decompiler::Decompiler() : out_stream_(NULL), current_object_(NULL), metadata_(NULL), image_(NULL), in_hlp_(false) {
+  // Make hlp_postfix_ true by default to put ':' after variables, unless it is set false for guards in cst and mdl.
+  hlp_postfix_ = true;
 }
 
 Decompiler::~Decompiler() {
@@ -557,15 +559,16 @@ void Decompiler::write_hlp(uint16 read_index) {
         write_indent(indents_);
       }
 
-      if (i == 0 || i == 1)
-        // Put a colon after variables for template arguments and the facts.
-        hlp_postfix_ = true;
+      if (!(i == 0 || i == 1))
+        // Put a colon after variables for template arguments and the facts, but not after further
+        // element such as guards.
+        hlp_postfix_ = false;
       bool save_horizontal_set = horizontal_set_;
       if (i == 0 || i == 4)
         // Write the set of template arguments and set of output groups horizontally.
         horizontal_set_ = true;
       write_any(++read_index, after_tail_wildcard, false);
-      hlp_postfix_ = false;
+      hlp_postfix_ = true;
       horizontal_set_ = save_horizontal_set;
 
       if (!closing_set_)
