@@ -211,7 +211,15 @@ uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, T
   return object_count;
 }
 
-uint32 Decompiler::decompile_references(r_comp::Image *image) {
+uint32 Decompiler::decompile_references(r_comp::Image *image, UNORDERED_MAP<uint16, std::string>* object_names) {
+
+  if (object_names) {
+    // Pre-populate object_names_ and object_indices_.
+    for (auto entry = object_names->begin(); entry != object_names->end(); ++entry) {
+      object_names_[entry->first] = entry->second;
+      object_indices_[entry->second] = entry->first;
+    }
+  }
 
   UNORDERED_MAP<const Class *, uint16> object_ID_per_class;
   UNORDERED_MAP<std::string, Class>::const_iterator it;
@@ -232,6 +240,11 @@ uint32 Decompiler::decompile_references(r_comp::Image *image) {
 
       s = n->second;
       named_objects_.insert(sys_object->oid_);
+
+      if (object_names_[i] != "" && object_names_[i] != s)
+        // The image->object_names_.symbols_ for the OID is different than the name in the provided object_names.
+        // (We don't expect this to happen.)
+        return 0;
 
       object_names_[i] = s;
       object_indices_[s] = i;
