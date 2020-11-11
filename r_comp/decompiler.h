@@ -163,7 +163,7 @@ public:
    * \return The number of objects, or 0 for error.
    */
   uint32 decompile_references(r_comp::Image *image, UNORDERED_MAP<uint16, std::string>* object_names = NULL);
-  void decompile_object(uint16 object_index, std::ostringstream *stream, Timestamp::duration time_offset); // decompiles a single object; object_index is the position of the object in the vector returned by Image::getObject.
+  void decompile_object(uint16 object_index, std::ostringstream *stream, Timestamp::duration time_offset, bool includeViews = true); // decompiles a single object; object_index is the position of the object in the vector returned by Image::getObject.
   void decompile_object(const std::string object_name, std::ostringstream *stream, Timestamp::duration time_offset); // decompiles a single object given its name: use this function to follow references.
 };
 }
