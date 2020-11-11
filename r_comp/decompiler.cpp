@@ -300,7 +300,7 @@ uint32 Decompiler::decompile_references(r_comp::Image *image, UNORDERED_MAP<uint
   return image->code_segment_.objects_.size();
 }
 
-void Decompiler::decompile_object(uint16 object_index, std::ostringstream *stream, Timestamp::duration time_offset) {
+void Decompiler::decompile_object(uint16 object_index, std::ostringstream *stream, Timestamp::duration time_offset, bool includeViews) {
 
   if (!out_stream_)
     out_stream_ = new OutStream(stream);
@@ -325,7 +325,8 @@ void Decompiler::decompile_object(uint16 object_index, std::ostringstream *strea
 
     if (named_objects_.find(sys_object->oid_) != named_objects_.end())
       return;
-  } else { // decompiling on-the-fly: ignore named objects only if imported.
+  }
+  else { // decompiling on-the-fly: ignore named objects only if imported.
 
     bool imported = false;
     for (uint32 i = 0; i < imported_objects_.size(); ++i) {
@@ -343,7 +344,8 @@ void Decompiler::decompile_object(uint16 object_index, std::ostringstream *strea
         return;
       else
         *out_stream_ << "imported";
-    } else if (sys_object->oid_ != UNDEFINED_OID)
+    }
+    else if (sys_object->oid_ != UNDEFINED_OID)
       *out_stream_ << sys_object->oid_;
 #ifdef WITH_DEBUG_OID
     *out_stream_ << "(" << sys_object->debug_oid_ << ") ";
@@ -361,18 +363,21 @@ void Decompiler::decompile_object(uint16 object_index, std::ostringstream *strea
 
   (this->*renderers_[current_object_->code_[read_index].asOpcode()])(read_index);
 
-  uint16 view_count = sys_object->views_.size();
-  if (view_count) { // write the set of views
+  if (includeViews) {
+    uint16 view_count = sys_object->views_.size();
+    if (view_count) { // write the set of views
 
-    *out_stream_ << " []";
-    for (uint16 i = 0; i < view_count; ++i) {
+      *out_stream_ << " []";
+      for (uint16 i = 0; i < view_count; ++i) {
 
-      write_indent(3);
-      current_object_ = sys_object->views_[i];
-      write_view(0, current_object_->code_[0].getAtomCount());
+        write_indent(3);
+        current_object_ = sys_object->views_[i];
+        write_view(0, current_object_->code_[0].getAtomCount());
+      }
     }
-  } else
-    *out_stream_ << " |[]";
+    else
+      *out_stream_ << " |[]";
+  }
   write_indent(0);
   write_indent(0);
 }
