@@ -300,7 +300,9 @@ uint32 Decompiler::decompile_references(r_comp::Image *image, UNORDERED_MAP<uint
   return image->code_segment_.objects_.size();
 }
 
-void Decompiler::decompile_object(uint16 object_index, std::ostringstream *stream, Timestamp::duration time_offset, bool includeViews) {
+void Decompiler::decompile_object(
+  uint16 object_index, std::ostringstream *stream, Timestamp::duration time_offset, bool include_oid,
+  bool include_views) {
 
   if (!out_stream_)
     out_stream_ = new OutStream(stream);
@@ -345,14 +347,18 @@ void Decompiler::decompile_object(uint16 object_index, std::ostringstream *strea
       else
         *out_stream_ << "imported";
     }
-    else if (sys_object->oid_ != UNDEFINED_OID)
-      *out_stream_ << sys_object->oid_;
+    else {
+      if (include_oid) {
+        if (sys_object->oid_ != UNDEFINED_OID)
+          *out_stream_ << sys_object->oid_;
 #ifdef WITH_DEBUG_OID
-    *out_stream_ << "(" << sys_object->debug_oid_ << ") ";
+        *out_stream_ << "(" << sys_object->debug_oid_ << ") ";
 #else
-    if (sys_object->oid_ != UNDEFINED_OID)
-      *out_stream_ << " ";
+        if (sys_object->oid_ != UNDEFINED_OID)
+          *out_stream_ << " ";
 #endif
+      }
+    }
   }
 
   std::string s = object_names_[object_index];
@@ -363,7 +369,7 @@ void Decompiler::decompile_object(uint16 object_index, std::ostringstream *strea
 
   (this->*renderers_[current_object_->code_[read_index].asOpcode()])(read_index);
 
-  if (includeViews) {
+  if (include_views) {
     uint16 view_count = sys_object->views_.size();
     if (view_count) { // write the set of views
 
