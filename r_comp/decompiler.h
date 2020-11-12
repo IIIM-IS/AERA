@@ -163,7 +163,19 @@ public:
    * \return The number of objects, or 0 for error.
    */
   uint32 decompile_references(r_comp::Image *image, UNORDERED_MAP<uint16, std::string>* object_names = NULL);
-  void decompile_object(uint16 object_index, std::ostringstream *stream, Timestamp::duration time_offset, bool includeViews = true); // decompiles a single object; object_index is the position of the object in the vector returned by Image::getObject.
+
+  /**
+   * Decompile a single object.
+   * \param object_index The position of the object in image_->code_segment_.objects_.
+   * \param stream The output stream.
+   * \param time_offset The time since the start of the run for showing relative times.
+   * \param include_oid (optional) If true, prepend with the OID (and debug OID if enabled). If omitted, include the OID.
+   * \param include_views (optional) If true, include the set of view, or |[] if there are not views. If omitted, include the views.
+   */
+  void decompile_object(
+    uint16 object_index, std::ostringstream *stream, Timestamp::duration time_offset, bool include_oid = true, 
+    bool include_views = true);
+
   void decompile_object(const std::string object_name, std::ostringstream *stream, Timestamp::duration time_offset); // decompiles a single object given its name: use this function to follow references.
 };
 }
