@@ -19,21 +19,25 @@ S0:(cst |[]
 ; When I move H by offset DeltaP, then H will be at position P1.
 M0:(mdl [H: P0: T0: T1:]
 []
-   (fact (cmd move [H: DeltaP:] :) T2: T1: : :)
-   (fact (mk.val H: position P1: :) T1: T3: : :)
+   (fact (cmd move [H: DeltaP:] :) T2: T1_cmd: : :); Change T1 to T1_cmd.
+   (fact (mk.val H: position P1: :) T1_RHS: T3: : :); Change T1 to T1_RHS.
 []
    P1:(+ P0 DeltaP)
+   T1_RHS:(+ T0 0s:100ms:0us)
    T3:(+ T1 0s:100ms:0us)
 []
    DeltaP:(- P1 P0)
-   T2:(- T1 0s:80ms:0us); Change 50ms delay to 20ms.
+   T2:(- T1_RHS 0s:80ms:0us); Change 50ms delay to 20ms.
+   T1_cmd:(- T3 0s:100ms:0us)
+   T0:(- T1_RHS 0s:100ms:0us)
+   T1:(- T3 0s:100ms:0us)
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; If we observe state S0 (hand H has position P0), then if M0 predicts something (position P1) it will be right.
 M1:(mdl |[]
 []
    (fact (icst S0 |[] [H: P0:] : :) T0: T1: : :)
-   (fact (imdl M0 [H: P0: T0: T1:] [DeltaP: P1: T3:] : :) T0: T1: : :); T2: is not exposed from M0.
+   (fact (imdl M0 [H: P0: T0: T1:] [DeltaP: P1: T1_RHS: T3:] : :) T0: T1: : :); T2: is not exposed from M0. T1_RHS is also exposed.
 |[]
 |[]
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
@@ -61,19 +65,23 @@ S1:(cst |[]
 ; When the hand H is asked to grab whatever, then it will be attached to hand H.
 M2:(mdl [H: C: T0: T1:]
 []
-   (fact (cmd grab [H:] :) T2: T1: : :)
-   (fact (mk.val H: attached C: :) T1: T3: : :)
+   (fact (cmd grab [H:] :) T2: T1_cmd: : :); Change T1 to T1_cmd.
+   (fact (mk.val H: attached C: :) T1_RHS: T3: : :); Change T1 to T1_RHS.
 []
-   T3:(+ T1 0s:100ms:0us); Copy from M0.
+   T1_RHS:(+ T0 0s:100ms:0us); Copy from M0.
+   T3:(+ T1 0s:100ms:0us);     Copy from M0.
 []
-   T2:(- T1 0s:80ms:0us); Copy from M0.
+   T2:(- T1_RHS 0s:80ms:0us);  Copy from M0.
+   T1_cmd:(- T3 0s:100ms:0us); Copy from M0.
+   T0:(- T1_RHS 0s:100ms:0us); Copy from M0.
+   T1:(- T3 0s:100ms:0us);     Copy from M0.
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; M2 will work (some C will be attached to hand H) if it is at the same position as hand H and it is not already attached.
 M3:(mdl |[]
 []
    (fact (icst S1 |[] [H: P: C: X:] : :) T0: T1: : :); X is also exposed from S1.
-   (fact (imdl M2 [H: C: T0: T1:] [T3:] : :) T0: T1: : :); T2 is not exposed from M2.
+   (fact (imdl M2 [H: C: T0: T1:] [T1_RHS: T3:] : :) T0: T1: : :); T2 is not exposed from M2. T1_RHS is also exposed.
 |[]
 |[]
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
@@ -91,19 +99,23 @@ S2:(cst |[]
 ; When I release my hand H, a thing C is not attached anymore.
 M4:(mdl [H: C: T0: T1:]
 []
-   (fact (cmd release [H:] :) T2: T1: : :)
-   (|fact (mk.val H: attached C: :) T1: T3: : :)
+   (fact (cmd release [H:] :) T2: T1_cmd: : :); Change T1 to T1_cmd.
+   (|fact (mk.val H: attached C: :) T1_RHS: T3: : :); Change T1 to T1_RHS.
 []
-   T3:(+ T1 0s:100ms:0us); Copy from M0.
+   T1_RHS:(+ T0 0s:100ms:0us); Copy from M0.
+   T3:(+ T1 0s:100ms:0us);     Copy from M0.
 []
-   T2:(- T1 0s:80ms:0us); Copy from M0.
+   T2:(- T1_RHS 0s:80ms:0us);  Copy from M0.
+   T1_cmd:(- T3 0s:100ms:0us); Copy from M0.
+   T0:(- T1_RHS 0s:100ms:0us); Copy from M0.
+   T1:(- T3 0s:100ms:0us);     Copy from M0.
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; M4 will work (some C will not be attached to hand H) if it is at the same position as hand H and it is already attached.
 M5:(mdl |[]
 []
    (fact (icst S2 |[] [H: P: C: X:] : :) T0: T1: : :); X is also exposed from S2.
-   (fact (imdl M4 [H: C: T0: T1:] [T2: T3:] : :) T0: T1: : :)
+   (fact (imdl M4 [H: C: T0: T1:] [T1_RHS: T3:] : :) T0: T1: : :); T2 is not exposed from M2. T1_RHS is also exposed.
 |[]
 |[]
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
@@ -111,16 +123,14 @@ M5:(mdl |[]
 ; When model M0 fires the prediction of the next position P1 of hand H, something C will also be at the same position P1.
 M6:(mdl [H: C: P0: T0: T1:]
 []
-   (fact (imdl M0 [H: P0: T0: T1:] [DeltaP: P1: T3:] : :) T0_cmd: T1_cmd: : :); Change timings from T1 T3 to T0_cmd T1_cmd. T2 is not exposed from M0.
-   (fact (mk.val C: position P1: :) T1_RHS: T3: : :); Fix bug as explained: Change C to P1.
-[]
-   T1_RHS:(+ T0 0s:100ms:0us); Copy from M0.
-   T3:(+ T1 0s:100ms:0us); Copy from M0.
+   (fact (imdl M0 [H: P0: T0: T1:] [DeltaP: P1: T1_RHS: T3:] : :) T0_cmd: T1_cmd: : :); Change timings from T1 T3 to T0_cmd T1_cmd. T2 is not exposed from M0. T1_RHS is also exposed.
+   (fact (mk.val C: position P1: :) T1_RHS: T3: : :); Fix bug as explained: Change C to P1. Change T1 to T1_RHS.
+|[]
 []
    T0_cmd:(- T1_RHS 0s:80ms:0us); Copy from M0.
-   T1_cmd:(- T3 0s:100ms:0us)
-   T0:(- T1_RHS 0s:100ms:0us)
-   T1:(- T3 0s:100ms:0us)
+   T1_cmd:(- T3 0s:100ms:0us);    Copy from M0.
+   T0:(- T1_RHS 0s:100ms:0us);    Copy from M0.
+   T1:(- T3 0s:100ms:0us);        Copy from M0.
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; When some C is attached to hand H and the hand moves to position P1, then C will also be at P1.
@@ -209,9 +219,8 @@ pgm_inject_drive:(pgm |[]
    (>= after (+ this.vw.ijt 0s:100ms:0us))
 []
    (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
       ; The end of the time interval will be used in m_run_position as the end of the goal interval.
-      f_run:(fact run (+ after 0s:10ms:0us) (+ before 0s:200ms:0us) 1 1)
+      f_run:(fact run (+ after 0s:100ms:0us) (+ before 0s:300ms:0us) 1 1)
       |[]
    )
    (inj []
@@ -219,8 +228,9 @@ pgm_inject_drive:(pgm |[]
       |[]
    )
    (inj []
-      (fact g t1:(+ after 10000us) t1 1 1)
-      [SYNC_ONCE t1 1 forever primary nil]
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact g t0:(+ after 10000us) t0 1 1)
+      [SYNC_ONCE t0 1 forever primary nil]
    )
    (prb [1 "print" "injected drive" |[]])
 1) |[]
