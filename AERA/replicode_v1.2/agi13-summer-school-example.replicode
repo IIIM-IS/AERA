@@ -137,7 +137,7 @@ M6:(mdl [H: C: P0: T0: T1:]
 M7:(mdl |[]
 []
    (fact (icst S2 |[] [H: P: C: X:] : :) T0: T1: : :); X is also exposed from S2.
-   (fact (imdl M6 [H: C: P: T0: T1:] [DeltaP: P1: T3: T1_RHS:] : :) T0: T1: : :); M6 template needs P. DeltaP, P1, T3 and T1_RHS are exposed. T2 is not exposed from M6.
+   (fact (imdl M6 [H: C: P: T0: T1:] [DeltaP: P1: T1_RHS: T3:] : :) T0: T1: : :); M6 template needs P. DeltaP, P1, T1_RHS and T3 are exposed. T2 is not exposed from M6.
 |[]
 |[]
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
