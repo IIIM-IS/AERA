@@ -218,7 +218,7 @@ public:
   // If SIM_MANDATORY or SIM_OPTIONAL: qualifies a sub-goal of the branch's root.
   SimMode get_mode() const { return (SimMode)(int)code(SIM_MODE).asFloat(); }
   // simulation time allowance (this is not the goal deadline); 0 indicates no time for simulation.
-  std::chrono::microseconds get_thz() const { 
+  std::chrono::microseconds get_thz() const {
     // The time horizon is stored as a timestamp, but it is actually a duration.
     return std::chrono::duration_cast<std::chrono::microseconds>(r_code::Utils::GetTimestamp<Code>(this, SIM_THZ).time_since_epoch());
   }
@@ -229,7 +229,7 @@ public:
   Fact* get_f_super_goal() const { return (Fact*)get_reference(0); }
 
   /**
-   * Get the opposite flag of the goal the sim is attached to, i.e. the result of the 
+   * Get the opposite flag of the goal the sim is attached to, i.e. the result of the
    * match during controller->reduce(); the confidence is in the goal target.
    */
   bool get_opposite() const { return code(SIM_OPPOSITE).asBoolean(); }
@@ -247,9 +247,12 @@ public:
   /**
    * Check if obj matches the target of any super goal, recursively following the chain of Sim objects up to
    * the root.
-   * @return True if obj matches any super goal.
+   * \param opcode The opcode, such as Opcodes::Fact or Opcodes::AntiFact. We specify the opcode
+   * separately because we ignore the fact timings.
+   * \param obj The object, such as (mk_val ...).
+   * \return True if obj matches any super goal.
    */
-  bool matchesAnySuperGoal(const Code* obj);
+  bool matchesAnySuperGoal(uint16 opcode, const Code* obj);
 
   bool is_requirement_;
 
