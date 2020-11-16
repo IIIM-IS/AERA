@@ -170,11 +170,12 @@ public:
    * \param stream The output stream.
    * \param time_offset The time since the start of the run for showing relative times.
    * \param include_oid (optional) If true, prepend with the OID (and debug OID if enabled). If omitted, include the OID.
+   * \param include_label (optional) If true, prepend the label and ':'. If omitted, include the label.
    * \param include_views (optional) If true, include the set of view, or |[] if there are not views. If omitted, include the views.
    */
   void decompile_object(
     uint16 object_index, std::ostringstream *stream, Timestamp::duration time_offset, bool include_oid = true, 
-    bool include_views = true);
+    bool include_label = true, bool include_views = true);
 
   void decompile_object(const std::string object_name, std::ostringstream *stream, Timestamp::duration time_offset); // decompiles a single object given its name: use this function to follow references.
 };
