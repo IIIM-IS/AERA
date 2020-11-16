@@ -304,7 +304,7 @@ uint32 Decompiler::decompile_references(r_comp::Image *image, UNORDERED_MAP<uint
 
 void Decompiler::decompile_object(
   uint16 object_index, std::ostringstream *stream, Timestamp::duration time_offset, bool include_oid,
-  bool include_views) {
+  bool include_label, bool include_views) {
 
   if (!out_stream_)
     out_stream_ = new OutStream(stream);
@@ -363,9 +363,11 @@ void Decompiler::decompile_object(
     }
   }
 
-  std::string s = object_names_[object_index];
-  s += ":";
-  *out_stream_ << s;
+  if (include_label) {
+    std::string s = object_names_[object_index];
+    s += ":";
+    *out_stream_ << s;
+  }
 
   horizontal_set_ = false;
 
