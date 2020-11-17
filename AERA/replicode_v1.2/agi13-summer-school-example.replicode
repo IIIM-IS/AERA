@@ -54,7 +54,6 @@ S3:(cst |[]
 
 ; One hand H is at a position P and another thing C is at the same position and the hand is not attached to anything.
 S1:(cst |[]
-
 []
    (fact (icst S0 |[] [H: P:] : :) T0: T1: : :)
    (fact (icst S3 |[] [C: X: P:] : :) T0: T1: : :); X is also exposed from S3.
