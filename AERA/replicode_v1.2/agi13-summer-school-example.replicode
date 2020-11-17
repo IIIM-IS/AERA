@@ -52,12 +52,13 @@ S3:(cst |[]
 |[]
 [stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
-; One hand H is at a position P and another thing C is at the same position and is not attached to the hand.
+; One hand H is at a position P and another thing C is at the same position and the hand is not attached to anything.
 S1:(cst |[]
+
 []
    (fact (icst S0 |[] [H: P:] : :) T0: T1: : :)
    (fact (icst S3 |[] [C: X: P:] : :) T0: T1: : :); X is also exposed from S3.
-   (|fact (mk.val H: attached C: :) T0: T1: : :); Change O to C.
+   (|fact (mk.val H: attached O: :) T0: T1: : :)
 |[]
 |[]
 [stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
@@ -80,7 +81,7 @@ M2:(mdl [H: C: T0: T1:]
 ; M2 will work (some C will be attached to hand H) if it is at the same position as hand H and it is not already attached.
 M3:(mdl |[]
 []
-   (fact (icst S1 |[] [H: P: C: X:] : :) T0: T1: : :); X is also exposed from S1.
+   (fact (icst S1 |[] [H: P: C: X: O:] : :) T0: T1: : :); X and O are also exposed from S1.
    (fact (imdl M2 [H: C: T0: T1:] [T1_RHS: T3:] : :) T0: T1: : :); T2 is not exposed from M2. T1_RHS is also exposed.
 |[]
 |[]
