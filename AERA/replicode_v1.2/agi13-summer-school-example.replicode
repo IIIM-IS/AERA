@@ -187,7 +187,6 @@ start:(pgm |[] |[] |[] []
       s_position_pS0:(mk.val s position pS0 1)
       |[]
    )
-
    (inj []
       (fact s_position_pS0 after (+ after sampling_period) 1 1)
       [SYNC_PERIODIC now 1 1 stdin nil]
