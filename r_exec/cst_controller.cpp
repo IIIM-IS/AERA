@@ -184,6 +184,11 @@ CSTOverlay *CSTOverlay::get_offspring(HLPBindingMap *map, _Fact *input, _Fact *b
   patterns_.remove(bound_pattern);
   if (match_deadline_.time_since_epoch().count() == 0)
     match_deadline_ = map->get_fwd_before();
+#ifdef WITH_DEBUG_OID
+  OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " CSTOverlay(" << get_debug_oid() <<
+    ") for cst " << controller_->getObject()->get_oid() << " -> offspring CSTOverlay(" << 
+    offspring->get_debug_oid() << ")");
+#endif
   update(map, input, bound_pattern);
   //std::cout<<std::hex<<this<<std::dec<<" produced: "<<std::hex<<offspring<<std::dec<<std::endl;
   return offspring;
@@ -478,6 +483,10 @@ void CSTController::inject_goal(HLPBindingMap *bm,
 
   View *view = new View(View::SYNC_ONCE, now, confidence, 1, group, group, sub_goal_f); // SYNC_ONCE,res=1.
   _Mem::Get()->inject(view);
+#ifdef WITH_DEBUG_OID
+  OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " cst " << getObject()->get_oid() << ": fact " <<
+    super_goal->get_oid() << " super_goal -> fact " << sub_goal_f->get_oid() << " simulated goal");
+#endif
 
   if (sim->get_mode() == SIM_ROOT) { // no rdx for SIM_OPTIONAL or SIM_MANDATORY.
 
