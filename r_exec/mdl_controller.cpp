@@ -1863,6 +1863,10 @@ void PrimaryMDLController::abduce_simulated_imdl(HLPBindingMap *bm, Fact *super_
   Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
   add_r_monitor(new SRMonitor(this, bm, now + sim->get_thz(), f_sub_goal, f_imdl));
   inject_simulation(f_sub_goal);
+#ifdef WITH_DEBUG_OID
+  OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": fact " <<
+    super_goal->get_oid() << " super_goal -> fact " << f_sub_goal->get_oid() << " simulated goal");
+#endif
 }
 
 bool PrimaryMDLController::check_imdl(Fact *goal, HLPBindingMap *bm) { // goal is f->g->f->imdl; called by r-monitors.
