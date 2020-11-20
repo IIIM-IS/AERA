@@ -79,7 +79,7 @@ Debug
   runtime_output_file_path: The file path for the runtime output of the trace_levels selected below. If "" then use std::cout.
   trace_levels: Hexadecimal ORed values of traces for the runtime output (numbers indicate the location from right to left):
     0: cst inputs, 1: cst outputs, 2: mdl inputs, 3: mdl outputs, 4 prediction monitoring, 5: goal monitoring,
-      6: model revision, 7:mdl/cst injections, 8: environment injections/ejections, 9: auto focus.
+      6: model revision, 7:mdl/cst injections, 8: I/O device injections/ejections, 9: auto focus.
     e.g.: 3 means cst inputs and cst outputs, ignore others. FFFF enables all trace levels.
   Resilience
     ntf_mk_resilience: in upr (i.e. relative to the ntf group).
