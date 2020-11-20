@@ -179,10 +179,10 @@ void InputLessPGMSignalingJob::report(int64 lag) const {
 
 ////////////////////////////////////////////////////////////
 
-InjectionJob::InjectionJob(View *v, Timestamp target_time, bool isFromEnvironment) : TimeJob(target_time) {
+InjectionJob::InjectionJob(View *v, Timestamp target_time, bool isFromIoDevice) : TimeJob(target_time) {
 
   view_ = v;
-  isFromEnvironment_ = isFromEnvironment;
+  isFromIoDevice_ = isFromIoDevice;
 }
 
 bool InjectionJob::update(Timestamp &next_target) {
@@ -192,9 +192,9 @@ bool InjectionJob::update(Timestamp &next_target) {
     ": inject(View(fact(" << view_->object_->get_debug_oid() << ")))");
 #endif
   _Mem::Get()->inject(view_);
-  if (isFromEnvironment_)
+  if (isFromIoDevice_)
     // The view injection time may be different than now, so log it too.
-    OUTPUT_LINE(ENVIRONMENT_INJ_EJT, Utils::RelativeTime(Now()) << " environment inject " <<
+    OUTPUT_LINE(IO_DEVICE_INJ_EJT, Utils::RelativeTime(Now()) << " I/O device inject " <<
       view_->object_->get_oid() << ", ijt " << Utils::RelativeTime(view_->get_ijt()));
   return true;
 }

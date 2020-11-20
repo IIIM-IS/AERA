@@ -101,7 +101,7 @@ typedef enum {
   GOAL_MON = 5,
   MDL_REV = 6,
   HLP_INJ = 7,
-  ENVIRONMENT_INJ_EJT = 8,
+  IO_DEVICE_INJ_EJT = 8,
   AUTO_FOCUS = 9
 } TraceLevel;
 

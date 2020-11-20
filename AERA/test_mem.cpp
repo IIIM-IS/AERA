@@ -205,7 +205,7 @@ template<class O, class S> r_exec::View* TestMem<O, S>::injectFact
   r_exec::View *view = new r_exec::View(syncMode, after, 1, 1, group, NULL, fact);
 
   // Inject the view.
-  ((_Mem *)this)->injectFromEnvironment(view);
+  ((_Mem *)this)->injectFromIoDevice(view);
   return view;
 }
 

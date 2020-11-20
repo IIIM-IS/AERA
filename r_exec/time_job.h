@@ -158,14 +158,14 @@ public:
    * Create an InjectionJob to call  _Mem::Get()->inject(view_) at the target_time.
    * \param v The View for calling inject.
    * \param target_time The target time for the TimeJob.
-   * \param isFromEnvironment True if this is called from injectFromEnvironment().
-   * This is only needed so that this will log the environment inject.
+   * \param isFromIoDevice True if this is called from injectFromIoDevice().
+   * This is only needed so that this will log the I/O device inject.
    */
-  InjectionJob(View *v, Timestamp target_time, bool isFromEnvironment);
+  InjectionJob(View *v, Timestamp target_time, bool isFromIoDevice);
   bool update(Timestamp &next_target);
   void report(int64 lag) const;
 
-  bool isFromEnvironment_;
+  bool isFromIoDevice_;
 };
 
 class r_exec_dll EInjectionJob :

@@ -299,11 +299,11 @@ public:
   void pushTimeJob(TimeJob *j);
 
   /**
-   * This is called from the external environment to call the normal inject(view), then 
+   * This is called from the I/O device to call the normal inject(view), then 
    * log the injection event.
    * \param view The View for inject(view).
    */
-  void injectFromEnvironment(View *view);
+  void injectFromIoDevice(View *view);
 
   // Called upon successful reduction.
   /**
@@ -311,11 +311,11 @@ public:
    * However, if the view's injection time is later than now, then create
    * an InjectionJob which will call bind and inject the view at the injection time.
    * \param view The View to inject.
-   * \param isFromEnvironment True if this is called from injectFromEnvironment().
+   * \param isFromIoDevice True if this is called from injectFromIoDevice().
    * This is only needed to pass to the InjectionJob so that it will log the 
-   * environment inject.
+   * I/O device inject.
    */
-  void inject(View *view, bool isFromEnvironment = false);
+  void inject(View *view, bool isFromIoDevice = false);
   void inject_async(View *view);
   void inject_new_object(View *view);
   void inject_existing_object(View *view, r_code::Code *object, Group *host);
