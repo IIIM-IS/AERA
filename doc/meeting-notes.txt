@@ -409,10 +409,11 @@ Simulator
 * Models from PTPX don't seem to use specific facts which caused the failure. Basic question of general vs. specific models.
 
 next meeting
-* Review/merge pull request for binding map in the prediction's mk.rdx https://github.com/IIIM-IS/replicode/pull/120
+* DONE. In runtime_out, change "environment" to "I/O device"
 * Review/merge pull request for matchesAnySuperGoal in simulated backward chaining https://github.com/IIIM-IS/replicode/pull/108
 * Review/merge pull request for GMonitor::commit() calling abduce_no_simulation https://github.com/IIIM-IS/replicode/pull/114
 * Review/merge pull request for template timings in abduce_imdl https://github.com/IIIM-IS/replicode/pull/107
+* Review/merge pull request for binding map in the prediction's mk.rdx https://github.com/IIIM-IS/replicode/pull/120
 * Review/merge pull request for super_goal in new Sim https://github.com/IIIM-IS/replicode/pull/106
 * Review/merge pull request to not share timing variables when building the model https://github.com/IIIM-IS/replicode/pull/110
 * Review/merge pull request for simulation control in abduce_simulated_lhs https://github.com/IIIM-IS/replicode/pull/111
@@ -422,6 +423,7 @@ next meeting
 * Review/merge pull request for SYNC_HOLD timings https://github.com/IIIM-IS/replicode/pull/118
 * Review/merge pull request for simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
 * Review/merge pull request to allow eject to return the actally-executed command https://github.com/IIIM-IS/replicode/pull/125
+* Review/merge pull request to fix  https://github.com/IIIM-IS/replicode/issues/51 Add CODE_VL_PTR and fix the decompiler https://github.com/IIIM-IS/replicode/pull/126
 
 TODO
 * Try commenting out PTPX::reduce:666 if (i->input_ == Opcodes::Cmd)
@@ -432,7 +434,6 @@ TODO
 * How to ensure that stored requirements are from the same simulation branch?
 * In prediction monitor, on failure check again at the end of the predicted period.
 * Visualizer: Add an item for prediction reduction, initially hidden.
-* Visualizer: Use uniform spacing for each frame, adjustable.
 * Visualizer: Ability to launch Replicode from the Visualizer.
 * Make a mk.rdx for (fact (pred (fact (imdl ...)))). (May affect other code that expects the other kind of prediction.)
 * Change (success) to refer to the prediction mk.rdx instead of the prediction. (Affects other code.)
@@ -440,7 +441,6 @@ TODO
 * Document methods, starting with those related to the simulator.
 * If min_sim_time_horizon > 0, how is the behavior different?
 * In babbling, issue a goal for a position, an "unrelated" speed_x, and move the position there. Is GTPX invoked?
-* Decompiler error for VL_PTR in imdl https://github.com/IIIM-IS/replicode/issues/51
 * Treat move commands at the same time step as impulses and have them accumulate?
 * Issue #2: Try to reproduce.
 * Issue #25: Reproduce running in real-time, and see if it happens in diagnostic time.
