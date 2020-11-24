@@ -30,6 +30,7 @@
 !dfn (release :); arg0: an object.
 !dfn (move :); arg0: an object, arg1: target position
 !dfn (set_velocity_y :); arg0: an object, arg1: velocity.
+!dfn (set_acceleration_y :); arg0: an object, arg1: acceleration.
 !dfn (move_y_plus :); arg0: an object.
 !dfn (move_y_minus :); arg0: an object.
 !dfn (set_acceleration_y :); arg0: an object, arg1: acceleration.
@@ -55,6 +56,13 @@ velocity_z:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 acceleration_x:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 acceleration_y:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 acceleration_z:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+theta_x:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+theta_y:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+theta_z:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+omega_x:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+omega_y:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+omega_z:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+
 
 attachment:(ont 1) [[SYNC_ONCE now 0 forever root nil]]; usage: (mk.val self_right_hand attachment a_thing 1)
 spoken:(ont 1) [[SYNC_ONCE now 0 forever root nil]]; usage: (mk.val an_actor spoken a_sentence 1)
