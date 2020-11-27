@@ -288,7 +288,7 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
           update(bm, (_Fact *)input->object_, bound_pattern);
           inject_production();
           invalidate();
-          offspring = NULL;
+          offspring = new CSTOverlay(this);
           store_evidence(input->object_, prediction, is_simulation);
           return true;
         } else {
@@ -301,11 +301,11 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
       } else { // guards already evaluated, full match.
 //std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" full match\n";
         // Debug: If simulating then make the icst after matching one member, as a temporary solution to https://github.com/IIIM-IS/replicode/issues/97
-        if (is_simulation) offspring = new CSTOverlay(this); else offspring = NULL;
         update(bm, (_Fact *)input->object_, bound_pattern);
         // Debug: If simulating then make the icst after matching one member, as a temporary solution to https://github.com/IIIM-IS/replicode/issues/97
         if (is_simulation || inputs_.size() == original_patterns_size_) inject_production();
         invalidate();
+        offspring = new CSTOverlay(this);
         store_evidence(input->object_, prediction, is_simulation);
         return true;
       }
