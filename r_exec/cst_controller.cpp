@@ -96,6 +96,7 @@ CSTOverlay::CSTOverlay(const CSTOverlay *original) : HLPOverlay(original->contro
   match_deadline_ = original->match_deadline_;
   lowest_cfd_ = original->lowest_cfd_;
   original_patterns_size_ = original->original_patterns_size_;
+  inputs_ = original->inputs_;
 }
 
 CSTOverlay::~CSTOverlay() {
@@ -285,10 +286,10 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
         bindings_ = bm;
         if (evaluate_fwd_guards()) { // may update bindings; full match.
 //std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" full match\n";
+          offspring = new CSTOverlay(this);
           update(bm, (_Fact *)input->object_, bound_pattern);
           inject_production();
           invalidate();
-          offspring = new CSTOverlay(this);
           store_evidence(input->object_, prediction, is_simulation);
           return true;
         } else {
@@ -301,11 +302,11 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
       } else { // guards already evaluated, full match.
 //std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" full match\n";
         // Debug: If simulating then make the icst after matching one member, as a temporary solution to https://github.com/IIIM-IS/replicode/issues/97
+        offspring = new CSTOverlay(this);
         update(bm, (_Fact *)input->object_, bound_pattern);
         // Debug: If simulating then make the icst after matching one member, as a temporary solution to https://github.com/IIIM-IS/replicode/issues/97
         if (is_simulation || inputs_.size() == original_patterns_size_) inject_production();
         invalidate();
-        offspring = new CSTOverlay(this);
         store_evidence(input->object_, prediction, is_simulation);
         return true;
       }
