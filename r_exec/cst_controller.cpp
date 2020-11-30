@@ -285,10 +285,10 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
         bindings_ = bm;
         if (evaluate_fwd_guards()) { // may update bindings; full match.
 //std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" full match\n";
+          offspring = new CSTOverlay(this);
           update(bm, (_Fact *)input->object_, bound_pattern);
           inject_production();
           invalidate();
-          offspring = NULL;
           store_evidence(input->object_, prediction, is_simulation);
           return true;
         } else {
@@ -300,10 +300,10 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
         }
       } else { // guards already evaluated, full match.
 //std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" full match\n";
+        offspring = new CSTOverlay(this);
         update(bm, (_Fact *)input->object_, bound_pattern);
         if (inputs_.size() == original_patterns_size_) inject_production();
         invalidate();
-        offspring = NULL;
         store_evidence(input->object_, prediction, is_simulation);
         return true;
       }
