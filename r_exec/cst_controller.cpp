@@ -96,6 +96,7 @@ CSTOverlay::CSTOverlay(const CSTOverlay *original) : HLPOverlay(original->contro
   match_deadline_ = original->match_deadline_;
   lowest_cfd_ = original->lowest_cfd_;
   original_patterns_size_ = original->original_patterns_size_;
+  inputs_ = original->inputs_;
 }
 
 CSTOverlay::~CSTOverlay() {
