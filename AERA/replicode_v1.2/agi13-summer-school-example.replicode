@@ -127,7 +127,7 @@ M6:(mdl [H: C: P0: T0: T1:]
    (fact (mk.val C: position P1: :) T1_RHS: T3: : :); Fix bug as explained: Change C to P1. Change T1 to T1_RHS.
 |[]
 []
-   T0_cmd:(- T1_RHS 0s:80ms:0us); Copy from M0.
+   T0_cmd:(- T1_RHS 0s:100ms:0us); Copy from M0, but subtract 100ms because the LHS is not a command.
    T1_cmd:(- T3 0s:100ms:0us);    Copy from M0.
    T0:(- T1_RHS 0s:100ms:0us);    Copy from M0.
    T1:(- T3 0s:100ms:0us);        Copy from M0.
