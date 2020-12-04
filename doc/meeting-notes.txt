@@ -408,8 +408,11 @@ Simulator
   Hand-coded exception model works: The main model is not killed for failing. (Needed to offset babbling command.)
 * Models from PTPX don't seem to use specific facts which caused the failure. Basic question of general vs. specific models.
 
-next meeting
+2020-12-03
 * DONE. In runtime_out, change "environment" to "I/O device"
+* DONE. Review/merge pull request for all combinations of CSTOverlay https://github.com/IIIM-IS/replicode/pull/127
+
+next meeting
 * Review/merge pull request for matchesAnySuperGoal in simulated backward chaining https://github.com/IIIM-IS/replicode/pull/108
 * Review/merge pull request for GMonitor::commit() calling abduce_no_simulation https://github.com/IIIM-IS/replicode/pull/114
 * Review/merge pull request for template timings in abduce_imdl https://github.com/IIIM-IS/replicode/pull/107
@@ -426,6 +429,7 @@ next meeting
 * Review/merge pull request to fix  https://github.com/IIIM-IS/replicode/issues/51 Add CODE_VL_PTR and fix the decompiler https://github.com/IIIM-IS/replicode/pull/126
 
 TODO
+* For a goal for a member of a composite state, try making a goal for the other members (as if it were a goal for the icst)
 * Try commenting out PTPX::reduce:666 if (i->input_ == Opcodes::Cmd)
 * Visualizer: Show prediction failure.
 * When a failed model is in the secondary group and the pattern extractor learns a model from new inputs, does it check if it's the same as the failed model?
