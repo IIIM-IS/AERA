@@ -141,6 +141,11 @@ protected:
     r_code::list<E>::const_iterator _e;
     for (_e = cache->evidences.begin(); _e != cache->evidences.end();) {
 
+      if ((*_e).evidence_ == e.evidence_) {
+        // Already stored.
+        cache->CS.leave();
+        return;
+      }
       if ((*_e).is_too_old(now)) // garbage collection.
         _e = cache->evidences.erase(_e);
       else
