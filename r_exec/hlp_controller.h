@@ -114,7 +114,12 @@ protected:
     EvidenceEntry(_Fact *evidence);
     EvidenceEntry(_Fact *evidence, _Fact *payload);
 
-    bool is_too_old(Timestamp now) const { return (evidence_->is_invalidated() || before_ < now); }
+    bool is_too_old(Timestamp now) const {
+      return evidence_->is_invalidated() ||
+        // If an instantaneous fact, require if to be strictly before now to be considered old,
+        // otherwise consider a time interval to be old if now is at the end of the interval.
+        (after_ == before_ ? (before_ < now) : (before_ <= now));
+    }
   };
 
   class PredictedEvidenceEntry : // predicted evidences.
