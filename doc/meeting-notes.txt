@@ -430,6 +430,9 @@ next meeting
 
 TODO
 * For a goal for a member of a composite state, try making a goal for the other members (as if it were a goal for the icst)
+* Make the AGI summer school example work in series. (Choose I/O device or seed program.)
+* Make pull request for maching all composite state combinations in backward chaining.
+* If backracking to a goal (|fact (mk.val h attached O: :)), should  (fact (mk.val h attached s :)) block making the goal?
 * Try commenting out PTPX::reduce:666 if (i->input_ == Opcodes::Cmd)
 * Visualizer: Show prediction failure.
 * When a failed model is in the secondary group and the pattern extractor learns a model from new inputs, does it check if it's the same as the failed model?
