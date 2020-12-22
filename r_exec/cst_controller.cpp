@@ -127,7 +127,7 @@ void CSTOverlay::inject_production() {
   Fact *f_icst = ((CSTController *)controller_)->get_f_icst(bindings_, &inputs_);
   auto now = Now();//f_icst->get_reference(0)->trace();
 
-  if (simulations_.size() == 0) { // no simulation.
+  if (!is_simulated()) {
 
     auto before = bindings_->get_fwd_before();
     Timestamp::duration time_to_live;

@@ -122,6 +122,8 @@ public:
   void load_patterns();
 
   bool can_match(Timestamp now) const;
+
+  bool is_simulated() { return simulations_.size() > 0; }
 };
 
 // Backward chaining:
