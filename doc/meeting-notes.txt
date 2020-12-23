@@ -412,6 +412,25 @@ Simulator
 * DONE. In runtime_out, change "environment" to "I/O device"
 * DONE. Review/merge pull request for all combinations of CSTOverlay https://github.com/IIIM-IS/replicode/pull/127
 
+2020-12-23
+* Simulator: Avoiding loops.
+  * If there is a goal for (mk.val c position 1), should quit if a subgoal (mk.val c position 2)?
+  * Subtler for (icst S0 |[] [h s]) and (icst S0 |[] [h c]). Not obvious if conflicting.
+    (cst |[] []
+       (fact (mk.val h essence hand :) T0: T1: : :)
+       (fact (mk.val h attached s :) T0: T1: : :)
+    (cst |[] []
+       (fact (mk.val h essence hand :) T0: T1: : :)
+       (fact (mk.val h attached c :) T0: T1: : :)
+
+    But could mean non-conflicting:
+    (cst |[] []
+       (fact (mk.val h essence hand :) T0: T1: : :)
+       (fact (mk.val s attached h :) T0: T1: : :)
+    (cst |[] []
+       (fact (mk.val h essence hand :) T0: T1: : :)
+       (fact (mk.val c attached h :) T0: T1: : :)
+
 next meeting
 * Review/merge pull request for matchesAnySuperGoal in simulated backward chaining https://github.com/IIIM-IS/replicode/pull/108
 * Review/merge pull request for GMonitor::commit() calling abduce_no_simulation https://github.com/IIIM-IS/replicode/pull/114
@@ -429,16 +448,19 @@ next meeting
 * Review/merge pull request to fix  https://github.com/IIIM-IS/replicode/issues/51 Add CODE_VL_PTR and fix the decompiler https://github.com/IIIM-IS/replicode/pull/126
 
 TODO
-* For a goal for a member of a composite state, try making a goal for the other members (as if it were a goal for the icst)
+* Try limiting dtection of conflicting facts to numbers.
+* For a goal for a member of a composite state, try making a goal for the icst.
+* If a fact is delcared as AXIOM in the seed, don't make a goal for it.
 * Make the AGI summer school example work in series. (Choose I/O device or seed program.)
-* Make pull request for maching all composite state combinations in backward chaining.
-* If backracking to a goal (|fact (mk.val h attached O: :)), should  (fact (mk.val h attached s :)) block making the goal?
+* Make pull request for matching all composite state combinations in backward chaining.
 * Try commenting out PTPX::reduce:666 if (i->input_ == Opcodes::Cmd)
 * Visualizer: Show prediction failure.
+* Make the cart-pole example run in Release configuration.
 * When a failed model is in the secondary group and the pattern extractor learns a model from new inputs, does it check if it's the same as the failed model?
 * Keep the controller in the C++ object, but use the model in the decompiled (sim) code. Include all extra Sim fields.
 * pull request for overlapping SYNC_HOLD timings in auto focus
 * How to ensure that stored requirements are from the same simulation branch?
+* How does an AERA agent make hypotheses about essence facts?
 * In prediction monitor, on failure check again at the end of the predicted period.
 * Visualizer: Add an item for prediction reduction, initially hidden.
 * Visualizer: Ability to launch Replicode from the Visualizer.
