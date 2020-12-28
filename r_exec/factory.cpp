@@ -253,11 +253,36 @@ bool _Fact::match_timings_inclusive(const _Fact *evidence) const { // intervals 
   return (e_after <= after && e_before >= before);
 }
 
-bool _Fact::Match(const Code *lhs, uint16 lhs_base_index, uint16 lhs_index, const Code *rhs, uint16 rhs_index, uint16 lhs_arity) {
+bool _Fact::Match(const Code *lhs, uint16 lhs_base_index, uint16 lhs_index, const Code *rhs, uint16 rhs_index, uint16 lhs_arity, bool same_binding_state) {
 
   uint16 lhs_full_index = lhs_base_index + lhs_index;
   Atom lhs_atom = lhs->code(lhs_full_index);
   Atom rhs_atom = rhs->code(rhs_index);
+
+  if (same_binding_state) {
+    bool lhs_is_bound = true;
+    switch (lhs_atom.getDescriptor()) {
+    case Atom::T_WILDCARD:
+    case Atom::WILDCARD:
+    case Atom::VL_PTR:
+      lhs_is_bound = false;
+      break;
+    }
+
+    bool rhs_is_bound = true;
+    switch (rhs_atom.getDescriptor()) {
+    case Atom::T_WILDCARD:
+    case Atom::WILDCARD:
+    case Atom::VL_PTR:
+      rhs_is_bound = false;
+      break;
+    }
+
+    if (lhs_is_bound && !rhs_is_bound || !lhs_is_bound && rhs_is_bound)
+      // Not the same binding state.
+      return false;
+  }
+
   switch (lhs_atom.getDescriptor()) {
   case Atom::T_WILDCARD:
   case Atom::WILDCARD:
@@ -266,7 +291,7 @@ bool _Fact::Match(const Code *lhs, uint16 lhs_base_index, uint16 lhs_index, cons
   case Atom::I_PTR:
     switch (rhs_atom.getDescriptor()) {
     case Atom::I_PTR:
-      if (!MatchStructure(lhs, lhs_atom.asIndex(), 0, rhs, rhs_atom.asIndex()))
+      if (!MatchStructure(lhs, lhs_atom.asIndex(), 0, rhs, rhs_atom.asIndex(), same_binding_state))
         return false;
       break;
     case Atom::T_WILDCARD:
@@ -280,7 +305,7 @@ bool _Fact::Match(const Code *lhs, uint16 lhs_base_index, uint16 lhs_index, cons
   case Atom::R_PTR:
     switch (rhs_atom.getDescriptor()) {
     case Atom::R_PTR:
-      if (!MatchObject(lhs->get_reference(lhs_atom.asIndex()), rhs->get_reference(rhs_atom.asIndex())))
+      if (!MatchObject(lhs->get_reference(lhs_atom.asIndex()), rhs->get_reference(rhs_atom.asIndex()), same_binding_state))
         return false;
       break;
     case Atom::T_WILDCARD:
@@ -307,7 +332,7 @@ bool _Fact::Match(const Code *lhs, uint16 lhs_base_index, uint16 lhs_index, cons
 
   if (lhs_index == lhs_arity)
     return true;
-  return Match(lhs, lhs_base_index, lhs_index + 1, rhs, rhs_index + 1, lhs_arity);
+  return Match(lhs, lhs_base_index, lhs_index + 1, rhs, rhs_index + 1, lhs_arity, same_binding_state);
 }
 
 bool _Fact::MatchAtom(Atom lhs, Atom rhs) {
@@ -321,7 +346,7 @@ bool _Fact::MatchAtom(Atom lhs, Atom rhs) {
   return false;
 }
 
-bool _Fact::MatchStructure(const Code *lhs, uint16 lhs_base_index, uint16 lhs_index, const Code *rhs, uint16 rhs_index) {
+bool _Fact::MatchStructure(const Code *lhs, uint16 lhs_base_index, uint16 lhs_index, const Code *rhs, uint16 rhs_index, bool same_binding_state) {
 
   uint16 lhs_full_index = lhs_base_index + lhs_index;
   Atom lhs_atom = lhs->code(lhs_full_index);
@@ -333,10 +358,10 @@ bool _Fact::MatchStructure(const Code *lhs, uint16 lhs_base_index, uint16 lhs_in
     return true;
   if (lhs_atom.getDescriptor() == Atom::TIMESTAMP)
     return Utils::Synchronous(Utils::GetTimestamp(&lhs->code(lhs_full_index)), Utils::GetTimestamp(&rhs->code(rhs_index)));
-  return Match(lhs, lhs_base_index, lhs_index + 1, rhs, rhs_index + 1, arity);
+  return Match(lhs, lhs_base_index, lhs_index + 1, rhs, rhs_index + 1, arity, same_binding_state);
 }
 
-bool _Fact::MatchObject(const Code *lhs, const Code *rhs) {
+bool _Fact::MatchObject(const Code *lhs, const Code *rhs, bool same_binding_state) {
 
   if (lhs->code(0) != rhs->code(0))
     return false;
@@ -346,7 +371,7 @@ bool _Fact::MatchObject(const Code *lhs, const Code *rhs) {
     lhs_opcode == Opcodes::Mdl ||
     lhs_opcode == Opcodes::Cst)
     return lhs == rhs;
-  return Match(lhs, 0, 1, rhs, 1, lhs->code(0).getAtomCount());
+  return Match(lhs, 0, 1, rhs, 1, lhs->code(0).getAtomCount(), same_binding_state);
 }
 
 bool _Fact::CounterEvidence(const Code *lhs, const Code *rhs) {

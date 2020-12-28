@@ -147,8 +147,8 @@ class r_exec_dll _Fact :
   public LObject {
 private:
   static bool MatchAtom(Atom lhs, Atom rhs);
-  static bool MatchStructure(const r_code::Code *lhs, uint16 lhs_base_index, uint16 lhs_index, const r_code::Code *rhs, uint16 rhs_index);
-  static bool Match(const r_code::Code *lhs, uint16 lhs_base_index, uint16 lhs_index, const r_code::Code *rhs, uint16 rhs_index, uint16 lhs_arity);
+  static bool MatchStructure(const r_code::Code *lhs, uint16 lhs_base_index, uint16 lhs_index, const r_code::Code *rhs, uint16 rhs_index, bool same_binding_state);
+  static bool Match(const r_code::Code *lhs, uint16 lhs_base_index, uint16 lhs_index, const r_code::Code *rhs, uint16 rhs_index, uint16 lhs_arity, bool same_binding_state);
   static bool CounterEvidence(const r_code::Code *lhs, const r_code::Code *rhs);
 protected:
   _Fact();
@@ -156,7 +156,13 @@ protected:
   _Fact(_Fact *f);
   _Fact(uint16 opcode, r_code::Code *object, Timestamp after, Timestamp before, float32 confidence, float32 psln_thr);
 public:
-  static bool MatchObject(const r_code::Code *lhs, const r_code::Code *rhs);
+  /**
+   * Check if lhs matches rhs.
+   * \param same_binding_state (optional) If false, then allow a wildcard or unbound variable to match another
+   * bound or unbound object. If true, then only allow a wildcard or unbound variable to match another wildcard
+   * or unbound variable. If omitted, use false.
+   */
+  static bool MatchObject(const r_code::Code *lhs, const r_code::Code *rhs, bool same_binding_state = false);
 
   virtual bool is_invalidated();
 
