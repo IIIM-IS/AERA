@@ -739,6 +739,20 @@ bool Sim::is_invalidated() {
   return false;
 }
 
+Sim* Sim::getRootSim()
+{
+  Sim* result = this;
+  while (result) {
+    if (result->get_mode() == SIM_ROOT)
+      return result;
+
+    result = result->get_f_super_goal()->get_goal()->get_sim();
+  }
+
+  // A goal had a NULL Sim object. This shouldn't happen.
+  return NULL;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 MkRdx::MkRdx() : LObject(), bindings_(NULL) {

@@ -250,6 +250,12 @@ public:
    */
   Timestamp get_solution_before() const { return r_code::Utils::GetTimestamp<Code>(this, SIM_SOLUTION_BEFORE); }
 
+  /**
+   * Recursively search this or parent Sim objects to get the Sim object where get_mode() == SIM_ROOT.
+   * \return The root Sim object, or NULL if not found (which shouldn't happen).
+   */
+  Sim* getRootSim();
+
   bool is_requirement_;
 
   P<Controller> root_; // controller that produced the simulation branch root (SIM_ROOT): identifies the branch.
