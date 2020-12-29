@@ -1901,6 +1901,9 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
         }
 
         f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
+        if (sim && sim->get_thz() != seconds(0) && !sim->registerGoalTarget(f_imdl))
+          // We are already simulating from this goal, so abort to avoid loops.
+          break;
 
         Goal *sub_goal = new Goal(bound_lhs, super_goal->get_goal()->get_actor(), sim, 1);
 
@@ -1921,6 +1924,10 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
 }
 
 void PrimaryMDLController::abduce_simulated_imdl(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim) { // goal is f->g->f->object or f->g->|f->object; called concurrently by redcue() and _GMonitor::update().
+
+  if (sim && sim->get_thz() != seconds(0) && !sim->registerGoalTarget(f_imdl))
+    // We are already simulating from this goal, so abort to avoid loops.
+    return;
 
   // Use the timestamps in the template parameters from the prerequisite model.
   // This is to make it symmetric with the timestamp in the forward chaining requirement.
