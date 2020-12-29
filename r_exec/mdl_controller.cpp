@@ -1230,6 +1230,8 @@ void TopLevelMDLController::abduce_lhs(HLPBindingMap *bm,
   auto deadline = sub_goal_target->get_before();
   auto sim_thz = get_sim_thz(now, deadline);
   Sim *sub_sim = new Sim(SIM_ROOT, sim_thz, super_goal, false, this, 1);
+  // Register the goal to make sure it doesn't become a subgoal.
+  sub_sim->registerGoalTarget(sub_goal_target);
 
   Goal *sub_goal = new Goal(sub_goal_target, super_goal->get_goal()->get_actor(), sub_sim, 1);
   Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
@@ -1838,6 +1840,9 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
       case MATCH_FAILURE: {
 
         f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
+        if (sim && !sim->registerGoalTarget(f_imdl))
+          // We are already simulating from this goal, so abort to avoid loops.
+          break;
 
         Goal *sub_goal = new Goal(bound_lhs, super_goal->get_goal()->get_actor(), sim, 1);
 
@@ -1859,6 +1864,10 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
 }
 
 void PrimaryMDLController::abduce_simulated_imdl(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim) { // goal is f->g->f->object or f->g->|f->object; called concurrently by redcue() and _GMonitor::update().
+
+  if (sim && !sim->registerGoalTarget(f_imdl))
+    // We are already simulating from this goal, so abort to avoid loops.
+    return;
 
   f_imdl->set_cfd(confidence);
 

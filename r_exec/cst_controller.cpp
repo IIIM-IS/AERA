@@ -475,6 +475,10 @@ void CSTController::inject_goal(HLPBindingMap *bm,
   float32 confidence,
   Code *group) const {
 
+  if (sim && !sim->registerGoalTarget(sub_goal_target))
+    // We are already simulating from this goal, so abort to avoid loops.
+    return;
+
   sub_goal_target->set_cfd(confidence);
 
   Goal *sub_goal = new Goal(sub_goal_target, f_super_goal->get_goal()->get_actor(), sim, 1);
