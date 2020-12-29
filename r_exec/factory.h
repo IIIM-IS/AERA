@@ -251,19 +251,28 @@ public:
   Timestamp get_solution_before() const { return r_code::Utils::GetTimestamp<Code>(this, SIM_SOLUTION_BEFORE); }
 
   /**
-   * Check if obj matches the target of any super goal, recursively following the chain of Sim objects up to
-   * the root.
-   * \param opcode The opcode, such as Opcodes::Fact or Opcodes::AntiFact. We specify the opcode
-   * separately because we ignore the fact timings.
-   * \param obj The object, such as (mk_val ...).
-   * \return True if obj matches any super goal.
+   * Recursively search this or parent Sim objects to get the Sim object where get_mode() == SIM_ROOT.
+   * \return The root Sim object, or NULL if not found (which shouldn't happen).
    */
-  bool matchesAnySuperGoal(uint16 opcode, const Code* obj);
+  Sim* getRootSim();
+
+  /**
+   * If f_obj does not match any of the goal targets stored in the root Sim object, then store it in the root Sim object
+   * for future checks and return true. (In this case, you should inject it as a goal.) Othewise if the goal target was already
+   * registered then return false, meaning that it does not need to be made into a goal again.
+   * \param f_obj The (fact of the) object, such as (fact (mk_val ...)).
+   * \return True if f_obj has been registered and should be injected as a goal, false if it is already registered and should not
+   * be injected as a goal.
+   */
+  bool registerGoalTarget(_Fact* f_obj);
 
   bool is_requirement_;
 
   P<Controller> root_; // controller that produced the simulation branch root (SIM_ROOT): identifies the branch.
   P<Controller> solution_controller_; // controller that produced a sub-goal of the branch's root: identifies the model that can be a solution for the super-goal.
+
+private:
+  std::vector<P<_Fact> > goalTargets_;
 };
 
 // Caveat: instances of Fact can becone instances of AntiFact (set_opposite() upon MATCH_SUCCESS_NEGATIVE during backward chaining).

@@ -739,18 +739,39 @@ bool Sim::is_invalidated() {
   return false;
 }
 
-bool Sim::matchesAnySuperGoal(uint16 opcode, const Code* obj) {
-  if (get_mode() == SIM_ROOT)
-    // The super goal of the ROOT Sim is the drive, so stop checking here.
-    return false;
+Sim* Sim::getRootSim()
+{
+  Sim* result = this;
+  while (result) {
+    if (result->get_mode() == SIM_ROOT)
+      return result;
 
-  Goal* super_goal = get_f_super_goal()->get_goal();
-  uint16 super_goal_opcode = super_goal->get_reference(0)->code(0).asOpcode();
-  if (opcode == super_goal_opcode && _Fact::MatchObject(obj, super_goal->get_reference(0)->get_reference(0)))
+    result = result->get_f_super_goal()->get_goal()->get_sim();
+  }
+
+  // A goal had a NULL Sim object. This shouldn't happen.
+  return NULL;
+}
+
+bool Sim::registerGoalTarget(_Fact* f_obj) {
+  Sim* rootSim = getRootSim();
+  if (!rootSim)
+    // We don't expect this. Return true so that f_obj is injected as a goal anyway.
     return true;
 
-  // Recurse.
-  return super_goal->get_sim()->matchesAnySuperGoal(opcode, obj);
+  uint16 opcode = f_obj->code(0).asOpcode();
+  Code* obj = f_obj->get_reference(0);
+  // Debug: Do we need a critical section for this?
+  for (int i = 0; i < rootSim-> goalTargets_.size(); ++i) {
+    _Fact* goalTarget = rootSim->goalTargets_[i];
+    // TODO: Actually match timings. For now, ignore timings and just check the fact opcode and match the object.
+    if (opcode == goalTarget->code(0).asOpcode() && _Fact::MatchObject(obj, goalTarget->get_reference(0), true))
+      // Already registered.
+      return false;
+  }
+
+  rootSim->goalTargets_.push_back(f_obj);
+  return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
