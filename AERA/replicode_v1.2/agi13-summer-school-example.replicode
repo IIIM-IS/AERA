@@ -202,7 +202,7 @@ start:(pgm |[] |[] |[] []
 1) |[]
 (ipgm start |[] RUN_ONCE sampling_period VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
 
-m_run:(mdl |[] []
+m_drive:(mdl |[] []
    ; The goal target timings are the same as the drive timings.
    (fact (mk.val s position pS1 1) t0: t1: 1 1)
    (fact run t0: t1: ::)
@@ -218,7 +218,7 @@ pgm_inject_drive:(pgm |[]
    (>= after (+ this.vw.ijt 0s:100ms:0us))
 []
    (inj []
-      ; The end of the time interval will be used in m_run_position as the end of the goal interval.
+      ; The end of the time interval will be used in m_drive as the end of the goal interval.
       f_run:(fact run (+ after 0s:100ms:0us) (+ before 0s:300ms:0us) 1 1)
       |[]
    )
