@@ -422,9 +422,9 @@ void CSTController::reduce(r_exec::View *input) {
   }
 }
 
-void CSTController::abduce(HLPBindingMap *bm, Fact *super_goal) { // super_goal is f0->g->f1->icst or f0->g->|f1->icst.
+void CSTController::abduce(HLPBindingMap *bm, Fact *f_super_goal) {
 
-  Goal *g = super_goal->get_goal();
+  Goal *g = f_super_goal->get_goal();
   _Fact *super_goal_target = g->get_target();
   bool opposite = (super_goal_target->is_anti_fact());
 
@@ -455,7 +455,7 @@ void CSTController::abduce(HLPBindingMap *bm, Fact *super_goal) { // super_goal 
         break;
       case MATCH_SUCCESS_NEGATIVE:
       case MATCH_FAILURE: // inject a sub-goal for the missing predicted positive evidence.
-        inject_goal(bm, super_goal, bound_pattern, sim, now, confidence, host); // all sub-goals share the same sim.
+        inject_goal(bm, f_super_goal, bound_pattern, sim, now, confidence, host); // all sub-goals share the same sim.
         break;
       }
     }
@@ -463,7 +463,7 @@ void CSTController::abduce(HLPBindingMap *bm, Fact *super_goal) { // super_goal 
 }
 
 void CSTController::inject_goal(HLPBindingMap *bm,
-  Fact *super_goal, // f0->g->f1->icst or f0->g->|f1->icst.
+  Fact *f_super_goal,
   _Fact *sub_goal_target, // f1.
   Sim *sim,
   Timestamp now,
@@ -476,21 +476,21 @@ void CSTController::inject_goal(HLPBindingMap *bm,
 
   sub_goal_target->set_cfd(confidence);
 
-  Goal *sub_goal = new Goal(sub_goal_target, super_goal->get_goal()->get_actor(), sim, 1);
+  Goal *sub_goal = new Goal(sub_goal_target, f_super_goal->get_goal()->get_actor(), sim, 1);
 
-  _Fact *f_icst = super_goal->get_goal()->get_target();
+  _Fact *f_icst = f_super_goal->get_goal()->get_target();
   _Fact *sub_goal_f = new Fact(sub_goal, now, now, 1, 1);
 
   View *view = new View(View::SYNC_ONCE, now, confidence, 1, group, group, sub_goal_f); // SYNC_ONCE,res=1.
   _Mem::Get()->inject(view);
 #ifdef WITH_DEBUG_OID
   OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " cst " << getObject()->get_oid() << ": fact " <<
-    super_goal->get_oid() << " super_goal -> fact " << sub_goal_f->get_oid() << " simulated goal");
+    f_super_goal->get_oid() << " f_super_goal -> fact " << sub_goal_f->get_oid() << " simulated goal");
 #endif
 
   if (sim->get_mode() == SIM_ROOT) { // no rdx for SIM_OPTIONAL or SIM_MANDATORY.
 
-    MkRdx *mk_rdx = new MkRdx(f_icst, super_goal, sub_goal, 1, bm);
+    MkRdx *mk_rdx = new MkRdx(f_icst, f_super_goal, sub_goal, 1, bm);
     uint16 out_group_count = get_out_group_count();
     for (uint16 i = 0; i < out_group_count; ++i) {
 
