@@ -354,6 +354,11 @@ bool _Mem::load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 s
 
       if (!host->load(view, object))
         return false;
+      if (host == stdin_ && view->get_sync() == View::SYNC_AXIOM &&
+          (view->object_->code(0).asOpcode() == Opcodes::Fact ||
+           view->object_->code(0).asOpcode() == Opcodes::AntiFact))
+        // This is an axiom in the stdin group, so save for matchesAxiom().
+        axiomValues_.push_back(view->object_->get_reference(0));
     }
 
     if (object->code(0).getDescriptor() == Atom::GROUP)
@@ -1229,6 +1234,16 @@ Code *_Mem::clone(Code *original) const { // shallow copy; oid not copied.
   for (uint16 i = 0; i < original->references_size(); ++i)
     _clone->add_reference(original->get_reference(i));
   return _clone;
+}
+
+bool _Mem::matchesAxiom(Code* obj)
+{
+  for (auto axiom = axiomValues_.begin(); axiom != axiomValues_.end(); ++axiom) {
+    if (_Fact::MatchObject(obj, *axiom))
+      return true;
+  }
+
+  return false;
 }
 
 ////////////////////////////////////////////////////////////////
