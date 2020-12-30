@@ -135,6 +135,14 @@ class CSTController :
 private:
   Group *secondary_host_;
 
+  /**
+   * For each of the overlays, make a copy of bm and merge it with the overlay's binding map, then call abduce() with the
+   * merged binding map and f_super_goal. In this way we make a branch of the simulation with each possible way of
+   * instantiating the cst.
+   * \param bm The binding map created by reduce.
+   * \param f_super_goal The super goal to pass to abduce().
+   */
+  void abduce_simulated(HLPBindingMap *bm, Fact *f_super_goal);
   void abduce(HLPBindingMap *bm, Fact *f_super_goal); // f_super_goal is f0->g->f1->icst or f0->g->|f1->icst.
   void inject_goal(HLPBindingMap *bm,
     Fact *f_super_goal, // f0->g->f1->icst or f0->g->|f1->icst.
