@@ -135,9 +135,9 @@ class CSTController :
 private:
   Group *secondary_host_;
 
-  void abduce(HLPBindingMap *bm, Fact *super_goal); // super_goal is f->g->f->icst.
+  void abduce(HLPBindingMap *bm, Fact *f_super_goal); // f_super_goal is f0->g->f1->icst or f0->g->|f1->icst.
   void inject_goal(HLPBindingMap *bm,
-    Fact *super_goal, // f0->g->f1->icst.
+    Fact *f_super_goal, // f0->g->f1->icst or f0->g->|f1->icst.
     _Fact *sub_goal_target, // f1.
     Sim *sim,
     Timestamp now,
