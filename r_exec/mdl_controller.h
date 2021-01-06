@@ -95,7 +95,7 @@ public:
 
   void load_patterns();
 
-  virtual Overlay *reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *req_controller) = 0;
+  virtual bool reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *req_controller) = 0;
 };
 
 class PrimaryMDLOverlay :
@@ -106,7 +106,7 @@ public:
   PrimaryMDLOverlay(Controller *c, const HLPBindingMap *bindngs);
   ~PrimaryMDLOverlay();
 
-  Overlay *reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *req_controller);
+  bool reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *req_controller);
 };
 
 class SecondaryMDLOverlay :
@@ -115,7 +115,7 @@ public:
   SecondaryMDLOverlay(Controller *c, const HLPBindingMap *bindngs);
   ~SecondaryMDLOverlay();
 
-  Overlay *reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *req_controller);
+  bool reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *req_controller);
 };
 
 class MDLController;
