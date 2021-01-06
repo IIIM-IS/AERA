@@ -105,7 +105,7 @@ PrimaryMDLOverlay::PrimaryMDLOverlay(Controller *c, const HLPBindingMap *binding
 PrimaryMDLOverlay::~PrimaryMDLOverlay() {
 }
 
-Overlay *PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *req_controller) {
+bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *req_controller) {
 
   OUTPUT_LINE(MDL_IN, Utils::RelativeTime(Now()) << " mdl: " << controller_->getObject()->get_oid() << " <- input: " << input->get_oid());
   _Fact *input_object;
@@ -137,7 +137,7 @@ Overlay *PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController
     P<HLPBindingMap> original_bindings = bindings_;
     bindings_ = bm;
     bool is_req = ((MDLController *)controller_)->is_requirement();
-    Overlay *o;
+    bool match = false;
     Fact *f_imdl = ((MDLController *)controller_)->get_f_ihlp(bm, false);
     RequirementsPair r_p;
     Fact *ground = f_p_f_imdl; // JTNote: retrieve_imdl_fwd assigns ground, so this assignment is not used.
@@ -153,39 +153,28 @@ Overlay *PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController
 
         if (check_simulated_chaining(bm, f_imdl, prediction))
           chaining_allowed = true;
-        else {
-
-          o = NULL;
+        else
           break;
-        }
       }
     case NO_REQUIREMENT:
-      if (!chaining_allowed && ((MDLController *)controller_)->has_tpl_args()) { // there are tpl args, abort.
-
-        o = NULL;
+      if (!chaining_allowed && ((MDLController *)controller_)->has_tpl_args()) // there are tpl args, abort.
         break;
-      } else
+      else
         f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(false);
     case STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT: // silent monitoring of a prediction that will not be injected.
       if (is_simulation) { // if there is simulated imdl for the root of one sim in prediction, allow forward chaining.
 
         if (check_simulated_chaining(bm, f_imdl, prediction))
           chaining_allowed = true;
-        else {
-
-          o = NULL;
+        else
           break;
-        }
       }
     case WEAK_REQUIREMENT_ENABLED:
       if (evaluate_fwd_guards()) { // may update bindings.
         // JTNote: The prediction is made from the bindings that made f_imdl, but it is not used directly.
         f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
         ((PrimaryMDLController *)controller_)->predict(bindings_, input, f_imdl, chaining_allowed, r_p, ground);
-        o = this;
-      } else {
-        //std::cout<<" guards failed\n";
-        o = NULL;
+        match = true;
       }
       break;
     }
@@ -195,13 +184,13 @@ Overlay *PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController
     bindings_ = original_bindings;
     if (f_p_f_imdl == NULL) // i.e. if reduction not triggered a requirement.
       store_evidence(input, prediction, is_simulation);
-    return o;
+    return match;
   }case MATCH_SUCCESS_NEGATIVE: // counter-evidence WRT the lhs.
     if (f_p_f_imdl == NULL) // i.e. if reduction not triggered a requirement.
       store_evidence(input, prediction, is_simulation);
   case MATCH_FAILURE:
     //std::cout<<" no match\n";
-    return NULL;
+    return false;
   }
 }
 
@@ -229,7 +218,7 @@ SecondaryMDLOverlay::SecondaryMDLOverlay(Controller *c, const HLPBindingMap *bin
 SecondaryMDLOverlay::~SecondaryMDLOverlay() {
 }
 
-Overlay *SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *req_controller) { // no caching since no bwd.
+bool SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *req_controller) { // no caching since no bwd.
 //std::cout<<std::hex<<this<<std::dec<<" "<<input->object->get_oid();
   P<HLPBindingMap> bm = new HLPBindingMap(bindings_);
   bm->reset_fwd_timings(input);
@@ -239,7 +228,7 @@ Overlay *SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLControll
     load_code();
     P<HLPBindingMap> original_bindings = bindings_;
     bindings_ = bm;
-    Overlay *o;
+    bool match = false;
     Fact *f_imdl = ((MDLController *)controller_)->get_f_ihlp(bm, false);
     RequirementsPair r_p;
     Fact *ground = f_p_f_imdl;
@@ -251,11 +240,9 @@ Overlay *SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLControll
     case WEAK_REQUIREMENT_DISABLED:
     case STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT: // silent monitoring of a prediction that will not be injected.
     case NO_REQUIREMENT:
-      if (((MDLController *)controller_)->has_tpl_args()) { // there are tpl args, abort.
-
-        o = NULL;
+      if (((MDLController *)controller_)->has_tpl_args()) // there are tpl args, abort.
         break;
-      } else
+      else
         f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(false);
     case STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT:
     case WEAK_REQUIREMENT_ENABLED:
@@ -263,10 +250,7 @@ Overlay *SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLControll
 //std::cout<<" match\n";
         f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
         ((SecondaryMDLController *)controller_)->predict(bindings_, input, NULL, true, r_p, ground);
-        o = this;
-      } else {
-        //std::cout<<" guards failed\n";
-        o = NULL;
+        match = true;
       }
       break;
     }
@@ -274,11 +258,11 @@ Overlay *SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLControll
     delete[] code_;
     code_ = NULL;
     bindings_ = original_bindings;
-    return o;
+    return match;
   }case MATCH_SUCCESS_NEGATIVE:
   case MATCH_FAILURE:
     //std::cout<<" no match\n";
-    return NULL;
+    return false;
   }
 }
 
