@@ -90,8 +90,9 @@ class HLPContext;
 class HLPOverlay :
   public Overlay {
   friend class HLPContext;
-protected:
+public:
   P<HLPBindingMap> bindings_;
+protected:
 
   r_code::list<P<_Fact> > patterns_;
 
