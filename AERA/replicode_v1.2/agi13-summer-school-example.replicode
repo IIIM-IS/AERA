@@ -92,8 +92,10 @@ S2:(cst |[]
    (fact (icst S0 |[] [H: P:] : :) T0: T1: : :)
    (fact (icst S3 |[] [C: X: P:] : :) T0: T1: : :); X is also exposed from S3.
    (fact (mk.val H: attached C: :) T0: T1: : :)
-|[]
-|[]
+[]
+   (<> C nil); Make sure the object C is not nil.
+[]
+   (<> C nil); Make sure the object C is not nil.
 [stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; When I my hand H is attached to a thing C and I release my hand, it is not attached anymore.
@@ -328,7 +330,7 @@ pgm_cmd_move_h_attached_s:(pgm |[]
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
    (inj []
-      Next_pos_c:(mk.val c position pos_c 1); s keeps the same position.
+      Next_pos_c:(mk.val c position pos_c 1); c keeps the same position.
       |[]
    )
    (inj []
@@ -347,6 +349,62 @@ pgm_cmd_move_h_attached_s:(pgm |[]
    (prb [1 "print" "pgm_cmd_move_h_attached_s new s position" [Next_pos_s]])
 1) |[]
 (ipgm pgm_cmd_move_h_attached_s |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_cmd_move_h_attached_nil:(pgm |[]
+[]
+   (ptn (fact G:(goal (fact Command:(cmd move [h DeltaP:] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
+   (ptn (fact (mk.val h attached Attached_obj: :) After: Before: ::) |[])
+   (ptn (fact (mk.val h position pos_h: :) After_h: Before_h: ::) |[])
+   (ptn (fact (mk.val c position pos_c: :) After_c: Before_c: ::) |[])
+   (ptn (fact (mk.val s position pos_s: :) After_s: Before_s: ::) |[])
+[]
+   (= Attached_obj nil)
+   (= (is_sim G) false)
+   (< Cmd_after Before)
+   (> Cmd_before After)
+   (< After_h Before)
+   (> Before_h After)
+   (< After_c Before)
+   (> Before_c After)
+   (< After_s Before)
+   (> Before_s After)
+[]
+   (inj []
+      Next_attached:(mk.val h attached Attached_obj 1); Still attached to the same object.
+      |[]
+   )
+   (inj []
+      (fact Next_attached (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
+   )
+   (inj []
+      Next_pos_h:(mk.val h position (+ pos_h DeltaP) 1); Move h by DeltaP.
+      |[]
+   )
+   (inj []
+      (fact Next_pos_h (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
+   )
+   (inj []
+      Next_pos_c:(mk.val c position pos_c 1); c keeps the same position.
+      |[]
+   )
+   (inj []
+      (fact Next_pos_c (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
+   )
+   (inj []
+      Next_pos_s:(mk.val s position pos_s 1); s keeps the same position.
+      |[]
+   )
+   (inj []
+      (fact Next_pos_s (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
+   )
+   (prb [1 "print" "pgm_cmd_move_h_attached_nil from command" [Command]])
+1) |[]
+(ipgm pgm_cmd_move_h_attached_nil |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
 pgm_cmd_release_h:(pgm |[]
