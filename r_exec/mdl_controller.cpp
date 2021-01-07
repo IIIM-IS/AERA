@@ -421,8 +421,6 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
 
       if ((*e).is_too_old(now)) // garbage collection.
         e = simulated_requirements_.positive_evidences.erase(e);
-      else if ((*e).is_out_of_range(now))
-        ++e;
       else {
 
         if ((*e).evidence_->get_pred()->get_simulation(root)) {
@@ -455,8 +453,6 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
 
         if ((*e).is_too_old(now)) // garbage collection.
           e = simulated_requirements_.negative_evidences.erase(e);
-        else if ((*e).is_out_of_range(now))
-          ++e;
         else {
 
           if ((*e).evidence_->get_pred()->get_simulation(root)) {
@@ -487,8 +483,6 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
 
         if ((*e).is_too_old(now)) // garbage collection.
           e = simulated_requirements_.negative_evidences.erase(e);
-        else if ((*e).is_out_of_range(now))
-          ++e;
         else {
 
           if ((*e).evidence_->get_pred()->get_simulation(root)) {
@@ -511,8 +505,6 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
 
         if ((*e).is_too_old(now)) // garbage collection.
           e = simulated_requirements_.positive_evidences.erase(e);
-        else if ((*e).is_out_of_range(now))
-          ++e;
         else {
           //(*e).f->get_reference(0)->trace();
           //f->get_reference(0)->trace();
