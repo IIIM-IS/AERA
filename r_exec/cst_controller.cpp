@@ -256,20 +256,7 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
   }
 
   P<HLPBindingMap> bm = new HLPBindingMap();
-  _Fact *bound_pattern = NULL;
-  r_code::list<P<_Fact> >::const_iterator p;
-  for (p = patterns_.begin(); p != patterns_.end(); ++p) {
-
-    bm->load(bindings_);
-    if (inputs_.size() == 0)
-      bm->reset_fwd_timings(input_object);
-    if (bm->match_fwd_strict(input_object, *p)) {
-
-      bound_pattern = *p;
-      break;
-    }
-  }
-
+  _Fact *bound_pattern = bindPattern(input_object, bm);
   if (bound_pattern) {
     //if(match_deadline.time_since_epoch().count() == 0){
     // std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" "<<std::hex<<this<<std::dec<<" (0) ";
@@ -318,6 +305,21 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
     offspring = NULL;
     return false;
   }
+}
+
+_Fact* CSTOverlay::bindPattern(_Fact *input, HLPBindingMap* map)
+{
+  r_code::list<P<_Fact> >::const_iterator p;
+  for (p = patterns_.begin(); p != patterns_.end(); ++p) {
+
+    map->load(bindings_);
+    if (inputs_.size() == 0)
+      map->reset_fwd_timings(input);
+    if (map->match_fwd_strict(input, *p))
+      return *p;
+  }
+
+  return NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
