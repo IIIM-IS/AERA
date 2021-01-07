@@ -124,6 +124,16 @@ public:
   bool can_match(Timestamp now) const;
 
   bool is_simulated() { return simulations_.size() > 0; }
+
+  /**
+   * Find the first _Fact in patterns_ which matches the input, and update
+   * the binding map.
+   * \param input The input _Fact to match against a pattern.
+   * \param map The binding map for calling match_fwd_strict and has the bindings
+   * if this returns a pattern.
+   * \return The matching pattern from patterns_, or NULL if not found.
+   */
+  _Fact* CSTOverlay::bindPattern(_Fact *input, HLPBindingMap* map);
 };
 
 // Backward chaining:
