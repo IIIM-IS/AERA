@@ -440,6 +440,10 @@ void CSTController::abduce(HLPBindingMap *bm, Fact *f_super_goal) {
 
     _Fact *pattern = (_Fact *)cst->get_reference(cst->code(obj_set_index + i).asIndex());
     _Fact *bound_pattern = (_Fact *)bm->bind_pattern(pattern);
+    if (_Mem::Get()->matchesAxiom(bound_pattern->get_reference(0)))
+      // Don't make a goal of a member which is an axiom.
+      continue;
+
     _Fact *evidence;
     if (opposite)
       bound_pattern->set_opposite();

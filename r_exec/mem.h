@@ -190,6 +190,8 @@ protected:
   // runtime_output_streams_[i] will be set to new NullOStream().
   std::ostream *defaultRuntimeOutputStream_;
 
+  std::vector<P<r_code::Code> > axiomValues_;
+
   _Mem();
 
   static void _unpack_code(r_code::Code *hlp, uint16 fact_object_index, r_code::Code *fact_object, uint16 read_index);
@@ -367,6 +369,13 @@ public:
   // External device I/O ////////////////////////////////////////////////////////////////
   virtual r_comp::Image *get_objects(bool include_invalidated = false) = 0; // create an image; fill with all objects; call only when stopped.
   r_comp::Image *get_models(); // create an image; fill with all models; call only when stopped.
+
+  /**
+   * Check if an object matches the value of a fact in the seed whose view is SYNC_AXIOM.
+   * \param obj A fact's value such as (mk.val b essence ball 1).
+   * \return True if the object matches an axiom.
+   */
+  bool matchesAxiom(r_code::Code* obj);
 
   /**
    * This is called on starting the executive to adjust the timestamps of all the initial
