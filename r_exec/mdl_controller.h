@@ -399,7 +399,22 @@ public:
    * Otherwise, use the given forwardSimulation, which is carried throughout forward simulation.
    */
   bool check_simulated_imdl(Fact *goal, HLPBindingMap *bm, Controller *root, Sim* forwardSimulation);
-  void abduce(HLPBindingMap *bm, Fact *super_goal, bool opposite, float32 confidence);
+
+  /**
+   * \param allow_simulation (optional) If false then treat the super_goal Sim object as if it has mode ROOT and
+   * time horizon zero, forcing an actual abduced LHS (not simulated). If true or omitted, then process with the
+   * super_goal's given Sim object.
+   */
+  void abduce(HLPBindingMap *bm, Fact *super_goal, bool opposite, float32 confidence, bool allow_simulation = true);
+
+  /**
+   * Make a binding map from the super_goal, then call abduce() with allow_simulation false to inject the LHS as
+   * an actual goal.
+   * \param super_goal A goal of the model RHS.
+   * \param opposite See abduce().
+   * \param confidence See abduce().
+   */
+  void abduce_no_simulation(Fact *super_goal, bool opposite, float32 confidence);
 
   void debug(View *input);
 };
