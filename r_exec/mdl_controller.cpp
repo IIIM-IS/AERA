@@ -141,7 +141,7 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
     Fact *f_imdl = ((MDLController *)controller_)->get_f_ihlp(bm, false);
     RequirementsPair r_p;
     Fact *ground = f_p_f_imdl; // JTNote: retrieve_imdl_fwd assigns ground, so this assignment is not used.
-    bool wr_enabled;
+    bool wr_enabled = false;
     bool stop = (req_controller != NULL);
     ChainingStatus c_s = ((MDLController *)controller_)->retrieve_imdl_fwd(bm, f_imdl, r_p, ground, req_controller, wr_enabled);
     f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(wr_enabled);
@@ -232,7 +232,7 @@ bool SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *
     Fact *f_imdl = ((MDLController *)controller_)->get_f_ihlp(bm, false);
     RequirementsPair r_p;
     Fact *ground = f_p_f_imdl;
-    bool wr_enabled;
+    bool wr_enabled = false;
     ChainingStatus c_s = ((MDLController *)controller_)->retrieve_imdl_fwd(bm, f_imdl, r_p, ground, req_controller, wr_enabled);
     f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(wr_enabled);
     bool chaining_allowed = (c_s >= NO_REQUIREMENT);
