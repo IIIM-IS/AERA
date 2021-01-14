@@ -520,7 +520,7 @@ void CSTController::inject_goal(HLPBindingMap *bm,
   float32 confidence,
   Code *group) const {
 
-  if (sim && sim->get_thz() != seconds(0) && !sim->registerGoalTarget(sub_goal_target))
+  if (sim && !sim->registerGoalTarget(sub_goal_target))
     // We are already simulating from this goal, so abort to avoid loops.
     return;
 

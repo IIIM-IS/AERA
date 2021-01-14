@@ -1891,7 +1891,7 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
         }
 
         f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
-        if (sim && sim->get_thz() != seconds(0) && !sim->registerGoalTarget(f_imdl))
+        if (sim && !sim->registerGoalTarget(f_imdl))
           // We are already simulating from this goal, so abort to avoid loops.
           break;
 
@@ -1915,7 +1915,7 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
 
 void PrimaryMDLController::abduce_simulated_imdl(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim) { // goal is f->g->f->object or f->g->|f->object; called concurrently by redcue() and _GMonitor::update().
 
-  if (sim && sim->get_thz() != seconds(0) && !sim->registerGoalTarget(f_imdl))
+  if (sim && !sim->registerGoalTarget(f_imdl))
     // We are already simulating from this goal, so abort to avoid loops.
     return;
 
