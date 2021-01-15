@@ -185,11 +185,6 @@ CSTOverlay *CSTOverlay::get_offspring(HLPBindingMap *map, _Fact *input, _Fact *b
   patterns_.remove(bound_pattern);
   if (match_deadline_.time_since_epoch().count() == 0)
     match_deadline_ = map->get_fwd_before();
-#ifdef WITH_DEBUG_OID
-  OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " CSTOverlay(" << get_debug_oid() <<
-    ") for cst " << controller_->getObject()->get_oid() << " -> offspring CSTOverlay(" << 
-    offspring->get_debug_oid() << ")");
-#endif
   update(map, input, bound_pattern);
   //std::cout<<std::hex<<this<<std::dec<<" produced: "<<std::hex<<offspring<<std::dec<<std::endl;
   return offspring;
@@ -199,10 +194,6 @@ void CSTOverlay::update(HLPBindingMap *map, _Fact *input, _Fact *bound_pattern) 
 
   bindings_ = map;
   inputs_.push_back(input);
-#ifdef WITH_DEBUG_OID
-  OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " CSTOverlay(" << get_debug_oid() << 
-    ") for cst " << controller_->getObject()->get_oid() << ": store input " << input->get_oid());
-#endif
   float32 last_cfd;
   Pred *prediction = input->get_pred();
   if (prediction) {
