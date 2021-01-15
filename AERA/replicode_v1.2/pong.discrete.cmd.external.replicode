@@ -95,7 +95,7 @@ pgm_inject_drive:(pgm |[]
    (inj []
       ; Delay a little to allow predictions for this sampling period before injecting the drive.
       ; The end of the time interval will be used in m_run_position as the end of the goal interval.
-      f_run:(fact run (+ after 10000us) (+ (+ this.vw.ijt inject_drive_time) 200000us) 1 1)
+      f_run:(fact run (+ after 10000us) (+ (+ this.vw.ijt inject_drive_time) 1000000us) 1 1)
       |[]
    )
    (inj []
