@@ -443,27 +443,37 @@ Simulator
   * We got lucky the first few times. We only predict (cmd move [h -25]), then predict (mk.val s position 15) without simulating grabbing s?
   * Need to simulate future change of many state variables (not just one like paddle position).
 
+2021-01-14
+* Investigate when need to set the "weak requirement enabled" flag.
+   * The code says, "wr_enabled: true if there is at least one wr stronger than at least one sr." Yet many places set 
+     wr_enabled when there are no strong requirements.
+   * The code modifies the wr_enabled flags of existing (imdl ...) objects. This is one of the few cases where the objects are
+     not immutable. Maybe it makes sense to modify an existing object if it is only used in one processing path, but the simulator
+     has many processing paths. So, it might not make sense to modify an object sharded among different simulator paths.
+     Pull request to ignore wr_enabled when matching in the simulator https://github.com/IIIM-IS/replicode/pull/132
+* How does an AERA agent make hypotheses about essence facts? (avoid https://github.com/IIIM-IS/replicode/pull/112)
+  TRY. New proposal for using CSTOverlay in https://github.com/IIIM-IS/replicode/issues/97 .
+
 next meeting
 * Review/merge pull request For a goal for a member of a composite state, make a goal for the icst. https://github.com/IIIM-IS/replicode/pull/131
 * Review/merge pull request for template timings in abduce_imdl https://github.com/IIIM-IS/replicode/pull/107
+* Review/merge pull request to fix  https://github.com/IIIM-IS/replicode/issues/51 Add CODE_VL_PTR and fix the decompiler https://github.com/IIIM-IS/replicode/pull/126
+* Review/merge pull request to not share timing variables when building the model https://github.com/IIIM-IS/replicode/pull/110
 * Review/merge pull request for super_goal in new Sim https://github.com/IIIM-IS/replicode/pull/106
 * Review/merge pull request for binding map in the prediction's mk.rdx https://github.com/IIIM-IS/replicode/pull/120
-* Review/merge pull request to fix  https://github.com/IIIM-IS/replicode/issues/51 Add CODE_VL_PTR and fix the decompiler https://github.com/IIIM-IS/replicode/pull/126
-* Review/merge pull request for matching all composite state combinations in backward chaining  https://github.com/IIIM-IS/replicode/pull/129
-* Review/merge pull request to not share timing variables when building the model https://github.com/IIIM-IS/replicode/pull/110
-* Review/merge pull request for registerGoalTarget in simulated backward chaining https://github.com/IIIM-IS/replicode/pull/108
 * Review/merge pull request for simulation control in abduce_simulated_lhs https://github.com/IIIM-IS/replicode/pull/111
 * Review/merge pull request for NoArgCmdGuardBuilder backward guard https://github.com/IIIM-IS/replicode/pull/115
 * Review/merge pull request for check_simulated_imdl in SRMonitor::signal https://github.com/IIIM-IS/replicode/pull/116
 * Review/merge pull request for SYNC_HOLD timings https://github.com/IIIM-IS/replicode/pull/118
 * Review/merge pull request for simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
+* Review/merge pull request for registerGoalTarget in simulated backward chaining https://github.com/IIIM-IS/replicode/pull/108
+* Review/merge pull request for matching all composite state combinations in backward chaining  https://github.com/IIIM-IS/replicode/pull/129
 * Review/merge pull request to allow eject to return the actally-executed command https://github.com/IIIM-IS/replicode/pull/125
 
 TODO
 * Look at not removing a simulated requirement once it has been used by a branch from one simulated command.
 * Make pull request for PrimaryMDLController::predict to allow simulated predicted imdl.
-* Investigate when need to set the "weak requirement enabled" flag.
-* Make pull request: For a goal for a member of a composite state, make a goal for the icst.
+* How to ensure that stored requirements are from the same simulation branch?
 * Try limiting detection of conflicting facts to numbers.
 * Try commenting out PTPX::reduce:666 if (i->input_ == Opcodes::Cmd)
 * Make AGI summer school example learn the models.
@@ -471,8 +481,6 @@ TODO
 * Make the cart-pole example run in Release configuration.
 * When a failed model is in the secondary group and the pattern extractor learns a model from new inputs, does it check if it's the same as the failed model?
 * pull request for overlapping SYNC_HOLD timings in auto focus
-* How to ensure that stored requirements are from the same simulation branch?
-* How does an AERA agent make hypotheses about essence facts?
 * In prediction monitor, on failure check again at the end of the predicted period.
 * Visualizer: Add an item for prediction reduction, initially hidden.
 * Visualizer: Ability to launch Replicode from the Visualizer.
