@@ -63,8 +63,8 @@ pgm_cmd_move_y_plus:(pgm |[]
 []
    (= (is_sim g) false)
 []
-   (prb [1 "print" "cmd move_y_plus..." |[]])
    (cmd move_y_plus [obj] 1)
+   (prb [1 "print" "cmd move_y_plus..." |[]])
 1) |[]
 i_pgm_cmd_move_y_plus:(ipgm pgm_cmd_move_y_plus |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
