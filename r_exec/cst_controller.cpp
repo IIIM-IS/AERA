@@ -259,7 +259,6 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
       if (!code_) {
 
         load_code();
-        P<HLPBindingMap> original_bindings = bindings_;
         bindings_ = bm;
         if (evaluate_fwd_guards()) { // may update bindings; full match.
 //std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" full match\n";
