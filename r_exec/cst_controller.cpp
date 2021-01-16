@@ -263,6 +263,7 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
         bindings_ = bm;
         if (evaluate_fwd_guards()) { // may update bindings; full match.
 //std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" full match\n";
+          // JTNote: The offspring is made with the modified bindings_. That doesn't seem right.
           offspring = new CSTOverlay(this);
           update(bm, (_Fact *)input->object_, bound_pattern);
           inject_production();
@@ -274,6 +275,7 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
           delete[] code_;
           code_ = NULL;
           offspring = NULL;
+          // JTNote: This returns after bindings_ is modified. Should they be restored?
           return false;
         }
       } else { // guards already evaluated, full match.
