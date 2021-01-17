@@ -471,6 +471,7 @@ next meeting
 * Review/merge pull request to allow eject to return the actally-executed command https://github.com/IIIM-IS/replicode/pull/125
 
 TODO
+* TRY. New proposal for using CSTOverlay in https://github.com/IIIM-IS/replicode/issues/97
 * Look at not removing a simulated requirement once it has been used by a branch from one simulated command.
 * Make pull request for PrimaryMDLController::predict to allow simulated predicted imdl.
 * How to ensure that stored requirements are from the same simulation branch?
@@ -478,7 +479,9 @@ TODO
 * Try commenting out PTPX::reduce:666 if (i->input_ == Opcodes::Cmd)
 * Make AGI summer school example learn the models.
 * Visualizer: Show prediction failure.
+* Make the Visualizer compile in Release configuration.
 * Make the cart-pole example run in Release configuration.
+* After merging PR #126, remove code to change vars to wildcards: https://github.com/IIIM-IS/replicode/blob/5794c30b1bf7daea0ecc94c7e81e4456e258138c/r_exec/mdl_controller.cpp#L1400-L1411
 * When a failed model is in the secondary group and the pattern extractor learns a model from new inputs, does it check if it's the same as the failed model?
 * pull request for overlapping SYNC_HOLD timings in auto focus
 * In prediction monitor, on failure check again at the end of the predicted period.
