@@ -6,6 +6,21 @@
 ; inputs: position, attached, efferent copies of commands.
 
 attached:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+h:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+h_is_a_hand:(mk.val h essence hand 1) |[]
+(fact h_is_a_hand 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+c:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+c_is_a_cube:(mk.val c essence cube 1) |[]
+(fact c_is_a_cube 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+c_is_a_hand:(mk.val c essence hand 1) |[]
+; This is needed for S3.
+(|fact c_is_a_hand 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+s:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+s_is_a_sphere:(mk.val s essence sphere 1) |[]
+(fact s_is_a_sphere 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+s_is_a_hand:(mk.val s essence hand 1) |[]
+; This is needed for S3.
+(|fact s_is_a_hand 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 
 ; Hand H has position P.
 S0:(cst |[]
@@ -143,22 +158,6 @@ M7:(mdl |[]
 |[]
 |[]
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
-
-h:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
-h_is_a_hand:(mk.val h essence hand 1) |[]
-(fact h_is_a_hand 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
-c:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
-c_is_a_cube:(mk.val c essence cube 1) |[]
-(fact c_is_a_cube 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
-c_is_a_hand:(mk.val c essence hand 1) |[]
-; This is needed for S3.
-(|fact c_is_a_hand 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
-s:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
-s_is_a_sphere:(mk.val s essence sphere 1) |[]
-(fact s_is_a_sphere 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
-s_is_a_hand:(mk.val s essence hand 1) |[]
-; This is needed for S3.
-(|fact s_is_a_hand 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 
 !def pH0 25
 !def pS0 0
