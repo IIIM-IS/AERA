@@ -92,11 +92,12 @@ M2:(mdl [H: C: T0: T1:]
    T1:(- T3 0s:100ms:0us);     Copy from M0.
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
-; M2 will work (some C will be attached to hand H) if it is at the same position as hand H and it is not already attached.
+; M2 will work (something will be attached to hand H) if it is at the same position as hand H and it is not already attached.
+; Restrict to grab s, in case c is also at the same position. TODO: Properly handle the case of multiple objects at the same position.
 M3:(mdl |[]
 []
-   (fact (icst S1 |[] [H: P: C: X:] : :) T0: T1: : :); X is also exposed from S1.
-   (fact (imdl M2 [H: C: T0: T1:] [T1_RHS: T3:] : :) T0: T1: : :); T2 is not exposed from M2. T1_RHS is also exposed.
+   (fact (icst S1 |[] [H: P: s X:] : :) T0: T1: : :); X is also exposed from S1.
+   (fact (imdl M2 [H: s T0: T1:] [T1_RHS: T3:] : :) T0: T1: : :); T2 is not exposed from M2. T1_RHS is also exposed.
 |[]
 |[]
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
