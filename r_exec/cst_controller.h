@@ -111,6 +111,12 @@ protected:
   void inject_production();
   void update(HLPBindingMap *map, _Fact *input, _Fact *bound_pattern);
   CSTOverlay *get_offspring(HLPBindingMap *map, _Fact *input, _Fact *bound_pattern);
+  /**
+   * Similar to *Pred::get_simulation, find the Sim in simulations_ whose root_ is root.
+   * \param root The root to match with the Sim root_.
+   * \return The matching Sim, or NULL if no match.
+   */
+  Sim* get_simulation(Controller *root) const;
 
   CSTOverlay(const CSTOverlay *original);
 public:

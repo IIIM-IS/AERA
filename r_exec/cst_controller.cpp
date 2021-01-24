@@ -317,6 +317,16 @@ _Fact* CSTOverlay::bindPattern(_Fact *input, HLPBindingMap* map)
   return NULL;
 }
 
+Sim* CSTOverlay::get_simulation(Controller *root) const {
+  // TODO: Do we need a critical section to access simulations_?
+  for (auto sim = simulations_.begin(); sim != simulations_.end(); ++sim) {
+    if ((*sim)->root_ == root)
+      return *sim;
+  }
+
+  return NULL;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 CSTController::CSTController(r_code::View *view) : HLPController(view) {
