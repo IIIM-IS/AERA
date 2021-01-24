@@ -29,11 +29,13 @@ This is a list of unintuitive issues with using Replicode, to help new users.
 * "icmd" means "internal command", not "instantiated command" (like "imdl" for "instantiated model").
 * imdl set of exposed values doesn't have LHS fact timestamps. See: HLPBindingMap::build_f_ihlp:1037
 * If a model's guard assigns a variable, the value passed in with the same template variable is ignored.
-* The timestamps of facts defined at the top level automatically have the start time added for run time 
+* The timestamps of facts defined at the top level of a file automatically have the start time added for run time 
   (and subtracted after run time for `decompiled_objects.txt`).
 * min_sim_time_horizon is really "time allowance for the simulated predictions".
 * OIDs are not in order of creation. (Only order of binding to a view.)
 * Program "guards" which check boolean constraints are different than model "guards" which assign values to variables.
+* Even though a drive goal is to be accomplished in the next frame, make its time interval start in the current frame
+  so that its potential sub-goals will match current facts (and not be injected as new goals).
 * A program accumulates matched patterns and will run even if one of the facts is "old". You must use boolean guards to control this.
 * `pong.2.simplified.replicode`: Prediction is made after the actual fact is injected. (But the prediction doesn't look at it,
   and the prediction check uses the output of auto focus which correctly doesn't appear until the next frame.)
