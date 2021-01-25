@@ -146,12 +146,16 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
     ChainingStatus c_s = ((MDLController *)controller_)->retrieve_imdl_fwd(bm, f_imdl, r_p, ground, req_controller, wr_enabled);
     f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(wr_enabled);
     bool chaining_allowed = (c_s >= WEAK_REQUIREMENT_ENABLED);
+    bool did_check_simulated_chaining = false;
+    bool check_simulated_chaining_result;
     switch (c_s) {
     case WEAK_REQUIREMENT_DISABLED:
     case STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT: // silent monitoring of a prediction that will not be injected.
       if (is_simulation) { // if there is simulated imdl for the root of one sim in prediction, allow forward chaining.
 
-        if (check_simulated_chaining(bm, f_imdl, prediction))
+        check_simulated_chaining_result = check_simulated_chaining(bm, f_imdl, prediction);
+        did_check_simulated_chaining = true;
+        if (check_simulated_chaining_result)
           chaining_allowed = true;
         else
           break;
@@ -164,7 +168,11 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
     case STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT: // silent monitoring of a prediction that will not be injected.
       if (is_simulation) { // if there is simulated imdl for the root of one sim in prediction, allow forward chaining.
 
-        if (check_simulated_chaining(bm, f_imdl, prediction))
+        if (!did_check_simulated_chaining) {
+          check_simulated_chaining_result = check_simulated_chaining(bm, f_imdl, prediction);
+          did_check_simulated_chaining = true;
+        }
+        if (check_simulated_chaining_result)
           chaining_allowed = true;
         else
           break;
