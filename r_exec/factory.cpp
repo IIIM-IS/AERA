@@ -258,22 +258,30 @@ bool _Fact::Match(const Code *lhs, uint16 lhs_base_index, uint16 lhs_index, cons
   uint16 lhs_full_index = lhs_base_index + lhs_index;
   Atom lhs_atom = lhs->code(lhs_full_index);
   Atom rhs_atom = rhs->code(rhs_index);
+  uint8 lhs_descriptor = lhs_atom.getDescriptor();
+  uint8 rhs_descriptor = rhs_atom.getDescriptor();
 
   if (same_binding_state) {
-    bool lhs_is_bound = (lhs_atom.getDescriptor() != Atom::VL_PTR);
-    bool rhs_is_bound = (rhs_atom.getDescriptor() != Atom::VL_PTR);
-    if (lhs_is_bound != rhs_is_bound)
-      // Not the same binding state.
-      return false;
+    if (lhs_descriptor == Atom::T_WILDCARD || lhs_descriptor == Atom::WILDCARD ||
+        rhs_descriptor == Atom::T_WILDCARD || rhs_descriptor == Atom::WILDCARD) {
+      // A wildcard will match anything including a variable when it becomes bound.
+    }
+    else {
+      bool lhs_is_VL_PTR = (lhs_descriptor == Atom::VL_PTR);
+      bool rhs_is_VL_PTR = (rhs_descriptor == Atom::VL_PTR);
+      if (lhs_is_VL_PTR != rhs_is_VL_PTR)
+        // Not the same binding state.
+        return false;
+    }
   }
 
-  switch (lhs_atom.getDescriptor()) {
+  switch (lhs_descriptor) {
   case Atom::T_WILDCARD:
   case Atom::WILDCARD:
   case Atom::VL_PTR:
     break;
   case Atom::I_PTR:
-    switch (rhs_atom.getDescriptor()) {
+    switch (rhs_descriptor) {
     case Atom::I_PTR:
       if (!MatchStructure(lhs, lhs_atom.asIndex(), 0, rhs, rhs_atom.asIndex(), same_binding_state))
         return false;
@@ -287,7 +295,7 @@ bool _Fact::Match(const Code *lhs, uint16 lhs_base_index, uint16 lhs_index, cons
     }
     break;
   case Atom::R_PTR:
-    switch (rhs_atom.getDescriptor()) {
+    switch (rhs_descriptor) {
     case Atom::R_PTR:
       if (!MatchObject(lhs->get_reference(lhs_atom.asIndex()), rhs->get_reference(rhs_atom.asIndex()), same_binding_state))
         return false;
@@ -301,7 +309,7 @@ bool _Fact::Match(const Code *lhs, uint16 lhs_base_index, uint16 lhs_index, cons
     }
     break;
   default:
-    switch (rhs_atom.getDescriptor()) {
+    switch (rhs_descriptor) {
     case Atom::T_WILDCARD:
     case Atom::WILDCARD:
     case Atom::VL_PTR:
