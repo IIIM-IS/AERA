@@ -260,25 +260,9 @@ bool _Fact::Match(const Code *lhs, uint16 lhs_base_index, uint16 lhs_index, cons
   Atom rhs_atom = rhs->code(rhs_index);
 
   if (same_binding_state) {
-    bool lhs_is_bound = true;
-    switch (lhs_atom.getDescriptor()) {
-    case Atom::T_WILDCARD:
-    case Atom::WILDCARD:
-    case Atom::VL_PTR:
-      lhs_is_bound = false;
-      break;
-    }
-
-    bool rhs_is_bound = true;
-    switch (rhs_atom.getDescriptor()) {
-    case Atom::T_WILDCARD:
-    case Atom::WILDCARD:
-    case Atom::VL_PTR:
-      rhs_is_bound = false;
-      break;
-    }
-
-    if (lhs_is_bound && !rhs_is_bound || !lhs_is_bound && rhs_is_bound)
+    bool lhs_is_bound = (lhs_atom.getDescriptor() != Atom::VL_PTR);
+    bool rhs_is_bound = (rhs_atom.getDescriptor() != Atom::VL_PTR);
+    if (lhs_is_bound != rhs_is_bound)
       // Not the same binding state.
       return false;
   }
