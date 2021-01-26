@@ -158,9 +158,9 @@ protected:
 public:
   /**
    * Check if lhs matches rhs.
-   * \param same_binding_state (optional) If false, then allow a wildcard or unbound variable to match another
-   * bound or unbound object. If true, then only allow a wildcard or unbound variable to match another wildcard
-   * or unbound variable. If omitted, use false.
+   * \param same_binding_state (optional) If false, then allow an unbound variable to match another
+   * bound or unbound object. If true, then only allow an unbound variable to match another
+   * unbound variable. If omitted, use false.
    */
   static bool MatchObject(const r_code::Code *lhs, const r_code::Code *rhs, bool same_binding_state = false);
 
