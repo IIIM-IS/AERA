@@ -1243,6 +1243,8 @@ void TopLevelMDLController::abduce_lhs(HLPBindingMap *bm,
   auto deadline = sub_goal_target->get_before();
   auto sim_thz = get_sim_thz(now, deadline);
   Sim *sub_sim = new Sim(SIM_ROOT, sim_thz, super_goal, false, this, 1);
+  // Register the goal to make sure it doesn't become a subgoal.
+  sub_sim->registerGoalTarget(sub_goal_target);
 
   Goal *sub_goal = new Goal(sub_goal_target, super_goal->get_goal()->get_actor(), sub_sim, 1);
   Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
