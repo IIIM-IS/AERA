@@ -201,8 +201,12 @@ void CSTOverlay::update(HLPBindingMap *map, _Fact *input, _Fact *bound_pattern) 
     last_cfd = prediction->get_target()->get_cfd();
     if (prediction->is_simulation()) {
 
-      for (uint16 i = 0; i < prediction->get_simulations_size(); ++i)
-        simulations_.insert(prediction->get_simulation(i));
+      for (uint16 i = 0; i < prediction->get_simulations_size(); ++i) {
+        auto predictionSimulation = prediction->get_simulation(i);
+        if (!get_simulation(predictionSimulation->getRootSim()->root_))
+          // The simulations_ does not have a Sim with the same root_, so add.
+          simulations_.insert(predictionSimulation);
+      }
     } else
       predictions_.insert(input);
   } else
