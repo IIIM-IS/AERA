@@ -152,9 +152,12 @@ public:
    * \param input The input _Fact to match against a pattern.
    * \param map The binding map for calling match_fwd_strict and has the bindings
    * if this returns a pattern.
+   * \param predictionSimulation If not NULL, then ensure that its simulation root matches the root
+   * of the simulation in this object's simulations_. Also use the timings from input to update the
+   * timing variables of this CSTOverlay.
    * \return The matching pattern from patterns_, or NULL if not found.
    */
-  _Fact* CSTOverlay::bindPattern(_Fact *input, HLPBindingMap* map);
+  _Fact* CSTOverlay::bindPattern(_Fact *input, HLPBindingMap* map, Sim* predictionSimulation);
 };
 
 // Backward chaining:
