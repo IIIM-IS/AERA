@@ -454,27 +454,34 @@ Simulator
 * How does an AERA agent make hypotheses about essence facts? (avoid https://github.com/IIIM-IS/replicode/pull/112)
   TRY. New proposal for using CSTOverlay in https://github.com/IIIM-IS/replicode/issues/97 .
 
+2021-01-28
+* DONE. Implement new proposal for using CSTOverlay in https://github.com/IIIM-IS/replicode/issues/97
+  * OK. (After these changes, confirmed that the "cart pole" and "discrete paddle positions" examples still work.)
+  * DONE. Review/merge pull request for adding to CSTOverlay's list of Sim https://github.com/IIIM-IS/replicode/pull/134
+
 next meeting
 * Review/merge pull request For a goal for a member of a composite state, make a goal for the icst. https://github.com/IIIM-IS/replicode/pull/131
 * Review/merge pull request for template timings in abduce_imdl https://github.com/IIIM-IS/replicode/pull/107
+* Review/merge pull request for bindPattern to update timings https://github.com/IIIM-IS/replicode/pull/135
 * Review/merge pull request to fix  https://github.com/IIIM-IS/replicode/issues/51 Add CODE_VL_PTR and fix the decompiler https://github.com/IIIM-IS/replicode/pull/126
 * Review/merge pull request to not share timing variables when building the model https://github.com/IIIM-IS/replicode/pull/110
+* Review/merge pull request for simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
 * Review/merge pull request for super_goal in new Sim https://github.com/IIIM-IS/replicode/pull/106
 * Review/merge pull request for binding map in the prediction's mk.rdx https://github.com/IIIM-IS/replicode/pull/120
 * Review/merge pull request for simulation control in abduce_simulated_lhs https://github.com/IIIM-IS/replicode/pull/111
 * Review/merge pull request for NoArgCmdGuardBuilder backward guard https://github.com/IIIM-IS/replicode/pull/115
 * Review/merge pull request for check_simulated_imdl in SRMonitor::signal https://github.com/IIIM-IS/replicode/pull/116
 * Review/merge pull request for SYNC_HOLD timings https://github.com/IIIM-IS/replicode/pull/118
-* Review/merge pull request for simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
 * Review/merge pull request for registerGoalTarget in simulated backward chaining https://github.com/IIIM-IS/replicode/pull/108
 * Review/merge pull request for matching all composite state combinations in backward chaining  https://github.com/IIIM-IS/replicode/pull/129
 * Review/merge pull request to allow eject to return the actally-executed command https://github.com/IIIM-IS/replicode/pull/125
 
 TODO
-* TRY. New proposal for using CSTOverlay in https://github.com/IIIM-IS/replicode/issues/97
-* Look at not removing a simulated requirement once it has been used by a branch from one simulated command.
 * Make pull request for PrimaryMDLController::predict to allow simulated predicted imdl.
+* Create issue for non-exact match of template timings.
+* TRY copy/paste code to check references to fix: Using = in guard of composite state of model https://github.com/IIIM-IS/replicode/issues/133
 * How to ensure that stored requirements are from the same simulation branch?
+* AGI example move command has limited distance (different efferent copy).
 * Try limiting detection of conflicting facts to numbers.
 * Try commenting out PTPX::reduce:666 if (i->input_ == Opcodes::Cmd)
 * Make AGI summer school example learn the models.
