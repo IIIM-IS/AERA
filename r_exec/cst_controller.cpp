@@ -240,10 +240,14 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
   _Fact *input_object;
   Pred *prediction = ((_Fact *)input->object_)->get_pred();
   bool is_simulation;
+  Sim* predictionSimulation = NULL;
   if (prediction) {
 
     input_object = prediction->get_target(); // input_object is f1 as in f0->pred->f1->object.
     is_simulation = prediction->is_simulation();
+    // TODO: Handle a prediction with multiple simulations for different roots.
+    if (prediction->get_simulations_size() == 1)
+      predictionSimulation = prediction->get_simulation((uint16)0);
   } else {
 
     input_object = (_Fact *)input->object_;
@@ -251,7 +255,7 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
   }
 
   P<HLPBindingMap> bm = new HLPBindingMap();
-  _Fact *bound_pattern = bindPattern(input_object, bm);
+  _Fact *bound_pattern = bindPattern(input_object, bm, predictionSimulation);
   if (bound_pattern) {
     //if(match_deadline.time_since_epoch().count() == 0){
     // std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" "<<std::hex<<this<<std::dec<<" (0) ";
@@ -306,13 +310,38 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
   }
 }
 
-_Fact* CSTOverlay::bindPattern(_Fact *input, HLPBindingMap* map)
+_Fact* CSTOverlay::bindPattern(_Fact *input, HLPBindingMap* map, Sim* predictionSimulation)
 {
+  bool useInputTimings = false;
+  if (predictionSimulation) {
+    // TODO: Handle the case where simulations_ has multiple simulation roots.
+    if (simulations_.size() > 1 ||
+        (simulations_.size() == 1 && (*simulations_.begin())->getRootSim() != predictionSimulation->getRootSim()))
+      // This overlay is for a simulation, but the simulation root doesn't match the input predictionSimulation.
+      return NULL;
+
+    if (inputs_.size() > 0) {
+      // This overlay's binding map forward timings have been set.
+      if (input->get_after() < bindings_->get_fwd_before() &&
+        input->get_before() > bindings_->get_fwd_after()) {
+        // The timings overlap, so let match_fwd_strict update the map from the input timings.
+      }
+      else if (input->get_before() <= bindings_->get_fwd_after())
+        // The input is earlier than the facts in this overlay, so don't match.
+        return NULL;
+      else
+        // The input is later than the facts in this overlay, so use the input timings.
+        useInputTimings = true;
+    }
+  }
+
   r_code::list<P<_Fact> >::const_iterator p;
   for (p = patterns_.begin(); p != patterns_.end(); ++p) {
 
     map->load(bindings_);
     if (inputs_.size() == 0)
+      map->reset_fwd_timings(input);
+    else if (useInputTimings)
       map->reset_fwd_timings(input);
     if (map->match_fwd_strict(input, *p))
       return *p;
