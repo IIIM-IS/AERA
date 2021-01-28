@@ -262,8 +262,7 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
     //} else{
     // std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" "<<std::hex<<this<<std::dec<<" ("<<Time::ToString_seconds(match_deadline-Utils::GetTimeReference())<<") ";
     //}
-    // Debug: If simulating then make the icst after matching one member, as a temporary solution to https://github.com/IIIM-IS/replicode/issues/97
-    if (is_simulation || patterns_.size() == 1) { // last match.
+    if (patterns_.size() == 1) { // last match.
 
       if (!code_) {
 
@@ -288,11 +287,9 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
         }
       } else { // guards already evaluated, full match.
 //std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" full match\n";
-        // Debug: If simulating then make the icst after matching one member, as a temporary solution to https://github.com/IIIM-IS/replicode/issues/97
         offspring = new CSTOverlay(this);
         update(bm, (_Fact *)input->object_, bound_pattern);
-        // Debug: If simulating then make the icst after matching one member, as a temporary solution to https://github.com/IIIM-IS/replicode/issues/97
-        if (is_simulation || inputs_.size() == original_patterns_size_) inject_production();
+        if (inputs_.size() == original_patterns_size_) inject_production();
         invalidate();
         store_evidence(input->object_, prediction, is_simulation);
         return true;
@@ -438,7 +435,7 @@ void CSTController::reduce(r_exec::View *input) {
       CSTOverlay overlay(this, bindings_);
       overlay.load_patterns();
       P<HLPBindingMap> bm = new HLPBindingMap();
-      _Fact *bound_pattern = overlay.bindPattern(goal_target, bm);
+      _Fact *bound_pattern = overlay.bindPattern(goal_target, bm, NULL);
       if (bound_pattern) {
         // The match has filled in the binding map. Make an icst from it and inject it as a goal.
         // TODO: Call load_code (if needed) and evaluate backward guards.
