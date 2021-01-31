@@ -996,6 +996,28 @@ void MDLController::register_requirement(_Fact *f_pred, RequirementsPair &r_p) {
   if (r_p.first.controllers.size() > 0 || r_p.second.controllers.size() > 0)
     active_requirements_.insert(std::make_pair(f_pred, r_p));
 }
+
+bool MDLController::get_imdl_template_timings(
+    r_code::Code* imdl, Timestamp& after, Timestamp& before, uint16* after_ts_index, uint16* before_ts_index) {
+  auto template_set_index = imdl->code(I_HLP_TPL_ARGS).asIndex();
+  auto template_set_count = imdl->code(template_set_index).getAtomCount();
+  auto template_after_index = template_set_index + (template_set_count - 1);
+  auto template_before_index = template_set_index + template_set_count;
+  if (!(template_set_count >= 2 &&
+        imdl->code(template_after_index).getDescriptor() == Atom::I_PTR &&
+        imdl->code(template_before_index).getDescriptor() == Atom::I_PTR))
+    return false;
+
+  after = Utils::GetTimestamp(imdl, template_after_index);
+  before = Utils::GetTimestamp(imdl, template_before_index);
+  if (after_ts_index)
+    *after_ts_index = imdl->code(template_after_index).asIndex();
+  if (before_ts_index)
+    *before_ts_index = imdl->code(template_before_index).asIndex();
+
+  return true;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 MDLController::RequirementEntry::RequirementEntry() : PredictedEvidenceEntry(), controller_(NULL), chaining_was_allowed_(false) {
@@ -2263,25 +2285,6 @@ bool PrimaryMDLController::abduction_allowed(HLPBindingMap *bm) { // true if fwd
     return false;
   if (!HLPOverlay::ScanBWDGuards(this, bm))
     return false;
-  return true;
-}
-
-bool PrimaryMDLController::get_imdl_template_timings(
-  r_code::Code* imdl, Timestamp& after, Timestamp& before, uint16& after_ts_index, uint16& before_ts_index) {
-  auto template_set_index = imdl->code(I_HLP_TPL_ARGS).asIndex();
-  auto template_set_count = imdl->code(template_set_index).getAtomCount();
-  auto template_after_index = template_set_index + (template_set_count - 1);
-  auto template_before_index = template_set_index + template_set_count;
-  if (!(template_set_count >= 2 &&
-        imdl->code(template_after_index).getDescriptor() == Atom::I_PTR &&
-        imdl->code(template_before_index).getDescriptor() == Atom::I_PTR))
-    return false;
-
-  after_ts_index = imdl->code(template_after_index).asIndex();
-  before_ts_index = imdl->code(template_before_index).asIndex();
-  after = Utils::GetTimestamp(imdl, template_after_index);
-  before = Utils::GetTimestamp(imdl, template_before_index);
-
   return true;
 }
 

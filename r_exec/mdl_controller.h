@@ -253,6 +253,20 @@ public:
   bool is_cmd() const { return is_cmd_; }
 
   void register_requirement(_Fact *f_pred, RequirementsPair &r_p);
+
+  /**
+   * Get the last two values from the imdl template values, assuming that they are the timings
+   * from the prerequisite model.
+   * \param imdl The imdl object.
+   * \param after Set this to the after timestamp (if this returns true).
+   * \param before Set this to the before timestamp (if this returns true).
+   * \param (optional) after_ts_index If not NULL, set this to the index in imdl Code array of the after time stamp structure.
+   * \param (optional)  before_ts_index If not NULL, set this to the index in imdl Code array of the before time stamp structure.
+   * \return True for success, otherwise false if there are not enough template parameters,
+   * or if the values some time other than a timestamp (such as an unbound variable).
+   */
+  static bool get_imdl_template_timings(
+    r_code::Code* imdl, Timestamp& after, Timestamp& before, uint16* after_ts_index = NULL, uint16* before_ts_index = NULL);
 };
 
 class PMDLController :
@@ -372,21 +386,6 @@ private:
   void assume_lhs(HLPBindingMap *bm, bool opposite, _Fact *input, float32 confidence);
 
   bool abduction_allowed(HLPBindingMap *bm);
-
-  /**
-   * Get the last two values from the imdl template values, assuming that they are the timings
-   * from the prerequisite model.
-   * \param imdl The imdl object.
-   * \param after Set this to the after timestamp (if this returns true).
-   * \param before Set this to the before timestamp (if this returns true).
-   * \param after_ts_index The index in imdl Code array of the after time stamp structure.
-   * \param before_ts_index The index in imdl Code array of the before time stamp structure.
-   * \return True for success, otherwise false if there are not enough template parameters,
-   * or if the values some time other than a timestamp (such as an unbound variable).
-   */
-  static bool get_imdl_template_timings(
-    r_code::Code* imdl, Timestamp& after, Timestamp& before, uint16& after_ts_index, uint16& before_ts_index);
-
 public:
   PrimaryMDLController(r_code::View *view);
 
