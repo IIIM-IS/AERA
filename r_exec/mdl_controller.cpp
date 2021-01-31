@@ -476,10 +476,13 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
             if (_f_imdl_template_set_count >= 2 &&
                 _f_imdl->get_reference(0)->code(_f_imdl_after_code_index).getDescriptor() == Atom::I_PTR &&
                 _f_imdl->get_reference(0)->code(_f_imdl_before_code_index).getDescriptor() == Atom::I_PTR) {
-              Utils::SetTimestamp(f_imdl->get_reference(0), template_after_ts_index,
-                Utils::GetTimestamp(_f_imdl->get_reference(0), _f_imdl_after_code_index));
-              Utils::SetTimestamp(f_imdl->get_reference(0), template_before_ts_index,
-                Utils::GetTimestamp(_f_imdl->get_reference(0), _f_imdl_before_code_index));
+              auto _f_imdl_template_after = Utils::GetTimestamp(_f_imdl->get_reference(0), _f_imdl_after_code_index);
+              auto _f_imdl_template_before = Utils::GetTimestamp(_f_imdl->get_reference(0), _f_imdl_before_code_index);
+              // When Match is updated with time interval comparison, it will do this test for strict overlap.
+              if (save_template_after < _f_imdl_template_before && save_template_before > _f_imdl_template_after) {
+                Utils::SetTimestamp(f_imdl->get_reference(0), template_after_ts_index, _f_imdl_template_after);
+                Utils::SetTimestamp(f_imdl->get_reference(0), template_before_ts_index, _f_imdl_template_before);
+              }
             }
           }
           if (_original.match_fwd_strict(_f_imdl, f_imdl)) { // tpl args will be valuated in bm, but not in f_imdl yet.
