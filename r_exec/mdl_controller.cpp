@@ -2266,6 +2266,25 @@ bool PrimaryMDLController::abduction_allowed(HLPBindingMap *bm) { // true if fwd
   return true;
 }
 
+bool PrimaryMDLController::get_template_timings(
+  r_code::Code* imdl, Timestamp& after, Timestamp& before, uint16& after_ts_index, uint16& before_ts_index) {
+  auto template_set_index = imdl->code(I_HLP_TPL_ARGS).asIndex();
+  auto template_set_count = imdl->code(template_set_index).getAtomCount();
+  auto template_after_index = template_set_index + (template_set_count - 1);
+  auto template_before_index = template_set_index + template_set_count;
+  if (!(template_set_count >= 2 &&
+    imdl->code(template_after_index).getDescriptor() == Atom::I_PTR &&
+    imdl->code(template_before_index).getDescriptor() == Atom::I_PTR))
+    return false;
+
+  after_ts_index = imdl->code(template_after_index).asIndex();
+  before_ts_index = imdl->code(template_before_index).asIndex();
+  after = Utils::GetTimestamp(imdl, template_after_index);
+  before = Utils::GetTimestamp(imdl, template_before_index);
+
+  return true;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SecondaryMDLController::SecondaryMDLController(r_code::View *view) : MDLController(view) {

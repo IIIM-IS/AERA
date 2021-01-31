@@ -372,6 +372,19 @@ private:
   void assume_lhs(HLPBindingMap *bm, bool opposite, _Fact *input, float32 confidence);
 
   bool abduction_allowed(HLPBindingMap *bm);
+
+  /**
+   * Get the last two values from the imdl template values, assuming that they are the timings
+   * from the prerequisite model.
+   * \param imdl The imdl object.
+   * \param after Set this to the after timestamp (if this returns true).
+   * \param before Set this to the before timestamp (if this returns true).
+   * \return True for success, otherwise false if there are not enough template parameters,
+   * or if the values some time other than a timestamp (such as an unbound variable).
+   */
+  static bool get_template_timings(
+    r_code::Code* imdl, Timestamp& after, Timestamp& before, uint16& after_ts_index, uint16& before_ts_index);
+
 public:
   PrimaryMDLController(r_code::View *view);
 
