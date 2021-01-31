@@ -1672,7 +1672,7 @@ void PrimaryMDLController::reduce(r_exec::View *input) { // no lock.
   } else {
 
     PrimaryMDLOverlay o(this, bindings_);
-    bool match = (o.reduce((_Fact *)input->object_, NULL, NULL) != NULL);
+    bool match = o.reduce((_Fact *)input->object_, NULL, NULL);
     if (!match && !monitor_predictions((_Fact *)input->object_) && !monitor_goals((_Fact *)input->object_))
       assume((_Fact *)input->object_);
     check_last_match_time(match);
@@ -2453,7 +2453,7 @@ void SecondaryMDLController::reduce(r_exec::View *input) { // no lock.
     return;
 
   SecondaryMDLOverlay o(this, bindings_);
-  bool match = (o.reduce((_Fact *)input->object_, NULL, NULL) != NULL); // forward chaining.
+  bool match = o.reduce((_Fact *)input->object_, NULL, NULL); // forward chaining.
 
   if (!match)
     monitor_predictions((_Fact *)input->object_);
