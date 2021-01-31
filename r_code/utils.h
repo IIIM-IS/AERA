@@ -137,6 +137,13 @@ public:
     uint16 t_index = object->code(index).asIndex();
     return object->code_size() > t_index + 2;
   }
+  /**
+   * Get the time stamp pointed to be the I_PTR at index.
+   * \param object The object with the Code array.
+   * \param index The index in the Code array of the I_PTR to the time stamp structure (not the
+   * index of the time stamp structure itself as in SetTimestamp).
+   * \return The time stamp.
+   */
   template<class O> static Timestamp GetTimestamp(const O *object, uint16 index) {
 
     uint16 t_index = object->code(index).asIndex();
@@ -144,6 +151,13 @@ public:
     return Timestamp(std::chrono::microseconds(high << 32 | object->code(t_index + 2).atom_));
   }
 
+  /**
+   * Set the Code array values at index with the structure for the timestamp.
+   * \param object The object with the Code array.
+   * \param index The index in the Code array to place the time stamp structure (not the
+   * index of the I_PTR to the structure as in GetTimestamp).
+   * \param timestamp The time stamp to put in the structure at the index.
+   */
   template<class O> static void SetTimestamp(O *object, uint16 index, Timestamp timestamp) {
 
     uint64 t = std::chrono::duration_cast<std::chrono::microseconds>(timestamp.time_since_epoch()).count();
