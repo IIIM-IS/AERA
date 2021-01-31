@@ -429,21 +429,10 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
   bool save_f_imdl_wr_enabled = f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED).asBoolean();
 
   // Temporarily make f_imdl template timings match the one from _f_imdl so that any difference is ignored.
-  bool have_saved_template_timings = false;
   Timestamp save_template_after, save_template_before;
-  auto template_set_index = f_imdl->get_reference(0)->code(I_HLP_TPL_ARGS).asIndex();
-  auto template_set_count = f_imdl->get_reference(0)->code(template_set_index).getAtomCount();
-  auto template_after_index = template_set_index + (template_set_count - 1);
-  auto template_after_ts_index = f_imdl->get_reference(0)->code(template_after_index).asIndex();
-  auto template_before_index = template_set_index + template_set_count;
-  auto template_before_ts_index = f_imdl->get_reference(0)->code(template_before_index).asIndex();
-  if (template_set_count >= 2 &&
-      f_imdl->get_reference(0)->code(template_after_index).getDescriptor() == Atom::I_PTR &&
-      f_imdl->get_reference(0)->code(template_before_index).getDescriptor() == Atom::I_PTR) {
-    have_saved_template_timings = true;
-    save_template_after = Utils::GetTimestamp(f_imdl->get_reference(0), template_after_index);
-    save_template_before = Utils::GetTimestamp(f_imdl->get_reference(0), template_before_index);
-  }
+  uint16 template_after_ts_index, template_before_ts_index;
+  bool have_saved_template_timings = get_imdl_template_timings(
+    f_imdl->get_reference(0), save_template_after, save_template_before, &template_after_ts_index, &template_before_ts_index);
 
   if (!sr_count) { // no strong req., some weak req.: true if there is one f->imdl complying with timings and bindings.
 
@@ -469,15 +458,8 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
 
           if (have_saved_template_timings) {
             // Temporarily make f_imdl template timings match the one from _f_imdl so that any difference is ignored.
-            auto _f_imdl_template_set_index = _f_imdl->get_reference(0)->code(I_HLP_TPL_ARGS).asIndex();
-            auto _f_imdl_template_set_count = _f_imdl->get_reference(0)->code(_f_imdl_template_set_index).getAtomCount();
-            auto _f_imdl_after_code_index = _f_imdl_template_set_index + (_f_imdl_template_set_count - 1);
-            auto _f_imdl_before_code_index = _f_imdl_template_set_index + _f_imdl_template_set_count;
-            if (_f_imdl_template_set_count >= 2 &&
-                _f_imdl->get_reference(0)->code(_f_imdl_after_code_index).getDescriptor() == Atom::I_PTR &&
-                _f_imdl->get_reference(0)->code(_f_imdl_before_code_index).getDescriptor() == Atom::I_PTR) {
-              auto _f_imdl_template_after = Utils::GetTimestamp(_f_imdl->get_reference(0), _f_imdl_after_code_index);
-              auto _f_imdl_template_before = Utils::GetTimestamp(_f_imdl->get_reference(0), _f_imdl_before_code_index);
+            Timestamp _f_imdl_template_after, _f_imdl_template_before;
+            if (get_imdl_template_timings(_f_imdl->get_reference(0), _f_imdl_template_after, _f_imdl_template_before)) {
               // When Match is updated with time interval comparison, it will do this test for strict overlap.
               if (save_template_after < _f_imdl_template_before && save_template_before > _f_imdl_template_after) {
                 Utils::SetTimestamp(f_imdl->get_reference(0), template_after_ts_index, _f_imdl_template_after);
@@ -1050,6 +1032,28 @@ void MDLController::register_requirement(_Fact *f_pred, RequirementsPair &r_p) {
   if (r_p.first.controllers.size() > 0 || r_p.second.controllers.size() > 0)
     active_requirements_.insert(std::make_pair(f_pred, r_p));
 }
+
+bool MDLController::get_imdl_template_timings(
+    r_code::Code* imdl, Timestamp& after, Timestamp& before, uint16* after_ts_index, uint16* before_ts_index) {
+  auto template_set_index = imdl->code(I_HLP_TPL_ARGS).asIndex();
+  auto template_set_count = imdl->code(template_set_index).getAtomCount();
+  auto template_after_index = template_set_index + (template_set_count - 1);
+  auto template_before_index = template_set_index + template_set_count;
+  if (!(template_set_count >= 2 &&
+        imdl->code(template_after_index).getDescriptor() == Atom::I_PTR &&
+        imdl->code(template_before_index).getDescriptor() == Atom::I_PTR))
+    return false;
+
+  after = Utils::GetTimestamp(imdl, template_after_index);
+  before = Utils::GetTimestamp(imdl, template_before_index);
+  if (after_ts_index)
+    *after_ts_index = imdl->code(template_after_index).asIndex();
+  if (before_ts_index)
+    *before_ts_index = imdl->code(template_before_index).asIndex();
+
+  return true;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 MDLController::RequirementEntry::RequirementEntry() : PredictedEvidenceEntry(), controller_(NULL), chaining_was_allowed_(false) {
