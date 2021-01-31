@@ -427,6 +427,24 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
   ChainingStatus r;
   HLPBindingMap original(bm);
   bool save_f_imdl_wr_enabled = f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED).asBoolean();
+
+  // Temporarily make f_imdl template timings match the one from _f_imdl so that any difference is ignored.
+  bool have_saved_template_timings = false;
+  Timestamp save_template_after, save_template_before;
+  auto template_set_index = f_imdl->get_reference(0)->code(I_HLP_TPL_ARGS).asIndex();
+  auto template_set_count = f_imdl->get_reference(0)->code(template_set_index).getAtomCount();
+  auto template_after_index = template_set_index + (template_set_count - 1);
+  auto template_after_ts_index = f_imdl->get_reference(0)->code(template_after_index).asIndex();
+  auto template_before_index = template_set_index + template_set_count;
+  auto template_before_ts_index = f_imdl->get_reference(0)->code(template_before_index).asIndex();
+  if (template_set_count >= 2 &&
+      f_imdl->get_reference(0)->code(template_after_index).getDescriptor() == Atom::I_PTR &&
+      f_imdl->get_reference(0)->code(template_before_index).getDescriptor() == Atom::I_PTR) {
+    have_saved_template_timings = true;
+    save_template_after = Utils::GetTimestamp(f_imdl->get_reference(0), template_after_index);
+    save_template_before = Utils::GetTimestamp(f_imdl->get_reference(0), template_before_index);
+  }
+
   if (!sr_count) { // no strong req., some weak req.: true if there is one f->imdl complying with timings and bindings.
 
     r = WEAK_REQUIREMENT_DISABLED;
@@ -448,6 +466,22 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
           // Temporarily make f_imdl wr_enabled match the one from _f_imdl so that any difference is ignored.
           f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(
             _f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED).asBoolean());
+
+          if (have_saved_template_timings) {
+            // Temporarily make f_imdl template timings match the one from _f_imdl so that any difference is ignored.
+            auto _f_imdl_template_set_index = _f_imdl->get_reference(0)->code(I_HLP_TPL_ARGS).asIndex();
+            auto _f_imdl_template_set_count = _f_imdl->get_reference(0)->code(_f_imdl_template_set_index).getAtomCount();
+            auto _f_imdl_after_code_index = _f_imdl_template_set_index + (_f_imdl_template_set_count - 1);
+            auto _f_imdl_before_code_index = _f_imdl_template_set_index + _f_imdl_template_set_count;
+            if (_f_imdl_template_set_count >= 2 &&
+                _f_imdl->get_reference(0)->code(_f_imdl_after_code_index).getDescriptor() == Atom::I_PTR &&
+                _f_imdl->get_reference(0)->code(_f_imdl_before_code_index).getDescriptor() == Atom::I_PTR) {
+              Utils::SetTimestamp(f_imdl->get_reference(0), template_after_ts_index,
+                Utils::GetTimestamp(_f_imdl->get_reference(0), _f_imdl_after_code_index));
+              Utils::SetTimestamp(f_imdl->get_reference(0), template_before_ts_index,
+                Utils::GetTimestamp(_f_imdl->get_reference(0), _f_imdl_before_code_index));
+            }
+          }
           if (_original.match_fwd_strict(_f_imdl, f_imdl)) { // tpl args will be valuated in bm, but not in f_imdl yet.
 
             r = WEAK_REQUIREMENT_ENABLED;
@@ -462,6 +496,10 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
     requirements_.CS.leave();
     // Restore.
     f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(save_f_imdl_wr_enabled);
+    if (have_saved_template_timings) {
+      Utils::SetTimestamp(f_imdl->get_reference(0), template_after_ts_index, save_template_after);
+      Utils::SetTimestamp(f_imdl->get_reference(0), template_before_ts_index, save_template_before);
+    }
     return r;
   } else {
 
