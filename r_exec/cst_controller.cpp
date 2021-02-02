@@ -490,7 +490,7 @@ void CSTController::inject_goal(HLPBindingMap *bm,
   _Mem::Get()->inject(view);
 #ifdef WITH_DEBUG_OID
   OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " cst " << getObject()->get_oid() << ": fact " <<
-    f_super_goal->get_oid() << " f_super_goal -> fact " << sub_goal_f->get_oid() << " simulated goal");
+    f_super_goal->get_oid() << " super_goal -> fact " << sub_goal_f->get_oid() << " simulated goal");
 #endif
 
   if (sim->get_mode() == SIM_ROOT) { // no rdx for SIM_OPTIONAL or SIM_MANDATORY.
