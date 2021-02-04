@@ -395,6 +395,32 @@ void CSTController::reduce(r_exec::View *input) {
           abduce(bm, input->object_);
       }
     }
+    else {
+      // Make an icst by matching a single member, then make it a goal to instantiate it. This will
+      // propagate bindings to other members of the composite state and make subgoals from them..
+      // Imitate CSTOverlay::reduce.
+      CSTOverlay overlay(this, bindings_);
+      overlay.load_patterns();
+      P<HLPBindingMap> bm = new HLPBindingMap();
+      _Fact *bound_pattern = overlay.bindPattern(goal_target, bm, NULL);
+      if (bound_pattern) {
+        // The match has filled in the binding map. Make an icst from it and inject it as a goal.
+        // TODO: Call load_code (if needed) and evaluate backward guards.
+        std::vector<P<_Fact> > empty_inputs;
+        Fact *f_icst = get_f_icst(bm, &empty_inputs);
+        Sim* sim = goal->get_sim();
+        Sim* sub_sim;
+        bool opposite = goal->get_target()->is_anti_fact();
+        if (sim->get_mode() == SIM_ROOT)
+          sub_sim = new Sim(opposite ? SIM_MANDATORY : SIM_OPTIONAL, sim->get_thz(), input->object_, opposite, sim->root_, 1,
+            sim->solution_controller_, sim->get_solution_cfd(), Timestamp(seconds(0)));
+        else
+          sub_sim = new Sim(sim->get_mode(), sim->get_thz(), input->object_, opposite, sim->root_, 1,
+            sim->solution_controller_, sim->get_solution_cfd(), sim->get_solution_before());
+
+        inject_goal(bm, input->object_, f_icst, sub_sim, Now(), goal->get_target()->get_cfd(), get_host());
+      }
+    }
   } else {
     // std::cout<<"CTRL: "<<get_host()->get_oid()<<" > "<<input->object->get_oid()<<std::endl;
     bool match = false;
