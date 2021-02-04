@@ -745,6 +745,27 @@ Sim* Sim::getRootSim()
   return NULL;
 }
 
+bool Sim::registerGoalTarget(_Fact* f_obj) {
+  Sim* rootSim = getRootSim();
+  if (!rootSim)
+    // We don't expect this. Return true so that f_obj is injected as a goal anyway.
+    return true;
+
+  uint16 opcode = f_obj->code(0).asOpcode();
+  Code* obj = f_obj->get_reference(0);
+  // Debug: Do we need a critical section for this?
+  for (int i = 0; i < rootSim->goalTargets_.size(); ++i) {
+    _Fact* goalTarget = rootSim->goalTargets_[i];
+    // TODO: Actually match timings. For now, ignore timings and just check the fact opcode and match the object.
+    if (opcode == goalTarget->code(0).asOpcode() && _Fact::MatchObject(obj, goalTarget->get_reference(0), true))
+      // Already registered.
+      return false;
+  }
+
+  rootSim->goalTargets_.push_back(f_obj);
+  return true;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 MkRdx::MkRdx() : LObject(), bindings_(NULL) {

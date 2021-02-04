@@ -256,10 +256,23 @@ public:
    */
   Sim* getRootSim();
 
+  /**
+   * If f_obj does not match any of the goal targets stored in the root Sim object, then store it in the root Sim object
+   * for future checks and return true. (In this case, you should inject it as a goal.) Othewise if the goal target was already
+   * registered then return false, meaning that it does not need to be made into a goal again.
+   * \param f_obj The (fact of the) object, such as (fact (mk_val ...)).
+   * \return True if f_obj has been registered and should be injected as a goal, false if it is already registered and should not
+   * be injected as a goal.
+   */
+  bool registerGoalTarget(_Fact* f_obj);
+
   bool is_requirement_;
 
   P<Controller> root_; // controller that produced the simulation branch root (SIM_ROOT): identifies the branch.
   P<Controller> solution_controller_; // controller that produced a sub-goal of the branch's root: identifies the model that can be a solution for the super-goal.
+
+private:
+  std::vector<P<_Fact> > goalTargets_;
 };
 
 // Caveat: instances of Fact can becone instances of AntiFact (set_opposite() upon MATCH_SUCCESS_NEGATIVE during backward chaining).
