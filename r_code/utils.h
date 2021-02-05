@@ -134,7 +134,7 @@ public:
    * index of the I_PTR to the structure as in SetTimestamp<Code>() or  GetTimestamp()).
    * \param timestamp The time stamp to put in the structure at the index.
    */
-  static void SetTimestamp(Code *object, uint16 index, Timestamp t); // allocates atoms.
+  static void SetTimestampStruct(Code *object, uint16 index, Timestamp t); // Expands object->code to allocate atoms.
 
   static const uint64 MaxTHZ = 0xFFFFFFFF;
 
@@ -148,7 +148,7 @@ public:
    * Get the time stamp pointed to be the I_PTR at index.
    * \param object The object with the Code array.
    * \param index The index in the Code array of the I_PTR to the time stamp structure (like
-   * SetTimestamp<Code>() but not the index of the time stamp structure itself as in SetTimestamp()).
+   * SetTimestamp<Code>() but not the index of the time stamp structure itself as in SetTimestampStruct()).
    * \return The time stamp.
    */
   template<class O> static Timestamp GetTimestamp(const O *object, uint16 index) {
@@ -162,7 +162,7 @@ public:
    * Set the Code array values at index with the structure for the timestamp.
    * \param object The object with the Code array.
    * \param index The index in the Code array of the I_PTR to the time stamp structure (like
-   * GetTimestamp() but not the index of the time stamp structure itself as in SetTimestamp()).
+   * GetTimestamp() but not the index of the time stamp structure itself as in SetTimestampStruct()).
    * \param timestamp The time stamp to put in the structure at the index.
    */
   template<class O> static void SetTimestamp(O *object, uint16 index, Timestamp timestamp) {
