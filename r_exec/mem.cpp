@@ -388,6 +388,25 @@ void _Mem::init_timings(Timestamp now, const r_code::list<P<Code>>& objects) {
       else
         Utils::SetTimestamp<Code>(*o, FACT_BEFORE, Utils_MaxTime);
     }
+    else if (opcode == Opcodes::IMdl || opcode == Opcodes::ICst) {
+      // Look for timestamps in the template values and exposed values, and add now.
+      // TODO: There should be a more general mechanism to locate timestamps in facts, imdls, and elsewhere.
+      for (int pass = 1; pass <= 2; ++pass) {
+        auto set_index = (pass == 1 ? (*o)->code(I_HLP_TPL_ARGS).asIndex()
+                                    : (*o)->code(I_HLP_EXPOSED_ARGS).asIndex());
+        auto set_count = (*o)->code(set_index).getAtomCount();
+        for (int i = 1; i <= set_count; ++i) {
+          auto index = set_index + i;
+          if ((*o)->code(set_index + i).getDescriptor() == Atom::I_PTR) {
+            auto timestamp_index = (*o)->code(set_index + i).asIndex();
+            if ((*o)->code(timestamp_index).getDescriptor() == Atom::TIMESTAMP) {
+              auto timestamp = Utils::GetTimestamp<Code>(*o, set_index + i).time_since_epoch();
+              Utils::SetTimestamp(*o, timestamp_index, timestamp + now);
+            }
+          }
+        }
+      }
+    }
   }
 }
 
