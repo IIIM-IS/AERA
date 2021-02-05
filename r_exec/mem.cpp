@@ -401,7 +401,7 @@ void _Mem::init_timings(Timestamp now, const r_code::list<P<Code>>& objects) {
             auto timestamp_index = (*o)->code(set_index + i).asIndex();
             if ((*o)->code(timestamp_index).getDescriptor() == Atom::TIMESTAMP) {
               auto timestamp = Utils::GetTimestamp<Code>(*o, set_index + i).time_since_epoch();
-              Utils::SetTimestamp(*o, timestamp_index, timestamp + now);
+              Utils::SetTimestampStruct(*o, timestamp_index, timestamp + now);
             }
           }
         }

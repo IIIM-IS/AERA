@@ -132,7 +132,7 @@ void Utils::SetTimestamp(Atom *iptr, Timestamp timestamp) {
   iptr[2].atom_ = t & 0x00000000FFFFFFFF;
 }
 
-void Utils::SetTimestamp(Code *object, uint16 index, Timestamp timestamp) {
+void Utils::SetTimestampStruct(Code *object, uint16 index, Timestamp timestamp) {
 
   uint64 t = duration_cast<microseconds>(timestamp.time_since_epoch()).count();
   object->code(index) = Atom::Timestamp();
