@@ -462,8 +462,8 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
             if (get_imdl_template_timings(_f_imdl->get_reference(0), _f_imdl_template_after, _f_imdl_template_before)) {
               // When Match is updated with time interval comparison, it will do this test for strict overlap.
               if (save_template_after < _f_imdl_template_before && save_template_before > _f_imdl_template_after) {
-                Utils::SetTimestamp(f_imdl->get_reference(0), template_after_ts_index, _f_imdl_template_after);
-                Utils::SetTimestamp(f_imdl->get_reference(0), template_before_ts_index, _f_imdl_template_before);
+                Utils::SetTimestampStruct(f_imdl->get_reference(0), template_after_ts_index, _f_imdl_template_after);
+                Utils::SetTimestampStruct(f_imdl->get_reference(0), template_before_ts_index, _f_imdl_template_before);
               }
             }
           }
@@ -482,8 +482,8 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
     // Restore.
     f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(save_f_imdl_wr_enabled);
     if (have_saved_template_timings) {
-      Utils::SetTimestamp(f_imdl->get_reference(0), template_after_ts_index, save_template_after);
-      Utils::SetTimestamp(f_imdl->get_reference(0), template_before_ts_index, save_template_before);
+      Utils::SetTimestampStruct(f_imdl->get_reference(0), template_after_ts_index, save_template_after);
+      Utils::SetTimestampStruct(f_imdl->get_reference(0), template_before_ts_index, save_template_before);
     }
     return r;
   } else {
