@@ -1465,18 +1465,6 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
 
   _Fact *bound_rhs = (_Fact *)bm->bind_pattern(rhs_); // fact or |fact.
   Code* bound_rhs_value = bound_rhs->get_reference(0);
-  if (bound_rhs_value->code(0).asOpcode() == Opcodes::IMdl ||
-      bound_rhs_value->code(0).asOpcode() == Opcodes::ICst) {
-    // Change all VL_PTR in the set of exposed values to wildcard so that a future 
-    // prediction can include it as "ground" in the mk.rdx, and it can be decompiled.
-    uint16 exposed_values_index = bound_rhs_value->code(I_HLP_EXPOSED_ARGS).asIndex();
-    uint16 exposed_values_count = bound_rhs_value->code(exposed_values_index).getAtomCount();
-    for (uint16 i = 1; i <= exposed_values_count; ++i) {
-      Atom atom = bound_rhs_value->code(exposed_values_index + i);
-      if (atom.getDescriptor() == Atom::VL_PTR)
-        bound_rhs_value->code(exposed_values_index + i) = Atom::Wildcard();
-    }
-  }
 
   bool is_simulation;
   float32 confidence;
