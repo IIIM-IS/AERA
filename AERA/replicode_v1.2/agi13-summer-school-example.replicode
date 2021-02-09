@@ -240,7 +240,7 @@ pgm_inject_drive:(pgm |[]
 
 pgm_cmd_move_h_attached_c:(pgm |[]
 []
-   (ptn (fact G:(goal (fact Command:(cmd move [h DeltaP:] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
+   (ptn (fact G:(goal (fact (cmd move [h DeltaP_in:] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
    (ptn (fact (mk.val h attached Attached_obj: :) After: Before: ::) |[])
    (ptn (fact (mk.val h position pos_h: :) After_h: Before_h: ::) |[])
    (ptn (fact (mk.val c position pos_c: :) After_c: Before_c: ::) |[])
@@ -257,7 +257,11 @@ pgm_cmd_move_h_attached_c:(pgm |[]
    (< After_s Before)
    (> Before_s After)
 []
-   ; Inject the fact that the command was executed.
+   ; Limit DeltaP to +/- 15. Inject the fact that the command was executed.
+   (inj []
+      Command:(cmd move [h DeltaP:(min (max DeltaP_in -15) 15)] 1)
+      |[]
+   )
    (inj []
       (fact Command (+ After 20000us) Before 1 1)
       [SYNC_PERIODIC After 1 1 stdin nil]
@@ -301,7 +305,7 @@ pgm_cmd_move_h_attached_c:(pgm |[]
 
 pgm_cmd_move_h_attached_s:(pgm |[]
 []
-   (ptn (fact G:(goal (fact Command:(cmd move [h DeltaP:] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
+   (ptn (fact G:(goal (fact (cmd move [h DeltaP_in:] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
    (ptn (fact (mk.val h attached Attached_obj: :) After: Before: ::) |[])
    (ptn (fact (mk.val h position pos_h: :) After_h: Before_h: ::) |[])
    (ptn (fact (mk.val c position pos_c: :) After_c: Before_c: ::) |[])
@@ -318,7 +322,11 @@ pgm_cmd_move_h_attached_s:(pgm |[]
    (< After_s Before)
    (> Before_s After)
 []
-   ; Inject the fact that the command was executed.
+   ; Limit DeltaP to +/- 15. Inject the fact that the command was executed.
+   (inj []
+      Command:(cmd move [h DeltaP:(min (max DeltaP_in -15) 15)] 1)
+      |[]
+   )
    (inj []
       (fact Command (+ After 20000us) Before 1 1)
       [SYNC_PERIODIC After 1 1 stdin nil]
@@ -363,7 +371,7 @@ pgm_cmd_move_h_attached_s:(pgm |[]
 
 pgm_cmd_move_h_attached_nil:(pgm |[]
 []
-   (ptn (fact G:(goal (fact Command:(cmd move [h DeltaP:] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
+   (ptn (fact G:(goal (fact (cmd move [h DeltaP_in:] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
    (ptn (fact (mk.val h attached Attached_obj: :) After: Before: ::) |[])
    (ptn (fact (mk.val h position pos_h: :) After_h: Before_h: ::) |[])
    (ptn (fact (mk.val c position pos_c: :) After_c: Before_c: ::) |[])
@@ -380,7 +388,11 @@ pgm_cmd_move_h_attached_nil:(pgm |[]
    (< After_s Before)
    (> Before_s After)
 []
-   ; Inject the fact that the command was executed.
+   ; Limit DeltaP to +/- 15. Inject the fact that the command was executed.
+   (inj []
+      Command:(cmd move [h DeltaP:(min (max DeltaP_in -15) 15)] 1)
+      |[]
+   )
    (inj []
       (fact Command (+ After 20000us) Before 1 1)
       [SYNC_PERIODIC After 1 1 stdin nil]
