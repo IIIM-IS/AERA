@@ -667,4 +667,70 @@ bool is_sim(const Context &context, uint16 &index) {
   return true;
 }
 
+bool minimum(const Context &context, uint16 &index) {
+  Context lhs = *context.getChild(1);
+  Context rhs = *context.getChild(2);
+
+  if (lhs[0].isFloat() && rhs[0].isFloat()) {
+    if (lhs[0] == Atom::MinusInfinity() || rhs[0] == Atom::MinusInfinity()) {
+      index = context.setAtomicResult(Atom::MinusInfinity());
+      return true;
+    }
+
+    if (lhs[0] == Atom::PlusInfinity()) {
+      index = context.setAtomicResult(Atom::Float(rhs[0].asFloat()));
+      return true;
+    }
+    if (rhs[0] == Atom::PlusInfinity()) {
+      index = context.setAtomicResult(Atom::Float(lhs[0].asFloat()));
+      return true;
+    }
+
+    index = context.setAtomicResult(Atom::Float(min(lhs[0].asFloat(), rhs[0].asFloat())));
+    return true;
+  }
+  else if (lhs[0].getDescriptor() == Atom::TIMESTAMP && rhs[0].getDescriptor() == Atom::TIMESTAMP) {
+    index = context.setTimestampResult(Timestamp(min(
+      duration_cast<microseconds>(Utils::GetTimestamp(&lhs[0]).time_since_epoch()),
+      duration_cast<microseconds>(Utils::GetTimestamp(&rhs[0]).time_since_epoch()))));
+    return true;
+  }
+
+  index = context.setAtomicResult(Atom::Nil());
+  return false;
+}
+
+bool maximum(const Context &context, uint16 &index) {
+  Context lhs = *context.getChild(1);
+  Context rhs = *context.getChild(2);
+
+  if (lhs[0].isFloat() && rhs[0].isFloat()) {
+    if (lhs[0] == Atom::PlusInfinity() || rhs[0] == Atom::PlusInfinity()) {
+      index = context.setAtomicResult(Atom::PlusInfinity());
+      return true;
+    }
+
+    if (lhs[0] == Atom::MinusInfinity()) {
+      index = context.setAtomicResult(Atom::Float(rhs[0].asFloat()));
+      return true;
+    }
+    if (rhs[0] == Atom::MinusInfinity()) {
+      index = context.setAtomicResult(Atom::Float(lhs[0].asFloat()));
+      return true;
+    }
+
+    index = context.setAtomicResult(Atom::Float(max(lhs[0].asFloat(), rhs[0].asFloat())));
+    return true;
+  }
+  else if (lhs[0].getDescriptor() == Atom::TIMESTAMP && rhs[0].getDescriptor() == Atom::TIMESTAMP) {
+    index = context.setTimestampResult(Timestamp(max(
+      duration_cast<microseconds>(Utils::GetTimestamp(&lhs[0]).time_since_epoch()),
+      duration_cast<microseconds>(Utils::GetTimestamp(&rhs[0]).time_since_epoch()))));
+    return true;
+  }
+
+  index = context.setAtomicResult(Atom::Nil());
+  return false;
+}
+
 }

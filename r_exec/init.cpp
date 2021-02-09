@@ -443,6 +443,8 @@ void InitOpcodes(const r_comp::Metadata& metadata) {
   Operator::Register(operator_opcode++, red);
   Operator::Register(operator_opcode++, fvw);
   Operator::Register(operator_opcode++, is_sim);
+  Operator::Register(operator_opcode++, minimum);
+  Operator::Register(operator_opcode++, maximum);
 }
 
 bool Init(const char *user_operator_library_path,
