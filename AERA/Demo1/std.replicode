@@ -80,6 +80,8 @@
 !op (fvw : :):
 ; true if pred or goal is a simulation.
 !op (is_sim :):bl
+!op (min : :):
+!op (max : :):
 
 ; operator aliases.
 !def now (_now)

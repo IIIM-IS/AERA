@@ -181,6 +181,8 @@ bool ins(const Context &context, uint16 &index); // executive-dependent.
 bool fvw(const Context &context, uint16 &index); // executive-dependent.
 
 bool is_sim(const Context &context, uint16 &index);
+bool minimum(const Context &context, uint16 &index);
+bool maximum(const Context &context, uint16 &index);
 }
 
 
