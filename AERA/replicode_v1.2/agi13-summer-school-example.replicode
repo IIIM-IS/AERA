@@ -257,9 +257,9 @@ pgm_cmd_move_h_attached_c:(pgm |[]
    (< After_s Before)
    (> Before_s After)
 []
-   ; Limit DeltaP to +/- 15. Inject the fact that the command was executed.
+   ; Limit DeltaP to +/- 20. Inject the fact that the command was executed.
    (inj []
-      Command:(cmd move [h DeltaP:(min (max DeltaP_in -15) 15)] 1)
+      Command:(cmd move [h DeltaP:(min (max DeltaP_in -20) 20)] 1)
       |[]
    )
    (inj []
@@ -322,9 +322,9 @@ pgm_cmd_move_h_attached_s:(pgm |[]
    (< After_s Before)
    (> Before_s After)
 []
-   ; Limit DeltaP to +/- 15. Inject the fact that the command was executed.
+   ; Limit DeltaP to +/- 20. Inject the fact that the command was executed.
    (inj []
-      Command:(cmd move [h DeltaP:(min (max DeltaP_in -15) 15)] 1)
+      Command:(cmd move [h DeltaP:(min (max DeltaP_in -20) 20)] 1)
       |[]
    )
    (inj []
@@ -388,9 +388,9 @@ pgm_cmd_move_h_attached_nil:(pgm |[]
    (< After_s Before)
    (> Before_s After)
 []
-   ; Limit DeltaP to +/- 15. Inject the fact that the command was executed.
+   ; Limit DeltaP to +/- 20. Inject the fact that the command was executed.
    (inj []
-      Command:(cmd move [h DeltaP:(min (max DeltaP_in -15) 15)] 1)
+      Command:(cmd move [h DeltaP:(min (max DeltaP_in -20) 20)] 1)
       |[]
    )
    (inj []
