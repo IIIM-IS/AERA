@@ -197,7 +197,8 @@ uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, T
   return object_count;
 }
 
-uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, Timestamp::duration time_offset, std::vector<SysObject *> &imported_objects) {
+uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, Timestamp::duration time_offset, std::vector<SysObject *> &imported_objects,
+  bool include_oid, bool include_label, bool include_views) {
 
   partial_decompilation_ = true;
   ignore_named_objects_ = true;
@@ -206,7 +207,7 @@ uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, T
   uint32 object_count = decompile_references(image);
 
   for (uint16 i = 0; i < image->code_segment_.objects_.size(); ++i)
-    decompile_object(i, stream, time_offset);
+    decompile_object(i, stream, time_offset, include_oid, include_label, include_views);
 
   return object_count;
 }

@@ -151,7 +151,8 @@ public:
   uint32 decompile(r_comp::Image *image,
     std::ostringstream *stream,
     Timestamp::duration time_offset,
-    std::vector<r_code::SysObject *> &imported_objects); // idem, ignores named objects if in the imported object list.
+    std::vector<r_code::SysObject *> &imported_objects,
+    bool include_oid = true, bool include_label = true, bool include_views = true); // idem, ignores named objects if in the imported object list.
 
   /**
    * initialize a reference table so that objects can be decompiled individually; returns the number of objects.
