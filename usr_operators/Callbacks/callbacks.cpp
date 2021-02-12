@@ -79,6 +79,7 @@
 #include "callbacks.h"
 
 #include "../r_exec/mem.h"
+#include "../r_comp/decompiler.h" //debug
 
 using namespace std::chrono;
 using namespace r_code;
@@ -88,7 +89,24 @@ bool print(microseconds relative_time, bool suspended, const char *msg, uint8 ob
   ostringstream out;
   out << Time::ToString_seconds(relative_time) << ": " << msg << std::endl;
   for (uint8 i = 0; i < object_count; ++i)
+#if 0 // debug
     objects[i]->trace(out);
+#else
+  {
+    r_comp::Decompiler decompiler;
+    decompiler.init(&r_exec::Metadata);
+
+    std::vector<SysObject *> imported_objects;
+    r_comp::Image image;
+    r_code::list<P<r_code::Code> > objectsList;
+    objectsList.push_back(objects[i]);
+    image.add_objects(objectsList, imported_objects);
+    image.object_names_.symbols_ = r_exec::Seed.object_names_.symbols_;
+
+    Timestamp::duration timeOffset = duration_cast<microseconds>(Utils::GetTimeReference().time_since_epoch());
+    decompiler.decompile(&image, &out, timeOffset, imported_objects, false, false, false);
+  }
+#endif
 
   // Assume that printing a single string is more-or-less atomic.
   std::cout << out.str();
