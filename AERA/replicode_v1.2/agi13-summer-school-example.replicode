@@ -298,7 +298,7 @@ pgm_cmd_move_h_attached_c:(pgm |[]
       (fact Next_pos_s (+ After sampling_period) (+ Before sampling_period) 1 1)
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
-   (prb [1 "print" "pgm_cmd_move_h_attached_c from command" [Command]])
+   (prb [1 "print" "pgm_cmd_move_h_attached_c from command:" [Command]])
 1) |[]
 (ipgm pgm_cmd_move_h_attached_c |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
@@ -363,8 +363,8 @@ pgm_cmd_move_h_attached_s:(pgm |[]
       (fact Next_pos_s (+ After sampling_period) (+ Before sampling_period) 1 1)
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
-   (prb [1 "print" "pgm_cmd_move_h_attached_s from command" [Command]])
-   (prb [1 "print" "pgm_cmd_move_h_attached_s new s position" [Next_pos_s]])
+   (prb [1 "print" "pgm_cmd_move_h_attached_s from command:" [Command]])
+   (prb [1 "print" "pgm_cmd_move_h_attached_s new s position:" [Next_pos_s]])
 1) |[]
 (ipgm pgm_cmd_move_h_attached_s |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
@@ -429,7 +429,7 @@ pgm_cmd_move_h_attached_nil:(pgm |[]
       (fact Next_pos_s (+ After sampling_period) (+ Before sampling_period) 1 1)
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
-   (prb [1 "print" "pgm_cmd_move_h_attached_nil from command" [Command]])
+   (prb [1 "print" "pgm_cmd_move_h_attached_nil from command:" [Command]])
 1) |[]
 (ipgm pgm_cmd_move_h_attached_nil |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
@@ -489,7 +489,7 @@ pgm_cmd_release_h:(pgm |[]
       (fact Next_pos_s (+ After sampling_period) (+ Before sampling_period) 1 1)
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
-   (prb [1 "print" "pgm_cmd_release_h from command" [Command]])
+   (prb [1 "print" "pgm_cmd_release_h from command:" [Command]])
 1) |[]
 (ipgm pgm_cmd_release_h |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
@@ -551,7 +551,7 @@ pgm_cmd_grab_h:(pgm |[]
       (fact Next_pos_s (+ After sampling_period) (+ Before sampling_period) 1 1)
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
-   (prb [1 "print" "pgm_cmd_grab_h from command" [Command]])
+   (prb [1 "print" "pgm_cmd_grab_h from command:" [Command]])
 1) |[]
 (ipgm pgm_cmd_grab_h |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
