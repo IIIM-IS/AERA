@@ -146,9 +146,9 @@ M6:(mdl [H: C: P0: T0: T1:]
 |[]
 []
    T0_cmd:(- T1_RHS 0s:100ms:0us); Copy from M0, but subtract 100ms because the LHS is not a command.
-   T1_cmd:(- T3 0s:100ms:0us);    Copy from M0.
-   T0:(- T1_RHS 0s:100ms:0us);    Copy from M0.
-   T1:(- T3 0s:100ms:0us);        Copy from M0.
+   T1_cmd:(- T3 0s:100ms:0us);     Copy from M0.
+   T0:(- T1_RHS 0s:100ms:0us);     Copy from M0.
+   T1:(- T3 0s:100ms:0us);         Copy from M0.
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; When some C is attached to hand H and the hand moves to position P1, then C will also be at P1.
