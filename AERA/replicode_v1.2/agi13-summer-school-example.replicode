@@ -164,6 +164,8 @@ M7:(mdl |[]
 !def pS0 0
 !def pS1 15
 
+!def DRIVE_START 0s:200ms:0us
+
 ; Initial conditions.
 start:(pgm |[] |[] |[] []
    (inj []
@@ -217,7 +219,7 @@ pgm_inject_drive:(pgm |[]
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) after: before: ::) |[])
 []
-   (>= after (+ this.vw.ijt 0s:100ms:0us))
+   (>= after (+ this.vw.ijt DRIVE_START))
 []
    (inj []
       ; The end of the time interval will be used in m_drive as the end of the goal interval.
@@ -236,6 +238,58 @@ pgm_inject_drive:(pgm |[]
    (prb [1 "print" "injected drive" |[]])
 1) |[]
 (ipgm pgm_inject_drive |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+; Before DRIVE_START, just re-inject the same values.
+pgm_before_drive:(pgm |[]
+[]
+   (ptn (fact (mk.val h attached Attached_obj: :) After: Before: ::) |[])
+   (ptn (fact (mk.val h position pos_h: :) After_h: Before_h: ::) |[])
+   (ptn (fact (mk.val c position pos_c: :) After_c: Before_c: ::) |[])
+   (ptn (fact (mk.val s position pos_s: :) After_s: Before_s: ::) |[])
+[]
+   (< After (+ this.vw.ijt DRIVE_START))
+   (< After_h Before)
+   (> Before_h After)
+   (< After_c Before)
+   (> Before_c After)
+   (< After_s Before)
+   (> Before_s After)
+[]
+   (inj []
+      Next_attached:(mk.val h attached Attached_obj 1); Still attached to the same object.
+      |[]
+   )
+   (inj []
+      (fact Next_attached (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
+   )
+   (inj []
+      Next_pos_h:(mk.val h position pos_h 1); h keeps the same position.
+      |[]
+   )
+   (inj []
+      (fact Next_pos_h (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
+   )
+   (inj []
+      Next_pos_c:(mk.val c position pos_c 1); c keeps the same position.
+      |[]
+   )
+   (inj []
+      (fact Next_pos_c (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
+   )
+   (inj []
+      Next_pos_s:(mk.val s position pos_s 1); s keeps the same position.
+      |[]
+   )
+   (inj []
+      (fact Next_pos_s (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
+   )
+1) |[]
+(ipgm pgm_before_drive |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
 pgm_cmd_move_h_attached_c:(pgm |[]
