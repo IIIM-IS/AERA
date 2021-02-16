@@ -2063,12 +2063,14 @@ inline void PrimaryMDLController::predict_simulated_lhs(HLPBindingMap *bm, bool 
   predict_simulated_evidence(bound_lhs, sim);
 }
 
-inline void PrimaryMDLController::predict_simulated_evidence(_Fact *evidence, Sim *sim) {
+inline Fact* PrimaryMDLController::predict_simulated_evidence(_Fact *evidence, Sim *sim) {
 
   Pred *pred = new Pred(evidence, sim, 1);
 
   auto now = Now();
-  inject_simulation(new Fact(pred, now, now, 1, 1));
+  Fact* fact_pred = new Fact(pred, now, now, 1, 1);
+  inject_simulation(fact_pred);
+  return fact_pred;
 }
 
 void PrimaryMDLController::register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures) {

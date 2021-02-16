@@ -381,7 +381,7 @@ private:
   void abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim, Sim* forwardSimulation);
   void abduce_simulated_imdl(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim);
   void predict_simulated_lhs(HLPBindingMap *bm, bool opposite, float32 confidence, Sim *sim);
-  void predict_simulated_evidence(_Fact *evidence, Sim *sim);
+  Fact* predict_simulated_evidence(_Fact *evidence, Sim *sim);
   void assume(_Fact *input);
   void assume_lhs(HLPBindingMap *bm, bool opposite, _Fact *input, float32 confidence);
 
