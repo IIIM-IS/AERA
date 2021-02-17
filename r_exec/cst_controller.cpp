@@ -122,7 +122,7 @@ bool CSTOverlay::can_match(Timestamp now) const { // to reach inputs until a giv
   return now <= match_deadline_;
 }
 
-void CSTOverlay::inject_production() {
+void CSTOverlay::inject_production(View* input) {
 
   Fact *f_icst = ((CSTController *)controller_)->get_f_icst(bindings_, &inputs_);
   auto now = Now();//f_icst->get_reference(0)->trace();
@@ -176,6 +176,8 @@ void CSTOverlay::inject_production() {
     Pred *prediction = new Pred(f_icst, simulations_copy, 1);
     Fact *f_p_f_icst = new Fact(prediction, now, now, 1, 1);
     ((HLPController *)controller_)->inject_prediction(f_p_f_icst, lowest_cfd_); // inject a simulated prediction in the main group.
+    OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " cst " << getObject()->get_oid() << ": fact " <<
+      input->object_->get_oid() << " -> fact " << f_p_f_icst->get_oid() << " simulated pred");
   }
 }
 
@@ -269,7 +271,7 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
           // JTNote: The offspring is made with the modified bindings_. That doesn't seem right.
           offspring = new CSTOverlay(this);
           update(bm, (_Fact *)input->object_, bound_pattern);
-          inject_production();
+          inject_production(input);
           invalidate();
           store_evidence(input->object_, prediction, is_simulation);
           return true;
@@ -285,7 +287,7 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
 //std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" full match\n";
         offspring = new CSTOverlay(this);
         update(bm, (_Fact *)input->object_, bound_pattern);
-        if (inputs_.size() == original_patterns_size_) inject_production();
+        if (inputs_.size() == original_patterns_size_) inject_production(input);
         invalidate();
         store_evidence(input->object_, prediction, is_simulation);
         return true;
@@ -518,10 +520,8 @@ void CSTController::inject_goal(HLPBindingMap *bm,
 
   View *view = new View(View::SYNC_ONCE, now, confidence, 1, group, group, sub_goal_f); // SYNC_ONCE,res=1.
   _Mem::Get()->inject(view);
-#ifdef WITH_DEBUG_OID
   OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " cst " << getObject()->get_oid() << ": fact " <<
     f_super_goal->get_oid() << " super_goal -> fact " << sub_goal_f->get_oid() << " simulated goal");
-#endif
 
   if (sim->get_mode() == SIM_ROOT) { // no rdx for SIM_OPTIONAL or SIM_MANDATORY.
 
