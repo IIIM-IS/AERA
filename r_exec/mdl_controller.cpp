@@ -1466,7 +1466,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
   _Fact *bound_rhs = (_Fact *)bm->bind_pattern(rhs_); // fact or |fact.
   Code* bound_rhs_value = bound_rhs->get_reference(0);
   if (bound_rhs_value->code(0).asOpcode() == Opcodes::IMdl ||
-    bound_rhs_value->code(0).asOpcode() == Opcodes::ICst) {
+      bound_rhs_value->code(0).asOpcode() == Opcodes::ICst) {
     // Change all VL_PTR in the set of exposed values to wildcard so that a future 
     // prediction can include it as "ground" in the mk.rdx, and it can be decompiled.
     uint16 exposed_values_index = bound_rhs_value->code(I_HLP_EXPOSED_ARGS).asIndex();
@@ -1928,9 +1928,11 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
             // Use this as the simulation's solution_controller so that, if we commit to this solution, then we 
             // will abduce the LHS to execute the command.
             // TODO: Also start simulated forward chaining if we passed the time horizon for simulated backward chaining.
-            predict_simulated_evidence(bound_lhs, new Sim(
+            Fact* fact_pred_bound_lhs = predict_simulated_evidence(bound_lhs, new Sim(
               sim->get_mode(), sim->get_thz(), super_goal, opposite, sim->root_, 1, this, sim->get_solution_cfd(),
               sim->get_solution_before()));
+            OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": fact " <<
+              super_goal->get_oid() << " super_goal -> fact " << fact_pred_bound_lhs->get_oid() << " simulated pred");
             break;
           }
           else if (super_goal->get_goal()->is_requirement()) {
@@ -1944,10 +1946,8 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
             // matching of a requirement. This will be done during simulated forward chaining.
             RequirementEntry e(rhs_f_pred_f_imdl, this, true);
             c->_store_requirement(&c->simulated_requirements_.positive_evidences, e);
-#ifdef WITH_DEBUG_OID
             OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " -> fact (" << rhs_f_pred_f_imdl->get_debug_oid() << ") pred fact (" <<
               rhs_f_imdl->get_debug_oid() << ") imdl mdl " << rhs_f_imdl->get_reference(0)->get_reference(0)->get_oid());
-#endif
             // Continue below to abduce the LHS.
           }
         }
