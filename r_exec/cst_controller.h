@@ -108,7 +108,11 @@ protected:
   UNORDERED_SET<P<Sim>, r_code::PHash<Sim> > simulations_;
   uint32 original_patterns_size_;
 
-  void inject_production();
+  /**
+   * Use inputs_ to make and inject an icst.
+   * \param input The input which triggered the production, only used for log output.
+   */
+  void inject_production(View* input);
   void update(HLPBindingMap *map, _Fact *input, _Fact *bound_pattern);
   CSTOverlay *get_offspring(HLPBindingMap *map, _Fact *input, _Fact *bound_pattern);
   /**
