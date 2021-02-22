@@ -142,6 +142,7 @@ public:
 
 class Pred;
 class Goal;
+class Success;
 
 class r_exec_dll _Fact :
   public LObject {
@@ -201,6 +202,12 @@ public:
     Code *goal = get_reference(0);
     if (goal->code(0).asOpcode() == Opcodes::Goal)
       return (Goal *)goal;
+    return NULL;
+  }
+  Success *get_success() const {
+    Code *success = get_reference(0);
+    if (success->code(0).asOpcode() == Opcodes::Success)
+      return (Success *)success;
     return NULL;
   }
 
@@ -477,6 +484,24 @@ class r_exec_dll Success :
 public:
   Success();
   Success(_Fact *object, _Fact *evidence, float32 psln_thr);
+
+  /**
+   * Get the object of this Success.
+   * @return The object of this Success as a _Fact.
+   */
+  _Fact *get_object() const { return (_Fact*)get_reference(code(SUCCESS_OBJ).asIndex()); }
+
+  /**
+   * Check if this Success has an evidence object.
+   * @return True if this Success has an evidence object, otherwise false.
+   */
+  bool has_evidence() const { return code(SUCCESS_EVD).getDescriptor() == Atom::R_PTR; }
+
+  /**
+   * Get the evidence object.
+   * @return The evidence object as a _Fact, or NULL if this Success does not have an evidence object.
+   */
+  _Fact* get_evidence() const { return has_evidence() ? (_Fact*)get_reference(code(SUCCESS_EVD).asIndex()) : NULL; }
 };
 
 class r_exec_dll Perf :
