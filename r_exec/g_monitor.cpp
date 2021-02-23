@@ -546,6 +546,7 @@ bool SRMonitor::signal(bool is_simulation, Sim* forwardSimulation) {
       ((PMDLController *)controller_)->register_simulated_goal_outcome(target_, true, target_); // report a simulated success.
       // check_simulated_imdl did an abduction, so return true to remove this monitor. Otherwise it will do the same
       // abduction again and cause a loop.
+      // JTNote: Maybe it is needed for a different simulation branch?
       return true;
     }
   } else {
