@@ -109,9 +109,13 @@ void _GMonitor::store_simulated_outcome(_Fact *f_pred_f_success, Sim *sim) {
     switch (sim->get_mode()) {
     case SIM_MANDATORY:
       sim_successes_.mandatory_solutions.push_back(std::pair<P<_Fact>, P<Sim> >(f_pred_f_success, sim));
+      OUTPUT_LINE(GOAL_MON, Utils::RelativeTime(Now()) << " goal monitor for " << target_->get_oid() <<
+        ": store mandatory solution " << f_pred_f_success->get_oid());
       break;
     case SIM_OPTIONAL:
       sim_successes_.optional_solutions.push_back(std::pair<P<_Fact>, P<Sim> >(f_pred_f_success, sim));
+      OUTPUT_LINE(GOAL_MON, Utils::RelativeTime(Now()) << " goal monitor for " << target_->get_oid() <<
+        ": store optional solution " << f_pred_f_success->get_oid());
       break;
     default:
       break;
@@ -121,9 +125,13 @@ void _GMonitor::store_simulated_outcome(_Fact *f_pred_f_success, Sim *sim) {
     switch (sim->get_mode()) {
     case SIM_MANDATORY:
       sim_failures_.mandatory_solutions.push_back(std::pair<P<_Fact>, P<Sim> >(f_pred_f_success, sim));
+      OUTPUT_LINE(GOAL_MON, Utils::RelativeTime(Now()) << " goal monitor for " << target_->get_oid() <<
+        ": store mandatory solution " << f_pred_f_success->get_oid());
       break;
     case SIM_OPTIONAL:
       sim_failures_.optional_solutions.push_back(std::pair<P<_Fact>, P<Sim> >(f_pred_f_success, sim));
+      OUTPUT_LINE(GOAL_MON, Utils::RelativeTime(Now()) << " goal monitor for " << target_->get_oid() <<
+        ": store optional solution " << f_pred_f_success->get_oid());
       break;
     default:
       break;
