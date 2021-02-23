@@ -102,9 +102,9 @@ _GMonitor::_GMonitor(PMDLController *controller,
   goal_target_ = target_->get_goal()->get_target(); // f1.
 }
 
-void _GMonitor::store_simulated_outcome(Goal *affected_goal, Sim *sim, bool success) { // outcome is f0 as in f0->pred->f1->success.
+void _GMonitor::store_simulated_outcome(Goal *affected_goal, Sim *sim, bool is_success) { // outcome is f0 as in f0->pred->f1->success.
 
-  if (success) {
+  if (is_success) {
 
     switch (sim->get_mode()) {
     case SIM_MANDATORY:

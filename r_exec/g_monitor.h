@@ -109,7 +109,7 @@ protected:
   SimOutcomes sim_successes_;
   SimOutcomes sim_failures_;
 
-  void store_simulated_outcome(Goal *affected_goal, Sim *sim, bool success); // store the outcomes of any goal affected by the simulation of the monitored goal.
+  void store_simulated_outcome(Goal *affected_goal, Sim *sim, bool is_success); // store the outcomes of any goal affected by the simulation of the monitored goal.
   void invalidate_sim_outcomes();
 
   _GMonitor(PMDLController *controller,
