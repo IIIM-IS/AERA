@@ -97,7 +97,22 @@ protected:
 
   uint32 volatile simulating_; // 32 bits alignment.
 
-  typedef std::list<std::pair<P<Goal>, P<Sim> > > SolutionList;
+  // The first in the pair is the (fact (pred (fact (success...)))) or
+  // (fact (pred (|fact (success...)))) where the success's object is the (fact (goal ...)).
+  typedef std::list<std::pair<P<_Fact>, P<Sim> > > SolutionList;
+  
+  /* From the (fact (pred (fact (success...)))) of a solution, get the goal from
+   * the success object's (fact (goal ...)).
+   */
+  static Goal* get_solution_goal(_Fact* f_pred_f_success) {
+    Pred* pred = f_pred_f_success->get_pred();
+    if (!pred)
+      return NULL;
+    Success* success = pred->get_target()->get_success();
+    if (!success)
+      return NULL;
+    return success->get_object()->get_goal();
+  }
 
   class SimOutcomes {
   public:
@@ -109,7 +124,15 @@ protected:
   SimOutcomes sim_successes_;
   SimOutcomes sim_failures_;
 
-  void store_simulated_outcome(Goal *affected_goal, Sim *sim, bool is_success); // store the outcomes of any goal affected by the simulation of the monitored goal.
+  /**
+   * Store the outcome of any goal affected by the simulation of the monitored goal. If
+   * (fact (pred (fact ...))) then store in sim_successes_. Otherwise if
+   * (fact (pred (|fact ...))) then store in sim_failures_.
+   * \param f_pred_f_success The (fact (pred (fact (success...)))) or
+   * (fact (pred (|fact (success...)))) where the success's object is the affected (fact (goal ...)).
+   * \param sim The Sim object (for the relevant controller) from the prediction.
+   */
+  void store_simulated_outcome(_Fact *f_pred_f_success, Sim *sim);
   void invalidate_sim_outcomes();
 
   _GMonitor(PMDLController *controller,
