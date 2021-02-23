@@ -102,16 +102,16 @@ _GMonitor::_GMonitor(PMDLController *controller,
   goal_target_ = target_->get_goal()->get_target(); // f1.
 }
 
-void _GMonitor::store_simulated_outcome(Goal *affected_goal, Sim *sim, bool is_success) { // outcome is f0 as in f0->pred->f1->success.
+void _GMonitor::store_simulated_outcome(_Fact *f_pred_f_success, Sim *sim) {
 
-  if (is_success) {
+  if (f_pred_f_success->get_pred()->get_target()->is_fact()) {
 
     switch (sim->get_mode()) {
     case SIM_MANDATORY:
-      sim_successes_.mandatory_solutions.push_back(std::pair<P<Goal>, P<Sim> >(affected_goal, sim));
+      sim_successes_.mandatory_solutions.push_back(std::pair<P<_Fact>, P<Sim> >(f_pred_f_success, sim));
       break;
     case SIM_OPTIONAL:
-      sim_successes_.optional_solutions.push_back(std::pair<P<Goal>, P<Sim> >(affected_goal, sim));
+      sim_successes_.optional_solutions.push_back(std::pair<P<_Fact>, P<Sim> >(f_pred_f_success, sim));
       break;
     default:
       break;
@@ -120,10 +120,10 @@ void _GMonitor::store_simulated_outcome(Goal *affected_goal, Sim *sim, bool is_s
 
     switch (sim->get_mode()) {
     case SIM_MANDATORY:
-      sim_failures_.mandatory_solutions.push_back(std::pair<P<Goal>, P<Sim> >(affected_goal, sim));
+      sim_failures_.mandatory_solutions.push_back(std::pair<P<_Fact>, P<Sim> >(f_pred_f_success, sim));
       break;
     case SIM_OPTIONAL:
-      sim_failures_.optional_solutions.push_back(std::pair<P<Goal>, P<Sim> >(affected_goal, sim));
+      sim_failures_.optional_solutions.push_back(std::pair<P<_Fact>, P<Sim> >(f_pred_f_success, sim));
       break;
     default:
       break;
@@ -181,7 +181,11 @@ void GMonitor::commit() { // the purpose is to invalidate damaging simulations; 
 
     if ((*solution).second->is_invalidated())
       continue;
-    if ((*solution).first->get_strength(now) > monitored_goal->get_strength(now)) { // cave in.
+    Goal* goal = get_solution_goal((*solution).first);
+    if (!goal)
+      // We don't expect this.
+      continue;
+    if (goal->get_strength(now) > monitored_goal->get_strength(now)) { // cave in.
 
       invalidate_sim_outcomes(); // this stops any further propagation of the goal simulation.
       return;
@@ -192,7 +196,11 @@ void GMonitor::commit() { // the purpose is to invalidate damaging simulations; 
 
     if ((*solution).second->is_invalidated())
       continue;
-    if ((*solution).first->get_strength(now) > monitored_goal->get_strength(now))
+    Goal* goal = get_solution_goal((*solution).first);
+    if (!goal)
+      // We don't expect this.
+      continue;
+    if (goal->get_strength(now) > monitored_goal->get_strength(now))
       (*solution).second->invalidate();
   }
 
@@ -259,7 +267,7 @@ bool GMonitor::reduce(_Fact *input) { // executed by a reduction core; invalidat
           Goal *affected_goal = f_success->get_goal();
           if (affected_goal) {
 
-            store_simulated_outcome(affected_goal, sim, _input->is_fact());
+            store_simulated_outcome(input, sim);
             return false;
           }
         } else { // report the simulated outcome: this will inject a simulated prediction of the outcome, to allow any g-monitor deciding on this ground.
@@ -394,7 +402,7 @@ bool RMonitor::reduce(_Fact *input) { // catch simulated predictions only; requi
           Goal *affected_goal = f_success->get_goal();
           if (affected_goal) {
 
-            store_simulated_outcome(affected_goal, sim, _input->is_fact());
+            store_simulated_outcome(input, sim);
             return false;
           }
         }
@@ -453,7 +461,11 @@ void SGMonitor::commit() { // the purpose is to invalidate damaging simulations 
 
     if ((*solution).second->is_invalidated())
       continue;
-    if ((*solution).first->get_strength(now) > monitored_goal->get_strength(now)) { // cave in.
+    Goal* goal = get_solution_goal((*solution).first);
+    if (!goal)
+      // We don't expect this.
+      continue;
+    if (goal->get_strength(now) > monitored_goal->get_strength(now)) { // cave in.
 
       (*solution).second->invalidate();
       return;
@@ -464,7 +476,11 @@ void SGMonitor::commit() { // the purpose is to invalidate damaging simulations 
 
     if ((*solution).second->is_invalidated())
       continue;
-    if ((*solution).first->get_strength(now) > monitored_goal->get_strength(now))
+    Goal* goal = get_solution_goal((*solution).first);
+    if (!goal)
+      // We don't expect this.
+      continue;
+    if (goal->get_strength(now) > monitored_goal->get_strength(now))
       (*solution).second->invalidate();
   }
 }
@@ -490,7 +506,7 @@ bool SGMonitor::reduce(_Fact *input) {
         Goal *affected_goal = f_success->get_goal();
         if (affected_goal) {
 
-          store_simulated_outcome(affected_goal, sim, _input->is_fact());
+          store_simulated_outcome(input, sim);
           return false;
         }
       }
@@ -572,7 +588,7 @@ bool SRMonitor::reduce(_Fact *input) {
         Goal *affected_goal = f_success->get_goal();
         if (affected_goal) {
 
-          store_simulated_outcome(affected_goal, sim, _input->is_fact());
+          store_simulated_outcome(input, sim);
           return false;
         }
       }
