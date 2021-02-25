@@ -469,10 +469,13 @@ Simulator
 * DONE. AGI example move command has limited distance (different efferent copy).
   * Added min/max operators.
 
+2021-02-25
+* DONE. Review/merge pull request to log the predicted success object https://github.com/IIIM-IS/replicode/pull/140
+
 next meeting
-* Review/merge pull request for bindPattern to update timings https://github.com/IIIM-IS/replicode/pull/135
 * Review/merge pull request to fix  https://github.com/IIIM-IS/replicode/issues/51 Add CODE_VL_PTR and fix the decompiler https://github.com/IIIM-IS/replicode/pull/126
 * Review/merge pull request for template timings in abduce_imdl https://github.com/IIIM-IS/replicode/pull/107
+* Review/merge pull request for bindPattern to update timings https://github.com/IIIM-IS/replicode/pull/135
 * Review/merge pull request to not share timing variables when building the model https://github.com/IIIM-IS/replicode/pull/110
 * Review/merge pull request for simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
 * Review/merge pull request for super_goal in new Sim https://github.com/IIIM-IS/replicode/pull/106
@@ -486,6 +489,10 @@ next meeting
 * Review/merge pull request to allow eject to return the actally-executed command https://github.com/IIIM-IS/replicode/pull/125
 
 TODO
+* Visualizer: Reverse arrow direct.
+* Visualizer: Goal item default position on the right of the time interval.
+* Visualizer: Option to position simulation objects by predicted time vs. created time.
+* Visualizer: On step to new frame, remove simulation from previous frame.
 * TRY copy/paste code to check references to fix: Using = in guard of composite state of model https://github.com/IIIM-IS/replicode/issues/133
 * Make pull request for PrimaryMDLController::predict to allow simulated predicted imdl.
 * How to ensure that stored requirements are from the same simulation branch?
