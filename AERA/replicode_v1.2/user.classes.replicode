@@ -33,7 +33,7 @@
 !dfn (set_acceleration_y :); arg0: an object, arg1: acceleration.
 !dfn (move_y_plus :); arg0: an object.
 !dfn (move_y_minus :); arg0: an object.
-!dfn (set_acceleration_y :); arg0: an object, arg1: acceleration.
+!dfn (set_force_y :); arg0: an object, arg1: force.
 
 ; The sampling_period should be 2 * base_period, where base_period is from settings.xml.
 !def sampling_period 100000us
