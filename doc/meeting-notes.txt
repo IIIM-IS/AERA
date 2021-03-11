@@ -487,6 +487,7 @@ next meeting
 * Review/merge pull request for bindPattern to update timings https://github.com/IIIM-IS/replicode/pull/135
 * Review/merge pull request to not share timing variables when building the model https://github.com/IIIM-IS/replicode/pull/110
 * Review/merge pull request for simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
+* Review/merge pull request to use match_fwd in retrieve_simulated_imdl_fwd https://github.com/IIIM-IS/replicode/pull/141
 * Review/merge pull request for super_goal in new Sim https://github.com/IIIM-IS/replicode/pull/106
 * Review/merge pull request for binding map in the prediction's mk.rdx https://github.com/IIIM-IS/replicode/pull/120
 * Review/merge pull request for simulation control in abduce_simulated_lhs https://github.com/IIIM-IS/replicode/pull/111
@@ -498,6 +499,9 @@ next meeting
 * Review/merge pull request to allow eject to return the actally-executed command https://github.com/IIIM-IS/replicode/pull/125
 
 TODO
+* Move injectFact, etc. into base class.
+* Review release1 tags.
+* Rename AGI summer school to "hand_grab_object"
 * Visualizer: On step to new frame, remove simulation from previous frame.
 * Visualizer: On step, show non-simulation items, then simulation items on next step.
 * Visualizer: Option to position simulation objects by predicted time vs. created time.
@@ -506,7 +510,8 @@ TODO
 * How to ensure that stored requirements are from the same simulation branch?
 * Try limiting detection of conflicting facts to numbers.
 * Try commenting out PTPX::reduce:666 if (i->input_ == Opcodes::Cmd)
-* Make AGI summer school example learn the models.
+* Make hand_grab_object example learn the models.
+  * A pgm to match a learned model and inject a new model which uses it.
 * Visualizer: Show prediction failure.
 * When a failed model is in the secondary group and the pattern extractor learns a model from new inputs, does it check if it's the same as the failed model?
 * pull request for overlapping SYNC_HOLD timings in auto focus
