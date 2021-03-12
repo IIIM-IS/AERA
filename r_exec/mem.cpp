@@ -834,7 +834,7 @@ r_exec::View* _Mem::injectFactFromIoDevice(
   r_exec::View *view = new r_exec::View(syncMode, after, 1, 1, group, NULL, fact);
 
   // Inject the view.
-  ((_Mem *)this)->injectFromIoDevice(view);
+  injectFromIoDevice(view);
   return view;
 }
 
