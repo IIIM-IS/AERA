@@ -307,6 +307,206 @@ public:
    */
   void injectFromIoDevice(View *view);
 
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * [syncMode after 1 1 group nil]
+   * where val is a simple Atom.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param val The Atom value for the mk.val, such as Atom::Float(1).
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \param syncMode The view sync mode, such as r_exec::View::SYNC_PERIODIC.
+   * \param group The group of the view, such as get_stdin().
+   * \return The created View.
+   */
+  r_exec::View* injectMarkerValueFromIoDevice(
+    r_code::Code* obj, r_code::Code* prop, Atom val, Timestamp after, Timestamp before,
+    r_exec::View::SyncMode syncMode, r_code::Code* group);
+
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * [syncMode after 1 1 stdin nil]
+   * where val is a simple Atom.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param val The Atom value for the mk.val, such as Atom::Float(1).
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \param syncMode The view sync mode, such as r_exec::View::SYNC_PERIODIC.
+   * \return The created View.
+   */
+  r_exec::View* injectMarkerValueFromIoDevice(
+    r_code::Code* obj, r_code::Code* prop, Atom val, Timestamp after, Timestamp before,
+    r_exec::View::SyncMode syncMode)
+  {
+    return injectMarkerValueFromIoDevice(obj, prop, val, after, before, syncMode, get_stdin());
+  }
+
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * [SYNC_PERIODIC after 1 1 group nil]
+   * where val is a simple Atom.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param val The Atom value for the mk.val, such as Atom::Float(1).
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \param group The group of the view, such as get_stdin().
+   * \return The created View.
+   */
+  r_exec::View* injectMarkerValueFromIoDevice(
+    r_code::Code* obj, r_code::Code* prop, Atom val, Timestamp after, Timestamp before, r_code::Code* group)
+  {
+    return injectMarkerValueFromIoDevice(
+      obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, group);
+  }
+
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * [SYNC_PERIODIC after 1 1 stdin nil]
+   * where val is a simple Atom.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param val The Atom value for the mk.val, such as Atom::Float(1).
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \return The created View.
+   */
+  r_exec::View* injectMarkerValueFromIoDevice(
+    r_code::Code* obj, r_code::Code* prop, Atom val, Timestamp after, Timestamp before)
+  {
+    return injectMarkerValueFromIoDevice(
+      obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, get_stdin());
+  }
+
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * [syncMode after 1 1 group nil]
+   * where val is a referenced Code object.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param val The value for the mk.val, which is an existing Code object. This will
+   * add it to the references of the mkval.
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \param syncMode The view sync mode, such as r_exec::View::SYNC_PERIODIC.
+   * \param group The group of the view, such as get_stdin().
+   * \return The created View.
+   */
+  r_exec::View* injectMarkerValueFromIoDevice(
+    r_code::Code* obj, r_code::Code* prop, r_code::Code* val, Timestamp after, Timestamp before,
+    r_exec::View::SyncMode syncMode, r_code::Code* group);
+
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * [syncMode after 1 1 stdin nil]
+   * where val is a referenced Code object.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param val The value for the mk.val, which is an existing Code object. This will
+   * add it to the references of the mkval.
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \param syncMode The view sync mode, such as r_exec::View::SYNC_PERIODIC.
+   * \return The created View.
+   */
+  r_exec::View* injectMarkerValueFromIoDevice(
+    r_code::Code* obj, r_code::Code* prop, r_code::Code* val, Timestamp after, Timestamp before,
+    r_exec::View::SyncMode syncMode)
+  {
+    return injectMarkerValueFromIoDevice(obj, prop, val, after, before, syncMode, get_stdin());
+  }
+
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * [SYNC_PERIODIC after 1 1 group nil]
+   * where val is a referenced Code object.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param val The value for the mk.val, which is an existing Code object. This will
+   * add it to the references of the mkval.
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \param group The group of the view, such as get_stdin().
+   * \return The created View.
+   */
+  r_exec::View* injectMarkerValueFromIoDevice(
+    r_code::Code* obj, r_code::Code* prop, r_code::Code* val, Timestamp after, Timestamp before, r_code::Code* group)
+  {
+    return injectMarkerValueFromIoDevice(
+      obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, group);
+  }
+
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * [SYNC_PERIODIC after 1 1 stdin nil]
+   * where val is a referenced Code object.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param val The value for the mk.val, which is an existing Code object. This will
+   * add it to the references of the mkval.
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \return The created View.
+   */
+  r_exec::View* injectMarkerValueFromIoDevice(
+    r_code::Code* obj, r_code::Code* prop, r_code::Code* val, Timestamp after, Timestamp before)
+  {
+    return injectMarkerValueFromIoDevice(
+      obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, get_stdin());
+  }
+
+  /**
+   * Inject (fact object after before 1 1)
+   * [syncMode after 1 1 group nil]
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param object The fact's object, which you must allocated and construct. (For mk.val, use one
+   * of the methods for injectMarkerValue...)
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \param syncMode The view sync mode, such as r_exec::View::SYNC_PERIODIC.
+   * \param group The group of the view, such as get_stdin().
+   * \return The created View.
+   */
+  r_exec::View* injectFactFromIoDevice(
+    r_code::Code* object, Timestamp after, Timestamp before, r_exec::View::SyncMode syncMode,
+    r_code::Code* group);
+
+  /**
+   * Inject (fact object after before 1 1)
+   * [SYNC_PERIODIC after 1 1 group nil]
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param object The fact's object, which you must allocated and construct. (For mk.val, use one
+   * of the methods for injectMarkerValue...)
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \param group The group of the view, such as get_stdin().
+   * \return The created View.
+   */
+  r_exec::View* injectFactFromIoDevice(r_code::Code* object, Timestamp after, Timestamp before, r_code::Code* group) {
+    return injectFactFromIoDevice(
+      object, after, before, r_exec::View::SYNC_PERIODIC, group);
+  }
+
   // Called upon successful reduction.
   /**
    * Call bind which assigns an OID to the view's object and inject the view. 
