@@ -781,6 +781,64 @@ void _Mem::injectFromIoDevice(View *view) {
       view->object_->get_oid() << ", ijt " << Utils::RelativeTime(view->get_ijt()));
 }
 
+r_exec::View* _Mem::injectMarkerValueFromIoDevice(
+  Code* obj, Code* prop, Atom val, Timestamp after, Timestamp before,
+  r_exec::View::SyncMode syncMode, Code* group) 
+{
+  if (!obj || !prop)
+    // We don't expect this, but sanity check.
+    return NULL;
+
+  Code *object = new r_exec::LObject(this);
+  object->code(0) = Atom::Marker(r_exec::GetOpcode("mk.val"), 4); // Caveat: arity does not include the opcode.
+  object->code(1) = Atom::RPointer(0); // obj
+  object->code(2) = Atom::RPointer(1); // prop
+  object->code(3) = val;
+  object->code(4) = Atom::Float(1); // psln_thr.
+
+  object->set_reference(0, obj);
+  object->set_reference(1, prop);
+
+  return injectFactFromIoDevice(object, after, before, syncMode, group);
+}
+
+r_exec::View* _Mem::injectMarkerValueFromIoDevice(
+  Code* obj, Code* prop, Code* val, Timestamp after, Timestamp before,
+  r_exec::View::SyncMode syncMode, Code* group)
+{
+  if (!obj || !prop)
+    // We don't expect this, but sanity check.
+    return NULL;
+
+  Code *object = new r_exec::LObject(this);
+  object->code(0) = Atom::Marker(r_exec::GetOpcode("mk.val"), 4); // Caveat: arity does not include the opcode.
+  object->code(1) = Atom::RPointer(0); // obj
+  object->code(2) = Atom::RPointer(1); // prop
+  object->code(3) = Atom::RPointer(2); // val
+  object->code(4) = Atom::Float(1); // psln_thr.
+
+  object->set_reference(0, obj);
+  object->set_reference(1, prop);
+  object->set_reference(2, val);
+
+  return injectFactFromIoDevice(object, after, before, syncMode, group);
+}
+
+r_exec::View* _Mem::injectFactFromIoDevice(
+  Code* object, Timestamp after, Timestamp before, r_exec::View::SyncMode syncMode,
+  Code* group)
+{
+  // Build a fact.
+  Code* fact = new r_exec::Fact(object, after, before, 1, 1);
+
+  // Build a view for the fact.
+  r_exec::View *view = new r_exec::View(syncMode, after, 1, 1, group, NULL, fact);
+
+  // Inject the view.
+  ((_Mem *)this)->injectFromIoDevice(view);
+  return view;
+}
+
 void _Mem::inject(View *view, bool isFromIoDevice) {
 
   if (view->object_->is_invalidated())

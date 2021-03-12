@@ -154,47 +154,6 @@ TestMem<O, S>::findObject(std::vector<Code*> *objects, const char* name) {
   return NULL;
 }
 
-template<class O, class S> r_exec::View* TestMem<O, S>::injectMarkerValue
-(Code* obj, Code* prop, Atom val, Timestamp after, Timestamp before,
-  r_exec::View::SyncMode syncMode, Code* group) {
-  if (!obj || !prop)
-    // We don't expect this, but sanity check.
-    return NULL;
-
-  Code *object = new r_exec::LObject(this);
-  object->code(0) = Atom::Marker(r_exec::GetOpcode("mk.val"), 4); // Caveat: arity does not include the opcode.
-  object->code(1) = Atom::RPointer(0); // obj
-  object->code(2) = Atom::RPointer(1); // prop
-  object->code(3) = val;
-  object->code(4) = Atom::Float(1); // psln_thr.
-
-  object->set_reference(0, obj);
-  object->set_reference(1, prop);
-
-  return injectFact(object, after, before, syncMode, group);
-}
-
-template<class O, class S> r_exec::View* TestMem<O, S>::injectMarkerValue
-(Code* obj, Code* prop, Code* val, Timestamp after, Timestamp before,
-  r_exec::View::SyncMode syncMode, Code* group) {
-  if (!obj || !prop)
-    // We don't expect this, but sanity check.
-    return NULL;
-
-  Code *object = new r_exec::LObject(this);
-  object->code(0) = Atom::Marker(r_exec::GetOpcode("mk.val"), 4); // Caveat: arity does not include the opcode.
-  object->code(1) = Atom::RPointer(0); // obj
-  object->code(2) = Atom::RPointer(1); // prop
-  object->code(3) = Atom::RPointer(2); // val
-  object->code(4) = Atom::Float(1); // psln_thr.
-
-  object->set_reference(0, obj);
-  object->set_reference(1, prop);
-  object->set_reference(2, val);
-
-  return injectFact(object, after, before, syncMode, group);
-}
-
 template<class O, class S> r_exec::View* TestMem<O, S>::injectFact
 (Code* object, Timestamp after, Timestamp before, r_exec::View::SyncMode syncMode,
   Code* group) {
