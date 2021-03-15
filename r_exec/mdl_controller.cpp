@@ -1639,6 +1639,7 @@ void PrimaryMDLController::reduce(r_exec::View *input) { // no lock.
           bm = new HLPBindingMap(bindings_);
           bm->reset_bwd_timings(goal_target);
           bm->init_from_f_ihlp(goal_target);
+          // JTNote: opposite is always false.
           abduce(bm, (Fact *)input->object_, opposite, confidence);
         }
       }
