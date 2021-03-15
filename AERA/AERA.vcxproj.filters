@@ -230,7 +230,7 @@
     <None Include="replicode_v1.2\ball.goal.external.replicode">
       <Filter>replicode_v1.2</Filter>
     </None>
-    <None Include="replicode_v1.2\agi13-summer-school-example.replicode">
+    <None Include="replicode_v1.2\hand-grab-sphere.replicode">
       <Filter>replicode_v1.2</Filter>
     </None>
   </ItemGroup>
