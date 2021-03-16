@@ -154,20 +154,6 @@ TestMem<O, S>::findObject(std::vector<Code*> *objects, const char* name) {
   return NULL;
 }
 
-template<class O, class S> r_exec::View* TestMem<O, S>::injectFact
-(Code* object, Timestamp after, Timestamp before, r_exec::View::SyncMode syncMode,
-  Code* group) {
-  // Build a fact.
-  Code* fact = new r_exec::Fact(object, after, before, 1, 1);
-
-  // Build a view for the fact.
-  r_exec::View *view = new r_exec::View(syncMode, after, 1, 1, group, NULL, fact);
-
-  // Inject the view.
-  ((_Mem *)this)->injectFromIoDevice(view);
-  return view;
-}
-
 template<class O, class S> void TestMem<O, S>::eject(Code *command) {
   uint16 function = (command->code(CMD_FUNCTION).atom_ >> 8) & 0x000000FF;
 
@@ -309,10 +295,10 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
       lastInjectTime_ = now;
       // Inject the velocity and position.
       // It seems that velocity_y needs SYNC_HOLD for building models.
-      injectMarkerValue(
+      injectMarkerValueFromIoDevice(
         position_y_obj_, velocity_y_property_, Atom::Float(velocity_y_),
         now, now + get_sampling_period(), r_exec::View::SYNC_HOLD);
-      injectMarkerValue(
+      injectMarkerValueFromIoDevice(
         position_y_obj_, position_y_property_, Atom::Float(position_y_),
         now, now + get_sampling_period());
     }
@@ -332,7 +318,7 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
       }
 
       lastInjectTime_ = now;
-      injectMarkerValue(
+      injectMarkerValueFromIoDevice(
         discretePositionObj_, position_property_, discretePosition_,
         now, now + get_sampling_period());
 
@@ -371,7 +357,7 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
         auto after = now + get_sampling_period() + 2 * Utils::GetTimeTolerance();
         r_exec::Fact* factCmd = new r_exec::Fact(cmd, after, now + 2 * get_sampling_period(), 1, 1);
         r_exec::Goal* goal = new r_exec::Goal(factCmd, get_self(), NULL, 1);
-        injectFact(goal, after, now + get_sampling_period(), primary_group_);
+        injectFactFromIoDevice(goal, after, now + get_sampling_period(), primary_group_);
       }
     }
   }
