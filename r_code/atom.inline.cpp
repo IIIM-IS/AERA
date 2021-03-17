@@ -402,6 +402,10 @@ inline bool Atom::asBoolean() const {
   return atom_ & 0x000000FF;
 }
 
+inline bool Atom::isBooleanTrue() const { return getDescriptor() == BOOLEAN_ && asBoolean(); }
+
+inline bool Atom::isBooleanFalse() const { return getDescriptor() == BOOLEAN_ && !asBoolean(); }
+
 inline uint16 Atom::asIndex() const {
 
   return atom_ & 0x00000FFF;

@@ -220,6 +220,8 @@ public:
   bool readsAsNil() const; // returns true for all undefined values.
   float32 asFloat() const;
   bool asBoolean() const;
+  bool isBooleanTrue() const;
+  bool isBooleanFalse() const;
   uint16 asIndex() const; // applicable to internal, view, reference,
                                       // and value pointers.
   uint8 asInputIndex() const; // applicable to IN_OBJ_PTR.
