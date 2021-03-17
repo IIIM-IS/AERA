@@ -176,23 +176,24 @@ bool HLPOverlay::check_fwd_timings() {
     }
   }
 
-  uint16 result_index;
+  // These are assignment guards, so we don't need result_index to check a boolean guard.
+  uint16 unused_result_index;
   if (!bindings_->has_fwd_before()) {
     // We need to evaluate forward before.
     if (fwd_before_guard_index == -1)
       // None of the backward guards assigns the variable for forward before.
       return false;
-    if (!evaluate(guard_set_index + fwd_before_guard_index, result_index))
+    if (!evaluate(guard_set_index + fwd_before_guard_index, unused_result_index))
 #if 1 // Debug: temporary solution to handle dependecies among guards. The full solution would recurse through the guards.
     {
       // This may depend on forward after, so try evaluating it first.
       if (fwd_after_guard_index == -1)
         // None of the backward guards assigns the variable for forward after.
         return false;
-      if (!evaluate(guard_set_index + fwd_after_guard_index, result_index))
+      if (!evaluate(guard_set_index + fwd_after_guard_index, unused_result_index))
         return false;
       // Now try again to evaluate forward before.
-      if (!evaluate(guard_set_index + fwd_before_guard_index, result_index))
+      if (!evaluate(guard_set_index + fwd_before_guard_index, unused_result_index))
         return false;
     }
 #else
@@ -207,7 +208,7 @@ bool HLPOverlay::check_fwd_timings() {
     if (fwd_after_guard_index == -1)
       // None of the backward guards assigns the variable for forward after.
       return false;
-    if (!evaluate(guard_set_index + fwd_after_guard_index, result_index))
+    if (!evaluate(guard_set_index + fwd_after_guard_index, unused_result_index))
       return false;
   }
 
