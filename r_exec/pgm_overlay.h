@@ -97,7 +97,17 @@ class r_exec_dll InputLessPGMOverlay :
 protected:
   std::vector<P<r_code::Code> > productions_; // receives the results of ins, inj and eje; views are retrieved (fvw) or built (reduction) in the value array.
 
-  bool evaluate(uint16 index); // evaluates the pgm_code at the specified index.
+  /**
+   * Create an IPGMContext and evaluate code_ at index.
+   * \param index The index in code_ to evaluate.
+   * \param result_index The result is at code_[result_index]. If this returns false,
+   * then this is undefined.
+   * \return True if successfully evaluated, false for problem evaluated including
+   * unbound variables. Note that if the code at index is a boolean expression,
+   * then this can return true for successful evaluation even though code_[result_index]
+   * is boolean false.
+   */
+  bool evaluate(uint16 index, uint16 &result_index);
 
   virtual r_code::Code *get_mk_rdx(uint16 &extent_index) const;
 
@@ -149,7 +159,8 @@ protected:
     patch_input_code(code_[pattern_index + 1].asIndex(), input_views.size() - 1, 0);
     // match: evaluate the set of guards.
     uint16 guard_set_index = code_[pattern_index + 2].asIndex();
-    if (!evaluate(guard_set_index))
+    uint16 result_index;
+    if (!evaluate(guard_set_index, result_index))
       return FAILURE;
     return SUCCESS;
   }

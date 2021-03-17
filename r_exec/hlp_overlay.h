@@ -98,7 +98,17 @@ protected:
 
   bool evaluate_guards(uint16 guard_set_iptr_index);
   bool evaluate_fwd_guards();
-  bool evaluate(uint16 index);
+  /**
+   * Create an HLPContext and evaluate code_ at index.
+   * \param index The index in code_ to evaluate.
+   * \param result_index The result is at code_[result_index]. If this returns false,
+   * then this is undefined.
+   * \return True if successfully evaluated, false for problem evaluated including
+   * unbound variables. Note that if the code at index is a boolean expression,
+   * then this can return true for successful evaluation even though code_[result_index]
+   * is boolean false.
+   */
+  bool evaluate(uint16 index, uint16 &result_index);
 
   bool check_fwd_timings();
 
