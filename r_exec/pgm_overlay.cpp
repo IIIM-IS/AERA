@@ -152,10 +152,9 @@ void InputLessPGMOverlay::reset() {
   productions_.clear();
 }
 
-bool InputLessPGMOverlay::evaluate(uint16 index) {
+bool InputLessPGMOverlay::evaluate(uint16 index, uint16 &result_index) {
 
   IPGMContext c(getObject()->get_reference(0), getView(), code_, index, this);
-  uint16 result_index;
   return c.evaluate(result_index);
 }
 
@@ -749,7 +748,8 @@ bool PGMOverlay::check_guards() {
   uint16 guard_count = code_[guard_set_index].getAtomCount();
   for (uint16 i = 1; i <= guard_count; ++i) {
 
-    if (!evaluate(guard_set_index + i))
+    uint16 result_index;
+    if (!evaluate(guard_set_index + i, result_index))
       return false;
   }
   return true;
