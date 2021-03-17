@@ -162,6 +162,9 @@ protected:
     uint16 result_index;
     if (!evaluate(guard_set_index, result_index))
       return FAILURE;
+    if (code_[result_index].isBooleanFalse())
+      // The boolean guard is false.
+      return FAILURE;
     return SUCCESS;
   }
 
