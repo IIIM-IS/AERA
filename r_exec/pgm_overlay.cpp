@@ -751,6 +751,9 @@ bool PGMOverlay::check_guards() {
     uint16 result_index;
     if (!evaluate(guard_set_index + i, result_index))
       return false;
+    if (code_[result_index].isBooleanFalse())
+      // The boolean guard is false.
+      return false;
   }
   return true;
 }

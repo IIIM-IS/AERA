@@ -137,7 +137,7 @@ bool equ(const Context &context, uint16 &index) {
 
   bool r = (lhs == rhs);
   index = context.setAtomicResult(Atom::Boolean(r));
-  return r;
+  return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -146,7 +146,7 @@ bool neq(const Context &context, uint16 &index) {
 
   bool r = *context.getChild(1) != *context.getChild(2);
   index = context.setAtomicResult(Atom::Boolean(r));
-  return r;
+  return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -162,7 +162,7 @@ bool gtr(const Context &context, uint16 &index) {
 
       bool r = lhs[0].asFloat() > rhs[0].asFloat();
       index = context.setAtomicResult(Atom::Boolean(r));
-      return r;
+      return true;
     }
   } else if (lhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
@@ -170,7 +170,7 @@ bool gtr(const Context &context, uint16 &index) {
 
       bool r = Utils::GetTimestamp(&lhs[0]) > Utils::GetTimestamp(&rhs[0]);
       index = context.setAtomicResult(Atom::Boolean(r));
-      return r;
+      return true;
     }
   }
 
@@ -191,7 +191,7 @@ bool lsr(const Context &context, uint16 &index) {
 
       bool r = lhs[0].asFloat() < rhs[0].asFloat();
       index = context.setAtomicResult(Atom::Boolean(r));
-      return r;
+      return true;
     }
   } else if (lhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
@@ -199,7 +199,7 @@ bool lsr(const Context &context, uint16 &index) {
 
       bool r = Utils::GetTimestamp(&lhs[0]) < Utils::GetTimestamp(&rhs[0]);
       index = context.setAtomicResult(Atom::Boolean(r));
-      return r;
+      return true;
     }
   }
 
@@ -220,7 +220,7 @@ bool gte(const Context &context, uint16 &index) {
 
       bool r = lhs[0].asFloat() >= rhs[0].asFloat();
       index = context.setAtomicResult(Atom::Boolean(r));
-      return r;
+      return true;
     }
   } else if (lhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
@@ -228,7 +228,7 @@ bool gte(const Context &context, uint16 &index) {
 
       bool r = Utils::GetTimestamp(&lhs[0]) >= Utils::GetTimestamp(&rhs[0]);
       index = context.setAtomicResult(Atom::Boolean(r));
-      return r;
+      return true;
     }
   }
 
@@ -249,7 +249,7 @@ bool lse(const Context &context, uint16 &index) {
 
       bool r = lhs[0].asFloat() <= rhs[0].asFloat();
       index = context.setAtomicResult(Atom::Boolean(r));
-      return r;
+      return true;
     }
   } else if (lhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
@@ -257,7 +257,7 @@ bool lse(const Context &context, uint16 &index) {
 
       bool r = Utils::GetTimestamp(&lhs[0]) <= Utils::GetTimestamp(&rhs[0]);
       index = context.setAtomicResult(Atom::Boolean(r));
-      return r;
+      return true;
     }
   }
 
