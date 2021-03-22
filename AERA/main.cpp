@@ -77,6 +77,7 @@
 
 #include "decompiler.h"
 #include "test_mem.h"
+#include "IODevices\TCP\tcp_io_device.h"
 #include "init.h"
 #include "image_impl.h"
 #include "settings.h"
