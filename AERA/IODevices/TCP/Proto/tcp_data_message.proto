@@ -8,7 +8,6 @@ message TCPMessage {
         DATA = 1;
         START = 2;
         STOP = 3;
-        // DATATEST = 4;
     }
     Type messageType = 1;
     oneof message {
@@ -16,7 +15,6 @@ message TCPMessage {
         DataMessage dataMessage = 3;
         StartMessage startMessage = 4;
         StopMessage stopMessage = 5;
-        // DataMessageTest dataMessagetest = 7;
     }
     uint64 timestamp = 6;
 }

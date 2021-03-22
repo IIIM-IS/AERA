@@ -3,10 +3,16 @@
   <ItemGroup>
     <ClCompile Include="test_mem.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="IODevices\TCP\Proto\tcp_data_message.pb.cc" />
+    <ClCompile Include="IODevices\TCP\tcp_connection.cpp" />
+    <ClCompile Include="IODevices\TCP\tcp_io_device.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="settings.h" />
     <ClInclude Include="test_mem.h" />
+    <ClInclude Include="IODevices\TCP\Proto\tcp_data_message.pb.h" />
+    <ClInclude Include="IODevices\TCP\tcp_connection.h" />
+    <ClInclude Include="IODevices\TCP\tcp_io_device.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="settings.xml" />
@@ -236,5 +242,6 @@
     <None Include="replicode_v1.2\hand-grab-sphere.replicode">
       <Filter>replicode_v1.2</Filter>
     </None>
+    <None Include="IODevices\TCP\Proto\tcp_data_message.proto" />
   </ItemGroup>
 </Project>
