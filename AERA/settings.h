@@ -83,6 +83,8 @@
 
 class Settings {
 public:
+  // Mem.
+  std::string mem_type_;
   // Load.
   std::string usr_operator_path_;
   std::string usr_class_path_;
@@ -141,6 +143,15 @@ public:
     if (!mainNode) {
 
       std::cerr << "> Error: AERAConfiguration is unreadable" << std::endl;
+      return false;
+    }
+
+    core::XMLNode mem = mainNode.getChildNode("Mem");
+    if (!!mem) {
+      mem_type_ = mem.getAttribute("mem_file");
+    }
+    else {
+      std::cerr << "> Error: Mem section is unreadable" << std::endl;
       return false;
     }
 
