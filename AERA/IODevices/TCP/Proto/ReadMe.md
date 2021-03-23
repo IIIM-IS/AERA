@@ -56,3 +56,6 @@ C:\Path\to\replicode\AERA\IODevices\TCP\Proto> protoc -I=. --cpp_out=. tcp_data_
 
 ## Add created libraries to your project
 Once everything is installed you need to add the created dlls to your project. For this simply copy-paste `libprotobufd.dll` and `libprotobuf-lited.dll` from `C:\Path\to\vcpkg\installed\x86-windows\debug\bin` to `C:\Path\to\replicode\Debug`. And if you have compiled the project as release additionally copy paste `libprotobuf.dll` and `libprotobuf-lite.dll` from `C:\Path\to\vcpkg\installed\x86-windows\bin` to `C:\Path\to\replicode\Release`. Now everything should be set up for running AERA with a TCP connection.
+
+## Enable protobuf in AERA
+If you want to use the tcp-connection with AERA you have to enable it by setting the ENABLE_PROTOBUF flag on line 78 in `...\replicode\AERA\main.cpp` such that `// #define ENABLE_PROTOBUF` becomes `#define ENABLE_PROTOBUF`
