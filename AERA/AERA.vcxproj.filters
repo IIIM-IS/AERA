@@ -3,16 +3,28 @@
   <ItemGroup>
     <ClCompile Include="test_mem.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="IODevices\TCP\Proto\tcp_data_message.pb.cc" />
-    <ClCompile Include="IODevices\TCP\tcp_connection.cpp" />
-    <ClCompile Include="IODevices\TCP\tcp_io_device.cpp" />
+    <ClCompile Include="IODevices\TCP\Proto\tcp_data_message.pb.cc">
+      <Filter>IODevices\TCP\Proto</Filter>
+    </ClCompile>
+    <ClCompile Include="IODevices\TCP\tcp_connection.cpp">
+      <Filter>IODevices\TCP</Filter>
+    </ClCompile>
+    <ClCompile Include="IODevices\TCP\tcp_io_device.cpp">
+      <Filter>IODevices\TCP</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="settings.h" />
     <ClInclude Include="test_mem.h" />
-    <ClInclude Include="IODevices\TCP\Proto\tcp_data_message.pb.h" />
-    <ClInclude Include="IODevices\TCP\tcp_connection.h" />
-    <ClInclude Include="IODevices\TCP\tcp_io_device.h" />
+    <ClInclude Include="IODevices\TCP\Proto\tcp_data_message.pb.h">
+      <Filter>IODevices\TCP\Proto</Filter>
+    </ClInclude>
+    <ClInclude Include="IODevices\TCP\tcp_connection.h">
+      <Filter>IODevices\TCP</Filter>
+    </ClInclude>
+    <ClInclude Include="IODevices\TCP\tcp_io_device.h">
+      <Filter>IODevices\TCP</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="settings.xml" />
@@ -29,6 +41,15 @@
     </Filter>
     <Filter Include="replicode_v1.1">
       <UniqueIdentifier>{5f868cb5-792b-4256-8b43-30fa597536eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IODevices">
+      <UniqueIdentifier>{f5e2d18c-e8f6-43d3-a707-8c852d2411da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IODevices\TCP">
+      <UniqueIdentifier>{aff273df-e058-400a-8aff-510b1123a5ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IODevices\TCP\Proto">
+      <UniqueIdentifier>{9646f737-c173-4b58-8ce6-35bd5232eb55}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -242,6 +263,9 @@
     <None Include="replicode_v1.2\hand-grab-sphere.replicode">
       <Filter>replicode_v1.2</Filter>
     </None>
-    <None Include="IODevices\TCP\Proto\tcp_data_message.proto" />
+    <None Include="IODevices\TCP\Proto\ReadMe.md" />
+    <None Include="IODevices\TCP\Proto\tcp_data_message.proto">
+      <Filter>IODevices\TCP\Proto</Filter>
+    </None>
   </ItemGroup>
 </Project>
