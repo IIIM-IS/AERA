@@ -72,21 +72,21 @@ namespace tcp_io_device {
     }
 
     // Load entities
-    cout << "Loading entities:" << endl;
+    cout << "> Loading entities:" << endl;
     for (auto it = entities_.begin(); it != entities_.end(); ++it) {
       it->second = findObject(objects, &((it->first)[0]));
       cout << it->first << ":\t" << it->second->get_oid() << endl;
     }
 
     // Load objects
-    cout << "Loading objects:" << endl;
+    cout << "> Loading objects:" << endl;
     for (auto it = objects_.begin(); it != objects_.end(); ++it) {
       it->second = findObject(objects, &((it->first)[0]));
       cout << it->first << ":\t" << it->second->get_oid() << endl;
     }
 
     // Load command op-codes
-    cout << "Loading commands:" << endl;
+    cout << "> Loading commands:" << endl;
     for (auto it = commands_.begin(); it != commands_.end(); ++it) {
       it->second = r_exec::GetOpcode(&((it->first)[0]));
       cout << it->first << ":\t" << it->second << endl;
@@ -106,7 +106,7 @@ namespace tcp_io_device {
     if (function == commands_["ready"]) {
       if (command->code_size() < 2 || command->code(args_set_index + 1).getDescriptor() != Atom::I_PTR ||
         command->code(command->code(args_set_index + 1).asIndex()).getDescriptor() != Atom::STRING) {
-        cout << "WARNING: Cannot get identifier as string" << endl;
+        cout << "> WARNING: Cannot get identifier as string" << endl;
         return NULL;
       }
 
@@ -118,7 +118,7 @@ namespace tcp_io_device {
 
         if (!(command->code_size() >= 3 && command->code(args_set_index + 2).getDescriptor() == Atom::R_PTR &&
           command->references_size() > command->code(args_set_index + 2).asIndex())) {
-          cout << "WARNING: Cannot get the object for ready " << identifier << endl;
+          cout << "> WARNING: Cannot get the object for ready " << identifier << endl;
           return NULL;
         }
 
@@ -166,7 +166,7 @@ namespace tcp_io_device {
     // Get the stored meta data received by the SetupMessage during establishConnection with the correct identifier.
     std::map<string, MetaData>::iterator stored_meta_data = meta_data_map_.find(cmd_identifier);
     if (stored_meta_data == meta_data_map_.end()) {
-      cout << "WARNING: Could not find cmd identifier " << cmd_identifier << " in the MetaData of available commands!" << endl;
+      cout << "> WARNING: Could not find cmd identifier " << cmd_identifier << " in the MetaData of available commands!" << endl;
       return NULL;
     }
 
@@ -226,7 +226,7 @@ namespace tcp_io_device {
     case VariableDescription_DataType_STRING:
     {
       // TODO: Using the .asIndex() function this can be done
-      cout << "WARNING: String type not implemented, yet" << endl;
+      cout << "> WARNING: String type not implemented, yet" << endl;
     }
     }
     return msg;
@@ -279,7 +279,6 @@ namespace tcp_io_device {
   template<class O, class S>
   void TcpIoDevice<O, S>::startTimeTickThread()
   {
-    cout << "Starting Time Tick Thread" << endl;
 
     // Send start message to environment
     std::unique_ptr<TCPMessage> msg = std::make_unique<TCPMessage>();
@@ -339,7 +338,7 @@ namespace tcp_io_device {
       handleDataMessage(std::move(msg));
       break;
     default:
-      cout << "WARNING: Received Message of different type than SETUP or DATA" << endl;
+      cout << "> WARNING: Received Message of different type than SETUP or DATA" << endl;
     }
   }
 
@@ -393,7 +392,7 @@ namespace tcp_io_device {
     for (int v = 0; v < setup_message->commanddescriptions_size(); ++v) {
       auto command_desscription = setup_message->commanddescriptions(v);
       if (commands_.find(command_desscription.name()) == commands_.end()) {
-        cout << "WARNING: Variable Description found with different name than any commands. This will never be used!" << endl;
+        cout << "> WARNING: Variable Description found with different name than any commands. This will never be used!" << endl;
         continue;
       }
       meta_data_map_.insert(std::map<string, MetaData>::value_type(command_desscription.name(), MetaData(&command_desscription.description())));

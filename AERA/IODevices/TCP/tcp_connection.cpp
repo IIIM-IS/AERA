@@ -13,7 +13,7 @@ namespace tcp_io_device {
 
   TCPConnection::~TCPConnection()
   {
-    std::cout << "INFO: Shutting down TCP connection" << std::endl;
+    std::cout << "> INFO: Shutting down TCP connection" << std::endl;
     // Set state to STOPPED triggers end of while loop in the backgroundHandler.
     // Wait for the background thread to join and close the socket, if necessary
     state_ = STOPPED;
@@ -47,7 +47,7 @@ namespace tcp_io_device {
     hints.ai_protocol = IPPROTO_TCP;
     hints.ai_flags = AI_PASSIVE;
 
-    std::cout << "INFO: Resolving server address and port" << std::endl;
+    std::cout << "> INFO: Resolving server address and port" << std::endl;
     // Resolve the server address and port
     err = getaddrinfo(NULL, port.c_str(), &hints, &result);
     if (err != 0) {
@@ -56,7 +56,7 @@ namespace tcp_io_device {
       return err;
     }
 
-    std::cout << "INFO: Creating socket for connection to server" << std::endl;
+    std::cout << "> INFO: Creating socket for connection to server" << std::endl;
 
     // Create a SOCKET for connecting to server
     SOCKET listen_socket = INVALID_SOCKET;
@@ -68,7 +68,7 @@ namespace tcp_io_device {
       return 1;
     }
 
-    std::cout << "INFO: Setting up TCP listening socket" << std::endl;
+    std::cout << "> INFO: Setting up TCP listening socket" << std::endl;
     // Setup the TCP listening socket
     err = ::bind(listen_socket, result->ai_addr, (int)result->ai_addrlen);
     if (err == SOCKET_ERROR) {
@@ -91,7 +91,7 @@ namespace tcp_io_device {
     }
 
 
-    std::cout << "INFO: Accepting client socket" << std::endl;
+    std::cout << "> INFO: Accepting client socket" << std::endl;
     // Accept a client socket
     tcp_client_socket_ = ::accept(listen_socket, NULL, NULL);
     if (tcp_client_socket_ == INVALID_SOCKET) {
@@ -108,7 +108,7 @@ namespace tcp_io_device {
     FD_SET(tcp_client_socket_, &tcp_client_fd_set_);
 
 
-    std::cout << "INFO: TCP connection successfully established" << std::endl;
+    std::cout << "> INFO: TCP connection successfully established" << std::endl;
 
     return 0;
   }
