@@ -1914,7 +1914,9 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
 
         if (forwardSimulation) {
           // Keep simulating forward. Don't loop by abducing the LHS as a goal again.
-          predict_simulated_evidence(bound_lhs, forwardSimulation);
+          Fact* fact_pred_bound_lhs = predict_simulated_evidence(bound_lhs, forwardSimulation);
+          OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": fact " <<
+            super_goal->get_oid() << " pred -> fact " << fact_pred_bound_lhs->get_oid() << " simulated pred");
           break;
         }
 
