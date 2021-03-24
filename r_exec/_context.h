@@ -96,7 +96,7 @@ protected:
     STEM = 0, // - the pgm/hlp being reducing inputs;
     REFERENCE = 1, // - a reference to another object;
     VIEW = 2, // - a view;
-    MKS = 3, // - the mks or an object;
+    MKS = 3, // - the mks of an object;
     VWS = 4, // - the vws of an object;
     VALUE_ARRAY = 5, // - code in the overlay's value array.
     BINDING_MAP = 6, // - values of a imdl/icst.
