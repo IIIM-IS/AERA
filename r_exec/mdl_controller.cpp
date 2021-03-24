@@ -1947,8 +1947,10 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
             // matching of a requirement. This will be done during simulated forward chaining.
             RequirementEntry e(rhs_f_pred_f_imdl, this, true);
             c->_store_requirement(&c->simulated_requirements_.positive_evidences, e);
+#ifdef WITH_DEBUG_OID
             OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " -> fact (" << rhs_f_pred_f_imdl->get_debug_oid() << ") pred fact (" <<
               rhs_f_imdl->get_debug_oid() << ") imdl mdl " << rhs_f_imdl->get_reference(0)->get_reference(0)->get_oid());
+#endif
             // Continue below to abduce the LHS.
           }
         }
