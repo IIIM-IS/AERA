@@ -428,6 +428,6 @@ namespace tcp_io_device {
   template class TcpIoDevice<r_exec::LObject, r_exec::MemStatic>;
   template class TcpIoDevice<r_exec::LObject, r_exec::MemVolatile>;
 
-} /
+} // namespace tcp_io_device
 
-#endif // !ENABLE_PROTOBUF/ namespace tcp_io_device
+#endif // !ENABLE_PROTOBUF
