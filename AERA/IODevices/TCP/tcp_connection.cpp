@@ -1,5 +1,7 @@
 #include "tcp_connection.h"
 
+#ifdef ENABLE_PROTOBUF
+
 namespace tcp_io_device {
 
   TCPConnection::TCPConnection(std::shared_ptr<SafeQueue> receive_queue, std::shared_ptr<SafeQueue> send_queue, uint64_t msg_length_buf_size)
@@ -282,3 +284,5 @@ namespace tcp_io_device {
   }
 
 } // namespace tcp_io_device
+
+#endif
