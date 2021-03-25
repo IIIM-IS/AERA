@@ -98,7 +98,7 @@ private:
 
   bool is_cmd_with_cptr() const;
 
-  void addReference(r_code::Code *destination, uint16 write_index, r_code::Code *referenced_object) const {
+  static void addReference(r_code::Code *destination, uint16 write_index, r_code::Code *referenced_object) {
 
     for (uint16 i = 0; i < destination->references_size(); ++i)
       if (referenced_object == destination->get_reference(i)) {
@@ -111,7 +111,7 @@ private:
     destination->code(write_index) = Atom::RPointer(destination->references_size() - 1);
   }
 
-  void addReference(View *destination, uint16 write_index, r_code::Code *referenced_object) const { // view references are set in order (index 0 then 1).
+  static void addReference(View *destination, uint16 write_index, r_code::Code *referenced_object) { // view references are set in order (index 0 then 1).
 
     uint16 r_ptr_index;
     if (destination->references_[0]) // first ref already in place.
