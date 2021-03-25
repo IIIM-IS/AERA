@@ -25,6 +25,9 @@
     <ClInclude Include="IODevices\TCP\tcp_io_device.h">
       <Filter>IODevices\TCP</Filter>
     </ClInclude>
+    <ClInclude Include="IODevices\TCP\Proto\utils.h">
+      <Filter>IODevices\TCP</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="settings.xml" />
@@ -263,8 +266,10 @@
     <None Include="replicode_v1.2\hand-grab-sphere.replicode">
       <Filter>replicode_v1.2</Filter>
     </None>
-    <None Include="IODevices\TCP\Proto\ReadMe.md" />
     <None Include="IODevices\TCP\Proto\tcp_data_message.proto">
+      <Filter>IODevices\TCP\Proto</Filter>
+    </None>
+    <None Include="IODevices\TCP\Proto\ReadMe.md">
       <Filter>IODevices\TCP\Proto</Filter>
     </None>
   </ItemGroup>

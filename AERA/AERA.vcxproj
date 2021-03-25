@@ -147,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IODevices\TCP\Proto\tcp_data_message.pb.h" />
+    <ClInclude Include="IODevices\TCP\Proto\utils.h" />
     <ClInclude Include="IODevices\TCP\tcp_connection.h" />
     <ClInclude Include="IODevices\TCP\tcp_io_device.h" />
     <ClInclude Include="settings.h" />
