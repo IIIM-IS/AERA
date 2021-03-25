@@ -83,6 +83,9 @@
 
 class Settings {
 public:
+  // IO Device.
+  std::string io_device_;
+
   // Load.
   std::string usr_operator_path_;
   std::string usr_class_path_;
@@ -141,6 +144,15 @@ public:
     if (!mainNode) {
 
       std::cerr << "> Error: AERAConfiguration is unreadable" << std::endl;
+      return false;
+    }
+
+    core::XMLNode mem = mainNode.getChildNode("IODevice");
+    if (!!mem) {
+      io_device_ = mem.getAttribute("io_device");
+    }
+    else {
+      std::cerr << "> Error: Mem section is unreadable" << std::endl;
       return false;
     }
 

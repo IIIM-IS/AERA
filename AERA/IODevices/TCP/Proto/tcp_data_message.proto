@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package tcp_io_device;
+
+message TCPMessage {
+    enum Type {
+        SETUP = 0;
+        DATA = 1;
+        START = 2;
+        STOP = 3;
+    }
+    Type messageType = 1;
+    oneof message {
+        SetupMessage setupMessage = 2;
+        DataMessage dataMessage = 3;
+        StartMessage startMessage = 4;
+        StopMessage stopMessage = 5;
+    }
+    uint64 timestamp = 6;
+}
+
+message StartMessage{
+    bool diagnosticMode = 1;
+}
+
+message StopMessage{
+
+}
+
+message SetupMessage {
+    map<string, int32> entities = 1;
+    map<string, int32> objects = 2;
+    map<string, int32> commands = 3;
+    repeated CommandDescription commandDescriptions = 4;
+}
+
+message CommandDescription {
+    VariableDescription description = 1;
+    string name = 2;
+}
+
+message DataMessage {
+    repeated ProtoVariable variables = 1;
+    uint64 timeSpan = 2;
+}
+
+message VariableDescription {
+
+    enum DataType {
+        DOUBLE = 0;
+        // FLOAT = 1;
+        // INT32 = 2;
+        INT64 = 3;
+        // UINT32 = 4;
+        // UINT64 = 5;
+        // Reserved if ever needed
+        // SINT32 = 6;
+        // SINT64 = 7;
+        // FIXED32 = 8;
+        // FIXED64 = 9;
+        // SFIXED32 = 10;
+        // SFIXED64 = 11;
+        BOOL = 12;
+        STRING = 13;
+        BYTES = 14;
+    }
+
+    int32 entityID = 1;
+    int32 ID = 2;
+    DataType dataType = 3;
+    repeated uint64 dimensions = 4;
+}
+
+message ProtoVariable
+{
+    VariableDescription metaData = 1;
+    bytes data = 2;
+}
