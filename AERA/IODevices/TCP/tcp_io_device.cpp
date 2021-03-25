@@ -4,6 +4,31 @@ using namespace std::chrono;
 using namespace r_code;
 using namespace r_exec;
 
+
+#ifndef ENABLE_PROTOBUF
+namespace tcp_io_device {
+  template<class O, class S> TcpIoDevice<O, S>::TcpIoDevice() : r_exec::Mem<O, S>()
+  {
+    cout << "\n> ERROR: Trying to use the TcpIoDevice without setting ENABLE_PROTOBUF flag in the beginning of main.cpp" << endl;
+  }
+
+  template<class O, class S>
+  TcpIoDevice<O, S>::~TcpIoDevice() {}
+
+  template<class O, class S>
+  int TcpIoDevice<O, S>::initTCP(string port)
+  {
+    return 1;
+  }
+
+  template class TcpIoDevice<r_exec::LObject, r_exec::MemStatic>;
+  template class TcpIoDevice<r_exec::LObject, r_exec::MemVolatile>;
+}
+#else
+
+#include "Proto/utils.h"
+#include "Proto/tcp_data_message.pb.h"
+
 namespace tcp_io_device {
 
   template<class O, class S> TcpIoDevice<O, S>::TcpIoDevice() : r_exec::Mem<O, S>()
@@ -399,9 +424,10 @@ namespace tcp_io_device {
     }
   }
 
-
   // Instatiate this template class as needed by main(). (Needs C++11.)
   template class TcpIoDevice<r_exec::LObject, r_exec::MemStatic>;
   template class TcpIoDevice<r_exec::LObject, r_exec::MemVolatile>;
 
-} // namespace tcp_io_device
+} /
+
+#endif // !ENABLE_PROTOBUF/ namespace tcp_io_device
