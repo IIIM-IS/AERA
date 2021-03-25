@@ -1,6 +1,7 @@
-#include "tcp_connection.h"
 
 #ifdef ENABLE_PROTOBUF
+
+#include "tcp_connection.h"
 
 namespace tcp_io_device {
 
