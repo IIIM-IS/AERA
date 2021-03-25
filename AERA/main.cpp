@@ -75,13 +75,8 @@
 //_/_/
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
-// #define ENABLE_PROTOBUF
-
 #include "decompiler.h"
-#ifdef ENABLE_PROTOBUF
-  #include "IODevices\TCP\tcp_io_device.h"
-#endif // ENABLE_PROTOBUF
-
+#include "IODevices\TCP\tcp_io_device.h"
 #include "test_mem.h"
 #include "init.h"
 #include "image_impl.h"
@@ -341,25 +336,15 @@ int32 main(int argc, char **argv) {
         mem = new TestMem<r_exec::LObject, r_exec::MemVolatile>();
     }
     else if (settings.mem_type_.compare("tcp_io_device") == 0) {
-      #ifndef ENABLE_PROTOBUF
-        cout << "\n> ERROR: Trying to use the TcpIoDevice without setting ENABLE_PROTOBUF flag in the beginning of main.cpp" << endl;
-        return 1;
-      #endif // ENABLE_PROTOBUF
       string port = "8080";
       int err = 0;
       if (settings.get_objects_) {
-
-        #ifdef ENABLE_PROTOBUF
-          mem = new tcp_io_device::TcpIoDevice<r_exec::LObject, r_exec::MemStatic>();
-          err = static_cast<tcp_io_device::TcpIoDevice<r_exec::LObject, r_exec::MemStatic>*>(mem)->initTCP(port);
-        #endif // ENABLE_PROTOBUF
-
+        mem = new tcp_io_device::TcpIoDevice<r_exec::LObject, r_exec::MemStatic>();
+        err = static_cast<tcp_io_device::TcpIoDevice<r_exec::LObject, r_exec::MemStatic>*>(mem)->initTCP(port);
       }
       else {
-        #ifdef ENABLE_PROTOBUF
-          mem = new tcp_io_device::TcpIoDevice<r_exec::LObject, r_exec::MemVolatile>();
-          err = static_cast<tcp_io_device::TcpIoDevice<r_exec::LObject, r_exec::MemVolatile>*>(mem)->initTCP(port);
-        #endif // ENABLE_PROTOBUF
+        mem = new tcp_io_device::TcpIoDevice<r_exec::LObject, r_exec::MemVolatile>();
+        err = static_cast<tcp_io_device::TcpIoDevice<r_exec::LObject, r_exec::MemVolatile>*>(mem)->initTCP(port);
       }
       if (err != 0) {
         cout << "ERROR: Could not connect to a TCP client" << endl;
