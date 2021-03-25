@@ -1,6 +1,5 @@
 #pragma once
 
-#ifdef ENABLE_PROTOBUF
 #pragma comment (lib, "Ws2_32.lib")
 
 #include <queue>
@@ -192,5 +191,3 @@ namespace tcp_io_device {
   };
 
 } // namespace tcp_io_device
-
-#endif
