@@ -329,13 +329,13 @@ int32 main(int argc, char **argv) {
     r_comp::Image *image;
 
     r_exec::_Mem* mem;
-    if (settings.mem_type_.compare("test_mem") == 0) {
+    if (settings.io_device_.compare("test_mem") == 0) {
       if (settings.get_objects_)
         mem = new TestMem<r_exec::LObject, r_exec::MemStatic>();
       else
         mem = new TestMem<r_exec::LObject, r_exec::MemVolatile>();
     }
-    else if (settings.mem_type_.compare("tcp_io_device") == 0) {
+    else if (settings.io_device_.compare("tcp_io_device") == 0) {
       string port = "8080";
       int err = 0;
       if (settings.get_objects_) {

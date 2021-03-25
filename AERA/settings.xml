@@ -1,13 +1,13 @@
 <AERAConfiguration>
   <!-- Parameter to set which mem to use + aditional params specific to the mem.
        mem_file an be either test_mem or tcp_io_device at the moment-->
-  <Mem
-	  mem_file="test_mem"
+  <IODevice
+	  io_device="test_mem"
   />
   <Load
     usr_operator_path="./usr_operators.dll"
     usr_class_path="../AERA/replicode_v1.2/user.classes.replicode"
-    source_file_name="../AERA/replicode_v1.2/main.replicode"
+    source_file_name="../AERA/replicode_v1.2/ball.goal.external.replicode"
   />
   <!--Init is set to diagnostic time by default. 
       For real time, set reduction_core_count to "6" and time_core_count to "2" . -->

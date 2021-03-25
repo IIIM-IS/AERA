@@ -83,8 +83,9 @@
 
 class Settings {
 public:
-  // Mem.
-  std::string mem_type_;
+  // IO Device.
+  std::string io_device_;
+
   // Load.
   std::string usr_operator_path_;
   std::string usr_class_path_;
@@ -146,9 +147,9 @@ public:
       return false;
     }
 
-    core::XMLNode mem = mainNode.getChildNode("Mem");
+    core::XMLNode mem = mainNode.getChildNode("IODevice");
     if (!!mem) {
-      mem_type_ = mem.getAttribute("mem_file");
+      io_device_ = mem.getAttribute("io_device");
     }
     else {
       std::cerr << "> Error: Mem section is unreadable" << std::endl;
