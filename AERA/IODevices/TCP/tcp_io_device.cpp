@@ -222,6 +222,9 @@ namespace tcp_io_device {
 
     uint16 args_set_index = cmd->code(CMD_ARGS).asIndex();
 
+    std::cout << "Eject cmd: " << cmd_identifier << ", enitiy: " << entity << ", Value: " << cmd->code(args_set_index + 2).asFloat() << std::endl;
+
+
     // @todo: Only a single value implemented. For multiple values (dim != [1]) this needs to be extended.
     switch (stored_meta_data->second.getType()) {
     case VariableDescription_DataType_BOOL:
@@ -244,8 +247,12 @@ namespace tcp_io_device {
     case VariableDescription_DataType_DOUBLE:
     {
       double val = (double)cmd->code(args_set_index + 2).asFloat();
+      std::string data;
       char const* d = reinterpret_cast<char const*>(&val);
-      var->set_data(std::string(d));
+      for (size_t i = 0; i < sizeof(double); ++i) {
+        data += d[i];
+      }
+      var->set_data(data);
       break;
     }
     case VariableDescription_DataType_STRING:
