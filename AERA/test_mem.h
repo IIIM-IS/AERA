@@ -146,15 +146,25 @@ protected:
 
   Thread* timeTickThread_;
   Timestamp lastInjectTime_;
+  float force_y_;
   float velocity_y_;
   float position_y_;
+  float next_velocity_y_;
+  float next_position_y_;
+  float next_theta_y_;
+  float next_omega_y_;
   r_code::Code* position_y_obj_;
+  r_code::Code* cart_position_y_obj_;
   r_code::Code* position_property_;
   r_code::Code* position_y_property_;
   r_code::Code* velocity_y_property_;
+  r_code::Code* force_y_property_;
+  r_code::Code* theta_y_property_;
+  r_code::Code* omega_y_property_;
   r_code::Code* primary_group_;
   uint16 ready_opcode_;
   uint16 set_velocity_y_opcode_;
+  uint16 set_force_y_opcode_;
   uint16 move_y_plus_opcode_;
   uint16 move_y_minus_opcode_;
   Timestamp lastCommandTime_;
