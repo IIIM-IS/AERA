@@ -43,6 +43,7 @@ This is a list of unintuitive issues with using Replicode, to help new users.
   Such a goal abduced from a mdl is put in primary, so the program must be instantiated in primary.
 * Prediction failures may come from false assumptions. In `settings.xml`, try `enable_assumptions="no"` .
 * Objects with a short resilience aren't in `decompiled_objects.txt`. In `settings.xml`, try `keep_invalidated_objects=yes` .
+* If not debugging the code, then in Visual Studio run in the "Release" configuration so that it runs faster.
 * Math operations on two floating point numbers produce a floating point number, as expected. And addition
   and subtraction of two time values produces a time value, as expected. But the result of operations with
   mixed types is not obvious. Below 'nb' is a floating-point number and 'us' is a 64-bit timestamp in microseconds.
