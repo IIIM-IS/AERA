@@ -281,84 +281,81 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
 }
 
 template<class O, class S> void TestMem<O, S>::onTimeTick() {
+  auto now = r_exec::Now();
+  if (now <= lastInjectTime_ + get_sampling_period() * 8 / 10)
+    // Not enough time has elapsed to inject a new position.
+    return;
+
   if (position_y_obj_) {
     // We are updating the continuous position_y_.
-    auto now = r_exec::Now();
-    if (now > lastInjectTime_ + get_sampling_period() * 8 / 10) {
-      // Enough time has elapsed to inject a new position.
-      if (lastInjectTime_.time_since_epoch().count() == 0) {
-        // This is the first call, so leave the initial position.
-      }
-      else
-        position_y_ += velocity_y_ * duration_cast<microseconds>(now - lastInjectTime_).count();
-
-      lastInjectTime_ = now;
-      // Inject the velocity and position.
-      // It seems that velocity_y needs SYNC_HOLD for building models.
-      injectMarkerValueFromIoDevice(
-        position_y_obj_, velocity_y_property_, Atom::Float(velocity_y_),
-        now, now + get_sampling_period(), r_exec::View::SYNC_HOLD);
-      injectMarkerValueFromIoDevice(
-        position_y_obj_, position_y_property_, Atom::Float(position_y_),
-        now, now + get_sampling_period());
+    if (lastInjectTime_.time_since_epoch().count() == 0) {
+      // This is the first call, so leave the initial position.
     }
+    else
+      position_y_ += velocity_y_ * duration_cast<microseconds>(now - lastInjectTime_).count();
+
+    lastInjectTime_ = now;
+    // Inject the velocity and position.
+    // It seems that velocity_y needs SYNC_HOLD for building models.
+    injectMarkerValueFromIoDevice(
+      position_y_obj_, velocity_y_property_, Atom::Float(velocity_y_),
+      now, now + get_sampling_period(), r_exec::View::SYNC_HOLD);
+    injectMarkerValueFromIoDevice(
+      position_y_obj_, position_y_property_, Atom::Float(position_y_),
+      now, now + get_sampling_period());
   }
 
   if (discretePositionObj_) {
     // We are updating the discretePosition_.
-    auto now = r_exec::Now();
-    if (now > lastInjectTime_ + get_sampling_period() * 8 / 10) {
-      // Enough time has elapsed to inject another position.
-      if (nextDiscretePosition_ &&
+    if (nextDiscretePosition_ &&
         now >= lastCommandTime_ + get_sampling_period() * 4 / 10) {
-        // Enough time has elapsed from the move command to update the position.
-        discretePosition_ = nextDiscretePosition_;
-        // Clear nextDiscretePosition_ to allow another move command.
-        nextDiscretePosition_ = NULL;
+      // Enough time has elapsed from the move command to update the position.
+      discretePosition_ = nextDiscretePosition_;
+      // Clear nextDiscretePosition_ to allow another move command.
+      nextDiscretePosition_ = NULL;
+    }
+
+    lastInjectTime_ = now;
+    injectMarkerValueFromIoDevice(
+      discretePositionObj_, position_property_, discretePosition_,
+      now, now + get_sampling_period());
+
+    const microseconds babbleStopTime(3700000);
+    const int maxBabblePosition = 9;
+    if (now - Utils::GetTimeReference() < babbleStopTime) {
+      // Babble.
+      if (discretePosition_ == yEnt_[0])
+        // Reset to the expected value.
+        babbleState_ = 1;
+      else if (discretePosition_ == yEnt_[maxBabblePosition])
+        // Reset to the expected value.
+        babbleState_ = maxBabblePosition + 1;
+      else {
+        ++babbleState_;
+        if (babbleState_ >= maxBabblePosition * 2)
+          babbleState_ = 0;
       }
 
-      lastInjectTime_ = now;
-      injectMarkerValueFromIoDevice(
-        discretePositionObj_, position_property_, discretePosition_,
-        now, now + get_sampling_period());
+      uint16 nextCommand;
+      if (babbleState_ >= 0 && babbleState_ <= maxBabblePosition - 1)
+        nextCommand = move_y_plus_opcode_;
+      else
+        nextCommand = move_y_minus_opcode_;
 
-      const microseconds babbleStopTime(3700000);
-      const int maxBabblePosition = 9;
-      if (now - Utils::GetTimeReference() < babbleStopTime) {
-        // Babble.
-        if (discretePosition_ == yEnt_[0])
-          // Reset to the expected value.
-          babbleState_ = 1;
-        else if (discretePosition_ == yEnt_[maxBabblePosition])
-          // Reset to the expected value.
-          babbleState_ = maxBabblePosition + 1;
-        else {
-          ++babbleState_;
-          if (babbleState_ >= maxBabblePosition * 2)
-            babbleState_ = 0;
-        }
+      // Inject (fact (goal (fact (cmd ...))))
+      Code *cmd = new r_exec::LObject(this);
+      cmd->code(0) = Atom::Object(r_exec::GetOpcode("cmd"), 3);
+      cmd->code(1) = Atom::DeviceFunction(nextCommand);
+      cmd->code(2) = Atom::IPointer(4);
+      cmd->code(3) = Atom::Float(1); // psln_thr.
+      cmd->code(4) = Atom::Set(1);
+      cmd->code(5) = Atom::RPointer(0); // obj
+      cmd->set_reference(0, discretePositionObj_);
 
-        uint16 nextCommand;
-        if (babbleState_ >= 0 && babbleState_ <= maxBabblePosition - 1)
-          nextCommand = move_y_plus_opcode_;
-        else
-          nextCommand = move_y_minus_opcode_;
-
-        // Inject (fact (goal (fact (cmd ...))))
-        Code *cmd = new r_exec::LObject(this);
-        cmd->code(0) = Atom::Object(r_exec::GetOpcode("cmd"), 3);
-        cmd->code(1) = Atom::DeviceFunction(nextCommand);
-        cmd->code(2) = Atom::IPointer(4);
-        cmd->code(3) = Atom::Float(1); // psln_thr.
-        cmd->code(4) = Atom::Set(1);
-        cmd->code(5) = Atom::RPointer(0); // obj
-        cmd->set_reference(0, discretePositionObj_);
-
-        auto after = now + get_sampling_period() + 2 * Utils::GetTimeTolerance();
-        r_exec::Fact* factCmd = new r_exec::Fact(cmd, after, now + 2 * get_sampling_period(), 1, 1);
-        r_exec::Goal* goal = new r_exec::Goal(factCmd, get_self(), NULL, 1);
-        injectFactFromIoDevice(goal, after, now + get_sampling_period(), primary_group_);
-      }
+      auto after = now + get_sampling_period() + 2 * Utils::GetTimeTolerance();
+      r_exec::Fact* factCmd = new r_exec::Fact(cmd, after, now + 2 * get_sampling_period(), 1, 1);
+      r_exec::Goal* goal = new r_exec::Goal(factCmd, get_self(), NULL, 1);
+      injectFactFromIoDevice(goal, after, now + get_sampling_period(), primary_group_);
     }
   }
 }
