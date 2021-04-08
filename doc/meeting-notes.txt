@@ -495,11 +495,26 @@ Simulator
   Simulations are started by TopLevelMDLController. Only by models with a RHS drive.
     MDLController::New:285 if (rhs->get_reference(0)->code(0).asOpcode() == Opcodes::Ent)
 
-next meeting
+2021-04-08
 * DONE. Rename milestone to diag_mode_rel_0_1
-* Review RELEASE_1 tags.
+* DONE. Visualizer: On step, show non-simulation items, then simulation items on next step.
+* DONE. Visualizer: On step to new frame, remove simulation from previous frame.
+* DONE: Visualizer: Make anti-facts red.
+* TRY copy/paste code to check references to fix: Using = in guard of composite state of model https://github.com/IIIM-IS/replicode/issues/133
+  I spent some time on this but it is not a simple copy/paste. I need to dig into how IPGMContext actually does object references.
+* Can AERA start simulating from a non-simulated (and non drive) goal?
+  CORRECTION: YES. PrimaryMDLController::reduce:1655 if (!goal->is_drive())
+    is_drive() returns false if the goal has a simulation (created by commit).
+    (fact (goal (|fact (mk.val h power false) 0s:200ms:0us 0s:600ms:0us) (sim 0 0s:0ms:0us)))
+    (fact (goal (fact (cmd set_state [h power true]) 0s:120ms:0us 0s:500ms:0u)))
+
+next meeting
+* Review diag_mode_rel_0_1 tags.
 * Review/merge pull request to fix  https://github.com/IIIM-IS/replicode/issues/51 Add CODE_VL_PTR and fix the decompiler https://github.com/IIIM-IS/replicode/pull/126
 * Review/merge pull request for template timings in abduce_imdl https://github.com/IIIM-IS/replicode/pull/107
+* Review/merge pull request to allow eject to return the actally-executed command https://github.com/IIIM-IS/replicode/pull/125
+  -> Merge into master: https://github.com/IIIM-IS/replicode/pull/145 with https://github.com/IIIM-IS/replicode/pull/146
+  -> Merge into master: https://github.com/IIIM-IS/replicode/pull/149
 * Review/merge pull request to use match_fwd in retrieve_simulated_imdl_fwd https://github.com/IIIM-IS/replicode/pull/141
 * Review/merge pull request for simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
 * Review/merge pull request for super_goal in new Sim https://github.com/IIIM-IS/replicode/pull/106
@@ -507,7 +522,6 @@ next meeting
 * Review/merge pull request for check_simulated_imdl in SRMonitor::signal https://github.com/IIIM-IS/replicode/pull/116
 * Review/merge pull request for SYNC_HOLD timings https://github.com/IIIM-IS/replicode/pull/118
 * Review/merge pull request for temporary fix for matching template timings https://github.com/IIIM-IS/replicode/pull/136
-* Review/merge pull request to allow eject to return the actally-executed command https://github.com/IIIM-IS/replicode/pull/125
 * Review/merge pull request to not share timing variables when building the model https://github.com/IIIM-IS/replicode/pull/110
 * Review/merge pull request for bindPattern to update timings https://github.com/IIIM-IS/replicode/pull/135
 * Review/merge pull request for simulation control in abduce_simulated_lhs https://github.com/IIIM-IS/replicode/pull/111
@@ -515,14 +529,10 @@ next meeting
 * Review/merge pull request for matching all composite state combinations in backward chaining  https://github.com/IIIM-IS/replicode/pull/129
 
 TODO
-* Should AERA start simulating from a non-simulated (and non drive) goal? YES. Try sending to TopLevelMDLController to start a sim, only anti-goal.
-  * For an anti-goal can it check if it doesn't violate any "current" drive? Need a list of "current" drive?
 * TRY copy/paste code to check references to fix: Using = in guard of composite state of model https://github.com/IIIM-IS/replicode/issues/133
 * Make pull request for PrimaryMDLController::predict to allow simulated predicted imdl.
-* Visualizer: On step to new frame, remove simulation from previous frame.
-* Visualizer: On step, show non-simulation items, then simulation items on next step.
 * Visualizer: Option to position simulation objects by predicted time vs. created time.
-* Visualizer: Set selectedSimulationOids by backwards from committed solution.
+* Visualizer: Set selectedSimulationOids by linking backwards from committed solution.
 * Make hand-grab-sphere example learn the models.
   * A pgm to match a learned model and inject a new model which uses it.
 * How to ensure that stored requirements are from the same simulation branch?
@@ -534,6 +544,7 @@ TODO
 * In prediction monitor, on failure check again at the end of the predicted period.
 * Visualizer: Add an item for prediction reduction, initially hidden.
 * Visualizer: Ability to launch Replicode from the Visualizer.
+* For an anti-goal can AERA check if it doesn't violate any "current" drive? Need a list of "current" drives?
 * Make a mk.rdx for (fact (pred (fact (imdl ...)))). (May affect other code that expects the other kind of prediction.)
 * Change (success) to refer to the prediction mk.rdx instead of the prediction. (Affects other code.)
 * Visualizer: Show the time job queue sorted by time.
