@@ -298,15 +298,15 @@ MDLController::MDLController(r_code::View *view) : HLPController(view) {
   Code *rhs_ihlp = rhs_->get_reference(0);
   is_requirement_ = NOT_A_REQUIREMENT;
   controllers_[RHSController] = NULL;
-  uint16 opcode = rhs_ihlp->code(0).asOpcode();
-  if (opcode == Opcodes::ICst ||
-    opcode == Opcodes::IMdl) {
+  uint16 rhs_opcode = rhs_ihlp->code(0).asOpcode();
+  if (rhs_opcode == Opcodes::ICst ||
+      rhs_opcode == Opcodes::IMdl) {
 
     Code *rhs_hlp = rhs_ihlp->get_reference(0);
     r_exec::View *rhs_hlp_v = (r_exec::View*)rhs_hlp->get_view(host, true);
     if (rhs_hlp_v) {
 
-      if (opcode == Opcodes::IMdl)
+      if (rhs_opcode == Opcodes::IMdl)
         is_requirement_ = (rhs_->code(0).asOpcode() == Opcodes::AntiFact ? STRONG_REQUIREMENT : WEAK_REQUIREMENT);
       controllers_[RHSController] = (HLPController *)rhs_hlp_v->controller_;
     }
@@ -315,21 +315,21 @@ MDLController::MDLController(r_code::View *view) : HLPController(view) {
   Code *lhs_ihlp = lhs_->get_reference(0);
   is_reuse_ = false;
   controllers_[LHSController] = NULL;
-  opcode = lhs_ihlp->code(0).asOpcode();
-  if (opcode == Opcodes::ICst ||
-    opcode == Opcodes::IMdl) {
+  uint16 lhs_opcode = lhs_ihlp->code(0).asOpcode();
+  if (lhs_opcode == Opcodes::ICst ||
+      lhs_opcode == Opcodes::IMdl) {
 
     Code *lhs_hlp = lhs_ihlp->get_reference(0);
     r_exec::View *lhs_hlp_v = (r_exec::View*)lhs_hlp->get_view(host, true);
     if (lhs_hlp_v) {
 
-      if (opcode == Opcodes::IMdl)
+      if (lhs_opcode == Opcodes::IMdl)
         is_reuse_ = true;
       controllers_[LHSController] = (HLPController *)lhs_hlp_v->controller_;
     }
   }
 
-  is_cmd_ = (lhs_ihlp->code(0).asOpcode() == Opcodes::Cmd);
+  is_cmd_ = (lhs_opcode == Opcodes::Cmd);
 }
 
 float32 MDLController::get_cfd() const {
