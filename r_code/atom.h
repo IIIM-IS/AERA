@@ -117,7 +117,7 @@ public:
     T_WILDCARD = 0x83,
     I_PTR = 0x84, // internal pointer.
     R_PTR = 0x85, // reference pointer.
-    VL_PTR = 0x86, // value pointer.
+    VL_PTR = 0x86, // binding map value pointer.
     IPGM_PTR = 0x87, // r_exec internal: index of data of a tpl arg held by an ipgm.
     IN_OBJ_PTR = 0x88, // r_exec internal: index of data held by an input object.
     VALUE_PTR = 0x89, // r_exec internal: index of data held by the overlay's value array.
@@ -125,6 +125,7 @@ public:
     OUT_OBJ_PTR = 0x8B, // r_exec internal: index of data held by a newly produced object.
     D_IN_OBJ_PTR = 0x8C, // r_exec internal: index of data held by an object referenced by an input object.
     ASSIGN_PTR = 0x8D, // r_exec internal: index of a hlp variable and to be assigned index of an expression that produces the value.
+    CODE_VL_PTR = 0x8E, // pointer to a value at an index in the same code array.
     THIS = 0x90, // this pointer.
     VIEW = 0x91,
     MKS = 0x92,
@@ -162,7 +163,7 @@ public:
   static Atom TailWildcard();
   static Atom IPointer(uint16 index);
   static Atom RPointer(uint16 index);
-  static Atom VLPointer(uint16 index, uint16 cast_opcode = 0x0FFF);
+  static Atom VLPointer(uint16 index);
   static Atom IPGMPointer(uint16 index);
   static Atom InObjPointer(uint8 inputIndex, uint16 index); // inputIndex: index of the input view; index: index of data in the object's code.
   static Atom DInObjPointer(uint8 relativeIndex, uint16 index); // relativeIndex: index of an in-obj-ptr in the program's (patched) code; index: index of data in the referenced object code.
@@ -170,6 +171,7 @@ public:
   static Atom ValuePointer(uint16 index);
   static Atom ProductionPointer(uint16 index);
   static Atom AssignmentPointer(uint8 variable_index, uint16 index);
+  static Atom CodeVLPointer(uint16 index, uint16 cast_opcode = 0x0FFF);
   static Atom This();
   static Atom View();
   static Atom Mks();
@@ -227,7 +229,7 @@ public:
   uint8 asInputIndex() const; // applicable to IN_OBJ_PTR.
   uint8 asRelativeIndex() const; // applicable to D_IN_OBJ_PTR.
   uint16 asOpcode() const;
-  uint16 asCastOpcode() const; // applicable to VL_PTR.
+  uint16 asCastOpcode() const; // applicable to CODE_VL_PTR.
   uint8 getAtomCount() const; // arity of operators and
                                       // objects/markers/structured sets,
                                       // number of atoms in pointers chains,

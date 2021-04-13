@@ -101,6 +101,8 @@ static std::string make_suffix(uint32 value) {
 }
 
 Decompiler::Decompiler() : out_stream_(NULL), current_object_(NULL), metadata_(NULL), image_(NULL), in_hlp_(false) {
+  // Make hlp_postfix_ true by default to put ':' after variables, unless it is set false for guards in cst and mdl.
+  hlp_postfix_ = true;
 }
 
 Decompiler::~Decompiler() {
@@ -584,15 +586,16 @@ void Decompiler::write_hlp(uint16 read_index) {
         write_indent(indents_);
       }
 
-      if (i == 0 || i == 1)
-        // Put a colon after variables for template arguments and the facts.
-        hlp_postfix_ = true;
+      if (!(i == 0 || i == 1))
+        // Put a colon after variables for template arguments and the facts, but not after further
+        // element such as guards.
+        hlp_postfix_ = false;
       bool save_horizontal_set = horizontal_set_;
       if (i == 0 || i == 4)
         // Write the set of template arguments and set of output groups horizontally.
         horizontal_set_ = true;
       write_any(++read_index, after_tail_wildcard, false);
-      hlp_postfix_ = false;
+      hlp_postfix_ = true;
       horizontal_set_ = save_horizontal_set;
 
       if (!closing_set_)
@@ -857,23 +860,21 @@ void Decompiler::write_any(uint16 read_index, bool &after_tail_wildcard, bool ap
   uint16 index;
   switch (a.getDescriptor()) {
   case Atom::VL_PTR:
-    if (in_hlp_) {
+    // JTNote: The opcode 0x0FFE doesn't seem to be used.
+    if (a.asCastOpcode() == 0x0FFE)
+      out_stream_->push(':', read_index);
+    else {
 
-      if (a.asCastOpcode() == 0x0FFE)
-        out_stream_->push(':', read_index);
-      else {
-
-        std::string s = get_hlp_variable_name(a.asIndex());
-        out_stream_->push(s, read_index);
-      }
-      break;
+      std::string s = get_hlp_variable_name(a.asIndex());
+      out_stream_->push(s, read_index);
     }
+    break;
   case Atom::ASSIGN_PTR:
-    if (in_hlp_) {
-
-      out_stream_->push(get_hlp_variable_name(a.asAssignmentIndex()), read_index);
-      *out_stream_ << ":";
-    }
+    // Output the assignment index, then fall through to process like an I_PTR.
+    out_stream_->push(get_hlp_variable_name(a.asAssignmentIndex()), read_index);
+    *out_stream_ << ":";
+  case Atom::CODE_VL_PTR:
+    // Fall through to start processing like an I_PTR. Will print the get_variable_name() and break.
   case Atom::I_PTR:
     index = a.asIndex();
     atom = current_object_->code_[index];
@@ -882,7 +883,7 @@ void Decompiler::write_any(uint16 read_index, bool &after_tail_wildcard, bool ap
       index = atom.asIndex();
       atom = current_object_->code_[index];
     }
-    if (index < read_index) { // reference to a label or variable.
+    if (index < read_index) { // reference to a label or variable, including CODE_VL_PTR.
 
       std::string s = get_variable_name(index, atom.getDescriptor() != Atom::WILDCARD); // post-fix labels with ':' (no need for variables since they are inserted just before wildcards).
       out_stream_->push(s, read_index);
@@ -940,7 +941,7 @@ void Decompiler::write_any(uint16 read_index, bool &after_tail_wildcard, bool ap
         out_stream_->push("this", read_index);
         opcode = metadata_->sys_classes_["ipgm"].atom_.asOpcode();
         break;
-      case Atom::VL_PTR: {
+      case Atom::CODE_VL_PTR: {
 
         uint8 cast_opcode = atom.asCastOpcode();
         while (current_object_->code_[atom.asIndex()].getDescriptor() == Atom::I_PTR) // position to a structure or an atomic value_.

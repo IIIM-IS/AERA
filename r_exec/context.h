@@ -141,14 +141,14 @@ private:
 
       switch ((*this)[0].getDescriptor()) {
       case Atom::C_PTR: // copy members as is (no dereference).
-        if ((*this)[1].getDescriptor() == Atom::VL_PTR) {
+        if ((*this)[1].getDescriptor() == Atom::CODE_VL_PTR) {
 
           Atom a = code_[(*this)[1].asIndex()];
           if (a.getDescriptor() == Atom::I_PTR)
             a = code_[a.asIndex()];
           switch (a.getDescriptor()) {
           case Atom::OUT_OBJ_PTR:
-            destination->code(write_index++) = Atom::VLPointer(code_[(*this)[1].asIndex()].asIndex());
+            destination->code(write_index++) = Atom::CodeVLPointer(code_[(*this)[1].asIndex()].asIndex());
             break;
           case Atom::IN_OBJ_PTR: // TMP: assumes destination is a mk.rdx.
             destination->code(write_index++) = Atom::RPointer(1 + a.asInputIndex());
@@ -234,7 +234,7 @@ private:
         destination->code(write_index) = c[0];
       break;
     }
-    case Atom::VL_PTR:
+    case Atom::CODE_VL_PTR:
       switch (code_[(*this)[0].asIndex()].getDescriptor()) {
       case Atom::PROD_PTR:
         addReference(destination, write_index, ((InputLessPGMOverlay *)overlay_)->productions_[code_[(*this)[0].asIndex()].asIndex()]);
@@ -246,7 +246,7 @@ private:
           (**this).copy_member(destination, write_index, extent_index, dereference_cptr, pgm_index);
         break;
       case Atom::OUT_OBJ_PTR:
-        destination->code(write_index) = Atom::VLPointer(code_[(*this)[0].asIndex()].asIndex());
+        destination->code(write_index) = Atom::CodeVLPointer(code_[(*this)[0].asIndex()].asIndex());
         break;
       case Atom::IN_OBJ_PTR:
       case Atom::D_IN_OBJ_PTR: {
