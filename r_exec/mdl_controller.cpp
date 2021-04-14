@@ -1945,7 +1945,7 @@ bool PrimaryMDLController::check_imdl(Fact *goal, HLPBindingMap *bm) { // goal i
     f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(true);
   case NO_REQUIREMENT:
     if (evaluate_bwd_guards(bm)) { // bm may be updated.
-
+      // JTNote: This changes an object which is already injected.
       f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
       abduce_lhs(bm, sim->get_f_super_goal(), f_imdl, sim->get_opposite(), f_imdl->get_cfd(), new Sim(SIM_ROOT, seconds(0), sim->get_f_super_goal(), sim->get_opposite(), this, 1), ground, false);
       return true;
@@ -1975,7 +1975,7 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, C
     f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(true);
   case NO_REQUIREMENT:
     if (evaluate_bwd_guards(bm)) { // bm may be updated.
-
+      // JTNote: This changes an object which is already injected.
       f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
       abduce_simulated_lhs(bm, sim->get_f_super_goal(), f_imdl, sim->get_opposite(), f_imdl->get_cfd(), new Sim(sim), forwardSimulation);
       return true;
@@ -2147,6 +2147,7 @@ void PrimaryMDLController::register_simulated_goal_outcome(Fact *goal, bool succ
   Group *primary_host = get_host();
   int32 resilience = _Mem::Get()->get_goal_pred_success_res(primary_host, now, seconds(0));
   View *view = new View(View::SYNC_ONCE, now, 1, resilience, primary_host, primary_host, f_pred);
+  // JTNote: A View is created, but nothing is done with it.
 }
 
 void PrimaryMDLController::rate_model(bool success) {
