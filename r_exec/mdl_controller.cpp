@@ -1512,12 +1512,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
         return;
       if (prediction) { // no rdx nor monitoring if the input was a prediction; case of a reuse: f_imdl becomes f->p->f_imdl.
 
-        Pred *pred_f_imdl;
-        if (is_simulation)
-          pred_f_imdl = new Pred(f_imdl, prediction, 1);
-        else
-          pred_f_imdl = new Pred(f_imdl, 1);
-        Fact *f_pred_f_imdl = new Fact(pred_f_imdl, now, now, 1, 1);
+        Fact *f_pred_f_imdl = new Fact(new Pred(f_imdl, 1), now, now, 1, 1);
         inject_prediction(production, f_pred_f_imdl, confidence, before - now, NULL);
         string f_imdl_info;
 #ifdef WITH_DEBUG_OID
