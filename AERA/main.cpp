@@ -76,6 +76,7 @@
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
 #include "decompiler.h"
+#include "IODevices\TCP\tcp_io_device.h"
 #include "test_mem.h"
 #include "init.h"
 #include "image_impl.h"
@@ -327,11 +328,30 @@ int32 main(int argc, char **argv) {
 
     r_comp::Image *image;
 
-    r_exec::_Mem *mem;
-    if (settings.get_objects_)
-      mem = new TestMem<r_exec::LObject, r_exec::MemStatic>();
-    else
-      mem = new TestMem<r_exec::LObject, r_exec::MemVolatile>();
+    r_exec::_Mem* mem;
+    if (settings.io_device_.compare("test_mem") == 0) {
+      if (settings.get_objects_)
+        mem = new TestMem<r_exec::LObject, r_exec::MemStatic>();
+      else
+        mem = new TestMem<r_exec::LObject, r_exec::MemVolatile>();
+    }
+    else if (settings.io_device_.compare("tcp_io_device") == 0) {
+      string port = "8080";
+      int err = 0;
+      if (settings.get_objects_) {
+        mem = new tcp_io_device::TcpIoDevice<r_exec::LObject, r_exec::MemStatic>();
+        err = static_cast<tcp_io_device::TcpIoDevice<r_exec::LObject, r_exec::MemStatic>*>(mem)->initTCP(port);
+      }
+      else {
+        mem = new tcp_io_device::TcpIoDevice<r_exec::LObject, r_exec::MemVolatile>();
+        err = static_cast<tcp_io_device::TcpIoDevice<r_exec::LObject, r_exec::MemVolatile>*>(mem)->initTCP(port);
+      }
+      if (err != 0) {
+        cout << "ERROR: Could not connect to a TCP client" << endl;
+        delete mem;
+        return err;
+      }
+    }
 
     if (runtimeOutputStream.is_open())
       // Use the debug stream from settings.xml.
