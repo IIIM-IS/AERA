@@ -110,8 +110,7 @@ public:
 #ifdef WITH_DEBUG_OID
     OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(now) << " ReductionJob " << get_job_id() <<
       ": controller(" << processor_->get_debug_oid() << ")->reduce(View(fact_" << 
-      input_->object_->get_oid() << "(" << input_->object_->get_debug_oid() << 
-      ")))");
+      input_->object_->get_oid() << "))");
 #endif
     processor_->reduce(input_);
     return true;
