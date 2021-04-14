@@ -237,7 +237,6 @@
     <None Include="replicode_v1.2\main.replicode" />
     <None Include="replicode_v1.2\pattern.replicode" />
     <None Include="replicode_v1.2\pong.1.replicode" />
-    <None Include="replicode_v1.2\pong.2.goal.replicode" />
     <None Include="replicode_v1.2\pong.2.replicode" />
     <None Include="replicode_v1.2\pong.2.simplified.replicode" />
     <None Include="replicode_v1.2\pong.3.replicode" />
