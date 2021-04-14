@@ -457,25 +457,31 @@ bool InputLessPGMOverlay::inject_productions() {
       }
     } else if (cmd[0].asOpcode() == Opcodes::Cmd) { // command to an external device, build a cmd object and send it.
 
-      Code *command = _Mem::Get()->build_object(cmd[0]);
-      cmd.copy(command, 0);
+      P<Code> command = _Mem::Get()->build_object(cmd[0]);
+      cmd.copy((Code*)command, 0);
 
-      _Mem::Get()->eject(command);
+      Code* executedCommand = _Mem::Get()->eject(command);
 
       // Build a fact of the command and inject it in stdin. Give the fact an uncertainty range since we don't know when
       // it will be executed. Otherwise a fact with zero duration may not overlap a fact, making predictions fail.
       // We offset the beginning of the uncertainty range by 2*GetTimeTolerance() (the same as SYNC_HOLD)
       // so that CTPX::reduce will not fail due to "cause in sync with the premise".
-      Code *fact = new Fact(command, now + 2 * Utils::GetTimeTolerance(), now + _Mem::Get()->get_sampling_period(), 1, 1);
-      View *view = new View(View::SYNC_ONCE, now, 1, 1, _Mem::Get()->get_stdin(), getView()->get_host(), fact); // SYNC_ONCE, sln=1, res=1,
-      _Mem::Get()->inject(view);
-      string mk_rdx_info = "";
+      P<Code> fact;
+      if (executedCommand) {
+        fact = new Fact(command, now + 2 * Utils::GetTimeTolerance(), now + _Mem::Get()->get_sampling_period(), 1, 1);
+        View *view = new View(View::SYNC_ONCE, now, 1, 1, _Mem::Get()->get_stdin(), getView()->get_host(), fact); // SYNC_ONCE, sln=1, res=1,
+        _Mem::Get()->inject(view);
+        string mk_rdx_info = "";
 #ifdef WITH_DEBUG_OID
-      if (mk_rdx)
-        // We don't know the mk.rdx OID yet, so use the debug OID.
-        mk_rdx_info = " mk.rdx(" + to_string(mk_rdx->get_debug_oid()) + "):";
+        if (mk_rdx)
+          // We don't know the mk.rdx OID yet, so use the debug OID.
+          mk_rdx_info = " mk.rdx(" + to_string(mk_rdx->get_debug_oid()) + "):";
 #endif
-      OUTPUT_LINE(IO_DEVICE_INJ_EJT, Utils::RelativeTime(Now()) << mk_rdx_info << " I/O device eject " << fact->get_oid());
+        OUTPUT_LINE(IO_DEVICE_INJ_EJT, Utils::RelativeTime(Now()) << mk_rdx_info << " I/O device eject " << fact->get_oid());
+      }
+      else
+        // The command wasn't executed. Set fact to an anti-fact of the original command and record in the mk_rdx.
+        fact = new AntiFact(command, after, before, 1, 1);
 
       if (mk_rdx) {
 

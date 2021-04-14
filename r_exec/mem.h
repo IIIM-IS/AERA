@@ -547,9 +547,16 @@ public:
   // To be redefined by object transport aware subcalsses.
   virtual void eject(View *view, uint16 nodeID);
 
-  // From rMem to I/O device.
-  // To be redefined by object transport aware subcalsses.
-  virtual void eject(r_code::Code *command);
+  /**
+   * This is called by the program controller to eject a command from rMem to the 
+   * I/O device. This method should be redefined by object transport-aware subclasses.
+   * \param command The command from the Replicode (cmd ...).
+   * \return The given command if it is executed as-is, or a new command object of the command
+   * that is actually executed. The program controller will make a fact from the command and
+   * inject it as the efferent copy. However, if the command is not executed, then return NULL
+   * and the program controller will put an anti-fact of the command in the mk.rdx reduction.
+   */
+  virtual r_code::Code* eject(r_code::Code *command);
 
   virtual r_code::Code *_build_object(Atom head) const = 0;
   virtual r_code::Code *build_object(Atom head) const = 0;
