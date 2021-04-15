@@ -91,6 +91,7 @@ class HLPOverlay :
   public Overlay {
   friend class HLPContext;
 protected:
+  friend class CSTController; // For abduce_simulated.
   P<HLPBindingMap> bindings_;
 
   r_code::list<P<_Fact> > patterns_;
