@@ -505,25 +505,27 @@ Simulator
 * Can AERA start simulating from a non-simulated (and non drive) goal?
   CORRECTION: YES. PrimaryMDLController::reduce:1655 if (!goal->is_drive())
     is_drive() returns false if the goal has a simulation (created by commit).
-    (fact (goal (|fact (mk.val h power false) 0s:200ms:0us 0s:600ms:0us) (sim 0 0s:0ms:0us)))
+    (fact (g
+    oal (|fact (mk.val h power false) 0s:200ms:0us 0s:600ms:0us) (sim 0 0s:0ms:0us)))
     (fact (goal (fact (cmd set_state [h power true]) 0s:120ms:0us 0s:500ms:0u)))
 
-next meeting
-* Timesheet research topics
-* Simulated forward chaining: Match with backward chaining stored requirement.
-  * Review/merge pull request to store the requirement before signaling the monitors https://github.com/IIIM-IS/replicode/pull/151
-* REVIEW. Make pull request for PrimaryMDLController::predict to allow simulated predicted imdl.
-  * Review/merge pull request to inject simulated (fact (imdl ...)) in simulation https://github.com/IIIM-IS/replicode/pull/153
+2021-04-19
+* DONE: Visaulizer: In arrows for between forward/backward chaining items, color arrow heads with read and green (when hovered)
+* DONE: Visualizer: Show the drive.
 * DONE. Review/merge pull request to fix  https://github.com/IIIM-IS/replicode/issues/51 Add CODE_VL_PTR and fix the decompiler https://github.com/IIIM-IS/replicode/pull/126
 * DONE. Review/merge pull request to allow eject to return the actally-executed command https://github.com/IIIM-IS/replicode/pull/125
     DONE. Merge into master: https://github.com/IIIM-IS/replicode/pull/145 with https://github.com/IIIM-IS/replicode/pull/146
     DONE. Merge into master: https://github.com/IIIM-IS/replicode/pull/149
 * DONE. Review/merge pull request for template timings in abduce_imdl https://github.com/IIIM-IS/replicode/pull/107
-* DONE: Visaulizer: In arrows for between forward/backward chaining items, color arrow heads with read and green (when hovered)
+
+next meeting
+* Review/merge pull request to store the requirement before signaling the monitors https://github.com/IIIM-IS/replicode/pull/151
+* Review/merge pull request to make the efferent copy timings relative to the frame https://github.com/IIIM-IS/replicode/pull/124
 * Review/merge pull request for temporary fix for matching template timings https://github.com/IIIM-IS/replicode/pull/136
 * Review/merge pull request to ignore wr_enabled when matching in the simulator https://github.com/IIIM-IS/replicode/pull/132
 * Review/merge pull request to use match_fwd in retrieve_simulated_imdl_fwd https://github.com/IIIM-IS/replicode/pull/141
 * Review/merge pull request to not share timing variables when building the model https://github.com/IIIM-IS/replicode/pull/110
+* Review/merge pull request to not make a goal icst from a single member (revert pull request #131) https://github.com/IIIM-IS/replicode/pull/154
 * Review diag_mode_rel_0_1 tags.
 * Review/merge pull request for simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
 * Review/merge pull request for super_goal in new Sim https://github.com/IIIM-IS/replicode/pull/106
@@ -531,31 +533,32 @@ next meeting
 * Review/merge pull request for check_simulated_imdl in SRMonitor::signal https://github.com/IIIM-IS/replicode/pull/116
 * Review/merge pull request for SYNC_HOLD timings https://github.com/IIIM-IS/replicode/pull/118
 * Review/merge pull request for bindPattern to update timings https://github.com/IIIM-IS/replicode/pull/135
+* Review/merge pull request to not abduce from anti-fact imdl https://github.com/IIIM-IS/replicode/pull/156
 * Review/merge pull request for simulation control in abduce_simulated_lhs https://github.com/IIIM-IS/replicode/pull/111
-* Review/merge pull request to make the efferent copy timings relative to the frame https://github.com/IIIM-IS/replicode/pull/124
 * Review/merge pull request for NoArgCmdGuardBuilder backward guard https://github.com/IIIM-IS/replicode/pull/115
 * Review/merge pull request for matching all composite state combinations in backward chaining  https://github.com/IIIM-IS/replicode/pull/129
-* Review/merge pull request to not make a goal icst from a single member (revert pull request #131) https://github.com/IIIM-IS/replicode/pull/154
 
 TODO
+* How close is the cart pole to overrunning object limit? https://github.com/IIIM-IS/replicode/issues/128
+* Still need? Make pull request for PrimaryMDLController::predict to allow simulated predicted imdl.
+  * Review/merge pull request to inject simulated (fact (imdl ...)) in simulation https://github.com/IIIM-IS/replicode/pull/153
 * TRY copy/paste code to check references to fix: Using = in guard of composite state of model https://github.com/IIIM-IS/replicode/issues/133
-* Visualizer: Option to position simulation objects by predicted time vs. created time.
 * Visualizer: Set selectedSimulationOids by linking backwards from committed solution.
-* Visualizer: Show the drive.
+* Visualizer: Show prediction failure.
+* Visualizer: Option to position simulation objects by predicted time vs. created time.
+* Visualizer: Pre-loaded models should start with count and success rate of 1.
 * Make hand-grab-sphere example learn the models.
   * A pgm to match a learned model and inject a new model which uses it.
 * How to ensure that stored requirements are from the same simulation branch?
 * Try limiting detection of conflicting facts to numbers.
 * Try commenting out PTPX::reduce:666 if (i->input_ == Opcodes::Cmd)
-* Visualizer: Show prediction failure.
 * When a failed model is in the secondary group and the pattern extractor learns a model from new inputs, does it check if it's the same as the failed model?
 * pull request for overlapping SYNC_HOLD timings in auto focus
-* In prediction monitor, on failure check again at the end of the predicted period.
-* Visualizer: Add an item for prediction reduction, initially hidden.
-* Visualizer: Ability to launch Replicode from the Visualizer.
 * For an anti-goal can AERA check if it doesn't violate any "current" drive? Need a list of "current" drives?
 * Make a mk.rdx for (fact (pred (fact (imdl ...)))). (May affect other code that expects the other kind of prediction.)
 * Change (success) to refer to the prediction mk.rdx instead of the prediction. (Affects other code.)
+* Visualizer: Add an item for prediction reduction, initially hidden.
+* Visualizer: Ability to launch Replicode from the Visualizer.
 * Visualizer: Show the time job queue sorted by time.
 * Document methods, starting with those related to the simulator.
 * If min_sim_time_horizon > 0, how is the behavior different?
