@@ -518,9 +518,15 @@ Simulator
     DONE. Merge into master: https://github.com/IIIM-IS/replicode/pull/149
 * DONE. Review/merge pull request for template timings in abduce_imdl https://github.com/IIIM-IS/replicode/pull/107
 
+2021-04-22
+* DONE. Visualizer: Show simulated predicted success.
+* DONE. Visualizer: Show simulated predicted imdl (new mk.rdx).
+* DONE. Still need? Review/merge pull request to inject simulated (fact (imdl ...)) in simulation https://github.com/IIIM-IS/replicode/pull/153
+  YES. M7 already gave its requrement to M6. The new prediction from M0 will not cause M7 to call store_requirement on M7.
+* DONE. Review/merge pull request to store the requirement before signaling the monitors https://github.com/IIIM-IS/replicode/pull/151
+* DONE. Review/merge pull request to make the efferent copy timings relative to the frame https://github.com/IIIM-IS/replicode/pull/124
+
 next meeting
-* Review/merge pull request to store the requirement before signaling the monitors https://github.com/IIIM-IS/replicode/pull/151
-* Review/merge pull request to make the efferent copy timings relative to the frame https://github.com/IIIM-IS/replicode/pull/124
 * Review/merge pull request for temporary fix for matching template timings https://github.com/IIIM-IS/replicode/pull/136
 * Review/merge pull request to ignore wr_enabled when matching in the simulator https://github.com/IIIM-IS/replicode/pull/132
 * Review/merge pull request to use match_fwd in retrieve_simulated_imdl_fwd https://github.com/IIIM-IS/replicode/pull/141
@@ -540,8 +546,8 @@ next meeting
 
 TODO
 * How close is the cart pole to overrunning object limit? https://github.com/IIIM-IS/replicode/issues/128
-* Still need? Make pull request for PrimaryMDLController::predict to allow simulated predicted imdl.
-  * Review/merge pull request to inject simulated (fact (imdl ...)) in simulation https://github.com/IIIM-IS/replicode/pull/153
+* Suggest a renaming of ent and ont in cart-pole to be more "body-like".
+* TRY end of simulation commit injects a new non-simulated copy of the commited goal. Show in Visualizer.
 * TRY copy/paste code to check references to fix: Using = in guard of composite state of model https://github.com/IIIM-IS/replicode/issues/133
 * Visualizer: Set selectedSimulationOids by linking backwards from committed solution.
 * Visualizer: Show prediction failure.
