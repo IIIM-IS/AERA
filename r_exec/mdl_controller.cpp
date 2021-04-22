@@ -1360,6 +1360,8 @@ void TopLevelMDLController::register_simulated_goal_outcome(Fact *goal, bool suc
   int32 resilience = _Mem::Get()->get_goal_pred_success_res(primary_host, now, seconds(0));
   View *view = new View(View::SYNC_ONCE, now, 1, resilience, primary_host, primary_host, f_pred);
   _Mem::Get()->inject(view); // inject in the primary group.
+  OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": fact " <<
+    evidence->get_oid() << " pred -> fact " << f_pred->get_oid() << " simulated pred");
 }
 
 void TopLevelMDLController::register_req_outcome(Fact *f_pred, bool success, bool rate_failures) {
