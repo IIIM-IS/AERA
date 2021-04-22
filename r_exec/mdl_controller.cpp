@@ -1561,6 +1561,12 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
     HLPController::inject_prediction(production, confidence); // inject a simulated prediction in the primary group.
     OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": fact " <<
       input->get_oid() << " pred -> fact " << production->get_oid() << " simulated pred");
+
+    if (is_cmd()) {
+      // Inject the predicted imdl, in case other models are reusing this model.
+      Fact *f_pred_f_imdl = new Fact(new Pred(f_imdl, prediction, 1), now, now, 1, 1);
+      HLPController::inject_prediction(f_pred_f_imdl, confidence);
+    }
   }
 }
 
