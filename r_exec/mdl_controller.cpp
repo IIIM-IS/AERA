@@ -1486,6 +1486,15 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
       // Another thread has invalidated this controller which clears the controllers.
       return;
     // In the Pred constructor, we already copied the simulations from prediction.
+    Code* mk_rdx = new MkRdx(f_imdl, (Code *)input, production, 1, bm);
+    uint16 out_group_count = get_rdx_out_group_count();
+    for (uint16 i = 0; i < out_group_count; ++i) {
+      Group *out_group = (Group *)get_out_group(i);
+      View *view = new NotificationView(get_host(), out_group, mk_rdx);
+      _Mem::Get()->inject_notification(view, true);
+    }
+    OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " predict imdl -> mk.rdx " << mk_rdx->get_oid());
+
     PrimaryMDLController *c = (PrimaryMDLController *)controllers_[RHSController]; // rhs controller: in the same view.
     c->store_requirement(production, this, chaining_was_allowed, is_simulation); // if not simulation, stores also in the secondary controller.
 #ifdef WITH_DEBUG_OID
