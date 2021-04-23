@@ -759,10 +759,12 @@ bool PGMOverlay::check_guards() {
   uint16 guard_count = code_[guard_set_index].getAtomCount();
   for (uint16 i = 1; i <= guard_count; ++i) {
 
+    // Get the IPGMContext like in InputLessPGMOverlay::evaluate.
+    IPGMContext c(getObject()->get_reference(0), getView(), code_, guard_set_index + i, this);
     uint16 result_index;
-    if (!evaluate(guard_set_index + i, result_index))
+    if (!c.evaluate(result_index))
       return false;
-    if (code_[result_index].isBooleanFalse())
+    if ((*c)[0].isBooleanFalse())
       // The boolean guard is false.
       return false;
   }
