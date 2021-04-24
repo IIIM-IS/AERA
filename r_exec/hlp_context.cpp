@@ -90,8 +90,8 @@ HLPContext::HLPContext(Atom *code, uint16 index, HLPOverlay *const overlay, Data
 
 bool HLPContext::operator ==(const HLPContext &c) const {
 
-  HLPContext lhs = **this;
-  HLPContext rhs = *c;
+  HLPContext lhs = dereference();
+  HLPContext rhs = c.dereference();
 
   if (lhs[0] != rhs[0]) // both contexts point to an atom which is not a pointer.
     return false;
@@ -100,7 +100,7 @@ bool HLPContext::operator ==(const HLPContext &c) const {
 
     uint16 atom_count = lhs.getChildrenCount();
     for (uint16 i = 1; i <= atom_count; ++i)
-      if (*lhs.getChild(i) != *rhs.getChild(i))
+      if (lhs.getChild(i).dereference() != rhs.getChild(i).dereference())
         return false;
     return true;
   }
@@ -112,19 +112,19 @@ bool HLPContext::operator !=(const HLPContext &c) const {
   return !(*this == c);
 }
 
-HLPContext HLPContext::operator *() const {
+HLPContext HLPContext::dereference() const {
 
   switch ((*this)[0].getDescriptor()) {
   case Atom::I_PTR:
-    return *HLPContext(code_, (*this)[0].asIndex(), (HLPOverlay *)overlay_, data_);
+    return HLPContext(code_, (*this)[0].asIndex(), (HLPOverlay *)overlay_, data_).dereference();
   case Atom::VL_PTR: {
     Atom *value_code = ((HLPOverlay *)overlay_)->get_value_code((*this)[0].asIndex());
     if (value_code)
-      return *HLPContext(value_code, 0, (HLPOverlay *)overlay_, BINDING_MAP);
+      return HLPContext(value_code, 0, (HLPOverlay *)overlay_, BINDING_MAP).dereference();
     else // unbound variable.
       return HLPContext(); // data=undefined: evaluation will return false.
   }case Atom::VALUE_PTR:
-    return *HLPContext(&overlay_->values_[0], (*this)[0].asIndex(), (HLPOverlay *)overlay_, VALUE_ARRAY);
+    return HLPContext(&overlay_->values_[0], (*this)[0].asIndex(), (HLPOverlay *)overlay_, VALUE_ARRAY).dereference();
   default:
     return *this;
   }
@@ -156,7 +156,7 @@ bool HLPContext::evaluate_no_dereference(uint16 &result_index) const {
     for (uint16 i = 1; i <= atom_count; ++i) {
 
       uint16 unused_result_index;
-      if (!(*getChild(i)).evaluate_no_dereference(unused_result_index))
+      if (!getChild(i).dereference().evaluate_no_dereference(unused_result_index))
         return false;
     }
 
@@ -180,7 +180,7 @@ bool HLPContext::evaluate_no_dereference(uint16 &result_index) const {
     for (uint16 i = 1; i <= atom_count; ++i) {
 
       uint16 unused_result_index;
-      if (!(*getChild(i)).evaluate_no_dereference(unused_result_index))
+      if (!getChild(i).dereference().evaluate_no_dereference(unused_result_index))
         return false;
     }
     result_index = index_;

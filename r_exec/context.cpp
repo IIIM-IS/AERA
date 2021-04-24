@@ -89,8 +89,8 @@ namespace r_exec {
 bool IPGMContext::operator ==(const IPGMContext &c) const {
   //c.trace();
   //this->trace();
-  IPGMContext lhs = **this;
-  IPGMContext rhs = *c;
+  IPGMContext lhs = dereference();
+  IPGMContext rhs = c.dereference();
 
   if (lhs.data_ == REFERENCE && lhs.index_ == 0 &&
     rhs.data_ == REFERENCE && rhs.index_ == 0) // both point to an object's head, not one of its members.
@@ -104,7 +104,7 @@ bool IPGMContext::operator ==(const IPGMContext &c) const {
 
     uint16 atom_count = lhs.getChildrenCount();
     for (uint16 i = 1; i <= atom_count; ++i)
-      if (*lhs.getChild(i) != *rhs.getChild(i))
+      if (lhs.getChild(i).dereference() != rhs.getChild(i).dereference())
         return false;
     return true;
   }
@@ -137,8 +137,8 @@ bool IPGMContext::match(const IPGMContext &input) const {
 
     for (uint16 i = 1; i <= atom_count; ++i) {
 
-      IPGMContext pc = *getChild(i);
-      IPGMContext ic = *input.getChild(i);
+      IPGMContext pc = getChild(i).dereference();
+      IPGMContext ic = input.getChild(i).dereference();
       if (!pc.match(ic))
         return false;
     }
@@ -150,7 +150,7 @@ bool IPGMContext::match(const IPGMContext &input) const {
   case Atom::T_WILDCARD:
     return true;
   case Atom::IPGM_PTR:
-    return (**this).match(input);
+    return dereference().match(input);
   default:
     return (*this)[0] == input[0];
   }
@@ -167,7 +167,7 @@ void IPGMContext::dereference_once() {
   }
 }
 
-IPGMContext IPGMContext::operator *() const {
+IPGMContext IPGMContext::dereference() const {
 
   switch ((*this)[0].getDescriptor()) {
   case Atom::CODE_VL_PTR: { // evaluate the code if necessary.
@@ -186,15 +186,15 @@ IPGMContext IPGMContext::operator *() const {
       else // evaluation failed, return undefined context.
         return IPGMContext();
     } else
-      return *IPGMContext(object_, view_, code_, (*this)[0].asIndex(), (InputLessPGMOverlay *)overlay_, data_);
+      return IPGMContext(object_, view_, code_, (*this)[0].asIndex(), (InputLessPGMOverlay *)overlay_, data_).dereference();
   }case Atom::I_PTR:
-    return *IPGMContext(object_, view_, code_, (*this)[0].asIndex(), (InputLessPGMOverlay *)overlay_, data_);
+    return IPGMContext(object_, view_, code_, (*this)[0].asIndex(), (InputLessPGMOverlay *)overlay_, data_).dereference();
   case Atom::R_PTR: {
     Code *o = object_->get_reference((*this)[0].asIndex());
     return IPGMContext(o, NULL, &o->code(0), 0, NULL, REFERENCE);
   }case Atom::C_PTR: {
 
-    IPGMContext c = *getChild(1);
+    IPGMContext c = getChild(1).dereference();
     for (uint16 i = 2; i <= getChildrenCount(); ++i) {
 
       switch ((*this)[i].getDescriptor()) {
@@ -211,7 +211,7 @@ IPGMContext IPGMContext::operator *() const {
         return IPGMContext(c.getObject(), VWS);
         break;
       default:
-        c = *c.getChild((*this)[i].asIndex());
+        c = c.getChild((*this)[i].asIndex()).dereference();
       }
     }
     return c;
@@ -229,15 +229,15 @@ IPGMContext IPGMContext::operator *() const {
   case Atom::VALUE_PTR:
     return IPGMContext(object_, view_, &overlay_->values_[0], (*this)[0].asIndex(), (InputLessPGMOverlay *)overlay_, VALUE_ARRAY);
   case Atom::IPGM_PTR:
-    return *IPGMContext(overlay_->getObject(), (*this)[0].asIndex());
+    return IPGMContext(overlay_->getObject(), (*this)[0].asIndex()).dereference();
   case Atom::IN_OBJ_PTR: {
     Code *input_object = ((PGMOverlay *)overlay_)->getInputObject((*this)[0].asInputIndex());
     View *input_view = (r_exec::View*)((PGMOverlay *)overlay_)->getInputView((*this)[0].asInputIndex());
-    return *IPGMContext(input_object, input_view, &input_object->code(0), (*this)[0].asIndex(), NULL, REFERENCE);
+    return IPGMContext(input_object, input_view, &input_object->code(0), (*this)[0].asIndex(), NULL, REFERENCE).dereference();
   }case Atom::D_IN_OBJ_PTR: {
-    IPGMContext parent = *IPGMContext(object_, view_, code_, (*this)[0].asRelativeIndex(), (InputLessPGMOverlay *)overlay_, data_);
+    IPGMContext parent = IPGMContext(object_, view_, code_, (*this)[0].asRelativeIndex(), (InputLessPGMOverlay *)overlay_, data_).dereference();
     Code *parent_object = parent.object_;
-    return *IPGMContext(parent_object, NULL, &parent_object->code(0), (*this)[0].asIndex(), NULL, REFERENCE);
+    return IPGMContext(parent_object, NULL, &parent_object->code(0), (*this)[0].asIndex(), NULL, REFERENCE).dereference();
   }case Atom::PROD_PTR:
     return IPGMContext(((InputLessPGMOverlay *)overlay_)->productions_[(*this)[0].asIndex()], 0);
   default:
@@ -271,7 +271,7 @@ bool IPGMContext::evaluate_no_dereference(uint16 &result_index) const {
       for (uint16 i = 1; i <= atom_count; ++i) {
 
         uint16 unused_result_index;
-        if (!(*getChild(i)).evaluate_no_dereference(unused_result_index))
+        if (!getChild(i).dereference().evaluate_no_dereference(unused_result_index))
           return false;
       }
     }
@@ -299,7 +299,7 @@ bool IPGMContext::evaluate_no_dereference(uint16 &result_index) const {
     for (uint16 i = 1; i <= atom_count; ++i) {
 
       uint16 unused_result_index;
-      if (!(*getChild(i)).evaluate_no_dereference(unused_result_index))
+      if (!getChild(i).dereference().evaluate_no_dereference(unused_result_index))
         return false;
     }
     result_index = index_;
@@ -315,7 +315,7 @@ inline bool IPGMContext::evaluate(uint16 &result_index) const {
   if (data_ == REFERENCE || data_ == VALUE_ARRAY)
     return true;
 
-  IPGMContext c = **this;
+  IPGMContext c = dereference();
   return c.evaluate_no_dereference(result_index);
 }
 
@@ -391,7 +391,7 @@ dereference:
 
       uint16 saved_index = index_;
       index_ = _index;
-      IPGMContext cptr = **this;
+      IPGMContext cptr = dereference();
       overlay_->values_[write_index] = cptr[0];
       index_ = saved_index;
       return;
@@ -433,7 +433,7 @@ void IPGMContext::getMember(void *&object, uint32 &view_oid, ObjectType &object_
     return;
   }
 
-  IPGMContext c = *cptr.getChild(1); // this, vl_ptr, value_ptr or rptr.
+  IPGMContext c = cptr.getChild(1).dereference(); // this, vl_ptr, value_ptr or rptr.
 
   uint16 atom_count = cptr.getChildrenCount();
   for (uint16 i = 2; i < atom_count; ++i) { // stop before the last iptr.
@@ -441,7 +441,7 @@ void IPGMContext::getMember(void *&object, uint32 &view_oid, ObjectType &object_
     if (cptr[i].getDescriptor() == Atom::VIEW)
       c = IPGMContext(c.getObject(), c.view_, &c.view_->code(0), 0, NULL, VIEW);
     else
-      c = *c.getChild(cptr[i].asIndex());
+      c = c.getChild(cptr[i].asIndex()).dereference();
   }
 
   // at this point, c is an iptr dereferenced to an object or a view; the next iptr holds the member index.
@@ -507,12 +507,12 @@ bool match(const IPGMContext &input, const IPGMContext &pattern) { // in red, pa
     pattern.patch_code(pattern.getIndex() + 1, Atom::IPointer(input.getIndex()));
 
   // evaluate the set of guards.
-  IPGMContext guard_set = *pattern.getChild(2);
+  IPGMContext guard_set = pattern.getChild(2).dereference();
   uint16 guard_count = guard_set.getChildrenCount();
   uint16 unused_index;
   for (uint16 i = 1; i <= guard_count; ++i) {
 
-    if (!(*guard_set.getChild(i)).evaluate_no_dereference(unused_index)) // WARNING: no check for duplicates.
+    if (!guard_set.getChild(i).dereference().evaluate_no_dereference(unused_index)) // WARNING: no check for duplicates.
       return false;
   }
 
@@ -525,7 +525,7 @@ bool match(const IPGMContext &input, const IPGMContext &pattern, const IPGMConte
   uint16 last_patch_index;
   if (pattern[0].asOpcode() == Opcodes::Ptn) {
 
-    skeleton = *pattern.getChild(1);
+    skeleton = pattern.getChild(1).dereference();
     if (!skeleton.match(input))
       return false;
     last_patch_index = pattern.get_last_patch_index();
@@ -537,7 +537,7 @@ bool match(const IPGMContext &input, const IPGMContext &pattern, const IPGMConte
 
   if (pattern[0].asOpcode() == Opcodes::AntiPtn) {
 
-    skeleton = *pattern.getChild(1);
+    skeleton = pattern.getChild(1).dereference();
     if (skeleton.match(input))
       return false;
     last_patch_index = pattern.get_last_patch_index();
@@ -569,11 +569,11 @@ build_productions:
 
 void reduce(const IPGMContext &context, const IPGMContext &input_set, const IPGMContext &section, std::vector<uint16> &input_indices, std::vector<uint16> &production_indices) {
 
-  IPGMContext pattern = *section.getChild(1);
+  IPGMContext pattern = section.getChild(1).dereference();
   if (pattern[0].asOpcode() != Opcodes::Ptn && pattern[0].asOpcode() != Opcodes::AntiPtn)
     return;
 
-  IPGMContext productions = *section.getChild(2);
+  IPGMContext productions = section.getChild(2).dereference();
   if (productions[0].getDescriptor() != Atom::SET)
     return;
 
@@ -584,7 +584,7 @@ void reduce(const IPGMContext &context, const IPGMContext &input_set, const IPGM
   std::vector<uint16>::iterator i;
   for (i = input_indices.begin(); i != input_indices.end();) { // to be successful, at least one input must match the pattern.
 
-    IPGMContext c = *input_set.getChild(*i);
+    IPGMContext c = input_set.getChild(*i).dereference();
     if (c.is_undefined()) {
 
       i = input_indices.erase(i);
@@ -608,17 +608,17 @@ void reduce(const IPGMContext &context, const IPGMContext &input_set, const IPGM
 bool IPGMContext::Red(const IPGMContext &context, uint16 &index) {
   //context.trace();
   uint16 unused_result_index;
-  IPGMContext input_set = *context.getChild(1);
+  IPGMContext input_set = context.getChild(1).dereference();
   if (!input_set.evaluate_no_dereference(unused_result_index))
     return false;
 
   // a section is a set of one pattern and a set of productions.
-  IPGMContext positive_section = *context.getChild(2);
-  if (!(*positive_section.getChild(1)).evaluate_no_dereference(unused_result_index)) // evaluate the pattern only.
+  IPGMContext positive_section = context.getChild(2).dereference();
+  if (!positive_section.getChild(1).dereference().evaluate_no_dereference(unused_result_index)) // evaluate the pattern only.
     return false;
 
-  IPGMContext negative_section = *context.getChild(3);
-  if (!(*negative_section.getChild(1)).evaluate_no_dereference(unused_result_index)) // evaluate the pattern only.
+  IPGMContext negative_section = context.getChild(3).dereference();
+  if (!negative_section.getChild(1).dereference().evaluate_no_dereference(unused_result_index)) // evaluate the pattern only.
     return false;
 
   std::vector<uint16> input_indices; // todo list of inputs to match.
@@ -655,12 +655,12 @@ failure:
 
 bool IPGMContext::Ins(const IPGMContext &context, uint16 &index) {
 
-  IPGMContext object = *context.getChild(1);
-  IPGMContext args = *context.getChild(2);
-  IPGMContext run = *context.getChild(3);
-  IPGMContext tsc = *context.getChild(4);
-  IPGMContext res = *context.getChild(5);
-  IPGMContext nfr = *context.getChild(6);
+  IPGMContext object = context.getChild(1).dereference();
+  IPGMContext args = context.getChild(2).dereference();
+  IPGMContext run = context.getChild(3).dereference();
+  IPGMContext tsc = context.getChild(4).dereference();
+  IPGMContext res = context.getChild(5).dereference();
+  IPGMContext nfr = context.getChild(6).dereference();
 
   Code *pgm = object.getObject();
   uint16 pgm_opcode = pgm->code(0).asOpcode();
@@ -685,8 +685,8 @@ bool IPGMContext::Ins(const IPGMContext &context, uint16 &index) {
     IPGMContext pattern_set(pgm, pattern_set_index);
     for (uint16 i = 1; i <= arg_count; ++i) {
 
-      IPGMContext arg = *args.getChild(i);
-      IPGMContext skel = *(*pattern_set.getChild(i)).getChild(1);
+      IPGMContext arg = args.getChild(i).dereference();
+      IPGMContext skel = pattern_set.getChild(i).dereference().getChild(1).dereference();
       if (!skel.match(arg)) {
 
         context.setAtomicResult(Atom::Nil());
@@ -735,8 +735,8 @@ bool IPGMContext::Ins(const IPGMContext &context, uint16 &index) {
 
 bool IPGMContext::Fvw(const IPGMContext &context, uint16 &index) {
 
-  IPGMContext object = *context.getChild(1);
-  IPGMContext group = *context.getChild(2);
+  IPGMContext object = context.getChild(1).dereference();
+  IPGMContext group = context.getChild(2).dereference();
 
   Code *_object = object.getObject();
   Group *_group = (Group *)group.getObject();

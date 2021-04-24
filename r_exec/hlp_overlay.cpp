@@ -134,7 +134,7 @@ inline bool HLPOverlay::evaluate_guards(uint16 guard_set_iptr_index) {
     uint16 result_index;
     if (!c.evaluate(result_index))
       return false;
-    if ((*c)[0].isBooleanFalse())
+    if (c.dereference()[0].isBooleanFalse())
       // This is a boolean guard (not an assignment) and it is false.
       return false;
   }

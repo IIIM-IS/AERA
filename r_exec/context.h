@@ -223,7 +223,7 @@ private:
         }
       }
 
-      IPGMContext c = **this;
+      IPGMContext c = dereference();
       if (c[0].isStructural()) {
 
         destination->code(write_index) = Atom::IPointer(extent_index);
@@ -243,7 +243,7 @@ private:
         if (code_[code_[(*this)[0].asIndex()].asIndex()].getDescriptor() == Atom::IN_OBJ_PTR)
           addReference(destination, write_index, ((PGMOverlay *)overlay_)->getInputObject(code_[code_[(*this)[0].asIndex()].asIndex()].asInputIndex()));
         else
-          (**this).copy_member(destination, write_index, extent_index, dereference_cptr, pgm_index);
+          dereference().copy_member(destination, write_index, extent_index, dereference_cptr, pgm_index);
         break;
       case Atom::OUT_OBJ_PTR:
         destination->code(write_index) = Atom::CodeVLPointer(code_[(*this)[0].asIndex()].asIndex());
@@ -251,7 +251,7 @@ private:
       case Atom::IN_OBJ_PTR:
       case Atom::D_IN_OBJ_PTR: {
 
-        IPGMContext c = **this;
+        IPGMContext c = dereference();
         if (c.index_ == 0)
           addReference(destination, write_index, c.object_);
         else if (c[0].isStructural()) {
@@ -262,7 +262,7 @@ private:
           c.copy_member(destination, write_index, extent_index, dereference_cptr, pgm_index);
         break;
       }default:
-        (**this).copy_member(destination, write_index, extent_index, dereference_cptr, pgm_index);
+        dereference().copy_member(destination, write_index, extent_index, dereference_cptr, pgm_index);
         break;
       }
       break;
@@ -276,7 +276,7 @@ private:
       addReference(destination, write_index, ((PGMOverlay *)overlay_)->getInputObject((*this)[0].asIndex()));
       break;
     case Atom::D_IN_OBJ_PTR: {
-      IPGMContext c = **this;
+      IPGMContext c = dereference();
       addReference(destination, write_index, c.object_);
       break;
     }case Atom::OPERATOR:
@@ -361,7 +361,7 @@ public:
    */
   _Context *dereference_new() const {
 
-    IPGMContext *_c = new IPGMContext(**this);
+    IPGMContext *_c = new IPGMContext(dereference());
     return _c;
   }
 
@@ -431,7 +431,7 @@ public:
   r_code::Code *getObject() const { return object_; }
   uint16 getIndex() const { return index_; }
 
-  IPGMContext operator *() const;
+  IPGMContext dereference() const;
   void dereference_once();
 
   bool is_reference() const { return data_ == REFERENCE; }

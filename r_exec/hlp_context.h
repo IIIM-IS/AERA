@@ -92,7 +92,7 @@ public:
   HLPContext();
   HLPContext(Atom *code, uint16 index, HLPOverlay *const overlay, Data data = STEM);
 
-  HLPContext operator *() const;
+  HLPContext dereference() const;
 
   HLPContext &operator =(const HLPContext &c) {
 
@@ -116,7 +116,7 @@ public:
     if (data_ == BINDING_MAP || data_ == VALUE_ARRAY)
       return true;
 
-    HLPContext c = **this;
+    HLPContext c = dereference();
     return c.evaluate_no_dereference(result_index);
   }
 
@@ -150,7 +150,7 @@ public:
    */
   _Context *dereference_new() const {
 
-    HLPContext *_c = new HLPContext(**this);
+    HLPContext *_c = new HLPContext(dereference());
     return _c;
   }
 };
