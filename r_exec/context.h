@@ -320,11 +320,7 @@ public:
   IPGMContext(r_code::Code *object, Data data) : _Context(&object->code(0), index_, NULL, data), object_(object), view_(NULL) {}
 
   // _Context implementation.
-  _Context *clone(const _Context *c) {
-
-    IPGMContext *_c = new IPGMContext(*(IPGMContext *)c);
-    return _c;
-  }
+  _Context *clone() { return new IPGMContext(*this); }
 
   bool equal(const _Context *c) const { return *this == *(IPGMContext *)c; }
 

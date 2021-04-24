@@ -123,11 +123,7 @@ public:
   bool evaluate_no_dereference(uint16 &result_index) const;
 
   // _Context implementation.
-  _Context *clone(const _Context *c) {
-
-    HLPContext *_c = new HLPContext(*(HLPContext *)c);
-    return _c;
-  }
+  _Context *clone() { return new HLPContext(*this); }
 
   bool equal(const _Context *c) const { return *this == *(HLPContext *)c; }
 

@@ -103,7 +103,7 @@ public:
   Context &operator =(const Context &c) {
 
     // Copy the existing implementation before deleting it.
-    _Context* copy = implementation_->clone(c.get_implementation());
+    _Context* copy = c.get_implementation()->clone();
     delete implementation_;
     implementation_ = copy;
     return *this;
