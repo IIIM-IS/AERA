@@ -100,7 +100,7 @@ bool HLPContext::operator ==(const HLPContext &c) const {
 
     uint16 atom_count = lhs.getChildrenCount();
     for (uint16 i = 1; i <= atom_count; ++i)
-      if (lhs.getChild(i).dereference() != rhs.getChild(i).dereference())
+      if (lhs.getChildDeref(i) != rhs.getChildDeref(i))
         return false;
     return true;
   }
@@ -156,7 +156,7 @@ bool HLPContext::evaluate_no_dereference(uint16 &result_index) const {
     for (uint16 i = 1; i <= atom_count; ++i) {
 
       uint16 unused_result_index;
-      if (!getChild(i).dereference().evaluate_no_dereference(unused_result_index))
+      if (!getChildDeref(i).evaluate_no_dereference(unused_result_index))
         return false;
     }
 
@@ -180,7 +180,7 @@ bool HLPContext::evaluate_no_dereference(uint16 &result_index) const {
     for (uint16 i = 1; i <= atom_count; ++i) {
 
       uint16 unused_result_index;
-      if (!getChild(i).dereference().evaluate_no_dereference(unused_result_index))
+      if (!getChildDeref(i).evaluate_no_dereference(unused_result_index))
         return false;
     }
     result_index = index_;

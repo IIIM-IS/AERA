@@ -427,6 +427,14 @@ public:
       return IPGMContext();
     }
   }
+
+  /**
+   * Call getChild(index) and then return the result of dereference().
+   */
+  IPGMContext getChildDeref(uint16 index) const {
+    return getChild(index).dereference();
+  }
+
   Atom &operator [](uint16 i) const { return code_[index_ + i]; }
   r_code::Code *getObject() const { return object_; }
   uint16 getIndex() const { return index_; }

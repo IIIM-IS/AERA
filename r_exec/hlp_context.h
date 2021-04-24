@@ -111,6 +111,13 @@ public:
     return HLPContext(code_, index_ + index, (HLPOverlay *)overlay_);
   }
 
+  /**
+   * Call getChild(index) and then return the result of dereference().
+   */
+  HLPContext getChildDeref(uint16 index) const {
+    return getChild(index).dereference();
+  }
+
   // index is set to the index of the result, undefined in case of failure.
   bool evaluate(uint16 &result_index) const {
     if (data_ == BINDING_MAP || data_ == VALUE_ARRAY)

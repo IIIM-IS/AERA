@@ -654,7 +654,7 @@ bool fvw(const Context &context, uint16 &index) {
 bool is_sim(const Context &context, uint16 &index) {
 
   const IPGMContext &ipgm_context = *(IPGMContext *)context.get_implementation();
-  IPGMContext arg = *ipgm_context.getChild(1);
+  IPGMContext arg = ipgm_context.getChildDeref(1);
   Code* obj = arg.getObject();
 
   bool result = false;

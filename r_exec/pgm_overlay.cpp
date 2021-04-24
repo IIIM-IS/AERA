@@ -220,14 +220,14 @@ bool InputLessPGMOverlay::inject_productions() {
   uint16 cmd_count = 0; // cmds to the executive (excl. mod/set) and external devices.
   for (uint16 i = 1; i <= production_count; ++i) {
 
-    IPGMContext cmd = prods.getChild(i).dereference();
+    IPGMContext cmd = prods.getChildDeref(i);
     if (!in_red && !cmd.evaluate(unused_index)) {
 
       rollback();
       productions_.clear();
       return false;
     }//cmd.trace();
-    IPGMContext function = cmd.getChild(1).dereference();
+    IPGMContext function = cmd.getChildDeref(1);
 
     // layout of a command:
     // 0 >icmd opcode
@@ -244,7 +244,7 @@ bool InputLessPGMOverlay::inject_productions() {
     // 5 >first arg
 
     // identify the production of new objects.
-    IPGMContext args = cmd.getChild(2).dereference();
+    IPGMContext args = cmd.getChildDeref(2);
     if (cmd[0].asOpcode() == Opcodes::ICmd) {
 
       if (function[0].asOpcode() == Opcodes::Inject ||
@@ -298,11 +298,11 @@ bool InputLessPGMOverlay::inject_productions() {
   // all productions have evaluated correctly; now we can execute the commands one by one.
   for (uint16 i = 1; i <= production_count; ++i) {
 
-    IPGMContext cmd = prods.getChild(i).dereference();
-    IPGMContext function = cmd.getChild(1).dereference();
+    IPGMContext cmd = prods.getChildDeref(i);
+    IPGMContext function = cmd.getChildDeref(1);
 
     // call device functions.
-    IPGMContext args = cmd.getChild(2).dereference();
+    IPGMContext args = cmd.getChildDeref(2);
     if (cmd[0].asOpcode() == Opcodes::ICmd) { // command to the executive.
 
       if (function[0].asOpcode() == Opcodes::Inject) { // args:[object view]; retrieve the object and create a view.
@@ -310,9 +310,9 @@ bool InputLessPGMOverlay::inject_productions() {
         IPGMContext arg1 = args.getChild(1);
         arg1.dereference_once();
         //arg1.trace();
-        Code *object = args.getChild(1).dereference().getObject();
+        Code *object = args.getChildDeref(1).getObject();
         //object->trace();
-        IPGMContext _view = args.getChild(2).dereference();
+        IPGMContext _view = args.getChildDeref(2);
         if (_view[0].getAtomCount() != 0) { // regular view (i.e. not |[]).
 
           View *view = new View();
@@ -327,27 +327,27 @@ bool InputLessPGMOverlay::inject_productions() {
           if (mk_rdx) {
 
             mk_rdx->code(write_index++) = Atom::IPointer(extent_index);
-            prods.getChild(i).dereference().copy(mk_rdx, extent_index, extent_index);
+            prods.getChildDeref(i).copy(mk_rdx, extent_index, extent_index);
           }
         } else // this allows building objects with no view (case in point: fact on object: only the fact needs to be injected).
           --cmd_count;
       } else if (function[0].asOpcode() == Opcodes::Eject) { // args:[object view destination_node]; view.grp=destination grp (stdin ot stdout); retrieve the object and create a view.
 
-        Code *object = args.getChild(1).dereference().getObject();
+        Code *object = args.getChildDeref(1).getObject();
 
-        IPGMContext _view = args.getChild(2).dereference();
+        IPGMContext _view = args.getChildDeref(2);
         View *view = new View();
         _view.copy(view, 0);
         view->set_object(object);
 
-        IPGMContext node = args.getChild(3).dereference();
+        IPGMContext node = args.getChildDeref(3);
 
         _Mem::Get()->eject(view, node[0].getNodeID());
 
         if (mk_rdx) {
 
           mk_rdx->code(write_index++) = Atom::IPointer(extent_index);
-          prods.getChild(i).dereference().copy(mk_rdx, extent_index, extent_index);
+          prods.getChildDeref(i).copy(mk_rdx, extent_index, extent_index);
         }
       } else if (function[0].asOpcode() == Opcodes::Mod) { // args:[iptr-to-cptr value_].
 
@@ -359,7 +359,7 @@ bool InputLessPGMOverlay::inject_productions() {
 
         if (object) {
 
-          float32 value = args.getChild(2).dereference()[0].asFloat();
+          float32 value = args.getChildDeref(2)[0].asFloat();
           switch (object_type) {
           case IPGMContext::TYPE_VIEW: { // add the target and value to the group's pending operations.
 
@@ -392,7 +392,7 @@ bool InputLessPGMOverlay::inject_productions() {
 
         if (object) {
 
-          float32 value = args.getChild(2).dereference()[0].asFloat();
+          float32 value = args.getChildDeref(2)[0].asFloat();
           switch (object_type) {
           case IPGMContext::TYPE_VIEW: { // add the target and value to the group's pending operations.
 
@@ -421,16 +421,16 @@ bool InputLessPGMOverlay::inject_productions() {
 
       } else if (function[0].asOpcode() == Opcodes::Prb) { // args:[probe_level,callback_name,msg,set of objects].
 
-        float32 probe_lvl = args.getChild(1).dereference()[0].asFloat();
+        float32 probe_lvl = args.getChildDeref(1)[0].asFloat();
         if (probe_lvl < _Mem::Get()->get_probe_level()) {
 
-          std::string callback_name = Utils::GetString(&args.getChild(2).dereference()[0]);
+          std::string callback_name = Utils::GetString(&args.getChildDeref(2)[0]);
 
           Callbacks::Callback callback = Callbacks::Get(callback_name);
           if (callback) {
 
-            std::string msg = Utils::GetString(&args.getChild(3).dereference()[0]);
-            IPGMContext _objects = args.getChild(4).dereference();
+            std::string msg = Utils::GetString(&args.getChildDeref(3)[0]);
+            IPGMContext _objects = args.getChildDeref(4);
 
             uint8 object_count = _objects[0].getAtomCount();
             Code **objects = NULL;
@@ -438,7 +438,7 @@ bool InputLessPGMOverlay::inject_productions() {
 
               objects = new Code *[object_count];
               for (uint8 i = 1; i <= object_count; ++i)
-                objects[i - 1] = _objects.getChild(i).dereference().getObject();
+                objects[i - 1] = _objects.getChildDeref(i).getObject();
             }
 
             callback(duration_cast<microseconds>(now - Utils::GetTimeReference()), false, msg.c_str(), object_count, objects);
@@ -492,7 +492,7 @@ bool InputLessPGMOverlay::inject_productions() {
 
         // Add the original command.
         mk_rdx->code(write_index++) = Atom::IPointer(extent_index);
-        prods.getChild(i).dereference().copy(mk_rdx, extent_index, extent_index);
+        prods.getChildDeref(i).copy(mk_rdx, extent_index, extent_index);
         // Add the fact of the injected command that we just made.
         mk_rdx->code(write_index++) = Atom::RPointer(mk_rdx->references_size());
         mk_rdx->add_reference(fact);
