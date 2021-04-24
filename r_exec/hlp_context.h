@@ -139,13 +139,20 @@ public:
 
     return code_[index_].getAtomCount();
   }
-  _Context *_getChild(uint16 index) const {
+
+  /**
+   * Call getChild and return a new allocated copy of the child. The caller is responsible to delete it.
+   */
+  _Context *getChild_new(uint16 index) const {
 
     HLPContext *_c = new HLPContext(getChild(index));
     return _c;
   }
 
-  _Context *dereference() const {
+  /**
+   * Dereference this and return a new allocated copy. The caller is responsible to delete it.
+   */
+  _Context *dereference_new() const {
 
     HLPContext *_c = new HLPContext(**this);
     return _c;

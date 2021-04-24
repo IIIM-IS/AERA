@@ -97,9 +97,9 @@ public:
   _Context *get_implementation() const { return implementation_; }
 
   uint16 getChildrenCount() const { return implementation_->getChildrenCount(); }
-  Context getChild(uint16 index) const { return Context(implementation_->_getChild(index)); }
+  Context getChild(uint16 index) const { return Context(implementation_->getChild_new(index)); }
 
-  Context operator *() const { return Context(implementation_->dereference()); }
+  Context operator *() const { return Context(implementation_->dereference_new()); }
   Context &operator =(const Context &c) {
 
     // Copy the existing implementation before deleting it.

@@ -115,9 +115,16 @@ public:
   virtual uint16 get_object_code_size() const = 0;
 
   virtual uint16 getChildrenCount() const = 0;
-  virtual _Context *_getChild(uint16 index) const = 0;
 
-  virtual _Context *dereference() const = 0;
+  /**
+   * Call getChild and return a new allocated copy of the child. The caller is responsible to delete it.
+   */
+  virtual _Context *getChild_new(uint16 index) const = 0;
+
+  /**
+   * Dereference this and return a new allocated copy. The caller is responsible to delete it.
+   */
+  virtual _Context *dereference_new() const = 0;
 
   void commit() const { overlay_->commit(); }
   void rollback() const { overlay_->rollback(); }
