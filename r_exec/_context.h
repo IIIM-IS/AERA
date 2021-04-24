@@ -106,7 +106,7 @@ protected:
 
   _Context(Atom *code, uint16 index, Overlay *overlay, Data data) : code_(code), index_(index), overlay_(overlay), data_(data) {}
 public:
-  virtual _Context *assign(const _Context *c) = 0;
+  virtual _Context *clone(const _Context *c) = 0;
 
   virtual bool equal(const _Context *c) const = 0;
 
