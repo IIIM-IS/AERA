@@ -122,7 +122,7 @@ public:
 
   bool evaluate_no_dereference(uint16 &result_index) const;
 
-  // __Context implementation.
+  // _Context implementation.
   _Context *assign(const _Context *c) {
 
     HLPContext *_c = new HLPContext(*(HLPContext *)c);
