@@ -102,8 +102,10 @@ public:
   Context operator *() const { return Context(implementation_->dereference()); }
   Context &operator =(const Context &c) {
 
+    // Copy the existing implementation before deleting it.
+    _Context* copy = implementation_->assign(c.get_implementation());
     delete implementation_;
-    implementation_ = implementation_->assign(c.get_implementation());
+    implementation_ = copy;
     return *this;
   }
 
