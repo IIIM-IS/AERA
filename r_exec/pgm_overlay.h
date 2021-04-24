@@ -153,22 +153,7 @@ protected:
    * \return SUCCESS upon a successful match, IMPOSSIBLE if the input is not of the right class, 
    * FAILURE otherwise.
    */
-  MatchResult __match(r_exec::View *input, uint16 pattern_index) {
-    // The input has just been pushed on input_views (see match).
-    // pgm_code[pattern_index+1].asIndex() is the structure pointed by the pattern's skeleton.
-    patch_input_code(code_[pattern_index + 1].asIndex(), input_views.size() - 1, 0);
-    // match: evaluate the set of guards.
-    uint16 guard_set_index = code_[pattern_index + 2].asIndex();
-    // Get the IPGMContext like in InputLessPGMOverlay::evaluate.
-    IPGMContext c(getObject()->get_reference(0), getView(), code_, guard_set_index, this);
-    uint16 result_index;
-    if (!c.evaluate(result_index))
-      return FAILURE;
-    if ((*c)[0].isBooleanFalse())
-      // The boolean guard is false.
-      return FAILURE;
-    return SUCCESS;
-  }
+  MatchResult __match(r_exec::View *input, uint16 pattern_index);
 
   r_code::Code *dereference_in_ptr(Atom a);
   void patch_input_code(uint16 pgm_code_index, uint16 input_index, uint16 input_code_index, int16 parent_index = -1);
