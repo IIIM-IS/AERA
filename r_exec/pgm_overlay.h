@@ -159,10 +159,12 @@ protected:
     patch_input_code(code_[pattern_index + 1].asIndex(), input_views.size() - 1, 0);
     // match: evaluate the set of guards.
     uint16 guard_set_index = code_[pattern_index + 2].asIndex();
+    // Get the IPGMContext like in InputLessPGMOverlay::evaluate.
+    IPGMContext c(getObject()->get_reference(0), getView(), code_, guard_set_index, this);
     uint16 result_index;
-    if (!evaluate(guard_set_index, result_index))
+    if (!c.evaluate(result_index))
       return FAILURE;
-    if (code_[result_index].isBooleanFalse())
+    if ((*c)[0].isBooleanFalse())
       // The boolean guard is false.
       return FAILURE;
     return SUCCESS;
