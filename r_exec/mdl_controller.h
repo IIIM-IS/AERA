@@ -378,7 +378,7 @@ private:
   /**
    * \param forwardSimulation If forwardSimulation is NULL, then pass sim to predict_simulated_evidence, otherwise pass forwardSimulation.
    */
-  void abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim, Sim* forwardSimulation);
+  void abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim, Fact *ground, Sim* forwardSimulation);
   void abduce_simulated_imdl(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim);
   void predict_simulated_lhs(HLPBindingMap *bm, bool opposite, float32 confidence, Sim *sim);
   Fact* predict_simulated_evidence(_Fact *evidence, Sim *sim);
