@@ -541,11 +541,12 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
   }
 }
 
-ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl, Controller *root) {
+ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl, Controller *root, Fact *&ground) {
 
   uint32 wr_count;
   uint32 sr_count;
   uint32 r_count = get_requirement_count(wr_count, sr_count);
+  ground = NULL;
   if (!r_count)
     return NO_REQUIREMENT;
   ChainingStatus r;
@@ -573,6 +574,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
 
             bm->load(&_original);
             r = WEAK_REQUIREMENT_ENABLED;
+            ground = (*e).evidence_;
             break;
           }
         }
@@ -661,6 +663,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
 
                 r = WEAK_REQUIREMENT_ENABLED;
                 bm->load(&_original);
+                ground = (*e).evidence_;
                 break;
               } else
                 r = STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
@@ -1722,7 +1725,7 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
         abduce_simulated_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim, NULL);
       break;
     default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
-      switch (retrieve_simulated_imdl_bwd(bm, f_imdl, sim->root_)) {
+      switch (retrieve_simulated_imdl_bwd(bm, f_imdl, sim->root_, ground)) {
       case WEAK_REQUIREMENT_ENABLED:
         f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(true);
       case NO_REQUIREMENT:
@@ -1974,13 +1977,11 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, C
   Goal *g = goal->get_goal();
   Fact *f_imdl = (Fact *)g->get_target();
   ChainingStatus c_s;
+  Fact *ground;
   if (root)
-    c_s = retrieve_simulated_imdl_bwd(bm, f_imdl, root);
-  else {
-
-    Fact *ground;
+    c_s = retrieve_simulated_imdl_bwd(bm, f_imdl, root, ground);
+  else
     c_s = retrieve_imdl_bwd(bm, f_imdl, ground);
-  }
 
   Sim *sim = g->get_sim();
   switch (c_s) {
