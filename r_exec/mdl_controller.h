@@ -376,7 +376,7 @@ private:
   void abduce_imdl(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim);
 
   /**
-   * @param forwardSimulation If forwardSimulation is NULL, then pass sim to predict_simulated_evidence, otherwise pass forwardSimulation.
+   * \param forwardSimulation If forwardSimulation is NULL, then pass sim to predict_simulated_evidence, otherwise pass forwardSimulation.
    */
   void abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim, Sim* forwardSimulation);
   void abduce_simulated_imdl(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim);
@@ -389,10 +389,10 @@ private:
   /**
    * Get the last two values from the template parameters, assuming that they are the timings
    * from the prerequisite model. This evaluates the backward guards if needed.
-   * @param bm The binding map, which is not changed.
-   * @param after Set this to the after timestamp (if this returns true).
-   * @param before Set this to the before timestamp (if this returns true).
-   * @return True for success, otherwise false if there are not enough template parameters,
+   * \param bm The binding map, which is not changed.
+   * \param after Set this to the after timestamp (if this returns true).
+   * \param before Set this to the before timestamp (if this returns true).
+   * \return True for success, otherwise false if there are not enough template parameters,
    * or cannot evaluate the backward guards, or if the values are not timestamps.
    */
   bool get_template_timings(HLPBindingMap *bm, Timestamp& after, Timestamp& before);
@@ -419,7 +419,7 @@ public:
   bool check_imdl(Fact *goal, HLPBindingMap *bm);
 
   /**
-   * @param forwardSimulation If forwardSimulation is NULL, then use the goal->get_goal()->get_sim() when calling abduce_simulated_lhs. 
+   * \param forwardSimulation If forwardSimulation is NULL, then use the goal->get_goal()->get_sim() when calling abduce_simulated_lhs. 
    * Otherwise, use the given forwardSimulation, which is carried throughout forward simulation.
    */
   bool check_simulated_imdl(Fact *goal, HLPBindingMap *bm, Controller *root, Sim* forwardSimulation);
