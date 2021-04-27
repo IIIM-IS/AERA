@@ -1776,10 +1776,11 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
   }
 }
 
-void PrimaryMDLController::abduce_no_simulation(Fact *f_super_goal, bool opposite, float32 confidence)
+void PrimaryMDLController::abduce_no_simulation(Fact *f_super_goal, bool opposite, float32 confidence, _Fact* f_p_f_success)
 {
   // Imitate PrimaryMDLController::reduce to set up the binding map.
-  _Fact *goal_target = f_super_goal->get_goal()->get_target();
+  Goal *super_goal = f_super_goal->get_goal();
+  _Fact *goal_target = super_goal->get_target();
   P<HLPBindingMap> bm = new HLPBindingMap(bindings_);
   bm->reset_bwd_timings(goal_target);
   MatchResult match_result = bm->match_bwd_lenient(goal_target, get_rhs());
@@ -1796,8 +1797,18 @@ void PrimaryMDLController::abduce_no_simulation(Fact *f_super_goal, bool opposit
       return;
   }
 
+  // Make a copy of f_super_goal with a separate identity.
+  P<Fact> f_super_goal_copy = new Fact(
+    super_goal, f_super_goal->get_after(), f_super_goal->get_before(), f_super_goal->get_cfd(),
+    f_super_goal->get_psln_thr());
+#ifdef WITH_DEBUG_OID
+  if (f_p_f_success)
+    OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " sim commit: fact " << f_p_f_success->get_oid() <<
+      " pred fact success -> fact (" << f_super_goal_copy->get_debug_oid() << ") goal");
+#endif
+
   // Set allow_simulation false.
-  abduce(bm, f_super_goal, opposite, confidence, false);
+  abduce(bm, f_super_goal_copy, opposite, confidence, false);
 }
 
 void PrimaryMDLController::abduce_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim, Fact *ground, bool set_before) { // goal is f->g->f->object or f->g->|f->object; called concurrently by reduce() and _GMonitor::update().

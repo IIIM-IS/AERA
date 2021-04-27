@@ -437,8 +437,10 @@ public:
    * \param super_goal A goal of the model RHS.
    * \param opposite See abduce().
    * \param confidence See abduce().
+   * \param f_success The simulated (fact (pred (fact (success ...)))) for this abduction (only used for runtime logging).
+   * If this is NULL, then don't use it.
    */
-  void abduce_no_simulation(Fact *super_goal, bool opposite, float32 confidence);
+  void abduce_no_simulation(Fact *super_goal, bool opposite, float32 confidence, _Fact* f_p_f_success = NULL);
 
   void debug(View *input);
 };
