@@ -1683,7 +1683,7 @@ void PrimaryMDLController::reduce_batch(Fact *f_p_f_imdl, MDLController *control
   reduce_cache<PredictedEvidenceEntry>(&predicted_evidences_, f_p_f_imdl, controller);
 }
 
-void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool opposite, float32 confidence, bool allow_simulation) { // goal is f->g->f->object or f->g->|f->object; called concurrently by redcue() and _GMonitor::update().
+void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool opposite, float32 confidence) { // goal is f->g->f->object or f->g->|f->object; called concurrently by redcue() and _GMonitor::update().
 
   if (!abduction_allowed(bm))
     return;
@@ -1692,9 +1692,6 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
   Sim *sim = super_goal->get_goal()->get_sim();
   auto sim_thz = sim->get_thz(); // 0 if super-goal had no time for simulation.
   auto min_sim_thz = _Mem::Get()->get_min_sim_time_horizon() / 2; // time allowance for the simulated predictions to flow upward.
-  if (!allow_simulation)
-    // Force the time horizon to zero.
-    sim_thz = seconds(0);
 
   Sim *sub_sim;
   if (sim_thz > min_sim_thz) {
@@ -1748,9 +1745,6 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
 
     Fact *ground;
     SimMode mode = sim->get_mode();
-    if (!allow_simulation)
-      // Force the mode to ROOT so that we don't call predict_simulated_lhs.
-      mode = SIM_ROOT;
     switch (mode) {
     case SIM_ROOT:
       f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
