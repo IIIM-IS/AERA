@@ -419,6 +419,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
     return NO_REQUIREMENT;
   ChainingStatus r;
   HLPBindingMap original(bm);
+  bool save_f_imdl_wr_enabled = f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED).asBoolean();
   if (!sr_count) { // no strong req., some weak req.: true if there is one f->imdl complying with timings and bindings.
 
     r = WEAK_REQUIREMENT_DISABLED;
@@ -437,6 +438,9 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
           //_f_imdl->get_reference(0)->trace();
           //f_imdl->get_reference(0)->trace();
           HLPBindingMap _original = original; // matching updates the bm; always start afresh.
+          // Temporarily make f_imdl wr_enabled match the one from _f_imdl so that any difference is ignored.
+          f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(
+            _f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED).asBoolean());
           if (_original.match_fwd_strict(_f_imdl, f_imdl)) { // tpl args will be valuated in bm, but not in f_imdl yet.
 
             r = WEAK_REQUIREMENT_ENABLED;
@@ -449,6 +453,8 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
     }
 
     requirements_.CS.leave();
+    // Restore.
+    f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(save_f_imdl_wr_enabled);
     return r;
   } else {
 
