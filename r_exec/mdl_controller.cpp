@@ -1797,9 +1797,12 @@ void PrimaryMDLController::abduce_no_simulation(Fact *f_super_goal, bool opposit
       return;
   }
 
-  // Make a copy of f_super_goal with a separate identity.
+  // Make a copy of f_super_goal with a separate identity. Use a Sim with 0 time horizon so we don't simulate.
+  Goal* super_goal_copy = new Goal
+  (goal_target, super_goal->get_actor(), new Sim(SIM_ROOT, seconds(0), super_goal->get_sim()->get_f_super_goal(), false, this, 1),
+    super_goal->get_psln_thr());
   P<Fact> f_super_goal_copy = new Fact(
-    super_goal, f_super_goal->get_after(), f_super_goal->get_before(), f_super_goal->get_cfd(),
+    super_goal_copy, f_super_goal->get_after(), f_super_goal->get_before(), f_super_goal->get_cfd(),
     f_super_goal->get_psln_thr());
 #ifdef WITH_DEBUG_OID
   if (f_p_f_success)
