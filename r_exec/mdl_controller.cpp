@@ -1793,8 +1793,8 @@ void PrimaryMDLController::abduce_no_simulation(Fact *f_super_goal, bool opposit
 
   // Make a copy of f_super_goal with a separate identity. Use a Sim with 0 time horizon so we don't simulate.
   Goal* super_goal_copy = new Goal
-  (goal_target, super_goal->get_actor(), new Sim(SIM_ROOT, seconds(0), super_goal->get_sim()->get_f_super_goal(), false, this, 1),
-    super_goal->get_psln_thr());
+    (goal_target, super_goal->get_actor(), new Sim(SIM_ROOT, seconds(0), super_goal->get_sim()->get_f_super_goal(), false, this, 1),
+     super_goal->get_psln_thr());
   P<Fact> f_super_goal_copy = new Fact(
     super_goal_copy, f_super_goal->get_after(), f_super_goal->get_before(), f_super_goal->get_cfd(),
     f_super_goal->get_psln_thr());
@@ -1805,7 +1805,7 @@ void PrimaryMDLController::abduce_no_simulation(Fact *f_super_goal, bool opposit
 #endif
 
   // Set allow_simulation false.
-  abduce(bm, f_super_goal_copy, opposite, confidence, false);
+  abduce(bm, f_super_goal_copy, opposite, confidence);
 }
 
 void PrimaryMDLController::abduce_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim, Fact *ground, bool set_before) { // goal is f->g->f->object or f->g->|f->object; called concurrently by reduce() and _GMonitor::update().
