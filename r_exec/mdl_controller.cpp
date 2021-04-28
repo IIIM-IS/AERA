@@ -1922,13 +1922,8 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
 
         add_g_monitor(new SGMonitor(this, bm, now + sim->get_thz(), f_sub_goal, f_imdl));
         inject_simulation(f_sub_goal);
-        if (ground)
-          // The ground came from matching a requirement.
-          OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": fact (" <<
-            ground->get_debug_oid() << ") pred fact imdl -> fact " << fact_pred_bound_lhs->get_oid() << " simulated pred");
-        else
-          OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": fact " <<
-            super_goal->get_oid() << " pred -> fact " << fact_pred_bound_lhs->get_oid() << " simulated pred");
+        OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": fact " <<
+          super_goal->get_oid() << " super_goal -> fact " << f_sub_goal->get_oid() << " simulated goal");
         break;
       }
       }
