@@ -274,7 +274,7 @@ public:
 
   /**
    * Check if the map entry at i is bound to a timestamp.
-   * @return True if it is a timestamp.
+   * \return True if it is a timestamp.
    */
   bool is_timestamp(uint16 i) const {
     return i >= 0 && i < map_.size() && map_[i]->get_code() != NULL &&

@@ -127,6 +127,7 @@ void Atom::trace(TraceContext& context, std::ostream& out) const {
   case VALUE_PTR: out << "value_ptr: " << std::dec << asIndex(); return;
   case PROD_PTR: out << "prod_ptr: " << std::dec << asIndex(); return;
   case ASSIGN_PTR: out << "assign_ptr: " << std::dec << (uint16)asAssignmentIndex() << " " << asIndex(); return;
+  case CODE_VL_PTR: out << "code_vlptr: " << std::dec << asIndex(); return;
   case THIS: out << "this"; return;
   case VIEW: out << "view"; return;
   case MKS: out << "mks"; return;

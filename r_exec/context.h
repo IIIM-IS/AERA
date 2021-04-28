@@ -141,14 +141,14 @@ private:
 
       switch ((*this)[0].getDescriptor()) {
       case Atom::C_PTR: // copy members as is (no dereference).
-        if ((*this)[1].getDescriptor() == Atom::VL_PTR) {
+        if ((*this)[1].getDescriptor() == Atom::CODE_VL_PTR) {
 
           Atom a = code_[(*this)[1].asIndex()];
           if (a.getDescriptor() == Atom::I_PTR)
             a = code_[a.asIndex()];
           switch (a.getDescriptor()) {
           case Atom::OUT_OBJ_PTR:
-            destination->code(write_index++) = Atom::VLPointer(code_[(*this)[1].asIndex()].asIndex());
+            destination->code(write_index++) = Atom::CodeVLPointer(code_[(*this)[1].asIndex()].asIndex());
             break;
           case Atom::IN_OBJ_PTR: // TMP: assumes destination is a mk.rdx.
             destination->code(write_index++) = Atom::RPointer(1 + a.asInputIndex());
@@ -223,7 +223,7 @@ private:
         }
       }
 
-      IPGMContext c = **this;
+      IPGMContext c = dereference();
       if (c[0].isStructural()) {
 
         destination->code(write_index) = Atom::IPointer(extent_index);
@@ -234,7 +234,7 @@ private:
         destination->code(write_index) = c[0];
       break;
     }
-    case Atom::VL_PTR:
+    case Atom::CODE_VL_PTR:
       switch (code_[(*this)[0].asIndex()].getDescriptor()) {
       case Atom::PROD_PTR:
         addReference(destination, write_index, ((InputLessPGMOverlay *)overlay_)->productions_[code_[(*this)[0].asIndex()].asIndex()]);
@@ -243,15 +243,15 @@ private:
         if (code_[code_[(*this)[0].asIndex()].asIndex()].getDescriptor() == Atom::IN_OBJ_PTR)
           addReference(destination, write_index, ((PGMOverlay *)overlay_)->getInputObject(code_[code_[(*this)[0].asIndex()].asIndex()].asInputIndex()));
         else
-          (**this).copy_member(destination, write_index, extent_index, dereference_cptr, pgm_index);
+          dereference().copy_member(destination, write_index, extent_index, dereference_cptr, pgm_index);
         break;
       case Atom::OUT_OBJ_PTR:
-        destination->code(write_index) = Atom::VLPointer(code_[(*this)[0].asIndex()].asIndex());
+        destination->code(write_index) = Atom::CodeVLPointer(code_[(*this)[0].asIndex()].asIndex());
         break;
       case Atom::IN_OBJ_PTR:
       case Atom::D_IN_OBJ_PTR: {
 
-        IPGMContext c = **this;
+        IPGMContext c = dereference();
         if (c.index_ == 0)
           addReference(destination, write_index, c.object_);
         else if (c[0].isStructural()) {
@@ -262,7 +262,7 @@ private:
           c.copy_member(destination, write_index, extent_index, dereference_cptr, pgm_index);
         break;
       }default:
-        (**this).copy_member(destination, write_index, extent_index, dereference_cptr, pgm_index);
+        dereference().copy_member(destination, write_index, extent_index, dereference_cptr, pgm_index);
         break;
       }
       break;
@@ -276,7 +276,7 @@ private:
       addReference(destination, write_index, ((PGMOverlay *)overlay_)->getInputObject((*this)[0].asIndex()));
       break;
     case Atom::D_IN_OBJ_PTR: {
-      IPGMContext c = **this;
+      IPGMContext c = dereference();
       addReference(destination, write_index, c.object_);
       break;
     }case Atom::OPERATOR:
@@ -320,11 +320,7 @@ public:
   IPGMContext(r_code::Code *object, Data data) : _Context(&object->code(0), index_, NULL, data), object_(object), view_(NULL) {}
 
   // _Context implementation.
-  _Context *assign(const _Context *c) {
-
-    IPGMContext *_c = new IPGMContext(*(IPGMContext *)c);
-    return _c;
-  }
+  _Context *clone() { return new IPGMContext(*this); }
 
   bool equal(const _Context *c) const { return *this == *(IPGMContext *)c; }
 
@@ -350,15 +346,22 @@ public:
       return code_[index_].getAtomCount();
     }
   }
-  _Context *_getChild(uint16 index) const {
+
+  /**
+   * Call getChild and return a new allocated copy of the child. The caller is responsible to delete it.
+   */
+  _Context *getChild_new(uint16 index) const {
 
     IPGMContext *_c = new IPGMContext(getChild(index));
     return _c;
   }
 
-  _Context *dereference() const {
+  /**
+   * Dereference this and return a new allocated copy. The caller is responsible to delete it.
+   */
+  _Context *dereference_new() const {
 
-    IPGMContext *_c = new IPGMContext(**this);
+    IPGMContext *_c = new IPGMContext(dereference());
     return _c;
   }
 
@@ -424,11 +427,19 @@ public:
       return IPGMContext();
     }
   }
+
+  /**
+   * Call getChild(index) and then return the result of dereference().
+   */
+  IPGMContext getChildDeref(uint16 index) const {
+    return getChild(index).dereference();
+  }
+
   Atom &operator [](uint16 i) const { return code_[index_ + i]; }
   r_code::Code *getObject() const { return object_; }
   uint16 getIndex() const { return index_; }
 
-  IPGMContext operator *() const;
+  IPGMContext dereference() const;
   void dereference_once();
 
   bool is_reference() const { return data_ == REFERENCE; }

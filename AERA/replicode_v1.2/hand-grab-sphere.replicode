@@ -164,7 +164,7 @@ M7:(mdl |[]
 !def pS0 0
 !def pS1 15
 
-!def DRIVE_START 0s:200ms:0us
+!def DRIVE_START 0s:300ms:0us
 
 ; Initial conditions.
 start:(pgm |[] |[] |[] []

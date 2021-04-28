@@ -212,20 +212,25 @@ void GMonitor::commit() { // the purpose is to invalidate damaging simulations; 
       (*solution).second->invalidate();
   }
 
+  _Fact* best_solution_f_p_f_success = NULL;
   Sim *best_solution = NULL;
   // Find the best optional solution.
   for (solution = sim_successes_.optional_solutions.begin(); solution != sim_successes_.optional_solutions.end(); ++solution) {
 
     if ((*solution).second->is_invalidated())
       continue;
-    if (!best_solution)
+    if (!best_solution) {
+      best_solution_f_p_f_success = (*solution).first;
       best_solution = (*solution).second;
+    }
     else {
 
       float32 s = (*solution).second->get_solution_cfd() / duration_cast<microseconds>((*solution).second->get_solution_before() - now).count();
       float32 _s = best_solution->get_solution_cfd() / duration_cast<microseconds>(best_solution->get_solution_before() - now).count();
-      if (s > _s)
+      if (s > _s) {
+        best_solution_f_p_f_success = (*solution).first;
         best_solution = (*solution).second;
+      }
     }
   }
 
@@ -234,12 +239,12 @@ void GMonitor::commit() { // the purpose is to invalidate damaging simulations; 
   if (best_solution) {
 
     ((PrimaryMDLController *)best_solution->solution_controller_)->abduce_no_simulation(
-      best_solution->get_f_super_goal(), best_solution->get_opposite(), goal_target_->get_cfd());
+      best_solution->get_f_super_goal(), best_solution->get_opposite(), goal_target_->get_cfd(), best_solution_f_p_f_success);
 
     // Commit to all mandatory solutions.
     for (solution = sim_successes_.mandatory_solutions.begin(); solution != sim_successes_.mandatory_solutions.end(); ++solution)
       ((PrimaryMDLController *)(*solution).second->solution_controller_)->abduce_no_simulation(
-        (*solution).second->get_f_super_goal(), (*solution).second->get_opposite(), goal_target_->get_cfd());
+        (*solution).second->get_f_super_goal(), (*solution).second->get_opposite(), goal_target_->get_cfd(), (*solution).first);
   }
 }
 

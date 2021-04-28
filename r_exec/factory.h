@@ -422,13 +422,13 @@ public:
 
   /**
    * Check if this Goal has a Sim object.
-   * @return True if this Goal has a Sim object, otherwise false.
+   * \return True if this Goal has a Sim object, otherwise false.
    */
   bool has_sim() const { return code(GOAL_SIM).getDescriptor() == Atom::R_PTR; }
 
   /**
    * Get the Sim object.
-   * @return The Sim object, or NULL if this Goal does not have a Sim object.
+   * \return The Sim object, or NULL if this Goal does not have a Sim object.
    */
   // Debug: Define _Sim because if a replicode file defines (sim ...) it won't have all the fields.
   Sim* get_sim() const { return has_sim() ? (Sim*)get_reference(code(GOAL_SIM).asIndex()) : NULL; }
@@ -437,7 +437,7 @@ public:
    * Set the Sim object for this Goal. If this Goal already has a Sim object, print an error and
    * do nothing. (Normally, the Sim object is given to the Goal constructor. If code needs to set
    * the Sim object, it should be on a Goal that was just constructed with a NULL Sim object.
-   * @param sim The Sim object.
+   * \param sim The Sim object.
    */
   void set_sim(Sim* sim) {
     if (has_sim()) {
@@ -452,7 +452,7 @@ public:
   /**
    * Check if this goal is a simulation, specifically if there is a simulation object whose
    * time horizon is not zero.
-   * @return True if this is a simulation.
+   * \return True if this is a simulation.
    */
   bool is_simulation() const {
     Sim* sim = get_sim();
@@ -487,19 +487,19 @@ public:
 
   /**
    * Get the object of this Success.
-   * @return The object of this Success as a _Fact.
+   * \return The object of this Success as a _Fact.
    */
   _Fact *get_object() const { return (_Fact*)get_reference(code(SUCCESS_OBJ).asIndex()); }
 
   /**
    * Check if this Success has an evidence object.
-   * @return True if this Success has an evidence object, otherwise false.
+   * \return True if this Success has an evidence object, otherwise false.
    */
   bool has_evidence() const { return code(SUCCESS_EVD).getDescriptor() == Atom::R_PTR; }
 
   /**
    * Get the evidence object.
-   * @return The evidence object as a _Fact, or NULL if this Success does not have an evidence object.
+   * \return The evidence object as a _Fact, or NULL if this Success does not have an evidence object.
    */
   _Fact* get_evidence() const { return has_evidence() ? (_Fact*)get_reference(code(SUCCESS_EVD).asIndex()) : NULL; }
 };

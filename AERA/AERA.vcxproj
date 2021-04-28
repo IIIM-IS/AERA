@@ -139,10 +139,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="IODevices\TCP\Proto\tcp_data_message.pb.cc" />
+    <ClCompile Include="IODevices\TCP\tcp_connection.cpp" />
+    <ClCompile Include="IODevices\TCP\tcp_io_device.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="test_mem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="IODevices\TCP\Proto\tcp_data_message.pb.h" />
+    <ClInclude Include="IODevices\TCP\Proto\utils.h" />
+    <ClInclude Include="IODevices\TCP\tcp_connection.h" />
+    <ClInclude Include="IODevices\TCP\tcp_io_device.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="test_mem.h" />
   </ItemGroup>
@@ -181,6 +188,8 @@
     <None Include="Demo1\std.replicode" />
     <None Include="Demo1\test.1.replicode" />
     <None Include="Demo1\user.classes.replicode" />
+    <None Include="IODevices\TCP\Proto\ReadMe.md" />
+    <None Include="IODevices\TCP\Proto\tcp_data_message.proto" />
     <None Include="replicode_v1.1\helgi.replicode" />
     <None Include="replicode_v1.1\rgrp.user.classes.replicode" />
     <None Include="replicode_v1.1\std.replicode" />
@@ -217,9 +226,9 @@
     <None Include="replicode_v1.1\test.rgrp.1.replicode" />
     <None Include="replicode_v1.1\test.visualizer.replicode" />
     <None Include="replicode_v1.1\user.classes.replicode" />
-    <None Include="replicode_v1.2\hand-grab-sphere.replicode" />
     <None Include="replicode_v1.2\ball.goal.external.replicode" />
     <None Include="replicode_v1.2\drives.replicode" />
+    <None Include="replicode_v1.2\hand-grab-sphere.replicode" />
     <None Include="replicode_v1.2\helgi.replicode" />
     <None Include="replicode_v1.2\hello.world.1.replicode" />
     <None Include="replicode_v1.2\hello.world.2.replicode" />

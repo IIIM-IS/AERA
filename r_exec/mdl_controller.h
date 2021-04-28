@@ -239,7 +239,7 @@ public:
   ChainingStatus retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl, RequirementsPair &r_p, Fact *&ground, MDLController *req_controller, bool &wr_enabled); // checks the requirement instances during fwd; r_p: all wrs in first, all srs in second.
   ChainingStatus retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl, Fact *&ground); // checks the requirement instances during bwd; ground is set to the best weak requirement if chaining allowed, NULL otherwise.
   ChainingStatus retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl, Controller *root);
-  ChainingStatus retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl, Controller *root);
+  ChainingStatus retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl, Controller *root, Fact *&ground);
 
   virtual void predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground) = 0;
   virtual void register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures) = 0;
@@ -376,9 +376,9 @@ private:
   void abduce_imdl(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim);
 
   /**
-   * @param forwardSimulation If forwardSimulation is NULL, then pass sim to predict_simulated_evidence, otherwise pass forwardSimulation.
+   * \param forwardSimulation If forwardSimulation is NULL, then pass sim to predict_simulated_evidence, otherwise pass forwardSimulation.
    */
-  void abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim, Sim* forwardSimulation);
+  void abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim, Fact *ground, Sim* forwardSimulation);
   void abduce_simulated_imdl(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim);
   void predict_simulated_lhs(HLPBindingMap *bm, bool opposite, float32 confidence, Sim *sim);
   Fact* predict_simulated_evidence(_Fact *evidence, Sim *sim);
@@ -386,6 +386,16 @@ private:
   void assume_lhs(HLPBindingMap *bm, bool opposite, _Fact *input, float32 confidence);
 
   bool abduction_allowed(HLPBindingMap *bm);
+  /**
+   * Get the last two values from the template parameters, assuming that they are the timings
+   * from the prerequisite model. This evaluates the backward guards if needed.
+   * \param bm The binding map, which is not changed.
+   * \param after Set this to the after timestamp (if this returns true).
+   * \param before Set this to the before timestamp (if this returns true).
+   * \return True for success, otherwise false if there are not enough template parameters,
+   * or cannot evaluate the backward guards, or if the values are not timestamps.
+   */
+  bool get_template_timings(HLPBindingMap *bm, Timestamp& after, Timestamp& before);
 public:
   PrimaryMDLController(r_code::View *view);
 
@@ -409,17 +419,12 @@ public:
   bool check_imdl(Fact *goal, HLPBindingMap *bm);
 
   /**
-   * @param forwardSimulation If forwardSimulation is NULL, then use the goal->get_goal()->get_sim() when calling abduce_simulated_lhs. 
+   * \param forwardSimulation If forwardSimulation is NULL, then use the goal->get_goal()->get_sim() when calling abduce_simulated_lhs. 
    * Otherwise, use the given forwardSimulation, which is carried throughout forward simulation.
    */
   bool check_simulated_imdl(Fact *goal, HLPBindingMap *bm, Controller *root, Sim* forwardSimulation);
 
-  /**
-   * \param allow_simulation (optional) If false then treat the super_goal Sim object as if it has mode ROOT and
-   * time horizon zero, forcing an actual abduced LHS (not simulated). If true or omitted, then process with the
-   * super_goal's given Sim object.
-   */
-  void abduce(HLPBindingMap *bm, Fact *super_goal, bool opposite, float32 confidence, bool allow_simulation = true);
+  void abduce(HLPBindingMap *bm, Fact *super_goal, bool opposite, float32 confidence);
 
   /**
    * Make a binding map from the super_goal, then call abduce() with allow_simulation false to inject the LHS as
@@ -427,8 +432,10 @@ public:
    * \param super_goal A goal of the model RHS.
    * \param opposite See abduce().
    * \param confidence See abduce().
+   * \param f_success The simulated (fact (pred (fact (success ...)))) for this abduction (only used for runtime logging).
+   * If this is NULL, then don't use it.
    */
-  void abduce_no_simulation(Fact *super_goal, bool opposite, float32 confidence);
+  void abduce_no_simulation(Fact *super_goal, bool opposite, float32 confidence, _Fact* f_p_f_success = NULL);
 
   void debug(View *input);
 };

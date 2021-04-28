@@ -86,14 +86,24 @@ template<class O, class S> TestMem<O, S>::TestMem()
   timeTickThread_ = 0;
   lastInjectTime_ = Timestamp(seconds(0));
   velocity_y_ = 0.0001;
+  force_y_ = 0.1;
+  next_velocity_y_ = .1;
+  next_position_y_ = 1;
+  next_theta_y_ = 1;
+  next_omega_y_ = .1;
   position_y_ = NULL;
   position_y_obj_ = NULL;
+  cart_position_y_obj_ = NULL;
   position_property_ = NULL;
   position_y_property_ = NULL;
   velocity_y_property_ = NULL;
+  force_y_property_ = NULL;
+  theta_y_property_ = NULL;
+  omega_y_property_ = NULL;
   primary_group_ = NULL;
   ready_opcode_ = 0xFFFF;
   set_velocity_y_opcode_ = 0xFFFF;
+  set_force_y_opcode_ = 0xFFFF;
   move_y_plus_opcode_ = 0xFFFF;
   move_y_minus_opcode_ = 0xFFFF;
   lastCommandTime_ = Timestamp(seconds(0));
@@ -106,6 +116,7 @@ template<class O, class S> TestMem<O, S>::TestMem()
   babbleState_ = 0;
 }
 
+float max_force = 20;
 template<class O, class S> TestMem<O, S>::~TestMem() {
   if (timeTickThread_)
     delete timeTickThread_;
@@ -121,6 +132,7 @@ template<class O, class S> bool TestMem<O, S>::load
   // Find the opcodes we need.
   ready_opcode_ = r_exec::GetOpcode("ready");
   set_velocity_y_opcode_ = r_exec::GetOpcode("set_velocity_y");
+  set_force_y_opcode_ = r_exec::GetOpcode("set_force_y");
   move_y_plus_opcode_ = r_exec::GetOpcode("move_y_plus");
   move_y_minus_opcode_ = r_exec::GetOpcode("move_y_minus");
 
@@ -128,6 +140,9 @@ template<class O, class S> bool TestMem<O, S>::load
   position_property_ = findObject(objects, "position");
   position_y_property_ = findObject(objects, "position_y");
   velocity_y_property_ = findObject(objects, "velocity_y");
+  force_y_property_ = findObject(objects, "force_y");
+  theta_y_property_ = findObject(objects, "theta_y");
+  omega_y_property_ = findObject(objects, "omega_y");
   primary_group_ = findObject(objects, "primary");
 
   // Find the entities we need.
@@ -154,7 +169,7 @@ TestMem<O, S>::findObject(std::vector<Code*> *objects, const char* name) {
   return NULL;
 }
 
-template<class O, class S> void TestMem<O, S>::eject(Code *command) {
+template<class O, class S> Code* TestMem<O, S>::eject(Code *command) {
   uint16 function = (command->code(CMD_FUNCTION).atom_ >> 8) & 0x000000FF;
 
   if (function == ready_opcode_) {
@@ -167,15 +182,15 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
         if (!(command->code_size() >= 3 && command->code(args_set_index + 2).getDescriptor() == Atom::R_PTR &&
               command->references_size() > command->code(args_set_index + 2).asIndex())) {
           cout << "WARNING: Cannot get the object for ready \"ball\"" << endl;
-          return;
+          return NULL;
         }
         if (!velocity_y_property_) {
           cout << "WARNING: Can't find the velocity_y property" << endl;
-          return;
+          return NULL;
         }
         if (!position_y_property_) {
           cout << "WARNING: Can't find the position_y property" << endl;
-          return;
+          return NULL;
         }
 
         Code* obj = command->get_reference(command->code(args_set_index + 2).asIndex());
@@ -187,23 +202,65 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
         else {
           if (position_y_obj_ != obj)
             // For now, don't allow tracking multiple objects.
-            return;
+            return NULL;
         }
+        return command;
+      }
+      if (identifier == "cart-pole") {
+        if (!(command->code_size() >= 3 && command->code(args_set_index + 2).getDescriptor() == Atom::R_PTR &&
+          command->references_size() > command->code(args_set_index + 2).asIndex())) {
+          cout << "WARNING: Cannot get the object for ready \"ball\"" << endl;
+          return NULL;
+        }
+        if (!velocity_y_property_) {
+          cout << "WARNING: Can't find the velocity_y property" << endl;
+          return NULL;
+        }
+        if (!position_y_property_) {
+          cout << "WARNING: Can't find the position_y property" << endl;
+          return NULL;
+        }
+        if (!force_y_property_) {
+          cout << "WARNING: Can't find the force_y property" << endl;
+          return NULL;
+        }
+        if (!omega_y_property_) {
+          cout << "WARNING: Can't find the omega_y property" << endl;
+          return NULL;
+        }
+        if (!theta_y_property_) {
+          cout << "WARNING: Can't find the theta_y property" << endl;
+          return NULL;
+        }
+        Code* obj = command->get_reference(command->code(args_set_index + 2).asIndex());
+        if (!cart_position_y_obj_) {
+          // This is the first call. Remember the object whose position we're reporting.
+          cart_position_y_obj_ = obj;
+          startTimeTickThread();
+        }
+
+        else {
+          if (cart_position_y_obj_ != obj)
+            // For now, don't allow tracking multiple objects.
+            return NULL;
+        }
+        ofs.open("cart.out");
+        return command;
       }
       else {
         cout << "WARNING: Ignoring unrecognized ready command identifier: " << identifier << endl;
-        return;
+        return NULL;
       }
     }
   }
   else if (function == set_velocity_y_opcode_) {
     if (!velocity_y_property_) {
       cout << "WARNING: Can't find the velocity_y property" << endl;
-      return;
+      return NULL;
     }
     if (!position_y_property_) {
       cout << "WARNING: Can't find the position_y property" << endl;
-      return;
+      return NULL;
     }
 
     auto now = r_exec::Now();
@@ -220,22 +277,91 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
     else {
       if (position_y_obj_ != obj)
         // For now, don't allow tracking the velocity of multiple objects.
-        return;
+        return NULL;
     }
 
     velocity_y_ = command->code(args_set_index + 2).asFloat();
     // Let onTimeTick inject the new velocity_y.
+    return command;
+  }
+  else if (function == set_force_y_opcode_) {
+    if (!velocity_y_property_) {
+      cout << "WARNING: Can't find the velocity_y property" << endl;
+      return NULL;
+    }
+    if (!position_y_property_) {
+      cout << "WARNING: Can't find the position_y property" << endl;
+      return NULL;
+    }
+    if (!omega_y_property_) {
+      cout << "WARNING: Can't find the omega_y property" << endl;
+      return NULL;
+    }
+    if (!theta_y_property_) {
+      cout << "WARNING: Can't find the theta_y property" << endl;
+      return NULL;
+    }
+    if (!force_y_property_) {
+      cout << "WARNING: Can't find the force_y property" << endl;
+      return NULL;
+    }
+    auto now = r_exec::Now();
+    lastCommandTime_ = now;
+    uint16 args_set_index = command->code(CMD_ARGS).asIndex();
+    Code* obj = command->get_reference(
+    command->code(args_set_index + 1).asIndex());
+    // Set up position_y_obj_ the same as the ready "ball" command.
+    if (!cart_position_y_obj_) {
+      // This is the first call. Remember the object whose velocity we're setting.
+      cart_position_y_obj_ = obj;
+      startTimeTickThread();
+    }
+    else {
+    if (cart_position_y_obj_ != obj)
+      // For now, don't allow tracking the velocity of multiple objects.
+      return NULL;
+    }
+
+    float desired_force = command->code(args_set_index + 2).asFloat();
+    if ((desired_force > max_force) || (desired_force < -max_force)) {
+      if (desired_force > max_force)
+        desired_force = max_force;
+      else if (desired_force < -max_force)
+        desired_force = -max_force;
+
+      force_y_ = desired_force;
+
+      uint16 AccCommand;
+      AccCommand = set_force_y_opcode_;
+      // Make (cmd set_force_y [obj: acc:] 1)
+      Code* cmdAcc = new r_exec::LObject(this);
+      cmdAcc->code(0) = Atom::Object(r_exec::GetOpcode("cmd"), 3);
+      cmdAcc->code(1) = Atom::DeviceFunction(AccCommand);
+      cmdAcc->code(2) = Atom::IPointer(4);
+      cmdAcc->code(3) = Atom::Float(1); // psln_thr.
+      cmdAcc->code(4) = Atom::Set(2);
+      cmdAcc->code(5) = Atom::RPointer(0); // obj
+      cmdAcc->code(6) = Atom::Float(force_y_);
+      cmdAcc->set_reference(0, cart_position_y_obj_);
+
+      return cmdAcc;
+    }
+    else {
+      force_y_ = desired_force;
+      return command;
+    }
+    // Let onTimeTick inject the new force_y.
   }
   else if (function == move_y_plus_opcode_ ||
     function == move_y_minus_opcode_) {
     if (!position_property_) {
       cout << "WARNING: Can't find the position property" << endl;
-      return;
+      return NULL;
     }
     for (int i = 0; i <= 9; ++i) {
       if (!yEnt_[i]) {
         cout << "WARNING: Can't find the entities y0, y1, etc." << endl;
-        return;
+        return NULL;
       }
     }
 
@@ -249,17 +375,16 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
       discretePositionObj_ = obj;
       discretePosition_ = yEnt_[0];
       startTimeTickThread();
-      return;
     }
     else {
       if (discretePositionObj_ != obj)
         // For now, don't allow tracking multiple objects.
-        return;
+        return NULL;
     }
 
     if (nextDiscretePosition_)
       // A previous move command is still pending execution.
-      return;
+      return NULL;
 
     // nextDiscretePosition_ will become the position at the next sampling period.
     lastCommandTime_ = now;
@@ -277,7 +402,10 @@ template<class O, class S> void TestMem<O, S>::eject(Code *command) {
       }
     }
     // Let onTimeTick inject the new position.
+    return command;
   }
+
+  return NULL;
 }
 
 template<class O, class S> void TestMem<O, S>::onTimeTick() {
@@ -304,7 +432,73 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
       position_y_obj_, position_y_property_, Atom::Float(position_y_),
       now, now + get_sampling_period());
   }
+  if (cart_position_y_obj_) {
+    // We are updating the continuous position_y_.
+    auto now = r_exec::Now();
+    if (now > lastInjectTime_ + get_sampling_period() * 8 / 10) {
+      // Enough time has elapsed to inject a new position.
+      if (lastInjectTime_.time_since_epoch().count() == 0) {
+        // This is the first call, so leave the initial position.
+      }
+      else
+      {
+        auto DeltaK = 1e-6 * duration_cast<microseconds>(now - lastInjectTime_).count();
+        float current_position_y;
+        float current_velocity_y;
+        float current_theta_y;
+        float current_omega_y;
 
+        current_position_y = next_position_y_;
+        current_velocity_y = next_velocity_y_;
+        current_theta_y = next_theta_y_;
+        current_omega_y = next_omega_y_;
+
+        //next_velocity_y_ = (((1. / M) * force_y_) * DeltaK) + current_velocity_y;     
+        next_velocity_y_ = (0.1 * force_y_) + current_velocity_y;
+        //next_position_y_ = (0.5 * ((1. / M) * force_y_) * DeltaK * DeltaK) + (current_velocity_y * DeltaK) + current_position_y;
+        next_position_y_ = (0.5e-2 * force_y_) + (0.1 * current_velocity_y) + current_position_y;
+        //next_omega_y_ = A*current_theta_y + B*force_y_ + current_omega_y;
+        next_omega_y_ = current_theta_y + 0.1 * force_y_ + current_omega_y;
+        //next_theta_y_ = A * force_y_ + B * current_theta_y + C * current_omega_y;
+        next_theta_y_ = 0.0371943 * force_y_ + 1.05042 * current_theta_y + 0.101675 * current_omega_y;
+        /* Calculate the constants of theta and omega equations
+        #include<iostream>
+        #include<string>
+        #include<algorithm>
+        using namespace std;
+        float max_force = 15; float d = 0;  float m = .00001; float M = 1;  float b = 1;  float L = 100;  float g = -10; float DeltaK = 0.1;
+        int main (){ float p = (-g / L);
+        float A_omg = (-g / L) * DeltaK; float B_omg = DeltaK / (M * L);
+        float A_th = ((-2 + exp(sqrt(p) * DeltaK) + exp(sqrt(p) * DeltaK)) / (2 * p));
+        float B_th = ((exp(-sqrt(p) * DeltaK) + exp(sqrt(p) * DeltaK)) / 2);
+        float C_th = ((-sqrt(p) * exp(-sqrt(p) * DeltaK) + sqrt(p) * exp(sqrt(p) * DeltaK)) / (2 * p));
+        cout << "P: " << p << endl;  cout << "A_omega: " << A_omg << endl; cout << "B_omega: " << B_omg << endl;
+        cout << "A_theta: " << A_th << endl; cout << "B_theta: " << B_th << endl; cout << "C_theta: " << C_th << endl;
+        return 0;}
+        */
+      }
+      lastInjectTime_ = now;
+
+
+      injectMarkerValueFromIoDevice(
+        cart_position_y_obj_, force_y_property_, Atom::Float(force_y_),
+        now, now + get_sampling_period());
+      injectMarkerValueFromIoDevice(
+        cart_position_y_obj_, velocity_y_property_, Atom::Float(next_velocity_y_),
+        now, now + get_sampling_period());
+      injectMarkerValueFromIoDevice(
+        cart_position_y_obj_, position_y_property_, Atom::Float(next_position_y_),
+        now, now + get_sampling_period());
+      injectMarkerValueFromIoDevice(
+        cart_position_y_obj_, theta_y_property_, Atom::Float(next_theta_y_),
+        now, now + get_sampling_period());
+      injectMarkerValueFromIoDevice(
+        cart_position_y_obj_, omega_y_property_, Atom::Float(next_omega_y_),
+        now, now + get_sampling_period());
+
+      ofs << next_theta_y_ << "," << next_omega_y_ << "," << next_position_y_ << "," << next_velocity_y_ << "," << force_y_ << endl;
+    }
+  }
   if (discretePositionObj_) {
     // We are updating the discretePosition_.
     if (nextDiscretePosition_ &&

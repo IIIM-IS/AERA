@@ -101,8 +101,13 @@ public:
 
   /**
    * Override eject to check for (cmd set_velocity_y ...) and other implemented commands.
+   * \param command The command from the Replicode (cmd ...).
+   * \return The given command if it is executed as-is, or a new command object of the command
+   * that is actually executed. The program controller will make a fact from the command and
+   * inject it as the efferent copy. However, if the command is not executed, then return NULL
+   * and the program controller will put an anti-fact of the command in the mk.rdx reduction.
    */
-  virtual void eject(r_code::Code *command);
+  virtual r_code::Code* eject(r_code::Code *command);
 
   /**
    * This is called when runInDiagnosticTime() updates the tickTime. Just call
@@ -138,18 +143,29 @@ protected:
    * \return 
    */
   static thread_ret thread_function_call timeTickRun(void *args);
+  std::ofstream ofs;
 
   Thread* timeTickThread_;
   Timestamp lastInjectTime_;
   float velocity_y_;
   float position_y_;
+  float force_y_;
+  float next_velocity_y_;
+  float next_position_y_;
+  float next_theta_y_;
+  float next_omega_y_;
   r_code::Code* position_y_obj_;
+  r_code::Code* cart_position_y_obj_;
   r_code::Code* position_property_;
   r_code::Code* position_y_property_;
   r_code::Code* velocity_y_property_;
+  r_code::Code* force_y_property_;
+  r_code::Code* theta_y_property_;
+  r_code::Code* omega_y_property_;
   r_code::Code* primary_group_;
   uint16 ready_opcode_;
   uint16 set_velocity_y_opcode_;
+  uint16 set_force_y_opcode_;
   uint16 move_y_plus_opcode_;
   uint16 move_y_minus_opcode_;
   Timestamp lastCommandTime_;

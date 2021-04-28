@@ -92,7 +92,7 @@ public:
   HLPContext();
   HLPContext(Atom *code, uint16 index, HLPOverlay *const overlay, Data data = STEM);
 
-  HLPContext operator *() const;
+  HLPContext dereference() const;
 
   HLPContext &operator =(const HLPContext &c) {
 
@@ -111,23 +111,26 @@ public:
     return HLPContext(code_, index_ + index, (HLPOverlay *)overlay_);
   }
 
+  /**
+   * Call getChild(index) and then return the result of dereference().
+   */
+  HLPContext getChildDeref(uint16 index) const {
+    return getChild(index).dereference();
+  }
+
   // index is set to the index of the result, undefined in case of failure.
   bool evaluate(uint16 &result_index) const {
     if (data_ == BINDING_MAP || data_ == VALUE_ARRAY)
       return true;
 
-    HLPContext c = **this;
+    HLPContext c = dereference();
     return c.evaluate_no_dereference(result_index);
   }
 
   bool evaluate_no_dereference(uint16 &result_index) const;
 
-  // __Context implementation.
-  _Context *assign(const _Context *c) {
-
-    HLPContext *_c = new HLPContext(*(HLPContext *)c);
-    return _c;
-  }
+  // _Context implementation.
+  _Context *clone() { return new HLPContext(*this); }
 
   bool equal(const _Context *c) const { return *this == *(HLPContext *)c; }
 
@@ -139,15 +142,22 @@ public:
 
     return code_[index_].getAtomCount();
   }
-  _Context *_getChild(uint16 index) const {
+
+  /**
+   * Call getChild and return a new allocated copy of the child. The caller is responsible to delete it.
+   */
+  _Context *getChild_new(uint16 index) const {
 
     HLPContext *_c = new HLPContext(getChild(index));
     return _c;
   }
 
-  _Context *dereference() const {
+  /**
+   * Dereference this and return a new allocated copy. The caller is responsible to delete it.
+   */
+  _Context *dereference_new() const {
 
-    HLPContext *_c = new HLPContext(**this);
+    HLPContext *_c = new HLPContext(dereference());
     return _c;
   }
 };

@@ -404,7 +404,7 @@ void CSTController::reduce(r_exec::View *input) {
       CSTOverlay overlay(this, bindings_);
       overlay.load_patterns();
       P<HLPBindingMap> bm = new HLPBindingMap();
-      _Fact *bound_pattern = overlay.bindPattern(goal_target, bm, NULL);
+      _Fact *bound_pattern = overlay.bindPattern(goal_target, bm);
       if (bound_pattern) {
         // The match has filled in the binding map. Make an icst from it and inject it as a goal.
         // TODO: Call load_code (if needed) and evaluate backward guards.

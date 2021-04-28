@@ -707,7 +707,7 @@ void _Mem::pushTimeJob(TimeJob *j) {
 void _Mem::eject(View *view, uint16 nodeID) {
 }
 
-void _Mem::eject(Code *command) {
+r_code::Code* _Mem::eject(Code *command) {
   // This is only for debugging
   /*
   uint16 function = (command->code(CMD_FUNCTION).atom_ >> 8) & 0x000000FF;
@@ -716,6 +716,7 @@ void _Mem::eject(Code *command) {
       //command->trace();
   }
   */
+  return NULL;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -862,8 +863,20 @@ void _Mem::inject(View *view, bool isFromIoDevice) {
     }
   } else { // new object.
 
-    if (ijt <= now)
+    if (ijt <= now) {
       inject_new_object(view);
+
+      if (view->object_->code(0).asOpcode() == Opcodes::Fact) {
+        Goal *goal = ((_Fact *)view->object_)->get_goal();
+        if (goal && goal->is_drive())
+          // Log the injection of a drive, presumably from a program, possibly delayed by a TimeJob.
+          // The view injection time may be different than now, so log it too.
+          // In general, the problem is how to relate the reduction output event to the injection event
+          // which could be delayed.
+          OUTPUT_LINE(MDL_IN, Utils::RelativeTime(Now()) << " -> drive " <<
+            view->object_->get_oid() << ", ijt " << Utils::RelativeTime(view->get_ijt()));
+      }
+    }
     else {
 
       P<TimeJob> j = new InjectionJob(view, ijt, isFromIoDevice);

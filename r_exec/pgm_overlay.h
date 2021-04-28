@@ -153,20 +153,7 @@ protected:
    * \return SUCCESS upon a successful match, IMPOSSIBLE if the input is not of the right class, 
    * FAILURE otherwise.
    */
-  MatchResult __match(r_exec::View *input, uint16 pattern_index) {
-    // The input has just been pushed on input_views (see match).
-    // pgm_code[pattern_index+1].asIndex() is the structure pointed by the pattern's skeleton.
-    patch_input_code(code_[pattern_index + 1].asIndex(), input_views.size() - 1, 0);
-    // match: evaluate the set of guards.
-    uint16 guard_set_index = code_[pattern_index + 2].asIndex();
-    uint16 result_index;
-    if (!evaluate(guard_set_index, result_index))
-      return FAILURE;
-    if (code_[result_index].isBooleanFalse())
-      // The boolean guard is false.
-      return FAILURE;
-    return SUCCESS;
-  }
+  MatchResult __match(r_exec::View *input, uint16 pattern_index);
 
   r_code::Code *dereference_in_ptr(Atom a);
   void patch_input_code(uint16 pgm_code_index, uint16 input_index, uint16 input_code_index, int16 parent_index = -1);

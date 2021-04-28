@@ -244,7 +244,7 @@ public:
   void update(Timestamp &next_target);
 
   /**
-   * @param forwardSimulation Pass forwardSimulation to PrimaryMDLController::check_simulated_imdl.
+   * \param forwardSimulation Pass forwardSimulation to PrimaryMDLController::check_simulated_imdl.
    */
   bool signal(bool is_simulation, Sim* forwardSimulation);
 };

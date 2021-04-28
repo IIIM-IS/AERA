@@ -129,10 +129,12 @@ inline bool HLPOverlay::evaluate_guards(uint16 guard_set_iptr_index) {
   uint16 guard_count = code_[guard_set_index].getAtomCount();
   for (uint16 i = 1; i <= guard_count; ++i) {
 
+    // Get the HLPContext like in HLPOverlay::evaluate.
+    HLPContext c(code_, guard_set_index + i, this);
     uint16 result_index;
-    if (!evaluate(guard_set_index + i, result_index))
+    if (!c.evaluate(result_index))
       return false;
-    if (code_[result_index].isBooleanFalse())
+    if (c.dereference()[0].isBooleanFalse())
       // This is a boolean guard (not an assignment) and it is false.
       return false;
   }
