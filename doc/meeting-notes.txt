@@ -505,8 +505,7 @@ Simulator
 * Can AERA start simulating from a non-simulated (and non drive) goal?
   CORRECTION: YES. PrimaryMDLController::reduce:1655 if (!goal->is_drive())
     is_drive() returns false if the goal has a simulation (created by commit).
-    (fact (g
-    oal (|fact (mk.val h power false) 0s:200ms:0us 0s:600ms:0us) (sim 0 0s:0ms:0us)))
+    (fact (goal (|fact (mk.val h power false) 0s:200ms:0us 0s:600ms:0us) (sim 0 0s:0ms:0us)))
     (fact (goal (fact (cmd set_state [h power true]) 0s:120ms:0us 0s:500ms:0u)))
 
 2021-04-19
@@ -526,30 +525,38 @@ Simulator
 * DONE. Review/merge pull request to store the requirement before signaling the monitors https://github.com/IIIM-IS/replicode/pull/151
 * DONE. Review/merge pull request to make the efferent copy timings relative to the frame https://github.com/IIIM-IS/replicode/pull/124
 
+2021-04-29
+* DONE. How close is the cart pole to overrunning object limit? https://github.com/IIIM-IS/replicode/issues/128
+  With keep_invalidated_objects yes, runtime of 55 seconds stores 65272 objects.
+  With keep_invalidated_objects no, runtime of 8+ minutes stores 28588 objects (slow growth because expired objects are removed).
+* DONE. Visualizer: Connect predicted requirement to predicted LHS.
+* DONE. Visualizer: Find "focus" simluation items by linking backwards from committed command.
+* DONE. The end of simulation commit creates a new non-simulated copy of the commited goal. Show in Visualizer.
+* DONE. Review/merge pull request to ignore wr_enabled when matching in the simulator https://github.com/IIIM-IS/replicode/pull/132
+* DONE. Review/merge pull request for temporary fix for matching template timings https://github.com/IIIM-IS/replicode/pull/136
+* Try mdl_anti_M2: Override model to grab the sphere if the cube is also there.
+  DONE. Why doesn't mdl_anti_M2_c prevent commiting to (cmd grab [h])?
+    REVIEWING. Review/merge pull request for equal confidence of weak and strong requirements https://github.com/IIIM-IS/replicode/pull/157
+* REVIEWING. Review/merge pull request to use match_fwd in retrieve_simulated_imdl_fwd https://github.com/IIIM-IS/replicode/pull/141
+* REVIEWING. Review/merge pull request to not abduce from anti-fact imdl https://github.com/IIIM-IS/replicode/pull/156
+
 next meeting
-* Review/merge pull request for temporary fix for matching template timings https://github.com/IIIM-IS/replicode/pull/136
-* Review/merge pull request to ignore wr_enabled when matching in the simulator https://github.com/IIIM-IS/replicode/pull/132
-* Review/merge pull request to use match_fwd in retrieve_simulated_imdl_fwd https://github.com/IIIM-IS/replicode/pull/141
-* Review/merge pull request to not share timing variables when building the model https://github.com/IIIM-IS/replicode/pull/110
-* Review/merge pull request to not make a goal icst from a single member (revert pull request #131) https://github.com/IIIM-IS/replicode/pull/154
-* Review diag_mode_rel_0_1 tags.
-* Review/merge pull request for simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
 * Review/merge pull request for super_goal in new Sim https://github.com/IIIM-IS/replicode/pull/106
 * Review/merge pull request for binding map in the prediction's mk.rdx https://github.com/IIIM-IS/replicode/pull/120
 * Review/merge pull request for check_simulated_imdl in SRMonitor::signal https://github.com/IIIM-IS/replicode/pull/116
+* Review/merge pull request for matching all composite state combinations in backward chaining  https://github.com/IIIM-IS/replicode/pull/129
+* Review/merge pull request to not make a goal icst from a single member (revert pull request #131) https://github.com/IIIM-IS/replicode/pull/154
+* Review diag_mode_rel_0_1 tags.
+* Review/merge pull request for simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
 * Review/merge pull request for SYNC_HOLD timings https://github.com/IIIM-IS/replicode/pull/118
 * Review/merge pull request for bindPattern to update timings https://github.com/IIIM-IS/replicode/pull/135
-* Review/merge pull request to not abduce from anti-fact imdl https://github.com/IIIM-IS/replicode/pull/156
 * Review/merge pull request for simulation control in abduce_simulated_lhs https://github.com/IIIM-IS/replicode/pull/111
+* Review/merge pull request to not share timing variables when building the model https://github.com/IIIM-IS/replicode/pull/110
 * Review/merge pull request for NoArgCmdGuardBuilder backward guard https://github.com/IIIM-IS/replicode/pull/115
-* Review/merge pull request for matching all composite state combinations in backward chaining  https://github.com/IIIM-IS/replicode/pull/129
 
 TODO
-* How close is the cart pole to overrunning object limit? https://github.com/IIIM-IS/replicode/issues/128
-* Suggest a renaming of ent and ont in cart-pole to be more "body-like".
-* TRY end of simulation commit injects a new non-simulated copy of the commited goal. Show in Visualizer.
+* Suggest a renaming of ents and onts in cart-pole to be more "body-like".
 * TRY copy/paste code to check references to fix: Using = in guard of composite state of model https://github.com/IIIM-IS/replicode/issues/133
-* Visualizer: Set selectedSimulationOids by linking backwards from committed solution.
 * Visualizer: Show prediction failure.
 * Visualizer: Option to position simulation objects by predicted time vs. created time.
 * Visualizer: Pre-loaded models should start with count and success rate of 1.
