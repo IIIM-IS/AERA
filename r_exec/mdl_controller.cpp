@@ -586,7 +586,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
             timingsUpdater.setTimings(_f_imdl);
             if (_original.match_bwd_strict(_f_imdl, f_imdl)) {
 
-              if ((*e).confidence_ >= negative_cfd) {
+              if ((*e).confidence_ > negative_cfd) {
 
                 r = WEAK_REQUIREMENT_ENABLED;
                 bm->load(&_original);
@@ -728,7 +728,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
             // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
             if (_original.match_fwd_strict(_f_imdl, f_imdl)) {
 
-              if ((*e).confidence_ >= negative_cfd) {
+              if ((*e).confidence_ > negative_cfd) {
 
                 r = WEAK_REQUIREMENT_ENABLED;
                 bm->load(&_original);
@@ -887,7 +887,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
 
         requirements_.CS.leave();
         float32 confidence = ground->get_pred()->get_target()->get_cfd();
-        if (confidence >= negative_cfd) {
+        if (confidence > negative_cfd) {
 
           r = WEAK_REQUIREMENT_ENABLED;
           r_p.first.controllers.push_back(req_controller);
@@ -910,7 +910,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
 
             if (r != WEAK_REQUIREMENT_ENABLED && (*e).chaining_was_allowed_) { // first siginificant match.
 
-              if ((*e).confidence_ >= negative_cfd) {
+              if ((*e).confidence_ > negative_cfd) {
 
                 r = WEAK_REQUIREMENT_ENABLED;
                 ground = (*e).evidence_;
@@ -1048,7 +1048,7 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
           // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
           if (_original.match_fwd_strict(_f_imdl, f_imdl)) {
 
-            if ((*e).confidence_ >= negative_cfd) {
+            if ((*e).confidence_ > negative_cfd) {
 
               r = WEAK_REQUIREMENT_ENABLED;
               ground = (*e).evidence_;
