@@ -2074,9 +2074,11 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, C
     f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(true);
   case NO_REQUIREMENT:
     if (evaluate_bwd_guards(bm)) { // bm may be updated.
-      // JTNote: This changes an object which is already injected.
-      f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
-      abduce_simulated_lhs(bm, sim->get_f_super_goal(), f_imdl, sim->get_opposite(), f_imdl->get_cfd(), new Sim(sim), ground, forwardSimulation);
+      // valuate f_imdl from updated bm into a copy.
+      P<Fact> f_imdl_copy = new Fact(
+        bm->bind_pattern(f_imdl->get_reference(0)), f_imdl->get_after(), f_imdl->get_before(),
+        f_imdl->get_cfd(), f_imdl->get_psln_thr());
+      abduce_simulated_lhs(bm, sim->get_f_super_goal(), f_imdl_copy, sim->get_opposite(), f_imdl->get_cfd(), new Sim(sim), ground, forwardSimulation);
       return true;
     }
     return false;
