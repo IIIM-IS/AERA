@@ -174,8 +174,7 @@ void CSTOverlay::inject_production(View* input) {
     Fact *f_p_f_icst = new Fact(prediction, now, now, 1, 1);
     ((HLPController *)controller_)->inject_prediction(f_p_f_icst, lowest_cfd_); // inject a simulated prediction in the main group.
     OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " cst " << getObject()->get_oid() << ": fact " <<
-      input->object_->get_oid() << " -> fact " << f_p_f_icst->get_oid() << " simulated pred");
-    OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " fact " << f_p_f_icst->get_oid() << " simulated pred fact icst[" << controller_->getObject()->get_oid() << "][" <<
+      input->object_->get_oid() << " -> fact " << f_p_f_icst->get_oid() << " simulated pred fact icst [" <<
       inputsInfo << "]");
   }
 }
