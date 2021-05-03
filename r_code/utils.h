@@ -145,7 +145,7 @@ public:
     return object->code_size() > t_index + 2;
   }
   /**
-   * Get the time stamp pointed to be the I_PTR at index.
+   * Get the time stamp pointed to by the I_PTR at index.
    * \param object The object with the Code array.
    * \param index The index in the Code array of the I_PTR to the time stamp structure (like
    * SetTimestamp<Code>() but not the index of the time stamp structure itself as in SetTimestampStruct()).
