@@ -556,7 +556,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
             HLPBindingMap _original = original; // matching updates the bm; always start afresh.
             TemplateTimingsUpdater timingsUpdater(_f_imdl, f_imdl, &_original);
-            if (_original.match_bwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) { // tpl args will be valuated in bm.
+            if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) { // tpl args will be valuated in bm.
 
               bm->load(&_original);
               requirements_.CS.leave();
@@ -587,7 +587,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
             HLPBindingMap _original = original; // matching updates the bm; always start afresh.
             TemplateTimingsUpdater timingsUpdater(_f_imdl, f_imdl, &_original);
-            if (_original.match_bwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) {
+            if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) {
 
               negative_cfd = (*e).confidence_;
               r = STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT;
@@ -611,7 +611,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
             HLPBindingMap _original = original; // matching updates the bm; always start afresh.
             TemplateTimingsUpdater timingsUpdater(_f_imdl, f_imdl, &_original);
-            if (_original.match_bwd_strict(_f_imdl, f_imdl)) {
+            if (_original.match_fwd_strict(_f_imdl, f_imdl)) {
 
               if ((*e).confidence_ >= negative_cfd) {
 
