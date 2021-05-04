@@ -1748,7 +1748,7 @@ void PrimaryMDLController::reduce(r_exec::View *input) { // no lock.
       abduce(bm, (Fact *)input->object_, opposite, confidence);
       break;
     default: // no match; however, goal_target may be f->imdl, i.e. case of a reuse of the model, i.e. the goal is for the model to make a prediction: this translates into making a sub-goal from the lhs.
-      if (!goal->is_requirement()) { // models like imdl -> |rhs or |imdl -> rhs are not allowed.
+      if (!goal->is_requirement() && goal_target->is_fact()) { // models like imdl -> |rhs or |imdl -> rhs are not allowed.
 
         Code *imdl = goal_target->get_reference(0);
         if (imdl->code(0).asOpcode() == Opcodes::IMdl && imdl->get_reference(0) == getObject()) { // in that case, get the bm from the imdl, ignore the bwd guards, bind the rhs and inject.
