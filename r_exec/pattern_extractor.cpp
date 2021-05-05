@@ -893,19 +893,22 @@ GuardBuilder *CTPX::get_default_guard_builder(_Fact *cause, _Fact *consequent, m
   return new TimingGuardBuilder(period);
 }
 
-// 5 forms:
-// 0 - q1=q0+cmd_arg (if the cause is a cmd) or q1=q0*cmd_arg with q0!=0.
-// 1 - q1=q0+speed*period, with q1=consequent.value, q0=premise.value, speed=cause.value,
-// 3 - q1=q0+constant or q1=q0*constant with q0!=0.
+// Forms:
+// 1A - q1=q0+cmd_arg (if the cause is a cmd)
+// 1B - q1=q0*cmd_arg with q0 != 0 (if the cause is a cmd)
+// 2  - q1=q0+speed*period, with q1=consequent.value, q0=premise.value, speed=cause.value
+// 3A - q1=q0*constant with q0 != 0.
+// 3B - q1=q0+constant
 GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microseconds period) {
 
   Code *cause_payload = cause->get_reference(0);
   uint16 opcode = cause_payload->code(0).asOpcode();
-  if (opcode == Opcodes::Cmd) { // form 0.
-
+  if (opcode == Opcodes::Cmd) {
+    // Form 1
     float32 q0 = target_->get_reference(0)->code(MK_VAL_VALUE).asFloat();
     float32 q1 = consequent->get_reference(0)->code(MK_VAL_VALUE).asFloat();
 
+    // Form 1A
     float32 searched_for = q1 - q0;
     uint16 cmd_arg_set_index = cause_payload->code(CMD_ARGS).asIndex();
     uint16 cmd_arg_count = cause_payload->code(cmd_arg_set_index).getAtomCount();
@@ -920,7 +923,7 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
     }
 
     if (q0 != 0) {
-
+      // Form 1B
       searched_for = q1 / q0;
       for (uint16 i = cmd_arg_set_index + 1; i <= cmd_arg_count; ++i) {
 
@@ -933,7 +936,7 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
       }
     }
   } else if (opcode == Opcodes::MkVal) {
-
+    // Forms 2 and 3
     Atom s = cause_payload->code(MK_VAL_VALUE);
     if (s.isFloat()) {
 
@@ -941,19 +944,21 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
       float32 q0 = target_->get_reference(0)->code(MK_VAL_VALUE).asFloat();
       float32 q1 = consequent->get_reference(0)->code(MK_VAL_VALUE).asFloat();
 
+      // Form 2
       float32 searched_for = (q1 - q0) / period.count();
-      if (Utils::Equal(_s, searched_for)) { // form 1.
+      if (Utils::Equal(_s, searched_for)) {
 
         auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target_, FACT_AFTER));
         return new SGuardBuilder(period, period - offset);
       }
 
-      if (q0 != 0) { // form 2.
-
+      if (q0 != 0) {
+        // Form 3A
         auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target_, FACT_AFTER));
         return new MGuardBuilder(period, q1 / q0, offset);
       }
 
+      // Form 3B
       auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target_, FACT_AFTER));
       return new AGuardBuilder(period, q1 - q0, offset);
     }
