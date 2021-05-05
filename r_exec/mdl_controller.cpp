@@ -1940,7 +1940,7 @@ void PrimaryMDLController::abduce_lhs(HLPBindingMap *bm, Fact *super_goal, Fact 
       Goal *sub_goal = new Goal(bound_lhs, super_goal->get_goal()->get_actor(), sim, 1);
       sub_goal->ground_ = ground;
       if (set_before)
-        sim->get_solution_before() = bound_lhs->get_before();
+        sim->set_solution_before(bound_lhs->get_before());
 
       auto now = Now();
       Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);

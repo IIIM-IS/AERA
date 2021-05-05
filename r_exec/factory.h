@@ -258,6 +258,11 @@ public:
   Timestamp get_solution_before() const { return r_code::Utils::GetTimestamp<Code>(this, SIM_SOLUTION_BEFORE); }
 
   /**
+   * Set the  deadline of the solution goal.
+   */
+  void set_solution_before(Timestamp before) { return r_code::Utils::SetTimestamp<Code>(this, SIM_SOLUTION_BEFORE, before); }
+
+  /**
    * Recursively search this or parent Sim objects to get the Sim object where get_mode() == SIM_ROOT.
    * \return The root Sim object, or NULL if not found (which shouldn't happen).
    */
