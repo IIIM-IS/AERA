@@ -1804,7 +1804,7 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
     auto now = Now();
     switch (sim->get_mode()) {
     case SIM_ROOT:
-      sub_sim = new Sim(opposite ? SIM_MANDATORY : SIM_OPTIONAL, sim_thz, super_goal, opposite, sim->root_, 1, this, confidence, Timestamp(seconds(0)));
+      sub_sim = new Sim(opposite ? SIM_MANDATORY : SIM_OPTIONAL, sim_thz, super_goal, opposite, sim->root_, 1, this, confidence, now + sim_thz);
       break;
     case SIM_OPTIONAL:
     case SIM_MANDATORY:
