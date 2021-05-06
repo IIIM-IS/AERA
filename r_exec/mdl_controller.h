@@ -278,7 +278,7 @@ protected:
 
   virtual uint32 get_rdx_out_group_count() const { return get_out_group_count(); }
   void inject_goal(HLPBindingMap *bm, Fact *goal, Fact *f_imdl) const;
-  void inject_simulation(Fact *simulation) const;
+  void inject_simulation(Fact *simulation, Timestamp injectionTime) const;
 
   bool monitor_goals(_Fact *input);
 

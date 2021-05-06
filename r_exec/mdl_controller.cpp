@@ -1185,14 +1185,14 @@ void PMDLController::inject_goal(HLPBindingMap *bm, Fact *goal, Fact *f_imdl) co
     << f_imdl->get_reference(0)->get_reference(0)->get_oid() << " abduce -> mk.rdx " << mk_rdx->get_oid());
 }
 
-void PMDLController::inject_simulation(Fact *goal_pred) const { // f->pred->f->obj or f->goal->f->obj.
+void PMDLController::inject_simulation(Fact *goal_pred, Timestamp injectionTime) const { // f->pred->f->obj or f->goal->f->obj.
 
   Group *primary_grp = get_host();
   auto before = ((_Fact *)goal_pred->get_reference(0)->get_reference(0))->get_before();
   auto now = Now();
   int32 resilience = _Mem::Get()->get_goal_pred_success_res(primary_grp, now, before - now);
 
-  View *view = new View(View::SYNC_ONCE, now, 1, resilience, primary_grp, primary_grp, goal_pred); // SYNC_ONCE,res=resilience.
+  View *view = new View(View::SYNC_ONCE, injectionTime, 1, resilience, primary_grp, primary_grp, goal_pred); // SYNC_ONCE,res=resilience.
   _Mem::Get()->inject(view);
 }
 
@@ -2022,7 +2022,7 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
         Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
 
         add_g_monitor(new SGMonitor(this, bm, now + sim->get_thz(), f_sub_goal, f_imdl));
-        inject_simulation(f_sub_goal);
+        inject_simulation(f_sub_goal, now);
         OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": fact " <<
           super_goal->get_oid() << " super_goal -> fact " << f_sub_goal->get_oid() << " simulated goal");
         break;
@@ -2053,7 +2053,7 @@ void PrimaryMDLController::abduce_simulated_imdl(HLPBindingMap *bm, Fact *super_
   auto now = Now();
   Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
   add_r_monitor(new SRMonitor(this, bm, now + sim->get_thz(), f_sub_goal, f_imdl));
-  inject_simulation(f_sub_goal);
+  inject_simulation(f_sub_goal, now);
   OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": fact " <<
     super_goal->get_oid() << " super_goal -> fact " << f_sub_goal->get_oid() << " simulated goal");
 }
@@ -2127,7 +2127,7 @@ inline Fact* PrimaryMDLController::predict_simulated_evidence(_Fact *evidence, S
 
   auto now = Now();
   Fact* fact_pred = new Fact(pred, now, now, 1, 1);
-  inject_simulation(fact_pred);
+  inject_simulation(fact_pred, now);
   return fact_pred;
 }
 
