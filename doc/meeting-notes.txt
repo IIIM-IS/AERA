@@ -535,27 +535,38 @@ Simulator
 * DONE. Review/merge pull request to ignore wr_enabled when matching in the simulator https://github.com/IIIM-IS/replicode/pull/132
 * DONE. Review/merge pull request for temporary fix for matching template timings https://github.com/IIIM-IS/replicode/pull/136
 * Try mdl_anti_M2: Override model to grab the sphere if the cube is also there.
-  DONE. Why doesn't mdl_anti_M2_c prevent commiting to (cmd grab [h])?
-    REVIEWING. Review/merge pull request for equal confidence of weak and strong requirements https://github.com/IIIM-IS/replicode/pull/157
-* REVIEWING. Review/merge pull request to use match_fwd in retrieve_simulated_imdl_fwd https://github.com/IIIM-IS/replicode/pull/141
-* REVIEWING. Review/merge pull request to not abduce from anti-fact imdl https://github.com/IIIM-IS/replicode/pull/156
+  DONE. Why doesn't mdl_anti_M2_c prevent commiting to (cmd grab [h])? See https://github.com/IIIM-IS/replicode/pull/157
+
+2021-05-06
+* DONE. Review/merge pull request to not abduce from anti-fact imdl https://github.com/IIIM-IS/replicode/pull/156
+* DONE. Review/merge pull request to use match_fwd in retrieve_simulated_imdl_fwd https://github.com/IIIM-IS/replicode/pull/141
+* DONE. Review/merge pull request for equal confidence of weak and strong requirements https://github.com/IIIM-IS/replicode/pull/157
+* DONE. Visualizer: Fix: The run item is not in the focus items after unstep then step.
+* DONE. In diagnostic mode, for the simulated prediction phase, wait until abudction phase is finished.
+* DONE: Check if hand-grab-sphere has a simulation solution for release first (before move).
+  ANSWER: Yes.
+* DONE. Check if simulated anti-requirement (fact (pred (|fact (imdl)))) stop a simulation branch.
+  ANSWER. No. PrimaryMDLController::store_requirement only stores anti-requirement for non-simulation.
+  Check if anti-goal (|fact (imdl M0 [h 25 0s:0ms:0us 0s:400ms:0us] [v5: 0 0s:100ms:0us 0s:500ms:0us])) prevents moving hand.
+  ANSWER: No. 
 
 next meeting
-* Review/merge pull request for super_goal in new Sim https://github.com/IIIM-IS/replicode/pull/106
-* Review/merge pull request for binding map in the prediction's mk.rdx https://github.com/IIIM-IS/replicode/pull/120
-* Review/merge pull request for check_simulated_imdl in SRMonitor::signal https://github.com/IIIM-IS/replicode/pull/116
-* Review/merge pull request for matching all composite state combinations in backward chaining  https://github.com/IIIM-IS/replicode/pull/129
-* Review/merge pull request to not make a goal icst from a single member (revert pull request #131) https://github.com/IIIM-IS/replicode/pull/154
+* Review/merge bug fix pull requests for:
+  * REVIEWING. super_goal in new Sim https://github.com/IIIM-IS/replicode/pull/106
+  * REVIEWING. not making a goal icst from a single member (revert pull request #131) https://github.com/IIIM-IS/replicode/pull/154
+  * binding map in the prediction's mk.rdx https://github.com/IIIM-IS/replicode/pull/120
+  * simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
+  * SYNC_HOLD timings https://github.com/IIIM-IS/replicode/pull/118
+* Review/merge new functionality pull requests for:
+  * not sharing timing variables when building the model https://github.com/IIIM-IS/replicode/pull/110
+  * NoArgCmdGuardBuilder backward guard https://github.com/IIIM-IS/replicode/pull/115
+  * matching all composite state combinations in backward chaining  https://github.com/IIIM-IS/replicode/pull/129
+  * bindPattern to update timings https://github.com/IIIM-IS/replicode/pull/135
+  * simulation control in abduce_simulated_lhs https://github.com/IIIM-IS/replicode/pull/111
 * Review diag_mode_rel_0_1 tags.
-* Review/merge pull request for simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
-* Review/merge pull request for SYNC_HOLD timings https://github.com/IIIM-IS/replicode/pull/118
-* Review/merge pull request for bindPattern to update timings https://github.com/IIIM-IS/replicode/pull/135
-* Review/merge pull request for simulation control in abduce_simulated_lhs https://github.com/IIIM-IS/replicode/pull/111
-* Review/merge pull request to not share timing variables when building the model https://github.com/IIIM-IS/replicode/pull/110
-* Review/merge pull request for NoArgCmdGuardBuilder backward guard https://github.com/IIIM-IS/replicode/pull/115
 
 TODO
-* Suggest a renaming of ents and onts in cart-pole to be more "body-like".
+* TRY anti-goal (|fact (imdl M0 [h 25 0s:0ms:0us 0s:400ms:0us] [v5: 0 0s:100ms:0us 0s:500ms:0us])) becomes anti-requirement
 * TRY copy/paste code to check references to fix: Using = in guard of composite state of model https://github.com/IIIM-IS/replicode/issues/133
 * Visualizer: Show prediction failure.
 * Visualizer: Option to position simulation objects by predicted time vs. created time.
