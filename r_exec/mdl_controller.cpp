@@ -2012,7 +2012,7 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
       case MATCH_FAILURE: {
 
         f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
-        if (sim && !sim->registerGoalTarget(bound_lhs))
+        if (!sim->registerGoalTarget(bound_lhs))
           // We are already simulating from this goal, so abort to avoid loops.
           break;
 
