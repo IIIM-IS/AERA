@@ -2011,6 +2011,7 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
         break;
       case MATCH_FAILURE: {
 
+        auto now = Now();
         f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
         if (!sim->registerGoalTarget(bound_lhs))
           // We are already simulating from this goal, so abort to avoid loops.
@@ -2018,12 +2019,11 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
 
         Goal *sub_goal = new Goal(bound_lhs, super_goal->get_goal()->get_actor(), sim, 1);
 
-        auto now = Now();
         Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
 
         add_g_monitor(new SGMonitor(this, bm, now + sim->get_thz(), f_sub_goal, f_imdl));
         inject_simulation(f_sub_goal, now);
-        OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": fact " <<
+        OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(now) << " mdl " << getObject()->get_oid() << ": fact " <<
           super_goal->get_oid() << " super_goal -> fact " << f_sub_goal->get_oid() << " simulated goal");
         break;
       }
