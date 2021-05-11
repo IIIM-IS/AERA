@@ -113,7 +113,7 @@ protected:
    * \param input The input which triggered the production, only used for log output.
    */
   void inject_production(View* input);
-  void update(HLPBindingMap *map, _Fact *input, _Fact *bound_pattern);
+  void update(HLPBindingMap *map, _Fact *input);
   CSTOverlay *get_offspring(HLPBindingMap *map, _Fact *input, _Fact *bound_pattern);
   /**
    * Similar to *Pred::get_simulation, find the Sim in simulations_ whose root_ is root.
