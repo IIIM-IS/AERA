@@ -114,7 +114,18 @@ protected:
    */
   void inject_production(View* input);
   void update(HLPBindingMap *map, _Fact *input);
-  CSTOverlay *get_offspring(HLPBindingMap *map, _Fact *input, _Fact *bound_pattern);
+
+  /**
+   * Make a copy of this CSTOverlay, then call update() to update the inputs_ and bindings_.
+   * \param map The HLPBindingMap to copy to bindings_. This also updates match_deadline_ from
+   * map->get_fwd_before() if needed.
+   * \param input The _Fact to add to inputs_.
+   * \param bound_pattern (optional) The pattern to remove from patterns_. If omitted or NULL,
+   * then don't use it.
+   * \return The copy of this CSTOverlay before making changes.
+   */
+  CSTOverlay *get_offspring(HLPBindingMap *map, _Fact *input, _Fact *bound_pattern = NULL);
+
   /**
    * Similar to *Pred::get_simulation, find the Sim in simulations_ whose root_ is root.
    * \param root The root to match with the Sim root_.

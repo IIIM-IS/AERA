@@ -182,7 +182,8 @@ void CSTOverlay::inject_production(View* input) {
 CSTOverlay *CSTOverlay::get_offspring(HLPBindingMap *map, _Fact *input, _Fact *bound_pattern) {
 
   CSTOverlay *offspring = new CSTOverlay(this);
-  patterns_.remove(bound_pattern);
+  if (bound_pattern)
+    patterns_.remove(bound_pattern);
   if (match_deadline_.time_since_epoch().count() == 0)
     match_deadline_ = map->get_fwd_before();
   update(map, input);
@@ -267,8 +268,7 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
         if (evaluate_fwd_guards()) { // may update bindings; full match.
 //std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" full match\n";
           // JTNote: The offspring is made with the modified bindings_. That doesn't seem right.
-          offspring = new CSTOverlay(this);
-          update(bm, (_Fact *)input->object_);
+          offspring = get_offspring(bm, (_Fact *)input->object_);
           inject_production(input);
           invalidate();
           store_evidence(input->object_, prediction, is_simulation);
@@ -283,8 +283,7 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
         }
       } else { // guards already evaluated, full match.
 //std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" full match\n";
-        offspring = new CSTOverlay(this);
-        update(bm, (_Fact *)input->object_);
+        offspring = get_offspring(bm, (_Fact *)input->object_);
         if (inputs_.size() == original_patterns_size_) inject_production(input);
         invalidate();
         store_evidence(input->object_, prediction, is_simulation);
