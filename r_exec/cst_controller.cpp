@@ -429,8 +429,10 @@ void CSTController::reduce(r_exec::View *input) {
     auto now = Now();
     for (o = overlays_.begin(); o != overlays_.end();) {
 
-      if (!((CSTOverlay *)*o)->can_match(now))
+      if (!((CSTOverlay *)*o)->can_match(now)) {
+        (*o)->invalidate();
         o = overlays_.erase(o);
+      }
       else if ((*o)->is_invalidated())
         o = overlays_.erase(o);
       else {
@@ -440,8 +442,11 @@ void CSTController::reduce(r_exec::View *input) {
           overlays_.push_front(offspring);
           ++o;
         }
-        else if (match) // full match: no offspring.
+        else if (match) {
+          // full match: no offspring.
+          (*o)->invalidate();
           o = overlays_.erase(o);
+        }
         else
           ++o;
       }
