@@ -554,13 +554,13 @@ Simulator
 * DISCUSS. Independent forward chaining only works for monotonic logic.
 * DONE anti-goal (|fact (imdl ...)) becomes anti-requirement to block move hand.
   After (mk.val h attached nil), conditions for anti-requirement are gone. Re-try move.
+* DONE. not making a goal icst from a single member (revert pull request #131) https://github.com/IIIM-IS/replicode/pull/154
+* DONE. super_goal in new Sim https://github.com/IIIM-IS/replicode/pull/106
 
 next meeting
 * Review/merge bug fix pull requests for:
-  * REVIEWING. super_goal in new Sim https://github.com/IIIM-IS/replicode/pull/106
-  * REVIEWING. not making a goal icst from a single member (revert pull request #131) https://github.com/IIIM-IS/replicode/pull/154
-  * binding map in the prediction's mk.rdx https://github.com/IIIM-IS/replicode/pull/120
-  * simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
+  * REVIEWING. binding map in the prediction's mk.rdx https://github.com/IIIM-IS/replicode/pull/120
+  * REVIEWING. simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
   * SYNC_HOLD timings https://github.com/IIIM-IS/replicode/pull/118
 * Review/merge new functionality pull requests for:
   * not sharing timing variables when building the model https://github.com/IIIM-IS/replicode/pull/110
