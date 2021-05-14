@@ -219,19 +219,15 @@ void CSTOverlay::update(HLPBindingMap *map, _Fact *input) {
 
 bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
 
-  if (input->object_->is_invalidated()) {
+  offspring = NULL;
 
-    offspring = NULL;
+  if (input->object_->is_invalidated())
     return false;
-  }
 
   for (uint16 i = 0; i < inputs_.size(); ++i) { // discard inputs that already matched.
 
-    if (((_Fact *)input->object_) == inputs_[i]) {
-
-      offspring = NULL;
+    if (((_Fact *)input->object_) == inputs_[i])
       return false;
-    }
   }
   auto now = Now();
   // if(match_deadline.time_since_epoch().count() == 0)
@@ -277,7 +273,6 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
           //std::cout<<" guards failed\n";
           delete[] code_;
           code_ = NULL;
-          offspring = NULL;
           // JTNote: This returns after bindings_ is modified. Should they be restored?
           return false;
         }
@@ -295,11 +290,9 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
       store_evidence(input->object_, prediction, is_simulation);
       return true;
     }
-  } else {
-    //std::cout<<" no match\n";
-    offspring = NULL;
-    return false;
   }
+  else
+    return false;
 }
 
 _Fact* CSTOverlay::bindPattern(_Fact *input, HLPBindingMap* map)
