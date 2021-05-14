@@ -550,6 +550,11 @@ Simulator
   Check if anti-goal (|fact (imdl M0 [h 25 0s:0ms:0us 0s:400ms:0us] [v5: 0 0s:100ms:0us 0s:500ms:0us])) prevents moving hand.
   ANSWER: No. 
 
+2021-05-14
+* DISCUSS. Independent forward chaining only works for monotonic logic.
+* DONE anti-goal (|fact (imdl ...)) becomes anti-requirement to block move hand.
+  After (mk.val h attached nil), conditions for anti-requirement are gone. Re-try move.
+
 next meeting
 * Review/merge bug fix pull requests for:
   * REVIEWING. super_goal in new Sim https://github.com/IIIM-IS/replicode/pull/106
@@ -566,11 +571,10 @@ next meeting
 * Review diag_mode_rel_0_1 tags.
 
 TODO
-* TRY anti-goal (|fact (imdl M0 [h 25 0s:0ms:0us 0s:400ms:0us] [v5: 0 0s:100ms:0us 0s:500ms:0us])) becomes anti-requirement
+* For release, does the PTPX need to be working (to learn why model failed)?
 * TRY copy/paste code to check references to fix: Using = in guard of composite state of model https://github.com/IIIM-IS/replicode/issues/133
 * Visualizer: Show prediction failure.
 * Visualizer: Option to position simulation objects by predicted time vs. created time.
-* Visualizer: Pre-loaded models should start with count and success rate of 1.
 * Make hand-grab-sphere example learn the models.
   * A pgm to match a learned model and inject a new model which uses it.
 * How to ensure that stored requirements are from the same simulation branch?
