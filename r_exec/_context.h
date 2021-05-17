@@ -132,10 +132,10 @@ public:
   void unpatch_code(uint16 patch_index) const { overlay_->unpatch_code(patch_index); }
   uint16 get_last_patch_index() const { return overlay_->get_last_patch_index(); }
 
-  uint16 setAtomicResult(Atom a) const;
-  uint16 setTimestampResult(Timestamp t) const;
-  uint16 setCompoundResultHead(Atom a) const;
-  uint16 addCompoundResultPart(Atom a) const;
+  void setAtomicResult(Atom a) const;
+  void setTimestampResult(Timestamp t) const;
+  void setCompoundResultHead(Atom a) const;
+  void addCompoundResultPart(Atom a) const;
 
   void trace(std::ostream& out) const;
 };

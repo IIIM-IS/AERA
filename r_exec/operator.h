@@ -114,10 +114,10 @@ public:
 
   Atom &operator [](uint16 i) const { return implementation_->get_atom(i); }
 
-  uint16 setAtomicResult(Atom a) const { return implementation_->setAtomicResult(a); }
-  uint16 setTimestampResult(Timestamp t) const { return implementation_->setTimestampResult(t); }
-  uint16 setCompoundResultHead(Atom a) const { return implementation_->setCompoundResultHead(a); }
-  uint16 addCompoundResultPart(Atom a) const { return implementation_->addCompoundResultPart(a); }
+  void setAtomicResult(Atom a) const { implementation_->setAtomicResult(a); }
+  void setTimestampResult(Timestamp t) const { implementation_->setTimestampResult(t); }
+  void setCompoundResultHead(Atom a) const { implementation_->setCompoundResultHead(a); }
+  void addCompoundResultPart(Atom a) const { implementation_->addCompoundResultPart(a); }
 
   void trace(std::ostream& out) const { return implementation_->trace(out); }
 };

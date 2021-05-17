@@ -81,33 +81,29 @@ using namespace r_code;
 
 namespace r_exec {
 
-uint16 _Context::setAtomicResult(Atom a) const { // patch code with 32 bits data.
+void _Context::setAtomicResult(Atom a) const { // patch code with 32 bits data.
 
   overlay_->patch_code(index_, a);
-  return index_;
 }
 
-uint16 _Context::setTimestampResult(Timestamp t) const { // patch code with a VALUE_PTR
+void _Context::setTimestampResult(Timestamp t) const { // patch code with a VALUE_PTR
 
   overlay_->patch_code(index_, Atom::ValuePointer(overlay_->values_.size()));
   overlay_->values_.as_std()->resize(overlay_->values_.size() + 3);
   uint16 value_index = overlay_->values_.size() - 3;
   Utils::SetTimestamp(&overlay_->values_[value_index], t);
-  return value_index;
 }
 
-uint16 _Context::setCompoundResultHead(Atom a) const { // patch code with a VALUE_PTR.
+void _Context::setCompoundResultHead(Atom a) const { // patch code with a VALUE_PTR.
 
   uint16 value_index = overlay_->values_.size();
   overlay_->patch_code(index_, Atom::ValuePointer(value_index));
   addCompoundResultPart(a);
-  return value_index;
 }
 
-uint16 _Context::addCompoundResultPart(Atom a) const { // store result in the value array.
+void _Context::addCompoundResultPart(Atom a) const { // store result in the value array.
 
   overlay_->values_.push_back(a);
-  return overlay_->values_.size() - 1;
 }
 
 void _Context::trace(std::ostream& out) const {
