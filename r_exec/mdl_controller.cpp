@@ -1501,10 +1501,7 @@ void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *c
         m = r_monitors_.erase(m);
       else {
 
-        // If the requirement is simulated, then pass its Sim as the forwardSimulation for check_simulated_imdl.
-        if (f_p_f_imdl->get_pred()->get_simulations_size() > 1)
-          std::cerr << "WARNING: store_requirement: Prediction has multiple simulations. Passing NULL forwardSimulation to r-monitor" << std::endl;
-        if ((*m)->signal(is_simulation, f_p_f_imdl->get_pred()->get_simulations_size() == 1 ? f_p_f_imdl->get_pred()->get_simulation((uint16)0) : NULL))
+        if ((*m)->signal(is_simulation))
           m = r_monitors_.erase(m);
         else
           ++m;
@@ -2081,7 +2078,7 @@ bool PrimaryMDLController::check_imdl(Fact *goal, HLPBindingMap *bm) { // goal i
   }
 }
 
-bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, Controller *root, Sim* forwardSimulation) { // goal is f->g->f->imdl; called by sr-monitors.
+bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, Controller *root) { // goal is f->g->f->imdl; called by sr-monitors.
 
   Goal *g = goal->get_goal();
   Fact *f_imdl = (Fact *)g->get_target();
@@ -2102,6 +2099,12 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, C
       P<Fact> f_imdl_copy = new Fact(
         bm->bind_pattern(f_imdl->get_reference(0)), f_imdl->get_after(), f_imdl->get_before(),
         f_imdl->get_cfd(), f_imdl->get_psln_thr());
+      Sim* forwardSimulation = NULL;
+      if (root && ground) {
+        if (ground->get_pred()->get_simulations_size() > 1)
+          std::cerr << "WARNING: check_simulated_imdl: ground has multiple Sims. Passing the first Sim to abduce_simulated_lhs" << std::endl;
+        forwardSimulation = ground->get_pred()->get_simulation((uint16)0);
+      }
       abduce_simulated_lhs(bm, sim->get_f_super_goal(), f_imdl_copy, sim->get_opposite(), f_imdl->get_cfd(), new Sim(sim), ground, forwardSimulation);
       return true;
     }

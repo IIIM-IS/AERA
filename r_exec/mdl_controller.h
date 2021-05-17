@@ -418,11 +418,7 @@ public:
 
   bool check_imdl(Fact *goal, HLPBindingMap *bm);
 
-  /**
-   * \param forwardSimulation If forwardSimulation is NULL, then use the goal->get_goal()->get_sim() when calling abduce_simulated_lhs. 
-   * Otherwise, use the given forwardSimulation, which is carried throughout forward simulation.
-   */
-  bool check_simulated_imdl(Fact *goal, HLPBindingMap *bm, Controller *root, Sim* forwardSimulation);
+  bool check_simulated_imdl(Fact *goal, HLPBindingMap *bm, Controller *root);
 
   void abduce(HLPBindingMap *bm, Fact *super_goal, bool opposite, float32 confidence);
 
