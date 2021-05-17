@@ -1817,7 +1817,7 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
       if (sub_sim->get_mode() == SIM_ROOT)
         abduce_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim, ground, true);
       else
-        abduce_simulated_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim, ground, NULL);
+        abduce_simulated_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim, ground);
       break;
     default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
       switch (retrieve_simulated_imdl_bwd(bm, f_imdl, sim->root_, ground)) {
@@ -1827,7 +1827,7 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
         if (sub_sim->get_mode() == SIM_ROOT)
           abduce_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim, NULL, true);
         else
-          abduce_simulated_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim, ground, NULL);
+          abduce_simulated_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim, ground);
         break;
       default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
         sub_sim->is_requirement_ = true;
@@ -1981,7 +1981,7 @@ void PrimaryMDLController::abduce_imdl(HLPBindingMap *bm, Fact *super_goal, Fact
     Utils::RelativeTime(sub_goal->get_target()->get_after()) << "," << Utils::RelativeTime(sub_goal->get_target()->get_before()) << "]");
 }
 
-void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim, Fact *ground, Sim* forwardSimulation) { // goal is f->g->f->object or f->g->|f->object; called concurrently by redcue() and _GMonitor::update().
+void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim, Fact *ground) { // goal is f->g->f->object or f->g->|f->object; called concurrently by redcue() and _GMonitor::update().
 
   if (evaluate_bwd_guards(bm)) { // bm may be updated.
 
@@ -2099,13 +2099,8 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, C
       P<Fact> f_imdl_copy = new Fact(
         bm->bind_pattern(f_imdl->get_reference(0)), f_imdl->get_after(), f_imdl->get_before(),
         f_imdl->get_cfd(), f_imdl->get_psln_thr());
-      Sim* forwardSimulation = NULL;
-      if (root && ground) {
-        if (ground->get_pred()->get_simulations_size() > 1)
-          std::cerr << "WARNING: check_simulated_imdl: ground has multiple Sims. Passing the first Sim to abduce_simulated_lhs" << std::endl;
-        forwardSimulation = ground->get_pred()->get_simulation((uint16)0);
-      }
-      abduce_simulated_lhs(bm, sim->get_f_super_goal(), f_imdl_copy, sim->get_opposite(), f_imdl->get_cfd(), new Sim(sim), ground, forwardSimulation);
+      // If root is provided, pass NULL as the sim to use the Sim in ground for forward chaining.
+      abduce_simulated_lhs(bm, sim->get_f_super_goal(), f_imdl_copy, sim->get_opposite(), f_imdl->get_cfd(), root ? NULL : new Sim(sim), ground);
       return true;
     }
     return false;
