@@ -395,9 +395,9 @@ public:
   }
 
   /**
-   * Get the simulation whose root is the given root Controller.
+   * Get the first simulation whose root is the given root Controller.
    * \param root The root Controller to search for.
-   * \return The simulation with the root, or NULL if not found.
+   * \return The first simulation with the root, or NULL if not found.
    */
   Sim *get_simulation(Controller *root) const;
 

@@ -127,9 +127,9 @@ protected:
   CSTOverlay *get_offspring(HLPBindingMap *map, _Fact *input, _Fact *bound_pattern = NULL);
 
   /**
-   * Similar to *Pred::get_simulation, find the Sim in simulations_ whose root_ is root.
+   * Similar to Pred::get_simulation, find the first Sim in simulations_ whose root_ is root.
    * \param root The root to match with the Sim root_.
-   * \return The matching Sim, or NULL if no match.
+   * \return The first matching Sim, or NULL if no match.
    */
   Sim* get_simulation(Controller *root) const;
 
