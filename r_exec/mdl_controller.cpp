@@ -2030,6 +2030,52 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
 
         auto now = Now();
         f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
+
+        if (!sim) {
+          // This was called from check_simulated_imdl. Keep simulating forward. Don't loop by abducing the LHS as a goal again.
+          // Copy all the Sims from ground.
+          Pred *pred = new Pred(bound_lhs, ground->get_pred(), 1);
+          Fact* fact_pred_bound_lhs = new Fact(pred, now, now, 1, 1);
+          inject_simulation(fact_pred_bound_lhs, now);
+
+          string ground_info;
+#ifdef WITH_DETAIL_OID
+          ground_info = " (" + to_string(ground->get_detail_oid()) + ")";
+#endif
+          // The ground came from matching a requirement.
+          OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(now) << " mdl " << getObject()->get_oid() << ": fact" << 
+            ground_info << " pred fact imdl -> fact " << fact_pred_bound_lhs->get_oid() << " simulated pred");
+          break;
+        }
+
+        // TODO: If we have reached the time horizon for simulated backward chaining, start forward chaining.
+
+        if (is_cmd()) {
+          // The LHS is a command, so stop the backward chaining in this branch and schedule to start forward chaining to predict.
+          // Create a new simulation which will be carried throughout forward chaining until (if) we reach the drive goal.
+          // Use this as the simulation's solution_controller so that, if we commit to this solution, then we 
+          // will abduce the LHS to execute the command.
+          // TODO: If we passed the time horizon for simulated backward chaining, stop all backward chaining and start forward.
+          auto sub_sim = new Sim(
+            sim->get_mode(), sim->get_thz(), super_goal, opposite, sim->root_, 1, this, sim->get_solution_cfd(),
+            sim->get_solution_before());
+          Pred *pred_bound_lhs = new Pred(bound_lhs, sub_sim, 1);
+          auto forward_simulation_time = max(now, sim->get_solution_before() - sim->get_thz() / 2);
+          Fact* f_pred_bound_lhs = new Fact(pred_bound_lhs, forward_simulation_time, forward_simulation_time, 1, 1);
+          inject_simulation(f_pred_bound_lhs, forward_simulation_time);
+          string f_pred_bound_lhs_info;
+          string ground_info;
+#ifdef WITH_DETAIL_OID
+          f_pred_bound_lhs_info = " (" + to_string(f_pred_bound_lhs->get_detail_oid()) + ")";
+          if (ground)
+            ground_info = ", using req (" + to_string(ground->get_detail_oid()) + ")";
+#endif
+          OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(now) << " mdl " << getObject()->get_oid() << ": fact " <<
+            super_goal->get_oid() << " super_goal -> fact" << f_pred_bound_lhs_info << " simulated pred start" <<
+            ground_info << ", ijt " << Utils::RelativeTime(forward_simulation_time));
+          break;
+        }
+
         if (!sim->register_goal_target(bound_lhs))
           // We are already simulating from this goal, so abort to avoid loops.
           break;
