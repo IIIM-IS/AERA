@@ -82,10 +82,10 @@
 
 
 extern "C" {
-bool dll_export add(const r_exec::Context &context, uint16 &index);
-bool dll_export sub(const r_exec::Context &context, uint16 &index);
-bool dll_export mul(const r_exec::Context &context, uint16 &index);
-bool dll_export dis(const r_exec::Context &context, uint16 &index);
+bool dll_export add(const r_exec::Context &context);
+bool dll_export sub(const r_exec::Context &context);
+bool dll_export mul(const r_exec::Context &context);
+bool dll_export dis(const r_exec::Context &context);
 }
 
 class Operators {

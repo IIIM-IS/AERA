@@ -101,14 +101,12 @@ protected:
   /**
    * Create an HLPContext and evaluate code_ at index.
    * \param index The index in code_ to evaluate.
-   * \param result_index The result is at code_[result_index]. If this returns false,
-   * then this is undefined.
    * \return True if successfully evaluated, false for problem evaluated including
    * unbound variables. Note that if the code at index is a boolean expression,
-   * then this can return true for successful evaluation even though code_[result_index]
+   * then this can return true for successful evaluation even though the expression value
    * is boolean false.
    */
-  bool evaluate(uint16 index, uint16 &result_index);
+  bool evaluate(uint16 index);
 
   bool check_fwd_timings();
 

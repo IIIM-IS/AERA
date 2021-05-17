@@ -366,8 +366,8 @@ public:
   }
 
   // IPGM specifics.
-  bool evaluate(uint16 &result_index) const; // index is set to the index of the result, undefined in case of failure.
-  bool evaluate_no_dereference(uint16 &result_index) const;
+  bool evaluate() const;
+  bool evaluate_no_dereference() const;
 
   IPGMContext &operator =(const IPGMContext &c) {
 
@@ -479,9 +479,9 @@ public:
   r_code::Code *build_object(Atom head) const { return overlay_->build_object(head); }
 
   // Implementation of executive-dependent operators.
-  static bool Ins(const IPGMContext &context, uint16 &index);
-  static bool Fvw(const IPGMContext &context, uint16 &index);
-  static bool Red(const IPGMContext &context, uint16 &index);
+  static bool Ins(const IPGMContext &context);
+  static bool Fvw(const IPGMContext &context);
+  static bool Red(const IPGMContext &context);
 };
 }
 

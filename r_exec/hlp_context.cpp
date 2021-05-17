@@ -130,7 +130,7 @@ HLPContext HLPContext::dereference() const {
   }
 }
 
-bool HLPContext::evaluate_no_dereference(uint16 &result_index) const {
+bool HLPContext::evaluate_no_dereference() const {
 
   switch (data_) {
   case VALUE_ARRAY:
@@ -144,7 +144,7 @@ bool HLPContext::evaluate_no_dereference(uint16 &result_index) const {
   case Atom::ASSIGN_PTR: {
 
     HLPContext c(code_, code_[index_].asIndex(), (HLPOverlay *)overlay_);
-    if (c.evaluate_no_dereference(result_index)) {
+    if (c.evaluate_no_dereference()) {
 
       ((HLPOverlay *)overlay_)->bindings_->bind_variable(code_, code_[index_].asAssignmentIndex(), code_[index_].asIndex(), &overlay_->values_[0]);
       return true;
@@ -155,15 +155,14 @@ bool HLPContext::evaluate_no_dereference(uint16 &result_index) const {
     uint16 atom_count = getChildrenCount();
     for (uint16 i = 1; i <= atom_count; ++i) {
 
-      uint16 unused_result_index;
-      if (!getChildDeref(i).evaluate_no_dereference(unused_result_index))
+      if (!getChildDeref(i).evaluate_no_dereference())
         return false;
     }
 
     Operator op = Operator::Get((*this)[0].asOpcode());
     HLPContext *c = new HLPContext(*this);
     Context _c(c);
-    return op(_c, result_index);
+    return op(_c);
   }case Atom::OBJECT:
   case Atom::MARKER:
   case Atom::INSTANTIATED_PROGRAM:
@@ -179,14 +178,11 @@ bool HLPContext::evaluate_no_dereference(uint16 &result_index) const {
     uint16 atom_count = getChildrenCount();
     for (uint16 i = 1; i <= atom_count; ++i) {
 
-      uint16 unused_result_index;
-      if (!getChildDeref(i).evaluate_no_dereference(unused_result_index))
+      if (!getChildDeref(i).evaluate_no_dereference())
         return false;
     }
-    result_index = index_;
     return true;
   }default:
-    result_index = index_;
     return true;
   }
 }

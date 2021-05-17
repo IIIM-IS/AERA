@@ -180,8 +180,7 @@ IPGMContext IPGMContext::dereference() const {
     if (a.isStructural()) { // the target location is not evaluated yet.
 
       IPGMContext s(object_, view_, code_, structure_index, (InputLessPGMOverlay *)overlay_, data_);
-      uint16 unused_index;
-      if (s.evaluate_no_dereference(unused_index))
+      if (s.evaluate_no_dereference())
         return s; // patched code: atom at CODE_VL_PTR's index changed to VALUE_PTR or 32 bits result.
       else // evaluation failed, return undefined context.
         return IPGMContext();
@@ -245,7 +244,7 @@ IPGMContext IPGMContext::dereference() const {
   }
 }
 
-bool IPGMContext::evaluate_no_dereference(uint16 &result_index) const {
+bool IPGMContext::evaluate_no_dereference() const {
 
   switch (data_) {
   case REFERENCE:
@@ -256,7 +255,6 @@ bool IPGMContext::evaluate_no_dereference(uint16 &result_index) const {
   case VIEW:
   case MKS:
   case VWS:
-    result_index = index_;
     return true;
   }
   switch (code_[index_].getDescriptor()) {
@@ -270,18 +268,16 @@ bool IPGMContext::evaluate_no_dereference(uint16 &result_index) const {
       uint16 atom_count = getChildrenCount();
       for (uint16 i = 1; i <= atom_count; ++i) {
 
-        uint16 unused_result_index;
-        if (!getChildDeref(i).evaluate_no_dereference(unused_result_index))
+        if (!getChildDeref(i).evaluate_no_dereference())
           return false;
       }
     }
     IPGMContext *__c = new IPGMContext(*this);
     Context _c(__c);
-    return op(_c, result_index);
+    return op(_c);
   }case Atom::OBJECT: // incl. cmd.
     if ((*this)[0].asOpcode() == Opcodes::Ptn || (*this)[0].asOpcode() == Opcodes::AntiPtn) { // skip patterns.
 
-      result_index = index_;
       return true;
     }
   case Atom::MARKER:
@@ -298,25 +294,22 @@ bool IPGMContext::evaluate_no_dereference(uint16 &result_index) const {
     uint16 atom_count = getChildrenCount();
     for (uint16 i = 1; i <= atom_count; ++i) {
 
-      uint16 unused_result_index;
-      if (!getChildDeref(i).evaluate_no_dereference(unused_result_index))
+      if (!getChildDeref(i).evaluate_no_dereference())
         return false;
     }
-    result_index = index_;
     return true;
   }default:
-    result_index = index_;
     return true;
   }
 }
 
-inline bool IPGMContext::evaluate(uint16 &result_index) const {
+inline bool IPGMContext::evaluate() const {
 
   if (data_ == REFERENCE || data_ == VALUE_ARRAY)
     return true;
 
   IPGMContext c = dereference();
-  return c.evaluate_no_dereference(result_index);
+  return c.evaluate_no_dereference();
 }
 
 void IPGMContext::copy_to_value_array(uint16 &position) {
@@ -509,10 +502,9 @@ bool match(const IPGMContext &input, const IPGMContext &pattern) { // in red, pa
   // evaluate the set of guards.
   IPGMContext guard_set = pattern.getChildDeref(2);
   uint16 guard_count = guard_set.getChildrenCount();
-  uint16 unused_index;
   for (uint16 i = 1; i <= guard_count; ++i) {
 
-    if (!guard_set.getChildDeref(i).evaluate_no_dereference(unused_index)) // WARNING: no check for duplicates.
+    if (!guard_set.getChildDeref(i).evaluate_no_dereference()) // WARNING: no check for duplicates.
       return false;
   }
 
@@ -552,13 +544,12 @@ bool match(const IPGMContext &input, const IPGMContext &pattern, const IPGMConte
 build_productions:
   // compute all productions for this input.
   uint16 production_count = productions.getChildrenCount();
-  uint16 unused_index;
   uint16 production_index;
   for (uint16 i = 1; i <= production_count; ++i) {
 
     IPGMContext prod = productions.getChild(i);
     //prod.trace();
-    prod.evaluate(unused_index);
+    prod.evaluate();
     prod.copy_to_value_array(production_index);
     production_indices.push_back(production_index);
   }
@@ -605,20 +596,19 @@ void reduce(const IPGMContext &context, const IPGMContext &input_set, const IPGM
   }
 }
 
-bool IPGMContext::Red(const IPGMContext &context, uint16 &index) {
+bool IPGMContext::Red(const IPGMContext &context) {
   //context.trace();
-  uint16 unused_result_index;
   IPGMContext input_set = context.getChildDeref(1);
-  if (!input_set.evaluate_no_dereference(unused_result_index))
+  if (!input_set.evaluate_no_dereference())
     return false;
 
   // a section is a set of one pattern and a set of productions.
   IPGMContext positive_section = context.getChildDeref(2);
-  if (!positive_section.getChildDeref(1).evaluate_no_dereference(unused_result_index)) // evaluate the pattern only.
+  if (!positive_section.getChildDeref(1).evaluate_no_dereference()) // evaluate the pattern only.
     return false;
 
   IPGMContext negative_section = context.getChildDeref(3);
-  if (!negative_section.getChildDeref(1).evaluate_no_dereference(unused_result_index)) // evaluate the pattern only.
+  if (!negative_section.getChildDeref(1).evaluate_no_dereference()) // evaluate the pattern only.
     return false;
 
   std::vector<uint16> input_indices; // todo list of inputs to match.
@@ -642,18 +632,18 @@ bool IPGMContext::Red(const IPGMContext &context, uint16 &index) {
   if (production_indices.size()) {
 
     // build the set of all productions in the value array.
-    index = context.setCompoundResultHead(Atom::Set(production_indices.size()));
+    context.setCompoundResultHead(Atom::Set(production_indices.size()));
     for (uint16 i = 0; i < production_indices.size(); ++i) // fill the set with iptrs to productions: the latter are copied in the value array.
       context.addCompoundResultPart(Atom::IPointer(production_indices[i]));
     //(*context).trace();
     return true;
   }
 failure:
-  index = context.setCompoundResultHead(Atom::Set(0));
+  context.setCompoundResultHead(Atom::Set(0));
   return false;
 }
 
-bool IPGMContext::Ins(const IPGMContext &context, uint16 &index) {
+bool IPGMContext::Ins(const IPGMContext &context) {
 
   IPGMContext object = context.getChildDeref(1);
   IPGMContext args = context.getChildDeref(2);
@@ -733,7 +723,7 @@ bool IPGMContext::Ins(const IPGMContext &context, uint16 &index) {
   return false;
 }
 
-bool IPGMContext::Fvw(const IPGMContext &context, uint16 &index) {
+bool IPGMContext::Fvw(const IPGMContext &context) {
 
   IPGMContext object = context.getChildDeref(1);
   IPGMContext group = context.getChildDeref(2);
@@ -749,7 +739,7 @@ bool IPGMContext::Fvw(const IPGMContext &context, uint16 &index) {
   View *v = (View *)_object->get_view(_group, true); // returns (a copy of: deprecated) of the view, if any.
   if (v) { // copy the view in the value array: code on VIEW_CODE_MAX_SIZE followed by 2 atoms holding raw pointers to grp and org.
 
-    index = context.setCompoundResultHead(v->code(0));
+    context.setCompoundResultHead(v->code(0));
     for (uint16 i = 1; i < VIEW_CODE_MAX_SIZE; ++i)
       context.addCompoundResultPart(v->code(i));
     context.addCompoundResultPart(Atom((uint32)v->references_[0]));
@@ -758,7 +748,7 @@ bool IPGMContext::Fvw(const IPGMContext &context, uint16 &index) {
     return true;
   }
 
-  index = context.setAtomicResult(Atom::Nil());
+  context.setAtomicResult(Atom::Nil());
   return false;
 }
 }
