@@ -80,9 +80,6 @@
 
 #include "../r_exec/operator.h"
 
-
-typedef bool (*Operator)(const r_exec::Context &, uint16 &);
-
 typedef uint16 (*OpcodeRetriever)(const char *);
 
 
