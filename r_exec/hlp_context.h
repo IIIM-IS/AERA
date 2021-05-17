@@ -118,16 +118,15 @@ public:
     return getChild(index).dereference();
   }
 
-  // index is set to the index of the result, undefined in case of failure.
-  bool evaluate(uint16 &result_index) const {
+  bool evaluate() const {
     if (data_ == BINDING_MAP || data_ == VALUE_ARRAY)
       return true;
 
     HLPContext c = dereference();
-    return c.evaluate_no_dereference(result_index);
+    return c.evaluate_no_dereference();
   }
 
-  bool evaluate_no_dereference(uint16 &result_index) const;
+  bool evaluate_no_dereference() const;
 
   // _Context implementation.
   _Context *clone() { return new HLPContext(*this); }

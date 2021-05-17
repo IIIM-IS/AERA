@@ -152,10 +152,10 @@ void InputLessPGMOverlay::reset() {
   productions_.clear();
 }
 
-bool InputLessPGMOverlay::evaluate(uint16 index, uint16 &result_index) {
+bool InputLessPGMOverlay::evaluate(uint16 index) {
 
   IPGMContext c(getObject()->get_reference(0), getView(), code_, index, this);
-  return c.evaluate(result_index);
+  return c.evaluate();
 }
 
 void InputLessPGMOverlay::patch_tpl_args() { // no rollback on that part of the code.
@@ -201,13 +201,12 @@ bool InputLessPGMOverlay::inject_productions() {
 
   auto now = Now();
 
-  uint16 unused_index;
   bool in_red = false; // if prods are computed by red, we have to evaluate the expression; otherwise, we have to evaluate the prods in the set one by one to be able to reference new objects in this->productions.
   IPGMContext prods(getObject()->get_reference(0), getView(), code_, code_[PGM_PRODS].asIndex(), this);
   if (prods[0].getDescriptor() != Atom::SET) { // prods[0] is not a set: it is assumed to be an expression lead by red.
 
     in_red = true;
-    if (!prods.evaluate(unused_index)) {
+    if (!prods.evaluate()) {
 
       rollback();
       productions_.clear();
@@ -221,7 +220,7 @@ bool InputLessPGMOverlay::inject_productions() {
   for (uint16 i = 1; i <= production_count; ++i) {
 
     IPGMContext cmd = prods.getChildDeref(i);
-    if (!in_red && !cmd.evaluate(unused_index)) {
+    if (!in_red && !cmd.evaluate()) {
 
       rollback();
       productions_.clear();
@@ -761,8 +760,7 @@ PGMOverlay::MatchResult PGMOverlay::__match(r_exec::View *input, uint16 pattern_
   uint16 guard_set_index = code_[pattern_index + 2].asIndex();
   // Get the IPGMContext like in InputLessPGMOverlay::evaluate.
   IPGMContext c(getObject()->get_reference(0), getView(), code_, guard_set_index, this);
-  uint16 result_index;
-  if (!c.evaluate(result_index))
+  if (!c.evaluate())
     return FAILURE;
   if (c.dereference()[0].isBooleanFalse())
     // The boolean guard is false.
@@ -778,8 +776,7 @@ bool PGMOverlay::check_guards() {
 
     // Get the IPGMContext like in InputLessPGMOverlay::evaluate.
     IPGMContext c(getObject()->get_reference(0), getView(), code_, guard_set_index + i, this);
-    uint16 result_index;
-    if (!c.evaluate(result_index))
+    if (!c.evaluate())
       return false;
     if (c.dereference()[0].isBooleanFalse())
       // The boolean guard is false.

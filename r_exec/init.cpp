@@ -480,7 +480,7 @@ bool Init(const char *user_operator_library_path,
 
   _Init(RetrieveOpcode);
 
-  typedef bool (*UserOperator)(const Context &, uint16 &);
+  typedef bool (*UserOperator)(const Context &);
 
   uint16 operatorCount = GetOperatorCount();
   for (uint16 i = 0; i < operatorCount; ++i) {

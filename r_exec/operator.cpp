@@ -92,7 +92,7 @@ namespace r_exec {
 
 r_code::vector<Operator> Operator::Operators_;
 
-void Operator::Register(uint16 opcode, bool(*o)(const Context &, uint16 &index)) {
+void Operator::Register(uint16 opcode, bool(*o)(const Context &)) {
 
   if (Operators_[opcode].operator_)
     Operators_[opcode].setOverload(o);
@@ -102,21 +102,21 @@ void Operator::Register(uint16 opcode, bool(*o)(const Context &, uint16 &index))
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool now(const Context &context, uint16 &index) {
+bool now(const Context &context) {
 
-  index = context.setTimestampResult(Now());
+  context.setTimestampResult(Now());
   return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool rnd(const Context &context, uint16 &index) {
+bool rnd(const Context &context) {
 
   Context range = *context.getChild(1);
 
   if (!range[0].isFloat()) {
 
-    index = context.setAtomicResult(Atom::Nil());
+    context.setAtomicResult(Atom::Nil());
     return false;
   }
 
@@ -124,34 +124,34 @@ bool rnd(const Context &context, uint16 &index) {
   float32 result=r(range[0].asFloat());
   result/=ULONG_MAX;*/
   float32 result = (((float32)(rand() % 100)) / 100)*range[0].asFloat();
-  index = context.setAtomicResult(Atom::Float(result));
+  context.setAtomicResult(Atom::Float(result));
   return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool equ(const Context &context, uint16 &index) {
+bool equ(const Context &context) {
 
   Context lhs = *context.getChild(1);
   Context rhs = *context.getChild(2);
 
   bool r = (lhs == rhs);
-  index = context.setAtomicResult(Atom::Boolean(r));
+  context.setAtomicResult(Atom::Boolean(r));
   return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool neq(const Context &context, uint16 &index) {
+bool neq(const Context &context) {
 
   bool r = *context.getChild(1) != *context.getChild(2);
-  index = context.setAtomicResult(Atom::Boolean(r));
+  context.setAtomicResult(Atom::Boolean(r));
   return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool gtr(const Context &context, uint16 &index) {
+bool gtr(const Context &context) {
 
   Context lhs = *context.getChild(1);
   Context rhs = *context.getChild(2);
@@ -161,7 +161,7 @@ bool gtr(const Context &context, uint16 &index) {
     if (rhs[0].isFloat()) {
 
       bool r = lhs[0].asFloat() > rhs[0].asFloat();
-      index = context.setAtomicResult(Atom::Boolean(r));
+      context.setAtomicResult(Atom::Boolean(r));
       return true;
     }
   } else if (lhs[0].getDescriptor() == Atom::TIMESTAMP) {
@@ -169,18 +169,18 @@ bool gtr(const Context &context, uint16 &index) {
     if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
       bool r = Utils::GetTimestamp(&lhs[0]) > Utils::GetTimestamp(&rhs[0]);
-      index = context.setAtomicResult(Atom::Boolean(r));
+      context.setAtomicResult(Atom::Boolean(r));
       return true;
     }
   }
 
-  index = context.setAtomicResult(Atom::UndefinedBoolean());
+  context.setAtomicResult(Atom::UndefinedBoolean());
   return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool lsr(const Context &context, uint16 &index) {
+bool lsr(const Context &context) {
 
   Context lhs = *context.getChild(1);
   Context rhs = *context.getChild(2);
@@ -190,7 +190,7 @@ bool lsr(const Context &context, uint16 &index) {
     if (rhs[0].isFloat()) {
 
       bool r = lhs[0].asFloat() < rhs[0].asFloat();
-      index = context.setAtomicResult(Atom::Boolean(r));
+      context.setAtomicResult(Atom::Boolean(r));
       return true;
     }
   } else if (lhs[0].getDescriptor() == Atom::TIMESTAMP) {
@@ -198,18 +198,18 @@ bool lsr(const Context &context, uint16 &index) {
     if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
       bool r = Utils::GetTimestamp(&lhs[0]) < Utils::GetTimestamp(&rhs[0]);
-      index = context.setAtomicResult(Atom::Boolean(r));
+      context.setAtomicResult(Atom::Boolean(r));
       return true;
     }
   }
 
-  index = context.setAtomicResult(Atom::UndefinedBoolean());
+  context.setAtomicResult(Atom::UndefinedBoolean());
   return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool gte(const Context &context, uint16 &index) {
+bool gte(const Context &context) {
 
   Context lhs = *context.getChild(1);
   Context rhs = *context.getChild(2);
@@ -219,7 +219,7 @@ bool gte(const Context &context, uint16 &index) {
     if (rhs[0].isFloat()) {
 
       bool r = lhs[0].asFloat() >= rhs[0].asFloat();
-      index = context.setAtomicResult(Atom::Boolean(r));
+      context.setAtomicResult(Atom::Boolean(r));
       return true;
     }
   } else if (lhs[0].getDescriptor() == Atom::TIMESTAMP) {
@@ -227,18 +227,18 @@ bool gte(const Context &context, uint16 &index) {
     if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
       bool r = Utils::GetTimestamp(&lhs[0]) >= Utils::GetTimestamp(&rhs[0]);
-      index = context.setAtomicResult(Atom::Boolean(r));
+      context.setAtomicResult(Atom::Boolean(r));
       return true;
     }
   }
 
-  index = context.setAtomicResult(Atom::UndefinedBoolean());
+  context.setAtomicResult(Atom::UndefinedBoolean());
   return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool lse(const Context &context, uint16 &index) {
+bool lse(const Context &context) {
 
   Context lhs = *context.getChild(1);
   Context rhs = *context.getChild(2);
@@ -248,7 +248,7 @@ bool lse(const Context &context, uint16 &index) {
     if (rhs[0].isFloat()) {
 
       bool r = lhs[0].asFloat() <= rhs[0].asFloat();
-      index = context.setAtomicResult(Atom::Boolean(r));
+      context.setAtomicResult(Atom::Boolean(r));
       return true;
     }
   } else if (lhs[0].getDescriptor() == Atom::TIMESTAMP) {
@@ -256,18 +256,18 @@ bool lse(const Context &context, uint16 &index) {
     if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
       bool r = Utils::GetTimestamp(&lhs[0]) <= Utils::GetTimestamp(&rhs[0]);
-      index = context.setAtomicResult(Atom::Boolean(r));
+      context.setAtomicResult(Atom::Boolean(r));
       return true;
     }
   }
 
-  index = context.setAtomicResult(Atom::UndefinedBoolean());
+  context.setAtomicResult(Atom::UndefinedBoolean());
   return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool add(const Context &context, uint16 &index) {
+bool add(const Context &context) {
 
   Context lhs = *context.getChild(1);
   Context rhs = *context.getChild(2);
@@ -278,23 +278,23 @@ bool add(const Context &context, uint16 &index) {
 
       if (lhs[0] == Atom::PlusInfinity()) {
 
-        index = context.setAtomicResult(Atom::PlusInfinity());
+        context.setAtomicResult(Atom::PlusInfinity());
         return true;
       }
 
       if (rhs[0] == Atom::PlusInfinity()) {
 
-        index = context.setAtomicResult(Atom::PlusInfinity());
+        context.setAtomicResult(Atom::PlusInfinity());
         return true;
       }
 
-      index = context.setAtomicResult(Atom::Float(lhs[0].asFloat() + rhs[0].asFloat()));
+      context.setAtomicResult(Atom::Float(lhs[0].asFloat() + rhs[0].asFloat()));
       return true;
     } else if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
       if (lhs[0] != Atom::PlusInfinity()) {
 
-        index = context.setTimestampResult(Utils::GetTimestamp(&rhs[0]) + microseconds((int64)lhs[0].asFloat()));
+        context.setTimestampResult(Utils::GetTimestamp(&rhs[0]) + microseconds((int64)lhs[0].asFloat()));
         return true;
       }
     }
@@ -302,25 +302,25 @@ bool add(const Context &context, uint16 &index) {
 
     if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
-      index = context.setTimestampResult(Utils::GetTimestamp(&lhs[0]) + Utils::GetTimestamp(&rhs[0]).time_since_epoch());
+      context.setTimestampResult(Utils::GetTimestamp(&lhs[0]) + Utils::GetTimestamp(&rhs[0]).time_since_epoch());
       return true;
     } else if (rhs[0].isFloat()) {
 
       if (rhs[0] != Atom::PlusInfinity()) {
 
-        index = context.setTimestampResult(Utils::GetTimestamp(&lhs[0]) + microseconds((int64)rhs[0].asFloat()));
+        context.setTimestampResult(Utils::GetTimestamp(&lhs[0]) + microseconds((int64)rhs[0].asFloat()));
         return true;
       }
     }
   }
 
-  index = context.setAtomicResult(Atom::Nil());
+  context.setAtomicResult(Atom::Nil());
   return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool sub(const Context &context, uint16 &index) {
+bool sub(const Context &context) {
 
   Context lhs = *context.getChild(1);
   Context rhs = *context.getChild(2);
@@ -331,42 +331,42 @@ bool sub(const Context &context, uint16 &index) {
 
       if (lhs[0] == Atom::PlusInfinity()) {
 
-        index = context.setAtomicResult(Atom::PlusInfinity());
+        context.setAtomicResult(Atom::PlusInfinity());
         return true;
       }
 
       if (rhs[0] == Atom::PlusInfinity()) {
 
-        index = context.setAtomicResult(Atom::Float(0));
+        context.setAtomicResult(Atom::Float(0));
         return true;
       }
 
-      index = context.setAtomicResult(Atom::Float(lhs[0].asFloat() - rhs[0].asFloat()));
+      context.setAtomicResult(Atom::Float(lhs[0].asFloat() - rhs[0].asFloat()));
       return true;
     }
   } else if (lhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
     if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
-      index = context.setTimestampResult(Utils::GetTimestamp(&lhs[0]) - Utils::GetTimestamp(&rhs[0]).time_since_epoch());
+      context.setTimestampResult(Utils::GetTimestamp(&lhs[0]) - Utils::GetTimestamp(&rhs[0]).time_since_epoch());
       return true;
     } else if (rhs[0].isFloat()) {
 
       if (rhs[0] != Atom::PlusInfinity()) {
 
-        index = context.setTimestampResult(Utils::GetTimestamp(&lhs[0]) - microseconds((int64)rhs[0].asFloat()));
+        context.setTimestampResult(Utils::GetTimestamp(&lhs[0]) - microseconds((int64)rhs[0].asFloat()));
         return true;
       }
     }
   }
 
-  index = context.setAtomicResult(Atom::Nil());
+  context.setAtomicResult(Atom::Nil());
   return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool mul(const Context &context, uint16 &index) {
+bool mul(const Context &context) {
 
   Context lhs = *context.getChild(1);
   Context rhs = *context.getChild(2);
@@ -379,19 +379,19 @@ bool mul(const Context &context, uint16 &index) {
 
         if (rhs[0] == Atom::PlusInfinity()) {
 
-          index = context.setAtomicResult(Atom::PlusInfinity());
+          context.setAtomicResult(Atom::PlusInfinity());
           return true;
         }
 
         if (rhs[0].asFloat() > 0) {
 
-          index = context.setAtomicResult(Atom::PlusInfinity());
+          context.setAtomicResult(Atom::PlusInfinity());
           return true;
         }
 
         if (rhs[0].asFloat() <= 0) {
 
-          index = context.setAtomicResult(Atom::Float(0));
+          context.setAtomicResult(Atom::Float(0));
           return true;
         }
       }
@@ -400,44 +400,44 @@ bool mul(const Context &context, uint16 &index) {
 
         if (lhs[0].asFloat() > 0) {
 
-          index = context.setAtomicResult(Atom::PlusInfinity());
+          context.setAtomicResult(Atom::PlusInfinity());
           return true;
         }
 
         if (lhs[0].asFloat() <= 0) {
 
-          index = context.setAtomicResult(Atom::Float(0));
+          context.setAtomicResult(Atom::Float(0));
           return true;
         }
       }
 
-      index = context.setAtomicResult(Atom::Float(lhs[0].asFloat()*rhs[0].asFloat()));
+      context.setAtomicResult(Atom::Float(lhs[0].asFloat()*rhs[0].asFloat()));
       return true;
     } else if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
-      index = context.setAtomicResult(Atom::Float(Utils::GetMicrosecondsSinceEpoch(&rhs[0]).count() * lhs[0].asFloat()));
+      context.setAtomicResult(Atom::Float(Utils::GetMicrosecondsSinceEpoch(&rhs[0]).count() * lhs[0].asFloat()));
       return true;
     }
   } else if (lhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
     if (rhs[0].isFloat()) {
 
-      index = context.setTimestampResult(Timestamp(microseconds((int64)(Utils::GetMicrosecondsSinceEpoch(&lhs[0]).count() * rhs[0].asFloat()))));
+      context.setTimestampResult(Timestamp(microseconds((int64)(Utils::GetMicrosecondsSinceEpoch(&lhs[0]).count() * rhs[0].asFloat()))));
       return true;
     } else if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
-      index = context.setAtomicResult(Atom::Float(Utils::GetMicrosecondsSinceEpoch(&lhs[0]).count() * Utils::GetMicrosecondsSinceEpoch(&lhs[0]).count()));
+      context.setAtomicResult(Atom::Float(Utils::GetMicrosecondsSinceEpoch(&lhs[0]).count() * Utils::GetMicrosecondsSinceEpoch(&lhs[0]).count()));
       return true;
     }
   }
 
-  index = context.setAtomicResult(Atom::Nil());
+  context.setAtomicResult(Atom::Nil());
   return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool div(const Context &context, uint16 &index) {
+bool div(const Context &context) {
 
   Context lhs = *context.getChild(1);
   Context rhs = *context.getChild(2);
@@ -452,19 +452,19 @@ bool div(const Context &context, uint16 &index) {
 
           if (rhs[0] == Atom::PlusInfinity()) {
 
-            index = context.setAtomicResult(Atom::PlusInfinity());
+            context.setAtomicResult(Atom::PlusInfinity());
             return true;
           }
 
           if (rhs[0].asFloat() > 0) {
 
-            index = context.setAtomicResult(Atom::PlusInfinity());
+            context.setAtomicResult(Atom::PlusInfinity());
             return true;
           }
 
           if (rhs[0].asFloat() <= 0) {
 
-            index = context.setAtomicResult(Atom::Float(0));
+            context.setAtomicResult(Atom::Float(0));
             return true;
           }
         }
@@ -473,18 +473,18 @@ bool div(const Context &context, uint16 &index) {
 
           if (lhs[0].asFloat() > 0) {
 
-            index = context.setAtomicResult(Atom::PlusInfinity());
+            context.setAtomicResult(Atom::PlusInfinity());
             return true;
           }
 
           if (lhs[0].asFloat() <= 0) {
 
-            index = context.setAtomicResult(Atom::Float(0));
+            context.setAtomicResult(Atom::Float(0));
             return true;
           }
         }
 
-        index = context.setAtomicResult(Atom::Float(lhs[0].asFloat() / rhs[0].asFloat()));
+        context.setAtomicResult(Atom::Float(lhs[0].asFloat() / rhs[0].asFloat()));
         return true;
       }
     } else if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
@@ -492,7 +492,7 @@ bool div(const Context &context, uint16 &index) {
       float64 rhs_t = (float64)Utils::GetMicrosecondsSinceEpoch(&rhs[0]).count();
       if (rhs_t != 0) {
 
-        index = context.setAtomicResult(Atom::Float(lhs[0].asFloat() / rhs_t));
+        context.setAtomicResult(Atom::Float(lhs[0].asFloat() / rhs_t));
         return true;
       }
     }
@@ -503,7 +503,7 @@ bool div(const Context &context, uint16 &index) {
       if (rhs[0].asFloat() != 0) {
 
         float64 lhs_t = (float64)Utils::GetMicrosecondsSinceEpoch(&lhs[0]).count();
-        index = context.setTimestampResult(Timestamp(microseconds((int64)(lhs_t / rhs[0].asFloat()))));
+        context.setTimestampResult(Timestamp(microseconds((int64)(lhs_t / rhs[0].asFloat()))));
         return true;
       }
     } else if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
@@ -512,19 +512,19 @@ bool div(const Context &context, uint16 &index) {
       if (rhs_t != 0) {
 
         float64 lhs_t = (float64)Utils::GetMicrosecondsSinceEpoch(&lhs[0]).count();
-        index = context.setAtomicResult(Atom::Float(lhs_t / rhs_t));
+        context.setAtomicResult(Atom::Float(lhs_t / rhs_t));
         return true;
       }
     }
   }
 
-  index = context.setAtomicResult(Atom::Nil());
+  context.setAtomicResult(Atom::Nil());
   return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool dis(const Context &context, uint16 &index) {
+bool dis(const Context &context) {
 
   Context lhs = *context.getChild(1);
   Context rhs = *context.getChild(2);
@@ -533,7 +533,7 @@ bool dis(const Context &context, uint16 &index) {
 
     if (rhs[0].isFloat()) {
 
-      index = context.setAtomicResult(Atom::Float(abs(lhs[0].asFloat() - rhs[0].asFloat())));
+      context.setAtomicResult(Atom::Float(abs(lhs[0].asFloat() - rhs[0].asFloat())));
       return true;
     }
   } else if (lhs[0].getDescriptor() == Atom::TIMESTAMP) {
@@ -542,18 +542,18 @@ bool dis(const Context &context, uint16 &index) {
 
       auto lhs_t = Utils::GetMicrosecondsSinceEpoch(&lhs[0]).count();
       auto rhs_t = Utils::GetMicrosecondsSinceEpoch(&rhs[0]).count();
-      index = context.setTimestampResult(Timestamp(microseconds(abs(lhs_t - rhs_t))));
+      context.setTimestampResult(Timestamp(microseconds(abs(lhs_t - rhs_t))));
       return true;
     }
   }
 
-  index = context.setAtomicResult(Atom::Nil());
+  context.setAtomicResult(Atom::Nil());
   return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool ln(const Context &context, uint16 &index) {
+bool ln(const Context &context) {
 
   Context arg = *context.getChild(1);
 
@@ -561,34 +561,34 @@ bool ln(const Context &context, uint16 &index) {
 
     if (arg[0].asFloat() != 0) {
 
-      index = context.setAtomicResult(Atom::Float(::log(arg[0].asFloat())));
+      context.setAtomicResult(Atom::Float(::log(arg[0].asFloat())));
       return true;
     }
   }
 
-  index = context.setAtomicResult(Atom::Nil());
+  context.setAtomicResult(Atom::Nil());
   return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool exp(const Context &context, uint16 &index) {
+bool exp(const Context &context) {
 
   Context arg = *context.getChild(1);
 
   if (arg[0].isFloat()) {
 
-    index = context.setAtomicResult(Atom::Float(::exp(arg[0].asFloat())));
+    context.setAtomicResult(Atom::Float(::exp(arg[0].asFloat())));
     return true;
   }
 
-  index = context.setAtomicResult(Atom::Nil());
+  context.setAtomicResult(Atom::Nil());
   return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool log(const Context &context, uint16 &index) {
+bool log(const Context &context) {
 
   Context arg = *context.getChild(1);
 
@@ -596,62 +596,62 @@ bool log(const Context &context, uint16 &index) {
 
     if (arg[0].asFloat() != 0) {
 
-      index = context.setAtomicResult(Atom::Float(log10(arg[0].asFloat())));
+      context.setAtomicResult(Atom::Float(log10(arg[0].asFloat())));
       return true;
     }
   }
 
-  index = context.setAtomicResult(Atom::Nil());
+  context.setAtomicResult(Atom::Nil());
   return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool e10(const Context &context, uint16 &index) {
+bool e10(const Context &context) {
 
   Context arg = *context.getChild(1);
 
   if (arg[0].isFloat()) {
 
-    index = context.setAtomicResult(Atom::Float(pow(10, arg[0].asFloat())));
+    context.setAtomicResult(Atom::Float(pow(10, arg[0].asFloat())));
     return true;
   }
 
-  index = context.setAtomicResult(Atom::Nil());
+  context.setAtomicResult(Atom::Nil());
   return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool syn(const Context &context, uint16 &index) {
+bool syn(const Context &context) {
 
   return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool ins(const Context &context, uint16 &index) {
+bool ins(const Context &context) {
 
-  return IPGMContext::Ins(*(IPGMContext *)context.get_implementation(), index);
+  return IPGMContext::Ins(*(IPGMContext *)context.get_implementation());
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool red(const Context &context, uint16 &index) {
+bool red(const Context &context) {
 
-  return IPGMContext::Red(*(IPGMContext *)context.get_implementation(), index);
+  return IPGMContext::Red(*(IPGMContext *)context.get_implementation());
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool fvw(const Context &context, uint16 &index) {
+bool fvw(const Context &context) {
 
-  return IPGMContext::Fvw(*(IPGMContext *)context.get_implementation(), index);
+  return IPGMContext::Fvw(*(IPGMContext *)context.get_implementation());
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool is_sim(const Context &context, uint16 &index) {
+bool is_sim(const Context &context) {
 
   const IPGMContext &ipgm_context = *(IPGMContext *)context.get_implementation();
   IPGMContext arg = ipgm_context.getChildDeref(1);
@@ -663,73 +663,73 @@ bool is_sim(const Context &context, uint16 &index) {
   else if (obj->code(0).asOpcode() == Opcodes::Pred)
     result = ((Pred*)obj)->is_simulation();
 
-  index = context.setAtomicResult(Atom::Boolean(result));
+  context.setAtomicResult(Atom::Boolean(result));
   return true;
 }
 
-bool minimum(const Context &context, uint16 &index) {
+bool minimum(const Context &context) {
   Context lhs = *context.getChild(1);
   Context rhs = *context.getChild(2);
 
   if (lhs[0].isFloat() && rhs[0].isFloat()) {
     if (lhs[0] == Atom::MinusInfinity() || rhs[0] == Atom::MinusInfinity()) {
-      index = context.setAtomicResult(Atom::MinusInfinity());
+      context.setAtomicResult(Atom::MinusInfinity());
       return true;
     }
 
     if (lhs[0] == Atom::PlusInfinity()) {
-      index = context.setAtomicResult(Atom::Float(rhs[0].asFloat()));
+      context.setAtomicResult(Atom::Float(rhs[0].asFloat()));
       return true;
     }
     if (rhs[0] == Atom::PlusInfinity()) {
-      index = context.setAtomicResult(Atom::Float(lhs[0].asFloat()));
+      context.setAtomicResult(Atom::Float(lhs[0].asFloat()));
       return true;
     }
 
-    index = context.setAtomicResult(Atom::Float(min(lhs[0].asFloat(), rhs[0].asFloat())));
+    context.setAtomicResult(Atom::Float(min(lhs[0].asFloat(), rhs[0].asFloat())));
     return true;
   }
   else if (lhs[0].getDescriptor() == Atom::TIMESTAMP && rhs[0].getDescriptor() == Atom::TIMESTAMP) {
-    index = context.setTimestampResult(Timestamp(min(
+    context.setTimestampResult(Timestamp(min(
       duration_cast<microseconds>(Utils::GetTimestamp(&lhs[0]).time_since_epoch()),
       duration_cast<microseconds>(Utils::GetTimestamp(&rhs[0]).time_since_epoch()))));
     return true;
   }
 
-  index = context.setAtomicResult(Atom::Nil());
+  context.setAtomicResult(Atom::Nil());
   return false;
 }
 
-bool maximum(const Context &context, uint16 &index) {
+bool maximum(const Context &context) {
   Context lhs = *context.getChild(1);
   Context rhs = *context.getChild(2);
 
   if (lhs[0].isFloat() && rhs[0].isFloat()) {
     if (lhs[0] == Atom::PlusInfinity() || rhs[0] == Atom::PlusInfinity()) {
-      index = context.setAtomicResult(Atom::PlusInfinity());
+      context.setAtomicResult(Atom::PlusInfinity());
       return true;
     }
 
     if (lhs[0] == Atom::MinusInfinity()) {
-      index = context.setAtomicResult(Atom::Float(rhs[0].asFloat()));
+      context.setAtomicResult(Atom::Float(rhs[0].asFloat()));
       return true;
     }
     if (rhs[0] == Atom::MinusInfinity()) {
-      index = context.setAtomicResult(Atom::Float(lhs[0].asFloat()));
+      context.setAtomicResult(Atom::Float(lhs[0].asFloat()));
       return true;
     }
 
-    index = context.setAtomicResult(Atom::Float(max(lhs[0].asFloat(), rhs[0].asFloat())));
+    context.setAtomicResult(Atom::Float(max(lhs[0].asFloat(), rhs[0].asFloat())));
     return true;
   }
   else if (lhs[0].getDescriptor() == Atom::TIMESTAMP && rhs[0].getDescriptor() == Atom::TIMESTAMP) {
-    index = context.setTimestampResult(Timestamp(max(
+    context.setTimestampResult(Timestamp(max(
       duration_cast<microseconds>(Utils::GetTimestamp(&lhs[0]).time_since_epoch()),
       duration_cast<microseconds>(Utils::GetTimestamp(&rhs[0]).time_since_epoch()))));
     return true;
   }
 
-  index = context.setAtomicResult(Atom::Nil());
+  context.setAtomicResult(Atom::Nil());
   return false;
 }
 

@@ -122,30 +122,30 @@ public:
   void trace(std::ostream& out) const { return implementation_->trace(out); }
 };
 
-bool red(const Context &context, uint16 &index); // executive-dependent.
+bool red(const Context &context); // executive-dependent.
 
-bool syn(const Context &context, uint16 &index);
+bool syn(const Context &context);
 
 class Operator {
 private:
   static r_code::vector<Operator> Operators_; // indexed by opcodes.
 
-  bool(*operator_)(const Context &, uint16 &);
-  bool(*overload_)(const Context &, uint16 &);
+  bool(*operator_)(const Context &);
+  bool(*overload_)(const Context &);
 public:
-  static void Register(uint16 opcode, bool(*op)(const Context &, uint16 &)); // first, register std operators; next register user-defined operators (may be registered as overloads).
+  static void Register(uint16 opcode, bool(*op)(const Context &)); // first, register std operators; next register user-defined operators (may be registered as overloads).
   static Operator Get(uint16 opcode) { return Operators_[opcode]; }
   Operator() : operator_(NULL), overload_(NULL) {}
-  Operator(bool(*o)(const Context &, uint16 &)) : operator_(o), overload_(NULL) {}
+  Operator(bool(*o)(const Context &)) : operator_(o), overload_(NULL) {}
   ~Operator() {}
 
-  void setOverload(bool(*o)(const Context &, uint16 &)) { overload_ = o; }
+  void setOverload(bool(*o)(const Context &)) { overload_ = o; }
 
-  bool operator ()(const Context &context, uint16 &index) const {
-    if (operator_(context, index))
+  bool operator ()(const Context &context) const {
+    if (operator_(context))
       return true;
     if (overload_)
-      return overload_(context, index);
+      return overload_(context);
     return false;
   }
 
@@ -155,36 +155,36 @@ public:
 
 // std operators ////////////////////////////////////////
 
-bool now(const Context &context, uint16 &index);
+bool now(const Context &context);
 
-bool rnd(const Context &context, uint16 &index);
+bool rnd(const Context &context);
 
-bool equ(const Context &context, uint16 &index);
-bool neq(const Context &context, uint16 &index);
-bool gtr(const Context &context, uint16 &index);
-bool lsr(const Context &context, uint16 &index);
-bool gte(const Context &context, uint16 &index);
-bool lse(const Context &context, uint16 &index);
+bool equ(const Context &context);
+bool neq(const Context &context);
+bool gtr(const Context &context);
+bool lsr(const Context &context);
+bool gte(const Context &context);
+bool lse(const Context &context);
 
-bool add(const Context &context, uint16 &index);
-bool sub(const Context &context, uint16 &index);
-bool mul(const Context &context, uint16 &index);
-bool div(const Context &context, uint16 &index);
+bool add(const Context &context);
+bool sub(const Context &context);
+bool mul(const Context &context);
+bool div(const Context &context);
 
-bool dis(const Context &context, uint16 &index);
+bool dis(const Context &context);
 
-bool ln(const Context &context, uint16 &index);
-bool exp(const Context &context, uint16 &index);
-bool log(const Context &context, uint16 &index);
-bool e10(const Context &context, uint16 &index);
+bool ln(const Context &context);
+bool exp(const Context &context);
+bool log(const Context &context);
+bool e10(const Context &context);
 
-bool ins(const Context &context, uint16 &index); // executive-dependent.
+bool ins(const Context &context); // executive-dependent.
 
-bool fvw(const Context &context, uint16 &index); // executive-dependent.
+bool fvw(const Context &context); // executive-dependent.
 
-bool is_sim(const Context &context, uint16 &index);
-bool minimum(const Context &context, uint16 &index);
-bool maximum(const Context &context, uint16 &index);
+bool is_sim(const Context &context);
+bool minimum(const Context &context);
+bool maximum(const Context &context);
 }
 
 
