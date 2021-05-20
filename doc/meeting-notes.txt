@@ -557,10 +557,19 @@ Simulator
 * DONE. not making a goal icst from a single member (revert pull request #131) https://github.com/IIIM-IS/replicode/pull/154
 * DONE. super_goal in new Sim https://github.com/IIIM-IS/replicode/pull/106
 
+2021-05-20
+* DONE. Pull request to save inputs for PTPX during pass-through https://github.com/IIIM-IS/replicode/pull/159
+* DONE. Try PTPX
+  * Creates model with anti-requirement in next frame. (The normal requirement is same frame.)
+  * The pre-conditions seem overly broad. "If a hand is at the same position as a cube, then
+    trying to pick up anything will fail."
+      (fact (icst S1 |[] [H: P: C: cube] : :) T0: T1: : :)
+      (|fact (imdl M2 [H: v5: T1: T2:] [T1_RHS: T3:] : :) T1: T2: : :)
+
 next meeting
 * Review/merge bug fix pull requests for:
-  * REVIEWING. binding map in the prediction's mk.rdx https://github.com/IIIM-IS/replicode/pull/120
   * REVIEWING. simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
+  * REVIEWING. binding map in the prediction's mk.rdx https://github.com/IIIM-IS/replicode/pull/120
   * SYNC_HOLD timings https://github.com/IIIM-IS/replicode/pull/118
 * Review/merge new functionality pull requests for:
   * not sharing timing variables when building the model https://github.com/IIIM-IS/replicode/pull/110
@@ -571,24 +580,30 @@ next meeting
 * Review diag_mode_rel_0_1 tags.
 
 TODO
-* For release, does the PTPX need to be working (to learn why model failed)?
+* PTPX: After PTPX creates the model predicting general grab failure for a cube, change the drive to grab a cube. See
+  how PTPX reacts to a prediction failure from its own model. Does this recurse? Should there be a limit?
+* PTPX: Try hand-coded more specific alternative to S1 for two things at the same position as hand. Make the example
+  keep running long enough to test predictions from the more general and specific PTPX models. See if the more general
+  model is eventially removed.
+* PTPX: Try to get the PTPX to create a new cst for the failure conditions.
+* PTPX: What steps create model mdl |[] [(|fact (cmd grab [v0:]) v1: v2:) (|fact (imdl M2 [v0: v3: v4: v5:] [v6: v7:]) v4: v5:)] ?
+  Did the programs fail to inject an effent copy, resulting in (|fact (cmd grab [h]) 0s:120ms:0us 0s:500ms:0us)) ?
+* PTPX: Try allowing models with LHS and RHS at the same time, by changing i->input_->get_after() >= consequent->get_after()
 * TRY copy/paste code to check references to fix: Using = in guard of composite state of model https://github.com/IIIM-IS/replicode/issues/133
-* Visualizer: Show prediction failure.
 * Visualizer: Option to position simulation objects by predicted time vs. created time.
 * Make hand-grab-sphere example learn the models.
   * A pgm to match a learned model and inject a new model which uses it.
 * How to ensure that stored requirements are from the same simulation branch?
 * Try limiting detection of conflicting facts to numbers.
 * Try commenting out PTPX::reduce:666 if (i->input_ == Opcodes::Cmd)
+* Try pass_through==false. Do CTPX and PTPX still work?
 * When a failed model is in the secondary group and the pattern extractor learns a model from new inputs, does it check if it's the same as the failed model?
-* pull request for overlapping SYNC_HOLD timings in auto focus
 * For an anti-goal can AERA check if it doesn't violate any "current" drive? Need a list of "current" drives?
 * Make a mk.rdx for (fact (pred (fact (imdl ...)))). (May affect other code that expects the other kind of prediction.)
 * Change (success) to refer to the prediction mk.rdx instead of the prediction. (Affects other code.)
 * Visualizer: Add an item for prediction reduction, initially hidden.
 * Visualizer: Ability to launch Replicode from the Visualizer.
 * Visualizer: Show the time job queue sorted by time.
-* Document methods, starting with those related to the simulator.
 * If min_sim_time_horizon > 0, how is the behavior different?
 * In babbling, issue a goal for a position, an "unrelated" speed_x, and move the position there. Is GTPX invoked?
 * Treat move commands at the same time step as impulses and have them accumulate?
