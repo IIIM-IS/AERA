@@ -381,8 +381,23 @@ void AutoFocusController::reduce(r_exec::View *input) {
 
         if (pass_through_) {
 
+          View* primary_view = NULL;
           if (opcode != Opcodes::ICst) // don't inject again (since it comes from inside).
-            inject_input(input);
+            primary_view = inject_input(input);
+
+          if (ptpx_on_) {
+            // The PTPX may need the input. Save it in cross_buffer_ up to tpx_time_horizon.
+            if (opcode == Opcodes::ICst) {
+              P<BindingMap> bm = ((ICST *)payload)->bindings_;
+              _Fact *abstract_f_ihlp = bm->abstract_f_ihlp((_Fact *)input_object);
+              cross_buffer_.push_back(Input(input, abstract_f_ihlp, bm));
+            }
+            else {
+              P<BindingMap> bm = new BindingMap();
+              P<_Fact> abstract_input = (_Fact *)bm->abstract_object(input_object, false);
+              cross_buffer_.push_back(Input(primary_view, abstract_input, bm));
+            }
+          }
         } else {
 
           P<BindingMap> bm = new BindingMap();
