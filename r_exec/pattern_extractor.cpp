@@ -666,7 +666,7 @@ void PTPX::reduce(r_exec::View *input) {
     if (i->input_->code(0).asOpcode() == Opcodes::Cmd) // no cmds as req lhs (because no bwd-operational); prefer: cmd->effect, effect->imdl.
       i = inputs_.erase(i);
     else if (!end_bm->intersect(i->bindings_) || // discard inputs that do not share values with the consequent.
-      i->input_->get_after() >= consequent->get_after()) // discard inputs not younger than the consequent.
+             i->input_->get_after() >= consequent->get_after()) // discard inputs not younger than the consequent.
       i = inputs_.erase(i);
     else
       ++i;
