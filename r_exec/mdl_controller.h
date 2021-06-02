@@ -125,7 +125,12 @@ public:
   P<_Fact> f_imdl; // f1 as in f0->pred->f1->imdl.
   bool chaining_was_allowed;
 };
-typedef std::pair<Requirements, Requirements> RequirementsPair; // first: wr, second: sr.
+
+class RequirementsPair {
+public:
+  Requirements weak_requirements_;
+  Requirements strong_requirements_;
+};
 
 // Requirements don't monitor their predictions: they don't inject any; instead, they store a f->imdl in the controlled model controllers (both primary and secondary), thus, no success injected for the productions of requirements.
 // Models controlled by requirements maintain for each prediction they make, a list of all the controllers of the requirements having allowed/inhibited said prediction.

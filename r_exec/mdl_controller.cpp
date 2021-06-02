@@ -790,9 +790,9 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
     // JTNote: We set ground = NULL above, so this is never true.
     if (ground != NULL) { // an imdl triggered the reduction of the cache.
 
-      r_p.first.controllers.push_back(req_controller);
-      r_p.first.f_imdl = ground;
-      r_p.first.chaining_was_allowed = true;
+      r_p.weak_requirements_.controllers.push_back(req_controller);
+      r_p.weak_requirements_.f_imdl = ground;
+      r_p.weak_requirements_.chaining_was_allowed = true;
       return WEAK_REQUIREMENT_ENABLED;
     }
 
@@ -830,9 +830,9 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
             //std::cout<<"Chosen IMDL: "<<imdl->code(tpl_index+1).asFloat()<<" ["<<Time::ToString_seconds((*e).after-Utils::GetTimeReference())<<" "<<Time::ToString_seconds((*e).before-Utils::GetTimeReference())<<"]"<<std::endl;
           }
 
-          r_p.first.controllers.push_back((*e).controller_);
-          r_p.first.f_imdl = _f_imdl;
-          r_p.first.chaining_was_allowed = (*e).chaining_was_allowed_;
+          r_p.weak_requirements_.controllers.push_back((*e).controller_);
+          r_p.weak_requirements_.f_imdl = _f_imdl;
+          r_p.weak_requirements_.chaining_was_allowed = (*e).chaining_was_allowed_;
         }
         ++e;
       }
@@ -864,9 +864,9 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
             if (r == WEAK_REQUIREMENT_ENABLED && (*e).chaining_was_allowed_) // first match.
               r = STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT;
 
-            r_p.second.controllers.push_back((*e).controller_);
-            r_p.second.f_imdl = _f_imdl;
-            r_p.second.chaining_was_allowed = (*e).chaining_was_allowed_;
+            r_p.strong_requirements_.controllers.push_back((*e).controller_);
+            r_p.strong_requirements_.f_imdl = _f_imdl;
+            r_p.strong_requirements_.chaining_was_allowed = (*e).chaining_was_allowed_;
           }
           ++e;
         }
@@ -900,9 +900,9 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
               r = STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT;
             }
 
-            r_p.second.controllers.push_back((*e).controller_);
-            r_p.second.f_imdl = _f_imdl;
-            r_p.second.chaining_was_allowed = (*e).chaining_was_allowed_;
+            r_p.strong_requirements_.controllers.push_back((*e).controller_);
+            r_p.strong_requirements_.f_imdl = _f_imdl;
+            r_p.strong_requirements_.chaining_was_allowed = (*e).chaining_was_allowed_;
           }
           ++e;
         }
@@ -915,9 +915,9 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
         if (confidence > negative_cfd) {
 
           r = WEAK_REQUIREMENT_ENABLED;
-          r_p.first.controllers.push_back(req_controller);
-          r_p.first.f_imdl = ground;
-          r_p.first.chaining_was_allowed = true;
+          r_p.weak_requirements_.controllers.push_back(req_controller);
+          r_p.weak_requirements_.f_imdl = ground;
+          r_p.weak_requirements_.chaining_was_allowed = true;
           wr_enabled = true;
         }
         return r;
@@ -948,9 +948,9 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
               bm->load(&_original);
             }
 
-            r_p.first.controllers.push_back((*e).controller_);
-            r_p.first.f_imdl = _f_imdl;
-            r_p.first.chaining_was_allowed = (*e).chaining_was_allowed_;
+            r_p.weak_requirements_.controllers.push_back((*e).controller_);
+            r_p.weak_requirements_.f_imdl = _f_imdl;
+            r_p.weak_requirements_.chaining_was_allowed = (*e).chaining_was_allowed_;
           }
           ++e;
         }
@@ -1095,7 +1095,7 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
 // jm Replaced template definition with make_pair
 void MDLController::register_requirement(_Fact *f_pred, RequirementsPair &r_p) {
 
-  if (r_p.first.controllers.size() > 0 || r_p.second.controllers.size() > 0)
+  if (r_p.weak_requirements_.controllers.size() > 0 || r_p.strong_requirements_.controllers.size() > 0)
     active_requirements_.insert(std::make_pair(f_pred, r_p));
 }
 
@@ -2187,17 +2187,17 @@ void PrimaryMDLController::register_req_outcome(Fact *f_pred, bool success, bool
   UNORDERED_MAP<P<_Fact>, RequirementsPair, PHash<_Fact> >::const_iterator r = active_requirements_.find(f_pred);
   if (r != active_requirements_.end()) { // some requirements were controlling the prediction: give feedback.
 
-    for (uint32 i = 0; i < r->second.first.controllers.size(); ++i) {
+    for (uint32 i = 0; i < r->second.weak_requirements_.controllers.size(); ++i) {
 
-      MDLController *c = r->second.first.controllers[i];
+      MDLController *c = r->second.weak_requirements_.controllers[i];
       if (!c->is_invalidated())
-        c->register_req_outcome(r->second.first.f_imdl, success, r->second.first.chaining_was_allowed);
+        c->register_req_outcome(r->second.weak_requirements_.f_imdl, success, r->second.weak_requirements_.chaining_was_allowed);
     }
-    for (uint32 i = 0; i < r->second.second.controllers.size(); ++i) {
+    for (uint32 i = 0; i < r->second.strong_requirements_.controllers.size(); ++i) {
 
-      MDLController *c = r->second.second.controllers[i];
+      MDLController *c = r->second.strong_requirements_.controllers[i];
       if (!c->is_invalidated())
-        c->register_req_outcome(r->second.second.f_imdl, !success, r->second.second.chaining_was_allowed);
+        c->register_req_outcome(r->second.strong_requirements_.f_imdl, !success, r->second.strong_requirements_.chaining_was_allowed);
     }
     active_requirements_.erase(r);
   }
@@ -2624,10 +2624,11 @@ void SecondaryMDLController::register_req_outcome(Fact *f_imdl, bool success, bo
     UNORDERED_MAP<P<_Fact>, RequirementsPair, PHash<_Fact> >::const_iterator r = active_requirements_.find(f_imdl);
     if (r != active_requirements_.end()) { // some requirements were controlling the prediction: give feedback.
 
-      for (uint32 i = 0; i < r->second.first.controllers.size(); ++i) {
+      for (uint32 i = 0; i < r->second.weak_requirements_.controllers.size(); ++i) {
 
-        if (!r->second.first.controllers[i]->is_invalidated())
-          r->second.first.controllers[i]->register_req_outcome(r->second.first.f_imdl, success, r->second.first.chaining_was_allowed);
+        if (!r->second.weak_requirements_.controllers[i]->is_invalidated())
+          r->second.weak_requirements_.controllers[i]->register_req_outcome(
+            r->second.weak_requirements_.f_imdl, success, r->second.weak_requirements_.chaining_was_allowed);
       }
       active_requirements_.erase(r);
     }
