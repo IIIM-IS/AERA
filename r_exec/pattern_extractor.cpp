@@ -270,7 +270,7 @@ _Fact *_TPX::find_f_icst(_Fact *component, uint16 &component_index, Code *&cst) 
     return NULL;
 
   _Fact *f_icst = _find_f_icst(component, component_index);
-  if (f_icst != NULL) {
+  if (f_icst != NULL)
     return f_icst;
 
   std::vector<Component> components; // no icst found, try to identify components to assemble a cst.
