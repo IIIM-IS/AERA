@@ -262,19 +262,16 @@ _Fact *_TPX::find_f_icst(_Fact *component, uint16 &component_index) {
 
 _Fact *_TPX::find_f_icst(_Fact *component, uint16 &component_index, Code *&cst) {
 
-  uint16 opcode = component->get_reference(0)->code(0).asOpcode();
-  if (opcode == Opcodes::Cmd || opcode == Opcodes::IMdl) { // cmds/imdls cannot be components of a cst.
+  cst = NULL;
 
-    cst = NULL;
+  uint16 opcode = component->get_reference(0)->code(0).asOpcode();
+  if (opcode == Opcodes::Cmd || opcode == Opcodes::IMdl)
+    // cmds/imdls cannot be components of a cst.
     return NULL;
-  }
 
   _Fact *f_icst = _find_f_icst(component, component_index);
   if (f_icst != NULL) {
-
-    cst = NULL;
     return f_icst;
-  }
 
   std::vector<Component> components; // no icst found, try to identify components to assemble a cst.
   std::vector<uint32> icst_components;
@@ -310,11 +307,9 @@ _Fact *_TPX::find_f_icst(_Fact *component, uint16 &component_index, Code *&cst) 
       ++actual_size;
   }
 
-  if (actual_size <= 1) { // contains at most only the provided component.
-
-    cst = NULL;
+  if (actual_size <= 1)
+    // contains at most only the provided component.
     return NULL;
-  }
 
   r_code::list<Input>::iterator _i;
   for (_i = inputs_.begin(); _i != inputs_.end(); ++_i) { // flag the components so the tpx does not try them again.
@@ -328,7 +323,6 @@ _Fact *_TPX::find_f_icst(_Fact *component, uint16 &component_index, Code *&cst) 
 
   P<HLPBindingMap> bm = new HLPBindingMap();
   cst = build_cst(components, bm, component);
-  uint32 rc = cst->references_size();
   f_icst = bm->build_f_ihlp(cst, Opcodes::ICst, false);
   icsts_.push_back(f_icst); // the f_icst can be reused in subsequent model building attempts.
   return f_icst;
