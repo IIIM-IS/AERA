@@ -2292,6 +2292,8 @@ void PrimaryMDLController::rate_model(bool success) {
   model->code(MDL_DSR) = model->code(MDL_SR);
 
   float32 success_rate;
+  bool is_phased_out = false;
+  bool is_deleted = false;
   if (success) { // leave the model active in the primary group.
 
     ++success_count;
@@ -2319,19 +2321,26 @@ void PrimaryMDLController::rate_model(bool success) {
       codeCS_.leave();
     } else if (strength == 1) { // activate out-of-context strong models in the secondary group, deactivate from the primary.
 
+      // JTNote: Should we update model->code(MDL_CNT) and model->code(MDL_SR) before moving to the secondary group?
       getView()->set_act(0);
       secondary_->getView()->set_act(success_rate); // may trigger secondary->gain_activation().
       codeCS_.leave();
-      OUTPUT_LINE(MDL_REV, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " phased out ");
+      is_phased_out = true;
     } else { // no weak models live in the secondary group.
 
       codeCS_.leave();
       ModelBase::Get()->register_mdl_failure(model);
       kill_views();
-      OUTPUT_LINE(MDL_REV, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " deleted ");
+      is_deleted = true;
     }
   }
   OUTPUT_LINE(MDL_REV, Utils::RelativeTime(Now()) << " mdl " << model->get_oid() << " cnt:" << evidence_count << " sr:" << success_rate);
+
+  // Delay logging these messages until after logging the updated success rate.
+  if (is_phased_out)
+    OUTPUT_LINE(MDL_REV, Utils::RelativeTime(Now()) << " mdl " << model->get_oid() << " phased out");
+  if (is_deleted)
+    OUTPUT_LINE(MDL_REV, Utils::RelativeTime(Now()) << " mdl " << model->get_oid() << " deleted");
 }
 
 void PrimaryMDLController::assume(_Fact *input) {
