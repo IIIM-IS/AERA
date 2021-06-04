@@ -145,31 +145,33 @@ public:
   virtual bool signal(bool is_simulation) { return false; }
 };
 
-// Monitors goals (other than requirements).
-// Use for SIM_ROOT.
-// Is aware of any predicted evidence for the goal target: if at construction time such an evidence is known, the goal is not injected.
-// Reporting a success or failure to the controller invalidates the goal; reporting a predicted success also does.
-// Reporting a predicted failure injects the goal if it has not been already, invalidates it otherwise (a new goal will be injected).
-// The monitor still runs after reporting a predicted success.
-// The monitor does not run anymore if the goal is invalidated (case of a predicted success, followed by a predicted failure).
-// Wait for the time horizon; in the meantime:
-// actual inputs:
-// if an input is an evidence for the target, report a success.
-// if an input is a counter-evidence of the target, report a failure.
-// if an input is a predicted evidence for the target, report a predicted success.
-// if an input is a predicted counter-evidence for the target, report a predicted failure.
-// if there is a predicted evidence for the target that becomes invalidated, report a predicted failure.
-// simulated predictions: catch only those that are a simulation for the monitored goal.
-// if an input is an evidence of the goal target, simulate a prediction of the goal success.
-// if an input is an evidence of the goal target, simulate a prediction of the goal failure.
-// store any simulated prediction of success/failure for any goal.
-// At the time horizon:
-// simulation mode:
-// commit to the appropriate solutions for the goal.
-// mode become actual.
-// time horizon becomes the goal deadline.
-// actual mode
-// if the goal is not invalidated, report a failure.
+/**
+ * Monitors goals (other than requirements).
+ * Use for SIM_ROOT.
+ * Is aware of any predicted evidence for the goal target: if at construction time such an evidence is known, the goal is not injected.
+ * Reporting a success or failure to the controller invalidates the goal; reporting a predicted success also does.
+ * Reporting a predicted failure injects the goal if it has not been already, invalidates it otherwise (a new goal will be injected).
+ * The monitor still runs after reporting a predicted success.
+ * The monitor does not run anymore if the goal is invalidated (case of a predicted success, followed by a predicted failure).
+ * Wait for the time horizon; in the meantime:
+ * actual inputs:
+ * If an input is an evidence for the target, report a success.
+ * If an input is a counter-evidence of the target, report a failure.
+ * If an input is a predicted evidence for the target, report a predicted success.
+ * If an input is a predicted counter-evidence for the target, report a predicted failure.
+ * If there is a predicted evidence for the target that becomes invalidated, report a predicted failure.
+ * Simulated predictions: catch only those that are a simulation for the monitored goal.
+ * If an input is an evidence of the goal target, simulate a prediction of the goal success.
+ * If an input is an evidence of the goal target, simulate a prediction of the goal failure.
+ * Store any simulated prediction of success/failure for any goal.
+ * At the time horizon:
+ * Simulation mode:
+ *   Commit to the appropriate solutions for the goal.
+ *   Mode become actual.
+ *   Time horizon becomes the goal deadline.
+ * Actual mode:
+ *   If the goal is not invalidated, report a failure.
+ */
 class GMonitor :
   public _GMonitor {
 protected:
@@ -190,14 +192,17 @@ public:
   virtual void update(Timestamp &next_target);
 };
 
-// Monitors actual requirements.
-// Use for SIM_ROOT.
-// target==f_imdl; this means we need to fullfill some requirements:
-// Wait until the deadline of the goal, in the meantime:
-// each time the monitor is signalled (i.e. a new pred->f_imdl has been produced), check if chaining is allowed:
-// if no, do nothing.
-// if yes: assert success and abort: the model will bind its rhs with the bm retrieved from the pred->f_imdl; this will kill the monitor and a new one will be built for the bound rhs sub-goal.
-// At the deadline, assert failure.
+/**
+ * Monitors actual requirements.
+ * Use for SIM_ROOT.
+ * target==f_imdl; this means we need to fullfill some requirements:
+ * Wait until the deadline of the goal, in the meantime:
+ * Each time the monitor is signalled (i.e. a new pred->f_imdl has been produced), check if chaining is allowed:
+ * If no, do nothing.
+ * If yes: assert success and abort: the model will bind its rhs with the bm retrieved from the pred->f_imdl; this will
+ * Kill the monitor and a new one will be built for the bound rhs sub-goal.
+ * At the deadline, assert failure.
+ */
 class RMonitor :
   public GMonitor {
 public:

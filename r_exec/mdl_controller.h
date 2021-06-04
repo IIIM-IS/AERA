@@ -132,19 +132,27 @@ public:
   Requirements strong_requirements_;
 };
 
-// Requirements don't monitor their predictions: they don't inject any; instead, they store a f->imdl in the controlled model controllers (both primary and secondary), thus, no success injected for the productions of requirements.
-// Models controlled by requirements maintain for each prediction they make, a list of all the controllers of the requirements having allowed/inhibited said prediction.
-// P-monitors (associated to non-requirement models) propagate the outcome to the controllers associated with the prediction they monitor.
-//
-// Predictions and goals are injected in the primary group only.
-// Simulations are injected in the primary group only; no mk.rdx.
-//
-// Each time a prediction is made by a non-req model, a f->imdl is injected in both primary and secondary groups. If the input was a prediction, f->pred->f->imdl is injected instead.
-// f->imdl can also be tagged as simulations.
-//
-// Successes and failures are injected only in output groups.
-//
-// If forward chaining is inhibited (by strong reqs with better cfd than weak reqs), predictions are still produced, but not injected (no mk.rdx): this is to allow the rating of the requirements.
+/**
+ * Requirements don't monitor their predictions: they don't inject any; instead, they store a f->imdl
+ * in the controlled model controllers (both primary and secondary), thus, no success injected for the 
+ * productions of requirements.
+ * Models controlled by requirements maintain for each prediction they make, a list of all the controllers
+ * of the requirements having allowed/inhibited said prediction.
+ * P-monitors (associated to non-requirement models) propagate the outcome to the controllers associated
+ * with the prediction they monitor.
+ *
+ * Predictions and goals are injected in the primary group only.
+ * Simulations are injected in the primary group only; no mk.rdx.
+ *
+ * Each time a prediction is made by a non-req model, a f->imdl is injected in both primary and secondary groups.
+ * If the input was a prediction, f->pred->f->imdl is injected instead.
+ * f->imdl can also be tagged as simulations.
+ *
+ * Successes and failures are injected only in output groups.
+ *
+ * If forward chaining is inhibited (by strong reqs with better cfd than weak reqs), predictions are still 
+ * produced, but not injected (no mk.rdx): this is to allow the rating of the requirements.
+ */
 class MDLController :
   public HLPController {
 protected:
@@ -301,23 +309,29 @@ public:
   virtual void register_simulated_goal_outcome(Fact *goal, bool success, _Fact *evidence) const = 0;
 };
 
-// See g_monitor.h: controllers and monitors work closely together.
-//
-// Min sthz is the time allowed for simulated predictions to flow upward.
-// Max sthz sets the responsiveness of the model, i.e. limits the time waiting for simulation results, i.e. limits the latency of decision making.
-// Simulation is synchronous, i.e. is performed within the enveloppe of sthz, recursively.
-
-// Drives are not monitored (since they are not produced by models): they are injected periodically by user-defined pgms.
-// Drives are not observable: they cannot be predicted to succeed or fail.
-// Rhs is a drive; the model is an axiom: no rating and lives in the primary group only.
-// The model does not predict.
-// There is exactly one top-level model for each drive: hence no simulation during backward chaining.
-// Top-level models cannot have requirements.
-//
-// Backward chaining: inputs are drives.
-// if lhs is in the fact cache, stop.
-// if lhs is in the prediction cache, spawn a g-monitor (will be ready to catch a counter-prediction, invalidate the goal and trigger the re-issuing of a new goal).
-// else commit to the sub-goal; this will trigger the simulation of sub-sub-goals; N.B.: commands are not simulated, commands with unbound values are not injected.
+/**
+ * See g_monitor.h: controllers and monitors work closely together.
+ *
+ * Min sthz is the time allowed for simulated predictions to flow upward.
+ * Max sthz sets the responsiveness of the model, i.e. limits the time waiting for simulation results,
+ * i.e. limits the latency of decision making.
+ * Simulation is synchronous, i.e. is performed within the enveloppe of sthz, recursively.
+ *
+ * Drives are not monitored (since they are not produced by models): they are injected periodically by
+ * user-defined pgms.
+ * Drives are not observable: they cannot be predicted to succeed or fail.
+ * RHS is a drive; the model is an axiom: no rating and lives in the primary group only.
+ * The model does not predict.
+ * There is exactly one top-level model for each drive: hence no simulation during backward chaining.
+ * Top-level models cannot have requirements.
+ *
+ * Backward chaining: inputs are drives.
+ * If LHS is in the fact cache, stop.
+ * If LHS is in the prediction cache, spawn a g-monitor (will be ready to catch a counter-prediction,
+ * invalidate the goal and trigger the re-issuing of a new goal). Else commit to the sub-goal; this will
+ * trigger the simulation of sub-sub-goals; N.B.: commands are not simulated, commands with unbound values
+ * are not injected.
+ */
 class TopLevelMDLController :
   public PMDLController {
 private:
@@ -346,22 +360,24 @@ public:
 
 class SecondaryMDLController;
 
-// Backward chaining: inputs are goals, actual or simulated.
-// Actual goals:
-// if lhs is in the fact cache, stop.
-// if lhs is in the prediction cache, spawn a g-monitor (will be ready to catch a counter-prediction, invalidate the goal and re-issue a new goal).
-// else
-// if (before-now)*percentage<min sthz, commit sub-goal on lhs.
-// else
-// if chaining is allowed, simulate the lhs and spawn a g-monitor with sthz=min((before-now)*percentage,max sthz)-min sthz.
-// else, simulate f->imdl and spawn a g-monitor with sthz=min((before-now)*percentage,max sthz)/2-min sthz.
-// Simulated goals:
-// if lhs is in the fact cache, .
-// if lhs is in the prediction cache,
-// else:
-// if sthz/2>min thz, simulate the lhs and spawn a g-monitor with sthz/2-min sthz.
-// else predict rhs (cfd=1) and stop.
-// Commands with unbound values are not injected.
+/**
+ * Backward chaining: inputs are goals, actual or simulated.
+ * Actual goals:
+ * if LHS is in the fact cache, stop.
+ * if LHS is in the prediction cache, spawn a g-monitor (will be ready to catch a counter-prediction, invalidate the goal and re-issue a new goal).
+ * else
+ * if (before-now)*percentage<min sthz, commit sub-goal on LHS.
+ * else
+ * if chaining is allowed, simulate the LHS and spawn a g-monitor with sthz=min((before-now)*percentage,max sthz)-min sthz.
+ * else, simulate f->imdl and spawn a g-monitor with sthz=min((before-now)*percentage,max sthz)/2-min sthz.
+ * Simulated goals:
+ * if LHS is in the fact cache, .
+ * if LHS is in the prediction cache,
+ * else:
+ * if sthz/2>min thz, simulate the LHS and spawn a g-monitor with sthz/2-min sthz.
+ * else predict RHS (cfd=1) and stop.
+ * Commands with unbound values are not injected.
+ */
 class PrimaryMDLController :
   public PMDLController {
 private:
@@ -444,7 +460,7 @@ public:
 // No backward chaining.
 // Rating happens only upon the success of predictions.
 // Requirements are stroed whetwehr they come from a primary or a secondary controller.
-// Positive requirements are stored into the rhs controller, both kinds (secondary or primary: the latter case is necessary for rating the model).
+// Positive requirements are stored into the RHS controller, both kinds (secondary or primary: the latter case is necessary for rating the model).
 class SecondaryMDLController :
   public MDLController {
 private:
