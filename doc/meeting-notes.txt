@@ -566,7 +566,25 @@ Simulator
       (fact (icst S1 |[] [H: P: C: cube] : :) T0: T1: : :)
       (|fact (imdl M2 [H: v5: T1: T2:] [T1_RHS: T3:] : :) T1: T2: : :)
 
+2021-06-04
+  * DONE. In PTPX, allow models with LHS icst and RHS imdl at the same time https://github.com/IIIM-IS/replicode/pull/161
+  * ASTController unexpectedly invalidates a valid input https://github.com/IIIM-IS/replicode/issues/162
+  * DONE. In Visualizer, show model deletion.
+  * DONE. What steps create model mdl |[] [(|fact (cmd grab [v0:]) v1: v2:) (|fact (imdl M2 [v0: v3: v4: v5:] [v6: v7:]) v4: v5:)] ?
+      This was a typo in the code. It should have been filtered out. 
+      OK. Pull request to filter out cmd on requirement LHS https://github.com/IIIM-IS/replicode/pull/163
+  * DONE. How does PTPX react to a prediction failure from its own model?
+    https://github.com/IIIM-IS/replicode/blob/b7269ab867fd123447bf0306b4b556863bd895c7/r_exec/mdl_controller.h#L135-L137
+  * DONE. Try hand-coded more specific alternative to S1 for two things at the same position as hand. Make the example
+    keep running long enough to test predictions from the more general and specific PTPX models. See if the more general
+    model is eventially removed.
+    * find_f_icst only matches once. Temporary inefficient fix to match all.
+
 next meeting
+  * DONE. Try to get the PTPX to create a new cst for the failure conditions.
+    * Normally only creates a new cst if no existing match. Maybe always add the created cst?
+    * Learned cst has only icst. But using an existing cst requires a non-icst fact. Should icst->contains be recursive?
+  * When using a drive, because of simulated predicted failure it may never grab, so never test models. Always need babbling?
 * Review/merge bug fix pull requests for:
   * REVIEWING. simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
   * REVIEWING. binding map in the prediction's mk.rdx https://github.com/IIIM-IS/replicode/pull/120
@@ -577,18 +595,11 @@ next meeting
   * matching all composite state combinations in backward chaining  https://github.com/IIIM-IS/replicode/pull/129
   * bindPattern to update timings https://github.com/IIIM-IS/replicode/pull/135
   * simulation control in abduce_simulated_lhs https://github.com/IIIM-IS/replicode/pull/111
+  * injecting a second icst if there is a different simulation branch https://github.com/IIIM-IS/replicode/pull/160
 * Review diag_mode_rel_0_1 tags.
 
 TODO
-* PTPX: After PTPX creates the model predicting general grab failure for a cube, change the drive to grab a cube. See
-  how PTPX reacts to a prediction failure from its own model. Does this recurse? Should there be a limit?
-* PTPX: Try hand-coded more specific alternative to S1 for two things at the same position as hand. Make the example
-  keep running long enough to test predictions from the more general and specific PTPX models. See if the more general
-  model is eventially removed.
-* PTPX: Try to get the PTPX to create a new cst for the failure conditions.
-* PTPX: What steps create model mdl |[] [(|fact (cmd grab [v0:]) v1: v2:) (|fact (imdl M2 [v0: v3: v4: v5:] [v6: v7:]) v4: v5:)] ?
-  Did the programs fail to inject an effent copy, resulting in (|fact (cmd grab [h]) 0s:120ms:0us 0s:500ms:0us)) ?
-* PTPX: Try allowing models with LHS and RHS at the same time, by changing i->input_->get_after() >= consequent->get_after()
+* Pull request for PTPX: find_f_icst multiple matches. Temporary inefficient fix to match all.
 * TRY copy/paste code to check references to fix: Using = in guard of composite state of model https://github.com/IIIM-IS/replicode/issues/133
 * Visualizer: Option to position simulation objects by predicted time vs. created time.
 * Make hand-grab-sphere example learn the models.
@@ -609,3 +620,46 @@ TODO
 * Treat move commands at the same time step as impulses and have them accumulate?
 * Issue #2: Try to reproduce.
 * Issue #25: Reproduce running in real-time, and see if it happens in diagnostic time.
+
+D   C   Demo = demonstrated functionality. Vis = explanation in Visualizer. Comm = code commented. Doc = details in software design document
+e V o D
+m i m o
+o s m c Functionality
+------- -------------
+Facts / Success
+Y _ _ _ Learn models in change targeted pattern extractor (CTPX)
+_ _ _ _ Learn models in goal targeted pattern extractor (GTPX) due to unexpected goal achievement
+Y Y _ _ Non-simulated icst from facts/icsts
+Y Y _ _ Non-simulated prediction of imdl from weak requirement model
+Y _ _ _ Rating of weak requirement models
+_ _ _ _ Testing and re-activation of models and weak requirement models in the secondary group
+_ _ _ _ Use of deleted models to prevent re-creating them
+Y Y _ _ Non-simulated prediction of fact from model
+Y _ _ _ Non-simulated cmd from non-simulated goal RHS
+_ _ _ _ Auto-focus based on active predictions and goals (not pass-through)
+_ _ _ _ Views/groups and saliency propagation
+Y _ _ _ Simulated prediction of icst from facts/icsts
+Y _ _ _ Simulated prediction of imdl from weak requirement model
+Y _ _ _ Simulated prediction of fact from model
+Y _ _ _ Simulated goal from drive
+Y _ _ _ Simulated goal cmd from model
+Y _ _ _ Simulated goal requirement imdl from model
+Y _ _ _ Simulated goal icst from requirement model
+Y _ _ _ Simulated goal facts/icsts from icst
+Y _ _ _ Commiting to optional solutions
+Anti-facts / Failure
+Y _ _ _ Learn strong requirement models (predicted anti-imdl) in prediction targeted pattern extractor (PTPX) due to prediction failure
+_ _ _ _ Non-simulated prediction of anti-fact from model (Is such a prediction tested?)
+Y _ _ _ Non-simulated prediction of anti-imdl from strong requirement model (to prevent model prediction)
+Y _ _ _ Rating of strong requirement models
+_ _ _ _ Testing and re-activation of strong requirement models in the secondary group
+_ _ _ _ Goal actions to test conflicting weak and strong requirements
+_ _ _ _ Simulated anti-goal from opposite match of drive (and starting of new simulation from anti-goal)
+_ _ _ _ Simulated prediction of anti-imdl from strong requirement model
+_ _ _ _ Simulated prediction of anti-fact from model (how does this make the simulation proceed?)
+_ _ _ _ Conflict resolution of conflicting predictions (fact and anti-fact)
+_ _ _ _ Simulated anti-goal of cmd from model with anti-matched RHS
+_ _ _ _ Simulated anti-goal requirement imdl from model with anti-matched RHS
+_ _ _ _ Simulated anti-goal icst from requirement model with anti-matched RHS
+_ _ _ _ Simulated anti-goal facts/icsts from anti-fact icst
+_ _ _ _ Commiting to mandatory solutions
