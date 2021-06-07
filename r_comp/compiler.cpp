@@ -1600,7 +1600,9 @@ bool Compiler::expression_tail(bool indented, const Class &p, uint16 write_index
       if (state_.no_arity_check) {
 
         state_.no_arity_check = false;
-        // JTNote: If (count < p.atom_.getAtomCount()) then we didn't decrement state_.pattern_lvl below. Do it here?
+        if (entered_pattern && pattern_end_index > 0 && count - 1 < pattern_end_index)
+          // state_.pattern_lvl was incremented below, but the tail wildcard prevented decrementing it. Do it here.
+          --state_.pattern_lvl;
         return true;
       }
       if (count == p.atom_.getAtomCount())
