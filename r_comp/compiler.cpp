@@ -86,9 +86,9 @@ static bool Output = true;
 
 static inline bool is_decimal(char c) { return c >= '0' && c <= '9'; }
 
-Compiler::Compiler(bool allow_wildcards_outside_pattern_skeleton)
+Compiler::Compiler(bool allow_variables_and_wildcards_outside_pattern_skeleton)
 : out_stream_(NULL), current_object_(NULL), error_(std::string("")),
-  allow_wildcards_outside_pattern_skeleton_(allow_wildcards_outside_pattern_skeleton)
+  allow_variables_and_wildcards_outside_pattern_skeleton_(allow_variables_and_wildcards_outside_pattern_skeleton)
 {
 }
 
@@ -1600,6 +1600,7 @@ bool Compiler::expression_tail(bool indented, const Class &p, uint16 write_index
       if (state_.no_arity_check) {
 
         state_.no_arity_check = false;
+        // JTNote: If (count < p.atom_.getAtomCount()) then we didn't decrement state_.pattern_lvl below. Do it here?
         return true;
       }
       if (count == p.atom_.getAtomCount())
@@ -2473,7 +2474,7 @@ bool Compiler::read_variable(uint16 write_index, uint16 &extent_index, bool writ
   std::string v;
   if (variable(v)) {
 
-    if (state_.pattern_lvl) {
+    if (state_.pattern_lvl || allow_variables_and_wildcards_outside_pattern_skeleton_) {
 
       if (in_hlp_) {
 
@@ -2610,7 +2611,7 @@ bool Compiler::read_wildcard(uint16 write_index, uint16 &extent_index, bool writ
 
   if (wildcard()) {
 
-    if (state_.pattern_lvl || allow_wildcards_outside_pattern_skeleton_) {
+    if (state_.pattern_lvl || allow_variables_and_wildcards_outside_pattern_skeleton_) {
 
       if (write)
         current_object_->code_[write_index] = Atom::Wildcard();
