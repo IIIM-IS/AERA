@@ -226,7 +226,7 @@ void _TPX::filter_icst_components(ICST *icst, uint32 icst_index, std::vector<Com
   delete[] found;
 }
 
-void _TPX::_find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results) {
+void _TPX::_find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results, bool find_multiple) {
 
   r_code::list<Input>::const_iterator i;
   for (i = inputs_.begin(); i != inputs_.end(); ++i) {
@@ -238,7 +238,8 @@ void _TPX::_find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results)
       uint16 component_index;
       if (icst->contains(component, component_index)) {
         results.push_back(FindFIcstResult(i->input_, component_index));
-        return;
+        if (!find_multiple)
+          return;
       }
     }
   }
@@ -250,28 +251,29 @@ void _TPX::_find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results)
     uint16 component_index;
     if (icst->contains(component, component_index)) {
       results.push_back(FindFIcstResult(*f_icst, component_index));
-      return;
+      if (!find_multiple)
+        return;
     }
   }
 }
 
-void _TPX::find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results) {
+void _TPX::find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results, bool find_multiple) {
 
   uint16 opcode = component->get_reference(0)->code(0).asOpcode();
   if (opcode == Opcodes::Cmd || opcode == Opcodes::IMdl) // cmds/imdls cannot be components of a cst.
     return;
 
-  _find_f_icst(component, results);
+  _find_f_icst(component, results, find_multiple);
 }
 
-void _TPX::find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results, P<Code> &new_cst) {
+void _TPX::find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results, P<Code> &new_cst, bool find_multiple) {
 
   uint16 opcode = component->get_reference(0)->code(0).asOpcode();
   if (opcode == Opcodes::Cmd || opcode == Opcodes::IMdl)
     // cmds/imdls cannot be components of a cst.
     return;
 
-  _find_f_icst(component, results);
+  _find_f_icst(component, results, find_multiple);
   if (results.size() > 0)
     return;
 
