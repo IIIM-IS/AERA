@@ -717,24 +717,38 @@ void PTPX::reduce(r_exec::View *input) {
 
     std::vector<FindFIcstResult> results;
     P<Code> new_cst;
-    find_f_icst(cause.input_, results, new_cst);
+    find_f_icst(cause.input_, results, new_cst, true);
     if (results.size() == 0) {
 
       if (build_mdl(cause.input_, consequent, guard_builder, period))
         inject_hlps(analysis_starting_time);
     } else {
 
-      Code *unpacked_cst;
+      for (size_t i = 0; i < results.size(); ++i) {
+        Code *unpacked_cst;
+        if (!new_cst) {
+
+          Code *cst = results[i].f_icst->get_reference(0)->get_reference(0);
+          unpacked_cst = cst->get_reference(cst->references_size() - CST_HIDDEN_REFS); // the cst is packed, retrieve the pattern from the unpacked code.
+        } else
+          unpacked_cst = new_cst;
+
+        _Fact *cause_pattern = (_Fact *)unpacked_cst->get_reference(results[i].component_index);
+        if (build_mdl(results[i].f_icst, cause_pattern, consequent, guard_builder, period, new_cst))
+          inject_hlps(analysis_starting_time);
+      }
+
       if (!new_cst) {
-
-        Code *cst = results[0].f_icst->get_reference(0)->get_reference(0);
-        unpacked_cst = cst->get_reference(cst->references_size() - CST_HIDDEN_REFS); // the cst is packed, retrieve the pattern from the unpacked code.
-      } else
-        unpacked_cst = new_cst;
-
-      _Fact *cause_pattern = (_Fact *)unpacked_cst->get_reference(results[0].component_index);
-      if (build_mdl(results[0].f_icst, cause_pattern, consequent, guard_builder, period, new_cst))
-        inject_hlps(analysis_starting_time);
+        // find_f_icst returned results without making a new cst. Check if we can make one.
+        uint16 component_index;
+        P<_Fact> f_icst = make_f_icst(cause.input_, component_index, new_cst);
+        if (!!f_icst) {
+          Code *unpacked_cst = new_cst;
+          _Fact *cause_pattern = (_Fact *)unpacked_cst->get_reference(component_index);
+          if (build_mdl(f_icst, cause_pattern, consequent, guard_builder, period, new_cst))
+            inject_hlps(analysis_starting_time);
+        }
+      }
     }
   }
 }
