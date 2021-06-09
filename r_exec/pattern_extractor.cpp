@@ -260,9 +260,7 @@ _Fact *_TPX::find_f_icst(_Fact *component, uint16 &component_index) {
   return _find_f_icst(component, component_index);
 }
 
-_Fact *_TPX::find_f_icst(_Fact *component, uint16 &component_index, Code *&cst) {
-
-  cst = NULL;
+_Fact *_TPX::find_f_icst(_Fact *component, uint16 &component_index, P<Code> &new_cst) {
 
   uint16 opcode = component->get_reference(0)->code(0).asOpcode();
   if (opcode == Opcodes::Cmd || opcode == Opcodes::IMdl)
@@ -322,8 +320,8 @@ _Fact *_TPX::find_f_icst(_Fact *component, uint16 &component_index, Code *&cst) 
   }
 
   P<HLPBindingMap> bm = new HLPBindingMap();
-  cst = build_cst(components, bm, component);
-  f_icst = bm->build_f_ihlp(cst, Opcodes::ICst, false);
+  new_cst = build_cst(components, bm, component);
+  f_icst = bm->build_f_ihlp(new_cst, Opcodes::ICst, false);
   icsts_.push_back(f_icst); // the f_icst can be reused in subsequent model building attempts.
   return f_icst;
 }
@@ -552,7 +550,7 @@ void GTPX::reduce(r_exec::View *input) { // input->object: f->success.
     rhs_duration = duration_cast<microseconds>(consequent->get_before() - consequent->get_after());
 
     uint16 cause_index;
-    Code *new_cst;
+    P<Code> new_cst;
     _Fact *f_icst = find_f_icst(cause.input_, cause_index, new_cst);
     if (f_icst == NULL) {
 
@@ -561,7 +559,7 @@ void GTPX::reduce(r_exec::View *input) { // input->object: f->success.
     } else {
 
       Code *unpacked_cst;
-      if (new_cst == NULL) {
+      if (!new_cst) {
 
         Code *cst = f_icst->get_reference(0)->get_reference(0);
         unpacked_cst = cst->get_reference(cst->references_size() - CST_HIDDEN_REFS); // the cst is packed, retrieve the pattern from the unpacked code.
@@ -687,7 +685,7 @@ void PTPX::reduce(r_exec::View *input) {
     guard_builder = new TimingGuardBuilder(period); // TODO: use the durations.
 
     uint16 cause_index;
-    Code *new_cst;
+    P<Code> new_cst;
     _Fact *f_icst = find_f_icst(cause.input_, cause_index, new_cst);
     if (f_icst == NULL) {
 
@@ -696,7 +694,7 @@ void PTPX::reduce(r_exec::View *input) {
     } else {
 
       Code *unpacked_cst;
-      if (new_cst == NULL) {
+      if (!new_cst) {
 
         Code *cst = f_icst->get_reference(0)->get_reference(0);
         unpacked_cst = cst->get_reference(cst->references_size() - CST_HIDDEN_REFS); // the cst is packed, retrieve the pattern from the unpacked code.
@@ -998,7 +996,7 @@ bool CTPX::build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, Gua
 bool CTPX::build_requirement(HLPBindingMap *bm, Code *m0, microseconds period) { // check for mdl existence at the same time (ModelBase::mdlCS_-wise).
 
   uint16 premise_index;
-  Code *new_cst;
+  P<Code> new_cst;
   _Fact *f_icst = find_f_icst(target_, premise_index, new_cst);
   if (f_icst == NULL) {//std::cout<<Utils::RelativeTime(Now())<<" failed xxxxxxxxx M1 / 0\n";
     return false; }
@@ -1008,7 +1006,7 @@ bool CTPX::build_requirement(HLPBindingMap *bm, Code *m0, microseconds period) {
   Utils::SetTimestamp<Code>(f_im0, FACT_BEFORE, f_icst->get_before());
 
   Code *unpacked_cst;
-  if (new_cst == NULL) {
+  if (!new_cst) {
 
     Code *cst = f_icst->get_reference(0)->get_reference(0);
     unpacked_cst = cst->get_reference(cst->references_size() - CST_HIDDEN_REFS); // the cst is packed, retrieve the pattern from the unpacked code.
@@ -1035,7 +1033,7 @@ bool CTPX::build_requirement(HLPBindingMap *bm, Code *m0, microseconds period) {
       return false;
     else if (_m0 == m0)
       mdls_.push_back(m0);
-    if (new_cst != NULL)
+    if (!!new_cst)
       csts_.push_back(new_cst);
     mdls_.push_back(m1);
   } // if m1 alrady exists, new_cst==NULL.
