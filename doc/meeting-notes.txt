@@ -572,23 +572,34 @@ Simulator
   * DONE. In Visualizer, show model deletion.
   * DONE. What steps create model mdl |[] [(|fact (cmd grab [v0:]) v1: v2:) (|fact (imdl M2 [v0: v3: v4: v5:] [v6: v7:]) v4: v5:)] ?
       This was a typo in the code. It should have been filtered out. 
-      OK. Pull request to filter out cmd on requirement LHS https://github.com/IIIM-IS/replicode/pull/163
+      DONE. Pull request to filter out cmd on requirement LHS https://github.com/IIIM-IS/replicode/pull/163
   * DONE. How does PTPX react to a prediction failure from its own model?
     https://github.com/IIIM-IS/replicode/blob/b7269ab867fd123447bf0306b4b556863bd895c7/r_exec/mdl_controller.h#L135-L137
   * DONE. Try hand-coded more specific alternative to S1 for two things at the same position as hand. Make the example
     keep running long enough to test predictions from the more general and specific PTPX models. See if the more general
-    model is eventially removed.
+    model is eventually removed.
     * find_f_icst only matches once. Temporary inefficient fix to match all.
 
+2021-06-10
+  * DONE. binding map in the prediction's mk.rdx https://github.com/IIIM-IS/replicode/pull/120
+  * DONE. Pull request: PTPX: Make a candidate model from every matching f_icst https://github.com/IIIM-IS/replicode/pull/165
+  * DONE.  PTPX: Add option to always create new cst. It seems to recognize an existing similar one.
+
 next meeting
-  * DONE. Try to get the PTPX to create a new cst for the failure conditions.
-    * Normally only creates a new cst if no existing match. Maybe always add the created cst?
-    * Learned cst has only icst. But using an existing cst requires a non-icst fact. Should icst->contains be recursive?
+  * PTPX:
+    * Option to always create new cst
+      * Why does the new_cst seem to prevent models with the previously-found icsts, e.g. S0 and S3?
+      * Learned cst may only have icsts. But using a cst for later model-building requires a non-icst fact. Should icst->contains be recursive? (Need limit.) Or always include a fact in new_cst?
+    * Why anti-requirement is not rated?
+      PrimaryMDLController::predict:1557 confidence = 0
+      PMonitor::reduce:126 "a predicted counter evidence is stronger than the target: don't rate the model."
   * When using a drive, because of simulated predicted failure it may never grab, so never test models. Always need babbling?
+  * pong.test: Learn general model for new position.
+  * pong.test: Learn the exception "bounce" model.
 * Review/merge bug fix pull requests for:
   * REVIEWING. simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
-  * REVIEWING. binding map in the prediction's mk.rdx https://github.com/IIIM-IS/replicode/pull/120
-  * SYNC_HOLD timings https://github.com/IIIM-IS/replicode/pull/118
+  * REVIEWING. SYNC_HOLD timings https://github.com/IIIM-IS/replicode/pull/118
+  * REVIEWING. PTPX: allow models with LHS icst and RHS imdl at the same time https://github.com/IIIM-IS/replicode/pull/161
 * Review/merge new functionality pull requests for:
   * not sharing timing variables when building the model https://github.com/IIIM-IS/replicode/pull/110
   * NoArgCmdGuardBuilder backward guard https://github.com/IIIM-IS/replicode/pull/115
@@ -596,10 +607,10 @@ next meeting
   * bindPattern to update timings https://github.com/IIIM-IS/replicode/pull/135
   * simulation control in abduce_simulated_lhs https://github.com/IIIM-IS/replicode/pull/111
   * injecting a second icst if there is a different simulation branch https://github.com/IIIM-IS/replicode/pull/160
-* Review diag_mode_rel_0_1 tags.
+  * PTPX: Make a candidate model from every matching f_icst https://github.com/IIIM-IS/replicode/pull/165
+* Review diag_mode_rel_0_1 tags https://github.com/IIIM-IS/replicode/issues?q=is%3Aopen+is%3Aissue+milestone%3Adiag_mode_rel_0_1
 
 TODO
-* Pull request for PTPX: find_f_icst multiple matches. Temporary inefficient fix to match all.
 * TRY copy/paste code to check references to fix: Using = in guard of composite state of model https://github.com/IIIM-IS/replicode/issues/133
 * Visualizer: Option to position simulation objects by predicted time vs. created time.
 * Make hand-grab-sphere example learn the models.
