@@ -187,6 +187,7 @@ protected:
   _Fact *_find_f_icst(_Fact *component, uint16 &component_index);
   _Fact *find_f_icst(_Fact *component, uint16 &component_index);
   _Fact *find_f_icst(_Fact *component, uint16 &component_index, P<r_code::Code> &new_cst);
+  _Fact *make_f_icst(_Fact *component, uint16 &component_index, P<r_code::Code> &new_cst);
   r_code::Code *build_cst(const std::vector<Component> &components, BindingMap *bm, _Fact *main_component);
 
   r_code::Code *build_mdl_head(HLPBindingMap *bm, uint16 tpl_arg_count, _Fact *lhs, _Fact *rhs, uint16 &write_index);
