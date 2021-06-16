@@ -407,16 +407,6 @@ private:
   void assume_lhs(HLPBindingMap *bm, bool opposite, _Fact *input, float32 confidence);
 
   bool abduction_allowed(HLPBindingMap *bm);
-  /**
-   * Get the last two values from the template parameters, assuming that they are the timings
-   * from the prerequisite model. This evaluates the backward guards if needed.
-   * \param bm The binding map, which is not changed.
-   * \param after Set this to the after timestamp (if this returns true).
-   * \param before Set this to the before timestamp (if this returns true).
-   * \return True for success, otherwise false if there are not enough template parameters,
-   * or cannot evaluate the backward guards, or if the values are not timestamps.
-   */
-  bool get_template_timings(HLPBindingMap *bm, Timestamp& after, Timestamp& before);
 public:
   PrimaryMDLController(r_code::View *view);
 
@@ -453,6 +443,17 @@ public:
    * If this is NULL, then don't use it.
    */
   void abduce_no_simulation(Fact *super_goal, bool opposite, float32 confidence, _Fact* f_p_f_success = NULL);
+
+  /**
+   * Get the last two values from the template parameters, assuming that they are the timings
+   * from the prerequisite model. This evaluates the backward guards if needed.
+   * \param bm The binding map, which is not changed.
+   * \param after Set this to the after timestamp (if this returns true).
+   * \param before Set this to the before timestamp (if this returns true).
+   * \return True for success, otherwise false if there are not enough template parameters,
+   * or cannot evaluate the backward guards, or if the values are not timestamps.
+   */
+  bool get_template_timings(HLPBindingMap *bm, Timestamp& after, Timestamp& before);
 
   void debug(View *input);
 };
