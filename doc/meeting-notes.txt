@@ -585,32 +585,46 @@ Simulator
   * DONE. Pull request: PTPX: Make a candidate model from every matching f_icst https://github.com/IIIM-IS/replicode/pull/165
   * DONE.  PTPX: Add option to always create new cst. It seems to recognize an existing similar one.
 
+2021-06-10
+* pong.test: Learn general model for new position.
+  * Initial way for pgm to inject efferent command wan't being recognized by CTPX.
+* PTPX:
+  * Why are strong requirement models not used sometimes?
+    * OK. Pull request for setting forward chaining f_imdl timings from template values https://github.com/IIIM-IS/replicode/pull/166
+
 next meeting
-  * PTPX:
-    * Option to always create new cst
-      * Why does the new_cst seem to prevent models with the previously-found icsts, e.g. S0 and S3?
-      * Learned cst may only have icsts. But using a cst for later model-building requires a non-icst fact. Should icst->contains be recursive? (Need limit.) Or always include a fact in new_cst?
-    * Why anti-requirement is not rated?
-      PrimaryMDLController::predict:1557 confidence = 0
-      PMonitor::reduce:126 "a predicted counter evidence is stronger than the target: don't rate the model."
-  * When using a drive, because of simulated predicted failure it may never grab, so never test models. Always need babbling?
-  * pong.test: Learn general model for new position.
-  * pong.test: Learn the exception "bounce" model.
+* pong.test: Learn general model for new position.
+  * mdl_222: In backward guard, need "v5:(sub v8 0s:80ms:0us)"
+  * (Low priority) CTPX: mdl_269 is the same as mdl_122. Why re-learned?
+  * (Low priority) PTPX: mdl_270 is the same as mdl_223. Why re-learned?
+  * More interesting: After making mdl_269 (copy of mdl_122), why does it stop from making more copies?
+  * mdl_222: Needed to put velocity in the cmd. Need a model builder to get it from the velocity fact.
+  * Remove cst_ball_position, etc. and learn them.
 * Review/merge bug fix pull requests for:
-  * REVIEWING. simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
-  * REVIEWING. SYNC_HOLD timings https://github.com/IIIM-IS/replicode/pull/118
-  * REVIEWING. PTPX: allow models with LHS icst and RHS imdl at the same time https://github.com/IIIM-IS/replicode/pull/161
+  * REPRODUCE. simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
+  * OK. SYNC_HOLD timings https://github.com/IIIM-IS/replicode/pull/118
+  * OK. PTPX: allow models with LHS icst and RHS imdl at the same time https://github.com/IIIM-IS/replicode/pull/161
 * Review/merge new functionality pull requests for:
-  * not sharing timing variables when building the model https://github.com/IIIM-IS/replicode/pull/110
-  * NoArgCmdGuardBuilder backward guard https://github.com/IIIM-IS/replicode/pull/115
-  * matching all composite state combinations in backward chaining  https://github.com/IIIM-IS/replicode/pull/129
-  * bindPattern to update timings https://github.com/IIIM-IS/replicode/pull/135
+  * REVIEWING. not sharing timing variables when building the model https://github.com/IIIM-IS/replicode/pull/110
+  * REVIEWING. NoArgCmdGuardBuilder backward guard https://github.com/IIIM-IS/replicode/pull/115
+  * REVIEWING. matching all composite state combinations in backward chaining  https://github.com/IIIM-IS/replicode/pull/129
+  * REVIEWING. bindPattern to update timings https://github.com/IIIM-IS/replicode/pull/135
   * simulation control in abduce_simulated_lhs https://github.com/IIIM-IS/replicode/pull/111
   * injecting a second icst if there is a different simulation branch https://github.com/IIIM-IS/replicode/pull/160
   * PTPX: Make a candidate model from every matching f_icst https://github.com/IIIM-IS/replicode/pull/165
 * Review diag_mode_rel_0_1 tags https://github.com/IIIM-IS/replicode/issues?q=is%3Aopen+is%3Aissue+milestone%3Adiag_mode_rel_0_1
 
 TODO
+* Visualizer: Checkbox for show requirements. (Let Leonard know.)
+* Can GitHub issues be limited to only posting by permission?
+* PTPX:
+  * Option to always create new cst
+    * Why does the new_cst seem to prevent models with the previously-found icsts, e.g. S0 and S3?
+    * Learned cst may only have icsts. But using a cst for later model-building requires a non-icst fact. Should icst->contains be recursive? (Need limit.) Or always include a fact in new_cst?
+  * Why anti-requirement is not rated?
+    PrimaryMDLController::predict:1557 confidence = 0
+    PMonitor::reduce:126 "a predicted counter evidence is stronger than the target: don't rate the model."
+* pong.test: Learn the exception "bounce" model.
 * TRY copy/paste code to check references to fix: Using = in guard of composite state of model https://github.com/IIIM-IS/replicode/issues/133
 * Visualizer: Option to position simulation objects by predicted time vs. created time.
 * Make hand-grab-sphere example learn the models.
