@@ -585,12 +585,15 @@ Simulator
   * DONE. Pull request: PTPX: Make a candidate model from every matching f_icst https://github.com/IIIM-IS/replicode/pull/165
   * DONE.  PTPX: Add option to always create new cst. It seems to recognize an existing similar one.
 
-2021-06-10
+2021-06-17
 * pong.test: Learn general model for new position.
   * Initial way for pgm to inject efferent command wan't being recognized by CTPX.
 * PTPX:
   * Why are strong requirement models not used sometimes?
-    * OK. Pull request for setting forward chaining f_imdl timings from template values https://github.com/IIIM-IS/replicode/pull/166
+    * DONE. Pull request for setting forward chaining f_imdl timings from template values https://github.com/IIIM-IS/replicode/pull/166
+* Review/merge bug fix pull requests for:
+  * DONE. SYNC_HOLD timings https://github.com/IIIM-IS/replicode/pull/118
+  * DONE. PTPX: allow models with LHS icst and RHS imdl at the same time https://github.com/IIIM-IS/replicode/pull/161
 
 next meeting
 * pong.test: Learn general model for new position.
@@ -602,8 +605,6 @@ next meeting
   * Remove cst_ball_position, etc. and learn them.
 * Review/merge bug fix pull requests for:
   * REPRODUCE. simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
-  * OK. SYNC_HOLD timings https://github.com/IIIM-IS/replicode/pull/118
-  * OK. PTPX: allow models with LHS icst and RHS imdl at the same time https://github.com/IIIM-IS/replicode/pull/161
 * Review/merge new functionality pull requests for:
   * REVIEWING. not sharing timing variables when building the model https://github.com/IIIM-IS/replicode/pull/110
   * REVIEWING. NoArgCmdGuardBuilder backward guard https://github.com/IIIM-IS/replicode/pull/115
@@ -615,7 +616,8 @@ next meeting
 * Review diag_mode_rel_0_1 tags https://github.com/IIIM-IS/replicode/issues?q=is%3Aopen+is%3Aissue+milestone%3Adiag_mode_rel_0_1
 
 TODO
-* Visualizer: Checkbox for show requirements. (Let Leonard know.)
+* Visualizer: Checkbox for show requirement predictions. (Let Leonard know.)
+* Visualizer: File menu / Preferences (XML file). And persist "view" checkboxes.
 * Can GitHub issues be limited to only posting by permission?
 * PTPX:
   * Option to always create new cst
