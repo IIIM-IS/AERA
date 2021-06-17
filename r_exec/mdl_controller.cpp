@@ -138,6 +138,13 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
     bool stop = (req_controller != NULL);
     ChainingStatus c_s = ((MDLController *)controller_)->retrieve_imdl_fwd(bm, f_imdl, r_p, ground, req_controller, wr_enabled);
     f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(wr_enabled);
+    // Use the timestamps in the template parameters that came from the prerequisite model.
+    Timestamp f_imdl_after, f_imdl_before;
+    if (((PrimaryMDLController *)controller_)->get_template_timings(bm, f_imdl_after, f_imdl_before)) {
+      Utils::SetTimestamp<Code>(f_imdl, FACT_AFTER, f_imdl_after);
+      Utils::SetTimestamp<Code>(f_imdl, FACT_BEFORE, f_imdl_before);
+    }
+
     bool chaining_allowed = (c_s >= WEAK_REQUIREMENT_ENABLED);
     bool did_check_simulated_chaining = false;
     bool check_simulated_chaining_result;
