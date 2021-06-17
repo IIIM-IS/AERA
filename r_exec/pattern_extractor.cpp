@@ -668,7 +668,7 @@ void PTPX::reduce(r_exec::View *input) {
     if (i->input_->get_reference(0)->code(0).asOpcode() == Opcodes::Cmd) // no cmds as req lhs (because no bwd-operational); prefer: cmd->effect, effect->imdl.
       i = inputs_.erase(i);
     else if (!end_bm->intersect(i->bindings_) || // discard inputs that do not share values with the consequent.
-             i->input_->get_after() >= consequent->get_after()) // discard inputs not younger than the consequent.
+             i->input_->get_after() > consequent->get_after()) // discard inputs that started after the consequent started.
       i = inputs_.erase(i);
     else
       ++i;
@@ -692,7 +692,12 @@ void PTPX::reduce(r_exec::View *input) {
     period = duration_cast<microseconds>(consequent->get_after() - cause.input_->get_after());
     lhs_duration = duration_cast<microseconds>(cause.input_->get_before() - cause.input_->get_after());
     rhs_duration = duration_cast<microseconds>(consequent->get_before() - consequent->get_after());
-    guard_builder = new TimingGuardBuilder(period); // TODO: use the durations.
+    if (period.count() == 0 && lhs_duration == rhs_duration)
+      // The LHS and RHS timings are the same, so we don't need guards. This often happens if the timings of the
+      // RHS imdl came from an icst.
+      guard_builder = new GuardBuilder();
+    else
+      guard_builder = new TimingGuardBuilder(period); // TODO: use the durations.
 
     uint16 cause_index;
     P<Code> new_cst;
