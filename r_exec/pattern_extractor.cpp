@@ -489,6 +489,10 @@ void GTPX::signal(View *input) const { // will be erased from the AF map upon re
   if (((_Fact *)input->object_)->is_fact()) { // goal success.
 
     ReductionJob<GTPX> *j = new ReductionJob<GTPX>(new View(input), (GTPX *)this);
+#ifdef WITH_DEBUG_OID
+    OUTPUT_LINE((TraceLevel)0, "  make ReductionJob<GTPX> " << j->get_job_id() << "(" << j->get_debug_oid() <<
+      "): controller(" << get_debug_oid() << ")->reduce(View(fact_" << input->object_->get_oid() << "))");
+#endif
     _Mem::Get()->pushReductionJob(j);
   }
 }
@@ -647,6 +651,10 @@ void PTPX::signal(View *input) const { // will be erased from the AF map upon re
   if (((_Fact *)input->object_)->is_anti_fact()) { // prediction failure.
 
     ReductionJob<PTPX> *j = new ReductionJob<PTPX>(new View(input), (PTPX *)this);
+#ifdef WITH_DEBUG_OID
+    OUTPUT_LINE((TraceLevel)0, "  make ReductionJob<PTPX> " << j->get_job_id() << "(" << j->get_debug_oid() <<
+      "): controller(" << get_debug_oid() << ")->reduce(View(fact_" << input->object_->get_oid() << "))");
+#endif
     _Mem::Get()->pushReductionJob(j);
   }
 }
@@ -793,6 +801,10 @@ void CTPX::signal(r_exec::View *input) {
 
   View *_view = new View(input); // controller not copied.
   ReductionJob<CTPX> *j = new ReductionJob<CTPX>(_view, this); // holds a reference to this.
+#ifdef WITH_DEBUG_OID
+  OUTPUT_LINE((TraceLevel)0, "  make ReductionJob " << j->get_job_id() << "(" << j->get_debug_oid() <<
+    "): CTPX(" << get_debug_oid() << ")->reduce(View(fact_" << input->object_->get_oid() << "))");
+#endif
   _Mem::Get()->pushReductionJob(j);
 }
 
