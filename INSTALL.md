@@ -30,13 +30,13 @@ Launch Visual Studio and open the project `Replicode.sln` from the cloned reposi
   `C:\Users\Alice\Documents\GitHub\replicode\AERA.sln` .
   If a dialog box appears asking to retarget the Windows version, click cancel. 
 
-## `WITH_DEBUG_OID`
+## `WITH_DETAIL_OID`
 
-To work with the AERA Visualizer, we must enable `WITH_DEBUG_OID` as follows. In the Visual Studio Solution Explorer,
-open the section for `CoreLibrary`. Double-click `base.h` . Uncomment the define for `WITH_DEBUG_OID`, so that
+To work with the AERA Visualizer, we must enable `WITH_DETAIL_OID` as follows. In the Visual Studio Solution Explorer,
+open the section for `CoreLibrary`. Double-click `base.h` . Uncomment the define for `WITH_DETAIL_OID`, so that
 the line is:
 
-    #define WITH_DEBUG_OID // Enable get_debug_oid() in every object.
+    #define WITH_DETAIL_OID // Enable get_detail_oid() in every object.
 
 ## Compile
 
