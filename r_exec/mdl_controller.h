@@ -207,6 +207,11 @@ protected:
   template<class C> void reduce_cache(Fact *f_p_f_imdl, MDLController *controller) { // fwd; controller is the controller of the requirement which produced f_p_f_imdl.
 
     BatchReductionJob<C, Fact, MDLController> *j = new BatchReductionJob<C, Fact, MDLController>((C *)this, f_p_f_imdl, controller);
+#ifdef WITH_DEBUG_OID
+    OUTPUT_LINE((TraceLevel)0, "  make BatchReductionJob " << j->get_job_id() << "(" <<
+      j->get_debug_oid() << "), f_p_f_imdl fact(" << f_p_f_imdl->get_debug_oid() <<
+      "), controller(" << get_debug_oid() << ") for " << get_core_object()->get_oid());
+#endif
     _Mem::Get()->pushReductionJob(j);
   }
 
