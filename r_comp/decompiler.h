@@ -170,7 +170,7 @@ public:
    * \param object_index The position of the object in image_->code_segment_.objects_.
    * \param stream The output stream.
    * \param time_offset The time since the start of the run for showing relative times.
-   * \param include_oid (optional) If true, prepend with the OID (and debug OID if enabled). If omitted, include the OID.
+   * \param include_oid (optional) If true, prepend with the OID (and detail OID if enabled). If omitted, include the OID.
    * \param include_label (optional) If true, prepend the label and ':'. If omitted, include the label.
    * \param include_views (optional) If true, include the set of view, or |[] if there are not views. If omitted, include the views.
    */

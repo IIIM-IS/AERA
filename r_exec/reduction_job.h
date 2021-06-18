@@ -107,9 +107,9 @@ public:
   bool update(Timestamp now) {
 
     _Mem::Get()->register_reduction_job_latency(now - ijt_);
-#ifdef WITH_DEBUG_OID
+#ifdef WITH_DETAIL_OID
     OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(now) << " ReductionJob " << get_job_id() <<
-      ": controller(" << processor_->get_debug_oid() << ")->reduce(View(fact_" << 
+      ": controller(" << processor_->get_detail_oid() << ")->reduce(View(fact_" << 
       input_->object_->get_oid() << "))");
 #endif
     processor_->reduce(input_);
@@ -131,10 +131,10 @@ public:
   bool update(Timestamp now) {
 
     _Mem::Get()->register_reduction_job_latency(now - ijt_);
-#ifdef WITH_DEBUG_OID
+#ifdef WITH_DETAIL_OID
     OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(now) << " BatchReductionJob " << get_job_id() <<
-      ": controller(" << controller_->get_debug_oid() << "), trigger fact(" << 
-      trigger_->get_debug_oid() << ")");
+      ": controller(" << controller_->get_detail_oid() << "), trigger fact(" << 
+      trigger_->get_detail_oid() << ")");
 #endif
     processor_->reduce_batch(trigger_, controller_);
     return true;

@@ -110,7 +110,7 @@ UpdateJob::UpdateJob(Group *g, Timestamp ijt) : TimeJob(ijt) {
 
 bool UpdateJob::update(Timestamp &next_target) {
 
-#ifdef WITH_DEBUG_OID
+#ifdef WITH_DETAIL_OID
   OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(Now()) << " UpdateJob::TimeJob " << get_job_id() <<
     ": group_" << group_->get_oid() << "->update()");
 #endif
@@ -142,9 +142,9 @@ AntiPGMSignalingJob::AntiPGMSignalingJob(View *v, Timestamp ijt) : SignalingJob(
 
 bool AntiPGMSignalingJob::update(Timestamp &next_target) {
 
-#ifdef WITH_DEBUG_OID
+#ifdef WITH_DETAIL_OID
   OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(Now()) << " AntiPGMSignalingJob::TimeJob " << get_job_id() <<
-    ": controller(" << view_->controller_->get_debug_oid() << ")->signal_anti_pgm()");
+    ": controller(" << view_->controller_->get_detail_oid() << ")->signal_anti_pgm()");
 #endif
   if (is_alive())
     ((AntiPGMController *)view_->controller_)->signal_anti_pgm();
@@ -163,9 +163,9 @@ InputLessPGMSignalingJob::InputLessPGMSignalingJob(View *v, Timestamp ijt) : Sig
 
 bool InputLessPGMSignalingJob::update(Timestamp &next_target) {
 
-#ifdef WITH_DEBUG_OID
+#ifdef WITH_DETAIL_OID
   OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(Now()) << " InputLessPGMSignalingJob::TimeJob " << get_job_id() <<
-    ": controller(" << view_->controller_->get_debug_oid() << ")->signal_input_less_pgm()");
+    ": controller(" << view_->controller_->get_detail_oid() << ")->signal_input_less_pgm()");
 #endif
   if (is_alive())
     ((InputLessPGMController *)view_->controller_)->signal_input_less_pgm();
@@ -187,9 +187,9 @@ InjectionJob::InjectionJob(View *v, Timestamp target_time, bool isFromIoDevice) 
 
 bool InjectionJob::update(Timestamp &next_target) {
 
-#ifdef WITH_DEBUG_OID
+#ifdef WITH_DETAIL_OID
   OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(Now()) << " InjectionJob::TimeJob " << get_job_id() <<
-    ": inject(View(fact(" << view_->object_->get_debug_oid() << ")))");
+    ": inject(View(fact(" << view_->object_->get_detail_oid() << ")))");
 #endif
   _Mem::Get()->inject(view_);
   if (isFromIoDevice_)
@@ -213,9 +213,9 @@ EInjectionJob::EInjectionJob(View *v, Timestamp ijt) : TimeJob(ijt) {
 
 bool EInjectionJob::update(Timestamp &next_target) {
 
-#ifdef WITH_DEBUG_OID
+#ifdef WITH_DETAIL_OID
   OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(Now()) << " EInjectionJob::TimeJob " << get_job_id() <<
-    ": inject_existing_object(View(fact(" << view_->object_->get_debug_oid() << ")))");
+    ": inject_existing_object(View(fact(" << view_->object_->get_detail_oid() << ")))");
 #endif
   _Mem::Get()->inject_existing_object(view_, view_->object_, view_->get_host());
   return true;
@@ -235,9 +235,9 @@ SaliencyPropagationJob::SaliencyPropagationJob(Code *o, float32 sln_change, floa
 
 bool SaliencyPropagationJob::update(Timestamp &next_target) {
 
-#ifdef WITH_DEBUG_OID
+#ifdef WITH_DETAIL_OID
   OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(Now()) << " SaliencyPropagationJob::TimeJob " << get_job_id() <<
-    ": propagate_sln(fact(" << object_->get_debug_oid() << "))");
+    ": propagate_sln(fact(" << object_->get_detail_oid() << "))");
 #endif
   if (!object_->is_invalidated())
     _Mem::Get()->propagate_sln(object_, sln_change_, source_sln_thr_);
@@ -266,7 +266,7 @@ PerfSamplingJob::PerfSamplingJob(Timestamp start, microseconds period) : TimeJob
 
 bool PerfSamplingJob::update(Timestamp &next_target) {
 
-#ifdef WITH_DEBUG_OID
+#ifdef WITH_DETAIL_OID
   OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(Now()) << " PerfSamplingJob::TimeJob " << get_job_id() <<
     ": inject_perf_stats()");
 #endif

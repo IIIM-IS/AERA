@@ -83,23 +83,23 @@
 
 namespace r_code {
 
-#ifdef WITH_DEBUG_OID
-// Start with a big number so it doesn't look like SysObject::debug_oid_.
-static uint64 last_SysView_debug_oid = 1000;
+#ifdef WITH_DETAIL_OID
+// Start with a big number so it doesn't look like SysObject::detail_oid_.
+static uint64 last_SysView_detail_oid = 1000;
 #endif
 SysView::SysView() {
-#ifdef WITH_DEBUG_OID
-  debug_oid_ = ++last_SysView_debug_oid;
-  if (debug_oid_ == 0)
+#ifdef WITH_DETAIL_OID
+  detail_oid_ = ++last_SysView_detail_oid;
+  if (detail_oid_ == 0)
     int set_breakpoint_here = 1;
 #endif
 }
 
 SysView::SysView(View *source) {
 
-#ifdef WITH_DEBUG_OID
-  debug_oid_ = ++last_SysView_debug_oid;
-  if (debug_oid_ == 0)
+#ifdef WITH_DETAIL_OID
+  detail_oid_ = ++last_SysView_detail_oid;
+  if (detail_oid_ == 0)
     int set_breakpoint_here = 1;
 #endif
   for (uint32 i = 0; i < VIEW_CODE_MAX_SIZE; ++i)
@@ -159,8 +159,8 @@ void SysView::trace(std::ostream& out) {
 uint32 SysObject::lastOID_ = 0;
 
 SysObject::SysObject() : oid_(lastOID_++) {
-#ifdef WITH_DEBUG_OID
-  debug_oid_ = 0;
+#ifdef WITH_DETAIL_OID
+  detail_oid_ = 0;
 #endif
 }
 
@@ -177,8 +177,8 @@ SysObject::SysObject(Code *source) {
   source->rel_views();
 
   oid_ = source->get_oid();
-#ifdef WITH_DEBUG_OID
-  debug_oid_ = source->get_debug_oid();
+#ifdef WITH_DETAIL_OID
+  detail_oid_ = source->get_detail_oid();
 #endif
 
   for (i = 0; i < source->references_size(); ++i) // to get the right size in Image::add_object().

@@ -148,12 +148,12 @@ void CSTOverlay::inject_production(View* input) {
       ((CSTController *)controller_)->inject_prediction(f_p_f_icst, lowest_cfd_, time_to_live); // inject a f->pred->icst in the primary group, no rdx.
 
       string f_p_f_icst_info;
-#ifdef WITH_DEBUG_OID
-      f_p_f_icst_info = "(" + to_string(f_p_f_icst->get_debug_oid()) + ")";
+#ifdef WITH_DETAIL_OID
+      f_p_f_icst_info = "(" + to_string(f_p_f_icst->get_detail_oid()) + ")";
 #endif
       string f_icst_info;
-#ifdef WITH_DEBUG_OID
-      f_icst_info = "(" + to_string(f_icst->get_debug_oid()) + ") ";
+#ifdef WITH_DETAIL_OID
+      f_icst_info = "(" + to_string(f_icst->get_detail_oid()) + ") ";
 #endif
       OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " fact " << f_p_f_icst->get_oid() << f_p_f_icst_info <<
         " pred fact " << f_icst_info << "icst[" << controller_->getObject()->get_oid() << "][" << inputsInfo << "]");

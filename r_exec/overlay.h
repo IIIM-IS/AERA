@@ -143,9 +143,9 @@ protected:
 
     View *_view = new View(input);
     ReductionJob<C> *j = new ReductionJob<C>(input/*_view*/, (C *)this);
-#ifdef WITH_DEBUG_OID
+#ifdef WITH_DETAIL_OID
     OUTPUT_LINE((TraceLevel)0, "  make ReductionJob " << j->get_job_id() << 
-      "(" << j->get_debug_oid() << "): controller(" << get_debug_oid() << ")->reduce(View(fact_" << 
+      "(" << j->get_detail_oid() << "): controller(" << get_detail_oid() << ")->reduce(View(fact_" << 
       input->object_->get_oid() << ")) for " << get_core_object()->get_oid());
 #endif
     _Mem::Get()->pushReductionJob(j);

@@ -476,10 +476,10 @@ bool InputLessPGMOverlay::inject_productions() {
         View *view = new View(View::SYNC_ONCE, now, 1, 1, _Mem::Get()->get_stdin(), getView()->get_host(), fact); // SYNC_ONCE, sln=1, res=1,
         _Mem::Get()->inject(view);
         string mk_rdx_info = "";
-#ifdef WITH_DEBUG_OID
+#ifdef WITH_DETAIL_OID
         if (mk_rdx)
-          // We don't know the mk.rdx OID yet, so use the debug OID.
-          mk_rdx_info = " mk.rdx(" + to_string(mk_rdx->get_debug_oid()) + "):";
+          // We don't know the mk.rdx OID yet, so use the detail OID.
+          mk_rdx_info = " mk.rdx(" + to_string(mk_rdx->get_detail_oid()) + "):";
 #endif
         OUTPUT_LINE(IO_DEVICE_INJ_EJT, Utils::RelativeTime(Now()) << mk_rdx_info << " I/O device eject " << fact->get_oid());
       }

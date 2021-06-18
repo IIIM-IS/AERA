@@ -824,10 +824,10 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
         //f_imdl->get_reference(0)->trace();
         HLPBindingMap _original = original; // matching updates the bm; always start afresh.
         if (_original.match_fwd_strict(_f_imdl, f_imdl)) { // tpl args will be valuated in bm, but not in f_imdl yet.
-#ifdef WITH_DEBUG_OID
-          OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " fact (" << f_imdl->get_debug_oid() << ") imdl mdl " <<
+#ifdef WITH_DETAIL_OID
+          OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " fact (" << f_imdl->get_detail_oid() << ") imdl mdl " <<
             f_imdl->get_reference(0)->get_reference(0)->get_oid() << " matches evidence fact (" <<
-            _f_imdl->get_debug_oid() << ") imdl mdl " << _f_imdl->get_reference(0)->get_reference(0)->get_oid());
+            _f_imdl->get_detail_oid() << ") imdl mdl " << _f_imdl->get_reference(0)->get_reference(0)->get_oid());
 #endif
           if (r == WEAK_REQUIREMENT_DISABLED && (*e).chaining_was_allowed_) { // first match.
 
@@ -1591,10 +1591,10 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
 
     PrimaryMDLController *c = (PrimaryMDLController *)controllers_[RHSController]; // rhs controller: in the same view.
     c->store_requirement(production, this, chaining_was_allowed, is_simulation); // if not simulation, stores also in the secondary controller.
-#ifdef WITH_DEBUG_OID
-    OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " fact (" << f_imdl->get_debug_oid() << ") imdl mdl " << getObject()->get_oid() <<
-      ": " << input->get_oid() << " -> fact (" << production->get_debug_oid() << ") pred fact (" <<
-      bound_rhs->get_debug_oid() << ") imdl mdl " << bound_rhs->get_reference(0)->get_reference(0)->get_oid());
+#ifdef WITH_DETAIL_OID
+    OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " fact (" << f_imdl->get_detail_oid() << ") imdl mdl " << getObject()->get_oid() <<
+      ": " << input->get_oid() << " -> fact (" << production->get_detail_oid() << ") pred fact (" <<
+      bound_rhs->get_detail_oid() << ") imdl mdl " << bound_rhs->get_reference(0)->get_reference(0)->get_oid());
 #else
     OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": " << input->get_oid() << 
       " -> fact pred fact imdl mdl " << bound_rhs->get_reference(0)->get_reference(0)->get_oid());
@@ -1620,8 +1620,8 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
         Fact *f_pred_f_imdl = new Fact(new Pred(f_imdl, 1), now, now, 1, 1);
         inject_prediction(production, f_pred_f_imdl, confidence, before - now, NULL);
         string f_imdl_info;
-#ifdef WITH_DEBUG_OID
-        f_imdl_info = " fact (" + to_string(f_imdl->get_debug_oid()) + ") imdl";
+#ifdef WITH_DETAIL_OID
+        f_imdl_info = " fact (" + to_string(f_imdl->get_detail_oid()) + ") imdl";
 #endif
         OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << f_imdl_info << " mdl " << 
           getObject()->get_oid() << ": " << input->get_oid() << " -> fact " << production->get_oid() << 
@@ -1641,8 +1641,8 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
         _Mem::Get()->inject(view);
         OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " predict -> mk.rdx " << mk_rdx->get_oid());
         string f_imdl_info;
-#ifdef WITH_DEBUG_OID
-        f_imdl_info = "(" + to_string(f_imdl->get_debug_oid()) + ")";
+#ifdef WITH_DETAIL_OID
+        f_imdl_info = "(" + to_string(f_imdl->get_detail_oid()) + ")";
 #endif
         OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " fact " << f_imdl->get_oid() << f_imdl_info << " imdl mdl " << 
           getObject()->get_oid() << ": " << input->get_oid() << " -> fact " << production->get_oid() << 
@@ -1890,10 +1890,10 @@ void PrimaryMDLController::abduce_no_simulation(Fact *f_super_goal, bool opposit
   P<Fact> f_super_goal_copy = new Fact(
     super_goal_copy, f_super_goal->get_after(), f_super_goal->get_before(), f_super_goal->get_cfd(),
     f_super_goal->get_psln_thr());
-#ifdef WITH_DEBUG_OID
+#ifdef WITH_DETAIL_OID
   if (f_p_f_success)
     OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " sim commit: fact " << f_p_f_success->get_oid() <<
-      " pred fact success -> fact (" << f_super_goal_copy->get_debug_oid() << ") goal");
+      " pred fact success -> fact (" << f_super_goal_copy->get_detail_oid() << ") goal");
 #endif
 
   // Set allow_simulation false.
@@ -1966,12 +1966,12 @@ void PrimaryMDLController::abduce_imdl(HLPBindingMap *bm, Fact *super_goal, Fact
   Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
   add_r_monitor(new RMonitor(this, bm, super_goal->get_goal()->get_target()->get_before(), now + sim->get_thz(), f_sub_goal, f_imdl)); // the monitor will wait until the deadline of the super-goal.
   inject_goal(bm, f_sub_goal, f_imdl);
-  string fImdlDebugInfo;
-#ifdef WITH_DEBUG_OID
-  fImdlDebugInfo = "(" + to_string(f_imdl->get_debug_oid()) + ")";
+  string fImdlDetailInfo;
+#ifdef WITH_DETAIL_OID
+  fImdlDetailInfo = "(" + to_string(f_imdl->get_detail_oid()) + ")";
 #endif
   OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " " << getObject()->get_oid() << " -> fact " << f_sub_goal->get_oid() << " goal fact " << 
-    f_imdl->get_oid() << fImdlDebugInfo << " imdl[" << f_imdl->get_reference(0)->get_reference(0)->get_oid() << "][" << 
+    f_imdl->get_oid() << fImdlDetailInfo << " imdl[" << f_imdl->get_reference(0)->get_reference(0)->get_oid() << "][" << 
     Utils::RelativeTime(sub_goal->get_target()->get_after()) << "," << Utils::RelativeTime(sub_goal->get_target()->get_before()) << "]");
 }
 

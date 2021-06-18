@@ -354,8 +354,8 @@ void Decompiler::decompile_object(
       if (include_oid) {
         if (sys_object->oid_ != UNDEFINED_OID)
           *out_stream_ << sys_object->oid_;
-#ifdef WITH_DEBUG_OID
-        *out_stream_ << "(" << sys_object->debug_oid_ << ") ";
+#ifdef WITH_DETAIL_OID
+        *out_stream_ << "(" << sys_object->detail_oid_ << ") ";
 #else
         if (sys_object->oid_ != UNDEFINED_OID)
           *out_stream_ << " ";

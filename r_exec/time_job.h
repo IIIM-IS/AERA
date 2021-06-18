@@ -200,17 +200,17 @@ template<class M> class MonitoringJob :
 public:
   P<M> monitor_;
   MonitoringJob(M *monitor, Timestamp deadline) : TimeJob(deadline), monitor_(monitor) {
-#ifdef WITH_DEBUG_OID
+#ifdef WITH_DETAIL_OID
     OUTPUT_LINE((TraceLevel)0, "  make MonitoringJob::TimeJob " << get_job_id() <<
-      "(" << get_debug_oid() << ") for monitor(" << monitor_->get_debug_oid() << "), deadline " <<
+      "(" << get_detail_oid() << ") for monitor(" << monitor_->get_detail_oid() << "), deadline " <<
       Utils::RelativeTime(deadline));
 #endif
   }
   bool update(Timestamp &next_target) {
 
-#ifdef WITH_DEBUG_OID
+#ifdef WITH_DETAIL_OID
     OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(Now()) << " MonitoringJob::TimeJob " << get_job_id() <<
-      ": monitor(" << monitor_->get_debug_oid() << ")->update()");
+      ": monitor(" << monitor_->get_detail_oid() << ")->update()");
 #endif
     monitor_->update(next_target);
     return true;

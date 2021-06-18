@@ -117,8 +117,8 @@ public:
   void read(word32 *data);
   uint32 get_size() const;
   void trace(std::ostream& out);
-#ifdef WITH_DEBUG_OID
-  int debug_oid_;
+#ifdef WITH_DETAIL_OID
+  int detail_oid_;
 #endif
 };
 
@@ -133,8 +133,8 @@ public:
   r_code::vector<SysView *> views_;
 
   uint32 oid_;
-#ifdef WITH_DEBUG_OID
-  uint64 debug_oid_;
+#ifdef WITH_DETAIL_OID
+  uint64 detail_oid_;
 #endif
 
   SysObject();
@@ -289,8 +289,8 @@ public:
     if (atom.getDescriptor() == Atom::R_PTR) {
       if (atom.asIndex() < references_size()) {
         out << " -> " << get_reference(atom.asIndex())->get_oid();
-#ifdef WITH_DEBUG_OID
-        out << "(" << get_reference(atom.asIndex())->get_debug_oid() << ")";
+#ifdef WITH_DETAIL_OID
+        out << "(" << get_reference(atom.asIndex())->get_detail_oid() << ")";
 #endif
       }
       else
@@ -320,8 +320,8 @@ public:
       out << std::endl;
     }
     out << "OID: " << get_oid();
-#ifdef WITH_DEBUG_OID
-    out << "(" << get_debug_oid() << ")";
+#ifdef WITH_DETAIL_OID
+    out << "(" << get_detail_oid() << ")";
 #endif
     out << std::endl;
   }

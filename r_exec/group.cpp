@@ -507,9 +507,9 @@ bool Group::load(View *view, Code *object) {
     c->set_secondary_host(get_secondary_group());
     if (is_active_pgm(view))
       c->gain_activation();
-#ifdef WITH_DEBUG_OID
+#ifdef WITH_DETAIL_OID
     OUTPUT_LINE(MDL_OUT, "load cst " << view->object_->get_oid() <<
-      ", CSTController(" + to_string(c->get_debug_oid()) + ")");
+      ", CSTController(" + to_string(c->get_detail_oid()) + ")");
 #endif
     break;
   }case Atom::MODEL: {
@@ -525,9 +525,9 @@ bool Group::load(View *view, Code *object) {
     }
     if (is_active_pgm(view))
       c->gain_activation();
-#ifdef WITH_DEBUG_OID
+#ifdef WITH_DETAIL_OID
     OUTPUT_LINE(MDL_OUT, "load mdl " << view->object_->get_oid() << 
-      ", MDLController(" + to_string(c->get_debug_oid()) + ") cnt:" << 
+      ", MDLController(" + to_string(c->get_detail_oid()) + ") cnt:" << 
       view->object_->code(MDL_CNT).asFloat() << " sr:" << view->object_->code(MDL_SR).asFloat());
 #endif
     break;
@@ -849,8 +849,8 @@ void Group::inject_hlps(std::vector<View *> &views) {
       (*view)->controller_ = c;
       c->set_secondary_host(get_secondary_group());
       string controllerInfo;
-#ifdef WITH_DEBUG_OID
-      controllerInfo = ", CSTController(" + to_string(c->get_debug_oid()) + ")";
+#ifdef WITH_DETAIL_OID
+      controllerInfo = ", CSTController(" + to_string(c->get_detail_oid()) + ")";
 #endif
       OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " -> cst " << (*view)->object_->get_oid() << controllerInfo);
       break;
@@ -863,8 +863,8 @@ void Group::inject_hlps(std::vector<View *> &views) {
       if (inject_in_secondary_group)
         get_secondary_group()->inject_secondary_mdl_controller(*view);
       string controllerInfo;
-#ifdef WITH_DEBUG_OID
-      controllerInfo = ", MDLController(" + to_string(c->get_debug_oid()) + ")";
+#ifdef WITH_DETAIL_OID
+      controllerInfo = ", MDLController(" + to_string(c->get_detail_oid()) + ")";
 #endif
       OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " -> mdl " << (*view)->object_->get_oid() << controllerInfo);
       break;
