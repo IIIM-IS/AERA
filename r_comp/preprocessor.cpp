@@ -157,6 +157,26 @@ int32 RepliStruct::parse(std::istream *stream, const std::string& filePath, uint
     lastc = c;
     c = stream->get();
     // printf("%c", c);
+
+    if (!inComment && c == '\"') {
+      // Special case: Read until the end of the string.
+      while (true) {
+        str += c;
+        lastcc = lastc;
+        lastc = c;
+        c = stream->get();
+
+        if (c == '\"')
+          // End of the string. Continue below to append to str.
+          break;
+        if (c == 10 || c == 13) {
+          line_ = GlobalLine_;
+          error_ += "Newline is not permitted in a string. ";
+          return -1;
+        }
+      }
+    }
+
     switch (c) {
     case '\t':
       if (inComment) continue; // allow tabs in comments, does not matter anyway
