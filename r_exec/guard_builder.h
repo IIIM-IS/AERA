@@ -142,12 +142,13 @@ public:
 class CmdGuardBuilder :
   public TimingGuardBuilder {
 protected:
+  std::chrono::microseconds offset_;
   uint16 cmd_arg_index_;
 
   void _build(r_code::Code *mdl, uint16 fwd_opcode, uint16 bwd_opcode, uint16 q0, uint16 t0, uint16 t1, uint16 &write_index) const;
   void _build(r_code::Code *mdl, uint16 fwd_opcode, uint16 bwd_opcode, _Fact *premise_pattern, _Fact *cause_pattern, uint16 &write_index) const;
 
-  CmdGuardBuilder(std::chrono::microseconds period, uint16 cmd_arg_index);
+  CmdGuardBuilder(std::chrono::microseconds period, std::chrono::microseconds offset, uint16 cmd_arg_index);
 public:
   virtual ~CmdGuardBuilder();
 };
@@ -157,7 +158,7 @@ public:
 class MCGuardBuilder :
   public CmdGuardBuilder {
 public:
-  MCGuardBuilder(std::chrono::microseconds period, float32 cmd_arg_index);
+  MCGuardBuilder(std::chrono::microseconds period, std::chrono::microseconds offset, float32 cmd_arg_index);
   ~MCGuardBuilder();
 
   void build(r_code::Code *mdl, _Fact *premise_pattern, _Fact *cause_pattern, uint16 &write_index) const;
@@ -170,7 +171,7 @@ class ACGuardBuilder :
 private:
 
 public:
-  ACGuardBuilder(std::chrono::microseconds period, uint16 cmd_arg_index);
+  ACGuardBuilder(std::chrono::microseconds period, std::chrono::microseconds offset, uint16 cmd_arg_index);
   ~ACGuardBuilder();
 
   void build(r_code::Code *mdl, _Fact *premise_pattern, _Fact *cause_pattern, uint16 &write_index) const;

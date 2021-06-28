@@ -937,8 +937,10 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
       if (!s.isFloat())
         continue;
       float32 _s = s.asFloat();
-      if (Utils::Equal(_s, searched_for))
-        return new ACGuardBuilder(period, cmd_arg_set_index + i);
+      if (Utils::Equal(_s, searched_for)) {
+        auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target_, FACT_AFTER));
+        return new ACGuardBuilder(period, period - offset, cmd_arg_set_index + i);
+      }
     }
 
     if (q0 != 0) {
@@ -950,8 +952,10 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
         if (!s.isFloat())
           continue;
         float32 _s = s.asFloat();
-        if (Utils::Equal(_s, searched_for))
-          return new MCGuardBuilder(period, i);
+        if (Utils::Equal(_s, searched_for)) {
+          auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target_, FACT_AFTER));
+          return new MCGuardBuilder(period, period - offset, i);
+        }
       }
     }
   } else if (opcode == Opcodes::MkVal) {

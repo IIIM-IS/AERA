@@ -308,7 +308,7 @@ void NoArgCmdGuardBuilder::build(Code *mdl, _Fact *premise_pattern, _Fact *cause
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-CmdGuardBuilder::CmdGuardBuilder(microseconds period, uint16 cmd_arg_index) : TimingGuardBuilder(period), cmd_arg_index_(cmd_arg_index) {
+CmdGuardBuilder::CmdGuardBuilder(microseconds period, microseconds offset, uint16 cmd_arg_index) : TimingGuardBuilder(period), offset_(offset), cmd_arg_index_(cmd_arg_index) {
 }
 
 CmdGuardBuilder::~CmdGuardBuilder() {
@@ -349,8 +349,8 @@ void CmdGuardBuilder::_build(Code *mdl, uint16 fwd_opcode, uint16 bwd_opcode, ui
   write_guard(mdl, t0, t2, Opcodes::Sub, period_, write_index, extent_index);
   write_guard(mdl, t1, t3, Opcodes::Sub, period_, write_index, extent_index);
 
-  write_guard(mdl, cmd_t0, t2, Opcodes::Sub, period_, write_index, extent_index);
-  write_guard(mdl, cmd_t1, t3, Opcodes::Sub, period_, write_index, extent_index);
+  write_guard(mdl, cmd_t0, t2, Opcodes::Sub, offset_, write_index, extent_index);
+  write_guard(mdl, cmd_t1, t3, Opcodes::Sub, offset_, write_index, extent_index);
 
   mdl->code(++write_index) = Atom::AssignmentPointer(cmd_arg, ++extent_index);
   mdl->code(extent_index) = Atom::Operator(bwd_opcode, 2); // cmd_arg:(bwd_opcode q1 q0)
@@ -384,7 +384,7 @@ void CmdGuardBuilder::_build(Code *mdl, uint16 fwd_opcode, uint16 bwd_opcode, _F
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-MCGuardBuilder::MCGuardBuilder(microseconds period, float32 cmd_arg_index) : CmdGuardBuilder(period, cmd_arg_index) {
+MCGuardBuilder::MCGuardBuilder(microseconds period, microseconds offset, float32 cmd_arg_index) : CmdGuardBuilder(period, offset, cmd_arg_index) {
 }
 
 MCGuardBuilder::~MCGuardBuilder() {
@@ -397,7 +397,7 @@ void MCGuardBuilder::build(Code *mdl, _Fact *premise_pattern, _Fact *cause_patte
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-ACGuardBuilder::ACGuardBuilder(microseconds period, uint16 cmd_arg_index) : CmdGuardBuilder(period, cmd_arg_index) {
+ACGuardBuilder::ACGuardBuilder(microseconds period, microseconds offset, uint16 cmd_arg_index) : CmdGuardBuilder(period, offset, cmd_arg_index) {
 }
 
 ACGuardBuilder::~ACGuardBuilder() {
