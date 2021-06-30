@@ -118,12 +118,12 @@ private:
 
     class Hash {
     public:
-      size_t operator ()(MEntry e) const { return e.hash_code_; }
+      size_t operator ()(const MEntry& e) const { return e.hash_code_; }
     };
 
     class Equal {
     public:
-      bool operator ()(const MEntry lhs, const MEntry rhs) const { return lhs.match(rhs); }
+      bool operator ()(const MEntry& lhs, const MEntry& rhs) const { return lhs.match(rhs); }
     };
   };
 
