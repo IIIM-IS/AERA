@@ -162,10 +162,10 @@ bool ModelBase::MEntry::Match(Code *lhs, Code *rhs) {
   return true;
 }
 
-ModelBase::MEntry::MEntry() : mdl_(NULL), touch_time_(seconds(0)), hash_code_(0) {
+ModelBase::MEntry::MEntry() : mdl_(NULL), packed_(false), touch_time_(seconds(0)), hash_code_(0) {
 }
 
-ModelBase::MEntry::MEntry(Code *mdl, bool packed) : mdl_(mdl), touch_time_(Now()), hash_code_(ComputeHashCode(mdl, packed)) {
+ModelBase::MEntry::MEntry(Code *mdl, bool packed) : mdl_(mdl), packed_(packed), touch_time_(Now()), hash_code_(ComputeHashCode(mdl, packed)) {
 }
 
 bool ModelBase::MEntry::match(const MEntry &e) const { // at this point both models have the same hash code; this.mdl is packed, e.mdl is unpacked.

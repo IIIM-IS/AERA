@@ -111,6 +111,7 @@ private:
     MEntry(r_code::Code *mdl, bool packed);
 
     P<r_code::Code> mdl_;
+    bool packed_;
     Timestamp touch_time_; // last time the mdl was successfully compared to.
     uint32 hash_code_;
 
