@@ -595,39 +595,51 @@ Simulator
   * DONE. SYNC_HOLD timings https://github.com/IIIM-IS/replicode/pull/118
   * DONE. PTPX: allow models with LHS icst and RHS imdl at the same time https://github.com/IIIM-IS/replicode/pull/161
 
+2021-06-30
+* DONE. Visualizer: Checkbox for show requirement predictions. (Let Leonard know.)
+* DONE. not sharing timing variables when building the model https://github.com/IIIM-IS/replicode/pull/110
+* pong.test
+  * DONE. After making mdl_269 (copy of mdl_122), why does it stop from making more copies?
+    fact_420 (ball pos) => make ASTController w/ candidate CTPX. fact_446 cmd => mdl 122 make fact_447 (predict ball pos).
+      fact_447 => ASTController match target fact_420. ASTController::reduce:138 kill()
+  * DONE. CTPX: mdl_269 is the same as mdl_122. Why re-learned? (Was labelled low-priority but now clear.)
+    fact_446 cmd => mdl 122 does not predict ball pos, blocked by new bad mdl_168 (not killed yet).
+      So the ASTController for the CTPX that makes mdl_269 is not killed (as above).
+    But... ModelBase::MEntry::match is broken. When fixed, check_existence does prevent making mdl_269.
+
 next meeting
-* pong.test: Learn general model for new position.
-  * mdl_222: In backward guard, need "v5:(sub v8 0s:80ms:0us)"
-  * (Low priority) CTPX: mdl_269 is the same as mdl_122. Why re-learned?
-  * (Low priority) PTPX: mdl_270 is the same as mdl_223. Why re-learned?
-  * More interesting: After making mdl_269 (copy of mdl_122), why does it stop from making more copies?
-  * mdl_222: Needed to put velocity in the cmd. Need a model builder to get it from the velocity fact.
-  * Remove cst_ball_position, etc. and learn them.
-* Review/merge bug fix pull requests for:
-  * REPRODUCE. simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
+* Visualizer: Issue #3
+* Pull request for issue #147
+* pong.test
+  * Try to fix ModelBase::MEntry::match. Use the hidden unpacked model where possible?
+  * Motion in X-Y
+  * Add paddle. Make goal for the ball to be at a position which requires moving the paddle to bounce it.
 * Review/merge new functionality pull requests for:
-  * REVIEWING. not sharing timing variables when building the model https://github.com/IIIM-IS/replicode/pull/110
   * REVIEWING. NoArgCmdGuardBuilder backward guard https://github.com/IIIM-IS/replicode/pull/115
   * REVIEWING. matching all composite state combinations in backward chaining  https://github.com/IIIM-IS/replicode/pull/129
   * REVIEWING. bindPattern to update timings https://github.com/IIIM-IS/replicode/pull/135
   * simulation control in abduce_simulated_lhs https://github.com/IIIM-IS/replicode/pull/111
   * injecting a second icst if there is a different simulation branch https://github.com/IIIM-IS/replicode/pull/160
   * PTPX: Make a candidate model from every matching f_icst https://github.com/IIIM-IS/replicode/pull/165
+* Review/merge bug fix pull requests for:
+  * Fix bug in issue #29 for !def substitution inside strings https://github.com/IIIM-IS/replicode/pull/167
+  * REPRODUCE. simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
 * Review diag_mode_rel_0_1 tags https://github.com/IIIM-IS/replicode/issues?q=is%3Aopen+is%3Aissue+milestone%3Adiag_mode_rel_0_1
 
 TODO
-* Visualizer: Checkbox for show requirement predictions. (Let Leonard know.)
-* Visualizer: File menu / Preferences (XML file). And persist "view" checkboxes.
-* Can GitHub issues be limited to only posting by permission?
-* PTPX:
+* TRY copy/paste code to check references to fix: Using = in guard of composite state of model https://github.com/IIIM-IS/replicode/issues/133
+* PTPX in hand-grab-sphere:
   * Option to always create new cst
     * Why does the new_cst seem to prevent models with the previously-found icsts, e.g. S0 and S3?
     * Learned cst may only have icsts. But using a cst for later model-building requires a non-icst fact. Should icst->contains be recursive? (Need limit.) Or always include a fact in new_cst?
   * Why anti-requirement is not rated?
     PrimaryMDLController::predict:1557 confidence = 0
     PMonitor::reduce:126 "a predicted counter evidence is stronger than the target: don't rate the model."
-* pong.test: Learn the exception "bounce" model.
-* TRY copy/paste code to check references to fix: Using = in guard of composite state of model https://github.com/IIIM-IS/replicode/issues/133
+* pong.test
+  * mdl_122: Needed to put velocity in the cmd. Need a model builder to get it from the velocity fact.
+  * Remove cst_ball_position, etc. and learn them.
+  * Learn the exception "bounce" model.
+* Visualizer: File menu / Preferences (XML file). And persist "view" checkboxes.
 * Visualizer: Option to position simulation objects by predicted time vs. created time.
 * Make hand-grab-sphere example learn the models.
   * A pgm to match a learned model and inject a new model which uses it.
