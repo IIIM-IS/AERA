@@ -279,6 +279,7 @@ Code *ModelBase::check_existence(Code *mdl) {
     return copy.mdl_;
   }
   _Mem::Get()->pack_hlp(e.mdl_);
+  e.packed_ = true;
   white_list_.insert(e);
   mdlCS_.leave();
   return mdl;
@@ -345,9 +346,11 @@ void ModelBase::check_existence(Code *m0, Code *m1, Code *&_m0, Code *&_m1) { //
   if (_m0 == m0) {
 
     _Mem::Get()->pack_hlp(m0);
+    e_m0.packed_ = true;
     white_list_.insert(e_m0);
   }
   _Mem::Get()->pack_hlp(m1);
+  e_m1.packed_ = true;
   white_list_.insert(e_m1);
   mdlCS_.leave();
   _m1 = m1;
