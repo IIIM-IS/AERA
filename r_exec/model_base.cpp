@@ -168,30 +168,46 @@ ModelBase::MEntry::MEntry() : mdl_(NULL), packed_(false), touch_time_(seconds(0)
 ModelBase::MEntry::MEntry(Code *mdl, bool packed) : mdl_(mdl), packed_(packed), touch_time_(Now()), hash_code_(ComputeHashCode(mdl, packed)) {
 }
 
-bool ModelBase::MEntry::match(const MEntry &e) const { // at this point both models have the same hash code; this.mdl is packed, e.mdl is unpacked.
+bool ModelBase::MEntry::match(const MEntry &e) const { // at this point both models have the same hash code.
 
   if (mdl_ == e.mdl_)
     return true;
 
-  for (uint16 i = 0; i < mdl_->code_size(); ++i) { // first check the mdl code: this checks on tpl args and guards.
+  // Get the unpacked models.
+  Code* mdl_0 = (packed_ ? mdl_->get_reference(mdl_->references_size() - MDL_HIDDEN_REFS) : mdl_);
+  Code* mdl_1 = (e.packed_ ? e.mdl_->get_reference(e.mdl_->references_size() - MDL_HIDDEN_REFS) : e.mdl_);
+
+  if (mdl_0->code_size() != mdl_1->code_size())
+    return false;
+  for (uint16 i = 0; i < mdl_0->code_size(); ++i) { // first check the mdl code: this checks on tpl args and guards.
 
     if (i == MDL_STRENGTH || i == MDL_CNT || i == MDL_SR || i == MDL_DSR || i == MDL_ARITY) // ignore house keeping data.
       continue;
 
-    if (mdl_->code(i) != e.mdl_->code(i))
+    if (mdl_0->code(i) != mdl_1->code(i))
       return false;
   }
 
-  Code *lhs_0 = mdl_->get_reference(mdl_->references_size() - 1)->get_reference(0); // payload of the fact.
-  if (e.mdl_->get_reference(0)->references_size() < 1)
+  Code* f_lhs_0 = mdl_0->get_reference(0);
+  Code* f_lhs_1 = mdl_1->get_reference(0);
+  if (f_lhs_0->references_size() < 1)
     return false;
-  Code *lhs_1 = e.mdl_->get_reference(0)->get_reference(0); // payload of the fact.
-  if (!Match(lhs_0, lhs_1))
+  if (f_lhs_1->references_size() < 1)
+    return false;
+  // Make sure we don't match fact with anti-fact.
+  if (f_lhs_0->code(0) != f_lhs_1->code(0))
+    return false;
+  // Match the payloads of the facts.
+  if (!Match(f_lhs_0->get_reference(0), f_lhs_1->get_reference(0)))
     return false;
 
-  Code *rhs_0 = mdl_->get_reference(mdl_->references_size() - 1)->get_reference(1); // payload of the fact.
-  Code *rhs_1 = e.mdl_->get_reference(1)->get_reference(1); // payload of the fact.
-  if (!Match(rhs_0, rhs_1))
+  Code* f_rhs_0 = mdl_0->get_reference(1);
+  Code* f_rhs_1 = mdl_1->get_reference(1);
+  // Make sure we don't match fact with anti-fact.
+  if (f_rhs_0->code(0) != f_rhs_1->code(0))
+    return false;
+  // Match the payloads of the facts.
+  if (!Match(f_rhs_0->get_reference(0), f_rhs_1->get_reference(0)))
     return false;
 
   return true;
