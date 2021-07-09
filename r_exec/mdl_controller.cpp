@@ -529,7 +529,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
           // Temporarily make f_imdl wr_enabled match the one from _f_imdl so that any difference is ignored.
           f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(
             _f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED).asBoolean());
-          TemplateTimingsUpdater timingsUpdater(_f_imdl, f_imdl, &_original);
+          TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
           if (_original.match_fwd_strict(_f_imdl, f_imdl)) { // tpl args will be valuated in bm, but not in f_imdl yet.
 
             r = WEAK_REQUIREMENT_ENABLED;
@@ -562,7 +562,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
             HLPBindingMap _original = original; // matching updates the bm; always start afresh.
-            TemplateTimingsUpdater timingsUpdater(_f_imdl, f_imdl, &_original);
+            TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
             if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) { // tpl args will be valuated in bm.
 
               bm->load(&_original);
@@ -593,7 +593,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
             HLPBindingMap _original = original; // matching updates the bm; always start afresh.
-            TemplateTimingsUpdater timingsUpdater(_f_imdl, f_imdl, &_original);
+            TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
             if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) {
 
               negative_cfd = (*e).confidence_;
@@ -617,7 +617,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
             HLPBindingMap _original = original; // matching updates the bm; always start afresh.
-            TemplateTimingsUpdater timingsUpdater(_f_imdl, f_imdl, &_original);
+            TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
             if (_original.match_fwd_strict(_f_imdl, f_imdl)) {
 
               if ((*e).confidence_ > negative_cfd) {
@@ -667,7 +667,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
           //_f_imdl->get_reference(0)->trace();
           //f_imdl->get_reference(0)->trace();
           HLPBindingMap _original = original; // matching updates the bm; always start afresh.
-          TemplateTimingsUpdater timingsUpdater(_f_imdl, f_imdl, &_original);
+          TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
           // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
           if (_original.match_fwd_strict(_f_imdl, f_imdl)) { // tpl args will be valuated in bm, but not in f_imdl yet.
 
@@ -700,7 +700,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
             HLPBindingMap _original = original; // matching updates the bm; always start afresh.
-            TemplateTimingsUpdater timingsUpdater(_f_imdl, f_imdl, &_original);
+            TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
             // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
             if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) { // tpl args will be valuated in bm.
 
@@ -732,7 +732,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
             HLPBindingMap _original = original; // matching updates the bm; always start afresh.
-            TemplateTimingsUpdater timingsUpdater(_f_imdl, f_imdl, &_original);
+            TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
             // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
             if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) {
 
@@ -757,7 +757,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
             HLPBindingMap _original = original; // matching updates the bm; always start afresh.
-            TemplateTimingsUpdater timingsUpdater(_f_imdl, f_imdl, &_original);
+            TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
             // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
             if (_original.match_fwd_strict(_f_imdl, f_imdl)) {
 
@@ -994,7 +994,7 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
         //_f_imdl->get_reference(0)->trace();
         //f_imdl->get_reference(0)->trace();
         HLPBindingMap _original = original; // matching updates the bm; always start afresh.
-        TemplateTimingsUpdater timingsUpdater(_f_imdl, f_imdl, &_original);
+        TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
         // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
         if (_original.match_fwd_strict(_f_imdl, f_imdl)) { // tpl args will be valuated in bm, but not in f_imdl yet.
 
@@ -1026,7 +1026,7 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
 
           _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
           HLPBindingMap _original = original; // matching updates the bm; always start afresh.
-          TemplateTimingsUpdater timingsUpdater(_f_imdl, f_imdl, &_original);
+          TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
           // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
           if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) { // tpl args will be valuated in bm.
 
@@ -1054,7 +1054,7 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
 
           _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
           HLPBindingMap _original = original; // matching updates the bm; always start afresh.
-          TemplateTimingsUpdater timingsUpdater(_f_imdl, f_imdl, &_original);
+          TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
           // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
           if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) {
 
@@ -1075,7 +1075,7 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
           //f->get_reference(0)->trace();
           _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
           HLPBindingMap _original = original; // matching updates the bm; always start afresh.
-          TemplateTimingsUpdater timingsUpdater(_f_imdl, f_imdl, &_original);
+          TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
           // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
           if (_original.match_fwd_strict(_f_imdl, f_imdl)) {
 
