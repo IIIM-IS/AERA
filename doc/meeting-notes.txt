@@ -607,13 +607,22 @@ Simulator
       So the ASTController for the CTPX that makes mdl_269 is not killed (as above).
     But... ModelBase::MEntry::match is broken. When fixed, check_existence does prevent making mdl_269.
 
+2021-07-09
+* DONE. Check if the LHS can be an ipgm.
+  Yes. Need to update PrimaryMDLController::abduce_simulated_lhs:2038 to start simulated forward
+    chaining for a LHS goal ipgm (in addition to LHS cmd)
+  Given a goal of the RHS, is the program instantiated? Need a program to intercept the goal ipgm,
+    the same as for a goal cmd.
+* pong.test
+  * DONE: Try to fix ModelBase::MEntry::match. Use the hidden unpacked model where possible.
+    * Fix bug in ModelBase::MEntry::match for packed models https://github.com/IIIM-IS/replicode/pull/170
+  * DONE. Motion in X-Y
+
 next meeting
-* Visualizer: Issue #3
 * Pull request for issue #147
 * pong.test
-  * Try to fix ModelBase::MEntry::match. Use the hidden unpacked model where possible?
-  * Motion in X-Y
   * Add paddle. Make goal for the ball to be at a position which requires moving the paddle to bounce it.
+  * For a non-simulated prediction, document the detail of a command input and controller state for the prediction.
 * Review/merge new functionality pull requests for:
   * REVIEWING. NoArgCmdGuardBuilder backward guard https://github.com/IIIM-IS/replicode/pull/115
   * REVIEWING. matching all composite state combinations in backward chaining  https://github.com/IIIM-IS/replicode/pull/129
@@ -694,7 +703,7 @@ Y _ _ _ Rating of strong requirement models
 _ _ _ _ Testing and re-activation of strong requirement models in the secondary group
 _ _ _ _ Goal actions to test conflicting weak and strong requirements
 _ _ _ _ Simulated anti-goal from opposite match of drive (and starting of new simulation from anti-goal)
-_ _ _ _ Simulated prediction of anti-imdl from strong requirement model
+_ _ _ _ Simulated prediction of anti-imdl from strong requirement model (to prevent model prediction)
 _ _ _ _ Simulated prediction of anti-fact from model (how does this make the simulation proceed?)
 _ _ _ _ Conflict resolution of conflicting predictions (fact and anti-fact)
 _ _ _ _ Simulated anti-goal of cmd from model with anti-matched RHS
