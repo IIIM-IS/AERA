@@ -615,14 +615,12 @@ Simulator
     the same as for a goal cmd.
 * pong.test
   * DONE: Try to fix ModelBase::MEntry::match. Use the hidden unpacked model where possible.
-    * Fix bug in ModelBase::MEntry::match for packed models https://github.com/IIIM-IS/replicode/pull/170
   * DONE. Motion in X-Y
 
 next meeting
-* Pull request for issue #147
 * pong.test
+  * DONE. For a non-simulated prediction, document the detail of a command input and controller state for the prediction.
   * Add paddle. Make goal for the ball to be at a position which requires moving the paddle to bounce it.
-  * For a non-simulated prediction, document the detail of a command input and controller state for the prediction.
 * Review/merge new functionality pull requests for:
   * REVIEWING. NoArgCmdGuardBuilder backward guard https://github.com/IIIM-IS/replicode/pull/115
   * REVIEWING. matching all composite state combinations in backward chaining  https://github.com/IIIM-IS/replicode/pull/129
@@ -632,6 +630,7 @@ next meeting
   * PTPX: Make a candidate model from every matching f_icst https://github.com/IIIM-IS/replicode/pull/165
 * Review/merge bug fix pull requests for:
   * Fix bug in issue #29 for !def substitution inside strings https://github.com/IIIM-IS/replicode/pull/167
+  * Fix bug in ModelBase::MEntry::match for packed models https://github.com/IIIM-IS/replicode/pull/170
   * REPRODUCE. simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
 * Review diag_mode_rel_0_1 tags https://github.com/IIIM-IS/replicode/issues?q=is%3Aopen+is%3Aissue+milestone%3Adiag_mode_rel_0_1
 
@@ -650,6 +649,7 @@ TODO
   * Learn the exception "bounce" model.
 * Visualizer: File menu / Preferences (XML file). And persist "view" checkboxes.
 * Visualizer: Option to position simulation objects by predicted time vs. created time.
+* Pull request for issue #147
 * Make hand-grab-sphere example learn the models.
   * A pgm to match a learned model and inject a new model which uses it.
 * How to ensure that stored requirements are from the same simulation branch?
