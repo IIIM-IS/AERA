@@ -9,6 +9,8 @@ See the file [INSTALL.md](https://github.com/IIIM-IS/AERA/blob/master/INSTALL.md
 
 See the file [CHANGELOG.md](https://github.com/IIIM-IS/AERA/blob/master/CHANGELOG.md) for version numbers and changes.
 
+For code documentation, see https://iiim-is.github.io/AERA .
+
 ## code structure
 The main program execution for the example happens in AERA/main.cpp
 - `main()` // loads the `settings.xml` and the seed image, starts up `r_exec/mem.cpp` and then waits for run_time and ends by saving the results to disk to `decompiled.txt`
