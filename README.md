@@ -1,12 +1,13 @@
-# Replicode
+# AERA
 
-Replicode is the programing language of AERA (Auto-catalytic Endogenous Reflective Architecture)
+This project implements AERA (Auto-catalytic Endogenous Reflective Architecture) using the Replicode
+programming language.
 
-This README file documents general information about Replicode.
+This README file documents general information about AERA.
 
-See the file [INSTALL.md](https://github.com/IIIM-IS/replicode/blob/master/INSTALL.md) for build and install instructions.
+See the file [INSTALL.md](https://github.com/IIIM-IS/AERA/blob/master/INSTALL.md) for build and install instructions.
 
-See the file [CHANGELOG.md](https://github.com/IIIM-IS/replicode/blob/master/CHANGELOG.md) for version numbers and changes.
+See the file [CHANGELOG.md](https://github.com/IIIM-IS/AERA/blob/master/CHANGELOG.md) for version numbers and changes.
 
 ## code structure
 The main program execution for the example happens in AERA/main.cpp
@@ -18,7 +19,7 @@ The main program execution for the example happens in AERA/main.cpp
 
 ## Gotchas
 
-This is a list of unintuitive issues with using Replicode, to help new users.
+This is a list of unintuitive issues with using AERA, to help new users.
 
 * Only the `AERA/replicode_v1.2` examples really function due to syntax changes.
 * The term "set" is used even when it means an ordered array with repeated elements.
