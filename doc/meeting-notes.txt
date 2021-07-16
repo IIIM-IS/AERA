@@ -617,9 +617,16 @@ Simulator
   * DONE: Try to fix ModelBase::MEntry::match. Use the hidden unpacked model where possible.
   * DONE. Motion in X-Y
 
-next meeting
+2021-07-16
 * pong.test
   * DONE. For a non-simulated prediction, document the detail of a command input and controller state for the prediction.
+  * DONE. Try goal for moving twice.
+    The requirement for the second simulated command doesn't match. Still investigating.
+
+next meeting
+* MDLController::get_cfd gets the success rate. Is this the only place it's called confidence? Can we rename it?
+* pong.test
+  * Try goal for moving twice.
   * Add paddle. Make goal for the ball to be at a position which requires moving the paddle to bounce it.
 * Review/merge new functionality pull requests for:
   * REVIEWING. NoArgCmdGuardBuilder backward guard https://github.com/IIIM-IS/replicode/pull/115
