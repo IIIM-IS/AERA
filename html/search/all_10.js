@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['replicode_266',['Replicode',['../index.html',1,'']]],
-  ['replicode_267',['Replicode',['../md_submodules_replicode__i_n_s_t_a_l_l.html',1,'']]],
   ['random_268',['Random',['../classcore_1_1_random.html',1,'core']]],
   ['receivemessage_269',['receiveMessage',['../classtcp__io__device_1_1_t_c_p_connection.html#aaf0663da349d650a0b286446e3bb40c7',1,'tcp_io_device::TCPConnection']]],
   ['reductioncore_270',['ReductionCore',['../classr__exec_1_1_reduction_core.html',1,'r_exec']]],
