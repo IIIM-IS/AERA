@@ -1,0 +1,3 @@
+[submodule "submodules/AERA"]
+	path = submodules/AERA
+	url = https://github.com/IIIM-IS/AERA
