@@ -199,7 +199,11 @@ protected:
   bool is_reuse_;
   bool is_cmd_;
 
-  float32 get_cfd() const;
+  /**
+   * Get the success rate from the mdl object.
+   * \return The success rate.
+   */
+  float32 get_success_rate() const;
 
   CriticalSection active_requirementsCS_;
   UNORDERED_MAP<P<_Fact>, RequirementsPair, r_code::PHash<_Fact> > active_requirements_; // P<_Fact>: f1 as in f0->pred->f1->imdl; requirements having allowed the production of prediction; first: wr, second: sr.

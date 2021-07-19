@@ -339,7 +339,7 @@ MDLController::MDLController(r_code::View *view) : HLPController(view) {
   is_cmd_ = (lhs_opcode == Opcodes::Cmd);
 }
 
-float32 MDLController::get_cfd() const {
+float32 MDLController::get_success_rate() const {
 
   return get_core_object()->code(MDL_SR).asFloat();
 }
@@ -1290,7 +1290,7 @@ void TopLevelMDLController::reduce(r_exec::View *input) { // no lock.
   if (goal && goal->is_drive()) {
 
     _Fact *goal_target = goal->get_target(); // goal_target is f->object.
-    float32 confidence = get_cfd()*goal_target->get_cfd(); // reading STRONG_REQUIREMENT is atomic.
+    float32 confidence = get_success_rate() * goal_target->get_cfd(); // reading STRONG_REQUIREMENT is atomic.
     if (confidence <= get_host()->code(GRP_SLN_THR).asFloat()) // cfd is too low for any sub-goal to be injected.
       return;
 
@@ -1545,14 +1545,14 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
 
     is_simulation = prediction->is_simulation();
     if (chaining_was_allowed)
-      confidence = prediction->get_target()->get_cfd()*get_cfd();
+      confidence = prediction->get_target()->get_cfd() * get_success_rate();
     else
       return;
   } else {
 
     is_simulation = false;
     if (chaining_was_allowed)
-      confidence = input->get_cfd()*get_cfd();
+      confidence = input->get_cfd() * get_success_rate();
     else
       confidence = 0;
   }
@@ -1723,7 +1723,7 @@ void PrimaryMDLController::reduce(r_exec::View *input) { // no lock.
   if (goal && goal->is_self_goal() && !goal->is_drive()) {
 
     _Fact *goal_target = goal->get_target(); // goal_target is f->object.
-    float32 confidence = get_cfd()*goal_target->get_cfd(); // reading STRONG_REQUIREMENT is atomic.
+    float32 confidence = get_success_rate() * goal_target->get_cfd(); // reading STRONG_REQUIREMENT is atomic.
     Code *host = get_host();
     if (confidence <= host->code(GRP_SLN_THR).asFloat()) // cfd is too low for any sub-goal to be injected.
       return;
@@ -2352,7 +2352,7 @@ void PrimaryMDLController::assume(_Fact *input) {
   if (input->get_pred()) // discard predictions.
     return;
 
-  float32 confidence = get_cfd()*input->get_cfd(); // reading STRONG_REQUIREMENT is atomic.
+  float32 confidence = get_success_rate() * input->get_cfd(); // reading STRONG_REQUIREMENT is atomic.
   Code *host = get_host();
   if (confidence <= host->code(GRP_SLN_THR).asFloat()) // cfd is too low for any assumption to be injected.
     return;
