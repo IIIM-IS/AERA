@@ -126,9 +126,9 @@ void CSTOverlay::inject_production(View* input) {
 
   Fact *f_icst = ((CSTController *)controller_)->get_f_icst(bindings_, &inputs_);
   auto now = Now();//f_icst->get_reference(0)->trace();
-  string inputsInfo;
+  string inputs_info;
   for (uint32 i = 0; i < inputs_.size(); ++i)
-    inputsInfo += " " + to_string(inputs_[i]->get_oid());
+    inputs_info += " " + to_string(inputs_[i]->get_oid());
 
   if (!is_simulated()) {
 
@@ -156,12 +156,12 @@ void CSTOverlay::inject_production(View* input) {
       f_icst_info = "(" + to_string(f_icst->get_detail_oid()) + ") ";
 #endif
       OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " fact " << f_p_f_icst->get_oid() << f_p_f_icst_info <<
-        " pred fact " << f_icst_info << "icst[" << controller_->getObject()->get_oid() << "][" << inputsInfo << "]");
+        " pred fact " << f_icst_info << "icst[" << controller_->getObject()->get_oid() << "][" << inputs_info << "]");
     } else {
       ((CSTController *)controller_)->inject_icst(f_icst, lowest_cfd_, time_to_live); // inject f->icst in the primary and secondary groups, and in the output groups.
 
       OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " fact " << f_icst->get_oid() << " icst[" << controller_->getObject()->get_oid() << "][" <<
-        inputsInfo << "]");
+        inputs_info << "]");
     }
   } else { // there are simulations; the production is therefore a prediction; add the simulations to the latter.
 
@@ -175,7 +175,7 @@ void CSTOverlay::inject_production(View* input) {
     ((HLPController *)controller_)->inject_prediction(f_p_f_icst, lowest_cfd_); // inject a simulated prediction in the main group.
     OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " cst " << getObject()->get_oid() << ": fact " <<
       input->object_->get_oid() << " -> fact " << f_p_f_icst->get_oid() << " simulated pred fact icst [" <<
-      inputsInfo << "]");
+      inputs_info << "]");
   }
 }
 
