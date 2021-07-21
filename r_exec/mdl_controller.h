@@ -216,7 +216,7 @@ protected:
       j->get_detail_oid() << "), f_p_f_imdl fact(" << f_p_f_imdl->get_detail_oid() <<
       "), controller(" << get_detail_oid() << ") for " << get_core_object()->get_oid());
 #endif
-    _Mem::Get()->pushReductionJob(j);
+    _Mem::Get()->push_reduction_job(j);
   }
 
   template<class E> void reduce_cache(Cache<E> *cache, Fact *f_p_f_imdl, MDLController *controller) {

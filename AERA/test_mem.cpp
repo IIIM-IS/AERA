@@ -281,7 +281,7 @@ template<class O, class S> Code* TestMem<O, S>::eject(Code *command) {
     }
 
     velocity_y_ = command->code(args_set_index + 2).asFloat();
-    // Let onTimeTick inject the new velocity_y.
+    // Let on_time_tick inject the new velocity_y.
     return command;
   }
   else if (function == set_force_y_opcode_) {
@@ -350,7 +350,7 @@ template<class O, class S> Code* TestMem<O, S>::eject(Code *command) {
       force_y_ = desired_force;
       return command;
     }
-    // Let onTimeTick inject the new force_y.
+    // Let on_time_tick inject the new force_y.
   }
   else if (function == move_y_plus_opcode_ ||
     function == move_y_minus_opcode_) {
@@ -401,14 +401,14 @@ template<class O, class S> Code* TestMem<O, S>::eject(Code *command) {
           nextDiscretePosition_ = yEnt_[i - 1];
       }
     }
-    // Let onTimeTick inject the new position.
+    // Let on_time_tick inject the new position.
     return command;
   }
 
   return NULL;
 }
 
-template<class O, class S> void TestMem<O, S>::onTimeTick() {
+template<class O, class S> void TestMem<O, S>::on_time_tick() {
   auto now = r_exec::Now();
   if (now <= lastInjectTime_ + get_sampling_period() * 8 / 10)
     // Not enough time has elapsed to inject a new position.
@@ -425,79 +425,75 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
     lastInjectTime_ = now;
     // Inject the velocity and position.
     // It seems that velocity_y needs SYNC_HOLD for building models.
-    injectMarkerValueFromIoDevice(
+    inject_marker_value_from_io_device(
       position_y_obj_, velocity_y_property_, Atom::Float(velocity_y_),
       now, now + get_sampling_period(), r_exec::View::SYNC_HOLD);
-    injectMarkerValueFromIoDevice(
+    inject_marker_value_from_io_device(
       position_y_obj_, position_y_property_, Atom::Float(position_y_),
       now, now + get_sampling_period());
   }
   if (cart_position_y_obj_) {
-    // We are updating the continuous position_y_.
-    auto now = r_exec::Now();
-    if (now > lastInjectTime_ + get_sampling_period() * 8 / 10) {
-      // Enough time has elapsed to inject a new position.
-      if (lastInjectTime_.time_since_epoch().count() == 0) {
-        // This is the first call, so leave the initial position.
-      }
-      else
-      {
-        auto DeltaK = 1e-6 * duration_cast<microseconds>(now - lastInjectTime_).count();
-        float current_position_y;
-        float current_velocity_y;
-        float current_theta_y;
-        float current_omega_y;
-
-        current_position_y = next_position_y_;
-        current_velocity_y = next_velocity_y_;
-        current_theta_y = next_theta_y_;
-        current_omega_y = next_omega_y_;
-
-        //next_velocity_y_ = (((1. / M) * force_y_) * DeltaK) + current_velocity_y;     
-        next_velocity_y_ = (0.1 * force_y_) + current_velocity_y;
-        //next_position_y_ = (0.5 * ((1. / M) * force_y_) * DeltaK * DeltaK) + (current_velocity_y * DeltaK) + current_position_y;
-        next_position_y_ = (0.5e-2 * force_y_) + (0.1 * current_velocity_y) + current_position_y;
-        //next_omega_y_ = A*current_theta_y + B*force_y_ + current_omega_y;
-        next_omega_y_ = current_theta_y + 0.1 * force_y_ + current_omega_y;
-        //next_theta_y_ = A * force_y_ + B * current_theta_y + C * current_omega_y;
-        next_theta_y_ = 0.0371943 * force_y_ + 1.05042 * current_theta_y + 0.101675 * current_omega_y;
-        /* Calculate the constants of theta and omega equations
-        #include<iostream>
-        #include<string>
-        #include<algorithm>
-        using namespace std;
-        float max_force = 15; float d = 0;  float m = .00001; float M = 1;  float b = 1;  float L = 100;  float g = -10; float DeltaK = 0.1;
-        int main (){ float p = (-g / L);
-        float A_omg = (-g / L) * DeltaK; float B_omg = DeltaK / (M * L);
-        float A_th = ((-2 + exp(sqrt(p) * DeltaK) + exp(sqrt(p) * DeltaK)) / (2 * p));
-        float B_th = ((exp(-sqrt(p) * DeltaK) + exp(sqrt(p) * DeltaK)) / 2);
-        float C_th = ((-sqrt(p) * exp(-sqrt(p) * DeltaK) + sqrt(p) * exp(sqrt(p) * DeltaK)) / (2 * p));
-        cout << "P: " << p << endl;  cout << "A_omega: " << A_omg << endl; cout << "B_omega: " << B_omg << endl;
-        cout << "A_theta: " << A_th << endl; cout << "B_theta: " << B_th << endl; cout << "C_theta: " << C_th << endl;
-        return 0;}
-        */
-      }
-      lastInjectTime_ = now;
-
-
-      injectMarkerValueFromIoDevice(
-        cart_position_y_obj_, force_y_property_, Atom::Float(force_y_),
-        now, now + get_sampling_period());
-      injectMarkerValueFromIoDevice(
-        cart_position_y_obj_, velocity_y_property_, Atom::Float(next_velocity_y_),
-        now, now + get_sampling_period());
-      injectMarkerValueFromIoDevice(
-        cart_position_y_obj_, position_y_property_, Atom::Float(next_position_y_),
-        now, now + get_sampling_period());
-      injectMarkerValueFromIoDevice(
-        cart_position_y_obj_, theta_y_property_, Atom::Float(next_theta_y_),
-        now, now + get_sampling_period());
-      injectMarkerValueFromIoDevice(
-        cart_position_y_obj_, omega_y_property_, Atom::Float(next_omega_y_),
-        now, now + get_sampling_period());
-
-      ofs << next_theta_y_ << "," << next_omega_y_ << "," << next_position_y_ << "," << next_velocity_y_ << "," << force_y_ << endl;
+    // We are updating the cart position_y_.
+    if (lastInjectTime_.time_since_epoch().count() == 0) {
+      // This is the first call, so leave the initial position.
     }
+    else
+    {
+      auto DeltaK = 1e-6 * duration_cast<microseconds>(now - lastInjectTime_).count();
+      float current_position_y;
+      float current_velocity_y;
+      float current_theta_y;
+      float current_omega_y;
+
+      current_position_y = next_position_y_;
+      current_velocity_y = next_velocity_y_;
+      current_theta_y = next_theta_y_;
+      current_omega_y = next_omega_y_;
+
+      //next_velocity_y_ = (((1. / M) * force_y_) * DeltaK) + current_velocity_y;     
+      next_velocity_y_ = (0.1 * force_y_) + current_velocity_y;
+      //next_position_y_ = (0.5 * ((1. / M) * force_y_) * DeltaK * DeltaK) + (current_velocity_y * DeltaK) + current_position_y;
+      next_position_y_ = (0.5e-2 * force_y_) + (0.1 * current_velocity_y) + current_position_y;
+      //next_omega_y_ = A*current_theta_y + B*force_y_ + current_omega_y;
+      next_omega_y_ = current_theta_y + 0.1 * force_y_ + current_omega_y;
+      //next_theta_y_ = A * force_y_ + B * current_theta_y + C * current_omega_y;
+      next_theta_y_ = 0.0371943 * force_y_ + 1.05042 * current_theta_y + 0.101675 * current_omega_y;
+      /* Calculate the constants of theta and omega equations
+      #include<iostream>
+      #include<string>
+      #include<algorithm>
+      using namespace std;
+      float max_force = 15; float d = 0;  float m = .00001; float M = 1;  float b = 1;  float L = 100;  float g = -10; float DeltaK = 0.1;
+      int main (){ float p = (-g / L);
+      float A_omg = (-g / L) * DeltaK; float B_omg = DeltaK / (M * L);
+      float A_th = ((-2 + exp(sqrt(p) * DeltaK) + exp(sqrt(p) * DeltaK)) / (2 * p));
+      float B_th = ((exp(-sqrt(p) * DeltaK) + exp(sqrt(p) * DeltaK)) / 2);
+      float C_th = ((-sqrt(p) * exp(-sqrt(p) * DeltaK) + sqrt(p) * exp(sqrt(p) * DeltaK)) / (2 * p));
+      cout << "P: " << p << endl;  cout << "A_omega: " << A_omg << endl; cout << "B_omega: " << B_omg << endl;
+      cout << "A_theta: " << A_th << endl; cout << "B_theta: " << B_th << endl; cout << "C_theta: " << C_th << endl;
+      return 0;}
+      */
+    }
+    lastInjectTime_ = now;
+
+
+    inject_marker_value_from_io_device(
+      cart_position_y_obj_, force_y_property_, Atom::Float(force_y_),
+      now, now + get_sampling_period());
+    inject_marker_value_from_io_device(
+      cart_position_y_obj_, velocity_y_property_, Atom::Float(next_velocity_y_),
+      now, now + get_sampling_period());
+    inject_marker_value_from_io_device(
+      cart_position_y_obj_, position_y_property_, Atom::Float(next_position_y_),
+      now, now + get_sampling_period());
+    inject_marker_value_from_io_device(
+      cart_position_y_obj_, theta_y_property_, Atom::Float(next_theta_y_),
+      now, now + get_sampling_period());
+    inject_marker_value_from_io_device(
+      cart_position_y_obj_, omega_y_property_, Atom::Float(next_omega_y_),
+      now, now + get_sampling_period());
+
+    ofs << next_theta_y_ << "," << next_omega_y_ << "," << next_position_y_ << "," << next_velocity_y_ << "," << force_y_ << endl;
   }
   if (discretePositionObj_) {
     // We are updating the discretePosition_.
@@ -510,7 +506,7 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
     }
 
     lastInjectTime_ = now;
-    injectMarkerValueFromIoDevice(
+    inject_marker_value_from_io_device(
       discretePositionObj_, position_property_, discretePosition_,
       now, now + get_sampling_period());
 
@@ -549,7 +545,7 @@ template<class O, class S> void TestMem<O, S>::onTimeTick() {
       auto after = now + get_sampling_period() + 2 * Utils::GetTimeTolerance();
       r_exec::Fact* factCmd = new r_exec::Fact(cmd, after, now + 2 * get_sampling_period(), 1, 1);
       r_exec::Goal* goal = new r_exec::Goal(factCmd, get_self(), NULL, 1);
-      injectFactFromIoDevice(goal, after, now + get_sampling_period(), primary_group_);
+      inject_fact_from_io_device(goal, after, now + get_sampling_period(), primary_group_);
     }
   }
 }
@@ -563,8 +559,8 @@ TestMem<O, S>::startTimeTickThread() {
     // We already started the thread.
     return;
 
-  // We are running in real time. onDiagnosticTimeTick() will not be called.
-  // Set up a timer thread to call onTimeTick().
+  // We are running in real time. on_diagnostic_time_tick() will not be called.
+  // Set up a timer thread to call on_time_tick().
   timeTickThread_ = Thread::New<_Thread>(timeTickRun, this);
 }
 
@@ -574,9 +570,9 @@ TestMem<O, S>::timeTickRun(void *args) {
 
   auto sampling_period = Mem::Get()->get_sampling_period();
   auto tickTime = r_exec::Now();
-  // Call onTimeTick at the sampling period.
+  // Call on_time_tick at the sampling period.
   while (self->state_ == RUNNING) {
-    self->onTimeTick();
+    self->on_time_tick();
 
     tickTime += sampling_period;
     Thread::Sleep(tickTime - r_exec::Now());

@@ -90,7 +90,7 @@ thread_ret thread_function_call TimeCore::Run(void *args) {
   bool run = true;
   while (run) {
 
-    P<TimeJob> j = _Mem::Get()->popTimeJob();
+    P<TimeJob> j = _Mem::Get()->pop_time_job();
     if (j == NULL)
       break;
     if (!j->is_alive()) {

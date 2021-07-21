@@ -90,7 +90,7 @@ namespace r_exec {
 /**
  * The TraceLevel enum defines bit positions for the "trace_levels" parameter
  * for "Debug" in settings.xml.
- * The number of bits should match RuntimeOutputStreamCount.
+ * The number of bits should match RUNTIME_OUTPUT_STREAM_COUNT.
  */
 typedef enum {
   CST_IN = 0,
@@ -148,7 +148,7 @@ protected:
       "(" << j->get_detail_oid() << "): controller(" << get_detail_oid() << ")->reduce(View(fact_" << 
       input->object_->get_oid() << ")) for " << get_core_object()->get_oid());
 #endif
-    _Mem::Get()->pushReductionJob(j);
+    _Mem::Get()->push_reduction_job(j);
   }
 
   Controller(r_code::View *view);

@@ -121,7 +121,7 @@ void InputLessPGMController::signal_input_less_pgm() { // next job will be pushe
           host->leave();
 
           TimeJob *next_job = new InputLessPGMSignalingJob((r_exec::View*)view_, Now() + time_scope_);
-          _Mem::Get()->pushTimeJob(next_job);
+          _Mem::Get()->push_time_job(next_job);
         } else
           host->leave();
       }
@@ -295,7 +295,7 @@ void AntiPGMController::push_new_signaling_job() {
     host->leave();
     // The time scope is stored as a timestamp, but it is actually a duration.
     TimeJob *next_job = new AntiPGMSignalingJob((r_exec::View*)view_, Now() + Utils::GetTimestamp<Code>(getObject(), IPGM_TSC).time_since_epoch());
-    _Mem::Get()->pushTimeJob(next_job);
+    _Mem::Get()->push_time_job(next_job);
   } else
     host->leave();
 }

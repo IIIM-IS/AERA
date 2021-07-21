@@ -285,10 +285,10 @@ int32 main(int argc, char **argv) {
   if (!settings.load(file_name))
     return 1;
 
-  ofstream runtimeOutputStream;
+  ofstream runtime_output_stream;
   if (settings.runtime_output_file_path_ != "") {
-    runtimeOutputStream.open(settings.runtime_output_file_path_);
-    if (!runtimeOutputStream.is_open()) {
+    runtime_output_stream.open(settings.runtime_output_file_path_);
+    if (!runtime_output_stream.is_open()) {
       std::cout << "Cannot open runtime_output_file_path \"" << settings.runtime_output_file_path_ << "\"" << std::endl;
       return 2;
     }
@@ -296,11 +296,11 @@ int32 main(int argc, char **argv) {
 
   std::cout << "> compiling ...\n";
   if (settings.reduction_core_count_ == 0 && settings.time_core_count_ == 0) {
-    // Below, we will use runInDiagnosticTime.
+    // Below, we will use run_in_diagnostic_time.
     // Initialize the diagnostic time to the real now.
-    r_exec::_Mem::DiagnosticTimeNow_ = Time::Get();
+    r_exec::_Mem::diagnostic_time_now_ = Time::Get();
     if (!r_exec::Init
-    (settings.usr_operator_path_.c_str(), r_exec::_Mem::getDiagnosticTimeNow,
+    (settings.usr_operator_path_.c_str(), r_exec::_Mem::get_diagnostic_time_now,
       settings.usr_class_path_.c_str()))
       return 2;
   }
@@ -353,9 +353,9 @@ int32 main(int argc, char **argv) {
       }
     }
 
-    if (runtimeOutputStream.is_open())
+    if (runtime_output_stream.is_open())
       // Use the debug stream from settings.xml.
-      mem->setDefaultRuntimeOutputStream(&runtimeOutputStream);
+      mem->set_default_runtime_output_stream(&runtime_output_stream);
 
     r_code::vector<r_code::Code *> ram_objects;
     r_exec::Seed.get_objects(mem, ram_objects);
@@ -406,7 +406,7 @@ int32 main(int argc, char **argv) {
 
     if (settings.reduction_core_count_ == 0 && settings.time_core_count_ == 0) {
       std::cout << "> running for " << settings.run_time_ << " ms in diagnostic time\n\n";
-      mem->runInDiagnosticTime(milliseconds(settings.run_time_));
+      mem->run_in_diagnostic_time(milliseconds(settings.run_time_));
     }
     else {
       std::cout << "> running for " << settings.run_time_ << " ms\n\n";

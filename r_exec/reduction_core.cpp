@@ -89,7 +89,7 @@ thread_ret thread_function_call ReductionCore::Run(void *args) {
   bool run = true;
   while (run) {
 
-    P<_ReductionJob> j = _Mem::Get()->popReductionJob();
+    P<_ReductionJob> j = _Mem::Get()->pop_reduction_job();
     if (j == NULL)
       break;
     run = j->update(Now());

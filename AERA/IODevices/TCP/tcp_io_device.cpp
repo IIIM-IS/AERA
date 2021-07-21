@@ -283,7 +283,7 @@ namespace tcp_io_device {
   }
 
   template<class O, class S>
-  void TcpIoDevice<O, S>::onTimeTick()
+  void TcpIoDevice<O, S>::on_time_tick()
   {
     auto now = r_exec::Now();
     if (now < lastInjectTime_ + get_sampling_period() * 8 / 10) {
@@ -328,8 +328,8 @@ namespace tcp_io_device {
       return;
     }
 
-    // We are running in real time. onDiagnosticTimeTick() will not be called.
-    // Set up a timer thread to call onTimeTick().
+    // We are running in real time. on_diagnostic_time_tick() will not be called.
+    // Set up a timer thread to call on_time_tick().
     timeTickThread_ = Thread::New<_Thread>(timeTickRun, this);
   }
 
@@ -340,9 +340,9 @@ namespace tcp_io_device {
 
     auto sampling_period = Mem::Get()->get_sampling_period();
     auto tickTime = r_exec::Now();
-    // Call onTimeTick at the sampling period.
+    // Call on_time_tick at the sampling period.
     while (self->state_ == RUNNING) {
-      self->onTimeTick();
+      self->on_time_tick();
 
       tickTime += sampling_period;
       Thread::Sleep(tickTime - r_exec::Now());
@@ -389,10 +389,10 @@ namespace tcp_io_device {
       auto obj = objects_[id_mapping_[var.getMetaData().getID()]];
       Atom val = Atom::Float(var.getData<double>()[0]);
       if (id_mapping_[var.getMetaData().getID()] == "velocity_y") {
-        injectMarkerValueFromIoDevice(entity, obj, val, now, now + get_sampling_period(), r_exec::View::SYNC_HOLD, get_stdin());
+        inject_marker_value_from_io_device(entity, obj, val, now, now + get_sampling_period(), r_exec::View::SYNC_HOLD, get_stdin());
       }
       else {
-        injectMarkerValueFromIoDevice(entity, obj, val, now, now + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
+        inject_marker_value_from_io_device(entity, obj, val, now, now + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
       }
     }
   }

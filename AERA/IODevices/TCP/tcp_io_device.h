@@ -157,10 +157,10 @@ namespace tcp_io_device {
     virtual r_code::Code* eject(r_code::Code* command);
 
     /**
-     * This is called when runInDiagnosticTime() updates the tickTime. Just call
-     * onTimeTick(), because there is no real - time timer thread to call it.
+     * This is called when run_in_diagnostic_time() updates the tickTime. Just call
+     * on_time_tick(), because there is no real - time timer thread to call it.
      */
-    virtual void onDiagnosticTimeTick() { onTimeTick(); }
+    virtual void on_diagnostic_time_tick() { on_time_tick(); }
 
 
   protected:
@@ -205,10 +205,10 @@ namespace tcp_io_device {
     /**
     * Execute a single step including receiving and sending of messages
     */
-    void onTimeTick();
+    void on_time_tick();
 
     /**
-     * This runs in the timeTickThread_ to periodicaly call onTimeTick().
+     * This runs in the timeTickThread_ to periodicaly call on_time_tick().
      * (Only used if not running in diagnostic time.)
      * \param args
      * \return

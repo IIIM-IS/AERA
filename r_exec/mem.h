@@ -147,7 +147,7 @@ protected:
   PipeNN<P<TimeJob>, 1024> *time_job_queue_;
   ReductionCore **reduction_cores_;
   TimeCore **time_cores_;
-  TimeJob::Compare timeJobCompare_;
+  TimeJob::Compare time_job_compare_;
 
   // Performance stats.
   uint32 reduction_job_count_;
@@ -184,13 +184,13 @@ protected:
 
   bool deleted_;
 
-  static const uint32 RuntimeOutputStreamCount = 10;
-  std::ostream *runtime_output_streams_[RuntimeOutputStreamCount];
-  // Use defaultRuntimeOutputStream_ if runtime_output_streams_[i] is NULL. For no output,
+  static const uint32 RUNTIME_OUTPUT_STREAM_COUNT = 10;
+  std::ostream *runtime_output_streams_[RUNTIME_OUTPUT_STREAM_COUNT];
+  // Use default_runtime_output_stream_ if runtime_output_streams_[i] is NULL. For no output,
   // runtime_output_streams_[i] will be set to new NullOStream().
-  std::ostream *defaultRuntimeOutputStream_;
+  std::ostream *default_runtime_output_stream_;
 
-  std::vector<P<r_code::Code> > axiomValues_;
+  std::vector<P<r_code::Code> > axiom_values_;
 
   _Mem();
 
@@ -276,40 +276,40 @@ public:
 
   /**
    * When reduction and core count == 0, start() does not start any core threads,
-   * so call this instead of Thread::Sleep(runTimeMilliseconds) to run in the current
+   * so call this instead of Thread::Sleep(run_time) to run in the current
    * thread using "diagnostic time".As opposed to real time which uses Time::Get,
-   * diagnostic time uses getDiagnosticTimeNow() which simply returns DiagnosticTimeNow.
-   * (The main() function should call r_exec::Init where time_base is getDiagnosticTimeNow.)
-   * So, runInDiagnosticTime updates DiagnosticTimeNow based on the next time job(which always
-   * runs on time).This way, the return value of Now() does not move with real time, but moves
-   * step-by-step when DiagnosticTimeNow is updated, making it possible to set break points
+   * diagnostic time uses get_diagnostic_time_now() which simply returns diagnostic_time_now_.
+   * (The main() function should call r_exec::Init where time_base is get_diagnostic_time_now.)
+   * So, run_in_diagnostic_time updates diagnostic_time_now_ based on the next time job(which always
+   * runs on time). This way, the return value of Now() does not move with real time, but moves
+   * step-by-step when diagnostic_time_now_ is updated, making it possible to set break points
    * and diagnose the program.
-   * \param runTime The number of milliseconds (in diagnostic time) to run for.
+   * \param run_time The number of milliseconds (in diagnostic time) to run for.
    */
-  void runInDiagnosticTime(std::chrono::milliseconds runTime);
-  static Timestamp DiagnosticTimeNow_;
-  static Timestamp getDiagnosticTimeNow();
+  void run_in_diagnostic_time(std::chrono::milliseconds run_time);
+  static Timestamp diagnostic_time_now_;
+  static Timestamp get_diagnostic_time_now();
   // Tell an inheriting class (with inject) when the time is changed.
-  virtual void onDiagnosticTimeTick();
+  virtual void on_diagnostic_time_tick();
   void stop(); // after stop() the content is cleared and one has to call load() and start() again.
 
   // Internal core processing ////////////////////////////////////////////////////////////////
 
-  P<_ReductionJob> popReductionJob(bool waitForItem = true);
-  void pushReductionJob(_ReductionJob *j);
-  P<TimeJob> popTimeJob(bool waitForItem = true);
-  void pushTimeJob(TimeJob *j);
+  P<_ReductionJob> pop_reduction_job(bool waitForItem = true);
+  void push_reduction_job(_ReductionJob *j);
+  P<TimeJob> pop_time_job(bool waitForItem = true);
+  void push_time_job(TimeJob *j);
 
   /**
    * This is called from the I/O device to call the normal inject(view), then 
    * log the injection event.
    * \param view The View for inject(view).
    */
-  void injectFromIoDevice(View *view);
+  void inject_from_io_device(View *view);
 
   /**
    * Inject (fact (mk.val obj prop val 1) after before 1 1)
-   * [syncMode after 1 1 group nil]
+   * [sync_mode after 1 1 group nil]
    * where val is a simple Atom.
    * This is called from the I/O device to call the normal inject(view), then
    * log the injection event.
@@ -318,17 +318,17 @@ public:
    * \param val The Atom value for the mk.val, such as Atom::Float(1).
    * \param after The start of the fact time interval.
    * \param before The end of the fact time interval.
-   * \param syncMode The view sync mode, such as r_exec::View::SYNC_PERIODIC.
+   * \param sync_mode The view sync mode, such as r_exec::View::SYNC_PERIODIC.
    * \param group The group of the view, such as get_stdin().
    * \return The created View.
    */
-  r_exec::View* injectMarkerValueFromIoDevice(
+  r_exec::View* inject_marker_value_from_io_device(
     r_code::Code* obj, r_code::Code* prop, Atom val, Timestamp after, Timestamp before,
-    r_exec::View::SyncMode syncMode, r_code::Code* group);
+    r_exec::View::SyncMode sync_mode, r_code::Code* group);
 
   /**
    * Inject (fact (mk.val obj prop val 1) after before 1 1)
-   * [syncMode after 1 1 stdin nil]
+   * [sync_mode after 1 1 stdin nil]
    * where val is a simple Atom.
    * This is called from the I/O device to call the normal inject(view), then
    * log the injection event.
@@ -337,14 +337,14 @@ public:
    * \param val The Atom value for the mk.val, such as Atom::Float(1).
    * \param after The start of the fact time interval.
    * \param before The end of the fact time interval.
-   * \param syncMode The view sync mode, such as r_exec::View::SYNC_PERIODIC.
+   * \param sync_mode The view sync mode, such as r_exec::View::SYNC_PERIODIC.
    * \return The created View.
    */
-  r_exec::View* injectMarkerValueFromIoDevice(
+  r_exec::View* inject_marker_value_from_io_device(
     r_code::Code* obj, r_code::Code* prop, Atom val, Timestamp after, Timestamp before,
-    r_exec::View::SyncMode syncMode)
+    r_exec::View::SyncMode sync_mode)
   {
-    return injectMarkerValueFromIoDevice(obj, prop, val, after, before, syncMode, get_stdin());
+    return inject_marker_value_from_io_device(obj, prop, val, after, before, sync_mode, get_stdin());
   }
 
   /**
@@ -361,10 +361,10 @@ public:
    * \param group The group of the view, such as get_stdin().
    * \return The created View.
    */
-  r_exec::View* injectMarkerValueFromIoDevice(
+  r_exec::View* inject_marker_value_from_io_device(
     r_code::Code* obj, r_code::Code* prop, Atom val, Timestamp after, Timestamp before, r_code::Code* group)
   {
-    return injectMarkerValueFromIoDevice(
+    return inject_marker_value_from_io_device(
       obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, group);
   }
 
@@ -381,16 +381,16 @@ public:
    * \param before The end of the fact time interval.
    * \return The created View.
    */
-  r_exec::View* injectMarkerValueFromIoDevice(
+  r_exec::View* inject_marker_value_from_io_device(
     r_code::Code* obj, r_code::Code* prop, Atom val, Timestamp after, Timestamp before)
   {
-    return injectMarkerValueFromIoDevice(
+    return inject_marker_value_from_io_device(
       obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, get_stdin());
   }
 
   /**
    * Inject (fact (mk.val obj prop val 1) after before 1 1)
-   * [syncMode after 1 1 group nil]
+   * [sync_mode after 1 1 group nil]
    * where val is a referenced Code object.
    * This is called from the I/O device to call the normal inject(view), then
    * log the injection event.
@@ -400,17 +400,17 @@ public:
    * add it to the references of the mkval.
    * \param after The start of the fact time interval.
    * \param before The end of the fact time interval.
-   * \param syncMode The view sync mode, such as r_exec::View::SYNC_PERIODIC.
+   * \param sync_mode The view sync mode, such as r_exec::View::SYNC_PERIODIC.
    * \param group The group of the view, such as get_stdin().
    * \return The created View.
    */
-  r_exec::View* injectMarkerValueFromIoDevice(
+  r_exec::View* inject_marker_value_from_io_device(
     r_code::Code* obj, r_code::Code* prop, r_code::Code* val, Timestamp after, Timestamp before,
-    r_exec::View::SyncMode syncMode, r_code::Code* group);
+    r_exec::View::SyncMode sync_mode, r_code::Code* group);
 
   /**
    * Inject (fact (mk.val obj prop val 1) after before 1 1)
-   * [syncMode after 1 1 stdin nil]
+   * [sync_mode after 1 1 stdin nil]
    * where val is a referenced Code object.
    * This is called from the I/O device to call the normal inject(view), then
    * log the injection event.
@@ -420,14 +420,14 @@ public:
    * add it to the references of the mkval.
    * \param after The start of the fact time interval.
    * \param before The end of the fact time interval.
-   * \param syncMode The view sync mode, such as r_exec::View::SYNC_PERIODIC.
+   * \param sync_mode The view sync mode, such as r_exec::View::SYNC_PERIODIC.
    * \return The created View.
    */
-  r_exec::View* injectMarkerValueFromIoDevice(
+  r_exec::View* inject_marker_value_from_io_device(
     r_code::Code* obj, r_code::Code* prop, r_code::Code* val, Timestamp after, Timestamp before,
-    r_exec::View::SyncMode syncMode)
+    r_exec::View::SyncMode sync_mode)
   {
-    return injectMarkerValueFromIoDevice(obj, prop, val, after, before, syncMode, get_stdin());
+    return inject_marker_value_from_io_device(obj, prop, val, after, before, sync_mode, get_stdin());
   }
 
   /**
@@ -445,10 +445,10 @@ public:
    * \param group The group of the view, such as get_stdin().
    * \return The created View.
    */
-  r_exec::View* injectMarkerValueFromIoDevice(
+  r_exec::View* inject_marker_value_from_io_device(
     r_code::Code* obj, r_code::Code* prop, r_code::Code* val, Timestamp after, Timestamp before, r_code::Code* group)
   {
-    return injectMarkerValueFromIoDevice(
+    return inject_marker_value_from_io_device(
       obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, group);
   }
 
@@ -466,28 +466,28 @@ public:
    * \param before The end of the fact time interval.
    * \return The created View.
    */
-  r_exec::View* injectMarkerValueFromIoDevice(
+  r_exec::View* inject_marker_value_from_io_device(
     r_code::Code* obj, r_code::Code* prop, r_code::Code* val, Timestamp after, Timestamp before)
   {
-    return injectMarkerValueFromIoDevice(
+    return inject_marker_value_from_io_device(
       obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, get_stdin());
   }
 
   /**
    * Inject (fact object after before 1 1)
-   * [syncMode after 1 1 group nil]
+   * [sync_mode after 1 1 group nil]
    * This is called from the I/O device to call the normal inject(view), then
    * log the injection event.
    * \param object The fact's object, which you must allocated and construct. (For mk.val, use one
    * of the methods for injectMarkerValue...)
    * \param after The start of the fact time interval.
    * \param before The end of the fact time interval.
-   * \param syncMode The view sync mode, such as r_exec::View::SYNC_PERIODIC.
+   * \param sync_mode The view sync mode, such as r_exec::View::SYNC_PERIODIC.
    * \param group The group of the view, such as get_stdin().
    * \return The created View.
    */
-  r_exec::View* injectFactFromIoDevice(
-    r_code::Code* object, Timestamp after, Timestamp before, r_exec::View::SyncMode syncMode,
+  r_exec::View* inject_fact_from_io_device(
+    r_code::Code* object, Timestamp after, Timestamp before, r_exec::View::SyncMode sync_mode,
     r_code::Code* group);
 
   /**
@@ -502,8 +502,8 @@ public:
    * \param group The group of the view, such as get_stdin().
    * \return The created View.
    */
-  r_exec::View* injectFactFromIoDevice(r_code::Code* object, Timestamp after, Timestamp before, r_code::Code* group) {
-    return injectFactFromIoDevice(
+  r_exec::View* inject_fact_from_io_device(r_code::Code* object, Timestamp after, Timestamp before, r_code::Code* group) {
+    return inject_fact_from_io_device(
       object, after, before, r_exec::View::SYNC_PERIODIC, group);
   }
 
@@ -513,11 +513,11 @@ public:
    * However, if the view's injection time is later than now, then create
    * an InjectionJob which will call bind and inject the view at the injection time.
    * \param view The View to inject.
-   * \param isFromIoDevice True if this is called from injectFromIoDevice().
+   * \param is_from_io_device True if this is called from inject_from_io_device().
    * This is only needed to pass to the InjectionJob so that it will log the 
    * I/O device inject.
    */
-  void inject(View *view, bool isFromIoDevice = false);
+  void inject(View *view, bool is_from_io_device = false);
   void inject_async(View *view);
   void inject_new_object(View *view);
   void inject_existing_object(View *view, r_code::Code *object, Group *host);
@@ -545,7 +545,7 @@ public:
   // rMem to rMem.
   // The view must contain the destination group (either stdin or stdout) as its grp member.
   // To be redefined by object transport aware subcalsses.
-  virtual void eject(View *view, uint16 nodeID);
+  virtual void eject(View *view, uint16 node_id);
 
   /**
    * This is called by the program controller to eject a command from rMem to the 
@@ -582,7 +582,7 @@ public:
    * \param obj A fact's value such as (mk.val b essence ball 1).
    * \return True if the object matches an axiom.
    */
-  bool matchesAxiom(r_code::Code* obj);
+  bool matches_axiom(r_code::Code* obj);
 
   /**
    * This is called on starting the executive to adjust the timestamps of all the initial
@@ -597,15 +597,15 @@ public:
 
   /**
    * Set the runtime output stream which Output returns when a trace level is NULL.
-   * \param defaultRuntimeOutputStream The stream.
+   * \param default_runtime_output_stream The stream.
    */
-  void setDefaultRuntimeOutputStream(std::ostream *defaultRuntimeOutputStream) {
-    defaultRuntimeOutputStream_ = defaultRuntimeOutputStream;
+  void set_default_runtime_output_stream(std::ostream *default_runtime_output_stream) {
+    default_runtime_output_stream_ = default_runtime_output_stream;
   }
 
   /**
    * Get the output stream for the trace level based on (_Mem::Get()->runtime_output_streams_[l].
-   * If (_Mem::Get()->runtime_output_streams_[l] is NULL, use defaultRuntimeOutputStream_.
+   * If (_Mem::Get()->runtime_output_streams_[l] is NULL, use default_runtime_output_stream_.
    * \param l The TraceLevel.
    * \return A reference to the output stream, which may be a NullOStream if the bit in 
    * settings.xml "trace_levels" was zero.

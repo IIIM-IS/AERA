@@ -174,7 +174,7 @@ GMonitor::GMonitor(PMDLController *controller,
 
   injected_goal_ = (predicted_evidence == NULL);
   MonitoringJob<GMonitor> *j = new MonitoringJob<GMonitor>(this, simulating_ ? sim_thz_timestamp : deadline);
-  _Mem::Get()->pushTimeJob(j);
+  _Mem::Get()->push_time_job(j);
 }
 
 void GMonitor::commit() { // the purpose is to invalidate damaging simulations; if anything remains, commit to all mandatory simulations and to the best optional one.
@@ -374,7 +374,7 @@ RMonitor::RMonitor(PrimaryMDLController *controller,
     NULL) { // goal is f0->g->f1->object.
 
   MonitoringJob<RMonitor> *j = new MonitoringJob<RMonitor>(this, deadline);
-  _Mem::Get()->pushTimeJob(j);
+  _Mem::Get()->push_time_job(j);
 }
 
 bool RMonitor::signal(bool is_simulation) {
@@ -459,7 +459,7 @@ SGMonitor::SGMonitor(PrimaryMDLController *controller,
     f_imdl) { // goal is f0->g->f1->object.
 
   MonitoringJob<SGMonitor> *j = new MonitoringJob<SGMonitor>(this, sim_thz_timestamp);
-  _Mem::Get()->pushTimeJob(j);
+  _Mem::Get()->push_time_job(j);
 }
 
 void SGMonitor::commit() { // the purpose is to invalidate damaging simulations and let the rest flow upward.
@@ -561,7 +561,7 @@ SRMonitor::SRMonitor(PrimaryMDLController *controller,
     f_imdl) { // goal is f0->g->f1->object.
 
   MonitoringJob<SRMonitor> *j = new MonitoringJob<SRMonitor>(this, sim_thz_timestamp);
-  _Mem::Get()->pushTimeJob(j);
+  _Mem::Get()->push_time_job(j);
 }
 
 bool SRMonitor::signal(bool is_simulation) {

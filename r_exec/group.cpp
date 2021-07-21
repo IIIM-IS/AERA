@@ -636,12 +636,12 @@ void Group::update(Timestamp planned_time) {
       case Atom::INSTANTIATED_ANTI_PROGRAM: { // inject signaling jobs for |ipgm (tsc).
         // The time scope is stored as a timestamp, but it is actually a duration.
         P<TimeJob> j = new AntiPGMSignalingJob((r_exec::View *)new_controllers_[i]->getView(), now + Utils::GetTimestamp<Code>(new_controllers_[i]->getObject(), IPGM_TSC).time_since_epoch());
-        _Mem::Get()->pushTimeJob(j);
+        _Mem::Get()->push_time_job(j);
         break;
       }case Atom::INSTANTIATED_INPUT_LESS_PROGRAM: { // inject a signaling job for an input-less pgm.
 
         P<TimeJob> j = new InputLessPGMSignalingJob((r_exec::View *)new_controllers_[i]->getView(), now + Utils::GetTimestamp<Code>(new_controllers_[i]->getObject(), IPGM_TSC).time_since_epoch());
-        _Mem::Get()->pushTimeJob(j);
+        _Mem::Get()->push_time_job(j);
         break;
       }
       }
@@ -655,7 +655,7 @@ void Group::update(Timestamp planned_time) {
   if (get_upr() > 0) { // inject the next update job for the group.
 
     P<TimeJob> j = new UpdateJob(this, planned_time + get_upr()*Utils::GetBasePeriod());
-    _Mem::Get()->pushTimeJob(j);
+    _Mem::Get()->push_time_job(j);
   }
 
   leave();
@@ -827,7 +827,7 @@ void Group::_propagate_sln(Code *object, float32 change, float32 source_sln_thr,
   path.push_back(object);
 
   P<TimeJob> j = new SaliencyPropagationJob(object, change, source_sln_thr, Timestamp(seconds(0)));
-  _Mem::Get()->pushTimeJob(j);
+  _Mem::Get()->push_time_job(j);
 
   _initiate_sln_propagation(object, change, source_sln_thr, path);
 }
@@ -945,7 +945,7 @@ void Group::inject(View *view) { // the view can hold anything but groups and no
       for (v = newly_salient_views_.begin(); v != newly_salient_views_.end(); ++v)
         c->_take_input(*v); // view will be copied.
       // The time scope is stored as a timestamp, but it is actually a duration.
-      _Mem::Get()->pushTimeJob(new AntiPGMSignalingJob(view, now + Utils::GetTimestamp<Code>(c->getObject(), IPGM_TSC).time_since_epoch()));
+      _Mem::Get()->push_time_job(new AntiPGMSignalingJob(view, now + Utils::GetTimestamp<Code>(c->getObject(), IPGM_TSC).time_since_epoch()));
     }
     break;
   }case Atom::INSTANTIATED_INPUT_LESS_PROGRAM: {
@@ -955,7 +955,7 @@ void Group::inject(View *view) { // the view can hold anything but groups and no
     if (is_active_pgm(view)) {
 
       c->gain_activation();
-      _Mem::Get()->pushTimeJob(new InputLessPGMSignalingJob(view, now + Utils::GetTimestamp<Code>(view->object_, IPGM_TSC).time_since_epoch()));
+      _Mem::Get()->push_time_job(new InputLessPGMSignalingJob(view, now + Utils::GetTimestamp<Code>(view->object_, IPGM_TSC).time_since_epoch()));
     }
     break;
   }case Atom::MARKER: // the marker has already been added to the mks of its references.
@@ -1099,7 +1099,7 @@ void Group::inject_group(View *view) { // the view holds a group.
   leave();
 
   if (((Group *)view->object_)->get_upr() > 0) // inject the next update job for the group.
-    _Mem::Get()->pushTimeJob(new UpdateJob((Group *)view->object_, ((Group *)view->object_)->get_next_upr_time(Now())));
+    _Mem::Get()->push_time_job(new UpdateJob((Group *)view->object_, ((Group *)view->object_)->get_next_upr_time(Now())));
 
   notifyNew(view);
 }

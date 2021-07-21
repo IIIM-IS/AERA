@@ -493,7 +493,7 @@ void GTPX::signal(View *input) const { // will be erased from the AF map upon re
     OUTPUT_LINE((TraceLevel)0, "  make ReductionJob<GTPX> " << j->get_job_id() << "(" << j->get_detail_oid() <<
       "): controller(" << get_detail_oid() << ")->reduce(View(fact_" << input->object_->get_oid() << "))");
 #endif
-    _Mem::Get()->pushReductionJob(j);
+    _Mem::Get()->push_reduction_job(j);
   }
 }
 
@@ -655,7 +655,7 @@ void PTPX::signal(View *input) const { // will be erased from the AF map upon re
     OUTPUT_LINE((TraceLevel)0, "  make ReductionJob<PTPX> " << j->get_job_id() << "(" << j->get_detail_oid() <<
       "): controller(" << get_detail_oid() << ")->reduce(View(fact_" << input->object_->get_oid() << "))");
 #endif
-    _Mem::Get()->pushReductionJob(j);
+    _Mem::Get()->push_reduction_job(j);
   }
 }
 
@@ -805,7 +805,7 @@ void CTPX::signal(r_exec::View *input) {
   OUTPUT_LINE((TraceLevel)0, "  make ReductionJob " << j->get_job_id() << "(" << j->get_detail_oid() <<
     "): CTPX(" << get_detail_oid() << ")->reduce(View(fact_" << input->object_->get_oid() << "))");
 #endif
-  _Mem::Get()->pushReductionJob(j);
+  _Mem::Get()->push_reduction_job(j);
 }
 
 void CTPX::reduce(r_exec::View *input) {

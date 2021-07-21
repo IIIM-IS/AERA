@@ -95,7 +95,7 @@ PMonitor::PMonitor(MDLController *controller,
   bindings->reset_fwd_timings(prediction_target_);
 
   MonitoringJob<PMonitor> *j = new MonitoringJob<PMonitor>(this, prediction_target_->get_before() + Utils::GetTimeTolerance());
-  _Mem::Get()->pushTimeJob(j);
+  _Mem::Get()->push_time_job(j);
 }
 
 PMonitor::~PMonitor() {

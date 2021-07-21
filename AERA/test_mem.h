@@ -110,10 +110,10 @@ public:
   virtual r_code::Code* eject(r_code::Code *command);
 
   /**
-   * This is called when runInDiagnosticTime() updates the tickTime. Just call
-   * onTimeTick(), because there is no real - time timer thread to call it.
+   * This is called when run_in_diagnostic_time() updates the tickTime. Just call
+   * on_time_tick(), because there is no real - time timer thread to call it.
    */
-  virtual void onDiagnosticTimeTick() { onTimeTick(); }
+  virtual void on_diagnostic_time_tick() { on_time_tick(); }
 
 protected:
   class _Thread : public Thread {
@@ -128,7 +128,7 @@ protected:
   static r_code::Code* findObject(
     std::vector<r_code::Code *> *objects, const char* name);
 
-  void onTimeTick();
+  void on_time_tick();
 
   /**
    * If not running in diagnostic time, start the timeTickThread_.
@@ -137,7 +137,7 @@ protected:
   void startTimeTickThread();
 
   /**
-   * This runs in the timeTickThread_ to periodicaly call onTimeTick().
+   * This runs in the timeTickThread_ to periodicaly call on_time_tick().
    * (Only used if not running in diagnostic time.)
    * \param args
    * \return 
