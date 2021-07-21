@@ -204,7 +204,7 @@ void CSTOverlay::update(HLPBindingMap *map, _Fact *input) {
 
       for (uint16 i = 0; i < prediction->get_simulations_size(); ++i) {
         auto predictionSimulation = prediction->get_simulation(i);
-        if (!get_simulation(predictionSimulation->getRootSim()->root_))
+        if (!get_simulation(predictionSimulation->get_root_sim()->root_))
           // The simulations_ does not have a Sim with the same root_, so add.
           simulations_.insert(predictionSimulation);
       }
@@ -476,7 +476,7 @@ void CSTController::inject_goal(HLPBindingMap *bm,
   float32 confidence,
   Code *group) const {
 
-  if (sim && !sim->registerGoalTarget(sub_goal_target))
+  if (sim && !sim->register_goal_target(sub_goal_target))
     // We are already simulating from this goal, so abort to avoid loops.
     return;
 

@@ -731,7 +731,7 @@ bool Sim::is_invalidated() {
   return false;
 }
 
-Sim* Sim::getRootSim()
+Sim* Sim::get_root_sim()
 {
   Sim* result = this;
   while (result) {
@@ -745,8 +745,8 @@ Sim* Sim::getRootSim()
   return NULL;
 }
 
-bool Sim::registerGoalTarget(_Fact* f_obj) {
-  Sim* rootSim = getRootSim();
+bool Sim::register_goal_target(_Fact* f_obj) {
+  Sim* rootSim = get_root_sim();
   if (!rootSim)
     // We don't expect this. Return true so that f_obj is injected as a goal anyway.
     return true;

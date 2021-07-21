@@ -266,7 +266,7 @@ public:
    * Recursively search this or parent Sim objects to get the Sim object where get_mode() == SIM_ROOT.
    * \return The root Sim object, or NULL if not found (which shouldn't happen).
    */
-  Sim* getRootSim();
+  Sim* get_root_sim();
 
   /**
    * If f_obj does not match any of the goal targets stored in the root Sim object, then store it in the root Sim object
@@ -276,7 +276,7 @@ public:
    * \return True if f_obj has been registered and should be injected as a goal, false if it is already registered and should not
    * be injected as a goal.
    */
-  bool registerGoalTarget(_Fact* f_obj);
+  bool register_goal_target(_Fact* f_obj);
 
   bool is_requirement_;
 
