@@ -215,18 +215,18 @@ bool InputLessPGMOverlay::inject_productions() {
     prods = prods.dereference();
   }
   //prods.trace();
-  uint16 production_count = prods.getChildrenCount();
+  uint16 production_count = prods.get_children_count();
   uint16 cmd_count = 0; // cmds to the executive (excl. mod/set) and external devices.
   for (uint16 i = 1; i <= production_count; ++i) {
 
-    IPGMContext cmd = prods.getChildDeref(i);
+    IPGMContext cmd = prods.get_child_deref(i);
     if (!in_red && !cmd.evaluate()) {
 
       rollback();
       productions_.clear();
       return false;
     }//cmd.trace();
-    IPGMContext function = cmd.getChildDeref(1);
+    IPGMContext function = cmd.get_child_deref(1);
 
     // layout of a command:
     // 0 >icmd opcode
@@ -243,14 +243,14 @@ bool InputLessPGMOverlay::inject_productions() {
     // 5 >first arg
 
     // identify the production of new objects.
-    IPGMContext args = cmd.getChildDeref(2);
+    IPGMContext args = cmd.get_child_deref(2);
     if (cmd[0].asOpcode() == Opcodes::ICmd) {
 
       if (function[0].asOpcode() == Opcodes::Inject ||
         function[0].asOpcode() == Opcodes::Eject) { // args:[object view]; create an object if not a reference.
 
         Code *object;
-        IPGMContext arg1 = args.getChild(1);
+        IPGMContext arg1 = args.get_child(1);
         uint16 index = arg1.getIndex();
         arg1 = arg1.dereference();
         // arg1.trace();
@@ -297,21 +297,21 @@ bool InputLessPGMOverlay::inject_productions() {
   // all productions have evaluated correctly; now we can execute the commands one by one.
   for (uint16 i = 1; i <= production_count; ++i) {
 
-    IPGMContext cmd = prods.getChildDeref(i);
-    IPGMContext function = cmd.getChildDeref(1);
+    IPGMContext cmd = prods.get_child_deref(i);
+    IPGMContext function = cmd.get_child_deref(1);
 
     // call device functions.
-    IPGMContext args = cmd.getChildDeref(2);
+    IPGMContext args = cmd.get_child_deref(2);
     if (cmd[0].asOpcode() == Opcodes::ICmd) { // command to the executive.
 
       if (function[0].asOpcode() == Opcodes::Inject) { // args:[object view]; retrieve the object and create a view.
 
-        IPGMContext arg1 = args.getChild(1);
+        IPGMContext arg1 = args.get_child(1);
         arg1.dereference_once();
         //arg1.trace();
-        Code *object = args.getChildDeref(1).getObject();
+        Code *object = args.get_child_deref(1).getObject();
         //object->trace();
-        IPGMContext _view = args.getChildDeref(2);
+        IPGMContext _view = args.get_child_deref(2);
         if (_view[0].getAtomCount() != 0) { // regular view (i.e. not |[]).
 
           View *view = new View();
@@ -326,27 +326,27 @@ bool InputLessPGMOverlay::inject_productions() {
           if (mk_rdx) {
 
             mk_rdx->code(write_index++) = Atom::IPointer(extent_index);
-            prods.getChildDeref(i).copy(mk_rdx, extent_index, extent_index);
+            prods.get_child_deref(i).copy(mk_rdx, extent_index, extent_index);
           }
         } else // this allows building objects with no view (case in point: fact on object: only the fact needs to be injected).
           --cmd_count;
       } else if (function[0].asOpcode() == Opcodes::Eject) { // args:[object view destination_node]; view.grp=destination grp (stdin ot stdout); retrieve the object and create a view.
 
-        Code *object = args.getChildDeref(1).getObject();
+        Code *object = args.get_child_deref(1).getObject();
 
-        IPGMContext _view = args.getChildDeref(2);
+        IPGMContext _view = args.get_child_deref(2);
         View *view = new View();
         _view.copy(view, 0);
         view->set_object(object);
 
-        IPGMContext node = args.getChildDeref(3);
+        IPGMContext node = args.get_child_deref(3);
 
         _Mem::Get()->eject(view, node[0].getNodeID());
 
         if (mk_rdx) {
 
           mk_rdx->code(write_index++) = Atom::IPointer(extent_index);
-          prods.getChildDeref(i).copy(mk_rdx, extent_index, extent_index);
+          prods.get_child_deref(i).copy(mk_rdx, extent_index, extent_index);
         }
       } else if (function[0].asOpcode() == Opcodes::Mod) { // args:[iptr-to-cptr value_].
 
@@ -354,11 +354,11 @@ bool InputLessPGMOverlay::inject_productions() {
         IPGMContext::ObjectType object_type;
         int16 member_index;
         uint32 view_oid;
-        args.getChild(1).getMember(object, view_oid, object_type, member_index); // args.getChild(1) is an iptr.
+        args.get_child(1).getMember(object, view_oid, object_type, member_index); // args.get_child(1) is an iptr.
 
         if (object) {
 
-          float32 value = args.getChildDeref(2)[0].asFloat();
+          float32 value = args.get_child_deref(2)[0].asFloat();
           switch (object_type) {
           case IPGMContext::TYPE_VIEW: { // add the target and value to the group's pending operations.
 
@@ -387,11 +387,11 @@ bool InputLessPGMOverlay::inject_productions() {
         IPGMContext::ObjectType object_type;
         int16 member_index;
         uint32 view_oid;
-        args.getChild(1).getMember(object, view_oid, object_type, member_index); // args.getChild(1) is an iptr.
+        args.get_child(1).getMember(object, view_oid, object_type, member_index); // args.get_child(1) is an iptr.
 
         if (object) {
 
-          float32 value = args.getChildDeref(2)[0].asFloat();
+          float32 value = args.get_child_deref(2)[0].asFloat();
           switch (object_type) {
           case IPGMContext::TYPE_VIEW: { // add the target and value to the group's pending operations.
 
@@ -420,16 +420,16 @@ bool InputLessPGMOverlay::inject_productions() {
 
       } else if (function[0].asOpcode() == Opcodes::Prb) { // args:[probe_level,callback_name,msg,set of objects].
 
-        float32 probe_lvl = args.getChildDeref(1)[0].asFloat();
+        float32 probe_lvl = args.get_child_deref(1)[0].asFloat();
         if (probe_lvl < _Mem::Get()->get_probe_level()) {
 
-          std::string callback_name = Utils::GetString(&args.getChildDeref(2)[0]);
+          std::string callback_name = Utils::GetString(&args.get_child_deref(2)[0]);
 
           Callbacks::Callback callback = Callbacks::Get(callback_name);
           if (callback) {
 
-            std::string msg = Utils::GetString(&args.getChildDeref(3)[0]);
-            IPGMContext _objects = args.getChildDeref(4);
+            std::string msg = Utils::GetString(&args.get_child_deref(3)[0]);
+            IPGMContext _objects = args.get_child_deref(4);
 
             uint8 object_count = _objects[0].getAtomCount();
             Code **objects = NULL;
@@ -437,7 +437,7 @@ bool InputLessPGMOverlay::inject_productions() {
 
               objects = new Code *[object_count];
               for (uint8 i = 1; i <= object_count; ++i)
-                objects[i - 1] = _objects.getChildDeref(i).getObject();
+                objects[i - 1] = _objects.get_child_deref(i).getObject();
             }
 
             callback(duration_cast<microseconds>(now - Utils::GetTimeReference()), false, msg.c_str(), object_count, objects);
@@ -459,20 +459,20 @@ bool InputLessPGMOverlay::inject_productions() {
       P<Code> command = _Mem::Get()->build_object(cmd[0]);
       cmd.copy((Code*)command, 0);
 
-      Code* executedCommand = _Mem::Get()->eject(command);
+      Code* executed_command = _Mem::Get()->eject(command);
 
       // Build a fact of the command and inject it in stdin. Give the fact an uncertainty range since we don't know when
       // it will be executed. Otherwise a fact with zero duration may not overlap a fact, making predictions fail.
       // We offset the beginning of the uncertainty range at a minimum by 2*GetTimeTolerance() from the frame start (the same as SYNC_HOLD)
       // so that CTPX::reduce will not fail due to "cause in sync with the premise".
-      auto relativeTime = duration_cast<microseconds>(now - Utils::GetTimeReference());
-      auto frameStart = now - (relativeTime % _Mem::Get()->get_sampling_period());
-      auto after = max(now, frameStart + 2 * Utils::GetTimeTolerance());
-      auto before = frameStart + _Mem::Get()->get_sampling_period();
+      auto relative_time = duration_cast<microseconds>(now - Utils::GetTimeReference());
+      auto frame_start = now - (relative_time % _Mem::Get()->get_sampling_period());
+      auto after = max(now, frame_start + 2 * Utils::GetTimeTolerance());
+      auto before = frame_start + _Mem::Get()->get_sampling_period();
       P<Code> fact;
-      if (executedCommand) {
+      if (executed_command) {
         // Set fact to the efferent copy of the command and inject it.
-        fact = new Fact(executedCommand, after, before, 1, 1);
+        fact = new Fact(executed_command, after, before, 1, 1);
         View *view = new View(View::SYNC_ONCE, now, 1, 1, _Mem::Get()->get_stdin(), getView()->get_host(), fact); // SYNC_ONCE, sln=1, res=1,
         _Mem::Get()->inject(view);
         string mk_rdx_info = "";
@@ -491,7 +491,7 @@ bool InputLessPGMOverlay::inject_productions() {
 
         // Add the original command.
         mk_rdx->code(write_index++) = Atom::IPointer(extent_index);
-        prods.getChildDeref(i).copy(mk_rdx, extent_index, extent_index);
+        prods.get_child_deref(i).copy(mk_rdx, extent_index, extent_index);
         // Add the fact of the injected command that we just made.
         mk_rdx->code(write_index++) = Atom::RPointer(mk_rdx->references_size());
         mk_rdx->add_reference(fact);

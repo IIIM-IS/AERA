@@ -96,8 +96,8 @@ public:
 
   _Context *get_implementation() const { return implementation_; }
 
-  uint16 getChildrenCount() const { return implementation_->getChildrenCount(); }
-  Context getChild(uint16 index) const { return Context(implementation_->getChild_new(index)); }
+  uint16 get_children_count() const { return implementation_->get_children_count(); }
+  Context get_child(uint16 index) const { return Context(implementation_->get_child_new(index)); }
 
   Context operator *() const { return Context(implementation_->dereference_new()); }
   Context &operator =(const Context &c) {

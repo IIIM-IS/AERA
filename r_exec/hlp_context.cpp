@@ -98,9 +98,9 @@ bool HLPContext::operator ==(const HLPContext &c) const {
 
   if (lhs[0].isStructural()) { // both are structural.
 
-    uint16 atom_count = lhs.getChildrenCount();
+    uint16 atom_count = lhs.get_children_count();
     for (uint16 i = 1; i <= atom_count; ++i)
-      if (lhs.getChildDeref(i) != rhs.getChildDeref(i))
+      if (lhs.get_child_deref(i) != rhs.get_child_deref(i))
         return false;
     return true;
   }
@@ -152,10 +152,10 @@ bool HLPContext::evaluate_no_dereference() const {
       return false;
   }case Atom::OPERATOR: {
 
-    uint16 atom_count = getChildrenCount();
+    uint16 atom_count = get_children_count();
     for (uint16 i = 1; i <= atom_count; ++i) {
 
-      if (!getChildDeref(i).evaluate_no_dereference())
+      if (!get_child_deref(i).evaluate_no_dereference())
         return false;
     }
 
@@ -175,10 +175,10 @@ bool HLPContext::evaluate_no_dereference() const {
   case Atom::SET:
   case Atom::S_SET: {
 
-    uint16 atom_count = getChildrenCount();
+    uint16 atom_count = get_children_count();
     for (uint16 i = 1; i <= atom_count; ++i) {
 
-      if (!getChildDeref(i).evaluate_no_dereference())
+      if (!get_child_deref(i).evaluate_no_dereference())
         return false;
     }
     return true;

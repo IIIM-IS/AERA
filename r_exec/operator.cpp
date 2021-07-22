@@ -112,7 +112,7 @@ bool now(const Context &context) {
 
 bool rnd(const Context &context) {
 
-  Context range = *context.getChild(1);
+  Context range = *context.get_child(1);
 
   if (!range[0].isFloat()) {
 
@@ -132,8 +132,8 @@ bool rnd(const Context &context) {
 
 bool equ(const Context &context) {
 
-  Context lhs = *context.getChild(1);
-  Context rhs = *context.getChild(2);
+  Context lhs = *context.get_child(1);
+  Context rhs = *context.get_child(2);
 
   bool r = (lhs == rhs);
   context.setAtomicResult(Atom::Boolean(r));
@@ -144,7 +144,7 @@ bool equ(const Context &context) {
 
 bool neq(const Context &context) {
 
-  bool r = *context.getChild(1) != *context.getChild(2);
+  bool r = *context.get_child(1) != *context.get_child(2);
   context.setAtomicResult(Atom::Boolean(r));
   return true;
 }
@@ -153,8 +153,8 @@ bool neq(const Context &context) {
 
 bool gtr(const Context &context) {
 
-  Context lhs = *context.getChild(1);
-  Context rhs = *context.getChild(2);
+  Context lhs = *context.get_child(1);
+  Context rhs = *context.get_child(2);
 
   if (lhs[0].isFloat()) {
 
@@ -182,8 +182,8 @@ bool gtr(const Context &context) {
 
 bool lsr(const Context &context) {
 
-  Context lhs = *context.getChild(1);
-  Context rhs = *context.getChild(2);
+  Context lhs = *context.get_child(1);
+  Context rhs = *context.get_child(2);
 
   if (lhs[0].isFloat()) {
 
@@ -211,8 +211,8 @@ bool lsr(const Context &context) {
 
 bool gte(const Context &context) {
 
-  Context lhs = *context.getChild(1);
-  Context rhs = *context.getChild(2);
+  Context lhs = *context.get_child(1);
+  Context rhs = *context.get_child(2);
 
   if (lhs[0].isFloat()) {
 
@@ -240,8 +240,8 @@ bool gte(const Context &context) {
 
 bool lse(const Context &context) {
 
-  Context lhs = *context.getChild(1);
-  Context rhs = *context.getChild(2);
+  Context lhs = *context.get_child(1);
+  Context rhs = *context.get_child(2);
 
   if (lhs[0].isFloat()) {
 
@@ -269,8 +269,8 @@ bool lse(const Context &context) {
 
 bool add(const Context &context) {
 
-  Context lhs = *context.getChild(1);
-  Context rhs = *context.getChild(2);
+  Context lhs = *context.get_child(1);
+  Context rhs = *context.get_child(2);
 
   if (lhs[0].isFloat()) {
 
@@ -322,8 +322,8 @@ bool add(const Context &context) {
 
 bool sub(const Context &context) {
 
-  Context lhs = *context.getChild(1);
-  Context rhs = *context.getChild(2);
+  Context lhs = *context.get_child(1);
+  Context rhs = *context.get_child(2);
 
   if (lhs[0].isFloat()) {
 
@@ -368,8 +368,8 @@ bool sub(const Context &context) {
 
 bool mul(const Context &context) {
 
-  Context lhs = *context.getChild(1);
-  Context rhs = *context.getChild(2);
+  Context lhs = *context.get_child(1);
+  Context rhs = *context.get_child(2);
 
   if (lhs[0].isFloat()) {
 
@@ -439,8 +439,8 @@ bool mul(const Context &context) {
 
 bool div(const Context &context) {
 
-  Context lhs = *context.getChild(1);
-  Context rhs = *context.getChild(2);
+  Context lhs = *context.get_child(1);
+  Context rhs = *context.get_child(2);
 
   if (lhs[0].isFloat()) {
 
@@ -526,8 +526,8 @@ bool div(const Context &context) {
 
 bool dis(const Context &context) {
 
-  Context lhs = *context.getChild(1);
-  Context rhs = *context.getChild(2);
+  Context lhs = *context.get_child(1);
+  Context rhs = *context.get_child(2);
 
   if (lhs[0].isFloat()) {
 
@@ -555,7 +555,7 @@ bool dis(const Context &context) {
 
 bool ln(const Context &context) {
 
-  Context arg = *context.getChild(1);
+  Context arg = *context.get_child(1);
 
   if (arg[0].isFloat()) {
 
@@ -574,7 +574,7 @@ bool ln(const Context &context) {
 
 bool exp(const Context &context) {
 
-  Context arg = *context.getChild(1);
+  Context arg = *context.get_child(1);
 
   if (arg[0].isFloat()) {
 
@@ -590,7 +590,7 @@ bool exp(const Context &context) {
 
 bool log(const Context &context) {
 
-  Context arg = *context.getChild(1);
+  Context arg = *context.get_child(1);
 
   if (arg[0].isFloat()) {
 
@@ -609,7 +609,7 @@ bool log(const Context &context) {
 
 bool e10(const Context &context) {
 
-  Context arg = *context.getChild(1);
+  Context arg = *context.get_child(1);
 
   if (arg[0].isFloat()) {
 
@@ -654,7 +654,7 @@ bool fvw(const Context &context) {
 bool is_sim(const Context &context) {
 
   const IPGMContext &ipgm_context = *(IPGMContext *)context.get_implementation();
-  IPGMContext arg = ipgm_context.getChildDeref(1);
+  IPGMContext arg = ipgm_context.get_child_deref(1);
   Code* obj = arg.getObject();
 
   bool result = false;
@@ -668,8 +668,8 @@ bool is_sim(const Context &context) {
 }
 
 bool minimum(const Context &context) {
-  Context lhs = *context.getChild(1);
-  Context rhs = *context.getChild(2);
+  Context lhs = *context.get_child(1);
+  Context rhs = *context.get_child(2);
 
   if (lhs[0].isFloat() && rhs[0].isFloat()) {
     if (lhs[0] == Atom::MinusInfinity() || rhs[0] == Atom::MinusInfinity()) {
@@ -701,8 +701,8 @@ bool minimum(const Context &context) {
 }
 
 bool maximum(const Context &context) {
-  Context lhs = *context.getChild(1);
-  Context rhs = *context.getChild(2);
+  Context lhs = *context.get_child(1);
+  Context rhs = *context.get_child(2);
 
   if (lhs[0].isFloat() && rhs[0].isFloat()) {
     if (lhs[0] == Atom::PlusInfinity() || rhs[0] == Atom::PlusInfinity()) {

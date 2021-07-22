@@ -102,9 +102,9 @@ bool IPGMContext::operator ==(const IPGMContext &c) const {
 
   if (lhs[0].isStructural()) { // both are structural.
 
-    uint16 atom_count = lhs.getChildrenCount();
+    uint16 atom_count = lhs.get_children_count();
     for (uint16 i = 1; i <= atom_count; ++i)
-      if (lhs.getChildDeref(i) != rhs.getChildDeref(i))
+      if (lhs.get_child_deref(i) != rhs.get_child_deref(i))
         return false;
     return true;
   }
@@ -128,8 +128,8 @@ bool IPGMContext::match(const IPGMContext &input) const {
 
   if (code_[index_].isStructural()) {
 
-    uint16 atom_count = getChildrenCount();
-    if (input.getChildrenCount() != atom_count)
+    uint16 atom_count = get_children_count();
+    if (input.get_children_count() != atom_count)
       return false;
 
     if (((*this)[0].atom_ & 0xFFFFFFF8) != (input[0].atom_ & 0xFFFFFFF8)) // masking a possible tolerance embedded in timestamps; otherwise, the last 3 bits encode an arity.
@@ -137,8 +137,8 @@ bool IPGMContext::match(const IPGMContext &input) const {
 
     for (uint16 i = 1; i <= atom_count; ++i) {
 
-      IPGMContext pc = getChildDeref(i);
-      IPGMContext ic = input.getChildDeref(i);
+      IPGMContext pc = get_child_deref(i);
+      IPGMContext ic = input.get_child_deref(i);
       if (!pc.match(ic))
         return false;
     }
@@ -193,8 +193,8 @@ IPGMContext IPGMContext::dereference() const {
     return IPGMContext(o, NULL, &o->code(0), 0, NULL, REFERENCE);
   }case Atom::C_PTR: {
 
-    IPGMContext c = getChildDeref(1);
-    for (uint16 i = 2; i <= getChildrenCount(); ++i) {
+    IPGMContext c = get_child_deref(1);
+    for (uint16 i = 2; i <= get_children_count(); ++i) {
 
       switch ((*this)[i].getDescriptor()) {
       case Atom::VIEW: // accessible only for this and input objects.
@@ -210,7 +210,7 @@ IPGMContext IPGMContext::dereference() const {
         return IPGMContext(c.getObject(), VWS);
         break;
       default:
-        c = c.getChildDeref((*this)[i].asIndex());
+        c = c.get_child_deref((*this)[i].asIndex());
       }
     }
     return c;
@@ -265,10 +265,10 @@ bool IPGMContext::evaluate_no_dereference() const {
       return true;
     if (!op.is_red()) { // red will prevent the evaluation of its productions before reducting its input.
 
-      uint16 atom_count = getChildrenCount();
+      uint16 atom_count = get_children_count();
       for (uint16 i = 1; i <= atom_count; ++i) {
 
-        if (!getChildDeref(i).evaluate_no_dereference())
+        if (!get_child_deref(i).evaluate_no_dereference())
           return false;
       }
     }
@@ -291,10 +291,10 @@ bool IPGMContext::evaluate_no_dereference() const {
   case Atom::SET:
   case Atom::S_SET: {
 
-    uint16 atom_count = getChildrenCount();
+    uint16 atom_count = get_children_count();
     for (uint16 i = 1; i <= atom_count; ++i) {
 
-      if (!getChildDeref(i).evaluate_no_dereference())
+      if (!get_child_deref(i).evaluate_no_dereference())
         return false;
     }
     return true;
@@ -328,7 +328,7 @@ void IPGMContext::copy_structure_to_value_array(bool prefix, uint16 write_index,
     copy_member_to_value_array(1, prefix, write_index, extent_index, dereference_cptr);
   else {
 
-    uint16 atom_count = getChildrenCount();
+    uint16 atom_count = get_children_count();
     overlay_->values_[write_index++] = code_[index_];
     extent_index = write_index + atom_count;
     switch (code_[index_].getDescriptor()) {
@@ -426,15 +426,15 @@ void IPGMContext::getMember(void *&object, uint32 &view_oid, ObjectType &object_
     return;
   }
 
-  IPGMContext c = cptr.getChildDeref(1); // this, vl_ptr, value_ptr or rptr.
+  IPGMContext c = cptr.get_child_deref(1); // this, vl_ptr, value_ptr or rptr.
 
-  uint16 atom_count = cptr.getChildrenCount();
+  uint16 atom_count = cptr.get_children_count();
   for (uint16 i = 2; i < atom_count; ++i) { // stop before the last iptr.
 
     if (cptr[i].getDescriptor() == Atom::VIEW)
       c = IPGMContext(c.getObject(), c.view_, &c.view_->code(0), 0, NULL, VIEW);
     else
-      c = c.getChildDeref(cptr[i].asIndex());
+      c = c.get_child_deref(cptr[i].asIndex());
   }
 
   // at this point, c is an iptr dereferenced to an object or a view; the next iptr holds the member index.
@@ -500,11 +500,11 @@ bool match(const IPGMContext &input, const IPGMContext &pattern) { // in red, pa
     pattern.patch_code(pattern.getIndex() + 1, Atom::IPointer(input.getIndex()));
 
   // evaluate the set of guards.
-  IPGMContext guard_set = pattern.getChildDeref(2);
-  uint16 guard_count = guard_set.getChildrenCount();
+  IPGMContext guard_set = pattern.get_child_deref(2);
+  uint16 guard_count = guard_set.get_children_count();
   for (uint16 i = 1; i <= guard_count; ++i) {
 
-    if (!guard_set.getChildDeref(i).evaluate_no_dereference()) // WARNING: no check for duplicates.
+    if (!guard_set.get_child_deref(i).evaluate_no_dereference()) // WARNING: no check for duplicates.
       return false;
   }
 
@@ -517,7 +517,7 @@ bool match(const IPGMContext &input, const IPGMContext &pattern, const IPGMConte
   uint16 last_patch_index;
   if (pattern[0].asOpcode() == Opcodes::Ptn) {
 
-    skeleton = pattern.getChildDeref(1);
+    skeleton = pattern.get_child_deref(1);
     if (!skeleton.match(input))
       return false;
     last_patch_index = pattern.get_last_patch_index();
@@ -529,7 +529,7 @@ bool match(const IPGMContext &input, const IPGMContext &pattern, const IPGMConte
 
   if (pattern[0].asOpcode() == Opcodes::AntiPtn) {
 
-    skeleton = pattern.getChildDeref(1);
+    skeleton = pattern.get_child_deref(1);
     if (skeleton.match(input))
       return false;
     last_patch_index = pattern.get_last_patch_index();
@@ -543,11 +543,11 @@ bool match(const IPGMContext &input, const IPGMContext &pattern, const IPGMConte
 
 build_productions:
   // compute all productions for this input.
-  uint16 production_count = productions.getChildrenCount();
+  uint16 production_count = productions.get_children_count();
   uint16 production_index;
   for (uint16 i = 1; i <= production_count; ++i) {
 
-    IPGMContext prod = productions.getChild(i);
+    IPGMContext prod = productions.get_child(i);
     //prod.trace();
     prod.evaluate();
     prod.copy_to_value_array(production_index);
@@ -560,22 +560,22 @@ build_productions:
 
 void reduce(const IPGMContext &context, const IPGMContext &input_set, const IPGMContext &section, std::vector<uint16> &input_indices, std::vector<uint16> &production_indices) {
 
-  IPGMContext pattern = section.getChildDeref(1);
+  IPGMContext pattern = section.get_child_deref(1);
   if (pattern[0].asOpcode() != Opcodes::Ptn && pattern[0].asOpcode() != Opcodes::AntiPtn)
     return;
 
-  IPGMContext productions = section.getChildDeref(2);
+  IPGMContext productions = section.get_child_deref(2);
   if (productions[0].getDescriptor() != Atom::SET)
     return;
 
-  uint16 production_count = productions.getChildrenCount();
+  uint16 production_count = productions.get_children_count();
   if (!production_count)
     return;
 
   std::vector<uint16>::iterator i;
   for (i = input_indices.begin(); i != input_indices.end();) { // to be successful, at least one input must match the pattern.
 
-    IPGMContext c = input_set.getChildDeref(*i);
+    IPGMContext c = input_set.get_child_deref(*i);
     if (c.is_undefined()) {
 
       i = input_indices.erase(i);
@@ -598,21 +598,21 @@ void reduce(const IPGMContext &context, const IPGMContext &input_set, const IPGM
 
 bool IPGMContext::Red(const IPGMContext &context) {
   //context.trace();
-  IPGMContext input_set = context.getChildDeref(1);
+  IPGMContext input_set = context.get_child_deref(1);
   if (!input_set.evaluate_no_dereference())
     return false;
 
   // a section is a set of one pattern and a set of productions.
-  IPGMContext positive_section = context.getChildDeref(2);
-  if (!positive_section.getChildDeref(1).evaluate_no_dereference()) // evaluate the pattern only.
+  IPGMContext positive_section = context.get_child_deref(2);
+  if (!positive_section.get_child_deref(1).evaluate_no_dereference()) // evaluate the pattern only.
     return false;
 
-  IPGMContext negative_section = context.getChildDeref(3);
-  if (!negative_section.getChildDeref(1).evaluate_no_dereference()) // evaluate the pattern only.
+  IPGMContext negative_section = context.get_child_deref(3);
+  if (!negative_section.get_child_deref(1).evaluate_no_dereference()) // evaluate the pattern only.
     return false;
 
   std::vector<uint16> input_indices; // todo list of inputs to match.
-  for (uint16 i = 1; i <= input_set.getChildrenCount(); ++i)
+  for (uint16 i = 1; i <= input_set.get_children_count(); ++i)
     input_indices.push_back(i);
 
   std::vector<uint16> production_indices; // list of productions built upon successful matches.
@@ -623,7 +623,7 @@ bool IPGMContext::Red(const IPGMContext &context) {
     negative_section[0].getDescriptor() != Atom::SET)
     goto failure;
 
-  uint16 input_count = input_set.getChildrenCount();
+  uint16 input_count = input_set.get_children_count();
   if (!input_count)
     goto failure;
 
@@ -645,12 +645,12 @@ failure:
 
 bool IPGMContext::Ins(const IPGMContext &context) {
 
-  IPGMContext object = context.getChildDeref(1);
-  IPGMContext args = context.getChildDeref(2);
-  IPGMContext run = context.getChildDeref(3);
-  IPGMContext tsc = context.getChildDeref(4);
-  IPGMContext res = context.getChildDeref(5);
-  IPGMContext nfr = context.getChildDeref(6);
+  IPGMContext object = context.get_child_deref(1);
+  IPGMContext args = context.get_child_deref(2);
+  IPGMContext run = context.get_child_deref(3);
+  IPGMContext tsc = context.get_child_deref(4);
+  IPGMContext res = context.get_child_deref(5);
+  IPGMContext nfr = context.get_child_deref(6);
 
   Code *pgm = object.getObject();
   uint16 pgm_opcode = pgm->code(0).asOpcode();
@@ -675,8 +675,8 @@ bool IPGMContext::Ins(const IPGMContext &context) {
     IPGMContext pattern_set(pgm, pattern_set_index);
     for (uint16 i = 1; i <= arg_count; ++i) {
 
-      IPGMContext arg = args.getChildDeref(i);
-      IPGMContext skel = pattern_set.getChildDeref(i).getChildDeref(1);
+      IPGMContext arg = args.get_child_deref(i);
+      IPGMContext skel = pattern_set.get_child_deref(i).get_child_deref(1);
       if (!skel.match(arg)) {
 
         context.setAtomicResult(Atom::Nil());
@@ -725,8 +725,8 @@ bool IPGMContext::Ins(const IPGMContext &context) {
 
 bool IPGMContext::Fvw(const IPGMContext &context) {
 
-  IPGMContext object = context.getChildDeref(1);
-  IPGMContext group = context.getChildDeref(2);
+  IPGMContext object = context.get_child_deref(1);
+  IPGMContext group = context.get_child_deref(2);
 
   Code *_object = object.getObject();
   Group *_group = (Group *)group.getObject();

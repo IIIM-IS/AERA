@@ -130,13 +130,13 @@ private:
 
     if ((*this)[0].getDescriptor() == Atom::OPERATOR && Operator::Get((*this)[0].asOpcode()).is_syn()) { // (\ (expression ...)).
 
-      IPGMContext c = getChild(1);
+      IPGMContext c = get_child(1);
       c.copy_member(destination, write_index, extent_index, dereference_cptr, pgm_index);
     } else {
 
       destination->code(write_index++) = (*this)[0];
 
-      uint16 atom_count = getChildrenCount();
+      uint16 atom_count = get_children_count();
       extent_index = write_index + atom_count;
 
       switch ((*this)[0].getDescriptor()) {
@@ -171,7 +171,7 @@ private:
 
           for (uint16 i = 1; i <= atom_count; ++i) {
 
-            IPGMContext c = getChild(i);
+            IPGMContext c = get_child(i);
             c.copy_member(destination, write_index++, extent_index, i != 2, pgm_index);
           }
         } else { // if a pgm is being copied, indicate the starting index of the pgm so that we can turn on code patching and know if a cptr is referencing code inside the pgm (in that case it will not be dereferenced).
@@ -186,7 +186,7 @@ private:
 
           for (uint16 i = 1; i <= atom_count; ++i) {
 
-            IPGMContext c = getChild(i);
+            IPGMContext c = get_child(i);
             c.copy_member(destination, write_index++, extent_index, !(!dereference_cptr && i == 1), _pgm_index);
           }
         }
@@ -328,7 +328,7 @@ public:
 
   uint16 get_object_code_size() const { return object_->code_size(); }
 
-  uint16 getChildrenCount() const {
+  uint16 get_children_count() const {
 
     uint16 c;
     switch (data_) {
@@ -348,11 +348,11 @@ public:
   }
 
   /**
-   * Call getChild and return a new allocated copy of the child. The caller is responsible to delete it.
+   * Call get_child and return a new allocated copy of the child. The caller is responsible to delete it.
    */
-  _Context *getChild_new(uint16 index) const {
+  _Context *get_child_new(uint16 index) const {
 
-    IPGMContext *_c = new IPGMContext(getChild(index));
+    IPGMContext *_c = new IPGMContext(get_child(index));
     return _c;
   }
 
@@ -382,7 +382,7 @@ public:
   bool operator ==(const IPGMContext &c) const;
   bool operator !=(const IPGMContext &c) const;
 
-  IPGMContext getChild(uint16 index) const {
+  IPGMContext get_child(uint16 index) const {
 
     switch (data_) {
     case STEM:
@@ -398,7 +398,7 @@ public:
       object_->acq_markers();
       for (m = object_->markers_.begin(); i < index - 1; ++i, ++m) {
 
-        if (m == object_->markers_.end()) { // happens when the list has changed after the call to getChildrenCount.
+        if (m == object_->markers_.end()) { // happens when the list has changed after the call to get_children_count.
 
           object_->rel_markers();
           return IPGMContext();
@@ -413,7 +413,7 @@ public:
       object_->acq_views();
       for (v = object_->views_.begin(); i < index - 1; ++i, ++v) {
 
-        if (v == object_->views_.end()) { // happens when the list has changed after the call to getChildrenCount.
+        if (v == object_->views_.end()) { // happens when the list has changed after the call to get_children_count.
 
           object_->rel_views();
           return IPGMContext();
@@ -429,10 +429,10 @@ public:
   }
 
   /**
-   * Call getChild(index) and then return the result of dereference().
+   * Call get_child(index) and then return the result of dereference().
    */
-  IPGMContext getChildDeref(uint16 index) const {
-    return getChild(index).dereference();
+  IPGMContext get_child_deref(uint16 index) const {
+    return get_child(index).dereference();
   }
 
   Atom &operator [](uint16 i) const { return code_[index_ + i]; }

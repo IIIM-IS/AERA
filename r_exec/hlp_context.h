@@ -106,16 +106,16 @@ public:
   bool operator ==(const HLPContext &c) const;
   bool operator !=(const HLPContext &c) const;
 
-  HLPContext getChild(uint16 index) const {
+  HLPContext get_child(uint16 index) const {
 
     return HLPContext(code_, index_ + index, (HLPOverlay *)overlay_);
   }
 
   /**
-   * Call getChild(index) and then return the result of dereference().
+   * Call get_child(index) and then return the result of dereference().
    */
-  HLPContext getChildDeref(uint16 index) const {
-    return getChild(index).dereference();
+  HLPContext get_child_deref(uint16 index) const {
+    return get_child(index).dereference();
   }
 
   bool evaluate() const {
@@ -137,17 +137,17 @@ public:
 
   uint16 get_object_code_size() const;
 
-  uint16 getChildrenCount() const {
+  uint16 get_children_count() const {
 
     return code_[index_].getAtomCount();
   }
 
   /**
-   * Call getChild and return a new allocated copy of the child. The caller is responsible to delete it.
+   * Call get_child and return a new allocated copy of the child. The caller is responsible to delete it.
    */
-  _Context *getChild_new(uint16 index) const {
+  _Context *get_child_new(uint16 index) const {
 
-    HLPContext *_c = new HLPContext(getChild(index));
+    HLPContext *_c = new HLPContext(get_child(index));
     return _c;
   }
 

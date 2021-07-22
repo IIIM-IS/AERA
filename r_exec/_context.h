@@ -114,12 +114,12 @@ public:
 
   virtual uint16 get_object_code_size() const = 0;
 
-  virtual uint16 getChildrenCount() const = 0;
+  virtual uint16 get_children_count() const = 0;
 
   /**
-   * Call getChild and return a new allocated copy of the child. The caller is responsible to delete it.
+   * Call get_child and return a new allocated copy of the child. The caller is responsible to delete it.
    */
-  virtual _Context *getChild_new(uint16 index) const = 0;
+  virtual _Context *get_child_new(uint16 index) const = 0;
 
   /**
    * Dereference this and return a new allocated copy. The caller is responsible to delete it.
