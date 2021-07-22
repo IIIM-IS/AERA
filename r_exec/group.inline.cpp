@@ -131,7 +131,7 @@ inline bool Group::invalidate() {
 
 inline uint32 Group::get_upr() const {
 
-  return code(GRP_UPR).asFloat();
+  return (uint32)code(GRP_UPR).asFloat();
 }
 
 inline float32 Group::get_sln_thr() const {

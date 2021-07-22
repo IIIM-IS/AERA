@@ -443,17 +443,17 @@ inline uint8 Atom::getNodeID() const {
 
 inline uint8 Atom::getClassID() const {
 
-  return (atom_ & 0x0000FF00) >> 8;
+  return (uint8)((atom_ & 0x0000FF00) >> 8);
 }
 
 inline uint8 Atom::getDeviceID() const {
 
-  return atom_ & 0x000000FF;
+  return (uint8)(atom_ & 0x000000FF);
 }
 
 inline uint8 Atom::asAssignmentIndex() const {
 
-  return (atom_ & 0x00FF0000) >> 16;
+  return (uint8)((atom_ & 0x00FF0000) >> 16);
 }
 
 inline uint8 Atom::getAtomCount() const {
