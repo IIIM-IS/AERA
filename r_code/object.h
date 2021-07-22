@@ -372,11 +372,17 @@ public:
 
   Atom &code(uint16 i) { return code_[i]; }
   Atom &code(uint16 i) const { return (*code_.as_std())[i]; }
-  uint16 code_size() const { return code_.size(); }
+  uint16 code_size() const {
+    // There can't be more than 65536 code bytes. Explicitly cast to the return type.
+    return (uint16)code_.size();
+  }
   void resize_code(uint16 new_size) { code_.as_std()->resize(new_size); }
   void set_reference(uint16 i, Code *object) { references_[i] = object; }
   Code *get_reference(uint16 i) const { return (*references_.as_std())[i]; }
-  uint16 references_size() const { return references_.size(); }
+  uint16 references_size() const {
+    // There can't be more than 65536 references. Explicitly cast to the return type.
+    return (uint16)references_.size();
+  }
   void clear_references() { references_.as_std()->clear(); }
   void set_references(std::vector<P<Code> > &new_references) { (*references_.as_std()) = new_references; }
   void add_reference(Code *object) const { references_.as_std()->push_back(object); }
