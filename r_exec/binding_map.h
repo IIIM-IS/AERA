@@ -303,7 +303,7 @@ public:
   Atom *get_value_code(uint16 id);
   uint16 get_value_code_size(uint16 id);
 
-  bool intersect(BindingMap *bm);
+  bool intersect(BindingMap *bm) const;
   bool is_fully_specified() const;
 
   Atom *get_code(uint16 i) const { return map_[i]->get_code(); }
