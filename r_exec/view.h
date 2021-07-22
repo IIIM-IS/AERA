@@ -161,7 +161,7 @@ public:
 
   uint32 get_oid() const;
 
-  virtual bool isNotification() const;
+  virtual bool is_notification() const;
 
   Group *get_host();
 
@@ -206,7 +206,7 @@ class r_exec_dll NotificationView :
 public:
   NotificationView(r_code::Code *origin, r_code::Code *destination, r_code::Code *marker); // res=1, sln=1.
 
-  bool isNotification() const;
+  bool is_notification() const;
 };
 }
 

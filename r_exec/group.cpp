@@ -387,7 +387,7 @@ float32 Group::update_res(View *v) {
   if (v->object_->is_invalidated())
     return 0;
   float res = v->update_res();
-  if (!v->isNotification() && res > 0 && res < get_low_res_thr()) {
+  if (!v->is_notification() && res > 0 && res < get_low_res_thr()) {
 
     uint16 ntf_grp_count = get_ntf_grp_count();
     for (uint16 i = 1; i <= ntf_grp_count; ++i)
@@ -408,7 +408,7 @@ float32 Group::update_sln(View *v) {
   else if (sln < low_sln_)
     low_sln_ = sln;
   ++sln_updates_;
-  if (!v->isNotification()) {
+  if (!v->is_notification()) {
 
     if (v->periods_at_high_sln_ == get_sln_ntf_prd()) {
 
@@ -436,7 +436,7 @@ float32 Group::update_act(View *v) {
   else if (act < low_act_)
     low_act_ = act;
   ++act_updates_;
-  if (!v->isNotification()) {
+  if (!v->is_notification()) {
 
     if (v->periods_at_high_act_ == get_act_ntf_prd()) {
 
@@ -1148,7 +1148,7 @@ void Group::inject_reduction_jobs(View *view) { // group is assumed to be c-sali
   UNORDERED_MAP<Group *, bool>::const_iterator vg;
   for (vg = viewing_groups_.begin(); vg != viewing_groups_.end(); ++vg) {
 
-    if (vg->second || view->isNotification()) // no reduction jobs when cov==true or view is a notification.
+    if (vg->second || view->is_notification()) // no reduction jobs when cov==true or view is a notification.
       continue;
 
     FOR_ALL_VIEWS_WITH_INPUTS_BEGIN(vg->first, v)
@@ -1192,7 +1192,7 @@ void Group::cov() {
       std::multiset<P<View>, r_code::View::Less>::const_iterator v;
       for (v = newly_salient_views_.begin(); v != newly_salient_views_.end(); ++v) { // no cov for pgm (all sorts), groups, notifications.
 
-        if ((*v)->isNotification())
+        if ((*v)->is_notification())
           continue;
         switch ((*v)->object_->code(0).getDescriptor()) {
         case Atom::GROUP:
@@ -1215,7 +1215,7 @@ void Group::cov() {
 
 void Group::delete_view(View *v) {
 
-  if (v->isNotification())
+  if (v->is_notification())
     notification_views_.erase(v->get_oid());
   else switch (v->object_->code(0).getDescriptor()) {
   case Atom::NULL_PROGRAM:
@@ -1243,7 +1243,7 @@ void Group::delete_view(View *v) {
 
 void Group::delete_view(UNORDERED_MAP<uint32, P<View> >::const_iterator &v) {
 
-  if (v->second->isNotification())
+  if (v->second->is_notification())
     v = notification_views_.erase(v);
   else switch (v->second->object_->code(0).getDescriptor()) {
   case Atom::NULL_PROGRAM:

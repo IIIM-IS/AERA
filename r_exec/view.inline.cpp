@@ -172,7 +172,7 @@ inline uint32 View::get_oid() const {
   return code_[VIEW_OID].atom_;
 }
 
-inline bool View::isNotification() const {
+inline bool View::is_notification() const {
 
   return false;
 }
@@ -325,7 +325,7 @@ inline void View::set(uint16 member_index, float32 value) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-inline bool NotificationView::isNotification() const {
+inline bool NotificationView::is_notification() const {
 
   return true;
 }
