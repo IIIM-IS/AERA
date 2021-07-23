@@ -322,7 +322,7 @@ bool GMonitor::reduce(_Fact *input) { // executed by a reduction core; invalidat
     if (g->ground_invalidated(input)) { // invalidate the goal and abduce from the super-goal.
 
       target_->invalidate();
-      // JTNote: abduce can update bindings_ . Should be pass a copy?
+      // JTNote: abduce can update bindings_ . Should we pass a copy?
       ((PrimaryMDLController *)controller_)->abduce(bindings_, g->get_sim()->get_f_super_goal(), g->get_sim()->get_opposite(), goal_target_->get_cfd());
       return true;
     }
