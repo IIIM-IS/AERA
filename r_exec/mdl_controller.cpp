@@ -411,6 +411,7 @@ void MDLController::_store_requirement(r_code::list<RequirementEntry> *cache, Re
     if ((*_e).is_too_old(now)) // garbage collection.
       _e = cache->erase(_e);
     else
+      // JTnote: Maybe check if _e matches e and quit (to avoid duplicates).
       ++_e;
   }
   cache->push_front(e);
