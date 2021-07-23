@@ -383,14 +383,16 @@ bool RMonitor::signal(bool is_simulation) {
   if (target_->is_invalidated())
     return true;
 
+  // check_simulated_imdl can change the binding map, so pass a copy.
+  P<BindingMap> bindings_copy(new BindingMap(bindings_));
   if (simulating_ && is_simulation) { // report the simulated outcome: this will inject a simulated prediction of the outcome, to allow any g-monitor deciding on this ground.
 
-    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_, target_->get_goal()->get_sim()->root_))
+    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_copy, target_->get_goal()->get_sim()->root_))
       ((PMDLController *)controller_)->register_simulated_goal_outcome(target_, true, target_); // report a simulated success.
     else
       ((PMDLController *)controller_)->register_simulated_goal_outcome(target_, false, NULL); // report a simulated failure.
     return false;
-  } else if (((PrimaryMDLController *)controller_)->check_imdl(target_, bindings_))
+  } else if (((PrimaryMDLController *)controller_)->check_imdl(target_, bindings_copy))
     return true;
   return false;
 }
@@ -570,13 +572,15 @@ bool SRMonitor::signal(bool is_simulation) {
   if (target_->is_invalidated())
     return true;
 
+  // check_simulated_imdl can change the binding map, so pass a copy.
+  P<BindingMap> bindings_copy(new BindingMap(bindings_));
   if (is_simulation) {
 
-    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_, target_->get_goal()->get_sim()->root_))
+    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_copy, target_->get_goal()->get_sim()->root_))
       ((PMDLController *)controller_)->register_simulated_goal_outcome(target_, true, target_); // report a simulated success.
   } else {
 
-    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_, NULL))
+    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_copy, NULL))
       ((PMDLController *)controller_)->register_simulated_goal_outcome(target_, false, NULL); // report a simulated failure.
   }
   return false;
