@@ -280,7 +280,7 @@ void NoArgCmdGuardBuilder::_build(Code *mdl, uint16 q0, uint16 t0, uint16 t1, ui
   write_guard(mdl, t1, t3, Opcodes::Sub, period_, write_index, extent_index);
 
   write_guard(mdl, cmd_t0, t2, Opcodes::Sub, offset_, write_index, extent_index);
-  write_guard(mdl, cmd_t1, cmd_t0, Opcodes::Add, cmd_duration_, write_index, extent_index);
+  write_guard(mdl, cmd_t1, t3, Opcodes::Sub, period_, write_index, extent_index);
 
   write_index = extent_index;
 }
