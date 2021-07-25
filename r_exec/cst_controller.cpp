@@ -403,8 +403,12 @@ void CSTController::reduce(r_exec::View *input) {
 
         P<HLPBindingMap> bm = new HLPBindingMap(bindings_);
         bm->init_from_f_ihlp(goal_target);
-        if (evaluate_bwd_guards(bm)) // leaves the controller constant: no need to protect; bm may be updated.
-          abduce(bm, input->object_);
+        if (evaluate_bwd_guards(bm)) { // leaves the controller constant: no need to protect; bm may be updated.
+          if (goal->is_simulation())
+            abduce_simulated(bm, input->object_);
+          else
+            abduce(bm, input->object_);
+        }
       }
     }
   } else {
@@ -444,6 +448,24 @@ void CSTController::reduce(r_exec::View *input) {
   }
 }
 
+void CSTController::abduce_simulated(HLPBindingMap *bm, Fact *f_super_goal) {
+  Goal *g = f_super_goal->get_goal();
+  _Fact *super_goal_target = g->get_target();
+  Fact* remade_f_icst = get_f_ihlp(bm, false);
+
+  for (auto o = overlays_.begin(); o != overlays_.end(); ++o) {
+    if (((CSTOverlay*)(*o))->is_simulated())
+      // Skip overlays that were produced during simulated forward chaining.
+      continue;
+
+    HLPBindingMap bm_copy(bm);
+    // TODO: this is inefficient. We want to merge (*o)->binding_ into bm_copy, but use an icst.
+    Fact* overlay_f_icst = get_f_ihlp(((HLPOverlay*)(*o))->bindings_, false);
+    if (bm_copy.match_object(overlay_f_icst->get_reference(0), remade_f_icst->get_reference(0)))
+      abduce(&bm_copy, f_super_goal);
+  }
+}
+
 void CSTController::abduce(HLPBindingMap *bm, Fact *f_super_goal) {
 
   Goal *g = f_super_goal->get_goal();
@@ -453,12 +475,17 @@ void CSTController::abduce(HLPBindingMap *bm, Fact *f_super_goal) {
   float32 confidence = super_goal_target->get_cfd();
 
   Sim *sim = g->get_sim();
+  Sim *sub_sim;
+  auto now = Now();
+  if (sim->get_mode() == SIM_ROOT)
+    sub_sim = new Sim(opposite ? SIM_MANDATORY : SIM_OPTIONAL, sim->get_thz(), f_super_goal, opposite, sim->root_, 1, sim->solution_controller_, sim->get_solution_cfd(), now + sim->get_thz());
+  else
+    sub_sim = new Sim(sim->get_mode(), sim->get_thz(), f_super_goal, opposite, sim->root_, 1, sim->solution_controller_, sim->get_solution_cfd(), sim->get_solution_before());
 
   Code *cst = get_unpacked_object();
   uint16 obj_set_index = cst->code(CST_OBJS).asIndex();
   uint16 obj_count = cst->code(obj_set_index).getAtomCount();
   Group *host = get_host();
-  auto now = Now();
   for (uint16 i = 1; i <= obj_count; ++i) {
 
     _Fact *pattern = (_Fact *)cst->get_reference(cst->code(obj_set_index + i).asIndex());
@@ -481,7 +508,7 @@ void CSTController::abduce(HLPBindingMap *bm, Fact *f_super_goal) {
         break;
       case MATCH_SUCCESS_NEGATIVE:
       case MATCH_FAILURE: // inject a sub-goal for the missing predicted positive evidence.
-        inject_goal(bm, f_super_goal, bound_pattern, sim, now, confidence, host); // all sub-goals share the same sim.
+        inject_goal(bm, f_super_goal, bound_pattern, sub_sim, now, confidence, host); // all sub-goals share the same sim.
         break;
       }
     }
