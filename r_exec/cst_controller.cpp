@@ -176,6 +176,26 @@ void CSTOverlay::inject_production(View* input) {
     OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " cst " << getObject()->get_oid() << ": fact " <<
       input->object_->get_oid() << " -> fact " << f_p_f_icst->get_oid() << " simulated pred fact icst [" <<
       inputs_info << "]");
+
+    Pred* input_prediction = ((_Fact*)input->object_)->get_pred();
+    if (input_prediction && input_prediction->get_simulations_size() == 1) {
+      Sim* input_simulation = ((_Fact*)input->object_)->get_pred()->get_simulation((uint16)0);
+      if (simulations_.size() == 1 && *simulations_.begin() != input_simulation &&
+        (*simulations_.begin())->getRootSim() == input_simulation->getRootSim()) {
+        // This CSTOverlay's Sim is different that the input's Sim, but has the same Sim root, so it
+        // is part of the same simulation but a branch with a different potential committed action.
+        // Inject the same predicted icst but with the input's Sim so we have a different solution branch.
+        // TODO: Handle the case when simulations_ or the input predictions simulations have multiple root Sims.
+        simulations_copy.clear();
+        simulations_copy.push_back(input_simulation);
+        prediction = new Pred(f_icst, simulations_copy, 1);
+        f_p_f_icst = new Fact(prediction, now, now, 1, 1);
+        ((HLPController *)controller_)->inject_prediction(f_p_f_icst, lowest_cfd_);
+        OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " cst " << getObject()->get_oid() << ": fact " <<
+          input->object_->get_oid() << " -> fact " << f_p_f_icst->get_oid() << " simulated pred fact icst [" <<
+          inputs_info << "]");
+      }
+    }
   }
 }
 
