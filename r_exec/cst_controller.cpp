@@ -181,7 +181,7 @@ void CSTOverlay::inject_production(View* input) {
     if (input_prediction && input_prediction->get_simulations_size() == 1) {
       Sim* input_simulation = ((_Fact*)input->object_)->get_pred()->get_simulation((uint16)0);
       if (simulations_.size() == 1 && *simulations_.begin() != input_simulation &&
-        (*simulations_.begin())->getRootSim() == input_simulation->getRootSim()) {
+        (*simulations_.begin())->get_root_sim() == input_simulation->get_root_sim()) {
         // This CSTOverlay's Sim is different that the input's Sim, but has the same Sim root, so it
         // is part of the same simulation but a branch with a different potential committed action.
         // Inject the same predicted icst but with the input's Sim so we have a different solution branch.
