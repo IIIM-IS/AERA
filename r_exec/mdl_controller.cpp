@@ -135,7 +135,6 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
     RequirementsPair r_p;
     Fact *ground = f_p_f_imdl; // JTNote: retrieve_imdl_fwd assigns ground, so this assignment is not used.
     bool wr_enabled = false;
-    bool stop = (req_controller != NULL);
     ChainingStatus c_s = ((MDLController *)controller_)->retrieve_imdl_fwd(bm, f_imdl, r_p, ground, req_controller, wr_enabled);
     f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(wr_enabled);
     // Use the timestamps in the template parameters that came from the prerequisite model.
