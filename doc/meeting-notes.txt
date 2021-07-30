@@ -623,21 +623,27 @@ Simulator
   * DONE. Try goal for moving twice.
     The requirement for the second simulated command doesn't match. Still investigating.
 
-next meeting
-* MDLController::get_cfd gets the success rate. Is this the only place it's called confidence? Can we rename it?
+2021-07-30
+* DONE. MDLController::get_cfd gets the success rate. Is this the only place it's called confidence? (Yes.) Renamed to get_success_rate.
+* DONE. Fix bug in issue #29 for !def substitution inside strings https://github.com/IIIM-IS/replicode/pull/167
+* DONE. injecting a second icst if there is a different simulation branch https://github.com/IIIM-IS/replicode/pull/160
+* DONE. matching all composite state combinations in backward chaining  https://github.com/IIIM-IS/replicode/pull/129
+* DONE. NoArgCmdGuardBuilder backward guard https://github.com/IIIM-IS/replicode/pull/115
+* DONE. Visualizer: Zoom to item by name.
+* DONE. Fix bug in ModelBase::MEntry::match for packed models https://github.com/IIIM-IS/replicode/pull/170
 * pong.test
-  * Try goal for moving twice.
+  * The requirement for the second simulated command doesn't match.
+    * DONE. In signal, pass a copy of the stored binding map to check_simulated_imdl https://github.com/IIIM-IS/AERA/pull/172
+  * DONE. Try goal for using mdl_ball_position twice.
+
+next meeting
+* pong.test
   * Add paddle. Make goal for the ball to be at a position which requires moving the paddle to bounce it.
 * Review/merge new functionality pull requests for:
-  * REVIEWING. NoArgCmdGuardBuilder backward guard https://github.com/IIIM-IS/replicode/pull/115
-  * REVIEWING. matching all composite state combinations in backward chaining  https://github.com/IIIM-IS/replicode/pull/129
   * REVIEWING. bindPattern to update timings https://github.com/IIIM-IS/replicode/pull/135
-  * simulation control in abduce_simulated_lhs https://github.com/IIIM-IS/replicode/pull/111
-  * injecting a second icst if there is a different simulation branch https://github.com/IIIM-IS/replicode/pull/160
-  * PTPX: Make a candidate model from every matching f_icst https://github.com/IIIM-IS/replicode/pull/165
+  * REVIEWING. simulation control in abduce_simulated_lhs https://github.com/IIIM-IS/replicode/pull/111
+  * REVIEWING. PTPX: Make a candidate model from every matching f_icst https://github.com/IIIM-IS/replicode/pull/165
 * Review/merge bug fix pull requests for:
-  * Fix bug in issue #29 for !def substitution inside strings https://github.com/IIIM-IS/replicode/pull/167
-  * Fix bug in ModelBase::MEntry::match for packed models https://github.com/IIIM-IS/replicode/pull/170
   * REPRODUCE. simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
 * Review diag_mode_rel_0_1 tags https://github.com/IIIM-IS/replicode/issues?q=is%3Aopen+is%3Aissue+milestone%3Adiag_mode_rel_0_1
 
