@@ -518,7 +518,6 @@ void GTPX::reduce(r_exec::View *input) { // input->object: f->success.
 
   auto analysis_starting_time = Now();
 
-  bool need_guard;
   if (target_->get_reference(0)->code(0).asOpcode() == Opcodes::MkVal)
     return; // this case will be handled by CTPXs.
 
