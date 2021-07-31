@@ -79,11 +79,11 @@ namespace r_exec {
 
 inline r_code::Code *PGMOverlay::getInputObject(uint16 i) const {
 
-  return input_views[i]->object_;
+  return input_views_[i]->object_;
 }
 
 inline r_code::View *PGMOverlay::getInputView(uint16 i) const {
 
-  return (r_code::View *)input_views[i];
+  return (r_code::View *)input_views_[i];
 }
 }

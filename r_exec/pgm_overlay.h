@@ -133,8 +133,8 @@ private:
   bool is_volatile_;
   Timestamp birth_time_; // used for ipgms: overlays older than ipgm->tsc are killed; birth_time set to the time of the first match, 0 if no match occurred.
 protected:
-  r_code::list<uint16> input_pattern_indices; // stores the input patterns still waiting for a match: will be plucked upon each successful match.
-  std::vector<P<r_code::View> > input_views; // copies of the inputs; vector updated at each successful match.
+  r_code::list<uint16> input_pattern_indices_; // stores the input patterns still waiting for a match: will be plucked upon each successful match.
+  std::vector<P<r_code::View> > input_views_; // copies of the inputs; vector updated at each successful match.
 
   typedef enum {
     SUCCESS = 0,
@@ -168,8 +168,8 @@ public:
   void reset() {
     InputLessPGMOverlay::reset();
     patch_indices_.clear();
-    input_views.clear();
-    input_pattern_indices.clear();
+    input_views_.clear();
+    input_pattern_indices_.clear();
     init();
   }
 

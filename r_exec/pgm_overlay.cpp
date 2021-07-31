@@ -545,10 +545,10 @@ PGMOverlay::PGMOverlay(PGMOverlay *original, uint16 last_input_index, uint16 val
 
   controller_ = original->controller_;
 
-  input_pattern_indices = original->input_pattern_indices;
-  input_pattern_indices.push_back(last_input_index); // put back the last original's input index.
-  for (uint16 i = 0; i < original->input_views.size() - 1; ++i) // ommit the last original's input view.
-    input_views.push_back(original->input_views[i]);
+  input_pattern_indices_ = original->input_pattern_indices_;
+  input_pattern_indices_.push_back(last_input_index); // put back the last original's input index.
+  for (uint16 i = 0; i < original->input_views_.size() - 1; ++i) // ommit the last original's input view.
+    input_views_.push_back(original->input_views_[i]);
 
   code_size_ = original->code_size_;
   code_ = new r_code::Atom[code_size_];
@@ -575,7 +575,7 @@ void PGMOverlay::init() {
   uint16 pattern_set_index = code_[PGM_INPUTS].asIndex();
   uint16 pattern_count = code_[pattern_set_index].getAtomCount();
   for (uint16 i = 1; i <= pattern_count; ++i)
-    input_pattern_indices.push_back(code_[pattern_set_index + i].asIndex());
+    input_pattern_indices_.push_back(code_[pattern_set_index + i].asIndex());
 
   birth_time_ = Timestamp(seconds(0));
 }
@@ -584,9 +584,9 @@ bool PGMOverlay::is_invalidated() {
 
   if (is_volatile_) {
 
-    for (uint32 i = 0; i < input_views.size(); ++i) {
+    for (uint32 i = 0; i < input_views_.size(); ++i) {
 
-      if (input_views[i]->object_->is_invalidated())
+      if (input_views_[i]->object_->is_invalidated())
         return (invalidated_ = 1);
     }
   }
@@ -664,14 +664,14 @@ Overlay *PGMOverlay::reduce(r_exec::View *input) {
   uint16 input_index;
   switch (match(input, input_index)) {
   case SUCCESS:
-    if (input_pattern_indices.size() == 0) { // all patterns matched.
+    if (input_pattern_indices_.size() == 0) { // all patterns matched.
 
       if (check_guards() && inject_productions()) {
 
         ((PGMController *)controller_)->notify_reduction();
         /*std::cout<<std::hex<<this<<std::dec<<" full match:";
-        for(uint16 i=0;i<input_views.size();++i)
-            std::cout<<" "<<input_views[i]->object->get_oid();
+        for(uint16 i=0;i<input_views_.size();++i)
+            std::cout<<" "<<input_views_[i]->object->get_oid();
         std::cout<<std::endl;*/
         PGMOverlay *offspring = new PGMOverlay(this, input_index, value_commit_index_);
         invalidate();
@@ -685,8 +685,8 @@ Overlay *PGMOverlay::reduce(r_exec::View *input) {
     } else { // create an overlay in a state where the last input is not matched: this overlay will be able to catch other candidates for the input patterns that have already been matched.
 
         /*std::cout<<std::hex<<this<<std::dec<<" partial match:";
-        for(uint16 i=0;i<input_views.size();++i)
-            std::cout<<" "<<input_views[i]->object->get_oid();
+        for(uint16 i=0;i<input_views_.size();++i)
+            std::cout<<" "<<input_views_[i]->object->get_oid();
         std::cout<<std::endl;*/
       PGMOverlay *offspring = new PGMOverlay(this, input_index, value_commit_index_);
       commit();
@@ -703,16 +703,16 @@ Overlay *PGMOverlay::reduce(r_exec::View *input) {
 
 PGMOverlay::MatchResult PGMOverlay::match(r_exec::View *input, uint16 &input_index) {
 
-  input_views.push_back(input);
+  input_views_.push_back(input);
   bool failed = false;
   r_code::list<uint16>::const_iterator it;
-  for (it = input_pattern_indices.begin(); it != input_pattern_indices.end(); ++it) {
+  for (it = input_pattern_indices_.begin(); it != input_pattern_indices_.end(); ++it) {
 
     MatchResult r = _match(input, *it);
     switch (r) {
     case SUCCESS:
       input_index = *it;
-      input_pattern_indices.erase(it);
+      input_pattern_indices_.erase(it);
       return r;
     case FAILURE:
       failed = true;
@@ -721,7 +721,7 @@ PGMOverlay::MatchResult PGMOverlay::match(r_exec::View *input, uint16 &input_ind
       break;
     }
   }
-  input_views.pop_back();
+  input_views_.pop_back();
   return failed ? FAILURE : IMPOSSIBLE;
 }
 
@@ -753,9 +753,9 @@ PGMOverlay::MatchResult PGMOverlay::_match(r_exec::View *input, uint16 pattern_i
 }
 
 PGMOverlay::MatchResult PGMOverlay::__match(r_exec::View *input, uint16 pattern_index) {
-  // The input has just been pushed on input_views (see match).
+  // The input has just been pushed on input_views_ (see match).
   // pgm_code[pattern_index+1].asIndex() is the structure pointed by the pattern's skeleton.
-  patch_input_code(code_[pattern_index + 1].asIndex(), input_views.size() - 1, 0);
+  patch_input_code(code_[pattern_index + 1].asIndex(), input_views_.size() - 1, 0);
   // match: evaluate the set of guards.
   uint16 guard_set_index = code_[pattern_index + 2].asIndex();
   // Get the IPGMContext like in InputLessPGMOverlay::evaluate.
@@ -796,11 +796,11 @@ Code *PGMOverlay::get_mk_rdx(uint16 &extent_index) const {
   mk_rdx->code(write_index++) = Atom::RPointer(0); // code.
   mk_rdx->add_reference(getObject());
   mk_rdx->code(write_index++) = Atom::IPointer(extent_index); // inputs.
-  mk_rdx->code(extent_index++) = Atom::Set(input_views.size());
-  for (uint16 i = 0; i < input_views.size(); ++i) {
+  mk_rdx->code(extent_index++) = Atom::Set(input_views_.size());
+  for (uint16 i = 0; i < input_views_.size(); ++i) {
 
     mk_rdx->code(extent_index++) = Atom::RPointer(i + 1);
-    mk_rdx->add_reference(input_views[i]->object_);
+    mk_rdx->add_reference(input_views_[i]->object_);
   }
   mk_rdx->code(write_index++) = Atom::IPointer(extent_index); // productions.
   mk_rdx->code(write_index++) = Atom::Float(1); // psln_thr.
@@ -818,7 +818,7 @@ Overlay *AntiPGMOverlay::reduce(r_exec::View *input) {
   uint16 input_index;
   switch (match(input, input_index)) {
   case SUCCESS:
-    if (input_pattern_indices.size() == 0) { // all patterns matched.
+    if (input_pattern_indices_.size() == 0) { // all patterns matched.
 
       if (check_guards()) {
 
