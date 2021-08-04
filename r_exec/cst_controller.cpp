@@ -246,6 +246,14 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
 
   for (uint16 i = 0; i < inputs_.size(); ++i) { // discard inputs that already matched.
 
+    if (inputs_[i]->is_invalidated()) {
+      // If we make an icst from this overlay, CSTController::get_f_icst will copy inputs_
+      // to the icst components_, and ICST::is_invalidated will see the invalidated
+      // component and mark the icst as invalidated before it is even injected. So just
+      // invalidate this overlay now.
+      invalidate();
+      return false;
+    }
     if (((_Fact *)input->object_) == inputs_[i])
       return false;
   }
