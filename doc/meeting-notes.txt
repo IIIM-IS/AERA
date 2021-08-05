@@ -636,18 +636,23 @@ Simulator
     * DONE. In signal, pass a copy of the stored binding map to check_simulated_imdl https://github.com/IIIM-IS/AERA/pull/172
   * DONE. Try goal for using mdl_ball_position twice.
 
+2021-08-05
+* hand-grab-sphere to simulate failure of "move first" and commit to "release first"
+  * DONE: Make pull request for calling abduce_simulated_imdl after abduce_simulated_lhs
+
 next meeting
-* pong.test
-  * Add paddle. Make goal for the ball to be at a position which requires moving the paddle to bounce it.
+* hand-grab-sphere to simulate failure of "move first" and commit to "release first"
 * Review/merge new functionality pull requests for:
   * REVIEWING. bindPattern to update timings https://github.com/IIIM-IS/replicode/pull/135
   * REVIEWING. simulation control in abduce_simulated_lhs https://github.com/IIIM-IS/replicode/pull/111
   * REVIEWING. PTPX: Make a candidate model from every matching f_icst https://github.com/IIIM-IS/replicode/pull/165
+  * Calling abduce_simulated_imdl after abduce_simulated_lhs https://github.com/IIIM-IS/AERA/pull/173
 * Review/merge bug fix pull requests for:
   * REPRODUCE. simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
 * Review diag_mode_rel_0_1 tags https://github.com/IIIM-IS/replicode/issues?q=is%3Aopen+is%3Aissue+milestone%3Adiag_mode_rel_0_1
 
 TODO
+* After merging PR #111: Pull request for abduce_simulated_lhs already_signalled.
 * TRY copy/paste code to check references to fix: Using = in guard of composite state of model https://github.com/IIIM-IS/replicode/issues/133
 * PTPX in hand-grab-sphere:
   * Option to always create new cst
@@ -657,6 +662,7 @@ TODO
     PrimaryMDLController::predict:1557 confidence = 0
     PMonitor::reduce:126 "a predicted counter evidence is stronger than the target: don't rate the model."
 * pong.test
+  * Add paddle. Make goal for the ball to be at a position which requires moving the paddle to bounce it.
   * mdl_122: Needed to put velocity in the cmd. Need a model builder to get it from the velocity fact.
   * Remove cst_ball_position, etc. and learn them.
   * Learn the exception "bounce" model.
