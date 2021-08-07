@@ -223,7 +223,7 @@ pgm_inject_drive:(pgm |[]
 []
    (inj []
       ; The end of the time interval will be used in m_drive as the end of the goal interval.
-      f_run:(fact run after (+ before 0s:300ms:0us) 1 1)
+      f_run:(fact run after (+ before 0s:400ms:0us) 1 1)
       |[]
    )
    (inj []
