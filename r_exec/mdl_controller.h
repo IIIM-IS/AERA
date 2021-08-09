@@ -271,6 +271,7 @@ public:
   void remove_requirement_from_rhs();
 
   bool is_requirement() const { return (requirement_type_ != NOT_A_REQUIREMENT); }
+  RequirementType get_requirement_type() const { return requirement_type_; }
   bool is_reuse() const { return is_reuse_; }
   bool is_cmd() const { return is_cmd_; }
 
