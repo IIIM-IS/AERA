@@ -302,7 +302,7 @@ MDLController::MDLController(r_code::View *view) : HLPController(view) {
   controllers_.resize(2);
 
   Code *rhs_ihlp = rhs_->get_reference(0);
-  is_requirement_ = NOT_A_REQUIREMENT;
+  requirement_type_ = NOT_A_REQUIREMENT;
   controllers_[RHSController] = NULL;
   uint16 rhs_opcode = rhs_ihlp->code(0).asOpcode();
   if (rhs_opcode == Opcodes::ICst ||
@@ -313,7 +313,7 @@ MDLController::MDLController(r_code::View *view) : HLPController(view) {
     if (rhs_hlp_v) {
 
       if (rhs_opcode == Opcodes::IMdl)
-        is_requirement_ = (rhs_->code(0).asOpcode() == Opcodes::AntiFact ? STRONG_REQUIREMENT : WEAK_REQUIREMENT);
+        requirement_type_ = (rhs_->code(0).asOpcode() == Opcodes::AntiFact ? STRONG_REQUIREMENT : WEAK_REQUIREMENT);
       controllers_[RHSController] = (HLPController *)rhs_hlp_v->controller_;
     }
   }
@@ -382,21 +382,21 @@ void MDLController::remove_monitor(PMonitor *m) {
 
 void MDLController::add_requirement_to_rhs() {
 
-  if (is_requirement_ != NOT_A_REQUIREMENT) {
+  if (requirement_type_ != NOT_A_REQUIREMENT) {
 
     HLPController *c = controllers_[RHSController];
     if (c)
-      c->add_requirement(is_requirement_ == STRONG_REQUIREMENT);
+      c->add_requirement(requirement_type_ == STRONG_REQUIREMENT);
   }
 }
 
 void MDLController::remove_requirement_from_rhs() {
 
-  if (is_requirement_ != NOT_A_REQUIREMENT) {
+  if (requirement_type_ != NOT_A_REQUIREMENT) {
 
     HLPController *c = controllers_[RHSController];
     if (c)
-      c->remove_requirement(is_requirement_ == STRONG_REQUIREMENT);
+      c->remove_requirement(requirement_type_ == STRONG_REQUIREMENT);
   }
 }
 
@@ -2133,7 +2133,7 @@ void PrimaryMDLController::register_pred_outcome(Fact *f_pred, bool success, _Fa
   if (confidence == 1) // else, evidence is an assumption: no rating.
     register_req_outcome(f_pred, success, rate_failures);
 
-  if (is_requirement_)
+  if (requirement_type_)
     return;
 
   _Fact *f_evidence = evidence;

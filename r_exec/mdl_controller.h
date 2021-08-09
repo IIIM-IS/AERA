@@ -195,7 +195,7 @@ protected:
     STRONG_REQUIREMENT = 2
   } RequirementType;
 
-  RequirementType is_requirement_;
+  RequirementType requirement_type_;
   bool is_reuse_;
   bool is_cmd_;
 
@@ -270,7 +270,7 @@ public:
   void add_requirement_to_rhs();
   void remove_requirement_from_rhs();
 
-  bool is_requirement() const { return (is_requirement_ != NOT_A_REQUIREMENT); }
+  bool is_requirement() const { return (requirement_type_ != NOT_A_REQUIREMENT); }
   bool is_reuse() const { return is_reuse_; }
   bool is_cmd() const { return is_cmd_; }
 
