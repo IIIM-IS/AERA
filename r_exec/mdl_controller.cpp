@@ -1866,18 +1866,18 @@ void PrimaryMDLController::abduce_no_simulation(Fact *f_super_goal, bool opposit
 {
   // Imitate PrimaryMDLController::reduce to set up the binding map.
   Goal *super_goal = f_super_goal->get_goal();
-  _Fact *goal_target = super_goal->get_target();
+  _Fact *f_goal_target = super_goal->get_target();
   P<HLPBindingMap> bm = new HLPBindingMap(bindings_);
-  bm->reset_bwd_timings(goal_target);
-  MatchResult match_result = bm->match_bwd_lenient(goal_target, get_rhs());
+  bm->reset_bwd_timings(f_goal_target);
+  MatchResult match_result = bm->match_bwd_lenient(f_goal_target, get_rhs());
   if (!(match_result == MATCH_SUCCESS_NEGATIVE || match_result == MATCH_SUCCESS_POSITIVE)) {
     // no match; however, goal_target may be f->imdl, i.e. case of a reuse of the model, i.e. the goal is for the model to make a prediction.
-    Code *imdl = goal_target->get_reference(0);
+    Code *imdl = f_goal_target->get_reference(0);
     if (imdl->code(0).asOpcode() == Opcodes::IMdl && imdl->get_reference(0) == getObject()) {
       // in that case, get the bm from the imdl, ignore the bwd guards.
       bm = new HLPBindingMap(bindings_);
-      bm->reset_bwd_timings(goal_target);
-      bm->init_from_f_ihlp(goal_target);
+      bm->reset_bwd_timings(f_goal_target);
+      bm->init_from_f_ihlp(f_goal_target);
     }
     else
       return;
@@ -1885,7 +1885,7 @@ void PrimaryMDLController::abduce_no_simulation(Fact *f_super_goal, bool opposit
 
   // Make a copy of f_super_goal with a separate identity. Use a Sim with 0 time horizon so we don't simulate.
   Goal* super_goal_copy = new Goal
-    (goal_target, super_goal->get_actor(), new Sim(SIM_ROOT, seconds(0), super_goal->get_sim()->get_f_super_goal(), false, this, 1),
+    (f_goal_target, super_goal->get_actor(), new Sim(SIM_ROOT, seconds(0), super_goal->get_sim()->get_f_super_goal(), false, this, 1),
      super_goal->get_psln_thr());
   P<Fact> f_super_goal_copy = new Fact(
     super_goal_copy, f_super_goal->get_after(), f_super_goal->get_before(), f_super_goal->get_cfd(),
