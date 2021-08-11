@@ -1896,7 +1896,6 @@ void PrimaryMDLController::abduce_no_simulation(Fact *f_super_goal, bool opposit
       " pred fact success -> fact (" << f_super_goal_copy->get_detail_oid() << ") goal");
 #endif
 
-  // Set allow_simulation false.
   abduce(bm, f_super_goal_copy, opposite, confidence);
 }
 
