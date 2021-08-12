@@ -640,8 +640,17 @@ Simulator
 * hand-grab-sphere to simulate failure of "move first" and commit to "release first"
   * DONE: Make pull request for calling abduce_simulated_imdl after abduce_simulated_lhs
 
+2021-08-12
+* DONE. Visualizer: Improve progress window. Set application icon.
+* DONE. Slides for workshop demo.
+* DONE. hand-grab-sphere to simulate failure of "move first" and commit to "release first"
+
 next meeting
-* hand-grab-sphere to simulate failure of "move first" and commit to "release first"
+* hand-grab-sphere-learn
+  * Need pull request for abduce_simulated_lhs already_signalled (after merging PR #111)
+  * Need pull request for first running reduction jobs that check strong requirements (non-monotonic)
+  * Need pull request for limiting the time interval of committed non-simulated command goals
+  * Need pull request for triggering move command after "release first" when "move first" already consumed the requirement
 * Review/merge new functionality pull requests for:
   * REVIEWING. bindPattern to update timings https://github.com/IIIM-IS/replicode/pull/135
   * REVIEWING. simulation control in abduce_simulated_lhs https://github.com/IIIM-IS/replicode/pull/111
@@ -652,7 +661,6 @@ next meeting
 * Review diag_mode_rel_0_1 tags https://github.com/IIIM-IS/replicode/issues?q=is%3Aopen+is%3Aissue+milestone%3Adiag_mode_rel_0_1
 
 TODO
-* After merging PR #111: Pull request for abduce_simulated_lhs already_signalled.
 * TRY copy/paste code to check references to fix: Using = in guard of composite state of model https://github.com/IIIM-IS/replicode/issues/133
 * PTPX in hand-grab-sphere:
   * Option to always create new cst
