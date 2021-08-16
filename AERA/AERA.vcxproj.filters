@@ -269,5 +269,8 @@
     <None Include="IODevices\TCP\Proto\ReadMe.md">
       <Filter>IODevices\TCP\Proto</Filter>
     </None>
+    <None Include="replicode_v1.2\hand-grab-sphere-learn.replicode">
+      <Filter>replicode_v1.2</Filter>
+    </None>
   </ItemGroup>
 </Project>
