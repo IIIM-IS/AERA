@@ -87,6 +87,8 @@ using r_code::Atom;
 
 namespace r_exec {
 
+class _ReductionJob; // For __take_input to return the job and help is_for_strong_requirement_ .
+
 /**
  * The TraceLevel enum defines bit positions for the "trace_levels" parameter
  * for "Debug" in settings.xml.
@@ -139,7 +141,7 @@ protected:
   CriticalSection reductionCS_;
 
   virtual void take_input(r_exec::View *input) {}
-  template<class C> void __take_input(r_exec::View *input) { // utility: to be called by sub-classes.
+  template<class C> _ReductionJob* __take_input(r_exec::View *input) { // utility: to be called by sub-classes.
 
     View *_view = new View(input);
     ReductionJob<C> *j = new ReductionJob<C>(input/*_view*/, (C *)this);
@@ -149,6 +151,7 @@ protected:
       input->object_->get_oid() << ")) for " << get_core_object()->get_oid());
 #endif
     _Mem::Get()->push_reduction_job(j);
+    return j;
   }
 
   Controller(r_code::View *view);
