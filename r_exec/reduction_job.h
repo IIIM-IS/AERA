@@ -92,6 +92,8 @@ public:
   Timestamp ijt_; // time of injection of the job in the pipe.
   virtual bool update(Timestamp now) = 0; // return false to shutdown the reduction core.
   virtual void debug() {}
+  // Temporary until a strong requirement can retroactively invalidate. See https://github.com/IIIM-IS/AERA/pull/174
+  bool is_for_strong_requirement_;
   uint32 get_job_id() { return job_id_; }
 private:
   static uint32 job_count_;

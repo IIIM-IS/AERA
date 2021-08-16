@@ -535,7 +535,11 @@ void _Mem::run_in_diagnostic_time(milliseconds run_time) {
         if (reduction_job == NULL)
           // No more reduction jobs.
           break;
-        reduction_job_queue.push_back(reduction_job);
+        if (reduction_job->is_for_strong_requirement_)
+          // See https://github.com/IIIM-IS/AERA/pull/174
+          reduction_job_queue.insert(reduction_job_queue.begin(), reduction_job);
+        else
+          reduction_job_queue.push_back(reduction_job);
       }
 
       size_t n_jobs_to_run = min(reduction_job_queue.size(), max_reduction_jobs_per_cycle);

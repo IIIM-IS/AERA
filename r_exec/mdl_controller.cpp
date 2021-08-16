@@ -1531,7 +1531,7 @@ void PrimaryMDLController::take_input(r_exec::View *input) {
 
   if (input->object_->code(0).asOpcode() == Opcodes::Fact ||
     input->object_->code(0).asOpcode() == Opcodes::AntiFact) // discard everything but facts and |facts.
-    Controller::__take_input<PrimaryMDLController>(input);
+    Controller::__take_input<PrimaryMDLController>(input)->is_for_strong_requirement_ = (requirement_type_ == STRONG_REQUIREMENT);
 }
 
 void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground) {
