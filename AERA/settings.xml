@@ -43,7 +43,7 @@
       decompilation_file_path="decompiled_objects.txt"
       ignore_named_objects="no"
       write_objects="no"
-      objects_path="../Test/objects.replicode.image"
+      objects_path="../AERA/objects.replicode.image"
       test_objects="no"
     />
   </Debug>
@@ -53,7 +53,7 @@
       decompile_models="yes"
       ignore_named_models="no"
       write_models="no"
-      models_path="../Test/models.replicode.image"
+      models_path="../AERA/models.replicode.image"
       test_models="no"
     />
   </Run>
