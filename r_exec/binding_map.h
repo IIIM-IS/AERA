@@ -277,6 +277,20 @@ public:
 
   void reset_fwd_timings(_Fact *reference_fact); // reset after and before from the timings of the reference object.
 
+  /**
+   * Match the given time interval to the time interval at this binding map's fwd_after_index_ and fwd_before_index_,
+   * updating this binding map's values to "narrow" them to the given time interval if needed.
+   * This assumes you have already called has_fwd_after() and has_fwd_before() to make sure that there are
+   * valid Timestamp bindings at fwd_after_index_ and fwd_before_index_.
+   * \param after The beginning of the time interval to compare with this binding map's fwd time interval.
+   * \param before The end of the time interval to compare with this binding map's fwd time interval.
+   * \return True if the time intervals match, in which case this binding maps' values may have been updated
+   * to "narrow" the time interval.
+   */
+  bool match_fwd_timings(Timestamp after, Timestamp before) {
+    return match_timings(get_fwd_after(), get_fwd_before(), after, before, fwd_after_index_, fwd_before_index_);
+  }
+
   MatchResult match_fwd_lenient(const _Fact *f_object, const _Fact *f_pattern); // use for facts when we are lenient about fact vs |fact.
   bool match_fwd_strict(const _Fact *f_object, const _Fact *f_pattern); // use for facts when we need sharp match.
 

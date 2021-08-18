@@ -741,7 +741,7 @@ bool BindingMap::match_timings(Timestamp stored_after, Timestamp stored_before, 
 
 bool BindingMap::match_fwd_timings(const _Fact *f_object) {
 
-  return match_timings(get_fwd_after(), get_fwd_before(), f_object->get_after(), f_object->get_before(), fwd_after_index_, fwd_before_index_);
+  return match_fwd_timings(f_object->get_after(), f_object->get_before());
 }
 
 bool BindingMap::match_fwd_strict(const _Fact *f_object, const _Fact *f_pattern) {
