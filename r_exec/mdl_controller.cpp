@@ -1653,15 +1653,20 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
 
     // In the Pred constructor, we already copied the simulations from prediction.
     HLPController::inject_prediction(production, confidence); // inject a simulated prediction in the primary group.
+    string ground_info;
+#ifdef WITH_DETAIL_OID
+    if (ground)
+      ground_info = ", using req (" + to_string(ground->get_detail_oid()) + ")";
+#endif
     OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": fact " <<
-      input->get_oid() << " pred -> fact " << production->get_oid() << " simulated pred");
+      input->get_oid() << " pred -> fact " << production->get_oid() << " simulated pred" << ground_info);
 
     if (is_cmd()) {
       // Inject the predicted imdl, in case other models are reusing this model.
       Fact *f_pred_f_imdl = new Fact(new Pred(f_imdl, prediction, 1), now, now, 1, 1);
       HLPController::inject_prediction(f_pred_f_imdl, confidence);
       OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": fact " <<
-        input->get_oid() << " pred -> fact " << f_pred_f_imdl->get_oid() << " simulated pred");
+        input->get_oid() << " pred -> fact " << f_pred_f_imdl->get_oid() << " simulated pred" << ground_info);
     }
   }
 }
