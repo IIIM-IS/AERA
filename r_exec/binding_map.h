@@ -233,7 +233,7 @@ protected:
   int16 fwd_before_index_;
 
   bool match_timings(Timestamp stored_after, Timestamp stored_before, Timestamp after, Timestamp before, uint32 destination_after_index, uint32 destination_before_index);
-  bool match_fwd_timings(const _Fact *f_object, const _Fact *f_pattern);
+  bool match_fwd_timings(const _Fact *f_object);
   bool match(const r_code::Code *object, uint16 o_base_index, uint16 o_index, const r_code::Code *pattern, uint16 p_index, uint16 o_arity);
 
   void abstract_member(r_code::Code *object, uint16 index, r_code::Code *abstracted_object, uint16 write_index, uint16 &extent_index, bool allow_shared_variable = true);

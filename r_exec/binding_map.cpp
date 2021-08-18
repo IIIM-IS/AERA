@@ -739,7 +739,7 @@ bool BindingMap::match_timings(Timestamp stored_after, Timestamp stored_before, 
   }
 }
 
-bool BindingMap::match_fwd_timings(const _Fact *f_object, const _Fact *f_pattern) {
+bool BindingMap::match_fwd_timings(const _Fact *f_object) {
 
   return match_timings(get_fwd_after(), get_fwd_before(), f_object->get_after(), f_object->get_before(), fwd_after_index_, fwd_before_index_);
 }
@@ -751,7 +751,7 @@ bool BindingMap::match_fwd_strict(const _Fact *f_object, const _Fact *f_pattern)
     if (f_object->code(0) != f_pattern->code(0))
       return false;
 
-    return match_fwd_timings(f_object, f_pattern);
+    return match_fwd_timings(f_object);
   } else
     return false;
 }
@@ -766,7 +766,7 @@ MatchResult BindingMap::match_fwd_lenient(const _Fact *f_object, const _Fact *f_
     else
       r = MATCH_SUCCESS_NEGATIVE;
 
-    if (match_fwd_timings(f_object, f_pattern))
+    if (match_fwd_timings(f_object))
       return r;
     return MATCH_FAILURE;
   } else
