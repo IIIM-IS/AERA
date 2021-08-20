@@ -1531,8 +1531,12 @@ void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *c
     g_monitorsCS_.leave();
 
     reduce_cache<PrimaryMDLController>((Fact *)f_p_f_imdl, controller);
-  } else if (!is_simulation)
-    _store_requirement(&requirements_.negative_evidences, e);
+  }
+  else {
+    // Negative requirement.
+    if (!is_simulation)
+      _store_requirement(&requirements_.negative_evidences, e);
+  }
 
   if (!is_simulation)
     secondary_->store_requirement(f_p_f_imdl, controller, chaining_was_allowed, false);
