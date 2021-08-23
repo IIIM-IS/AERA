@@ -1536,6 +1536,8 @@ void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *c
     // Negative requirement.
     if (!is_simulation)
       _store_requirement(&requirements_.negative_evidences, e);
+    else
+      _store_requirement(&simulated_requirements_.negative_evidences, e);
   }
 
   if (!is_simulation)
