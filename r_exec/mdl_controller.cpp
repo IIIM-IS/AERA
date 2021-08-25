@@ -2208,17 +2208,15 @@ void PrimaryMDLController::register_req_outcome(Fact *f_pred, bool success, bool
   UNORDERED_MAP<P<_Fact>, RequirementsPair, PHash<_Fact> >::const_iterator r = active_requirements_.find(f_pred);
   if (r != active_requirements_.end()) { // some requirements were controlling the prediction: give feedback.
 
-    for (uint32 i = 0; i < r->second.weak_requirements_.controllers.size(); ++i) {
+    for (auto c = r->second.weak_requirements_.controllers.begin(); c != r->second.weak_requirements_.controllers.end(); ++c) {
 
-      MDLController *c = r->second.weak_requirements_.controllers[i];
-      if (!c->is_invalidated())
-        c->register_req_outcome(r->second.weak_requirements_.f_imdl, success, r->second.weak_requirements_.chaining_was_allowed);
+      if (!(*c)->is_invalidated())
+        (*c)->register_req_outcome(r->second.weak_requirements_.f_imdl, success, r->second.weak_requirements_.chaining_was_allowed);
     }
-    for (uint32 i = 0; i < r->second.strong_requirements_.controllers.size(); ++i) {
+    for (auto c = r->second.strong_requirements_.controllers.begin(); c != r->second.strong_requirements_.controllers.end(); ++c) {
 
-      MDLController *c = r->second.strong_requirements_.controllers[i];
-      if (!c->is_invalidated())
-        c->register_req_outcome(r->second.strong_requirements_.f_imdl, !success, r->second.strong_requirements_.chaining_was_allowed);
+      if (!(*c)->is_invalidated())
+        (*c)->register_req_outcome(r->second.strong_requirements_.f_imdl, !success, r->second.strong_requirements_.chaining_was_allowed);
     }
     active_requirements_.erase(r);
   }
@@ -2654,10 +2652,10 @@ void SecondaryMDLController::register_req_outcome(Fact *f_imdl, bool success, bo
     UNORDERED_MAP<P<_Fact>, RequirementsPair, PHash<_Fact> >::const_iterator r = active_requirements_.find(f_imdl);
     if (r != active_requirements_.end()) { // some requirements were controlling the prediction: give feedback.
 
-      for (uint32 i = 0; i < r->second.weak_requirements_.controllers.size(); ++i) {
+      for (auto c = r->second.weak_requirements_.controllers.begin(); c != r->second.weak_requirements_.controllers.end(); ++c) {
 
-        if (!r->second.weak_requirements_.controllers[i]->is_invalidated())
-          r->second.weak_requirements_.controllers[i]->register_req_outcome(
+        if (!(*c)->is_invalidated())
+          (*c)->register_req_outcome(
             r->second.weak_requirements_.f_imdl, success, r->second.weak_requirements_.chaining_was_allowed);
       }
       active_requirements_.erase(r);
