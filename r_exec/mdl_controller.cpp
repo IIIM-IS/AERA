@@ -810,7 +810,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
     // JTNote: We set ground = NULL above, so this is never true.
     if (ground != NULL) { // an imdl triggered the reduction of the cache.
 
-      r_p.weak_requirements_.controllers.push_back(req_controller);
+      r_p.weak_requirements_.controllers.insert(req_controller);
       r_p.weak_requirements_.f_imdl = ground;
       r_p.weak_requirements_.chaining_was_allowed = true;
       return WEAK_REQUIREMENT_ENABLED;
@@ -850,7 +850,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
             //std::cout<<"Chosen IMDL: "<<imdl->code(tpl_index+1).asFloat()<<" ["<<Time::ToString_seconds((*e).after-Utils::GetTimeReference())<<" "<<Time::ToString_seconds((*e).before-Utils::GetTimeReference())<<"]"<<std::endl;
           }
 
-          r_p.weak_requirements_.controllers.push_back((*e).controller_);
+          r_p.weak_requirements_.controllers.insert((*e).controller_);
           r_p.weak_requirements_.f_imdl = _f_imdl;
           r_p.weak_requirements_.chaining_was_allowed = (*e).chaining_was_allowed_;
         }
@@ -884,7 +884,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
             if (r == WEAK_REQUIREMENT_ENABLED && (*e).chaining_was_allowed_) // first match.
               r = STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT;
 
-            r_p.strong_requirements_.controllers.push_back((*e).controller_);
+            r_p.strong_requirements_.controllers.insert((*e).controller_);
             r_p.strong_requirements_.f_imdl = _f_imdl;
             r_p.strong_requirements_.chaining_was_allowed = (*e).chaining_was_allowed_;
           }
@@ -920,7 +920,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
               r = STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT;
             }
 
-            r_p.strong_requirements_.controllers.push_back((*e).controller_);
+            r_p.strong_requirements_.controllers.insert((*e).controller_);
             r_p.strong_requirements_.f_imdl = _f_imdl;
             r_p.strong_requirements_.chaining_was_allowed = (*e).chaining_was_allowed_;
           }
@@ -936,7 +936,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
         if (confidence > negative_cfd) {
 
           r = WEAK_REQUIREMENT_ENABLED;
-          r_p.weak_requirements_.controllers.push_back(req_controller);
+          r_p.weak_requirements_.controllers.insert(req_controller);
           r_p.weak_requirements_.f_imdl = ground;
           r_p.weak_requirements_.chaining_was_allowed = true;
           wr_enabled = true;
@@ -969,7 +969,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
               bm->load(&_original);
             }
 
-            r_p.weak_requirements_.controllers.push_back((*e).controller_);
+            r_p.weak_requirements_.controllers.insert((*e).controller_);
             r_p.weak_requirements_.f_imdl = _f_imdl;
             r_p.weak_requirements_.chaining_was_allowed = (*e).chaining_was_allowed_;
           }

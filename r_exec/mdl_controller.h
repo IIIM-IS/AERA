@@ -121,7 +121,7 @@ public:
 class MDLController;
 class Requirements {
 public:
-  std::vector<P<MDLController> > controllers;
+  std::unordered_set<P<MDLController>, r_code::PHash<MDLController> > controllers;
   P<_Fact> f_imdl; // f1 as in f0->pred->f1->imdl.
   bool chaining_was_allowed;
 };
