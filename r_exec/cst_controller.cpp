@@ -437,17 +437,10 @@ void CSTController::reduce(r_exec::View *input) {
       else {
 
         match = ((CSTOverlay *)*o)->reduce(input, offspring);
-        if (offspring) {
+        if (offspring)
           overlays_.push_front(offspring);
-          ++o;
-        }
-        else if (match) {
-          // full match: no offspring.
-          (*o)->invalidate();
-          o = overlays_.erase(o);
-        }
-        else
-          ++o;
+
+        ++o;
       }
     }
     reductionCS_.leave();
