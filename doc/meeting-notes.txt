@@ -652,20 +652,24 @@ Simulator
 * Review/merge new functionality pull requests for:
   * DONE. Adding to simulated_requirements_.negative_evidences https://github.com/IIIM-IS/AERA/pull/176
 
+2021-08-26
+* hand-grab-sphere-learn
+  * DONE. Allow "cube only" anti-requirement model for grab. Babble to unlearn it.
+
 next meeting
 * hand-grab-sphere-learn
-  * Allow "cube only" anti-requirement model for grab. Babble to unlearn it.
-  * Make pull request for matching a requirement from the same Sim branch
+  * Try "loosening" SYNC_ONCE in M3 so that it will fire M2 for both s and c.
   * Make pull request for triggering move command after "release first" when "move first" already consumed the requirement
-  * Make pull request to not use an icst if a fact's value has been updated in the Sim branch
+  * Make pull request for matching a requirement from the same Sim branch
   * Make pull request for abduce_simulated_lhs already_signalled (after merging PR #111)
+  * Make pull request to not use an icst if a fact's value has been updated in the Sim branch (after merging PR #135)
   * Make pull request for making a CSTOverlay for each match of a member (after merging PR #135)
 * Review/merge new functionality pull requests for:
   * REVIEWING. bindPattern to update timings https://github.com/IIIM-IS/replicode/pull/135
   * REVIEWING. simulation control in abduce_simulated_lhs https://github.com/IIIM-IS/replicode/pull/111
   * REVIEWING. PTPX: Make a candidate model from every matching f_icst https://github.com/IIIM-IS/replicode/pull/165
   * Calling abduce_simulated_imdl after abduce_simulated_lhs https://github.com/IIIM-IS/AERA/pull/173
-  * First running reduction jobs that check strong requirements (non-monotonic) https://github.com/IIIM-IS/AERA/pull/174
+  * Running reduction jobs that check strong requirements before other jobs (non-monotonic) https://github.com/IIIM-IS/AERA/pull/174
   * Limiting the time interval of committed non-simulated command goals https://github.com/IIIM-IS/AERA/pull/175
 * Review/merge bug fix pull requests for:
   * REPRODUCE. simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
