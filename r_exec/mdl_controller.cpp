@@ -2322,7 +2322,12 @@ void PrimaryMDLController::rate_model(bool success) {
 
       evidence_count = (uint32)(1 / success_rate);
       success_rate = 1;
-      model->code(MDL_STRENGTH) = Atom::Float(1);
+      float32 new_strength = 1;
+      if (new_strength != strength) {
+        strength = new_strength;
+        model->code(MDL_STRENGTH) = Atom::Float(strength);
+        OUTPUT_LINE(MDL_REV, Utils::RelativeTime(Now()) << " mdl " << model->get_oid() << " strength:" << strength);
+      }
     }
 
     model->code(MDL_CNT) = Atom::Float(evidence_count);
