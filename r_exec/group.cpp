@@ -1145,7 +1145,7 @@ void Group::inject_reduction_jobs(View *view) { // group is assumed to be c-sali
 
   // build reduction jobs from host's own inputs and overlays from viewing groups, if no cov and view is not a notification.
   // NB: visibility is not transitive;
-  // no shadowing: if a view alresady exists in the viewing group, there will be twice the reductions: all of the identicals will be trimmed down at injection time.
+  // no shadowing: if a view already exists in the viewing group, there will be twice the reductions: all of the identicals will be trimmed down at injection time.
   UNORDERED_MAP<Group *, bool>::const_iterator vg;
   for (vg = viewing_groups_.begin(); vg != viewing_groups_.end(); ++vg) {
 
