@@ -2628,18 +2628,25 @@ void SecondaryMDLController::rate_model() { // acknowledge successes only; the p
   float32 success_rate = success_count / evidence_count; // no trimming.
   model->code(MDL_SR) = Atom::Float(success_rate);
 
+  bool is_phased_in = false;
   if (success_rate > primary_->getView()->get_host()->get_act_thr()) {
 
     getView()->set_act(0);
     primary_->getView()->set_act(success_rate); // activate the primary controller in its own group g: will be performmed at the nex g->upr.
     codeCS_.leave();
     OUTPUT_LINE(MDL_REV, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " phased in ");
+    is_phased_in = true;
   } else { // will trigger primary->gain_activation() at the next g->upr.
 
     if (success_rate > getView()->get_host()->get_act_thr()) // else: leave the model in the secondary group.
       getView()->set_act(success_rate);
     codeCS_.leave();
   }
+  OUTPUT_LINE(MDL_REV, Utils::RelativeTime(Now()) << " mdl " << model->get_oid() << " cnt:" << evidence_count << " sr:" << success_rate);
+
+  // Delay logging this message until after logging the updated success rate.
+  if (is_phased_in)
+    OUTPUT_LINE(MDL_REV, Utils::RelativeTime(Now()) << " mdl " << model->get_oid() << " phased in");
 }
 
 void SecondaryMDLController::register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures) { // success==false means executed in the thread of a time core; otherwise, executed in the same thread as for Controller::reduce().
