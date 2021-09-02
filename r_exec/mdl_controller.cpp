@@ -2634,7 +2634,6 @@ void SecondaryMDLController::rate_model() { // acknowledge successes only; the p
     getView()->set_act(0);
     primary_->getView()->set_act(success_rate); // activate the primary controller in its own group g: will be performmed at the nex g->upr.
     codeCS_.leave();
-    OUTPUT_LINE(MDL_REV, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << " phased in ");
     is_phased_in = true;
   } else { // will trigger primary->gain_activation() at the next g->upr.
 
