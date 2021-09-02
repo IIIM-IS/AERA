@@ -2617,8 +2617,8 @@ void SecondaryMDLController::rate_model() { // acknowledge successes only; the p
     return;
   }
 
-  uint32 evidence_count = model->code(MDL_CNT).asFloat();
-  uint32 success_count = model->code(MDL_SR).asFloat()*evidence_count;
+  float32 evidence_count = model->code(MDL_CNT).asFloat();
+  float32 success_count = model->code(MDL_SR).asFloat()*evidence_count;
 
   ++evidence_count;
   model->code(MDL_DSR) = model->code(MDL_SR);
