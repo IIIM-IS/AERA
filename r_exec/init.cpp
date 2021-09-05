@@ -216,7 +216,7 @@ void TDecompiler::add_objects(const std::vector<P<Code> > &objects) {
 
 void TDecompiler::decompile() {
 
-  if (_Mem::Get()->get_reduction_core_count() == 0 && _Mem::Get()->get_time_core_count())
+  if (_Mem::Get()->get_reduction_core_count() == 0 && _Mem::Get()->get_time_core_count() == 0)
     // We are running in diagnostic time with deterministic execution. Call Decompile in the current thread.
     Decompile(this);
   else {
