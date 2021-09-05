@@ -652,12 +652,13 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
   }
 }
 
-ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl, Controller *root, Fact *&ground) {
+ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl, Controller *root, Fact *&ground, Fact *&strong_requirement_ground) {
 
   uint32 wr_count;
   uint32 sr_count;
   uint32 r_count = get_requirement_count(wr_count, sr_count);
   ground = NULL;
+  strong_requirement_ground = NULL;
   if (!r_count)
     return NO_REQUIREMENT;
   ChainingStatus r;
@@ -718,6 +719,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
             if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) { // tpl args will be valuated in bm.
 
               bm->load(&_original);
+              strong_requirement_ground = (*e).evidence_;
               requirements_.CS.leave();
               return STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT;
             }
@@ -752,6 +754,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
               negative_cfd = (*e).confidence_;
               r = STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT;
               bm->load(&_original);
+              strong_requirement_ground = (*e).evidence_;
               break;
             }
           }
@@ -780,8 +783,11 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
                 bm->load(&_original);
                 ground = (*e).evidence_;
                 break;
-              } else
+              } else {
+                // For informational purposes, set ground in case this returns STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
+                ground = (*e).evidence_;
                 r = STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
+              }
             }
           }
           ++e;
@@ -1829,6 +1835,7 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
     }
 
     Fact *ground;
+    Fact *strong_requirement_ground;
     switch (retrieve_imdl_bwd(bm, f_imdl, ground)) {
     case WEAK_REQUIREMENT_ENABLED:
       f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(true);
@@ -1839,7 +1846,7 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
         abduce_simulated_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim, ground);
       break;
     default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
-      switch (retrieve_simulated_imdl_bwd(bm, f_imdl, sim->root_, ground)) {
+      switch (retrieve_simulated_imdl_bwd(bm, f_imdl, sim->root_, ground, strong_requirement_ground)) {
       case WEAK_REQUIREMENT_ENABLED:
         f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(true);
       case NO_REQUIREMENT:
@@ -2105,6 +2112,7 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, C
   Fact *f_imdl = (Fact *)g->get_target();
   ChainingStatus c_s;
   Fact *ground;
+  Fact *strong_requirement_ground;
   if (root)
     c_s = retrieve_simulated_imdl_bwd(bm, f_imdl, root, ground);
   else
@@ -2126,6 +2134,14 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, C
     }
     return false;
   default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
+#ifdef WITH_DETAIL_OID
+    if (c_s == STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT && root && ground && strong_requirement_ground)
+      // A strong requirement blocked the weak requirement. Just log the result.
+      OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": fact (" <<
+        to_string(ground->get_detail_oid()) << ") pred fact imdl, from goal req " << goal->get_oid() <<
+        ", simulated pred blocked by fact(" << to_string(strong_requirement_ground->get_detail_oid()) <<
+        ") pred |fact imdl");
+#endif
     return false;
   }
 }
