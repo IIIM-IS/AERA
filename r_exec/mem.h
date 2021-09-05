@@ -235,6 +235,8 @@ public:
   std::chrono::microseconds get_sampling_period() const { return 2 * base_period_; }
   uint64 get_probe_level() const { return probe_level_; }
   bool get_enable_assumptions() const { return enable_assumptions_; }
+  uint32 get_reduction_core_count() const { return reduction_core_count_; }
+  uint32 get_time_core_count() const { return time_core_count_; }
   float32 get_mdl_inertia_sr_thr() const { return mdl_inertia_sr_thr_; }
   uint32 get_mdl_inertia_cnt_thr() const { return mdl_inertia_cnt_thr_; }
   float32 get_tpx_dsr_thr() const { return tpx_dsr_thr_; }
