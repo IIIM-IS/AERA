@@ -216,8 +216,13 @@ void TDecompiler::add_objects(const std::vector<P<Code> > &objects) {
 
 void TDecompiler::decompile() {
 
-  thread_ = Thread::New<_Thread>(Decompile, this);
-  while (spawned_ == 0);
+  if (_Mem::Get()->get_reduction_core_count() == 0 && _Mem::Get()->get_time_core_count())
+    // We are running in diagnostic time with deterministic execution. Call Decompile in the current thread.
+    Decompile(this);
+  else {
+    thread_ = Thread::New<_Thread>(Decompile, this);
+    while (spawned_ == 0);
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
