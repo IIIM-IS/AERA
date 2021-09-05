@@ -2114,7 +2114,7 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, C
   Fact *ground;
   Fact *strong_requirement_ground;
   if (root)
-    c_s = retrieve_simulated_imdl_bwd(bm, f_imdl, root, ground);
+    c_s = retrieve_simulated_imdl_bwd(bm, f_imdl, root, ground, strong_requirement_ground);
   else
     c_s = retrieve_imdl_bwd(bm, f_imdl, ground);
 
