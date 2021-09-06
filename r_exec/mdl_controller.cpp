@@ -2139,7 +2139,7 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, C
       // A strong requirement blocked the weak requirement. Just log the result.
       OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": fact (" <<
         to_string(ground->get_detail_oid()) << ") pred fact imdl, from goal req " << goal->get_oid() <<
-        ", simulated pred blocked by fact (" << to_string(strong_requirement_ground->get_detail_oid()) <<
+        ", simulated pred disabled by fact (" << to_string(strong_requirement_ground->get_detail_oid()) <<
         ") pred |fact imdl");
 #endif
     return false;
