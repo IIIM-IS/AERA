@@ -656,16 +656,27 @@ Simulator
 * hand-grab-sphere-learn
   * DONE. Allow "cube only" anti-requirement model for grab. Babble to unlearn it.
 
+2021-09-02
+* hand-grab-sphere-learn
+  * DONE: Try injecting a new icst in the next Sim frame.
+* sensorimotor-letters
+  * DONE. Make 512 fovea patterns, models for move to top-center, bottom-center
+  * DONE. Try model "phase out" and "phase in"
+      RESULT: Phase out to secondary group works. In auto_focus, need to add secondary group.
+      DONE. Pull request to fix SecondaryMDLController::rate_model() https://github.com/IIIM-IS/AERA/pull/177
+
 next meeting
+* sensorimotor-letters
+  * DONE. Test phase in allowing anti-requirements as designed.
+      (When we saw the anti-requirements deleted, it was when the main model was relevant.)
 * hand-grab-sphere-learn
   * Try "loosening" SYNC_ONCE in M3 so that it will fire M2 for both s and c.
-  * Make pull request for triggering move command after "release first" when "move first" already consumed the requirement
+  * Make pull request for making an icst in the next frame of a Sim branch.
   * Make pull request for matching a requirement from the same Sim branch
   * Make pull request for abduce_simulated_lhs already_signalled (after merging PR #111)
   * Make pull request to not use an icst if a fact's value has been updated in the Sim branch (after merging PR #135)
   * Make pull request for making a CSTOverlay for each match of a member (after merging PR #135)
 * Review/merge new functionality pull requests for:
-  * REVIEWING. bindPattern to update timings https://github.com/IIIM-IS/replicode/pull/135
   * REVIEWING. simulation control in abduce_simulated_lhs https://github.com/IIIM-IS/replicode/pull/111
   * REVIEWING. PTPX: Make a candidate model from every matching f_icst https://github.com/IIIM-IS/replicode/pull/165
   * Calling abduce_simulated_imdl after abduce_simulated_lhs https://github.com/IIIM-IS/AERA/pull/173
@@ -722,7 +733,7 @@ _ _ _ _ Learn models in goal targeted pattern extractor (GTPX) due to unexpected
 Y Y _ _ Non-simulated icst from facts/icsts
 Y Y _ _ Non-simulated prediction of imdl from weak requirement model
 Y _ _ _ Rating of weak requirement models
-_ _ _ _ Testing and re-activation of models and weak requirement models in the secondary group
+Y Y _ _ Testing and re-activation of models and weak requirement models in the secondary group
 _ _ _ _ Use of deleted models to prevent re-creating them
 Y Y _ _ Non-simulated prediction of fact from model
 Y _ _ _ Non-simulated cmd from non-simulated goal RHS
