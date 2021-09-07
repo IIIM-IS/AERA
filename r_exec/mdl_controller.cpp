@@ -215,7 +215,7 @@ bool PrimaryMDLOverlay::check_simulated_chaining(HLPBindingMap *bm, Fact *f_imdl
 
   for (uint32 i = 0; i < prediction->get_simulations_size(); ++i) {
 
-    switch (((MDLController *)controller_)->retrieve_simulated_imdl_fwd(bm, f_imdl, prediction->get_simulation(i)->root_, ground)) {
+    switch (((MDLController *)controller_)->retrieve_simulated_imdl_fwd(bm, f_imdl, prediction->get_simulation(i), ground)) {
     case NO_REQUIREMENT:
     case WEAK_REQUIREMENT_ENABLED:
       return true;
@@ -508,7 +508,7 @@ public:
   bool have_saved_template_timings_;
 };
 
-ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl, Controller *root, Fact *&ground) {
+ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl, Sim* sim, Fact *&ground) {
 
   uint32 wr_count;
   uint32 sr_count;
@@ -531,7 +531,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
         e = simulated_requirements_.positive_evidences.erase(e);
       else {
 
-        if ((*e).evidence_->get_pred()->get_simulation(root)) {
+        if ((*e).evidence_->get_pred()->get_simulation(sim->root_)) {
 
           _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
           //_f_imdl->get_reference(0)->trace();
@@ -570,7 +570,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
           e = simulated_requirements_.negative_evidences.erase(e);
         else {
 
-          if ((*e).evidence_->get_pred()->get_simulation(root)) {
+          if ((*e).evidence_->get_pred()->get_simulation(sim->root_)) {
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
             HLPBindingMap _original = original; // matching updates the bm; always start afresh.
@@ -601,7 +601,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
           e = simulated_requirements_.negative_evidences.erase(e);
         else {
 
-          if ((*e).evidence_->get_pred()->get_simulation(root)) {
+          if ((*e).evidence_->get_pred()->get_simulation(sim->root_)) {
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
             HLPBindingMap _original = original; // matching updates the bm; always start afresh.
@@ -625,7 +625,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
         else {
           //(*e).f->get_reference(0)->trace();
           //f->get_reference(0)->trace();
-          if ((*e).evidence_->get_pred()->get_simulation(root)) {
+          if ((*e).evidence_->get_pred()->get_simulation(sim->root_)) {
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
             HLPBindingMap _original = original; // matching updates the bm; always start afresh.

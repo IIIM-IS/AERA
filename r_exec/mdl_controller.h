@@ -263,7 +263,7 @@ public:
   virtual void store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed) = 0;
   ChainingStatus retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl, RequirementsPair &r_p, Fact *&ground, MDLController *req_controller, bool &wr_enabled); // checks the requirement instances during fwd; r_p: all wrs in first, all srs in second.
   ChainingStatus retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl, Fact *&ground); // checks the requirement instances during bwd; ground is set to the best weak requirement if chaining allowed, NULL otherwise.
-  ChainingStatus retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl, Controller *root, Fact *&ground);
+  ChainingStatus retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl, Sim* sim, Fact *&ground);
   ChainingStatus retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl, Controller *root, Fact *&ground, Fact *&strong_requirement_ground);
 
   virtual void predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground) = 0;
