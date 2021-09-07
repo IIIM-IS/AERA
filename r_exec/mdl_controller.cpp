@@ -2611,14 +2611,13 @@ void SecondaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_im
   add_monitor(m);
 }
 
-void SecondaryMDLController::store_requirement(_Fact *f_imdl, MDLController *controller, bool chaining_was_allowed) {
+void SecondaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed) {
 
-  Code *mdl = f_imdl->get_reference(0);
-  RequirementEntry e(f_imdl, controller, chaining_was_allowed);
-  if (f_imdl->is_fact()) {
+  RequirementEntry e(f_p_f_imdl, controller, chaining_was_allowed);
+  if (((_Fact*)f_p_f_imdl->get_reference(0)->get_reference(0))->is_fact()) {
 
     _store_requirement(&requirements_.positive_evidences, e);
-    reduce_cache<SecondaryMDLController>((Fact *)f_imdl, controller);
+    reduce_cache<SecondaryMDLController>((Fact *)f_p_f_imdl, controller);
   } else
     _store_requirement(&requirements_.negative_evidences, e);
 }
