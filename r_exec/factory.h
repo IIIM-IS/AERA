@@ -401,6 +401,13 @@ public:
    */
   Sim *get_simulation(Controller *root) const;
 
+  /**
+   * Check if the list of simulations has the given sim.
+   * \param sim The Sim to check for.
+   * \return True if the list of simulations has sim.
+   */
+  bool has_simulation(Sim* sim) const;
+
 private:
   void construct(_Fact *target, const std::vector<P<Sim> >& simulations, float32 psln_thr);
 };

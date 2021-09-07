@@ -607,6 +607,16 @@ Sim *Pred::get_simulation(Controller *root) const {
   return NULL;
 }
 
+bool Pred::has_simulation(Sim* sim) const
+{
+  for (uint16 i = 0; i < get_simulations_size(); ++i) {
+    if (get_simulation(i) == sim)
+      return true;
+  }
+
+  return false;
+}
+
 ////////////////////////////////////////////////////////////////
 
 Goal::Goal() : LObject(), ground_(NULL) {
