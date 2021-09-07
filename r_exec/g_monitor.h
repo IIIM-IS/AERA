@@ -142,7 +142,10 @@ protected:
     Fact *goal,
     Fact *f_imdl); // goal is f0->g->f1->object.
 public:
-  virtual bool signal(bool is_simulation) { return false; }
+  /**
+   * If prediction->is_simulation(), then this is for a simulation.
+   */
+  virtual bool signal(Pred* prediction) { return false; }
 };
 
 /**
@@ -215,7 +218,7 @@ public:
 
   bool reduce(_Fact *input);
   void update(Timestamp &next_target);
-  bool signal(bool is_simulation);
+  bool signal(Pred* prediction);
 };
 
 // Monitors simulated goals.
@@ -248,7 +251,7 @@ public:
   bool reduce(_Fact *input);
   void update(Timestamp &next_target);
 
-  bool signal(bool is_simulation);
+  bool signal(Pred* prediction);
 };
 
 // Case A: target==actual goal and target!=f_imdl: simulations have been produced for all sub-goals.

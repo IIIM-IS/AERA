@@ -1528,7 +1528,7 @@ void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *c
         m = r_monitors_.erase(m);
       else {
 
-        if ((*m)->signal(is_simulation))
+        if ((*m)->signal(f_p_f_imdl->get_pred()))
           m = r_monitors_.erase(m);
         else
           ++m;
