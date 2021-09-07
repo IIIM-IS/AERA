@@ -257,7 +257,10 @@ public:
     return bindings->build_f_ihlp(getObject(), Opcodes::IMdl, wr_enabled);
   }
 
-  virtual void store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed, bool is_simulation) = 0;
+  /**
+   * If f_p_f_imdl->get_pred()->is_simulation(), then this is for a simulation.
+   */
+  virtual void store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed) = 0;
   ChainingStatus retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl, RequirementsPair &r_p, Fact *&ground, MDLController *req_controller, bool &wr_enabled); // checks the requirement instances during fwd; r_p: all wrs in first, all srs in second.
   ChainingStatus retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl, Fact *&ground); // checks the requirement instances during bwd; ground is set to the best weak requirement if chaining allowed, NULL otherwise.
   ChainingStatus retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl, Controller *root, Fact *&ground);
@@ -358,7 +361,7 @@ public:
   void take_input(r_exec::View *input);
   void reduce(r_exec::View *input);
 
-  void store_requirement(_Fact *f_imdl, MDLController *controller, bool chaining_was_allowed, bool is_simulation); // never called.
+  void store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed); // never called.
 
   void predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground);
   void register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures);
@@ -426,7 +429,7 @@ public:
   void reduce(r_exec::View *input);
   void reduce_batch(Fact *f_p_f_imdl, MDLController *controller);
 
-  void store_requirement(_Fact *f_imdl, MDLController *controller, bool chaining_was_allowed, bool is_simulation);
+  void store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed);
 
   void predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground);
   bool inject_prediction(Fact *prediction, Fact *f_imdl, float32 confidence, Timestamp::duration time_to_live, r_code::Code *mk_rdx) const; // here, resilience=time to live, in us; returns true if the prediction has actually been injected.
@@ -492,7 +495,7 @@ public:
   void reduce(r_exec::View *input);
   void reduce_batch(Fact *f_p_f_imdl, MDLController *controller);
 
-  void store_requirement(_Fact *f_imdl, MDLController *controller, bool chaining_was_allowed, bool is_simulation);
+  void store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed);
 
   void predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground);
   void register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures);
