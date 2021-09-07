@@ -20,10 +20,10 @@
   The PMonitor calls _Fact::match_timings_overlap which fails if no overlap.
   Possible solutions:
     * NO: Make mdl ignore LHS duration and predict RHS with explicit duration. (Requires changing pattern extractor)
-	* NO: Make inject_productions offset the instantaneous (fact (cmd ...)) into the future.
-	* YES: Make inject_productions give (fact (cmd ...)) a duration.
-	* NO: Move responsibility to inject (fact (cmd ...)) from inject_productions to the external environment.
-	* NO: In _Fact::match_timings_overlap, special case when one interval is zero duration.
+    * NO: Make inject_productions offset the instantaneous (fact (cmd ...)) into the future.
+    * YES: Make inject_productions give (fact (cmd ...)) a duration.
+    * NO: Move responsibility to inject (fact (cmd ...)) from inject_productions to the external environment.
+    * NO: In _Fact::match_timings_overlap, special case when one interval is zero duration.
 * DONE. Is the failed prediction from the assumption shielded from decreasing mdl confidence? No.
 
 2020-01-09
@@ -34,10 +34,10 @@
   https://github.com/IIIM-IS/replicode/commit/3c5b9be5f935d6783fb1d35d74ca7d19ad4be186#diff-0ff725f0ae881cefbad0064fc2eac950R236
   Changed:
     Code *target = goal->get_reference(0)->get_reference(0);
-	if (target->code(0).asOpcode() == Opcodes::ICST ...
+    if (target->code(0).asOpcode() == Opcodes::ICST ...
   to:
     _Fact *goal_target=goal->get_reference(0);
-	if (goal_target->code(0).asOpcode() == Opcodes::ICst ...
+    if (goal_target->code(0).asOpcode() == Opcodes::ICst ...
   There is a missing get_reference(0), so it never matches.
   Also, the following is clearly a bug, using the uninitialized bm:
     P<BindingMap> bm = new BindingMap(bm);
@@ -123,18 +123,18 @@
   * Delay the drive to allow predicting the imdl as a requirement. https://github.com/IIIM-IS/replicode/commit/3339d3a804a32d1692b993777d1da87d3035a787
   * In m_run_position, offset the timestamp of the goal position by 90000us 
     so that v2 in mdl_93 exactly matches 3s:200ms:0us in the requirement
-	(imdl mdl_93 [y1 3s:100ms:0us 3s:200ms:0us] [p1 y2 v5]) .
-	(Need to find a way to make this flexible.)
+    (imdl mdl_93 [y1 3s:100ms:0us 3s:200ms:0us] [p1 y2 v5]) .
+    (Need to find a way to make this flexible.)
   * Force HLPBindingMap::match_bwd_timings to succeed.
     The requirement timestamps 3s:100ms:0us,3s:200ms:0us don't match
-	the mdl_93 RHS backward timestamps 3s:200ms:0us,3s:300ms:0us .
-	It works if we use the timestamps of f_pattern (the constructed imdl).
+    the mdl_93 RHS backward timestamps 3s:200ms:0us,3s:300ms:0us .
+    It works if we use the timestamps of f_pattern (the constructed imdl).
   * In HLPOverlay::check_fwd_timings:178, need to evaluate fwd_after
     "v4:(sub v2 0s:80ms:0us)" first because fwd_before 
-	"v5:(add v4 0s:30ms:0us)" depends on it.
-	In general, there may be dependencies among many guards, so the general solution
-	needs multiple passes to bind other assignment variables that may be dependencies.
-	Maybe do ScanBWDGuards first and let it bind variables?
+    "v5:(add v4 0s:30ms:0us)" depends on it.
+    In general, there may be dependencies among many guards, so the general solution
+    needs multiple passes to bind other assignment variables that may be dependencies.
+    Maybe do ScanBWDGuards first and let it bind variables?
 
 2020-02-25
 * DONE. Review/merge allowing a reference to an expression https://github.com/IIIM-IS/replicode/pull/58
@@ -155,7 +155,7 @@
 * DONE. Is GTPX invoked when drive goal succeeds?
   ANSWER: Yes, but does nothing. GTPX::reduce needs inputs, but AutoFocusController::reduce:392
     doesn't call dispatch becuase std.replicode:166 pass_through is true.
-	Setting pass_through false: No auto focus, no learned models, no AutoFocus.goals. Still no dispatch.
+    Setting pass_through false: No auto focus, no learned models, no AutoFocus.goals. Still no dispatch.
 * DONE. Review/merge fix for getting fwd_after_index https://github.com/IIIM-IS/replicode/pull/63
 * DONE. Review/merge fix for accessing controllers array https://github.com/IIIM-IS/replicode/pull/64
 
@@ -167,8 +167,8 @@
 * DONE. Is GMonitor::commit called?
   ANSWER: Yes, but sim_successes is empty because store_simulated_outcome is never called. 
   * It might be called from GMonitor::reduce but only after calling get_simulation(controller),
-	which I can't believe was ever tested because it would crash due to the bug reported in
-	https://github.com/IIIM-IS/CoreLibrary/pull/3 .
+    which I can't believe was ever tested because it would crash due to the bug reported in
+    https://github.com/IIIM-IS/CoreLibrary/pull/3 .
   * FIXED. Also, the code in store_similated_outcome never adds to sim_successes.optional_solutions . 
     _GMonitor::store_simulated_outcome:112
     (Hard to believe this code was tested.)
