@@ -665,21 +665,29 @@ Simulator
       RESULT: Phase out to secondary group works. In auto_focus, need to add secondary group.
       DONE. Pull request to fix SecondaryMDLController::rate_model() https://github.com/IIIM-IS/AERA/pull/177
 
-next meeting
+2021-09-09
 * sensorimotor-letters
   * DONE. Test phase in allowing anti-requirements as designed.
-      (When we saw the anti-requirements deleted, it was when the main model was relevant.)
+    (When we saw the anti-requirements deleted, it was when the main model was relevant.)
+* Visualizer
+  * DONE. Show disabled prediction from strong requirement.
 * hand-grab-sphere-learn
-  * Try "loosening" SYNC_ONCE in M3 so that it will fire M2 for both s and c.
-  * Make pull request for making an icst in the next frame of a Sim branch.
-  * Make pull request for matching a requirement from the same Sim branch
+  * DONE. Try "loosening" SYNC_ONCE in M3 so that it will fire M2 for both s and c.
+    RESULT: No change with SYNC_PERIODIC.
+  * DONE. Make pull request for matching a requirement from the same Sim branch https://github.com/IIIM-IS/AERA/pull/179
+* Review/merge new functionality pull requests for:
+  * DONE. simulation control in abduce_simulated_lhs https://github.com/IIIM-IS/replicode/pull/111
+
+next meeting
+* Send the original Qt animation example
+* hand-grab-sphere-learn
+  * Make pull request for matching in retrieve_simulated_imdl_bwd from the same Sim branc
+  * Make pull request for making an icst in the next frame of a Sim branch
   * Make pull request for abduce_simulated_lhs already_signalled (after merging PR #111)
-  * Make pull request to not use an icst if a fact's value has been updated in the Sim branch (after merging PR #135)
   * Make pull request for making a CSTOverlay for each match of a member (after merging PR #135)
 * Review/merge new functionality pull requests for:
-  * REVIEWING. simulation control in abduce_simulated_lhs https://github.com/IIIM-IS/replicode/pull/111
   * REVIEWING. PTPX: Make a candidate model from every matching f_icst https://github.com/IIIM-IS/replicode/pull/165
-  * Calling abduce_simulated_imdl after abduce_simulated_lhs https://github.com/IIIM-IS/AERA/pull/173
+  * REVIEWING. Calling abduce_simulated_imdl after abduce_simulated_lhs https://github.com/IIIM-IS/AERA/pull/173
   * Running reduction jobs that check strong requirements before other jobs (non-monotonic) https://github.com/IIIM-IS/AERA/pull/174
   * Limiting the time interval of committed non-simulated command goals https://github.com/IIIM-IS/AERA/pull/175
 * Review/merge bug fix pull requests for:
