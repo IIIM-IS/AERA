@@ -442,7 +442,16 @@ public:
 
   bool check_imdl(Fact *goal, HLPBindingMap *bm);
 
-  bool check_simulated_imdl(Fact *goal, HLPBindingMap *bm, Controller *root);
+  /**
+   * This is called from RMonitor::signal or SRMonitor::signal to match the goal with a requirement. In case of a match,
+   * the signal "fires" by calling abduce_simulated_lhs to abduce the model's LHS.
+   * \param goal The target of the requirement monitor (from backward chaining), which is the goal imdl that is waiting for a
+   * predicted imdl in forward chaining giving the conditions to fire the model's LHS.
+   * \param bm A copy of the requirement monitor's saved binding map which has values for variables in the goal. This binding
+   * map may be updated during matching.
+   * \param prediction_sim The Sim of the input prediction, or NULL to just call retrieve_imdl_bwd.
+   */
+  bool check_simulated_imdl(Fact *goal, HLPBindingMap *bm, Sim* prediction_sim);
 
   void abduce(HLPBindingMap *bm, Fact *super_goal, bool opposite, float32 confidence);
 

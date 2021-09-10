@@ -2153,15 +2153,15 @@ bool PrimaryMDLController::check_imdl(Fact *goal, HLPBindingMap *bm) { // goal i
 }
 
 // goal is f->g->f->imdl; called by sr-monitors.
-bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, Controller *root) {
+bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, Sim* prediction_sim) {
 
   Goal *g = goal->get_goal();
   Fact *f_imdl = (Fact *)g->get_target();
   ChainingStatus c_s;
   Fact *ground;
   Fact *strong_requirement_ground;
-  if (root)
-    c_s = retrieve_simulated_imdl_bwd(bm, f_imdl, root, ground, strong_requirement_ground);
+  if (prediction_sim)
+    c_s = retrieve_simulated_imdl_bwd(bm, f_imdl, prediction_sim->root_, ground, strong_requirement_ground);
   else
     c_s = retrieve_imdl_bwd(bm, f_imdl, ground);
 
@@ -2176,13 +2176,13 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, C
         bm->bind_pattern(f_imdl->get_reference(0)), f_imdl->get_after(), f_imdl->get_before(),
         f_imdl->get_cfd(), f_imdl->get_psln_thr());
       // If root is provided, pass NULL as the sim to use the Sim in ground for forward chaining.
-      abduce_simulated_lhs(bm, sim->get_f_super_goal(), f_imdl_copy, sim->get_opposite(), f_imdl->get_cfd(), root ? NULL : new Sim(sim), ground);
+      abduce_simulated_lhs(bm, sim->get_f_super_goal(), f_imdl_copy, sim->get_opposite(), f_imdl->get_cfd(), prediction_sim ? NULL : new Sim(sim), ground);
       return true;
     }
     return false;
   default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
 #ifdef WITH_DETAIL_OID
-    if (c_s == STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT && root && ground && strong_requirement_ground)
+    if (c_s == STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT && prediction_sim && ground && strong_requirement_ground)
       // A strong requirement blocked the weak requirement. Just log the result.
       OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": fact (" <<
         to_string(ground->get_detail_oid()) << ") pred fact imdl, from goal req " << goal->get_oid() <<

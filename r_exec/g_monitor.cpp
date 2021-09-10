@@ -385,9 +385,10 @@ bool RMonitor::signal(Pred* prediction) {
 
   // check_simulated_imdl can change the binding map, so pass a copy.
   P<BindingMap> bindings_copy(new BindingMap(bindings_));
-  if (simulating_ && prediction->is_simulation()) { // report the simulated outcome: this will inject a simulated prediction of the outcome, to allow any g-monitor deciding on this ground.
+  Sim* prediction_sim = prediction->get_simulation(target_->get_goal()->get_sim()->root_);
+  if (simulating_ && prediction_sim) { // report the simulated outcome: this will inject a simulated prediction of the outcome, to allow any g-monitor deciding on this ground.
 
-    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_copy, target_->get_goal()->get_sim()->root_))
+    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_copy, prediction_sim))
       ((PMDLController *)controller_)->register_simulated_goal_outcome(target_, true, target_); // report a simulated success.
     else
       ((PMDLController *)controller_)->register_simulated_goal_outcome(target_, false, NULL); // report a simulated failure.
@@ -574,9 +575,10 @@ bool SRMonitor::signal(Pred* prediction) {
 
   // check_simulated_imdl can change the binding map, so pass a copy.
   P<BindingMap> bindings_copy(new BindingMap(bindings_));
-  if (prediction->is_simulation()) {
+  Sim* prediction_sim = prediction->get_simulation(target_->get_goal()->get_sim()->root_);
+  if (prediction_sim) {
 
-    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_copy, target_->get_goal()->get_sim()->root_))
+    if (((PrimaryMDLController *)controller_)->check_simulated_imdl(target_, bindings_copy, prediction_sim))
       ((PMDLController *)controller_)->register_simulated_goal_outcome(target_, true, target_); // report a simulated success.
   } else {
 
