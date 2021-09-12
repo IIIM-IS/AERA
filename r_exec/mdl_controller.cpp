@@ -652,7 +652,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
   }
 }
 
-ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl, Controller *root, Fact *&ground, Fact *&strong_requirement_ground) {
+ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl, Sim* prediction_sim, Fact *&ground, Fact *&strong_requirement_ground) {
 
   uint32 wr_count;
   uint32 sr_count;
@@ -675,7 +675,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
         e = simulated_requirements_.positive_evidences.erase(e);
       else {
 
-        if ((*e).evidence_->get_pred()->get_simulation(root)) {
+        if ((*e).evidence_->get_pred()->get_simulation(prediction_sim->root_)) {
 
           _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
           //_f_imdl->get_reference(0)->trace();
@@ -710,7 +710,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
           e = simulated_requirements_.negative_evidences.erase(e);
         else {
 
-          if ((*e).evidence_->get_pred()->get_simulation(root)) {
+          if ((*e).evidence_->get_pred()->get_simulation(prediction_sim->root_)) {
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
             HLPBindingMap _original = original; // matching updates the bm; always start afresh.
@@ -743,7 +743,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
           e = simulated_requirements_.negative_evidences.erase(e);
         else {
 
-          if ((*e).evidence_->get_pred()->get_simulation(root)) {
+          if ((*e).evidence_->get_pred()->get_simulation(prediction_sim->root_)) {
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
             HLPBindingMap _original = original; // matching updates the bm; always start afresh.
@@ -769,7 +769,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
         else {
           //(*e).f->get_reference(0)->trace();
           //f->get_reference(0)->trace();
-          if ((*e).evidence_->get_pred()->get_simulation(root)) {
+          if ((*e).evidence_->get_pred()->get_simulation(prediction_sim->root_)) {
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
             HLPBindingMap _original = original; // matching updates the bm; always start afresh.
@@ -1847,7 +1847,12 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
         abduce_simulated_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim, ground);
       break;
     default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
-      switch (retrieve_simulated_imdl_bwd(bm, f_imdl, sim->root_, ground, strong_requirement_ground)) {
+      // Note: The sim is from simulated backward chaining. retrieve_simulated_imdl_bwd checks for simulated
+      // requirements, but these are produced in simulated forward chaining which hasn't started yet in this
+      // simulation. Because, there are no simulated requirements, retrieve_simulated_imdl_bwd returns right away
+      // without using sim. If the ligic is changed so that retrieve_simulated_imdl_bwd does use sim, then we
+      // need a flag to check for a requirement from any Sim with the same root (not the exact same forward-chaining Sim).
+      switch (retrieve_simulated_imdl_bwd(bm, f_imdl, sim, ground, strong_requirement_ground)) {
       case WEAK_REQUIREMENT_ENABLED:
         f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(true);
       case NO_REQUIREMENT:
@@ -2161,7 +2166,7 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, S
   Fact *ground;
   Fact *strong_requirement_ground;
   if (prediction_sim)
-    c_s = retrieve_simulated_imdl_bwd(bm, f_imdl, prediction_sim->root_, ground, strong_requirement_ground);
+    c_s = retrieve_simulated_imdl_bwd(bm, f_imdl, prediction_sim, ground, strong_requirement_ground);
   else
     c_s = retrieve_imdl_bwd(bm, f_imdl, ground);
 
