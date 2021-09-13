@@ -410,9 +410,10 @@ private:
 
   /**
    * If sim is null, assume this is called from check_simulated_imdl in forward chaining and get the Sim from ground.
+   * If goal_requirement is not NULL, use it only for the runtime output.
    */
   void abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence,
-    Sim *sim, Fact *ground);
+    Sim *sim, Fact *ground, Fact* goal_requirement = NULL);
   void abduce_simulated_imdl(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim);
   void predict_simulated_lhs(HLPBindingMap *bm, bool opposite, float32 confidence, Sim *sim);
   Fact* predict_simulated_evidence(_Fact *evidence, Sim *sim);

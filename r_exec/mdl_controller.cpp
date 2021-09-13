@@ -2014,7 +2014,7 @@ void PrimaryMDLController::abduce_imdl(HLPBindingMap *bm, Fact *super_goal, Fact
 
 // goal is f->g->f->object or f->g->|f->object; called concurrently by redcue() and _GMonitor::update().
 void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence,
-  Sim *sim, Fact *ground) {
+  Sim *sim, Fact *ground, Fact* goal_requirement) {
 
   if (evaluate_bwd_guards(bm)) { // bm may be updated.
 
@@ -2055,9 +2055,13 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
 #ifdef WITH_DETAIL_OID
           ground_info = " (" + to_string(ground->get_detail_oid()) + ")";
 #endif
+          string goal_requirement_info = "";
+          if (goal_requirement)
+            goal_requirement_info = ", from goal req " + to_string(goal_requirement->get_oid());
           // The ground came from matching a requirement.
-          OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(now) << " mdl " << getObject()->get_oid() << ": fact" << 
-            ground_info << " pred fact imdl -> fact " << fact_pred_bound_lhs->get_oid() << " simulated pred");
+          OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(now) << " mdl " << getObject()->get_oid() << ": fact" <<
+            ground_info << " pred fact imdl -> fact " << fact_pred_bound_lhs->get_oid() << " simulated pred" <<
+            goal_requirement_info);
           break;
         }
 
@@ -2181,7 +2185,7 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, S
         bm->bind_pattern(f_imdl->get_reference(0)), f_imdl->get_after(), f_imdl->get_before(),
         f_imdl->get_cfd(), f_imdl->get_psln_thr());
       // If root is provided, pass NULL as the sim to use the Sim in ground for forward chaining.
-      abduce_simulated_lhs(bm, sim->get_f_super_goal(), f_imdl_copy, sim->get_opposite(), f_imdl->get_cfd(), prediction_sim ? NULL : new Sim(sim), ground);
+      abduce_simulated_lhs(bm, sim->get_f_super_goal(), f_imdl_copy, sim->get_opposite(), f_imdl->get_cfd(), prediction_sim ? NULL : new Sim(sim), ground, goal);
       return true;
     }
     return false;
