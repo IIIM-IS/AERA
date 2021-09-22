@@ -1843,8 +1843,15 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
     case NO_REQUIREMENT:
       if (sub_sim->get_mode() == SIM_ROOT)
         abduce_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim, ground, true);
-      else
+      else {
         abduce_simulated_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim, ground);
+        if (is_cmd())
+          // We called abduce_simulated_lhs because there is a non-simulated requirement which can instantiate
+          // the model with a simulated predicted command, but simulated forward chaining may fail. Therefore we also call
+          // abduce_simulated_imdl which adds an SRMonitor for a goal to instantiate the model (the same as below),
+          // so that if another simulation branch makes a predicted requirement it can simulate instantiating the model.
+          abduce_simulated_imdl(bm, super_goal, f_imdl, opposite, confidence, sub_sim);
+      }
       break;
     default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
       // Note: The sim is from simulated backward chaining. retrieve_simulated_imdl_bwd checks for simulated
