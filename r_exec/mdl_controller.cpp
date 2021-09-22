@@ -149,7 +149,7 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
     bool check_simulated_chaining_result;
     switch (c_s) {
     case WEAK_REQUIREMENT_DISABLED:
-    case STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT: // silent monitoring of a prediction that will not be injected.
+    case STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT: // silent monitoring of a prediction that will not be injected.
       if (is_simulation) { // if there is simulated imdl for the root of one sim in prediction, allow forward chaining.
 
         Fact *check_simulated_chaining_ground = NULL;
@@ -255,7 +255,7 @@ bool SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *
     bool chaining_allowed = (c_s >= NO_REQUIREMENT);
     switch (c_s) {
     case WEAK_REQUIREMENT_DISABLED:
-    case STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT: // silent monitoring of a prediction that will not be injected.
+    case STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT: // silent monitoring of a prediction that will not be injected.
     case NO_REQUIREMENT:
       if (((MDLController *)controller_)->has_tpl_args()) // there are tpl args, abort.
         break;
@@ -579,7 +579,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
 
               bm->load(&_original);
               requirements_.CS.leave();
-              return STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT;
+              return STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
             }
           }
           ++e;
@@ -609,7 +609,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
             if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) {
 
               negative_cfd = (*e).confidence_;
-              r = STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT;
+              r = STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
               bm->load(&_original);
               break;
             }
@@ -721,7 +721,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
               bm->load(&_original);
               strong_requirement_ground = (*e).evidence_;
               requirements_.CS.leave();
-              return STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT;
+              return STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
             }
           }
           ++e;
@@ -752,7 +752,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
             if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) {
 
               negative_cfd = (*e).confidence_;
-              r = STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT;
+              r = STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
               bm->load(&_original);
               strong_requirement_ground = (*e).evidence_;
               break;
@@ -888,7 +888,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
           if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) { // tpl args will be valuated in bm.
 
             if (r == WEAK_REQUIREMENT_ENABLED && (*e).chaining_was_allowed_) // first match.
-              r = STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT;
+              r = STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
 
             r_p.strong_requirements_.controllers.insert((*e).controller_);
             r_p.strong_requirements_.f_imdl = _f_imdl;
@@ -923,7 +923,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
             if (r == NO_REQUIREMENT && (*e).chaining_was_allowed_) { // first match.
 
               negative_cfd = (*e).confidence_;
-              r = STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT;
+              r = STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
             }
 
             r_p.strong_requirements_.controllers.insert((*e).controller_);
@@ -1051,7 +1051,7 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
           if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) { // tpl args will be valuated in bm.
 
             requirements_.CS.leave();
-            return STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT;
+            return STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
           }
           ++e;
         }
@@ -1079,7 +1079,7 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
           if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) {
 
             negative_cfd = (*e).confidence_;
-            r = STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT;
+            r = STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
             break;
           }
           ++e;
@@ -1846,7 +1846,7 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
       else
         abduce_simulated_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim, ground);
       break;
-    default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
+    default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
       // Note: The sim is from simulated backward chaining. retrieve_simulated_imdl_bwd checks for simulated
       // requirements, but these are produced in simulated forward chaining which hasn't started yet in this
       // simulation. Because, there are no simulated requirements, retrieve_simulated_imdl_bwd returns right away
@@ -1861,7 +1861,7 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
         else
           abduce_simulated_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim, ground);
         break;
-      default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
+      default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
         sub_sim->is_requirement_ = true;
         if (sub_sim->get_mode() == SIM_ROOT)
           abduce_imdl(bm, super_goal, f_imdl, opposite, confidence, sub_sim);
@@ -1885,7 +1885,7 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
         sub_sim = new Sim(SIM_ROOT, seconds(0), super_goal, opposite, this, 1);
         abduce_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim, ground, false);
         break;
-      default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
+      default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
         sub_sim = new Sim(SIM_ROOT, seconds(0), super_goal, opposite, this, 1);
         sub_sim->is_requirement_ = true;
         abduce_imdl(bm, super_goal, f_imdl, opposite, confidence, sub_sim);
@@ -2156,7 +2156,7 @@ bool PrimaryMDLController::check_imdl(Fact *goal, HLPBindingMap *bm) { // goal i
       return true;
     }
     return false;
-  default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
+  default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
     return false;
   }
 }
@@ -2189,7 +2189,7 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, S
       return true;
     }
     return false;
-  default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
+  default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
 #ifdef WITH_DETAIL_OID
     if (c_s == STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT && prediction_sim && ground && strong_requirement_ground)
       // A strong requirement blocked the weak requirement. Just log the result.
@@ -2484,7 +2484,7 @@ void PrimaryMDLController::assume_lhs(HLPBindingMap *bm, bool opposite, _Fact *i
     if (evaluate_bwd_guards(bm)) // bm may be updated.
       break;
     return;
-  default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_DISABLED_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
+  default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
     return;
   }
 
