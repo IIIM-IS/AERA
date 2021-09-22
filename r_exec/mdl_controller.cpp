@@ -2020,9 +2020,10 @@ void PrimaryMDLController::abduce_imdl(HLPBindingMap *bm, Fact *super_goal, Fact
 }
 
 // goal is f->g->f->object or f->g->|f->object; called concurrently by redcue() and _GMonitor::update().
-void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence,
+_Fact* PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence,
   Sim *sim, Fact *ground, Fact* goal_requirement) {
 
+  _Fact* injected_lhs = NULL;
   if (evaluate_bwd_guards(bm)) { // bm may be updated.
 
     P<_Fact> bound_lhs = (_Fact *)bm->bind_pattern(get_lhs());
@@ -2057,6 +2058,7 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
           Pred *pred = new Pred(bound_lhs, ground->get_pred(), 1);
           Fact* fact_pred_bound_lhs = new Fact(pred, now, now, 1, 1);
           inject_simulation(fact_pred_bound_lhs, now);
+          injected_lhs = fact_pred_bound_lhs;
 
           string ground_info;
 #ifdef WITH_DETAIL_OID
@@ -2087,6 +2089,7 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
           auto forward_simulation_time = max(now, sim->get_solution_before() - sim->get_thz() / 2);
           Fact* f_pred_bound_lhs = new Fact(pred_bound_lhs, forward_simulation_time, forward_simulation_time, 1, 1);
           inject_simulation(f_pred_bound_lhs, forward_simulation_time);
+          injected_lhs = f_pred_bound_lhs;
           string f_pred_bound_lhs_info;
           string ground_info;
 #ifdef WITH_DETAIL_OID
@@ -2110,6 +2113,7 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
 
         add_g_monitor(new SGMonitor(this, bm, now + sim->get_thz(), f_sub_goal, f_imdl));
         inject_simulation(f_sub_goal, now);
+        injected_lhs = f_sub_goal;
         OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(now) << " mdl " << getObject()->get_oid() << ": fact " <<
           super_goal->get_oid() << " super_goal -> fact " << f_sub_goal->get_oid() << " simulated goal");
         break;
@@ -2118,6 +2122,8 @@ void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_g
       break;
     }
   }
+
+  return injected_lhs;
 }
 
 void PrimaryMDLController::abduce_simulated_imdl(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim) { // goal is f->g->f->object or f->g->|f->object; called concurrently by redcue() and _GMonitor::update().
