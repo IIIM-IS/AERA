@@ -1513,13 +1513,23 @@ void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *c
   bool is_simulation = f_p_f_imdl->get_pred()->is_simulation();
   _Fact *f_imdl = f_p_f_imdl->get_pred()->get_target();
   RequirementEntry e(f_p_f_imdl, controller, chaining_was_allowed);
-  if (f_imdl->is_fact()) { // in case of a positive requirement tell monitors they can check for chaining again.
-    // Store the requirement before signaling the monitor so that its target will match the requirement.
+
+  // Store the requirement before signaling the monitor so that its target will match the requirement.
+  if (f_imdl->is_fact()) {
     if (is_simulation)
       _store_requirement(&simulated_requirements_.positive_evidences, e);
     else
       _store_requirement(&requirements_.positive_evidences, e);
+  }
+  else {
+    // Negative requirement.
+    if (!is_simulation)
+      _store_requirement(&requirements_.negative_evidences, e);
+    else
+      _store_requirement(&simulated_requirements_.negative_evidences, e);
+  }
 
+  if (f_imdl->is_fact()) { // in case of a positive requirement tell monitors they can check for chaining again.
     r_code::list<P<_GMonitor> >::const_iterator m;
     g_monitorsCS_.enter();
     for (m = r_monitors_.begin(); m != r_monitors_.end();) { // signal r-monitors.
@@ -1537,13 +1547,6 @@ void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *c
     g_monitorsCS_.leave();
 
     reduce_cache<PrimaryMDLController>((Fact *)f_p_f_imdl, controller);
-  }
-  else {
-    // Negative requirement.
-    if (!is_simulation)
-      _store_requirement(&requirements_.negative_evidences, e);
-    else
-      _store_requirement(&simulated_requirements_.negative_evidences, e);
   }
 
   if (!is_simulation)
