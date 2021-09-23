@@ -410,11 +410,13 @@ private:
 
   /**
    * If sim is null, assume this is called from check_simulated_imdl in forward chaining and get the Sim from ground.
+   * If already_signalled is not null, use it as described in check_simulated_imdl.
    * If goal_requirement is not NULL, use it only for the runtime output.
    * Return the injected LHS, or NULL if not injected.
    */
   void abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence,
-    Sim *sim, Fact *ground, Fact* goal_requirement = NULL);
+    Sim *sim, Fact *ground, std::unordered_map<Sim*, std::vector<P<r_code::Code> > >* already_signalled = NULL,
+    Fact* goal_requirement = NULL);
   void abduce_simulated_imdl(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim);
   void predict_simulated_lhs(HLPBindingMap *bm, bool opposite, float32 confidence, Sim *sim);
   Fact* predict_simulated_evidence(_Fact *evidence, Sim *sim);
@@ -452,8 +454,14 @@ public:
    * \param bm A copy of the requirement monitor's saved binding map which has values for variables in the goal. This binding
    * map may be updated during matching.
    * \param prediction_sim The Sim of the input prediction, or NULL to just call retrieve_imdl_bwd.
+   * \param already_signalled The list of imdl that abduce_simulated_lhs has already used with this requirement monitor to
+   * abduce a LHS, for the same Sim (as determined by the requirement that is passed to abduce_simulated_lhs as "ground").
+   * If abduce_simulated_lhs has an imdl which is not in the list for the same Sim, then the LHS is injected as usual
+   * (and the imdl is added to this list of imdl for the same Sim, to use in future checks). Otherwise, the same requirement
+   * monitor has already signalled and produced the same LHS, so abduce_simulated_lhs aborts and does not inject it. This
+   * prevents loops during simulation.
    */
-  bool check_simulated_imdl(Fact *goal, HLPBindingMap *bm, Sim* prediction_sim);
+  bool check_simulated_imdl(Fact *goal, HLPBindingMap *bm, Sim* prediction_sim, std::unordered_map<Sim*, std::vector<P<r_code::Code> > >* already_signalled);
 
   void abduce(HLPBindingMap *bm, Fact *super_goal, bool opposite, float32 confidence);
 
