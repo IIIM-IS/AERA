@@ -1512,7 +1512,6 @@ void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *c
 
   bool is_simulation = f_p_f_imdl->get_pred()->is_simulation();
   _Fact *f_imdl = f_p_f_imdl->get_pred()->get_target();
-  Code *mdl = f_imdl->get_reference(0);
   RequirementEntry e(f_p_f_imdl, controller, chaining_was_allowed);
   if (f_imdl->is_fact()) { // in case of a positive requirement tell monitors they can check for chaining again.
     // Store the requirement before signaling the monitor so that its target will match the requirement.
