@@ -414,7 +414,7 @@ private:
    * If goal_requirement is not NULL, use it only for the runtime output.
    * Return the injected LHS, or NULL if not injected.
    */
-  void abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence,
+  _Fact* abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence,
     Sim *sim, Fact *ground, std::unordered_map<Sim*, std::vector<P<r_code::Code> > >* already_signalled = NULL,
     Fact* goal_requirement = NULL);
   void abduce_simulated_imdl(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim);
