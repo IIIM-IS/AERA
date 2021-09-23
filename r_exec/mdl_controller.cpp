@@ -2020,7 +2020,7 @@ void PrimaryMDLController::abduce_imdl(HLPBindingMap *bm, Fact *super_goal, Fact
 }
 
 // goal is f->g->f->object or f->g->|f->object; called concurrently by redcue() and _GMonitor::update().
-_Fact* PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence,
+void PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence,
   Sim *sim, Fact *ground, Fact* goal_requirement) {
 
   _Fact* injected_lhs = NULL;

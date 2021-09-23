@@ -413,7 +413,7 @@ private:
    * If goal_requirement is not NULL, use it only for the runtime output.
    * Return the injected LHS, or NULL if not injected.
    */
-  _Fact* abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence,
+  void abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence,
     Sim *sim, Fact *ground, Fact* goal_requirement = NULL);
   void abduce_simulated_imdl(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim);
   void predict_simulated_lhs(HLPBindingMap *bm, bool opposite, float32 confidence, Sim *sim);
