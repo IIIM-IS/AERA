@@ -2010,12 +2010,12 @@ void PrimaryMDLController::abduce_imdl(HLPBindingMap *bm, Fact *super_goal, Fact
   Fact *f_sub_goal = new Fact(sub_goal, now, now, 1, 1);
   add_r_monitor(new RMonitor(this, bm, super_goal->get_goal()->get_target()->get_before(), now + sim->get_thz(), f_sub_goal, f_imdl)); // the monitor will wait until the deadline of the super-goal.
   inject_goal(bm, f_sub_goal, f_imdl);
-  string fImdlDetailInfo;
+  string f_imdl_detail_info;
 #ifdef WITH_DETAIL_OID
-  fImdlDetailInfo = "(" + to_string(f_imdl->get_detail_oid()) + ")";
+  f_imdl_detail_info = "(" + to_string(f_imdl->get_detail_oid()) + ")";
 #endif
   OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " " << getObject()->get_oid() << " -> fact " << f_sub_goal->get_oid() << " goal fact " << 
-    f_imdl->get_oid() << fImdlDetailInfo << " imdl[" << f_imdl->get_reference(0)->get_reference(0)->get_oid() << "][" << 
+    f_imdl->get_oid() << f_imdl_detail_info << " imdl[" << f_imdl->get_reference(0)->get_reference(0)->get_oid() << "][" <<
     Utils::RelativeTime(sub_goal->get_target()->get_after()) << "," << Utils::RelativeTime(sub_goal->get_target()->get_before()) << "]");
 }
 
