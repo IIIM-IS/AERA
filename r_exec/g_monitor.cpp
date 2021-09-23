@@ -187,6 +187,8 @@ void GMonitor::commit() { // the purpose is to invalidate damaging simulations; 
 
   for (solution = sim_failures_.mandatory_solutions.begin(); solution != sim_failures_.mandatory_solutions.end(); ++solution) { // check if any mandatory solution could result in the failure of more important a goal.
 
+    if ((*solution).first->is_invalidated())
+      continue;
     if ((*solution).second->is_invalidated())
       continue;
     Goal* goal = get_solution_goal((*solution).first);
@@ -202,6 +204,8 @@ void GMonitor::commit() { // the purpose is to invalidate damaging simulations; 
 
   for (solution = sim_failures_.optional_solutions.begin(); solution != sim_failures_.optional_solutions.end(); ++solution) { // check if any optional solutions could result in the failure of more important a goal; invalidate the culprits.
 
+    if ((*solution).first->is_invalidated())
+      continue;
     if ((*solution).second->is_invalidated())
       continue;
     Goal* goal = get_solution_goal((*solution).first);
@@ -217,6 +221,8 @@ void GMonitor::commit() { // the purpose is to invalidate damaging simulations; 
   // Find the best optional solution.
   for (solution = sim_successes_.optional_solutions.begin(); solution != sim_successes_.optional_solutions.end(); ++solution) {
 
+    if ((*solution).first->is_invalidated())
+      continue;
     if ((*solution).second->is_invalidated())
       continue;
     if (!best_solution) {
