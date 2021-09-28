@@ -2056,6 +2056,7 @@ _Fact* PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super
 
         if (!sim) {
           // This was called from check_simulated_imdl. Keep simulating forward. Don't loop by abducing the LHS as a goal again.
+          // TODO: Handle the case when there are other than one Sim in the prediction.
           if (already_signalled && ground->get_pred() && ground->get_pred()->get_simulations_size() == 1) {
             // Check if a call to signal already caused this same LHS to be abduced with the same conditions, in this Sim.
             std::vector<P<Code> >& sim_already_signalled = (*already_signalled)[ground->get_pred()->get_simulation((uint16)0)];
