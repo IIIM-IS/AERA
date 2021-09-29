@@ -412,7 +412,7 @@ void MDLController::remove_requirement_from_rhs() {
 
 void MDLController::_store_requirement(r_code::list<RequirementEntry> *cache, RequirementEntry &e) {
 
-  requirements_.CS.enter();
+  requirements_.CS_.enter();
   auto now = Now();
   r_code::list<RequirementEntry>::const_iterator _e;
   for (_e = cache->begin(); _e != cache->end();) {
@@ -424,7 +424,7 @@ void MDLController::_store_requirement(r_code::list<RequirementEntry> *cache, Re
       ++_e;
   }
   cache->push_front(e);
-  requirements_.CS.leave();
+  requirements_.CS_.leave();
 }
 
 /**
@@ -522,13 +522,13 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
   if (!sr_count) { // no strong req., some weak req.: true if there is one f->imdl complying with timings and bindings.
 
     r = WEAK_REQUIREMENT_DISABLED;
-    requirements_.CS.enter();
+    requirements_.CS_.enter();
     auto now = Now();
     r_code::list<RequirementEntry>::const_iterator e;
-    for (e = simulated_requirements_.positive_evidences.begin(); e != simulated_requirements_.positive_evidences.end();) {
+    for (e = simulated_requirements_.positive_evidences_.begin(); e != simulated_requirements_.positive_evidences_.end();) {
 
       if ((*e).is_too_old(now)) // garbage collection.
-        e = simulated_requirements_.positive_evidences.erase(e);
+        e = simulated_requirements_.positive_evidences_.erase(e);
       else {
 
         if ((*e).evidence_->get_pred()->has_simulation(sim)) {
@@ -553,7 +553,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
       }
     }
 
-    requirements_.CS.leave();
+    requirements_.CS_.leave();
     // Restore.
     f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(save_f_imdl_wr_enabled);
     return r;
@@ -561,13 +561,13 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
 
     if (!wr_count) { // some strong req., no weak req.: true if there is no |f->imdl complying with timings and bindings.
 
-      requirements_.CS.enter();
+      requirements_.CS_.enter();
       auto now = Now();
       r_code::list<RequirementEntry>::const_iterator e;
-      for (e = simulated_requirements_.negative_evidences.begin(); e != simulated_requirements_.negative_evidences.end();) {
+      for (e = simulated_requirements_.negative_evidences_.begin(); e != simulated_requirements_.negative_evidences_.end();) {
 
         if ((*e).is_too_old(now)) // garbage collection.
-          e = simulated_requirements_.negative_evidences.erase(e);
+          e = simulated_requirements_.negative_evidences_.erase(e);
         else {
 
           if ((*e).evidence_->get_pred()->has_simulation(sim)) {
@@ -578,7 +578,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
             if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) { // tpl args will be valuated in bm.
 
               bm->load(&_original);
-              requirements_.CS.leave();
+              requirements_.CS_.leave();
               return STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
             }
           }
@@ -586,19 +586,19 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
         }
       }
 
-      requirements_.CS.leave();
+      requirements_.CS_.leave();
       return WEAK_REQUIREMENT_ENABLED;
     } else { // some strong req. and some weak req.: true if among the entries complying with timings and bindings, the youngest |f->imdl is weaker than the youngest f->imdl.
 
       r = WEAK_REQUIREMENT_DISABLED;
       float32 negative_cfd = 0;
-      requirements_.CS.enter();
+      requirements_.CS_.enter();
       auto now = Now();
       r_code::list<RequirementEntry>::const_iterator e;
-      for (e = simulated_requirements_.negative_evidences.begin(); e != simulated_requirements_.negative_evidences.end();) {
+      for (e = simulated_requirements_.negative_evidences_.begin(); e != simulated_requirements_.negative_evidences_.end();) {
 
         if ((*e).is_too_old(now)) // garbage collection.
-          e = simulated_requirements_.negative_evidences.erase(e);
+          e = simulated_requirements_.negative_evidences_.erase(e);
         else {
 
           if ((*e).evidence_->get_pred()->has_simulation(sim)) {
@@ -618,10 +618,10 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
         }
       }
 
-      for (e = simulated_requirements_.positive_evidences.begin(); e != simulated_requirements_.positive_evidences.end();) {
+      for (e = simulated_requirements_.positive_evidences_.begin(); e != simulated_requirements_.positive_evidences_.end();) {
 
         if ((*e).is_too_old(now)) // garbage collection.
-          e = simulated_requirements_.positive_evidences.erase(e);
+          e = simulated_requirements_.positive_evidences_.erase(e);
         else {
           //(*e).f->get_reference(0)->trace();
           //f->get_reference(0)->trace();
@@ -646,7 +646,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
         }
       }
 
-      requirements_.CS.leave();
+      requirements_.CS_.leave();
       return r;
     }
   }
@@ -666,13 +666,13 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
   if (!sr_count) { // no strong req., some weak req.: true if there is one f->imdl complying with timings and bindings.
 
     r = WEAK_REQUIREMENT_DISABLED;
-    requirements_.CS.enter();
+    requirements_.CS_.enter();
     auto now = Now();
     r_code::list<RequirementEntry>::const_iterator e;
-    for (e = simulated_requirements_.positive_evidences.begin(); e != simulated_requirements_.positive_evidences.end();) {
+    for (e = simulated_requirements_.positive_evidences_.begin(); e != simulated_requirements_.positive_evidences_.end();) {
 
       if ((*e).is_too_old(now)) // garbage collection.
-        e = simulated_requirements_.positive_evidences.erase(e);
+        e = simulated_requirements_.positive_evidences_.erase(e);
       else {
 
         if ((*e).evidence_->get_pred()->has_simulation(prediction_sim)) {
@@ -695,19 +695,19 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
       }
     }
 
-    requirements_.CS.leave();
+    requirements_.CS_.leave();
     return r;
   } else {
 
     if (!wr_count) { // some strong req., no weak req.: true if there is no |f->imdl complying with timings and bindings.
 
-      requirements_.CS.enter();
+      requirements_.CS_.enter();
       auto now = Now();
       r_code::list<RequirementEntry>::const_iterator e;
-      for (e = simulated_requirements_.negative_evidences.begin(); e != simulated_requirements_.negative_evidences.end();) {
+      for (e = simulated_requirements_.negative_evidences_.begin(); e != simulated_requirements_.negative_evidences_.end();) {
 
         if ((*e).is_too_old(now)) // garbage collection.
-          e = simulated_requirements_.negative_evidences.erase(e);
+          e = simulated_requirements_.negative_evidences_.erase(e);
         else {
 
           if ((*e).evidence_->get_pred()->has_simulation(prediction_sim)) {
@@ -720,7 +720,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
 
               bm->load(&_original);
               strong_requirement_ground = (*e).evidence_;
-              requirements_.CS.leave();
+              requirements_.CS_.leave();
               return STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
             }
           }
@@ -728,19 +728,19 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
         }
       }
 
-      requirements_.CS.leave();
+      requirements_.CS_.leave();
       return WEAK_REQUIREMENT_ENABLED;
     } else { // some strong req. and some weak req.: true if among the entries complying with timings and bindings, the youngest |f->imdl is weaker than the youngest f->imdl.
 
       r = WEAK_REQUIREMENT_DISABLED;
       float32 negative_cfd = 0;
-      requirements_.CS.enter();
+      requirements_.CS_.enter();
       auto now = Now();
       r_code::list<RequirementEntry>::const_iterator e;
-      for (e = simulated_requirements_.negative_evidences.begin(); e != simulated_requirements_.negative_evidences.end();) {
+      for (e = simulated_requirements_.negative_evidences_.begin(); e != simulated_requirements_.negative_evidences_.end();) {
 
         if ((*e).is_too_old(now)) // garbage collection.
-          e = simulated_requirements_.negative_evidences.erase(e);
+          e = simulated_requirements_.negative_evidences_.erase(e);
         else {
 
           if ((*e).evidence_->get_pred()->has_simulation(prediction_sim)) {
@@ -762,10 +762,10 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
         }
       }
 
-      for (e = simulated_requirements_.positive_evidences.begin(); e != simulated_requirements_.positive_evidences.end();) {
+      for (e = simulated_requirements_.positive_evidences_.begin(); e != simulated_requirements_.positive_evidences_.end();) {
 
         if ((*e).is_too_old(now)) // garbage collection.
-          e = simulated_requirements_.positive_evidences.erase(e);
+          e = simulated_requirements_.positive_evidences_.erase(e);
         else {
           //(*e).f->get_reference(0)->trace();
           //f->get_reference(0)->trace();
@@ -794,7 +794,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
         }
       }
 
-      requirements_.CS.leave();
+      requirements_.CS_.leave();
       return r;
     }
   }
@@ -823,17 +823,17 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
     }
 
     r = WEAK_REQUIREMENT_DISABLED;
-    requirements_.CS.enter();
+    requirements_.CS_.enter();
     auto now = Now();
     r_code::list<RequirementEntry>::const_iterator e;
-    for (e = requirements_.positive_evidences.begin(); e != requirements_.positive_evidences.end();) {
+    for (e = requirements_.positive_evidences_.begin(); e != requirements_.positive_evidences_.end();) {
 
       Code *imdl = (*e).evidence_->get_pred()->get_target()->get_reference(0);
       uint16 tpl_index = imdl->code(I_HLP_TPL_ARGS).asIndex();
       //std::cout<<"IMDL: "<<imdl->code(tpl_index+1).asFloat()<<" ["<<Time::ToString_seconds((*e).after-Utils::GetTimeReference())<<" "<<Time::ToString_seconds((*e).before-Utils::GetTimeReference())<<"]"<<std::endl;
 
       if ((*e).is_too_old(now)) // garbage collection.
-        e = requirements_.positive_evidences.erase(e);
+        e = requirements_.positive_evidences_.erase(e);
       else if ((*e).is_out_of_range(now))
         ++e;
       else {
@@ -864,7 +864,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
       }
     }
 
-    requirements_.CS.leave();
+    requirements_.CS_.leave();
     return r;
   } else {
 
@@ -872,13 +872,13 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
 
       wr_enabled = false;
       r = WEAK_REQUIREMENT_ENABLED;
-      requirements_.CS.enter();
+      requirements_.CS_.enter();
       auto now = Now();
       r_code::list<RequirementEntry>::const_iterator e;
-      for (e = requirements_.negative_evidences.begin(); e != requirements_.negative_evidences.end();) {
+      for (e = requirements_.negative_evidences_.begin(); e != requirements_.negative_evidences_.end();) {
 
         if ((*e).is_too_old(now)) // garbage collection.
-          e = requirements_.positive_evidences.erase(e);
+          e = requirements_.positive_evidences_.erase(e);
         else if ((*e).is_out_of_range(now))
           ++e;
         else {
@@ -898,20 +898,20 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
         }
       }
 
-      requirements_.CS.leave();
+      requirements_.CS_.leave();
       return r;
     } else { // some strong req. and some weak req.: true if among the entries complying with timings and bindings, the youngest |f->imdl is weaker than the youngest f->imdl.
 
       r = NO_REQUIREMENT;
-      requirements_.CS.enter();
+      requirements_.CS_.enter();
       float32 negative_cfd = 0;
       auto now = Now();
 
       r_code::list<RequirementEntry>::const_iterator e;
-      for (e = requirements_.negative_evidences.begin(); e != requirements_.negative_evidences.end();) {
+      for (e = requirements_.negative_evidences_.begin(); e != requirements_.negative_evidences_.end();) {
 
         if ((*e).is_too_old(now)) // garbage collection.
-          e = requirements_.negative_evidences.erase(e);
+          e = requirements_.negative_evidences_.erase(e);
         else if ((*e).is_out_of_range(now))
           ++e;
         else {
@@ -937,7 +937,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
       // JTNote: We set ground = NULL above, so this is never true.
       if (ground != NULL) { // an imdl triggered the reduction of the cache.
 
-        requirements_.CS.leave();
+        requirements_.CS_.leave();
         float32 confidence = ground->get_pred()->get_target()->get_cfd();
         if (confidence > negative_cfd) {
 
@@ -948,10 +948,10 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
           wr_enabled = true;
         }
         return r;
-      } else for (e = requirements_.positive_evidences.begin(); e != requirements_.positive_evidences.end();) {
+      } else for (e = requirements_.positive_evidences_.begin(); e != requirements_.positive_evidences_.end();) {
 
         if ((*e).is_too_old(now)) // garbage collection.
-          e = requirements_.positive_evidences.erase(e);
+          e = requirements_.positive_evidences_.erase(e);
         else if ((*e).is_out_of_range(now))
           ++e;
         else {
@@ -982,7 +982,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
           ++e;
         }
       }
-      requirements_.CS.leave();
+      requirements_.CS_.leave();
       return r;
     }
   }
@@ -1001,13 +1001,13 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
   if (!sr_count) { // no strong req., some weak req.: true if there is one f->imdl complying with timings and bindings.
 
     r = WEAK_REQUIREMENT_DISABLED;
-    requirements_.CS.enter();
+    requirements_.CS_.enter();
     auto now = Now();
     r_code::list<RequirementEntry>::const_iterator e;
-    for (e = requirements_.positive_evidences.begin(); e != requirements_.positive_evidences.end();) {
+    for (e = requirements_.positive_evidences_.begin(); e != requirements_.positive_evidences_.end();) {
 
       if ((*e).is_too_old(now)) // garbage collection.
-        e = requirements_.positive_evidences.erase(e);
+        e = requirements_.positive_evidences_.erase(e);
       else {
 
         _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
@@ -1027,7 +1027,7 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
       }
     }
 
-    requirements_.CS.leave();
+    requirements_.CS_.leave();
     return r;
   } else {
 
@@ -1035,13 +1035,13 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
 
       ground = NULL;
 
-      requirements_.CS.enter();
+      requirements_.CS_.enter();
       auto now = Now();
       r_code::list<RequirementEntry>::const_iterator e;
-      for (e = requirements_.negative_evidences.begin(); e != requirements_.negative_evidences.end();) {
+      for (e = requirements_.negative_evidences_.begin(); e != requirements_.negative_evidences_.end();) {
 
         if ((*e).is_too_old(now)) // garbage collection.
-          e = requirements_.negative_evidences.erase(e);
+          e = requirements_.negative_evidences_.erase(e);
         else {
 
           _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
@@ -1050,26 +1050,26 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
           // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
           if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) { // tpl args will be valuated in bm.
 
-            requirements_.CS.leave();
+            requirements_.CS_.leave();
             return STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
           }
           ++e;
         }
       }
 
-      requirements_.CS.leave();
+      requirements_.CS_.leave();
       return WEAK_REQUIREMENT_ENABLED;
     } else { // some strong req. and some weak req.: true if among the entries complying with timings and bindings, the youngest |f->imdl is weaker than the youngest f->imdl.
 
       r = WEAK_REQUIREMENT_DISABLED;
       float32 negative_cfd = 0;
-      requirements_.CS.enter();
+      requirements_.CS_.enter();
       auto now = Now();
       r_code::list<RequirementEntry>::const_iterator e;
-      for (e = requirements_.negative_evidences.begin(); e != requirements_.negative_evidences.end();) {
+      for (e = requirements_.negative_evidences_.begin(); e != requirements_.negative_evidences_.end();) {
 
         if ((*e).is_too_old(now)) // garbage collection.
-          e = requirements_.negative_evidences.erase(e);
+          e = requirements_.negative_evidences_.erase(e);
         else {
 
           _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
@@ -1086,10 +1086,10 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
         }
       }
 
-      for (e = requirements_.positive_evidences.begin(); e != requirements_.positive_evidences.end();) {
+      for (e = requirements_.positive_evidences_.begin(); e != requirements_.positive_evidences_.end();) {
 
         if ((*e).is_too_old(now)) // garbage collection.
-          e = requirements_.positive_evidences.erase(e);
+          e = requirements_.positive_evidences_.erase(e);
         else {
           //(*e).f->get_reference(0)->trace();
           //f->get_reference(0)->trace();
@@ -1112,7 +1112,7 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
         }
       }
 
-      requirements_.CS.leave();
+      requirements_.CS_.leave();
       return r;
     }
   }
@@ -1517,16 +1517,16 @@ void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *c
   // Store the requirement before signaling the monitor so that its target will match the requirement.
   if (f_imdl->is_fact()) {
     if (is_simulation)
-      _store_requirement(&simulated_requirements_.positive_evidences, e);
+      _store_requirement(&simulated_requirements_.positive_evidences_, e);
     else
-      _store_requirement(&requirements_.positive_evidences, e);
+      _store_requirement(&requirements_.positive_evidences_, e);
   }
   else {
     // Negative requirement.
     if (!is_simulation)
-      _store_requirement(&requirements_.negative_evidences, e);
+      _store_requirement(&requirements_.negative_evidences_, e);
     else
-      _store_requirement(&simulated_requirements_.negative_evidences, e);
+      _store_requirement(&simulated_requirements_.negative_evidences_, e);
   }
 
   if (f_imdl->is_fact()) { // in case of a positive requirement tell monitors they can check for chaining again.
@@ -2706,10 +2706,10 @@ void SecondaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController 
   RequirementEntry e(f_p_f_imdl, controller, chaining_was_allowed);
   if (((_Fact*)f_p_f_imdl->get_reference(0)->get_reference(0))->is_fact()) {
 
-    _store_requirement(&requirements_.positive_evidences, e);
+    _store_requirement(&requirements_.positive_evidences_, e);
     reduce_cache<SecondaryMDLController>((Fact *)f_p_f_imdl, controller);
   } else
-    _store_requirement(&requirements_.negative_evidences, e);
+    _store_requirement(&requirements_.negative_evidences_, e);
 }
 
 void SecondaryMDLController::rate_model() { // acknowledge successes only; the purpose is to wake strong models up upon a context switch.

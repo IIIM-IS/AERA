@@ -170,9 +170,9 @@ protected:
 
   class RequirementCache {
   public:
-    CriticalSection CS;
-    r_code::list<RequirementEntry> positive_evidences;
-    r_code::list<RequirementEntry> negative_evidences;
+    CriticalSection CS_;
+    r_code::list<RequirementEntry> positive_evidences_;
+    r_code::list<RequirementEntry> negative_evidences_;
   };
 
   RequirementCache requirements_;
