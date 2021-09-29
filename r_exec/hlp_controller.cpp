@@ -182,7 +182,7 @@ MatchResult HLPController::check_evidences(_Fact *target, _Fact *&evidence) {
   r_code::list<EvidenceEntry>::const_iterator e;
   for (e = evidences_.list_.begin(); e != evidences_.list_.end();) {
 
-    if ((*e).is_too_old(now)) // garbage collection. // garbage collection.
+    if ((*e).is_too_old(now)) // garbage collection.
       e = evidences_.list_.erase(e);
     else {
 
