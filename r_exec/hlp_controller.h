@@ -129,35 +129,29 @@ protected:
     PredictedEvidenceEntry(_Fact *evidence);
   };
 
-  template<class E> class Cache {
-  public:
-    CriticalSection CS;
-    r_code::list<E> evidences;
-  };
+  CriticalSectionList<EvidenceEntry> evidences_;
+  CriticalSectionList<PredictedEvidenceEntry> predicted_evidences_;
 
-  Cache<EvidenceEntry> evidences_;
-  Cache<PredictedEvidenceEntry> predicted_evidences_;
-
-  template<class E> void _store_evidence(Cache<E> *cache, _Fact *evidence) {
+  template<class E> void _store_evidence(CriticalSectionList<E> *cache, _Fact *evidence) {
 
     E e(evidence);
-    cache->CS.enter();
+    cache->CS_.enter();
     auto now = Now();
     r_code::list<E>::const_iterator _e;
-    for (_e = cache->evidences.begin(); _e != cache->evidences.end();) {
+    for (_e = cache->list_.begin(); _e != cache->list_.end();) {
 
       if ((*_e).evidence_ == e.evidence_) {
         // Already stored.
-        cache->CS.leave();
+        cache->CS_.leave();
         return;
       }
       if ((*_e).is_too_old(now)) // garbage collection.
-        _e = cache->evidences.erase(_e);
+        _e = cache->list_.erase(_e);
       else
         ++_e;
     }
-    cache->evidences.push_front(e);
-    cache->CS.leave();
+    cache->list_.push_front(e);
+    cache->CS_.leave();
   }
 
   P<HLPBindingMap> bindings_;

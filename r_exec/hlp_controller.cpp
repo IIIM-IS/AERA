@@ -177,39 +177,39 @@ void HLPController::inject_prediction(Fact *prediction, float32 confidence) cons
 MatchResult HLPController::check_evidences(_Fact *target, _Fact *&evidence) {
 
   MatchResult r = MATCH_FAILURE;
-  evidences_.CS.enter();
+  evidences_.CS_.enter();
   auto now = Now();
   r_code::list<EvidenceEntry>::const_iterator e;
-  for (e = evidences_.evidences.begin(); e != evidences_.evidences.end();) {
+  for (e = evidences_.list_.begin(); e != evidences_.list_.end();) {
 
     if ((*e).is_too_old(now)) // garbage collection. // garbage collection.
-      e = evidences_.evidences.erase(e);
+      e = evidences_.list_.erase(e);
     else {
 
       if ((r = (*e).evidence_->is_evidence(target)) != MATCH_FAILURE) {
 
         evidence = (*e).evidence_;
-        evidences_.CS.leave();
+        evidences_.CS_.leave();
         return r;
       }
       ++e;
     }
   }
   evidence = NULL;
-  evidences_.CS.leave();
+  evidences_.CS_.leave();
   return r;
 }
 
 MatchResult HLPController::check_predicted_evidences(_Fact *target, _Fact *&evidence) {
 
   MatchResult r = MATCH_FAILURE;
-  predicted_evidences_.CS.enter();
+  predicted_evidences_.CS_.enter();
   auto now = Now();
   r_code::list<PredictedEvidenceEntry>::const_iterator e;
-  for (e = predicted_evidences_.evidences.begin(); e != predicted_evidences_.evidences.end();) {
+  for (e = predicted_evidences_.list_.begin(); e != predicted_evidences_.list_.end();) {
 
-    if ((*e).is_too_old(now)) // garbage collection. // garbage collection.
-      e = predicted_evidences_.evidences.erase(e);
+    if ((*e).is_too_old(now)) // garbage collection.
+      e = predicted_evidences_.list_.erase(e);
     else {
 
       if ((r = (*e).evidence_->is_evidence(target)) != MATCH_FAILURE) {
@@ -217,7 +217,7 @@ MatchResult HLPController::check_predicted_evidences(_Fact *target, _Fact *&evid
         if (target->get_cfd() < (*e).evidence_->get_cfd()) {
 
           evidence = (*e).evidence_;
-          predicted_evidences_.CS.leave();
+          predicted_evidences_.CS_.leave();
           return r;
         } else
           r = MATCH_FAILURE;
@@ -226,7 +226,7 @@ MatchResult HLPController::check_predicted_evidences(_Fact *target, _Fact *&evid
     }
   }
   evidence = NULL;
-  predicted_evidences_.CS.leave();
+  predicted_evidences_.CS_.leave();
   return r;
 }
 

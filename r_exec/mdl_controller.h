@@ -219,15 +219,15 @@ protected:
     _Mem::Get()->push_reduction_job(j);
   }
 
-  template<class E> void reduce_cache(Cache<E> *cache, Fact *f_p_f_imdl, MDLController *controller) {
+  template<class E> void reduce_cache(CriticalSectionList<E> *cache, Fact *f_p_f_imdl, MDLController *controller) {
 
-    cache->CS.enter();
+    cache->CS_.enter();
     auto now = Now();
     r_code::list<E>::const_iterator _e;
-    for (_e = cache->evidences.begin(); _e != cache->evidences.end();) {
+    for (_e = cache->list_.begin(); _e != cache->list_.end();) {
 
       if ((*_e).is_too_old(now)) // garbage collection.
-        _e = cache->evidences.erase(_e);
+        _e = cache->list_.erase(_e);
       else if ((*_e).evidence_->get_before() <= now)
         // Skip the evidence if its time interval ends at exactly now. This is a little
         // more strict than is_too_old() which only checks get_before() < now.
@@ -239,7 +239,7 @@ protected:
         ++_e;
       }
     }
-    cache->CS.leave();
+    cache->CS_.leave();
   }
 
   bool monitor_predictions(_Fact *input);
