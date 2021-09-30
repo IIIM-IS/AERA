@@ -2221,19 +2221,20 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, S
         bm->bind_pattern(f_imdl->get_reference(0)), f_imdl->get_after(), f_imdl->get_before(),
         f_imdl->get_cfd(), f_imdl->get_psln_thr());
       // If root is provided, pass NULL as the sim to use the Sim in ground for forward chaining.
-      abduce_simulated_lhs(bm, sim->get_f_super_goal(), f_imdl_copy, sim->get_opposite(), f_imdl->get_cfd(), prediction_sim ? NULL : new Sim(sim), ground, already_signalled, goal);
+      _Fact* injected_lhs = abduce_simulated_lhs(bm, sim->get_f_super_goal(), f_imdl_copy, sim->get_opposite(), f_imdl->get_cfd(), prediction_sim ? NULL : new Sim(sim), ground, already_signalled, goal);
       return true;
     }
     return false;
   default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
+    if (c_s == STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT && prediction_sim && ground && strong_requirement_ground) {
+      // A strong requirement disabled the weak requirement.
 #ifdef WITH_DETAIL_OID
-    if (c_s == STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT && prediction_sim && ground && strong_requirement_ground)
-      // A strong requirement blocked the weak requirement. Just log the result.
       OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": fact (" <<
         to_string(ground->get_detail_oid()) << ") pred fact imdl, from goal req " << goal->get_oid() <<
         ", simulated pred disabled by fact (" << to_string(strong_requirement_ground->get_detail_oid()) <<
         ") pred |fact imdl");
 #endif
+    }
     return false;
   }
 }
