@@ -1529,7 +1529,8 @@ void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *c
       _store_requirement(&simulated_requirements_.negative_evidences_, e);
   }
 
-  if (f_imdl->is_fact()) { // in case of a positive requirement tell monitors they can check for chaining again.
+  // In case of a positive requirement, tell monitors they can check for chaining again.
+  if (f_imdl->is_fact()) {
     r_code::list<P<_GMonitor> >::const_iterator m;
     g_monitorsCS_.enter();
     for (m = r_monitors_.begin(); m != r_monitors_.end();) { // signal r-monitors.
