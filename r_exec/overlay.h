@@ -246,6 +246,36 @@ public:
   r_code::list<T> list_;
 };
 
+/**
+ * A DefeasibleValidity is an object this is attached to a defeasible prediction and copied
+ * to each later prediction in forward chaining. If a new fact defeats the grounds of
+ * the original prediction, then call invalidate() to invalidate the defeasible prediction
+ * and all predictions which followed from it. (The is_invalidate() method of Pred checks its
+ * list of DefeasibleValidity and invalidates the Pred if a DefeasibleValidity is invalidated.)
+ */
+class r_exec_dll DefeasibleValidity :
+  public _Object {
+public:
+  /**
+   * Create a DefeasibleValidity that is not invalidated.
+   */
+  DefeasibleValidity() : invalidated_(0) {}
+
+  /**
+   * Check if this is invalidated
+   * \return True if this is invalidated.
+   */
+  bool is_invalidated() { return invalidated_ != 0; }
+
+  /**
+   * Set this to invalidated so that is_invalidated() returns true.
+   */
+  void invalidate() { invalidated_ = 1; }
+
+private:
+  volatile uint32 invalidated_; // 32 bit alignment.
+};
+
 }
 
 

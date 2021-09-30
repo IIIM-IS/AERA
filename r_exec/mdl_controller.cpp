@@ -1529,8 +1529,10 @@ void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *c
       _store_requirement(&simulated_requirements_.negative_evidences_, e);
   }
 
-  // In case of a positive requirement, tell monitors they can check for chaining again.
-  if (f_imdl->is_fact()) {
+  // In case of a positive non-simulated requirement or any simulated requirement (positive or negative),
+  // tell monitors they can check for chaining again. Even a simulated negative (strong) requirement may cause
+  // check_simulated_imdl to take some action (such as to invalidate a defeasible prediction).
+  if (f_imdl->is_fact() || is_simulation) {
     r_code::list<P<_GMonitor> >::const_iterator m;
     g_monitorsCS_.enter();
     for (m = r_monitors_.begin(); m != r_monitors_.end();) { // signal r-monitors.
@@ -2222,12 +2224,50 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, S
         f_imdl->get_cfd(), f_imdl->get_psln_thr());
       // If root is provided, pass NULL as the sim to use the Sim in ground for forward chaining.
       _Fact* injected_lhs = abduce_simulated_lhs(bm, sim->get_f_super_goal(), f_imdl_copy, sim->get_opposite(), f_imdl->get_cfd(), prediction_sim ? NULL : new Sim(sim), ground, already_signalled, goal);
+
+      if (c_s == WEAK_REQUIREMENT_ENABLED && prediction_sim && injected_lhs) {
+        // We injected a simulated prediction. Check if there could be a strong requirement in the future.
+        uint32 wr_count;
+        uint32 sr_count;
+        get_requirement_count(wr_count, sr_count);
+        if (wr_count > 0 && sr_count > 0) {
+          // Attach a DefeasibleValidity object to the prediction so that it can be invalidated later by a strong requirement.
+          P<DefeasibleValidity> defeasible_validity = new DefeasibleValidity();
+          injected_lhs->get_pred()->defeasible_validities_.push_back(defeasible_validity);
+
+          // Add to the list which is later checked if we match a strong requirement.
+          defeasible_weak_requirements_.CS_.enter();
+          defeasible_weak_requirements_.list_.push_front(DefeasibleWeakRequirement(ground, defeasible_validity));
+          defeasible_weak_requirements_.CS_.leave();
+        }
+      }
+
       return true;
     }
     return false;
   default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
     if (c_s == STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT && prediction_sim && ground && strong_requirement_ground) {
       // A strong requirement disabled the weak requirement.
+
+      // Check if the strong requirement defeats a result from a weak requirement.
+      defeasible_weak_requirements_.CS_.enter();
+      for (auto e = defeasible_weak_requirements_.list_.begin(); e != defeasible_weak_requirements_.list_.end();) {
+        if (e->weak_requirement_->is_invalidated() || e->defeasible_validity_->is_invalidated())
+          // Garbage collection.
+          e = defeasible_weak_requirements_.list_.erase(e);
+        else if (((_Fact*)e->weak_requirement_) == ground) {
+          // The strong requirement defeats the result based on the weak requirement, so invalidate the
+          // DefeasibleValidity object which was attached to the resulting and following predictions.
+          e->defeasible_validity_->invalidate();
+
+          // We are done checking the grounds for this result, so delete this entry.
+          e = defeasible_weak_requirements_.list_.erase(e);
+        }
+        else
+          ++e;
+      }
+      defeasible_weak_requirements_.CS_.leave();
+
 #ifdef WITH_DETAIL_OID
       OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": fact (" <<
         to_string(ground->get_detail_oid()) << ") pred fact imdl, from goal req " << goal->get_oid() <<

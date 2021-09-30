@@ -534,6 +534,7 @@ Pred::Pred(_Fact *target, const Pred* simulations_source, float32 psln_thr) : LO
   for (uint16 i = 0; i < simulations_source->get_simulations_size(); ++i)
     simulations_copy.push_back(simulations_source->get_simulation(i));
   construct(target, simulations_copy, psln_thr);
+  defeasible_validities_ = simulations_source->defeasible_validities_;
 }
 
 void Pred::construct(_Fact *target, const std::vector<P<Sim> >& simulations, float32 psln_thr) {
@@ -573,6 +574,14 @@ bool Pred::is_invalidated() {
       return true;
     }
   }
+
+  for (size_t i = 0; i < defeasible_validities_.size(); ++i) {
+    if (defeasible_validities_[i]->is_invalidated()) {
+      invalidate();
+      return true;
+    }
+  }
+
   if (get_reference(0)->is_invalidated()) {
 
     invalidate();

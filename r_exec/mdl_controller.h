@@ -208,6 +208,31 @@ protected:
   CriticalSection active_requirementsCS_;
   UNORDERED_MAP<P<_Fact>, RequirementsPair, r_code::PHash<_Fact> > active_requirements_; // Key: P<_Fact>: f1 as in f0->pred->f1->imdl; Value:requirements having allowed the production of prediction.
 
+  /**
+   * A DefeasibleWeakRequirement holds the weak requirement which is the ground for a defeasible
+   * prediction, and the DefeasibleValidity which is attached to the prediction and is invalidated if a
+   * strong requirement later defeats the weak requirement.
+   */
+  class DefeasibleWeakRequirement {
+  public:
+    DefeasibleWeakRequirement()
+      : weak_requirement_(NULL), defeasible_validity_(NULL)
+    {}
+
+    /**
+     * Create a DefeasibleWeakRequirement with the given values
+     * \param weak_requirement The weak requirement which is the ground for the defeasible prediction.
+     * \param defeasible_validity The DefeasibleValidity object that is attached to the defeasible prediction.
+     */
+    DefeasibleWeakRequirement(_Fact* weak_requirement, DefeasibleValidity* defeasible_validity)
+      : weak_requirement_(weak_requirement), defeasible_validity_(defeasible_validity)
+    {}
+
+    P<_Fact> weak_requirement_;
+    P<DefeasibleValidity> defeasible_validity_;
+  };
+  CriticalSectionList<DefeasibleWeakRequirement> defeasible_weak_requirements_;
+
   template<class C> void reduce_cache(Fact *f_p_f_imdl, MDLController *controller) { // fwd; controller is the controller of the requirement which produced f_p_f_imdl.
 
     BatchReductionJob<C, Fact, MDLController> *j = new BatchReductionJob<C, Fact, MDLController>((C *)this, f_p_f_imdl, controller);
