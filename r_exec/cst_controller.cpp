@@ -256,7 +256,6 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
     if (((_Fact *)input->object_) == inputs_[i])
       return false;
   }
-  auto now = Now();
   // if(match_deadline.time_since_epoch().count() == 0)
   // std::cout<<Time::ToString_seconds(Now()-st)<<" "<<std::hex<<this<<std::dec<<" (0) "<<input->object->get_oid()<<std::endl;
   // else
