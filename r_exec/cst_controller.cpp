@@ -434,7 +434,7 @@ void CSTController::reduce(r_exec::View *input) {
         o = overlays_.erase(o);
       else {
 
-        match = ((CSTOverlay *)*o)->reduce(input, offspring);
+        match = (((CSTOverlay *)*o)->reduce(input, offspring) || match);
         if (offspring)
           overlays_.push_front(offspring);
 
