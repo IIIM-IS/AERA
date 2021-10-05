@@ -1862,7 +1862,7 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
       // Note: The sim is from simulated backward chaining. retrieve_simulated_imdl_bwd checks for simulated
       // requirements, but these are produced in simulated forward chaining which hasn't started yet in this
       // simulation. Because, there are no simulated requirements, retrieve_simulated_imdl_bwd returns right away
-      // without using sim. If the ligic is changed so that retrieve_simulated_imdl_bwd does use sim, then we
+      // without using sim. If the logic is changed so that retrieve_simulated_imdl_bwd does use sim, then we
       // need a flag to check for a requirement from any Sim with the same root (not the exact same forward-chaining Sim).
       switch (retrieve_simulated_imdl_bwd(bm, f_imdl, sim, ground, strong_requirement_ground)) {
       case WEAK_REQUIREMENT_ENABLED:
