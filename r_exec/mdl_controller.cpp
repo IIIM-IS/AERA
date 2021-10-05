@@ -2006,6 +2006,8 @@ void PrimaryMDLController::abduce_imdl(HLPBindingMap *bm, Fact *super_goal, Fact
   if (get_template_timings(bm, f_imdl_after, f_imdl_before)) {
     Utils::SetTimestamp<Code>(f_imdl, FACT_AFTER, f_imdl_after);
     Utils::SetTimestamp<Code>(f_imdl, FACT_BEFORE, f_imdl_before);
+    // For an imdl, also make the binding map fwd timing variables match the fact.
+    bm->reset_fwd_timings(f_imdl);
   }
   f_imdl->set_cfd(confidence);
 
@@ -2163,6 +2165,8 @@ void PrimaryMDLController::abduce_simulated_imdl(HLPBindingMap *bm, Fact *super_
   if (get_template_timings(bm, f_imdl_after, f_imdl_before)) {
     Utils::SetTimestamp<Code>(f_imdl, FACT_AFTER, f_imdl_after);
     Utils::SetTimestamp<Code>(f_imdl, FACT_BEFORE, f_imdl_before);
+    // For an imdl, also make the binding map fwd timing variables match the fact.
+    bm->reset_fwd_timings(f_imdl);
   }
   f_imdl->set_cfd(confidence);
 
