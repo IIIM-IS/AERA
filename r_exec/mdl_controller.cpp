@@ -1951,7 +1951,7 @@ void PrimaryMDLController::abduce_no_simulation(Fact *f_super_goal, bool opposit
 
 void PrimaryMDLController::abduce_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim, Fact *ground, bool set_before) { // goal is f->g->f->object or f->g->|f->object; called concurrently by reduce() and _GMonitor::update().
 
-  if (evaluate_bwd_guards(bm)) { // bm may be updated.
+  if (evaluate_bwd_guards(bm, true)) { // bm may be updated.
 
     P<_Fact> bound_lhs = (_Fact *)bm->bind_pattern(get_lhs());
     if (opposite)
@@ -2031,7 +2031,7 @@ _Fact* PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super
   Sim *sim, Fact *ground, unordered_map<Sim*, std::vector<P<Code> > >* already_signalled, Fact* goal_requirement) {
 
   _Fact* injected_lhs = NULL;
-  if (evaluate_bwd_guards(bm)) { // bm may be updated.
+  if (evaluate_bwd_guards(bm, true)) { // bm may be updated.
 
     P<_Fact> bound_lhs = (_Fact *)bm->bind_pattern(get_lhs());
     if (opposite)
@@ -2191,7 +2191,7 @@ bool PrimaryMDLController::check_imdl(Fact *goal, HLPBindingMap *bm) { // goal i
   case WEAK_REQUIREMENT_ENABLED:
     f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(true);
   case NO_REQUIREMENT:
-    if (evaluate_bwd_guards(bm)) { // bm may be updated.
+    if (evaluate_bwd_guards(bm, true)) { // bm may be updated.
       // JTNote: This changes an object which is already injected.
       f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
       abduce_lhs(bm, sim->get_f_super_goal(), f_imdl, sim->get_opposite(), f_imdl->get_cfd(), new Sim(SIM_ROOT, seconds(0), sim->get_f_super_goal(), sim->get_opposite(), this, 1), ground, false);
@@ -2221,7 +2221,7 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, S
   case WEAK_REQUIREMENT_ENABLED:
     f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(true);
   case NO_REQUIREMENT:
-    if (evaluate_bwd_guards(bm)) { // bm may be updated.
+    if (evaluate_bwd_guards(bm, true)) { // bm may be updated.
       // valuate f_imdl from updated bm into a copy.
       P<Fact> f_imdl_copy = new Fact(
         bm->bind_pattern(f_imdl->get_reference(0)), f_imdl->get_after(), f_imdl->get_before(),
