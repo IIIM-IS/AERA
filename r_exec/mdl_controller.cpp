@@ -2661,7 +2661,7 @@ bool PrimaryMDLController::get_template_timings(HLPBindingMap *bm, Timestamp& af
     return true;
   }
 
-  // Make a copy of the binding map and evaluate to backward guards.
+  // Make a copy of the binding map and evaluate the backward guards.
   P<HLPBindingMap> bm_copy = new HLPBindingMap(bm);
   if (!evaluate_bwd_guards(bm_copy))
     return false;
