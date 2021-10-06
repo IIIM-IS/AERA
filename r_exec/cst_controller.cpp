@@ -122,7 +122,7 @@ bool CSTOverlay::can_match(Timestamp now) const { // to reach inputs until a giv
   return now <= match_deadline_;
 }
 
-void CSTOverlay::inject_production(View* input) {
+_Fact* CSTOverlay::inject_production(View* input) {
 
   Fact *f_icst = ((CSTController *)controller_)->get_f_icst(bindings_, &inputs_);
   auto now = Now();//f_icst->get_reference(0)->trace();
@@ -146,7 +146,7 @@ void CSTOverlay::inject_production(View* input) {
       for (pred = predictions_.begin(); pred != predictions_.end(); ++pred) // add antecedents to the prediction.
         prediction->grounds_.push_back(*pred);
       if (!((CSTController *)controller_)->inject_prediction(f_p_f_icst, lowest_cfd_, time_to_live)) // inject a f->pred->icst in the primary group, no rdx.
-        return;
+        return NULL;
 
       string f_icst_info;
 #ifdef WITH_DETAIL_OID
@@ -154,11 +154,13 @@ void CSTOverlay::inject_production(View* input) {
 #endif
       OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " fact " << f_p_f_icst->get_oid() <<
         " pred fact " << f_icst_info << "icst[" << controller_->getObject()->get_oid() << "][" << inputs_info << "]");
+      return f_p_f_icst;
     } else {
       ((CSTController *)controller_)->inject_icst(f_icst, lowest_cfd_, time_to_live); // inject f->icst in the primary and secondary groups, and in the output groups.
 
       OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " fact " << f_icst->get_oid() << " icst[" << controller_->getObject()->get_oid() << "][" <<
         inputs_info << "]");
+      return f_icst;
     }
   } else { // there are simulations; the production is therefore a prediction; add the simulations to the latter.
 
@@ -173,7 +175,7 @@ void CSTOverlay::inject_production(View* input) {
       prediction->defeasible_validities_ = ((_Fact*)input->object_)->get_pred()->defeasible_validities_;
     Fact *f_p_f_icst = new Fact(prediction, now, now, 1, 1);
     if (!((HLPController *)controller_)->inject_prediction(f_p_f_icst, lowest_cfd_)) // inject a simulated prediction in the main group.
-      return;
+      return NULL;
     OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " cst " << getObject()->get_oid() << ": fact " <<
       input->object_->get_oid() << " -> fact " << f_p_f_icst->get_oid() << " simulated pred fact icst [" <<
       inputs_info << "]");
@@ -197,6 +199,7 @@ void CSTOverlay::inject_production(View* input) {
           inputs_info << "]");
       }
     }
+    return f_p_f_icst;
   }
 }
 

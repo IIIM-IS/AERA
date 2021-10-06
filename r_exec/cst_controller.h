@@ -112,7 +112,7 @@ protected:
    * Use inputs_ to make and inject an icst.
    * \param input The input which triggered the production, only used for log output.
    */
-  void inject_production(View* input);
+  _Fact* inject_production(View* input);
   void update(HLPBindingMap *map, _Fact *input);
 
   /**
