@@ -1475,14 +1475,15 @@ void TopLevelMDLController::register_simulated_goal_outcome(Fact *goal, bool suc
   Code *success_object = new Success(goal, evidence, 1);
   Pred *evidence_pred = evidence->get_pred();
   float32 confidence = evidence_pred->get_target()->get_cfd();
-  auto now = Now();
+  _Fact* evidence_f_target = evidence_pred->get_target();
   _Fact *f_success_object;
   if (success)
-    f_success_object = new Fact(success_object, now, now, confidence, 1);
+    f_success_object = new Fact(success_object, evidence_f_target->get_after(), evidence_f_target->get_before(), confidence, 1);
   else
-    f_success_object = new AntiFact(success_object, now, now, confidence, 1);
+    f_success_object = new AntiFact(success_object, evidence_f_target->get_after(), evidence_f_target->get_before(), confidence, 1);
 
   Pred *pred = new Pred(f_success_object, evidence_pred, 1);
+  auto now = Now();
   Fact *f_pred = new Fact(pred, now, now, 1, 1);
 
   Group *primary_host = get_host();
