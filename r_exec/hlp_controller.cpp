@@ -163,7 +163,7 @@ bool HLPController::evaluate_bwd_guards(HLPBindingMap *bm) {
   return HLPOverlay::EvaluateBWDGuards(this, bm);
 }
 
-void HLPController::inject_prediction(Fact *prediction, float32 confidence) const { // prediction is simulated: f->pred->f->target.
+bool HLPController::inject_prediction(Fact *prediction, float32 confidence) const { // prediction is simulated: f->pred->f->target.
 
   Code *primary_host = get_host();
   float32 sln_thr = primary_host->code(GRP_SLN_THR).asFloat();
@@ -171,7 +171,10 @@ void HLPController::inject_prediction(Fact *prediction, float32 confidence) cons
 
     View *view = new View(View::SYNC_ONCE, Now(), confidence, 1, primary_host, primary_host, prediction); // SYNC_ONCE,res=1.
     _Mem::Get()->inject(view);
+    return true;
   }
+
+  return false;
 }
 
 MatchResult HLPController::check_evidences(_Fact *target, _Fact *&evidence) {

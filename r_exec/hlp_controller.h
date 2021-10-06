@@ -200,7 +200,7 @@ public:
   Group *get_host() const { return (Group *)getView()->get_host(); }
   bool has_tpl_args() const { return has_tpl_args_; }
 
-  void inject_prediction(Fact *prediction, float32 confidence) const; // for simulated predictions.
+  bool inject_prediction(Fact *prediction, float32 confidence) const; // for simulated predictions.
 };
 }
 
