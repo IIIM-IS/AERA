@@ -23,7 +23,7 @@
     min_sim_time_horizon="0"
     max_sim_time_horizon="50000"
     sim_time_horizon_factor="0.3"
-    tpx_time_horizon="500000"
+    tpx_time_horizon="300000"
     perf_sampling_period="250000"
     float_tolerance="0.00001"
     time_tolerance="10000"
