@@ -1651,7 +1651,8 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
       if (prediction) { // no rdx nor monitoring if the input was a prediction; case of a reuse: f_imdl becomes f->p->f_imdl.
 
         Fact *f_pred_f_imdl = new Fact(new Pred(f_imdl, 1), now, now, 1, 1);
-        inject_prediction(production, f_pred_f_imdl, confidence, before - now, NULL);
+        if (!inject_prediction(production, f_pred_f_imdl, confidence, before - now, NULL))
+          return;
         string f_imdl_info;
 #ifdef WITH_DETAIL_OID
         f_imdl_info = " fact (" + to_string(f_imdl->get_detail_oid()) + ") imdl";
@@ -1685,7 +1686,8 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
   } else { // no monitoring for simulated predictions.
 
     // In the Pred constructor, we already copied the simulations from prediction.
-    HLPController::inject_prediction(production, confidence); // inject a simulated prediction in the primary group.
+    if (!HLPController::inject_prediction(production, confidence)) // inject a simulated prediction in the primary group.
+      return;
     string ground_info;
 #ifdef WITH_DETAIL_OID
     if (ground)
@@ -1697,7 +1699,8 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
     if (is_cmd()) {
       // Inject the predicted imdl, in case other models are reusing this model.
       Fact *f_pred_f_imdl = new Fact(new Pred(f_imdl, prediction, 1), now, now, 1, 1);
-      HLPController::inject_prediction(f_pred_f_imdl, confidence);
+      if (!HLPController::inject_prediction(f_pred_f_imdl, confidence))
+        return;
       OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << getObject()->get_oid() << ": fact " <<
         input->get_oid() << " pred -> fact " << f_pred_f_imdl->get_oid() << " simulated pred fact imdl" << ground_info);
     }

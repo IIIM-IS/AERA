@@ -145,7 +145,8 @@ void CSTOverlay::inject_production(View* input) {
       UNORDERED_SET<P<_Fact>, PHash<_Fact> >::const_iterator pred;
       for (pred = predictions_.begin(); pred != predictions_.end(); ++pred) // add antecedents to the prediction.
         prediction->grounds_.push_back(*pred);
-      ((CSTController *)controller_)->inject_prediction(f_p_f_icst, lowest_cfd_, time_to_live); // inject a f->pred->icst in the primary group, no rdx.
+      if (!((CSTController *)controller_)->inject_prediction(f_p_f_icst, lowest_cfd_, time_to_live)) // inject a f->pred->icst in the primary group, no rdx.
+        return;
 
       string f_icst_info;
 #ifdef WITH_DETAIL_OID
@@ -171,7 +172,8 @@ void CSTOverlay::inject_production(View* input) {
       // Propagate the list of DefeasibleValidity (if any) from the input to the new prediction.
       prediction->defeasible_validities_ = ((_Fact*)input->object_)->get_pred()->defeasible_validities_;
     Fact *f_p_f_icst = new Fact(prediction, now, now, 1, 1);
-    ((HLPController *)controller_)->inject_prediction(f_p_f_icst, lowest_cfd_); // inject a simulated prediction in the main group.
+    if (!((HLPController *)controller_)->inject_prediction(f_p_f_icst, lowest_cfd_)) // inject a simulated prediction in the main group.
+      return;
     OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " cst " << getObject()->get_oid() << ": fact " <<
       input->object_->get_oid() << " -> fact " << f_p_f_icst->get_oid() << " simulated pred fact icst [" <<
       inputs_info << "]");
