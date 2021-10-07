@@ -692,15 +692,19 @@ Simulator
   * DONE. Abduce_simulated_lhs already_signalled https://github.com/IIIM-IS/AERA/pull/181
   * DONE. Strong requirement to retroactively disable a weak requirement https://github.com/IIIM-IS/AERA/pull/182
 
+2021-10-07
+* hand-grab-sphere-learn
+  * DONE. Revert pull request #160 https://github.com/IIIM-IS/AERA/pull/183
+  * Pull request #175 updated: Now simulations correctly proceed by frame.
+  * REVIEWED. Task environment doc
+
 next meeting
 * hand-grab-sphere-learn
   * Make pull request for making an icst in the next frame of a Sim branch
   * Make pull request for making a CSTOverlay for each match of a member
 * Review/merge new functionality pull requests for:
   * REVIEWING. PTPX: Make a candidate model from every matching f_icst https://github.com/IIIM-IS/replicode/pull/165
-  * Limiting the time interval of committed non-simulated command goals https://github.com/IIIM-IS/AERA/pull/175
-* Review/merge bug fix pull requests for:
-  * REPRODUCE. simulated trigger in PrimaryMDLOverlay::reduce https://github.com/IIIM-IS/replicode/pull/119
+  * REVIEWING. Limiting the time interval of abduced commands https://github.com/IIIM-IS/AERA/pull/175
 * Review diag_mode_rel_0_1 tags https://github.com/IIIM-IS/replicode/issues?q=is%3Aopen+is%3Aissue+milestone%3Adiag_mode_rel_0_1
 
 TODO
