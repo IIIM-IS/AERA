@@ -106,7 +106,6 @@ protected:
 
   UNORDERED_SET<P<_Fact>, r_code::PHash<_Fact> > predictions_; // f0->pred->f1->obj.
   UNORDERED_SET<P<Sim>, r_code::PHash<Sim> > simulations_;
-  uint32 original_patterns_size_;
 
   /**
    * Use inputs_ to make and inject an icst.

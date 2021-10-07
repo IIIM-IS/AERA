@@ -85,7 +85,6 @@ using namespace r_code;
 namespace r_exec {
 
 CSTOverlay::CSTOverlay(Controller *c, HLPBindingMap *bindings) : HLPOverlay(c, bindings), match_deadline_(Timestamp(seconds(0))), lowest_cfd_(1) {
-  original_patterns_size_ = 0;
 }
 
 CSTOverlay::CSTOverlay(const CSTOverlay *original) : HLPOverlay(original->controller_, original->bindings_) {
@@ -95,7 +94,6 @@ CSTOverlay::CSTOverlay(const CSTOverlay *original) : HLPOverlay(original->contro
   simulations_ = original->simulations_;
   match_deadline_ = original->match_deadline_;
   lowest_cfd_ = original->lowest_cfd_;
-  original_patterns_size_ = original->original_patterns_size_;
   inputs_ = original->inputs_;
 }
 
@@ -112,7 +110,6 @@ void CSTOverlay::load_patterns() {
     _Fact *pattern = (_Fact *)object->get_reference(object->code(obj_set_index + i).asIndex());
     patterns_.push_back(pattern);
   }
-  original_patterns_size_ = patterns_.size();
 }
 
 bool CSTOverlay::can_match(Timestamp now) const { // to reach inputs until a given thz in the past, return now<deadline+thz.
@@ -310,7 +307,7 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
       } else { // guards already evaluated, full match.
 //std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" full match\n";
         offspring = get_offspring(bm, (_Fact *)input->object_);
-        if (inputs_.size() == original_patterns_size_) inject_production(input);
+        inject_production(input);
         invalidate();
         store_evidence(input->object_, prediction, is_simulation);
         return true;
