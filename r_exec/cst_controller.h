@@ -163,6 +163,7 @@ public:
 class CSTController :
   public HLPController {
 private:
+  friend class CSTOverlay;
   Group *secondary_host_;
 
   /**
