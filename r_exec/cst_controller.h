@@ -153,7 +153,7 @@ public:
    * if this returns a pattern.
    * \return The matching pattern from patterns_, or NULL if not found.
    */
-  _Fact* CSTOverlay::bindPattern(_Fact *input, HLPBindingMap* map);
+  _Fact* CSTOverlay::bindPattern(_Fact *input, HLPBindingMap* map, Sim* predictionSimulation);
 };
 
 // Backward chaining:
