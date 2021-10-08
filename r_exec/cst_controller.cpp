@@ -329,6 +329,17 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
 
 _Fact* CSTOverlay::bindPattern(_Fact *input, HLPBindingMap* map, Sim* predictionSimulation)
 {
+  if (predictionSimulation) {
+    if (simulations_.size() > 1)
+      // TODO: Handle the case where simulations_ has multiple simulation roots.
+      return NULL;
+    if (simulations_.size() == 1) {
+      if (*simulations_.begin() != predictionSimulation)
+        // This overlay is for a simulation, but for a different simulation than the input predictionSimulation.
+        return NULL;
+    }
+  }
+
   r_code::list<P<_Fact> >::const_iterator p;
   for (p = patterns_.begin(); p != patterns_.end(); ++p) {
 
