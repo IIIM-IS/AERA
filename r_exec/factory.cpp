@@ -575,7 +575,7 @@ bool Pred::is_invalidated() {
     }
   }
 
-  for (auto d = defeasible_validities_.begin(); d != defeasible_validities_.begin(); ++d) {
+  for (auto d = defeasible_validities_.begin(); d != defeasible_validities_.end(); ++d) {
     if ((*d)->is_invalidated()) {
       invalidate();
       return true;
