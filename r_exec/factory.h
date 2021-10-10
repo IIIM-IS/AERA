@@ -361,7 +361,7 @@ public:
    * Create a Pred with the given values.
    * \param target The prediction target.
    * \param simulations_source The Pred with the list of simulations to copy. This also copies the
-   * list of DefeasibleValidity from simulations_source to the new Pred.
+   * set of DefeasibleValidity from simulations_source to the new Pred.
    * \param psln_thr The propagation of saliency threshold.
    */
   Pred(_Fact *target, const Pred* simulations_source, float32 psln_thr);
@@ -378,8 +378,8 @@ public:
   _Fact *get_target() const { return (_Fact *)get_reference(0); }
 
   std::vector<P<_Fact> > grounds_; // f1->obj; predictions that were used to build this predictions (i.e. antecedents); empty if simulated.
-  // The list of DefeasibleValidity which is copied to each Pred made from this one. See is_invalidated().
-  std::vector<P<DefeasibleValidity> > defeasible_validities_;
+  // The set of DefeasibleValidity which is copied to each Pred made from this one. See is_invalidated().
+  std::unordered_set<P<DefeasibleValidity>, r_code::PHash<DefeasibleValidity> > defeasible_validities_;
 
   bool is_simulation() const { return get_simulations_size() > 0; }
 

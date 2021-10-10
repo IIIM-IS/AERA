@@ -2241,7 +2241,7 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, S
         if (wr_count > 0 && sr_count > 0) {
           // Attach a DefeasibleValidity object to the prediction so that it can be invalidated later by a strong requirement.
           P<DefeasibleValidity> defeasible_validity = new DefeasibleValidity();
-          injected_lhs->get_pred()->defeasible_validities_.push_back(defeasible_validity);
+          injected_lhs->get_pred()->defeasible_validities_.insert(defeasible_validity);
 
           // Add to the list which is later checked if we match a strong requirement.
           defeasible_weak_requirements_.CS_.enter();

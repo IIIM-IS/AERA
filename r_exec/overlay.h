@@ -251,7 +251,7 @@ public:
  * to each later prediction in forward chaining. If a new fact defeats the grounds of
  * the original prediction, then call invalidate() to invalidate the defeasible prediction
  * and all predictions which followed from it. (The is_invalidate() method of Pred checks its
- * list of DefeasibleValidity and invalidates the Pred if a DefeasibleValidity is invalidated.)
+ * set of DefeasibleValidity and invalidates the Pred if a DefeasibleValidity is invalidated.)
  */
 class r_exec_dll DefeasibleValidity :
   public _Object {
