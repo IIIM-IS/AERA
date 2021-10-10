@@ -95,6 +95,7 @@ CSTOverlay::CSTOverlay(const CSTOverlay *original) : HLPOverlay(original->contro
   match_deadline_ = original->match_deadline_;
   lowest_cfd_ = original->lowest_cfd_;
   inputs_ = original->inputs_;
+  defeasible_validities_ = original->defeasible_validities_;
 }
 
 CSTOverlay::~CSTOverlay() {
@@ -168,8 +169,8 @@ _Fact* CSTOverlay::inject_production(View* input) {
     // Add the simulations to the prediction.
     Pred *prediction = new Pred(f_icst, simulations_copy, 1);
     if (((_Fact*)input->object_)->get_pred())
-      // Propagate the list of DefeasibleValidity (if any) from the input to the new prediction.
-      prediction->defeasible_validities_ = ((_Fact*)input->object_)->get_pred()->defeasible_validities_;
+      // Propagate the accumulated of DefeasibleValidity from all the inputs to the new prediction.
+      prediction->defeasible_validities_ = defeasible_validities_;
     Fact *f_p_f_icst = new Fact(prediction, now, now, 1, 1);
     if (!((HLPController *)controller_)->inject_prediction(f_p_f_icst, lowest_cfd_)) // inject a simulated prediction in the main group.
       return NULL;
@@ -211,6 +212,9 @@ void CSTOverlay::update(HLPBindingMap *map, _Fact *input) {
       }
     } else
       predictions_.insert(input);
+
+    // Accumulate the DefeasibleValidity objects from each input.
+    defeasible_validities_.insert(prediction->defeasible_validities_.begin(), prediction->defeasible_validities_.end());
   } else
     last_cfd = input->get_cfd();
 
