@@ -85,16 +85,9 @@ using namespace r_code;
 namespace r_exec {
 
 MDLOverlay::MDLOverlay(Controller *c, const HLPBindingMap *bindings) : HLPOverlay(c, bindings, true) {
-
-  load_patterns();
 }
 
 MDLOverlay::~MDLOverlay() {
-}
-
-void MDLOverlay::load_patterns() {
-
-  patterns_.push_back(((MDLController *)controller_)->get_lhs());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

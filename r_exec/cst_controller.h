@@ -102,6 +102,8 @@ protected:
   Timestamp match_deadline_; // before deadline after the last match.
   float32 lowest_cfd_; // among the inputs (forward chaining).
 
+  r_code::list<P<_Fact> > patterns_;
+
   std::vector<P<_Fact> > inputs_;
   // The set of accumulated DefeasibleValidity from inputs, which is copied to each produced Pred.
   std::unordered_set<P<DefeasibleValidity>, r_code::PHash<DefeasibleValidity> > defeasible_validities_;

@@ -93,8 +93,6 @@ protected:
 public:
   ~MDLOverlay();
 
-  void load_patterns();
-
   virtual bool reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *req_controller) = 0;
 };
 

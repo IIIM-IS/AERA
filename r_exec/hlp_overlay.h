@@ -94,8 +94,6 @@ protected:
   friend class CSTController; // For abduce_simulated.
   P<HLPBindingMap> bindings_;
 
-  r_code::list<P<_Fact> > patterns_;
-
   bool evaluate_guards(uint16 guard_set_iptr_index);
   bool evaluate_fwd_guards();
   /**
