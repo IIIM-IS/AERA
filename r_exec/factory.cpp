@@ -393,7 +393,14 @@ bool _Fact::CounterEvidence(const Code *lhs, const Code *rhs) {
         return false;
 
       uint16 lhs_desc = lhs_atom.getDescriptor();
-      if (lhs_desc != rhs_atom.getDescriptor()) // values of different types.
+      uint16 rhs_desc = rhs_atom.getDescriptor();
+
+      if (lhs_desc == Atom::NIL && rhs_desc == Atom::R_PTR ||
+          lhs_desc == Atom::R_PTR && rhs_desc == Atom::NIL)
+        // nil is counter-evidence of a referenced object.
+        return true;
+
+      if (lhs_desc != rhs_desc) // values of different types.
         return false;
       switch (lhs_desc) {
       case Atom::T_WILDCARD:
