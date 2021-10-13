@@ -107,6 +107,9 @@ protected:
 
   UNORDERED_SET<P<_Fact>, r_code::PHash<_Fact> > predictions_; // f0->pred->f1->obj.
   UNORDERED_SET<P<Sim>, r_code::PHash<Sim> > simulations_;
+  // This tracks whether promoting has already been done for this Sim. It needs to be a list of Sim
+  // because this overlay may be for the initial non-simulated icst which can be promoted for multiple sims.
+  std::vector<Sim*> promoted_in_sim_;
 
   r_code::list<P<_Fact> > axiom_patterns_;
   r_code::list<P<_Fact> > non_axiom_patterns_;
@@ -160,6 +163,8 @@ public:
    * if this returns a pattern.
    * \param predictionSimulation If not NULL, then ensure that its simulation root matches the root
    * of the simulation in this object's simulations_.
+   * Also if this overlay does not yet have non-axiom saved inputs, then use the timings from input to
+   * update the timing variables of this CSTOverlay.
    * \param is_axiom True if the matching pattern came from axiom_patterns_ .
    * \return The matching pattern from axiom_patterns_ or non_axiom_patterns_, or NULL if not found.
    */
