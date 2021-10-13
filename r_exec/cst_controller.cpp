@@ -560,8 +560,9 @@ Fact *CSTController::get_f_ihlp(HLPBindingMap *bindings, bool wr_enabled) const 
 Fact *CSTController::get_f_icst(HLPBindingMap *bindings, std::vector<P<_Fact> > *inputs) const {
 
   Fact *f_icst = get_f_ihlp(bindings, false);
-  ((ICST *)f_icst->get_reference(0))->bindings_ = bindings;
-  ((ICST *)f_icst->get_reference(0))->components_ = *inputs;
+  ICST* icst = (ICST *)f_icst->get_reference(0);
+  icst->bindings_ = bindings;
+  icst->components_ = *inputs;
   return f_icst;
 }
 
