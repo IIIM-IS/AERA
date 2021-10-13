@@ -530,10 +530,10 @@ AntiFact::AntiFact(Code *object, Timestamp after, Timestamp before, float32 conf
 
 ////////////////////////////////////////////////////////////////
 
-Pred::Pred() : LObject() {
+Pred::Pred() : LObject(), is_promoted_(false) {
 }
 
-Pred::Pred(SysObject *source) : LObject(source) {
+Pred::Pred(SysObject *source) : LObject(source), is_promoted_(false) {
 }
 
 Pred::Pred(_Fact *target, const Pred* simulations_source, float32 psln_thr) : LObject() {
@@ -559,6 +559,7 @@ void Pred::construct(_Fact *target, const std::vector<P<Sim> >& simulations, flo
   }
 
   code(PRED_ARITY) = Atom::Float(psln_thr);
+  is_promoted_ = false;
 }
 
 bool Pred::is_invalidated() {
@@ -791,6 +792,16 @@ bool Sim::register_goal_target(_Fact* f_obj) {
   rootSim->goalTargets_.push_back(f_obj);
   return true;
 }
+
+bool Sim::DefeasiblePromotedFact::has_original_fact(const r_code::list<DefeasiblePromotedFact>& list, const _Fact* original_fact) {
+  for (auto d = list.begin(); d != list.end(); ++d) {
+    if (original_fact == d->original_fact_)
+      return true;
+  }
+
+  return false;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
