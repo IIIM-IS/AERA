@@ -89,12 +89,14 @@ CSTOverlay::CSTOverlay(Controller *c, HLPBindingMap *bindings) : HLPOverlay(c, b
 
 CSTOverlay::CSTOverlay(const CSTOverlay *original) : HLPOverlay(original->controller_, original->bindings_) {
 
-  patterns_ = original->patterns_;
+  axiom_patterns_ = original->axiom_patterns_;
+  non_axiom_patterns_ = original->non_axiom_patterns_;
   predictions_ = original->predictions_;
   simulations_ = original->simulations_;
   match_deadline_ = original->match_deadline_;
   lowest_cfd_ = original->lowest_cfd_;
-  inputs_ = original->inputs_;
+  axiom_inputs_ = original->axiom_inputs_;
+  non_axiom_inputs_ = original->non_axiom_inputs_;
   defeasible_validities_ = original->defeasible_validities_;
 }
 
@@ -109,7 +111,10 @@ void CSTOverlay::load_patterns() {
   for (uint16 i = 1; i <= obj_count; ++i) {
 
     _Fact *pattern = (_Fact *)object->get_reference(object->code(obj_set_index + i).asIndex());
-    patterns_.push_back(pattern);
+    if (pattern->references_size() >= 1 && _Mem::Get()->matches_axiom(pattern->get_reference(0)))
+      axiom_patterns_.push_back(pattern);
+    else
+      non_axiom_patterns_.push_back(pattern);
   }
 }
 
@@ -122,11 +127,13 @@ bool CSTOverlay::can_match(Timestamp now) const { // to reach inputs until a giv
 
 _Fact* CSTOverlay::inject_production(View* input) {
 
-  Fact *f_icst = ((CSTController *)controller_)->get_f_icst(bindings_, &inputs_);
+  Fact *f_icst = ((CSTController *)controller_)->get_f_icst(bindings_, &axiom_inputs_, &non_axiom_inputs_);
   auto now = Now();//f_icst->get_reference(0)->trace();
   string inputs_info;
-  for (uint32 i = 0; i < inputs_.size(); ++i)
-    inputs_info += " " + to_string(inputs_[i]->get_oid());
+  for (uint32 i = 0; i < axiom_inputs_.size(); ++i)
+    inputs_info += " " + to_string(axiom_inputs_[i]->get_oid());
+  for (uint32 i = 0; i < non_axiom_inputs_.size(); ++i)
+    inputs_info += " " + to_string(non_axiom_inputs_[i]->get_oid());
 
   if (!is_simulated()) {
 
@@ -181,22 +188,29 @@ _Fact* CSTOverlay::inject_production(View* input) {
   }
 }
 
-CSTOverlay *CSTOverlay::get_offspring(HLPBindingMap *map, _Fact *input, _Fact *bound_pattern) {
+CSTOverlay *CSTOverlay::get_offspring(HLPBindingMap *map, _Fact *input, bool is_axiom, _Fact *bound_pattern) {
 
   CSTOverlay *offspring = new CSTOverlay(this);
-  if (bound_pattern)
-    patterns_.remove(bound_pattern);
+  if (bound_pattern) {
+    if (is_axiom)
+      axiom_patterns_.remove(bound_pattern);
+    else
+      non_axiom_patterns_.remove(bound_pattern);
+  }
   if (match_deadline_.time_since_epoch().count() == 0)
     match_deadline_ = map->get_fwd_before();
-  update(map, input);
+  update(map, input, is_axiom);
   //std::cout<<std::hex<<this<<std::dec<<" produced: "<<std::hex<<offspring<<std::dec<<std::endl;
   return offspring;
 }
 
-void CSTOverlay::update(HLPBindingMap *map, _Fact *input) {
+void CSTOverlay::update(HLPBindingMap *map, _Fact *input, bool is_axiom) {
 
   bindings_ = map;
-  inputs_.push_back(input);
+  if (is_axiom)
+    axiom_inputs_.push_back(input);
+  else
+    non_axiom_inputs_.push_back(input);
   float32 last_cfd;
   Pred *prediction = input->get_pred();
   if (prediction) {
@@ -229,17 +243,30 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
   if (input->object_->is_invalidated())
     return false;
 
-  for (uint16 i = 0; i < inputs_.size(); ++i) { // discard inputs that already matched.
+  for (uint16 i = 0; i < axiom_inputs_.size(); ++i) { // discard inputs that already matched.
 
-    if (inputs_[i]->is_invalidated()) {
-      // If we make an icst from this overlay, CSTController::get_f_icst will copy inputs_
+    if (axiom_inputs_[i]->is_invalidated()) {
+      // If we make an icst from this overlay, CSTController::get_f_icst will copy axiom_inputs_
       // to the icst components_, and ICST::is_invalidated will see the invalidated
       // component and mark the icst as invalidated before it is even injected. So just
       // invalidate this overlay now.
       invalidate();
       return false;
     }
-    if (((_Fact *)input->object_) == inputs_[i])
+    if (((_Fact *)input->object_) == axiom_inputs_[i])
+      return false;
+  }
+  for (uint16 i = 0; i < non_axiom_inputs_.size(); ++i) { // discard inputs that already matched.
+
+    if (non_axiom_inputs_[i]->is_invalidated()) {
+      // If we make an icst from this overlay, CSTController::get_f_icst will copy non_axiom_inputs_
+      // to the icst components_, and ICST::is_invalidated will see the invalidated
+      // component and mark the icst as invalidated before it is even injected. So just
+      // invalidate this overlay now.
+      invalidate();
+      return false;
+    }
+    if (((_Fact *)input->object_) == non_axiom_inputs_[i])
       return false;
   }
   // if(match_deadline.time_since_epoch().count() == 0)
@@ -264,14 +291,15 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
   }
 
   P<HLPBindingMap> bm = new HLPBindingMap();
-  _Fact *bound_pattern = bindPattern(input_object, bm, predictionSimulation);
+  bool bound_pattern_is_axiom;
+  _Fact *bound_pattern = bindPattern(input_object, bm, predictionSimulation, bound_pattern_is_axiom);
   if (bound_pattern) {
     //if(match_deadline.time_since_epoch().count() == 0){
     // std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" "<<std::hex<<this<<std::dec<<" (0) ";
     //} else{
     // std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" "<<std::hex<<this<<std::dec<<" ("<<Time::ToString_seconds(match_deadline-Utils::GetTimeReference())<<") ";
     //}
-    if (patterns_.size() == 1) { // last match.
+    if (axiom_patterns_.size() + non_axiom_patterns_.size() == 1) { // last match.
 
       if (!code_) {
 
@@ -280,7 +308,7 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
         if (evaluate_fwd_guards()) { // may update bindings; full match.
 //std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" full match\n";
           // JTNote: The offspring is made with the modified bindings_. That doesn't seem right.
-          offspring = get_offspring(bm, (_Fact *)input->object_);
+          offspring = get_offspring(bm, (_Fact *)input->object_, bound_pattern_is_axiom);
           inject_production(input);
           invalidate();
           store_evidence(input->object_, prediction, is_simulation);
@@ -294,7 +322,7 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
         }
       } else { // guards already evaluated, full match.
 //std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" full match\n";
-        offspring = get_offspring(bm, (_Fact *)input->object_);
+        offspring = get_offspring(bm, (_Fact *)input->object_, bound_pattern_is_axiom);
         inject_production(input);
         invalidate();
         store_evidence(input->object_, prediction, is_simulation);
@@ -302,7 +330,7 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
       }
     } else {
       //std::cout<<" match\n";
-      offspring = get_offspring(bm, (_Fact *)input->object_, bound_pattern);
+      offspring = get_offspring(bm, (_Fact *)input->object_, bound_pattern_is_axiom, bound_pattern);
       store_evidence(input->object_, prediction, is_simulation);
       return true;
     }
@@ -311,8 +339,11 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
     return false;
 }
 
-_Fact* CSTOverlay::bindPattern(_Fact *input, HLPBindingMap* map, Sim* predictionSimulation)
+_Fact* CSTOverlay::bindPattern(_Fact *input, HLPBindingMap* map, Sim* predictionSimulation, bool& is_axiom)
 {
+  is_axiom = false;
+
+  bool use_input_timings = (axiom_inputs_.size() + non_axiom_inputs_.size() == 0);
   if (predictionSimulation) {
     if (simulations_.size() > 1)
       // TODO: Handle the case where simulations_ has multiple simulation roots.
@@ -325,10 +356,20 @@ _Fact* CSTOverlay::bindPattern(_Fact *input, HLPBindingMap* map, Sim* prediction
   }
 
   r_code::list<P<_Fact> >::const_iterator p;
-  for (p = patterns_.begin(); p != patterns_.end(); ++p) {
+  for (p = axiom_patterns_.begin(); p != axiom_patterns_.end(); ++p) {
 
     map->load(bindings_);
-    if (inputs_.size() == 0)
+    if (use_input_timings)
+      map->reset_fwd_timings(input);
+    if (map->match_fwd_strict(input, *p)) {
+      is_axiom = true;
+      return *p;
+    }
+  }
+  for (p = non_axiom_patterns_.begin(); p != non_axiom_patterns_.end(); ++p) {
+
+    map->load(bindings_);
+    if (use_input_timings)
       map->reset_fwd_timings(input);
     if (map->match_fwd_strict(input, *p))
       return *p;
@@ -557,12 +598,13 @@ Fact *CSTController::get_f_ihlp(HLPBindingMap *bindings, bool wr_enabled) const 
   return bindings->build_f_ihlp(getObject(), Opcodes::ICst, false);
 }
 
-Fact *CSTController::get_f_icst(HLPBindingMap *bindings, std::vector<P<_Fact> > *inputs) const {
+Fact *CSTController::get_f_icst(HLPBindingMap *bindings, std::vector<P<_Fact> > *axiom_inputs, std::vector<P<_Fact> > *non_axiom_inputs) const {
 
   Fact *f_icst = get_f_ihlp(bindings, false);
   ICST* icst = (ICST *)f_icst->get_reference(0);
   icst->bindings_ = bindings;
-  icst->components_ = *inputs;
+  icst->components_ = *axiom_inputs;
+  icst->components_.insert(icst->components_.end(), non_axiom_inputs->begin(), non_axiom_inputs->end());
   return f_icst;
 }
 
