@@ -283,6 +283,45 @@ public:
   P<Controller> root_; // controller that produced the simulation branch root (SIM_ROOT): identifies the branch.
   P<Controller> solution_controller_; // controller that produced a sub-goal of the branch's root: identifies the model that can be a solution for the super-goal.
 
+  /**
+   * A DefeasiblePromotedFact holds the defeasible fact that was promoted to the next frame in this Sim,
+   * plus the DefeasibleValidity which is attached to its prediction and which is invalidated if a actual
+   * predicted fact is injected. It also holds the original fact that was promoted, for preventing repeated promotion.
+   */
+  class DefeasiblePromotedFact {
+  public:
+    DefeasiblePromotedFact()
+      : promoted_fact_(NULL), original_fact_(NULL), defeasible_validity_(NULL)
+    {}
+
+    /**
+     * Create a DefeasiblePromotedFact with the given values.
+     * \param original_fact The original fact that was promoted, for preventing repeated promotion.
+     * \param promoted_fact The promoted fact which will be checked against actual predicted facts.
+     * \param defeasible_validity The DefeasibleValidity object that is attached to the predicted promoted fact.
+     */
+    DefeasiblePromotedFact(_Fact* original_fact, _Fact* promoted_fact, DefeasibleValidity* defeasible_validity)
+      : original_fact_(original_fact), promoted_fact_(promoted_fact), defeasible_validity_(defeasible_validity)
+    {}
+
+    /**
+     * Check if the list has a DefeasiblePromotedFact with the given original_fact. Use pointer equality (not a deep match).
+     * \param list The list to check.
+     * \param original_fact The original fact to match.
+     * \return True if the list has a DefeasiblePromotedFact with the given original_fact.
+     */
+    static bool has_original_fact(const r_code::list<DefeasiblePromotedFact>& list, const _Fact* original_fact);
+
+    P<_Fact> original_fact_;
+    P<_Fact> promoted_fact_;
+    P<DefeasibleValidity> defeasible_validity_;
+  };
+  CriticalSectionList<DefeasiblePromotedFact> defeasible_promoted_facts_;
+
+  // The list of actual (non-icst) facts in this Sim which are able to (or already have) defeat a fact in defeasible_promoted_facts_ .
+  // (For a critical section, expect to use defeasible_promoted_facts_.CS_ .)
+  r_code::list<P<_Fact> > defeating_facts_;
+
 private:
   std::vector<P<_Fact> > goalTargets_;
 };
@@ -380,6 +419,8 @@ public:
   std::vector<P<_Fact> > grounds_; // f1->obj; predictions that were used to build this predictions (i.e. antecedents); empty if simulated.
   // The set of DefeasibleValidity which is copied to each Pred made from this one. See is_invalidated().
   std::unordered_set<P<DefeasibleValidity>, r_code::PHash<DefeasibleValidity> > defeasible_validities_;
+  // This is set true when a DefeasibleValidity is added for a promoted prediction.
+  bool is_promoted_;
 
   bool is_simulation() const { return get_simulations_size() > 0; }
 

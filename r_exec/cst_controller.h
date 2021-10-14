@@ -102,32 +102,38 @@ protected:
   Timestamp match_deadline_; // before deadline after the last match.
   float32 lowest_cfd_; // among the inputs (forward chaining).
 
-  r_code::list<P<_Fact> > patterns_;
-
-  std::vector<P<_Fact> > inputs_;
   // The set of accumulated DefeasibleValidity from inputs, which is copied to each produced Pred.
   std::unordered_set<P<DefeasibleValidity>, r_code::PHash<DefeasibleValidity> > defeasible_validities_;
 
   UNORDERED_SET<P<_Fact>, r_code::PHash<_Fact> > predictions_; // f0->pred->f1->obj.
   UNORDERED_SET<P<Sim>, r_code::PHash<Sim> > simulations_;
+  // This tracks whether promoting has already been done for this Sim. It needs to be a list of Sim
+  // because this overlay may be for the initial non-simulated icst which can be promoted for multiple sims.
+  std::vector<Sim*> promoted_in_sim_;
+
+  r_code::list<P<_Fact> > axiom_patterns_;
+  r_code::list<P<_Fact> > non_axiom_patterns_;
+  std::vector<P<_Fact> > axiom_inputs_;
+  std::vector<P<_Fact> > non_axiom_inputs_;
 
   /**
    * Use inputs_ to make and inject an icst.
    * \param input The input which triggered the production, only used for log output.
    */
   _Fact* inject_production(View* input);
-  void update(HLPBindingMap *map, _Fact *input);
+  void update(HLPBindingMap *map, _Fact *input, bool is_axiom);
 
   /**
    * Make a copy of this CSTOverlay, then call update() to update the inputs_ and bindings_.
    * \param map The HLPBindingMap to copy to bindings_. This also updates match_deadline_ from
    * map->get_fwd_before() if needed.
    * \param input The _Fact to add to inputs_.
-   * \param bound_pattern (optional) The pattern to remove from patterns_. If omitted or NULL,
-   * then don't use it.
+   * \param is_axiom True if input (and bound_pattern) is matched from axiom_patterns_.
+   * \param bound_pattern (optional) The pattern to remove from axiom_patterns_ or non_axiom_patterns_
+   * (according to is_axiom). If omitted or NULL, then don't use it.
    * \return The copy of this CSTOverlay before making changes.
    */
-  CSTOverlay *get_offspring(HLPBindingMap *map, _Fact *input, _Fact *bound_pattern = NULL);
+  CSTOverlay *get_offspring(HLPBindingMap *map, _Fact *input, bool is_axiom, _Fact *bound_pattern = NULL);
 
   /**
    * Similar to Pred::get_simulation, find the first Sim in simulations_ whose root_ is root.
@@ -150,16 +156,19 @@ public:
   bool is_simulated() { return simulations_.size() > 0; }
 
   /**
-   * Find the first _Fact in patterns_ which matches the input, and update
+   * Find the first _Fact in axiom_patterns_ or non_axiom_patterns_ which matches the input, and update
    * the binding map.
    * \param input The input _Fact to match against a pattern.
    * \param map The binding map for calling match_fwd_strict and has the bindings
    * if this returns a pattern.
    * \param predictionSimulation If not NULL, then ensure that its simulation root matches the root
    * of the simulation in this object's simulations_.
-   * \return The matching pattern from patterns_, or NULL if not found.
+   * Also if this overlay does not yet have non-axiom saved inputs, then use the timings from input to
+   * update the timing variables of this CSTOverlay.
+   * \param is_axiom True if the matching pattern came from axiom_patterns_ .
+   * \return The matching pattern from axiom_patterns_ or non_axiom_patterns_, or NULL if not found.
    */
-  _Fact* CSTOverlay::bindPattern(_Fact *input, HLPBindingMap* map, Sim* predictionSimulation);
+  _Fact* CSTOverlay::bindPattern(_Fact *input, HLPBindingMap* map, Sim* predictionSimulation, bool& is_axiom);
 };
 
 // Backward chaining:
@@ -199,7 +208,7 @@ public:
   void reduce(r_exec::View *input);
 
   Fact *get_f_ihlp(HLPBindingMap *bindings, bool wr_enabled) const;
-  Fact *get_f_icst(HLPBindingMap *bindings, std::vector<P<_Fact> > *inputs) const;
+  Fact *get_f_icst(HLPBindingMap *bindings, std::vector<P<_Fact> > *axiom_inputs, std::vector<P<_Fact> > *non_axiom_inputs) const;
 
   void inject_icst(Fact *production, float32 confidence, std::chrono::microseconds time_to_live) const; // here, resilience=time to live, in us.
   void inject_icst(Fact *production, float32 confidence, Timestamp::duration time_to_live) const {
