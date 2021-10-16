@@ -121,7 +121,6 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
 
     load_code();
     P<HLPBindingMap> original_bindings = bindings_;
-    bindings_ = bm;
     bool is_req = ((MDLController *)controller_)->is_requirement();
     bool match = false;
     Fact *f_imdl = ((MDLController *)controller_)->get_f_ihlp(bm, false);
@@ -180,9 +179,10 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
           break;
       }
     case WEAK_REQUIREMENT_ENABLED:
-      if (evaluate_fwd_guards()) { // may update bindings.
-        // JTNote: The prediction is made from the bindings that made f_imdl, but it is not used directly.
-        f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
+      // evaluate_fwd_guards() uses bindings_, so set it to the bm that we have been updating.
+      bindings_ = bm;
+      if (evaluate_fwd_guards()) { // may update bindings_ .
+        f_imdl->set_reference(0, bindings_->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated binding map.
         ((PrimaryMDLController *)controller_)->predict(bindings_, input, f_imdl, chaining_allowed, r_p, ground);
         match = true;
       }
