@@ -510,7 +510,6 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
   if (!r_count)
     return NO_REQUIREMENT;
   ChainingStatus r;
-  HLPBindingMap original(bm);
   bool save_f_imdl_wr_enabled = f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED).asBoolean();
   if (!sr_count) { // no strong req., some weak req.: true if there is one f->imdl complying with timings and bindings.
 
@@ -529,7 +528,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
           _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
           //_f_imdl->get_reference(0)->trace();
           //f_imdl->get_reference(0)->trace();
-          HLPBindingMap _original = original; // matching updates the bm; always start afresh.
+          HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
           // Temporarily make f_imdl wr_enabled match the one from _f_imdl so that any difference is ignored.
           f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(
             _f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED).asBoolean());
@@ -566,7 +565,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
           if ((*e).evidence_->get_pred()->has_simulation(sim)) {
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
-            HLPBindingMap _original = original; // matching updates the bm; always start afresh.
+            HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
             TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
             if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) { // tpl args will be valuated in bm.
 
@@ -587,6 +586,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
       float32 negative_cfd = 0;
       requirements_.CS_.enter();
       auto now = Now();
+      HLPBindingMap strong_bm;
       r_code::list<RequirementEntry>::const_iterator e;
       for (e = simulated_requirements_.negative_evidences_.begin(); e != simulated_requirements_.negative_evidences_.end();) {
 
@@ -597,13 +597,14 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
           if ((*e).evidence_->get_pred()->has_simulation(sim)) {
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
-            HLPBindingMap _original = original; // matching updates the bm; always start afresh.
+            HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
             TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
             if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) {
 
               negative_cfd = (*e).confidence_;
               r = STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
-              bm->load(&_original);
+              // We will update bm below.
+              strong_bm = _original;
               break;
             }
           }
@@ -621,7 +622,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
           if ((*e).evidence_->get_pred()->has_simulation(sim)) {
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
-            HLPBindingMap _original = original; // matching updates the bm; always start afresh.
+            HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
             TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
             if (_original.match_fwd_strict(_f_imdl, f_imdl)) {
 
@@ -631,13 +632,19 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
                 bm->load(&_original);
                 ground = (*e).evidence_;
                 break;
-              } else
+              } else {
+                // For informational purposes, set ground in case this returns STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
+                ground = (*e).evidence_;
                 r = STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
+              }
             }
           }
           ++e;
         }
       }
+
+      if (r == STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT || r == STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT)
+        bm->load(&strong_bm);
 
       requirements_.CS_.leave();
       return r;
@@ -655,7 +662,6 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
   if (!r_count)
     return NO_REQUIREMENT;
   ChainingStatus r;
-  HLPBindingMap original(bm);
   if (!sr_count) { // no strong req., some weak req.: true if there is one f->imdl complying with timings and bindings.
 
     r = WEAK_REQUIREMENT_DISABLED;
@@ -673,7 +679,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
           _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
           //_f_imdl->get_reference(0)->trace();
           //f_imdl->get_reference(0)->trace();
-          HLPBindingMap _original = original; // matching updates the bm; always start afresh.
+          HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
           TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
           // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
           if (_original.match_fwd_strict(_f_imdl, f_imdl)) { // tpl args will be valuated in bm, but not in f_imdl yet.
@@ -706,7 +712,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
           if ((*e).evidence_->get_pred()->has_simulation(prediction_sim)) {
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
-            HLPBindingMap _original = original; // matching updates the bm; always start afresh.
+            HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
             TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
             // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
             if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) { // tpl args will be valuated in bm.
@@ -729,6 +735,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
       float32 negative_cfd = 0;
       requirements_.CS_.enter();
       auto now = Now();
+      HLPBindingMap strong_bm;
       r_code::list<RequirementEntry>::const_iterator e;
       for (e = simulated_requirements_.negative_evidences_.begin(); e != simulated_requirements_.negative_evidences_.end();) {
 
@@ -739,14 +746,15 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
           if ((*e).evidence_->get_pred()->has_simulation(prediction_sim)) {
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
-            HLPBindingMap _original = original; // matching updates the bm; always start afresh.
+            HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
             TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
             // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
             if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) {
 
               negative_cfd = (*e).confidence_;
               r = STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
-              bm->load(&_original);
+              // We will update bm below.
+              strong_bm = _original;
               strong_requirement_ground = (*e).evidence_;
               break;
             }
@@ -765,7 +773,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
           if ((*e).evidence_->get_pred()->has_simulation(prediction_sim)) {
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
-            HLPBindingMap _original = original; // matching updates the bm; always start afresh.
+            HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
             TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
             // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
             if (_original.match_fwd_strict(_f_imdl, f_imdl)) {
@@ -787,6 +795,9 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
         }
       }
 
+      if (r == STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT || r == STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT)
+        bm->load(&strong_bm);
+
       requirements_.CS_.leave();
       return r;
     }
@@ -802,7 +813,6 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
   if (!r_count)
     return NO_REQUIREMENT;
   ChainingStatus r;
-  HLPBindingMap original(bm);
   if (!sr_count) { // no strong req., some weak req.: true if there is one f->imdl complying with timings and bindings.
 
     wr_enabled = false;
@@ -834,7 +844,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
         _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
         //_f_imdl->get_reference(0)->trace();
         //f_imdl->get_reference(0)->trace();
-        HLPBindingMap _original = original; // matching updates the bm; always start afresh.
+        HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
         if (_original.match_fwd_strict(_f_imdl, f_imdl)) { // tpl args will be valuated in bm, but not in f_imdl yet.
 #ifdef WITH_DETAIL_OID
           OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " fact (" << f_imdl->get_detail_oid() << ") imdl mdl " <<
@@ -877,7 +887,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
         else {
 
           _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
-          HLPBindingMap _original = original; // matching updates the bm; always start afresh.
+          HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
           if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) { // tpl args will be valuated in bm.
 
             if (r == WEAK_REQUIREMENT_ENABLED && (*e).chaining_was_allowed_) // first match.
@@ -910,7 +920,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
         else {
 
           _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
-          HLPBindingMap _original = original; // matching updates the bm; always start afresh.
+          HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
           if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) {
 
             if (r == NO_REQUIREMENT && (*e).chaining_was_allowed_) { // first match.
@@ -950,7 +960,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
         else {
 
           _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
-          HLPBindingMap _original = original; // matching updates the bm; always start afresh.
+          HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
           if (_original.match_fwd_strict(_f_imdl, f_imdl)) {
 
             if (r != WEAK_REQUIREMENT_ENABLED && (*e).chaining_was_allowed_) { // first siginificant match.
@@ -990,7 +1000,6 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
   if (!r_count)
     return NO_REQUIREMENT;
   ChainingStatus r;
-  HLPBindingMap original(bm);
   if (!sr_count) { // no strong req., some weak req.: true if there is one f->imdl complying with timings and bindings.
 
     r = WEAK_REQUIREMENT_DISABLED;
@@ -1006,7 +1015,7 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
         _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
         //_f_imdl->get_reference(0)->trace();
         //f_imdl->get_reference(0)->trace();
-        HLPBindingMap _original = original; // matching updates the bm; always start afresh.
+        HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
         TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
         // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
         if (_original.match_fwd_strict(_f_imdl, f_imdl)) { // tpl args will be valuated in bm, but not in f_imdl yet.
@@ -1038,7 +1047,7 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
         else {
 
           _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
-          HLPBindingMap _original = original; // matching updates the bm; always start afresh.
+          HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
           TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
           // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
           if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) { // tpl args will be valuated in bm.
@@ -1066,7 +1075,7 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
         else {
 
           _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
-          HLPBindingMap _original = original; // matching updates the bm; always start afresh.
+          HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
           TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
           // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
           if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) {
@@ -1087,7 +1096,7 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
           //(*e).f->get_reference(0)->trace();
           //f->get_reference(0)->trace();
           _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
-          HLPBindingMap _original = original; // matching updates the bm; always start afresh.
+          HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
           TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
           // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
           if (_original.match_fwd_strict(_f_imdl, f_imdl)) {
