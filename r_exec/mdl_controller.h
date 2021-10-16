@@ -96,10 +96,31 @@ public:
   virtual bool reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *req_controller) = 0;
 };
 
+/**
+ * A BindingResult is used by methods such as retrieve_simulated_imdl_fwd to return the updated binding maps
+ * for multiple matches.
+ */
+class BindingResult {
+public:
+  /**
+   * Create a HLPBindingMap with the given values.
+   * \param map The HLPBindingMap. This keeps a P<HLPBindingMap> for it.
+   * \param ground A pointer to the Fact which is the ground for the bindings. This only keeps a pointer.
+   */
+  BindingResult(HLPBindingMap* map, Fact* ground)
+  {
+    map_ = map;
+    ground_ = ground;
+  }
+
+  P<HLPBindingMap> map_;
+  Fact* ground_;
+};
+
 class PrimaryMDLOverlay :
   public MDLOverlay {
 protected:
-  bool check_simulated_chaining(HLPBindingMap *bm, Fact *f_imdl, Pred *prediction, Fact *&ground);
+  bool check_simulated_chaining(const HLPBindingMap *bm, Fact *f_imdl, Pred *prediction, std::vector<BindingResult>& results);
 public:
   PrimaryMDLOverlay(Controller *c, const HLPBindingMap *bindngs);
   ~PrimaryMDLOverlay();
@@ -286,7 +307,7 @@ public:
   virtual void store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed) = 0;
   ChainingStatus retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl, RequirementsPair &r_p, Fact *&ground, MDLController *req_controller, bool &wr_enabled); // checks the requirement instances during fwd; r_p: all wrs in first, all srs in second.
   ChainingStatus retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl, Fact *&ground); // checks the requirement instances during bwd; ground is set to the best weak requirement if chaining allowed, NULL otherwise.
-  ChainingStatus retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl, Sim* sim, Fact *&ground);
+  ChainingStatus retrieve_simulated_imdl_fwd(const HLPBindingMap *bm, Fact *f_imdl, Sim* sim, std::vector<BindingResult>& results);
   ChainingStatus retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl, Sim* prediction_sim, Fact *&ground, Fact *&strong_requirement_ground);
 
   virtual void predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground) = 0;
