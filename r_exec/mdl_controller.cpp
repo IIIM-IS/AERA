@@ -532,7 +532,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(const HLPBindingMap *b
 
             r = WEAK_REQUIREMENT_ENABLED;
             results.push_back(BindingResult(new HLPBindingMap(_original), (*e).evidence_));
-            break;
+            // Loop again to check for more matches.
           }
         }
         ++e;
@@ -625,11 +625,14 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(const HLPBindingMap *b
 
                 r = WEAK_REQUIREMENT_ENABLED;
                 results.push_back(BindingResult(new HLPBindingMap(_original), (*e).evidence_));
-                break;
+                // Loop again to check for more matches.
               } else {
-                // For informational purposes, set ground in case this returns STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
-                ground = (*e).evidence_;
-                r = STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
+                // If we already got a WEAK_REQUIREMENT_ENABLED, don't return STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
+                if (r != WEAK_REQUIREMENT_ENABLED) {
+                  // For informational purposes, set ground in case this returns STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
+                  ground = (*e).evidence_;
+                  r = STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
+                }
               }
             }
           }
