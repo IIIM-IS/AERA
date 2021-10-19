@@ -322,6 +322,8 @@ public:
   // (For a critical section, expect to use defeasible_promoted_facts_.CS_ .)
   r_code::list<P<_Fact> > defeating_facts_;
 
+  std::vector<P<Code> > already_signalled_;
+
 private:
   std::vector<P<_Fact> > goalTargets_;
 };

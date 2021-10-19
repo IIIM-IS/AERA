@@ -94,7 +94,6 @@ protected:
   _Fact *goal_target_; // convenience; f1->object.
   P<Fact> f_imdl_;
   SimMode sim_mode_;
-  std::unordered_map<Sim*, std::vector<P<r_code::Code> > > already_signalled_;
 
   uint32 volatile simulating_; // 32 bits alignment.
 

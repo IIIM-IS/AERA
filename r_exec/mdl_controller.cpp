@@ -2034,7 +2034,7 @@ void PrimaryMDLController::abduce_imdl(HLPBindingMap *bm, Fact *super_goal, Fact
 
 // goal is f->g->f->object or f->g->|f->object; called concurrently by redcue() and _GMonitor::update().
 _Fact* PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence,
-  Sim *sim, Fact *ground, unordered_map<Sim*, std::vector<P<Code> > >* already_signalled, Fact* goal_requirement) {
+  Sim *sim, Fact *ground, Fact* goal_requirement) {
 
   _Fact* injected_lhs = NULL;
   if (evaluate_bwd_guards(bm)) { // bm may be updated.
@@ -2068,13 +2068,14 @@ _Fact* PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super
         if (!sim) {
           // This was called from check_simulated_imdl. Keep simulating forward. Don't loop by abducing the LHS as a goal again.
           // TODO: Handle the case when there are other than one Sim in the prediction.
-          if (already_signalled && ground->get_pred() && ground->get_pred()->get_simulations_size() == 1) {
+          if (ground->get_pred() && ground->get_pred()->get_simulations_size() == 1) {
             // Check if a call to signal already caused this same LHS to be abduced with the same conditions, in this Sim.
-            std::vector<P<Code> >& sim_already_signalled = (*already_signalled)[ground->get_pred()->get_simulation((uint16)0)];
+            std::vector<P<Code> >& sim_already_signalled = ground->get_pred()->get_simulation((uint16)0)->already_signalled_;
             bool found = false;
             // TODO: Do we need a critical section for this loop?
             for (auto signalled = sim_already_signalled.begin(); signalled != sim_already_signalled.end(); ++signalled) {
-              if (_Fact::MatchObject(f_imdl->get_reference(0), *signalled)) {
+              // TODO: Check if signalled is invalidated?
+              if (_Fact::MatchObject(bound_lhs, *signalled)) {
                 found = true;
                 break;
               }
@@ -2084,7 +2085,7 @@ _Fact* PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super
               // Don't signal again.
               break;
             // Save for checking later and continue.
-            sim_already_signalled.push_back(f_imdl->get_reference(0));
+            sim_already_signalled.push_back((_Fact*)bound_lhs);
           }
 
           // Copy all the Sims from ground.
@@ -2210,7 +2211,7 @@ bool PrimaryMDLController::check_imdl(Fact *goal, HLPBindingMap *bm) { // goal i
 }
 
 // goal is f->g->f->imdl; called by sr-monitors.
-bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, Sim* prediction_sim, unordered_map<Sim*, std::vector<P<Code> > >* already_signalled) {
+bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, Sim* prediction_sim) {
 
   Goal *g = goal->get_goal();
   Fact *f_imdl = (Fact *)g->get_target();
@@ -2233,7 +2234,7 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, S
         bm->bind_pattern(f_imdl->get_reference(0)), f_imdl->get_after(), f_imdl->get_before(),
         f_imdl->get_cfd(), f_imdl->get_psln_thr());
       // If root is provided, pass NULL as the sim to use the Sim in ground for forward chaining.
-      _Fact* injected_lhs = abduce_simulated_lhs(bm, sim->get_f_super_goal(), f_imdl_copy, sim->get_opposite(), f_imdl->get_cfd(), prediction_sim ? NULL : new Sim(sim), ground, already_signalled, goal);
+      _Fact* injected_lhs = abduce_simulated_lhs(bm, sim->get_f_super_goal(), f_imdl_copy, sim->get_opposite(), f_imdl->get_cfd(), prediction_sim ? NULL : new Sim(sim), ground, goal);
 
       if (c_s == WEAK_REQUIREMENT_ENABLED && prediction_sim && injected_lhs) {
         // We injected a simulated prediction. Check if there could be a strong requirement in the future.
