@@ -112,7 +112,6 @@ r_exec::Controller dll_export *correlator(r_code::View *view);
 class State :
   public core::_Object {
 public:
-  float32 confidence_;
   virtual void trace(std::ostream& out) = 0;
 };
 
