@@ -141,8 +141,7 @@ protected:
   virtual void take_input(r_exec::View *input) {}
   template<class C> void __take_input(r_exec::View *input) { // utility: to be called by sub-classes.
 
-    View *_view = new View(input);
-    ReductionJob<C> *j = new ReductionJob<C>(input/*_view*/, (C *)this);
+    ReductionJob<C> *j = new ReductionJob<C>(input, (C *)this);
 #ifdef WITH_DETAIL_OID
     OUTPUT_LINE((TraceLevel)0, "  make ReductionJob " << j->get_job_id() << 
       "(" << j->get_detail_oid() << "): controller(" << get_detail_oid() << ")->reduce(View(fact_" << 
