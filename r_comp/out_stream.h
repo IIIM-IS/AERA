@@ -89,7 +89,6 @@ namespace r_comp {
 class OutStream {
 public:
   r_code::vector<uint16> code_indexes_to_stream_indexes_;
-  uint16 code_index_;
   r_code::vector<std::streampos> positions_;
   OutStream(std::ostringstream *s) : stream_(s) {}
   std::ostringstream *stream_;
