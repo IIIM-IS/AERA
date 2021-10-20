@@ -154,8 +154,6 @@ class Object;
 
 class dll_export View :
   public _Object {
-private:
-  uint16 index_; // for unpacking: index is the index of the view in the SysObject.
 protected:
   Atom code_[VIEW_CODE_MAX_SIZE]; // dimensioned to hold the largest view (group view): head atom, iptr to ijt, sln, res, rptr to grp, rptr to org, vis, cov, 3 atoms for ijt's timestamp; oid is the last word32 (not an atom).
 public:
