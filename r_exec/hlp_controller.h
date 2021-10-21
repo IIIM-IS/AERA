@@ -156,7 +156,16 @@ protected:
 
   P<HLPBindingMap> bindings_;
 
-  bool evaluate_bwd_guards(HLPBindingMap *bm);
+  /**
+   * Evaluate the backward guards and update the binding map.
+   * \param bm The binding map to update.
+   * \param narrow_fwd_timings If true and the binding map fwd_after and fwd_before variables are bound, then
+   * save them before evaluating the guards and then set the fwd_after and fwd_before variables to the intersection
+   * of the previous values and the guard values. If omitted or false, then let the guards overwrite the
+   * fwd_after and fwd_before variables.
+   * \return True if the guards are successfully evaluated.
+   */
+  bool evaluate_bwd_guards(HLPBindingMap *bm, bool narrow_fwd_timings = false);
 
   MatchResult check_evidences(_Fact *target, _Fact *&evidence); // evidence with the match (positive or negative), get_absentee(target) otherwise.
   MatchResult check_predicted_evidences(_Fact *target, _Fact *&evidence); // evidence with the match (positive or negative), NULL otherwise.

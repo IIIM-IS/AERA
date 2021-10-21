@@ -158,9 +158,27 @@ Code *HLPController::get_out_group(uint16 i) const {
   return hlp->get_reference(hlp->code(out_groups_index + i).asIndex());
 }
 
-bool HLPController::evaluate_bwd_guards(HLPBindingMap *bm) {
+bool HLPController::evaluate_bwd_guards(HLPBindingMap *bm, bool narrow_fwd_timings) {
 
-  return HLPOverlay::EvaluateBWDGuards(this, bm);
+  bool saved_fwd_timings = false;
+  Timestamp save_fwd_after, save_fwd_before;
+  if (narrow_fwd_timings && bm->has_fwd_after() && bm->has_fwd_before()) {
+    // The forward timings have previously-bound values from matching the requirement.
+    save_fwd_after = bm->get_fwd_after();
+    save_fwd_before = bm->get_fwd_before();
+    saved_fwd_timings = true;
+  }
+
+  bool result = HLPOverlay::EvaluateBWDGuards(this, bm);
+
+  if (saved_fwd_timings) {
+    // Call match_fwd_timings to narrow the forward timings set by the backward guards to the previously-bound values.
+    if (!bm->match_fwd_timings(save_fwd_after, save_fwd_before))
+      // The backward guards updated the forward timings outside the previously-bound values. (We don't expect this.)
+      return false;
+  }
+
+  return result;
 }
 
 bool HLPController::inject_prediction(Fact *prediction, float32 confidence) const { // prediction is simulated: f->pred->f->target.
