@@ -139,18 +139,14 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
     bool chaining_allowed = (c_s >= WEAK_REQUIREMENT_ENABLED);
     bool did_check_simulated_chaining = false;
     bool check_simulated_chaining_result;
+    std::vector<BindingResult> bind_results;
     switch (c_s) {
     case WEAK_REQUIREMENT_DISABLED:
     case STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT: // silent monitoring of a prediction that will not be injected.
       if (is_simulation) { // if there is simulated imdl for the root of one sim in prediction, allow forward chaining.
 
-        Fact *check_simulated_chaining_ground = NULL;
-        check_simulated_chaining_result = check_simulated_chaining(bm, f_imdl, prediction, check_simulated_chaining_ground);
+        check_simulated_chaining_result = check_simulated_chaining(bm, f_imdl, prediction, bind_results);
         did_check_simulated_chaining = true;
-        if (check_simulated_chaining_result) {
-          if (!ground)
-            ground = check_simulated_chaining_ground;
-        }
         if (check_simulated_chaining_result)
           chaining_allowed = true;
         else
@@ -165,13 +161,8 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
       if (is_simulation) { // if there is simulated imdl for the root of one sim in prediction, allow forward chaining.
 
         if (!did_check_simulated_chaining) {
-          Fact *check_simulated_chaining_ground = NULL;
-          check_simulated_chaining_result = check_simulated_chaining(bm, f_imdl, prediction, check_simulated_chaining_ground);
+          check_simulated_chaining_result = check_simulated_chaining(bm, f_imdl, prediction, bind_results);
           did_check_simulated_chaining = true;
-          if (check_simulated_chaining_result) {
-            if (!ground)
-              ground = check_simulated_chaining_ground;
-          }
         }
         if (check_simulated_chaining_result)
           chaining_allowed = true;
@@ -179,12 +170,17 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
           break;
       }
     case WEAK_REQUIREMENT_ENABLED:
-      // evaluate_fwd_guards() uses bindings_, so set it to the bm that we have been updating.
-      bindings_ = bm;
-      if (evaluate_fwd_guards()) { // may update bindings_ .
-        f_imdl->set_reference(0, bindings_->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated binding map.
-        ((PrimaryMDLController *)controller_)->predict(bindings_, input, f_imdl, chaining_allowed, r_p, ground);
-        match = true;
+      if (bind_results.size() == 0)
+        // check_simulated_chaining did not create any new bindings, so use the bm that we have been updating.
+        bind_results.push_back(BindingResult(bm, ground));
+      for (size_t i = 0; i < bind_results.size(); ++i) {
+        // evaluate_fwd_guards() uses bindings_, so set it to the binding map.
+        bindings_ = bind_results[i].map_;
+        if (evaluate_fwd_guards()) { // may update bindings_ .
+          f_imdl->set_reference(0, bindings_->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated binding map.
+          ((PrimaryMDLController *)controller_)->predict(bindings_, input, f_imdl, chaining_allowed, r_p, bind_results[i].ground_);
+          match = true;
+        }
       }
       break;
     }
@@ -204,11 +200,11 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
   }
 }
 
-bool PrimaryMDLOverlay::check_simulated_chaining(HLPBindingMap *bm, Fact *f_imdl, Pred *prediction, Fact *&ground) {
+bool PrimaryMDLOverlay::check_simulated_chaining(const HLPBindingMap *bm, Fact *f_imdl, Pred *prediction, std::vector<BindingResult >& results) {
 
   for (uint32 i = 0; i < prediction->get_simulations_size(); ++i) {
 
-    switch (((MDLController *)controller_)->retrieve_simulated_imdl_fwd(bm, f_imdl, prediction->get_simulation(i), ground)) {
+    switch (((MDLController *)controller_)->retrieve_simulated_imdl_fwd(bm, f_imdl, prediction->get_simulation(i), results)) {
     case NO_REQUIREMENT:
     case WEAK_REQUIREMENT_ENABLED:
       return true;
@@ -501,12 +497,11 @@ public:
   bool have_saved_template_timings_;
 };
 
-ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl, Sim* sim, Fact *&ground) {
+ChainingStatus MDLController::retrieve_simulated_imdl_fwd(const HLPBindingMap *bm, Fact *f_imdl, Sim* sim, std::vector<BindingResult>& results) {
 
   uint32 wr_count;
   uint32 sr_count;
   uint32 r_count = get_requirement_count(wr_count, sr_count);
-  ground = NULL;
   if (!r_count)
     return NO_REQUIREMENT;
   ChainingStatus r;
@@ -536,9 +531,8 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
           if (_original.match_fwd_strict(_f_imdl, f_imdl)) { // tpl args will be valuated in bm, but not in f_imdl yet.
 
             r = WEAK_REQUIREMENT_ENABLED;
-            bm->load(&_original);
-            ground = (*e).evidence_;
-            break;
+            results.push_back(BindingResult(new HLPBindingMap(_original), (*e).evidence_));
+            // Loop again to check for more matches.
           }
         }
         ++e;
@@ -569,7 +563,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
             TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
             if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) { // tpl args will be valuated in bm.
 
-              bm->load(&_original);
+              results.push_back(BindingResult(new HLPBindingMap(_original), NULL));
               requirements_.CS_.leave();
               return STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
             }
@@ -612,6 +606,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
         }
       }
 
+      Fact* ground = NULL;
       for (e = simulated_requirements_.positive_evidences_.begin(); e != simulated_requirements_.positive_evidences_.end();) {
 
         if ((*e).is_too_old(now)) // garbage collection.
@@ -629,13 +624,15 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
               if ((*e).confidence_ > negative_cfd) {
 
                 r = WEAK_REQUIREMENT_ENABLED;
-                bm->load(&_original);
-                ground = (*e).evidence_;
-                break;
+                results.push_back(BindingResult(new HLPBindingMap(_original), (*e).evidence_));
+                // Loop again to check for more matches.
               } else {
-                // For informational purposes, set ground in case this returns STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
-                ground = (*e).evidence_;
-                r = STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
+                // If we already got a WEAK_REQUIREMENT_ENABLED, don't return STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
+                if (r != WEAK_REQUIREMENT_ENABLED) {
+                  // For informational purposes, set ground in case this returns STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
+                  ground = (*e).evidence_;
+                  r = STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
+                }
               }
             }
           }
@@ -644,7 +641,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(HLPBindingMap *bm, Fac
       }
 
       if (r == STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT || r == STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT)
-        bm->load(&strong_bm);
+        results.push_back(BindingResult(new HLPBindingMap(strong_bm), ground));
 
       requirements_.CS_.leave();
       return r;
