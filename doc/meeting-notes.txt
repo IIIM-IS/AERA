@@ -698,13 +698,19 @@ Simulator
   * Pull request #175 updated: Now simulations correctly proceed by frame.
   * REVIEWED. Task environment doc
 
+2021-10-14
+* Review/merge new functionality pull requests for:
+  * DONE. Making an icst in the next frame of a Sim branch https://github.com/IIIM-IS/AERA/pull/185
+
+2021-10-21
+* Review/merge new functionality pull requests for:
+  * DONE. Limiting the time interval of abduced commands https://github.com/IIIM-IS/AERA/pull/175
+  * DONE. Forward chaining from each requirement https://github.com/IIIM-IS/AERA/pull/186
+
 next meeting
-* hand-grab-sphere-learn
-  * Make pull request for making an icst in the next frame of a Sim branch
-  * Make pull request for making a CSTOverlay for each match of a member
 * Review/merge new functionality pull requests for:
   * REVIEWING. PTPX: Make a candidate model from every matching f_icst https://github.com/IIIM-IS/replicode/pull/165
-  * REVIEWING. Limiting the time interval of abduced commands https://github.com/IIIM-IS/AERA/pull/175
+  * Creating the primary group before stdin https://github.com/IIIM-IS/AERA/pull/188
 * Review diag_mode_rel_0_1 tags https://github.com/IIIM-IS/replicode/issues?q=is%3Aopen+is%3Aissue+milestone%3Adiag_mode_rel_0_1
 
 TODO
