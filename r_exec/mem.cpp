@@ -589,10 +589,9 @@ void _Mem::run_in_diagnostic_time(milliseconds run_time) {
       n_reduction_jobs_this_sampling_period = 0;
       on_diagnostic_time_tick();
 
-      if (ordered_time_job_queue.size() == 0 ||
-        ordered_time_job_queue.front()->target_time_ > tick_time)
-        // Loop again in case a reduction job will add more time jobs.
-        continue;
+      // Loop again in case on_diagnostic_time_tick() added a reduction job,
+      // or a reduction job will add more time jobs.
+      continue;
     }
 
     if (ordered_time_job_queue.size() == 0)
