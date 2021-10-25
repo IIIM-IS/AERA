@@ -320,7 +320,7 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
       promoted_in_sim_.push_back(predictionSimulation);
 
       // Loop through this overlay's non-axiom saved inputs, checking if it needs to be promoted in this Sim.
-      // (Axiom facts are promoted by bindPattern when binding a non-axiom fact.)
+      // (Axiom facts are promoted by bind_pattern when binding a non-axiom fact.)
       for (uint32 i = 0; i < non_axiom_inputs_.size(); ++i) {
         _Fact* saved_input = non_axiom_inputs_[i];
         Pred* saved_input_pred = saved_input->get_pred();
@@ -380,7 +380,7 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
 
   P<HLPBindingMap> bm = new HLPBindingMap();
   bool bound_pattern_is_axiom;
-  _Fact *bound_pattern = bindPattern(input_object, bm, predictionSimulation, bound_pattern_is_axiom);
+  _Fact *bound_pattern = bind_pattern(input_object, bm, predictionSimulation, bound_pattern_is_axiom);
   if (bound_pattern) {
     //if(match_deadline.time_since_epoch().count() == 0){
     // std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" "<<std::hex<<this<<std::dec<<" (0) ";
@@ -428,7 +428,7 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
     return false;
 }
 
-_Fact* CSTOverlay::bindPattern(_Fact *input, HLPBindingMap* map, Sim* predictionSimulation, bool& is_axiom)
+_Fact* CSTOverlay::bind_pattern(_Fact *input, HLPBindingMap* map, Sim* predictionSimulation, bool& is_axiom)
 {
   is_axiom = false;
 

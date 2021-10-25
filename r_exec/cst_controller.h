@@ -170,7 +170,7 @@ public:
    * \param is_axiom True if the matching pattern came from axiom_patterns_ .
    * \return The matching pattern from axiom_patterns_ or non_axiom_patterns_, or NULL if not found.
    */
-  _Fact* CSTOverlay::bindPattern(_Fact *input, HLPBindingMap* map, Sim* predictionSimulation, bool& is_axiom);
+  _Fact* CSTOverlay::bind_pattern(_Fact *input, HLPBindingMap* map, Sim* predictionSimulation, bool& is_axiom);
 };
 
 // Backward chaining:
