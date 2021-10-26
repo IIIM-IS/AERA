@@ -117,12 +117,11 @@ protected:
   std::vector<P<_Fact> > non_axiom_inputs_;
 
   /**
-   * Inject the f_icst, putting it in a (fact (pred ...)) if needed.
+   * Use bindings_ to make the f_icst, putting it in a (fact (pred ...)) if needed.
    * \param input The input which triggered the production.
-   * \param f_icst The (fact (icst ...)) to inject.
    * \return The injected object, or NULL if not injected.
    */
-  _Fact* inject_production(View* input, Fact* f_icst);
+  _Fact* inject_production(View* input);
   void update(HLPBindingMap *map, _Fact *input, bool is_axiom);
 
   /**

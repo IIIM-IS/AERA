@@ -125,8 +125,9 @@ bool CSTOverlay::can_match(Timestamp now) const { // to reach inputs until a giv
   return now <= match_deadline_;
 }
 
-_Fact* CSTOverlay::inject_production(View* input, Fact* f_icst) {
+_Fact* CSTOverlay::inject_production(View* input) {
 
+  Fact *f_icst = ((CSTController *)controller_)->get_f_icst(bindings_, &axiom_inputs_, &non_axiom_inputs_);
   auto now = Now();//f_icst->get_reference(0)->trace();
   string inputs_info;
   for (uint32 i = 0; i < axiom_inputs_.size(); ++i)
@@ -389,8 +390,6 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
     //}
     if (axiom_patterns_.size() + non_axiom_patterns_.size() == 1) { // last match.
 
-      // Make the icst before calling get_offspring.
-      Fact *f_icst = ((CSTController *)controller_)->get_f_icst(bm, &axiom_inputs_, &non_axiom_inputs_);
       if (!code_) {
 
         load_code();
@@ -398,7 +397,7 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
         if (evaluate_fwd_guards()) { // may update bindings; full match.
 //std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" full match\n";
           offspring = get_offspring(bm, (_Fact *)input->object_, bound_pattern_is_axiom);
-          inject_production(input, f_icst);
+          inject_production(input);
           invalidate();
           store_evidence(input->object_, prediction, is_simulation);
           return true;
@@ -412,7 +411,7 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
       } else { // guards already evaluated, full match.
 //std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" full match\n";
         offspring = get_offspring(bm, (_Fact *)input->object_, bound_pattern_is_axiom);
-        inject_production(input, f_icst);
+        inject_production(input);
         invalidate();
         store_evidence(input->object_, prediction, is_simulation);
         return true;
