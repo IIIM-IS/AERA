@@ -421,6 +421,7 @@ bool _Fact::CounterEvidence(const Code *lhs, const Code *rhs) {
 
     for (uint32 i = 0; i < ((ICST *)lhs)->components_.size(); ++i) { // compare all components 2 by 2.
 
+      // JTNote: This assumes that the components_ in the lhs and rhs are in the same order.
       if (CounterEvidence(((ICST *)lhs)->components_[i], ((ICST *)rhs)->components_[i]))
         return true;
     }
