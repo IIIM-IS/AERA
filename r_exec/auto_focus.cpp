@@ -86,7 +86,7 @@ namespace r_exec {
 AutoFocusController::AutoFocusController(r_code::View *view) : Controller(view) {
 
   // Load arguments: pass_through, acquire_models, decompile_models, list of output groups: 1st must be the primary, 2nd the secondary, then other groups.
-  Code *icpp_pgm = getObject();
+  Code *icpp_pgm = get_object();
   uint16 arg_set_index = icpp_pgm->code(ICPP_PGM_ARGS).asIndex();
   uint16 arg_count = icpp_pgm->code(arg_set_index).getAtomCount();
   uint8 i = 1;
@@ -111,7 +111,7 @@ AutoFocusController::~AutoFocusController() {
 
 Code *AutoFocusController::get_core_object() const {
 
-  return getObject(); // icpp_pgm.
+  return get_object(); // icpp_pgm.
 }
 
 inline void AutoFocusController::inject_input(View *input, uint32 start) {

@@ -155,6 +155,6 @@ template<class U> void ASTController<U>::reduce(View *input) {
 template<class U> void ASTController<U>::kill() {
 
   invalidate();
-  getView()->force_res(0);
+  get_view()->force_res(0);
 }
 }

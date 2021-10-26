@@ -436,7 +436,7 @@ public:
   }
 
   Atom &operator [](uint16 i) const { return code_[index_ + i]; }
-  r_code::Code *getObject() const { return object_; }
+  r_code::Code *get_object() const { return object_; }
   uint16 getIndex() const { return index_; }
 
   IPGMContext dereference() const;

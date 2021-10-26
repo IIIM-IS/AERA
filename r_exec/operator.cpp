@@ -655,7 +655,7 @@ bool is_sim(const Context &context) {
 
   const IPGMContext &ipgm_context = *(IPGMContext *)context.get_implementation();
   IPGMContext arg = ipgm_context.get_child_deref(1);
-  Code* obj = arg.getObject();
+  Code* obj = arg.get_object();
 
   bool result = false;
   if (obj->code(0).asOpcode() == Opcodes::Goal)

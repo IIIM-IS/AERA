@@ -122,7 +122,7 @@ void Overlay::load_code() {
 
 void Overlay::reset() {
 
-  memcpy(code_, &getObject()->get_reference(0)->code(0), code_size_ * sizeof(r_code::Atom)); // restore code to prisitne copy.
+  memcpy(code_, &get_object()->get_reference(0)->code(0), code_size_ * sizeof(r_code::Atom)); // restore code to prisitne copy.
 }
 
 void Overlay::rollback() {
@@ -186,16 +186,16 @@ Controller::Controller(r_code::View *view) : _Object(), invalidated_(0), activat
   if (!view)
     return;
 
-  switch (getObject()->code(0).getDescriptor()) {
+  switch (get_object()->code(0).getDescriptor()) {
   case Atom::INSTANTIATED_PROGRAM:
   case Atom::INSTANTIATED_INPUT_LESS_PROGRAM:
   case Atom::INSTANTIATED_ANTI_PROGRAM:
     // The time scope is stored as a timestamp, but it is actually a duration.
-    time_scope_ = duration_cast<microseconds>(Utils::GetTimestamp<Code>(getObject(), IPGM_TSC).time_since_epoch());
+    time_scope_ = duration_cast<microseconds>(Utils::GetTimestamp<Code>(get_object(), IPGM_TSC).time_since_epoch());
     break;
   case Atom::INSTANTIATED_CPP_PROGRAM:
     // The time scope is stored as a timestamp, but it is actually a duration.
-    time_scope_ = duration_cast<microseconds>(Utils::GetTimestamp<Code>(getObject(), ICPP_PGM_TSC).time_since_epoch());
+    time_scope_ = duration_cast<microseconds>(Utils::GetTimestamp<Code>(get_object(), ICPP_PGM_TSC).time_since_epoch());
     break;
   }
 }

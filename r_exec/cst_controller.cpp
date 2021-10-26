@@ -158,12 +158,12 @@ _Fact* CSTOverlay::inject_production(View* input) {
       f_icst_info = "(" + to_string(f_icst->get_detail_oid()) + ") ";
 #endif
       OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " fact " << f_p_f_icst->get_oid() <<
-        " pred fact " << f_icst_info << "icst[" << controller_->getObject()->get_oid() << "][" << inputs_info << "]");
+        " pred fact " << f_icst_info << "icst[" << controller_->get_object()->get_oid() << "][" << inputs_info << "]");
       return f_p_f_icst;
     } else {
       ((CSTController *)controller_)->inject_icst(f_icst, lowest_cfd_, time_to_live); // inject f->icst in the primary and secondary groups, and in the output groups.
 
-      OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " fact " << f_icst->get_oid() << " icst[" << controller_->getObject()->get_oid() << "][" <<
+      OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " fact " << f_icst->get_oid() << " icst[" << controller_->get_object()->get_oid() << "][" <<
         inputs_info << "]");
       return f_icst;
     }
@@ -181,7 +181,7 @@ _Fact* CSTOverlay::inject_production(View* input) {
     Fact *f_p_f_icst = new Fact(prediction, now, now, 1, 1);
     if (!((HLPController *)controller_)->inject_prediction(f_p_f_icst, lowest_cfd_)) // inject a simulated prediction in the main group.
       return NULL;
-    OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " cst " << getObject()->get_oid() << ": fact " <<
+    OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " cst " << get_object()->get_oid() << ": fact " <<
       input->object_->get_oid() << " -> fact " << f_p_f_icst->get_oid() << " simulated pred fact icst [" <<
       inputs_info << "]");
     return f_p_f_icst;
@@ -530,7 +530,7 @@ void CSTController::take_input(r_exec::View *input) {
   if (input->object_->code(0).asOpcode() == Opcodes::Fact ||
     input->object_->code(0).asOpcode() == Opcodes::AntiFact) { // discard everything but facts and |facts.
 
-    OUTPUT_LINE(CST_IN, Utils::RelativeTime(Now()) << " cst " << getObject()->get_oid() << " <- " << input->object_->get_oid());
+    OUTPUT_LINE(CST_IN, Utils::RelativeTime(Now()) << " cst " << get_object()->get_oid() << " <- " << input->object_->get_oid());
     Controller::__take_input<CSTController>(input);
   }
 }
@@ -548,7 +548,7 @@ void CSTController::reduce(r_exec::View *input) {
 
     _Fact *goal_target = goal->get_target(); // handle only icst.
     Code *target_ihlp = goal_target->get_reference(0);
-    if (target_ihlp->code(0).asOpcode() == Opcodes::ICst && target_ihlp->get_reference(0) == getObject()) { // f is f->icst; produce as many sub-goals as there are patterns in the cst.
+    if (target_ihlp->code(0).asOpcode() == Opcodes::ICst && target_ihlp->get_reference(0) == get_object()) { // f is f->icst; produce as many sub-goals as there are patterns in the cst.
 
       if (!get_requirement_count()) { // models will attempt to produce the icst
 
@@ -680,7 +680,7 @@ void CSTController::inject_goal(HLPBindingMap *bm,
 
   View *view = new View(View::SYNC_ONCE, now, confidence, 1, group, group, sub_goal_f); // SYNC_ONCE,res=1.
   _Mem::Get()->inject(view);
-  OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " cst " << getObject()->get_oid() << ": fact " <<
+  OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " cst " << get_object()->get_oid() << ": fact " <<
     f_super_goal->get_oid() << " super_goal -> fact " << sub_goal_f->get_oid() << " simulated goal");
 
   if (sim->get_mode() == SIM_ROOT) { // no rdx for SIM_OPTIONAL or SIM_MANDATORY.
@@ -698,7 +698,7 @@ void CSTController::inject_goal(HLPBindingMap *bm,
 
 Fact *CSTController::get_f_ihlp(HLPBindingMap *bindings, bool wr_enabled) const {
 
-  return bindings->build_f_ihlp(getObject(), Opcodes::ICst, false);
+  return bindings->build_f_ihlp(get_object(), Opcodes::ICst, false);
 }
 
 Fact *CSTController::get_f_icst(HLPBindingMap *bindings, std::vector<P<_Fact> > *axiom_inputs, std::vector<P<_Fact> > *non_axiom_inputs) const {
@@ -765,7 +765,7 @@ Group *CSTController::get_secondary_host() const {
 void CSTController::kill_views() {
 
   invalidate();
-  getView()->force_res(0);
+  get_view()->force_res(0);
 }
 
 void CSTController::check_last_match_time(bool match) {

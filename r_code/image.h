@@ -152,8 +152,8 @@ public:
 
   uint32 get_size() const; // size of data in word32
   uint32 getObjectCount() const;
-  word32 *getObject(uint32 i); // points to the code size of the object; the first atom is at getObject()+2
-  word32 *getCodeSegment(); // equals getObject(0)
+  word32 *get_object(uint32 i); // points to the code size of the object; the first atom is at get_object()+2
+  word32 *getCodeSegment(); // equals get_object(0)
   uint32 getCodeSegmentSize() const;
 
   void trace() const;

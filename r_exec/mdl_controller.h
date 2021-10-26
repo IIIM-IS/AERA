@@ -298,7 +298,7 @@ public:
   _Fact *get_lhs() const { return lhs_; }
   _Fact *get_rhs() const { return rhs_; }
   Fact *get_f_ihlp(HLPBindingMap *bindings, bool wr_enabled) const {
-    return bindings->build_f_ihlp(getObject(), Opcodes::IMdl, wr_enabled);
+    return bindings->build_f_ihlp(get_object(), Opcodes::IMdl, wr_enabled);
   }
 
   /**

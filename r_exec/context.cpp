@@ -199,15 +199,15 @@ IPGMContext IPGMContext::dereference() const {
       switch ((*this)[i].getDescriptor()) {
       case Atom::VIEW: // accessible only for this and input objects.
         if (c.view_)
-          c = IPGMContext(c.getObject(), c.view_, &c.view_->code(0), 0, NULL, VIEW);
+          c = IPGMContext(c.get_object(), c.view_, &c.view_->code(0), 0, NULL, VIEW);
         else
           return IPGMContext();
         break;
       case Atom::MKS:
-        return IPGMContext(c.getObject(), MKS);
+        return IPGMContext(c.get_object(), MKS);
         break;
       case Atom::VWS:
-        return IPGMContext(c.getObject(), VWS);
+        return IPGMContext(c.get_object(), VWS);
         break;
       default:
         c = c.get_child_deref((*this)[i].asIndex());
@@ -216,9 +216,9 @@ IPGMContext IPGMContext::dereference() const {
     return c;
   }
   case Atom::THIS: // refers to the ipgm; the pgm view is not available.
-    return IPGMContext(overlay_->getObject(), overlay_->getView(), &overlay_->getObject()->code(0), 0, (InputLessPGMOverlay *)overlay_, REFERENCE);
+    return IPGMContext(overlay_->get_object(), overlay_->get_view(), &overlay_->get_object()->code(0), 0, (InputLessPGMOverlay *)overlay_, REFERENCE);
   case Atom::VIEW: // never a reference, always in a cptr.
-    if (overlay_ && object_ == overlay_->getObject())
+    if (overlay_ && object_ == overlay_->get_object())
       return IPGMContext(object_, view_, &view_->code(0), 0, NULL, VIEW);
     return *this;
   case Atom::MKS:
@@ -228,7 +228,7 @@ IPGMContext IPGMContext::dereference() const {
   case Atom::VALUE_PTR:
     return IPGMContext(object_, view_, &overlay_->values_[0], (*this)[0].asIndex(), (InputLessPGMOverlay *)overlay_, VALUE_ARRAY);
   case Atom::IPGM_PTR:
-    return IPGMContext(overlay_->getObject(), (*this)[0].asIndex()).dereference();
+    return IPGMContext(overlay_->get_object(), (*this)[0].asIndex()).dereference();
   case Atom::IN_OBJ_PTR: {
     Code *input_object = ((PGMOverlay *)overlay_)->getInputObject((*this)[0].asInputIndex());
     View *input_view = (r_exec::View*)((PGMOverlay *)overlay_)->getInputView((*this)[0].asInputIndex());
@@ -432,7 +432,7 @@ void IPGMContext::getMember(void *&object, uint32 &view_oid, ObjectType &object_
   for (uint16 i = 2; i < atom_count; ++i) { // stop before the last iptr.
 
     if (cptr[i].getDescriptor() == Atom::VIEW)
-      c = IPGMContext(c.getObject(), c.view_, &c.view_->code(0), 0, NULL, VIEW);
+      c = IPGMContext(c.get_object(), c.view_, &c.view_->code(0), 0, NULL, VIEW);
     else
       c = c.get_child_deref(cptr[i].asIndex());
   }
@@ -449,7 +449,7 @@ void IPGMContext::getMember(void *&object, uint32 &view_oid, ObjectType &object_
   case Atom::COMPOSITE_STATE:
   case Atom::MODEL:
     object_type = TYPE_OBJECT;
-    object = c.getObject();
+    object = c.get_object();
     break;
   case Atom::GROUP:
   case Atom::SET: // dynamically generated views can be sets.
@@ -494,7 +494,7 @@ bool match(const IPGMContext &input, const IPGMContext &pattern) { // in red, pa
     // patch the pattern with a ptr to the input.
   if (input.is_reference()) {
 
-    uint16 ptr = pattern.addProduction(input.getObject(), false); // the object obviously is not new.
+    uint16 ptr = pattern.addProduction(input.get_object(), false); // the object obviously is not new.
     pattern.patch_code(pattern.getIndex() + 1, Atom::ProductionPointer(ptr));
   } else
     pattern.patch_code(pattern.getIndex() + 1, Atom::IPointer(input.getIndex()));
@@ -652,7 +652,7 @@ bool IPGMContext::Ins(const IPGMContext &context) {
   IPGMContext res = context.get_child_deref(5);
   IPGMContext nfr = context.get_child_deref(6);
 
-  Code *pgm = object.getObject();
+  Code *pgm = object.get_object();
   uint16 pgm_opcode = pgm->code(0).asOpcode();
   if (pgm_opcode != Opcodes::Pgm &&
     pgm_opcode != Opcodes::AntiPgm) {
@@ -728,8 +728,8 @@ bool IPGMContext::Fvw(const IPGMContext &context) {
   IPGMContext object = context.get_child_deref(1);
   IPGMContext group = context.get_child_deref(2);
 
-  Code *_object = object.getObject();
-  Group *_group = (Group *)group.getObject();
+  Code *_object = object.get_object();
+  Group *_group = (Group *)group.get_object();
   if (!_object || !_group) {
 
     context.setAtomicResult(Atom::Nil());

@@ -113,7 +113,7 @@ void InputLessPGMController::signal_input_less_pgm() { // next job will be pushe
 
       if (is_alive()) {
 
-        Group *host = getView()->get_host();
+        Group *host = get_view()->get_host();
         host->enter();
         if (host->get_c_act() > host->get_c_act_thr() && // c-active group.
           host->get_c_sln() > host->get_c_sln_thr()) { // c-salient group.
@@ -286,15 +286,15 @@ void AntiPGMController::restart() { // one anti overlay matched all its inputs, 
 
 void AntiPGMController::push_new_signaling_job() {
 
-  Group *host = getView()->get_host();
+  Group *host = get_view()->get_host();
   host->enter();
-  if (getView()->get_act() > host->get_act_thr() && // active ipgm.
+  if (get_view()->get_act() > host->get_act_thr() && // active ipgm.
     host->get_c_act() > host->get_c_act_thr() && // c-active group.
     host->get_c_sln() > host->get_c_sln_thr()) { // c-salient group.
 
     host->leave();
     // The time scope is stored as a timestamp, but it is actually a duration.
-    TimeJob *next_job = new AntiPGMSignalingJob((r_exec::View*)view_, Now() + Utils::GetTimestamp<Code>(getObject(), IPGM_TSC).time_since_epoch());
+    TimeJob *next_job = new AntiPGMSignalingJob((r_exec::View*)view_, Now() + Utils::GetTimestamp<Code>(get_object(), IPGM_TSC).time_since_epoch());
     _Mem::Get()->push_time_job(next_job);
   } else
     host->leave();

@@ -633,15 +633,15 @@ void Group::update(Timestamp planned_time) {
 
     for (uint32 i = 0; i < new_controllers_.size(); ++i) {
 
-      switch (new_controllers_[i]->getObject()->code(0).getDescriptor()) {
+      switch (new_controllers_[i]->get_object()->code(0).getDescriptor()) {
       case Atom::INSTANTIATED_ANTI_PROGRAM: { // inject signaling jobs for |ipgm (tsc).
         // The time scope is stored as a timestamp, but it is actually a duration.
-        P<TimeJob> j = new AntiPGMSignalingJob((r_exec::View *)new_controllers_[i]->getView(), now + Utils::GetTimestamp<Code>(new_controllers_[i]->getObject(), IPGM_TSC).time_since_epoch());
+        P<TimeJob> j = new AntiPGMSignalingJob((r_exec::View *)new_controllers_[i]->get_view(), now + Utils::GetTimestamp<Code>(new_controllers_[i]->get_object(), IPGM_TSC).time_since_epoch());
         _Mem::Get()->push_time_job(j);
         break;
       }case Atom::INSTANTIATED_INPUT_LESS_PROGRAM: { // inject a signaling job for an input-less pgm.
 
-        P<TimeJob> j = new InputLessPGMSignalingJob((r_exec::View *)new_controllers_[i]->getView(), now + Utils::GetTimestamp<Code>(new_controllers_[i]->getObject(), IPGM_TSC).time_since_epoch());
+        P<TimeJob> j = new InputLessPGMSignalingJob((r_exec::View *)new_controllers_[i]->get_view(), now + Utils::GetTimestamp<Code>(new_controllers_[i]->get_object(), IPGM_TSC).time_since_epoch());
         _Mem::Get()->push_time_job(j);
         break;
       }
@@ -946,7 +946,7 @@ void Group::inject(View *view) { // the view can hold anything but groups and no
       for (v = newly_salient_views_.begin(); v != newly_salient_views_.end(); ++v)
         c->_take_input(*v); // view will be copied.
       // The time scope is stored as a timestamp, but it is actually a duration.
-      _Mem::Get()->push_time_job(new AntiPGMSignalingJob(view, now + Utils::GetTimestamp<Code>(c->getObject(), IPGM_TSC).time_since_epoch()));
+      _Mem::Get()->push_time_job(new AntiPGMSignalingJob(view, now + Utils::GetTimestamp<Code>(c->get_object(), IPGM_TSC).time_since_epoch()));
     }
     break;
   }case Atom::INSTANTIATED_INPUT_LESS_PROGRAM: {

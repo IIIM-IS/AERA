@@ -186,7 +186,7 @@ public:
 
   void invalidate();
 
-  r_code::Code *get_core_object() const { return getObject(); } // cst or mdl.
+  r_code::Code *get_core_object() const { return get_object(); } // cst or mdl.
   r_code::Code *get_unpacked_object() const { // the unpacked version of the core object.
 
     r_code::Code *core_object = get_core_object();
@@ -206,7 +206,7 @@ public:
 
   uint16 get_out_group_count() const;
   r_code::Code *get_out_group(uint16 i) const; // i starts at 1.
-  Group *get_host() const { return (Group *)getView()->get_host(); }
+  Group *get_host() const { return (Group *)get_view()->get_host(); }
   bool has_tpl_args() const { return has_tpl_args_; }
 
   bool inject_prediction(Fact *prediction, float32 confidence) const; // for simulated predictions.

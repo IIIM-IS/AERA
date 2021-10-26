@@ -130,7 +130,7 @@ template<class I> uint32 Image<I>::getObjectCount() const {
   return map_size();
 }
 
-template<class I> word32 *Image<I>::getObject(uint32 i) {
+template<class I> word32 *Image<I>::get_object(uint32 i) {
 
   return data() + data(i);
 }

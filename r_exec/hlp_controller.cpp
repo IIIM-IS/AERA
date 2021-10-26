@@ -148,12 +148,12 @@ uint32 HLPController::get_requirement_count() {
 
 uint16 HLPController::get_out_group_count() const {
 
-  return getObject()->code(getObject()->code(HLP_OUT_GRPS).asIndex()).getAtomCount();
+  return get_object()->code(get_object()->code(HLP_OUT_GRPS).asIndex()).getAtomCount();
 }
 
 Code *HLPController::get_out_group(uint16 i) const {
 
-  Code *hlp = getObject();
+  Code *hlp = get_object();
   uint16 out_groups_index = hlp->code(HLP_OUT_GRPS).asIndex() + 1; // first output group index.
   return hlp->get_reference(hlp->code(out_groups_index + i).asIndex());
 }

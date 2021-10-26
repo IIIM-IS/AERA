@@ -164,8 +164,8 @@ public:
 
   virtual r_code::Code *get_core_object() const = 0;
 
-  r_code::Code *getObject() const { return view_->object_; } // return the reduction object (e.g. ipgm, icpp_pgm, cst, mdl).
-  r_exec::View *getView() const { return (r_exec::View *)view_; } // return the reduction object's view.
+  r_code::Code *get_object() const { return view_->object_; } // return the reduction object (e.g. ipgm, icpp_pgm, cst, mdl).
+  r_exec::View *get_view() const { return (r_exec::View *)view_; } // return the reduction object's view.
 
   void _take_input(r_exec::View *input); // called by the rMem at update time and at injection time.
 
@@ -223,8 +223,8 @@ public:
   void invalidate() { invalidated_ = 1; }
   virtual bool is_invalidated() { return invalidated_ == 1; }
 
-  r_code::Code *getObject() const { return ((Controller *)controller_)->getObject(); }
-  r_exec::View *getView() const { return ((Controller *)controller_)->getView(); }
+  r_code::Code *get_object() const { return ((Controller *)controller_)->get_object(); }
+  r_exec::View *get_view() const { return ((Controller *)controller_)->get_view(); }
 
   r_code::Code *build_object(r_code::Atom head) const;
 };

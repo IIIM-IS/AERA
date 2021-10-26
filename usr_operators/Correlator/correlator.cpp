@@ -91,8 +91,8 @@ public:
   CorrelatorController(r_code::View *icpp_pgm_view) : r_exec::Controller(icpp_pgm_view) {
 
     // Load arguments here.
-    uint16 arg_set_index = getObject()->code(ICPP_PGM_ARGS).asIndex();
-    uint16 arg_count = getObject()->code(arg_set_index).getAtomCount();
+    uint16 arg_set_index = get_object()->code(ICPP_PGM_ARGS).asIndex();
+    uint16 arg_count = get_object()->code(arg_set_index).getAtomCount();
 
     correlator = new Correlator();
 
@@ -104,7 +104,7 @@ public:
     delete correlator;
   }
 
-  Code *get_core_object() const { return getObject()->get_reference(0); }
+  Code *get_core_object() const { return get_object()->get_reference(0); }
 
   void take_input(r_exec::View *input) {
     static bool once = false; if (once)return;
