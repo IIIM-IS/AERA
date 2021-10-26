@@ -376,7 +376,7 @@ Code *_TPX::build_cst(const std::vector<Component> &components, BindingMap *bm, 
 
   cst->code(CST_ARITY) = Atom::Float(1); // psln_thr.
 
-  cst->add_reference(auto_focus_->getView()->get_host()); // reference the output group.
+  cst->add_reference(auto_focus_->get_view()->get_host()); // reference the output group.
 
   return cst;
 }
@@ -415,7 +415,7 @@ void _TPX::build_mdl_tail(Code *mdl, uint16 write_index) {
   mdl->code(MDL_DSR) = Atom::Float(1);
   mdl->code(MDL_ARITY) = Atom::Float(1); // psln_thr.
 
-  mdl->add_reference(auto_focus_->getView()->get_host()); // reference the output group.
+  mdl->add_reference(auto_focus_->get_view()->get_host()); // reference the output group.
 }
 
 void _TPX::inject_hlps() const {
