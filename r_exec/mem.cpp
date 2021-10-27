@@ -327,11 +327,27 @@ bool _Mem::load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 s
 
     switch (object->code(0).getDescriptor()) {
     case Atom::MODEL:
+      if (Utils::has_reference(&object->code(0), HLP_FWD_GUARDS)) {
+        cerr << "ERROR: Illegal referenced object in forward guards of model OID " << object->get_oid() << endl;
+        return false;
+      }
+      if (Utils::has_reference(&object->code(0), HLP_BWD_GUARDS)) {
+        cerr << "ERROR: Illegal referenced object in backward guards of model OID " << object->get_oid() << endl;
+        return false;
+      }
       unpack_hlp(object);
       //object->add_reference(NULL); // classifier.
       ModelBase::Get()->load(object);
       break;
     case Atom::COMPOSITE_STATE:
+      if (Utils::has_reference(&object->code(0), HLP_FWD_GUARDS)) {
+        cerr << "ERROR: Illegal referenced object in forward guards of cst OID " << object->get_oid() << endl;
+        return false;
+      }
+      if (Utils::has_reference(&object->code(0), HLP_BWD_GUARDS)) {
+        cerr << "ERROR: Illegal referenced object in backward guards of cst OID " << object->get_oid() << endl;
+        return false;
+      }
       unpack_hlp(object);
       break;
     case Atom::INSTANTIATED_PROGRAM: // refine the opcode depending on the inputs and the program type.
