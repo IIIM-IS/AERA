@@ -218,6 +218,14 @@ public:
   static int32 GetResilience(float32 resilience, float32 origin_upr, float32 destination_upr); // express the res in destination group, given the res in origin group.
 
   static std::string RelativeTime(Timestamp t);
+
+  /**
+   * Check the code at index has a reference, also following I_PTR and recursing into sets.
+   * \param code The code to check.
+   * \param index start checking at code[index].
+   * \return True if the element has a reference.
+   */
+  static bool has_reference(const Atom* code, uint16 index);
 };
 
 // This is Timestamp::max() duration_cast to microseconds and used to initialize a Timestamp.
