@@ -1122,9 +1122,9 @@ void _Mem::unpack_hlp(Code *hlp) { // produces a new object (featuring a set of 
   }
 
   // adjust set indices.
-  unpacked_hlp->code(HLP_FWD_GUARDS) = Atom::IPointer(hlp->code(CST_FWD_GUARDS).asIndex() - invalid_zone_length);
-  unpacked_hlp->code(HLP_BWD_GUARDS) = Atom::IPointer(hlp->code(CST_BWD_GUARDS).asIndex() - invalid_zone_length);
-  unpacked_hlp->code(HLP_OUT_GRPS) = Atom::IPointer(hlp->code(CST_OUT_GRPS).asIndex() - invalid_zone_length);
+  unpacked_hlp->code(HLP_FWD_GUARDS) = Atom::IPointer(hlp->code(HLP_FWD_GUARDS).asIndex() - invalid_zone_length);
+  unpacked_hlp->code(HLP_BWD_GUARDS) = Atom::IPointer(hlp->code(HLP_BWD_GUARDS).asIndex() - invalid_zone_length);
+  unpacked_hlp->code(HLP_OUT_GRPS) = Atom::IPointer(hlp->code(HLP_OUT_GRPS).asIndex() - invalid_zone_length);
 
   uint16 unpacked_code_length = hlp->code_size() - invalid_zone_length;
   unpacked_hlp->resize_code(unpacked_code_length);
@@ -1234,9 +1234,9 @@ void _Mem::pack_hlp(Code *hlp) const { // produces a new object where a set of p
   }
 
   // adjust set indices.
-  hlp->code(CST_FWD_GUARDS) = Atom::IPointer(hlp->code(HLP_FWD_GUARDS).asIndex() + inserted_zone_length);
-  hlp->code(CST_BWD_GUARDS) = Atom::IPointer(hlp->code(HLP_BWD_GUARDS).asIndex() + inserted_zone_length);
-  hlp->code(CST_OUT_GRPS) = Atom::IPointer(hlp->code(HLP_OUT_GRPS).asIndex() + inserted_zone_length);
+  hlp->code(HLP_FWD_GUARDS) = Atom::IPointer(hlp->code(HLP_FWD_GUARDS).asIndex() + inserted_zone_length);
+  hlp->code(HLP_BWD_GUARDS) = Atom::IPointer(hlp->code(HLP_BWD_GUARDS).asIndex() + inserted_zone_length);
+  hlp->code(HLP_OUT_GRPS) = Atom::IPointer(hlp->code(HLP_OUT_GRPS).asIndex() + inserted_zone_length);
 
   group_set_index += inserted_zone_length;
   for (uint16 i = 1; i <= group_count; ++i) { // append the out_groups to the new references; adjust the exisitng r-ptrs.
