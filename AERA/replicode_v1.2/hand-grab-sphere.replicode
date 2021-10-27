@@ -322,7 +322,7 @@ pgm_cmd_move_h_attached_c:(pgm |[]
    )
    (inj []
       (fact Command (+ After 20000us) Before 1 1)
-      [SYNC_PERIODIC After 1 1 stdin nil]
+      [SYNC_ONCE After 1 1 stdin nil]
    )
    (inj []
       Next_attached:(mk.val h attached Attached_obj 1); Still attached to the same object.
@@ -387,7 +387,7 @@ pgm_cmd_move_h_attached_s:(pgm |[]
    )
    (inj []
       (fact Command (+ After 20000us) Before 1 1)
-      [SYNC_PERIODIC After 1 1 stdin nil]
+      [SYNC_ONCE After 1 1 stdin nil]
    )
    (inj []
       Next_attached:(mk.val h attached Attached_obj 1); Still attached to the same object.
@@ -453,7 +453,7 @@ pgm_cmd_move_h_attached_nil:(pgm |[]
    )
    (inj []
       (fact Command (+ After 20000us) Before 1 1)
-      [SYNC_PERIODIC After 1 1 stdin nil]
+      [SYNC_ONCE After 1 1 stdin nil]
    )
    (inj []
       Next_attached:(mk.val h attached Attached_obj 1); Still attached to the same object.
@@ -513,7 +513,7 @@ pgm_cmd_release_h:(pgm |[]
    ; Inject the fact that the command was executed.
    (inj []
       (fact Command (+ After 20000us) Before 1 1)
-      [SYNC_PERIODIC After 1 1 stdin nil]
+      [SYNC_ONCE After 1 1 stdin nil]
    )
    (inj []
       Next_attached:(mk.val h attached nil 1); h is now unattached.
@@ -575,7 +575,7 @@ pgm_cmd_grab_h:(pgm |[]
    ; Inject the fact that the command was executed.
    (inj []
       (fact Command (+ After 20000us) Before 1 1)
-      [SYNC_PERIODIC After 1 1 stdin nil]
+      [SYNC_ONCE After 1 1 stdin nil]
    )
    (inj []
       Next_attached:(mk.val h attached s 1); We already checked that s is at the hand's position. TODO: What if c is also there? 
