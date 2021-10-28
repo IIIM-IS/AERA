@@ -202,4 +202,33 @@ std::string Utils::RelativeTime(Timestamp t) {
 
   return Time::ToString_seconds(t - TimeReference);
 }
+
+bool Utils::has_reference(const Atom* code, uint16 index) {
+  Atom atom = code[index];
+
+  switch (atom.getDescriptor()) {
+  case Atom::R_PTR:
+    return true;
+  case Atom::I_PTR:
+    return has_reference(code, atom.asIndex());
+  case Atom::C_PTR:
+  case Atom::SET:
+  case Atom::OBJECT:
+  case Atom::S_SET:
+  case Atom::MARKER:
+  case Atom::OPERATOR:
+  case Atom::TIMESTAMP:
+  case Atom::GROUP: {
+    uint16 count = atom.getAtomCount();
+    for (uint16 i = 1; i <= count; ++i) {
+      if (has_reference(code, index + i))
+        return true;
+    }
+    return false;
+  }
+  default:
+    return false;
+  }
+}
+
 }
