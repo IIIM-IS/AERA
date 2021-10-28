@@ -320,13 +320,13 @@ public:
    * \param val The Atom value for the mk.val, such as Atom::Float(1).
    * \param after The start of the fact time interval.
    * \param before The end of the fact time interval.
-   * \param sync_mode The view sync mode, such as r_exec::View::SYNC_PERIODIC.
+   * \param sync_mode The view sync mode, such as View::SYNC_PERIODIC.
    * \param group The group of the view, such as get_stdin().
    * \return The created View.
    */
-  r_exec::View* inject_marker_value_from_io_device(
+  View* inject_marker_value_from_io_device(
     r_code::Code* obj, r_code::Code* prop, Atom val, Timestamp after, Timestamp before,
-    r_exec::View::SyncMode sync_mode, r_code::Code* group);
+    View::SyncMode sync_mode, r_code::Code* group);
 
   /**
    * Inject (fact (mk.val obj prop val 1) after before 1 1)
@@ -339,12 +339,12 @@ public:
    * \param val The Atom value for the mk.val, such as Atom::Float(1).
    * \param after The start of the fact time interval.
    * \param before The end of the fact time interval.
-   * \param sync_mode The view sync mode, such as r_exec::View::SYNC_PERIODIC.
+   * \param sync_mode The view sync mode, such as View::SYNC_PERIODIC.
    * \return The created View.
    */
-  r_exec::View* inject_marker_value_from_io_device(
+  View* inject_marker_value_from_io_device(
     r_code::Code* obj, r_code::Code* prop, Atom val, Timestamp after, Timestamp before,
-    r_exec::View::SyncMode sync_mode)
+    View::SyncMode sync_mode)
   {
     return inject_marker_value_from_io_device(obj, prop, val, after, before, sync_mode, get_stdin());
   }
@@ -363,11 +363,11 @@ public:
    * \param group The group of the view, such as get_stdin().
    * \return The created View.
    */
-  r_exec::View* inject_marker_value_from_io_device(
+  View* inject_marker_value_from_io_device(
     r_code::Code* obj, r_code::Code* prop, Atom val, Timestamp after, Timestamp before, r_code::Code* group)
   {
     return inject_marker_value_from_io_device(
-      obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, group);
+      obj, prop, val, after, before, View::SYNC_PERIODIC, group);
   }
 
   /**
@@ -383,11 +383,11 @@ public:
    * \param before The end of the fact time interval.
    * \return The created View.
    */
-  r_exec::View* inject_marker_value_from_io_device(
+  View* inject_marker_value_from_io_device(
     r_code::Code* obj, r_code::Code* prop, Atom val, Timestamp after, Timestamp before)
   {
     return inject_marker_value_from_io_device(
-      obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, get_stdin());
+      obj, prop, val, after, before, View::SYNC_PERIODIC, get_stdin());
   }
 
   /**
@@ -402,13 +402,13 @@ public:
    * add it to the references of the mkval.
    * \param after The start of the fact time interval.
    * \param before The end of the fact time interval.
-   * \param sync_mode The view sync mode, such as r_exec::View::SYNC_PERIODIC.
+   * \param sync_mode The view sync mode, such as View::SYNC_PERIODIC.
    * \param group The group of the view, such as get_stdin().
    * \return The created View.
    */
-  r_exec::View* inject_marker_value_from_io_device(
+  View* inject_marker_value_from_io_device(
     r_code::Code* obj, r_code::Code* prop, r_code::Code* val, Timestamp after, Timestamp before,
-    r_exec::View::SyncMode sync_mode, r_code::Code* group);
+    View::SyncMode sync_mode, r_code::Code* group);
 
   /**
    * Inject (fact (mk.val obj prop val 1) after before 1 1)
@@ -422,12 +422,12 @@ public:
    * add it to the references of the mkval.
    * \param after The start of the fact time interval.
    * \param before The end of the fact time interval.
-   * \param sync_mode The view sync mode, such as r_exec::View::SYNC_PERIODIC.
+   * \param sync_mode The view sync mode, such as View::SYNC_PERIODIC.
    * \return The created View.
    */
-  r_exec::View* inject_marker_value_from_io_device(
+  View* inject_marker_value_from_io_device(
     r_code::Code* obj, r_code::Code* prop, r_code::Code* val, Timestamp after, Timestamp before,
-    r_exec::View::SyncMode sync_mode)
+    View::SyncMode sync_mode)
   {
     return inject_marker_value_from_io_device(obj, prop, val, after, before, sync_mode, get_stdin());
   }
@@ -447,11 +447,11 @@ public:
    * \param group The group of the view, such as get_stdin().
    * \return The created View.
    */
-  r_exec::View* inject_marker_value_from_io_device(
+  View* inject_marker_value_from_io_device(
     r_code::Code* obj, r_code::Code* prop, r_code::Code* val, Timestamp after, Timestamp before, r_code::Code* group)
   {
     return inject_marker_value_from_io_device(
-      obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, group);
+      obj, prop, val, after, before, View::SYNC_PERIODIC, group);
   }
 
   /**
@@ -468,11 +468,11 @@ public:
    * \param before The end of the fact time interval.
    * \return The created View.
    */
-  r_exec::View* inject_marker_value_from_io_device(
+  View* inject_marker_value_from_io_device(
     r_code::Code* obj, r_code::Code* prop, r_code::Code* val, Timestamp after, Timestamp before)
   {
     return inject_marker_value_from_io_device(
-      obj, prop, val, after, before, r_exec::View::SYNC_PERIODIC, get_stdin());
+      obj, prop, val, after, before, View::SYNC_PERIODIC, get_stdin());
   }
 
   /**
@@ -484,12 +484,12 @@ public:
    * of the methods for injectMarkerValue...)
    * \param after The start of the fact time interval.
    * \param before The end of the fact time interval.
-   * \param sync_mode The view sync mode, such as r_exec::View::SYNC_PERIODIC.
+   * \param sync_mode The view sync mode, such as View::SYNC_PERIODIC.
    * \param group The group of the view, such as get_stdin().
    * \return The created View.
    */
-  r_exec::View* inject_fact_from_io_device(
-    r_code::Code* object, Timestamp after, Timestamp before, r_exec::View::SyncMode sync_mode,
+  View* inject_fact_from_io_device(
+    r_code::Code* object, Timestamp after, Timestamp before, View::SyncMode sync_mode,
     r_code::Code* group);
 
   /**
@@ -504,9 +504,9 @@ public:
    * \param group The group of the view, such as get_stdin().
    * \return The created View.
    */
-  r_exec::View* inject_fact_from_io_device(r_code::Code* object, Timestamp after, Timestamp before, r_code::Code* group) {
+  View* inject_fact_from_io_device(r_code::Code* object, Timestamp after, Timestamp before, r_code::Code* group) {
     return inject_fact_from_io_device(
-      object, after, before, r_exec::View::SYNC_PERIODIC, group);
+      object, after, before, View::SYNC_PERIODIC, group);
   }
 
   // Called upon successful reduction.

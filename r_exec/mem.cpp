@@ -348,7 +348,7 @@ bool _Mem::load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 s
     for (v = object->views_.begin(); v != object->views_.end(); ++v) {
 
       // init hosts' member_set.
-      View *view = (r_exec::View *)*v;
+      View *view = (View *)*v;
       view->set_object(object);
       Group *host = view->get_host();
 
@@ -780,16 +780,16 @@ void _Mem::inject_from_io_device(View *view) {
       view->object_->get_oid() << ", ijt " << Utils::RelativeTime(view->get_ijt()));
 }
 
-r_exec::View* _Mem::inject_marker_value_from_io_device(
+View* _Mem::inject_marker_value_from_io_device(
   Code* obj, Code* prop, Atom val, Timestamp after, Timestamp before,
-  r_exec::View::SyncMode sync_mode, Code* group) 
+  View::SyncMode sync_mode, Code* group) 
 {
   if (!obj || !prop)
     // We don't expect this, but sanity check.
     return NULL;
 
-  Code *object = new r_exec::LObject(this);
-  object->code(0) = Atom::Marker(r_exec::GetOpcode("mk.val"), 4); // Caveat: arity does not include the opcode.
+  Code *object = new LObject(this);
+  object->code(0) = Atom::Marker(GetOpcode("mk.val"), 4); // Caveat: arity does not include the opcode.
   object->code(1) = Atom::RPointer(0); // obj
   object->code(2) = Atom::RPointer(1); // prop
   object->code(3) = val;
@@ -801,16 +801,16 @@ r_exec::View* _Mem::inject_marker_value_from_io_device(
   return inject_fact_from_io_device(object, after, before, sync_mode, group);
 }
 
-r_exec::View* _Mem::inject_marker_value_from_io_device(
+View* _Mem::inject_marker_value_from_io_device(
   Code* obj, Code* prop, Code* val, Timestamp after, Timestamp before,
-  r_exec::View::SyncMode sync_mode, Code* group)
+  View::SyncMode sync_mode, Code* group)
 {
   if (!obj || !prop)
     // We don't expect this, but sanity check.
     return NULL;
 
-  Code *object = new r_exec::LObject(this);
-  object->code(0) = Atom::Marker(r_exec::GetOpcode("mk.val"), 4); // Caveat: arity does not include the opcode.
+  Code *object = new LObject(this);
+  object->code(0) = Atom::Marker(GetOpcode("mk.val"), 4); // Caveat: arity does not include the opcode.
   object->code(1) = Atom::RPointer(0); // obj
   object->code(2) = Atom::RPointer(1); // prop
   object->code(3) = Atom::RPointer(2); // val
@@ -823,15 +823,15 @@ r_exec::View* _Mem::inject_marker_value_from_io_device(
   return inject_fact_from_io_device(object, after, before, sync_mode, group);
 }
 
-r_exec::View* _Mem::inject_fact_from_io_device(
-  Code* object, Timestamp after, Timestamp before, r_exec::View::SyncMode sync_mode,
+View* _Mem::inject_fact_from_io_device(
+  Code* object, Timestamp after, Timestamp before, View::SyncMode sync_mode,
   Code* group)
 {
   // Build a fact.
-  Code* fact = new r_exec::Fact(object, after, before, 1, 1);
+  Code* fact = new Fact(object, after, before, 1, 1);
 
   // Build a view for the fact.
-  r_exec::View *view = new r_exec::View(sync_mode, after, 1, 1, group, NULL, fact);
+  View *view = new View(sync_mode, after, 1, 1, group, NULL, fact);
 
   // Inject the view.
   inject_from_io_device(view);
@@ -1008,9 +1008,9 @@ void _Mem::propagate_sln(Code *object, float32 change, float32 source_sln_thr) {
   UNORDERED_SET<r_code::View *, r_code::View::Hash, r_code::View::Equal>::const_iterator it;
   for (it = object->views_.begin(); it != object->views_.end(); ++it) {
 
-    float32 morphed_sln_change = View::MorphChange(change, source_sln_thr, ((r_exec::View*)*it)->get_host()->get_sln_thr());
+    float32 morphed_sln_change = View::MorphChange(change, source_sln_thr, ((View*)*it)->get_host()->get_sln_thr());
     if (morphed_sln_change != 0)
-      ((r_exec::View*)*it)->get_host()->pending_operations_.push_back(new Group::Mod(((r_exec::View*)*it)->get_oid(), VIEW_SLN, morphed_sln_change));
+      ((View*)*it)->get_host()->pending_operations_.push_back(new Group::Mod(((View*)*it)->get_oid(), VIEW_SLN, morphed_sln_change));
   }
   object->rel_views();
 }
