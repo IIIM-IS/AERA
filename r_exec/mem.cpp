@@ -1015,69 +1015,6 @@ void _Mem::propagate_sln(Code *object, float32 change, float32 source_sln_thr) {
   object->rel_views();
 }
 
-//DEPRECATED///////////////////////////////////////////////////
-
-/*r_exec_dll r_exec::Mem<r_exec::LObject> *Run(const char *user_operator_library_path,
-                                            uint64 (*time_base)(),
-                                            const char *seed_path,
-                                            const char *source_file_name)
-{
-    r_exec::Init(user_operator_library_path,time_base,seed_path );
-
-    srand(r_exec::Now());
-    Random::Init();
-
-    std::string error;
-    r_exec::Compile(source_file_name,error);
-
-    r_exec::Mem<r_exec::LObject> *mem = new r_exec::Mem<r_exec::LObject>();
-
-    r_code::vector<r_code::Code *> ram_objects;
-    r_exec::Seed.get_objects(mem,ram_objects);
-
-    mem->init( 100000, // base period.
-                3, // reduction core count.
-                1, // time core count.
-                0.9, // mdl inertia sr thr.
-                10, // mdl inertia cnt thr.
-                0.1, // tpx_dsr_thr.
-                25000, // min_sim time horizon
-                100000, // max_sim time horizon
-                0.3, // sim time horizon
-                500000, // tpx time horizon
-                250000, // perf sampling period
-                0.1, // float tolerance.
-                10000, // time tolerance.
-                3600000,// primary thz.
-                7200000,// secondary thz.
-                false, // debug.
-                1000, // ntf marker resilience.
-                1000, // goal pred success resilience.
-                2); // probe level.
-
-    uint32 stdin_oid;
-    std::string stdin_symbol("stdin");
-    uint32 stdout_oid;
-    std::string stdout_symbol("stdout");
-    uint32 self_oid;
-    std::string self_symbol("self");
-    UNORDERED_MAP<uint32,std::string>::const_iterator n;
-    for(n=r_exec::Seed.object_names_.symbols_.begin();n!=r_exec::Seed.object_names_.symbols_.end();++n){
-
-        if(n->second==stdin_symbol)
-            stdin_oid=n->first;
-        else if(n->second==stdout_symbol)
-            stdout_oid=n->first;
-        else if(n->second==self_symbol)
-            self_oid=n->first;
-    }
-
-    mem->load(ram_objects.as_std(),stdin_oid,stdout_oid,self_oid);
-
-    return mem;
-}*/
-////////////////////////////////////////////////////////////////
-
 void _Mem::unpack_hlp(Code *hlp) { // produces a new object (featuring a set of pattern objects instread of a set of embedded pattern expressions) and add it as a hidden reference to the original (still packed) hlp.
 
   Code *unpacked_hlp = new LObject(); // will not be transmitted nor decompiled.
