@@ -176,7 +176,8 @@ inline View *AutoFocusController::inject_input(View *input) {
 
         primary_view = view;
         if (ctpx_on_)
-          _Mem::Get()->inject_null_program(new PASTController(this, view), output_group, output_group->get_upr()*Utils::GetBasePeriod(), true);
+          // Set time_to_live to 2 frame periods so that PASTController stays valid during the whole frame when CTPX may build models.
+          _Mem::Get()->inject_null_program(new PASTController(this, view), output_group, 2 * output_group->get_upr()*Utils::GetBasePeriod(), true);
       }
     }
     break;
