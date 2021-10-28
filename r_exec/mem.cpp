@@ -732,7 +732,7 @@ void _Mem::inject_existing_object(View *view, Code *object, Group *host) {
   host->inject_existing_object(view);
 }
 
-void _Mem::inject_null_program(Controller *c, Group *group, microseconds time_to_live, bool take_past_inputs) {
+View* _Mem::inject_null_program(Controller *c, Group *group, microseconds time_to_live, bool take_past_inputs) {
 
   auto now = Now();
 
@@ -747,6 +747,7 @@ void _Mem::inject_null_program(Controller *c, Group *group, microseconds time_to
   c->set_view(view);
 
   inject(view);
+  return view;
 }
 
 void _Mem::inject_new_object(View *view) {

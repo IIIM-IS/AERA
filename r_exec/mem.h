@@ -523,7 +523,7 @@ public:
   void inject_async(View *view);
   void inject_new_object(View *view);
   void inject_existing_object(View *view, r_code::Code *object, Group *host);
-  void inject_null_program(Controller *c, Group *group, std::chrono::microseconds time_to_live, bool take_past_inputs); // build a view v (ijt=now, act=1, sln=0, res according to time_to_live in the group), attach c to v, inject v in the group.
+  View* inject_null_program(Controller *c, Group *group, std::chrono::microseconds time_to_live, bool take_past_inputs); // build a view v (ijt=now, act=1, sln=0, res according to time_to_live in the group), attach c to v, inject v in the group.
   void inject_hlps(std::vector<View *> views, Group *destination);
   void inject_notification(View *view, bool lock);
   virtual r_code::Code *check_existence(r_code::Code *object) = 0; // returns the existing object if any, or object otherwise: in the latter case, packing may occur.
