@@ -707,44 +707,37 @@ Simulator
   * DONE. Limiting the time interval of abduced commands https://github.com/IIIM-IS/AERA/pull/175
   * DONE. Forward chaining from each requirement https://github.com/IIIM-IS/AERA/pull/186
 
+2021-10-28
+* Review/merge new functionality pull requests for:
+  * DONE. error for reference in a mdl or cst guard https://github.com/IIIM-IS/AERA/pull/191
+  * DONE. Creating the primary group before stdin https://github.com/IIIM-IS/AERA/pull/188
+
 next meeting
 * Review/merge new functionality pull requests for:
+  * Making the CTPX learn models in hand-grab-sphere https://github.com/IIIM-IS/AERA/pull/192
   * REVIEWING. PTPX: Make a candidate model from every matching f_icst https://github.com/IIIM-IS/replicode/pull/165
-  * Creating the primary group before stdin https://github.com/IIIM-IS/AERA/pull/188
 * Review diag_mode_rel_0_1 tags https://github.com/IIIM-IS/replicode/issues?q=is%3Aopen+is%3Aissue+milestone%3Adiag_mode_rel_0_1
 
 TODO
-* TRY copy/paste code to check references to fix: Using = in guard of composite state of model https://github.com/IIIM-IS/replicode/issues/133
-* PTPX in hand-grab-sphere:
-  * Option to always create new cst
-    * Why does the new_cst seem to prevent models with the previously-found icsts, e.g. S0 and S3?
-    * Learned cst may only have icsts. But using a cst for later model-building requires a non-icst fact. Should icst->contains be recursive? (Need limit.) Or always include a fact in new_cst?
-  * Why anti-requirement is not rated?
-    PrimaryMDLController::predict:1557 confidence = 0
-    PMonitor::reduce:126 "a predicted counter evidence is stronger than the target: don't rate the model."
+* PTPX: Learned cst may only have icsts. But using a cst for later model-building requires a non-icst fact. Should icst->contains be recursive? (Need limit.) Or always include a fact in new_cst?
 * pong.test
   * Add paddle. Make goal for the ball to be at a position which requires moving the paddle to bounce it.
   * mdl_122: Needed to put velocity in the cmd. Need a model builder to get it from the velocity fact.
   * Remove cst_ball_position, etc. and learn them.
   * Learn the exception "bounce" model.
-* Visualizer: File menu / Preferences (XML file). And persist "view" checkboxes.
-* Visualizer: Option to position simulation objects by predicted time vs. created time.
-* Pull request for issue #147
 * Make hand-grab-sphere example learn the models.
   * A pgm to match a learned model and inject a new model which uses it.
-* How to ensure that stored requirements are from the same simulation branch?
-* Try limiting detection of conflicting facts to numbers.
 * Try commenting out PTPX::reduce:666 if (i->input_ == Opcodes::Cmd)
 * Try pass_through==false. Do CTPX and PTPX still work?
 * When a failed model is in the secondary group and the pattern extractor learns a model from new inputs, does it check if it's the same as the failed model?
 * For an anti-goal can AERA check if it doesn't violate any "current" drive? Need a list of "current" drives?
 * Make a mk.rdx for (fact (pred (fact (imdl ...)))). (May affect other code that expects the other kind of prediction.)
 * Change (success) to refer to the prediction mk.rdx instead of the prediction. (Affects other code.)
+* Visualizer: Option to position simulation objects by predicted time vs. created time.
 * Visualizer: Add an item for prediction reduction, initially hidden.
-* Visualizer: Ability to launch Replicode from the Visualizer.
 * Visualizer: Show the time job queue sorted by time.
 * If min_sim_time_horizon > 0, how is the behavior different?
-* In babbling, issue a goal for a position, an "unrelated" speed_x, and move the position there. Is GTPX invoked?
+* In babbling, issue a goal for a position, an "unrelated" move command, and move the position there. Is GTPX invoked?
 * Treat move commands at the same time step as impulses and have them accumulate?
 * Issue #2: Try to reproduce.
 * Issue #25: Reproduce running in real-time, and see if it happens in diagnostic time.
