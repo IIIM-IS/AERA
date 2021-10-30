@@ -31,19 +31,39 @@ pgm_cmd_set_velocity_y:(pgm |[]
 i_pgm_cmd_set_velocity_y:(ipgm pgm_cmd_set_velocity_y |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-; This model says that a command to set the velocity to a value causes the velocity to have that
-; value in the next frame. AERA could learn this from babbling, but we state it here for simplicity.
-mdl_set_velocity_y:(mdl |[]
+ball_position:(cst |[]
 []
-   (fact (cmd set_velocity_y [b: velocity_y:] 1) v2: v3: : :)
-   (fact (mk.val b: velocity_y velocity_y: :) v4: v5: : :)
+   (fact (mk.val B: essence ball :) T0: T1: : :)
+   (fact (mk.val B: position_y P: :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; This model says that a command to set the velocity to a value causes the position to have a
+; value in the next frame based on the new velocity.
+mdl_set_velocity_y:(mdl [B: P0: T0: T1:]
 []
-   v4:(add v2 0s:80ms:0us)
-   v5:(add v3 0s:100ms:0us)
+   (fact (cmd set_velocity_y [B: V:] 1) T0_cmd: T1_cmd: : :)
+   (fact (mk.val B: position_y P1: :) T2: T3: : :)
 []
-   v2:(sub v4 0s:80ms:0us)
-   v3:(sub v5 0s:100ms:0us)
+   T2:(add T0 0s:100ms:0us)
+   T3:(add T1 0s:100ms:0us)
+   P1:(+ P0 (mul V 0s:100ms:0us))
+[]
+   V:(/ (- P1 P0) 0s:100ms:0us)
+   T0:(sub T2 0s:100ms:0us)
+   T1:(sub T3 0s:100ms:0us)
+   T0_cmd:(sub T2 0s:80ms:0us)
+   T1_cmd:(sub T3 0s:100ms:0us)
 [stdin] 0 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_set_velocity_y_req:(mdl |[]
+[]
+   (fact (icst ball_position |[] [B: P0:] : :) T0: T1: : :)
+   (fact (imdl mdl_set_velocity_y [B: P0: T0: T1:] [V: P1: T2: T3:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; This model activates when the RHS drive is injected to make a goal to achieve the LHS.
 mdl_run_position:(mdl |[] []
