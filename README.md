@@ -44,7 +44,6 @@ This is a list of unintuitive issues with using AERA, to help new users.
   and the prediction check uses the output of auto focus which correctly doesn't appear until the next frame.)
 * For external cmd, need a program to intercept (fact (goal (fact (cmd ...)))) and eject the cmd.
   Such a goal abduced from a mdl is put in primary, so the program must be instantiated in primary.
-* Prediction failures may come from false assumptions. In `settings.xml`, try `enable_assumptions="no"` .
 * Objects with a short resilience aren't in `decompiled_objects.txt`. In `settings.xml`, try `keep_invalidated_objects=yes` .
 * If not debugging the code, then in Visual Studio run in the "Release" configuration so that it runs faster.
 * Math operations on two floating point numbers produce a floating point number, as expected. And addition
