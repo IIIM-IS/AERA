@@ -182,7 +182,7 @@ public:
       void decompile(uint64 time_offset){
 
           mem->suspend();
-          r_comp::Image *image=((r_exec::Mem<r_exec::LObject> *)mem)->getImage();
+          r_comp::Image *image=((r_exec::MemExec<r_exec::LObject> *)mem)->getImage();
           mem->resume();
 
           uint32 object_count=decompiler.decompile_references(image);

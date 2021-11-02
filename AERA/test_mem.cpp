@@ -82,7 +82,7 @@ using namespace r_code;
 using namespace r_exec;
 
 template<class O, class S> TestMem<O, S>::TestMem()
-  : r_exec::Mem<O, S>() {
+  : MemExec<O, S>() {
   timeTickThread_ = 0;
   lastInjectTime_ = Timestamp(seconds(0));
   velocity_y_ = 0.0001;
@@ -126,7 +126,7 @@ template<class O, class S> bool TestMem<O, S>::load
 (std::vector<Code*> *objects, uint32 stdin_oid, uint32 stdout_oid,
   uint32 self_oid) {
   // Call the method in the parent class.
-  if (!r_exec::Mem<O, S>::load(objects, stdin_oid, stdout_oid, self_oid))
+  if (!MemExec<O, S>::load(objects, stdin_oid, stdout_oid, self_oid))
     return false;
 
   // Find the opcodes we need.
@@ -568,7 +568,7 @@ template<class O, class S> thread_ret thread_function_call
 TestMem<O, S>::timeTickRun(void *args) {
   TestMem<O, S>* self = (TestMem *)args;
 
-  auto sampling_period = Mem::Get()->get_sampling_period();
+  auto sampling_period = MemExec::Get()->get_sampling_period();
   auto tickTime = r_exec::Now();
   // Call on_time_tick at the sampling period.
   while (self->state_ == RUNNING) {

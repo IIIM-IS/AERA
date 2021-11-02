@@ -88,7 +88,7 @@
  * can just create the parent class r_exec::Mem .)
  */
 template<class O, class S> class TestMem :
-  public r_exec::Mem<O, S> {
+  public r_exec::MemExec<O, S> {
 public:
   TestMem();
 

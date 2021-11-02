@@ -658,11 +658,11 @@ public:
  * Objects are built at reduction time as r_exec:LObjects and packed into instances of O when O is network-aware.
  * S is the super-class.
  */
-template<class O, class S> class Mem :
+template<class O, class S> class MemExec :
   public S {
 public:
-  Mem();
-  virtual ~Mem();
+  MemExec();
+  virtual ~MemExec();
 
   // Called at load time.
   r_code::Code *build_object(r_code::SysObject *source) const;

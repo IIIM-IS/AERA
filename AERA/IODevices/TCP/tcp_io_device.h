@@ -97,7 +97,7 @@
 namespace tcp_io_device {
 
   template<class O, class S> class TcpIoDevice :
-    public r_exec::Mem<O, S> {
+    public r_exec::MemExec<O, S> {
 
   public:
 
@@ -128,7 +128,7 @@ namespace tcp_io_device {
    */
 
   template<class O, class S> class TcpIoDevice :
-    public r_exec::Mem<O, S> {
+    public r_exec::MemExec<O, S> {
 
   public:
 

@@ -7,7 +7,7 @@ using namespace r_exec;
 
 #ifndef ENABLE_PROTOBUF
 namespace tcp_io_device {
-  template<class O, class S> TcpIoDevice<O, S>::TcpIoDevice() : r_exec::Mem<O, S>()
+  template<class O, class S> TcpIoDevice<O, S>::TcpIoDevice() : MemExec<O, S>()
   {
     cout << "\n> ERROR: Trying to use the TcpIoDevice without setting ENABLE_PROTOBUF flag in the beginning of main.cpp" << endl;
   }
@@ -31,7 +31,7 @@ namespace tcp_io_device {
 
 namespace tcp_io_device {
 
-  template<class O, class S> TcpIoDevice<O, S>::TcpIoDevice() : r_exec::Mem<O, S>()
+  template<class O, class S> TcpIoDevice<O, S>::TcpIoDevice() : MemExec<O, S>()
   {
 
     timeTickThread_ = 0;
@@ -92,7 +92,7 @@ namespace tcp_io_device {
   bool TcpIoDevice<O, S>::load(std::vector<r_code::Code*>* objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid)
   {
     // Call the method in the parent class.
-    if (!r_exec::Mem<O, S>::load(objects, stdin_oid, stdout_oid, self_oid)) {
+    if (!MemExec<O, S>::load(objects, stdin_oid, stdout_oid, self_oid)) {
       return false;
     }
 
@@ -338,7 +338,7 @@ namespace tcp_io_device {
   {
     TcpIoDevice<O, S>* self = (TcpIoDevice*)args;
 
-    auto sampling_period = Mem::Get()->get_sampling_period();
+    auto sampling_period = MemExec::Get()->get_sampling_period();
     auto tickTime = r_exec::Now();
     // Call on_time_tick at the sampling period.
     while (self->state_ == RUNNING) {

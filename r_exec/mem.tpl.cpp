@@ -87,10 +87,10 @@
 
 namespace r_exec {
 
-template<class O, class S> Mem<O, S>::Mem() : S() {
+template<class O, class S> MemExec<O, S>::MemExec() : S() {
 }
 
-template<class O, class S> Mem<O, S>::~Mem() {
+template<class O, class S> MemExec<O, S>::~MemExec() {
 
   if (state_ == RUNNING)
     stop();
@@ -100,7 +100,7 @@ template<class O, class S> Mem<O, S>::~Mem() {
 
 ////////////////////////////////////////////////////////////////
 
-template<class O, class S> r_code::Code *Mem<O, S>::build_object(r_code::SysObject *source) const {
+template<class O, class S> r_code::Code *MemExec<O, S>::build_object(r_code::SysObject *source) const {
 
   Atom head = source->code_[0];
   switch (head.getDescriptor()) {
@@ -137,14 +137,14 @@ template<class O, class S> r_code::Code *Mem<O, S>::build_object(r_code::SysObje
   }
 }
 
-template<class O, class S> r_code::Code *Mem<O, S>::_build_object(Atom head) const {
+template<class O, class S> r_code::Code *MemExec<O, S>::_build_object(Atom head) const {
 
   r_code::Code *object = new O();
   object->code(0) = head;
   return object;
 }
 
-template<class O, class S> r_code::Code *Mem<O, S>::build_object(Atom head) const {
+template<class O, class S> r_code::Code *MemExec<O, S>::build_object(Atom head) const {
 
   r_code::Code *object;
   switch (head.getDescriptor()) {
@@ -190,7 +190,7 @@ template<class O, class S> r_code::Code *Mem<O, S>::build_object(Atom head) cons
 
 ////////////////////////////////////////////////////////////////
 
-template<class O, class S> r_code::Code *Mem<O, S>::check_existence(r_code::Code *object) {
+template<class O, class S> r_code::Code *MemExec<O, S>::check_existence(r_code::Code *object) {
 
   if (object->code(0).getDescriptor() == Atom::GROUP) // groups are always new.
     return object;
@@ -204,7 +204,7 @@ template<class O, class S> r_code::Code *Mem<O, S>::check_existence(r_code::Code
   return _object;
 }
 
-template<class O, class S> void Mem<O, S>::inject(O *object, View *view) {
+template<class O, class S> void MemExec<O, S>::inject(O *object, View *view) {
 
   view->set_object(object);
   inject_new_object(view);
