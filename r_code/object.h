@@ -346,19 +346,19 @@ public:
 };
 
 // Implementation for local objects (non distributed).
-class dll_export LObject :
+class dll_export LocalObject :
   public Code {
 protected:
   uint32 oid_;
   r_code::vector<Atom> code_;
   r_code::vector<P<Code> > references_;
 public:
-  LObject() : Code() {}
-  LObject(SysObject *source) : Code() {
+  LocalObject() : Code() {}
+  LocalObject(SysObject *source) : Code() {
 
     load(source);
   }
-  virtual ~LObject() {}
+  virtual ~LocalObject() {}
 
   View *build_view(SysView *source) {
 

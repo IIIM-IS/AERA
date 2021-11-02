@@ -130,7 +130,7 @@ template<class O, class S> r_code::Code *Mem<O, S>::build_object(r_code::SysObje
       opcode == Opcodes::MkSlnChg ||
       opcode == Opcodes::Success ||
       opcode == Opcodes::Perf)
-      return new r_code::LObject(source);
+      return new r_code::LocalObject(source);
     else
       return new O(source);
   }
@@ -175,9 +175,9 @@ template<class O, class S> r_code::Code *Mem<O, S>::build_object(Atom head) cons
       opcode == Opcodes::MkSlnChg ||
       opcode == Opcodes::Success ||
       opcode == Opcodes::Perf)
-      object = new r_code::LObject();
+      object = new r_code::LocalObject();
     else if (O::RequiresPacking())
-      object = new r_code::LObject(); // temporary sand box for assembling code; will be packed into an O at injection time.
+      object = new r_code::LocalObject(); // temporary sand box for assembling code; will be packed into an O at injection time.
     else
       object = new O();
     break;

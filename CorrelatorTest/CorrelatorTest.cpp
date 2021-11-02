@@ -156,7 +156,7 @@ int32 main(int argc, char **argv) {
   r_code::vector<Code *> objects;
   r_comp::Image *_i = new r_comp::Image();
   _i->load(img);
-  _i->get_objects<r_code::LObject>(objects);
+  _i->get_objects<LocalObject>(objects);
 
   decompile(decompiler, _i, seconds(0));
   delete _i;

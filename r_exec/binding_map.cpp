@@ -209,28 +209,28 @@ bool AtomValue::contains(const Atom a) const {
 
 StructureValue::StructureValue(BindingMap *map, const Code *structure) : BoundValue(map) {
 
-  structure_ = new r_code::LObject();
+  structure_ = new LocalObject();
   for (uint16 i = 0; i < structure->code_size(); ++i)
     structure_->code(i) = structure->code(i);
 }
 
 StructureValue::StructureValue(BindingMap *map, const Code *source, uint16 structure_index) : BoundValue(map) {
 
-  structure_ = new r_code::LObject();
+  structure_ = new LocalObject();
   for (uint16 i = 0; i <= source->code(structure_index).getAtomCount(); ++i)
     structure_->code(i) = source->code(structure_index + i);
 }
 
 StructureValue::StructureValue(BindingMap *map, Atom *source, uint16 structure_index) : BoundValue(map) {
 
-  structure_ = new r_code::LObject();
+  structure_ = new LocalObject();
   for (uint16 i = 0; i <= source[structure_index].getAtomCount(); ++i)
     structure_->code(i) = source[structure_index + i];
 }
 
 StructureValue::StructureValue(BindingMap *map, Timestamp time) : BoundValue(map) {
 
-  structure_ = new r_code::LObject();
+  structure_ = new LocalObject();
   structure_->resize_code(3);
   Utils::SetTimestamp(&structure_->code(0), time);
 }
