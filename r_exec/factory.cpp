@@ -87,9 +87,9 @@ namespace r_exec {
 MkNew::MkNew(r_code::Mem *m, Code *object) : LObject(m) {
 
   uint16 write_index = 0;
-  code(write_index++) = r_code::Atom::Marker(Opcodes::MkNew, 2);
-  code(write_index++) = r_code::Atom::RPointer(0); // object.
-  code(write_index++) = r_code::Atom::Float(0); // psln_thr.
+  code(write_index++) = Atom::Marker(Opcodes::MkNew, 2);
+  code(write_index++) = Atom::RPointer(0); // object.
+  code(write_index++) = Atom::Float(0); // psln_thr.
   set_reference(0, object);
 }
 
@@ -98,9 +98,9 @@ MkNew::MkNew(r_code::Mem *m, Code *object) : LObject(m) {
 MkLowRes::MkLowRes(r_code::Mem *m, Code *object) : LObject(m) {
 
   uint16 write_index = 0;
-  code(write_index++) = r_code::Atom::Marker(Opcodes::MkLowRes, 2);
-  code(write_index++) = r_code::Atom::RPointer(0); // object.
-  code(write_index++) = r_code::Atom::Float(0); // psln_thr.
+  code(write_index++) = Atom::Marker(Opcodes::MkLowRes, 2);
+  code(write_index++) = Atom::RPointer(0); // object.
+  code(write_index++) = Atom::Float(0); // psln_thr.
   set_reference(0, object);
 }
 
@@ -109,9 +109,9 @@ MkLowRes::MkLowRes(r_code::Mem *m, Code *object) : LObject(m) {
 MkLowSln::MkLowSln(r_code::Mem *m, Code *object) : LObject(m) {
 
   uint16 write_index = 0;
-  code(write_index++) = r_code::Atom::Marker(Opcodes::MkLowSln, 2);
-  code(write_index++) = r_code::Atom::RPointer(0); // object.
-  code(write_index++) = r_code::Atom::Float(0); // psln_thr.
+  code(write_index++) = Atom::Marker(Opcodes::MkLowSln, 2);
+  code(write_index++) = Atom::RPointer(0); // object.
+  code(write_index++) = Atom::Float(0); // psln_thr.
   set_reference(0, object);
 }
 
@@ -120,9 +120,9 @@ MkLowSln::MkLowSln(r_code::Mem *m, Code *object) : LObject(m) {
 MkHighSln::MkHighSln(r_code::Mem *m, Code *object) : LObject(m) {
 
   uint16 write_index = 0;
-  code(write_index++) = r_code::Atom::Marker(Opcodes::MkHighSln, 2);
-  code(write_index++) = r_code::Atom::RPointer(0); // object.
-  code(write_index++) = r_code::Atom::Float(0); // psln_thr.
+  code(write_index++) = Atom::Marker(Opcodes::MkHighSln, 2);
+  code(write_index++) = Atom::RPointer(0); // object.
+  code(write_index++) = Atom::Float(0); // psln_thr.
   set_reference(0, object);
 }
 
@@ -131,9 +131,9 @@ MkHighSln::MkHighSln(r_code::Mem *m, Code *object) : LObject(m) {
 MkLowAct::MkLowAct(r_code::Mem *m, Code *object) : LObject(m) {
 
   uint16 write_index = 0;
-  code(write_index++) = r_code::Atom::Marker(Opcodes::MkLowAct, 2);
-  code(write_index++) = r_code::Atom::RPointer(0); // object.
-  code(write_index++) = r_code::Atom::Float(0); // psln_thr.
+  code(write_index++) = Atom::Marker(Opcodes::MkLowAct, 2);
+  code(write_index++) = Atom::RPointer(0); // object.
+  code(write_index++) = Atom::Float(0); // psln_thr.
   set_reference(0, object);
 }
 
@@ -142,9 +142,9 @@ MkLowAct::MkLowAct(r_code::Mem *m, Code *object) : LObject(m) {
 MkHighAct::MkHighAct(r_code::Mem *m, Code *object) : LObject(m) {
 
   uint16 write_index = 0;
-  code(write_index++) = r_code::Atom::Marker(Opcodes::MkHighAct, 2);
-  code(write_index++) = r_code::Atom::RPointer(0); // object.
-  code(write_index++) = r_code::Atom::Float(0); // psln_thr.
+  code(write_index++) = Atom::Marker(Opcodes::MkHighAct, 2);
+  code(write_index++) = Atom::RPointer(0); // object.
+  code(write_index++) = Atom::Float(0); // psln_thr.
   set_reference(0, object);
 }
 
@@ -153,10 +153,10 @@ MkHighAct::MkHighAct(r_code::Mem *m, Code *object) : LObject(m) {
 MkSlnChg::MkSlnChg(r_code::Mem *m, Code *object, float32 value) : LObject(m) {
 
   uint16 write_index = 0;
-  code(write_index++) = r_code::Atom::Marker(Opcodes::MkSlnChg, 3);
-  code(write_index++) = r_code::Atom::RPointer(0); // object.
-  code(write_index++) = r_code::Atom::Float(value); // change.
-  code(write_index++) = r_code::Atom::Float(0); // psln_thr.
+  code(write_index++) = Atom::Marker(Opcodes::MkSlnChg, 3);
+  code(write_index++) = Atom::RPointer(0); // object.
+  code(write_index++) = Atom::Float(value); // change.
+  code(write_index++) = Atom::Float(0); // psln_thr.
   set_reference(0, object);
 }
 
@@ -165,10 +165,10 @@ MkSlnChg::MkSlnChg(r_code::Mem *m, Code *object, float32 value) : LObject(m) {
 MkActChg::MkActChg(r_code::Mem *m, Code *object, float32 value) : LObject(m) {
 
   uint16 write_index = 0;
-  code(write_index++) = r_code::Atom::Marker(Opcodes::MkActChg, 3);
-  code(write_index++) = r_code::Atom::RPointer(0); // object.
-  code(write_index++) = r_code::Atom::Float(value); // change.
-  code(write_index++) = r_code::Atom::Float(0); // psln_thr.
+  code(write_index++) = Atom::Marker(Opcodes::MkActChg, 3);
+  code(write_index++) = Atom::RPointer(0); // object.
+  code(write_index++) = Atom::Float(value); // change.
+  code(write_index++) = Atom::Float(0); // psln_thr.
   set_reference(0, object);
 }
 
