@@ -518,7 +518,7 @@ bool Init(const char *user_operator_library_path,
   if (!GetProgramName)
     return false;
 
-  typedef Controller *(*UserProgram)(r_code::View *);
+  typedef Controller *(*UserProgram)(_View *);
 
   uint16 programCount = GetProgramCount();
   for (uint16 i = 0; i < programCount; ++i) {

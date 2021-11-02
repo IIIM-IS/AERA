@@ -180,7 +180,7 @@ protected:
   virtual void kill_views() {}
   virtual void check_last_match_time(bool match) = 0;
 
-  HLPController(r_code::View *view);
+  HLPController(r_code::_View *view);
 public:
   virtual ~HLPController();
 

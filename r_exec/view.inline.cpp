@@ -81,19 +81,19 @@
 
 namespace r_exec {
 
-inline View::View() : r_code::View(), controller_(NULL) {
+inline View::View() : r_code::_View(), controller_(NULL) {
 
   code_[VIEW_OID].atom_ = GetOID();
   reset_ctrl_values();
 }
 
-inline View::View(r_code::SysView *source, r_code::Code *object) : r_code::View(source, object), controller_(NULL) {
+inline View::View(r_code::SysView *source, r_code::Code *object) : r_code::_View(source, object), controller_(NULL) {
 
   code_[VIEW_OID].atom_ = GetOID();
   reset();
 }
 
-inline View::View(const View *view, bool new_OID) : r_code::View(), controller_(NULL) {
+inline View::View(const View *view, bool new_OID) : r_code::_View(), controller_(NULL) {
 
   object_ = view->object_;
   memcpy(code_, view->code_, VIEW_CODE_MAX_SIZE * sizeof(Atom) + 2 * sizeof(r_code::Code *)); // reference_set is contiguous to code; memcpy in one go.
@@ -109,7 +109,7 @@ inline View::View(SyncMode sync,
   int32 res,
   r_code::Code *destination,
   r_code::Code *origin,
-  r_code::Code *object) : r_code::View(), controller_(NULL) {
+  r_code::Code *object) : r_code::_View(), controller_(NULL) {
 
   code(VIEW_OPCODE) = Atom::SSet(Opcodes::View, VIEW_ARITY);
   init(sync, ijt, sln, res, destination, origin, object);
@@ -122,7 +122,7 @@ inline View::View(SyncMode sync,
   r_code::Code *destination,
   r_code::Code *origin,
   r_code::Code *object,
-  float32 act) : r_code::View(), controller_(NULL) {
+  float32 act) : r_code::_View(), controller_(NULL) {
 
   code(VIEW_OPCODE) = Atom::SSet(Opcodes::PgmView, PGM_VIEW_ARITY);
   init(sync, ijt, sln, res, destination, origin, object);

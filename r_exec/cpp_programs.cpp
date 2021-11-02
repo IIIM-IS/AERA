@@ -95,7 +95,7 @@ CPPPrograms::Program CPPPrograms::Get(const std::string &pgm_name) {
   return NULL;
 }
 
-Controller *CPPPrograms::New(const std::string &pgm_name, r_code::View *view) {
+Controller *CPPPrograms::New(const std::string &pgm_name, r_code::_View *view) {
 
   CPPPrograms::Program pgm = Get(pgm_name);
   if (pgm != NULL)

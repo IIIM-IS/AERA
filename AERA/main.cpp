@@ -97,7 +97,7 @@ r_exec::View *build_view(Timestamp time, Code* rstdin) { // this is application 
   uint16 extent_index = arity + 1;
 
   view->code(VIEW_OPCODE) = Atom::SSet(r_exec::View::ViewOpcode_, arity);
-  view->code(VIEW_SYNC) = Atom::Float(View::SYNC_ONCE); // sync on front.
+  view->code(VIEW_SYNC) = Atom::Float(_View::SYNC_ONCE); // sync on front.
   view->code(VIEW_IJT) = Atom::IPointer(extent_index); // iptr to injection time.
   view->code(VIEW_SLN) = Atom::Float(1.0); // sln.
   view->code(VIEW_RES) = Atom::Float(1); // res is set to 1 upr of the destination group.

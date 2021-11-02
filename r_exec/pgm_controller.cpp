@@ -82,7 +82,7 @@ using namespace r_code;
 
 namespace r_exec {
 
-_PGMController::_PGMController(r_code::View *ipgm_view) : OController(ipgm_view) {
+_PGMController::_PGMController(_View *ipgm_view) : OController(ipgm_view) {
 
   run_once_ = !ipgm_view->object_->code(IPGM_RUN).asBoolean();
 }
@@ -92,7 +92,7 @@ _PGMController::~_PGMController() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-InputLessPGMController::InputLessPGMController(r_code::View *ipgm_view) : _PGMController(ipgm_view) {
+InputLessPGMController::InputLessPGMController(_View *ipgm_view) : _PGMController(ipgm_view) {
 
   overlays_.push_back(new InputLessPGMOverlay(this));
 }
@@ -135,7 +135,7 @@ void InputLessPGMController::signal_input_less_pgm() { // next job will be pushe
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-PGMController::PGMController(r_code::View *ipgm_view) : _PGMController(ipgm_view) {
+PGMController::PGMController(_View *ipgm_view) : _PGMController(ipgm_view) {
 
   overlays_.push_back(new PGMOverlay(this));
 }
@@ -215,7 +215,7 @@ void PGMController::reduce(r_exec::View *input) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-AntiPGMController::AntiPGMController(r_code::View *ipgm_view) : _PGMController(ipgm_view), successful_match_(false) {
+AntiPGMController::AntiPGMController(_View *ipgm_view) : _PGMController(ipgm_view), successful_match_(false) {
 
   overlays_.push_back(new AntiPGMOverlay(this));
 }

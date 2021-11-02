@@ -125,7 +125,7 @@ class View;
 
 // Upon invocation of take_input() the overlays older than tsc are killed, assuming stc>0; otherwise, overlays live unitl the ipgm dies.
 // Controllers are built at loading time and at the view's injection time.
-// Derived classes must expose a function: void reduce(r_code::View*input); (called by reduction jobs).
+// Derived classes must expose a function: void reduce(r_code::_View*input); (called by reduction jobs).
 class r_exec_dll Controller :
   public _Object {
 protected:
@@ -134,7 +134,7 @@ protected:
 
   std::chrono::microseconds time_scope_;
 
-  r_code::View *view_;
+  r_code::_View *view_;
 
   CriticalSection reductionCS_;
 
@@ -150,7 +150,7 @@ protected:
     _Mem::Get()->push_reduction_job(j);
   }
 
-  Controller(r_code::View *view);
+  Controller(r_code::_View *view);
 public:
   virtual ~Controller();
 
@@ -234,7 +234,7 @@ class r_exec_dll OController :
 protected:
   r_code::list<P<Overlay> > overlays_;
 
-  OController(r_code::View *view);
+  OController(r_code::_View *view);
 public:
   virtual ~OController();
 };

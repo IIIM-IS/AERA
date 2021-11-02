@@ -578,7 +578,7 @@ SysObject *Image::add_object(Code *object, std::vector<SysObject *> &imported_ob
   }
 
   object->acq_views();
-  UNORDERED_SET<View *, View::Hash, View::Equal>::const_iterator v;
+  UNORDERED_SET<_View *, _View::Hash, _View::Equal>::const_iterator v;
   for (v = object->views_.begin(); v != object->views_.end(); ++v) { // follow the view's reference pointers and recurse.
 
     for (uint8 j = 0; j < 2; ++j) { // 2 refs maximum per view; may be NULL.
@@ -655,7 +655,7 @@ void Image::build_references(SysObject *sys_object, Code *object) {
   }
 
   object->acq_views();
-  UNORDERED_SET<View *, View::Hash, View::Equal>::const_iterator v;
+  UNORDERED_SET<_View *, _View::Hash, _View::Equal>::const_iterator v;
   for (i = 0, v = object->views_.begin(); v != object->views_.end(); ++i, ++v) {
 
     for (uint8 j = 0; j < 2; ++j) { // 2 refs maximum per view; may be NULL.
@@ -693,7 +693,7 @@ void Image::unpack_objects(r_code::vector<Code *> &ram_objects) {
     for (uint16 j = 0; j < sys_object->views_.as_std()->size(); ++j) {
 
       SysView *sys_v = sys_object->views_[j];
-      View *v = ram_object->build_view(sys_v);
+      _View *v = ram_object->build_view(sys_v);
       for (uint16 k = 0; k < sys_v->references_.as_std()->size(); ++k)
         v->references_[k] = ram_objects[sys_v->references_[k]];
 

@@ -82,7 +82,7 @@
 
 
 extern "C" {
-r_exec::Controller dll_export *auto_focus(r_code::View *view);
+r_exec::Controller dll_export *auto_focus(r_code::_View *view);
 }
 
 

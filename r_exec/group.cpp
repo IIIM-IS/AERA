@@ -625,7 +625,7 @@ void Group::update(Timestamp planned_time) {
       cov();
 
   // build reduction jobs.
-  std::multiset<P<View>, r_code::View::Less>::const_iterator v;
+  std::multiset<P<View>, _View::Less>::const_iterator v;
   for (v = newly_salient_views_.begin(); v != newly_salient_views_.end(); ++v)
     inject_reduction_jobs(*v);
 
@@ -879,7 +879,7 @@ void Group::inject_hlps(std::vector<View *> &views) {
     if (is_active_pgm(*view)) {
 
       (*view)->controller_->gain_activation();
-      std::multiset<P<View>, r_code::View::Less>::const_iterator v;
+      std::multiset<P<View>, _View::Less>::const_iterator v;
       for (v = newly_salient_views_.begin(); v != newly_salient_views_.end(); ++v)
         (*view)->controller_->_take_input(*v); // view will be copied.
     }
@@ -903,7 +903,7 @@ void Group::inject(View *view) { // the view can hold anything but groups and no
       view->controller_->gain_activation();
       if (a.takesPastInputs()) {
 
-        std::multiset<P<View>, r_code::View::Less>::const_iterator v;
+        std::multiset<P<View>, _View::Less>::const_iterator v;
         for (v = newly_salient_views_.begin(); v != newly_salient_views_.end(); ++v)
           view->controller_->_take_input(*v); // view will be copied.
       }
@@ -916,7 +916,7 @@ void Group::inject(View *view) { // the view can hold anything but groups and no
     if (is_active_pgm(view)) {
 
       c->gain_activation();
-      std::multiset<P<View>, r_code::View::Less>::const_iterator v;
+      std::multiset<P<View>, _View::Less>::const_iterator v;
       for (v = newly_salient_views_.begin(); v != newly_salient_views_.end(); ++v)
         c->_take_input(*v); // view will be copied.
     }
@@ -930,7 +930,7 @@ void Group::inject(View *view) { // the view can hold anything but groups and no
     if (is_active_pgm(view)) {
 
       c->gain_activation();
-      std::multiset<P<View>, r_code::View::Less>::const_iterator v;
+      std::multiset<P<View>, _View::Less>::const_iterator v;
       for (v = newly_salient_views_.begin(); v != newly_salient_views_.end(); ++v)
         c->_take_input(*v); // view will be copied.
     }
@@ -942,7 +942,7 @@ void Group::inject(View *view) { // the view can hold anything but groups and no
     if (is_active_pgm(view)) {
 
       c->gain_activation();
-      std::multiset<P<View>, r_code::View::Less>::const_iterator v;
+      std::multiset<P<View>, _View::Less>::const_iterator v;
       for (v = newly_salient_views_.begin(); v != newly_salient_views_.end(); ++v)
         c->_take_input(*v); // view will be copied.
       // The time scope is stored as a timestamp, but it is actually a duration.
@@ -976,7 +976,7 @@ void Group::inject(View *view) { // the view can hold anything but groups and no
     if (is_active_pgm(view)) {
 
       c->gain_activation();
-      std::multiset<P<View>, r_code::View::Less>::const_iterator v;
+      std::multiset<P<View>, _View::Less>::const_iterator v;
       for (v = newly_salient_views_.begin(); v != newly_salient_views_.end(); ++v)
         c->_take_input(*v); // view will be copied.
     }
@@ -992,7 +992,7 @@ void Group::inject(View *view) { // the view can hold anything but groups and no
     if (is_active_pgm(view)) {
 
       c->gain_activation();
-      std::multiset<P<View>, r_code::View::Less>::const_iterator v;
+      std::multiset<P<View>, _View::Less>::const_iterator v;
       for (v = newly_salient_views_.begin(); v != newly_salient_views_.end(); ++v)
         c->Controller::_take_input(*v); // view will be copied.
     }
@@ -1190,7 +1190,7 @@ void Group::cov() {
 
     if (vg->second) { // cov==true.
 
-      std::multiset<P<View>, r_code::View::Less>::const_iterator v;
+      std::multiset<P<View>, _View::Less>::const_iterator v;
       for (v = newly_salient_views_.begin(); v != newly_salient_views_.end(); ++v) { // no cov for pgm (all sorts), groups, notifications.
 
         if ((*v)->is_notification())

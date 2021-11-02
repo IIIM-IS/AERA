@@ -164,10 +164,10 @@ template<class C, class U> View *Object<C, U>::get_view(r_code::Code *group, boo
   if (lock)
     acq_views();
 
-  r_code::View probe;
+  r_code::_View probe;
   probe.references_[0] = group;
 
-  UNORDERED_SET<r_code::View *, r_code::View::Hash, r_code::View::Equal>::const_iterator v = views_.find(&probe);
+  UNORDERED_SET<r_code::_View *, r_code::_View::Hash, r_code::_View::Equal>::const_iterator v = views_.find(&probe);
   if (v != views_.end()) {
 
     if (lock)

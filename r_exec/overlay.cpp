@@ -181,7 +181,7 @@ r_code::Code *Overlay::build_object(Atom head) const {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Controller::Controller(r_code::View *view) : _Object(), invalidated_(0), activated_(0), view_(view) {
+Controller::Controller(_View *view) : _Object(), invalidated_(0), activated_(0), view_(view) {
 
   if (!view)
     return;
@@ -216,7 +216,7 @@ void Controller::_take_input(r_exec::View *input) { // called by groups at updat
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-OController::OController(r_code::View *view) : Controller(view) {
+OController::OController(_View *view) : Controller(view) {
 }
 
 OController::~OController() {

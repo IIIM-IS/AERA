@@ -88,7 +88,7 @@ class r_exec_dll _PGMController :
 protected:
   bool run_once_;
 
-  _PGMController(r_code::View *ipgm_view);
+  _PGMController(r_code::_View *ipgm_view);
   virtual ~_PGMController();
 public:
   r_code::Code *get_core_object() const { return get_object()->get_reference(0); }
@@ -99,7 +99,7 @@ public:
 class r_exec_dll InputLessPGMController :
   public _PGMController {
 public:
-  InputLessPGMController(r_code::View *ipgm_view);
+  InputLessPGMController(r_code::_View *ipgm_view);
   ~InputLessPGMController();
 
   void signal_input_less_pgm();
@@ -109,7 +109,7 @@ public:
 class r_exec_dll PGMController :
   public _PGMController {
 public:
-  PGMController(r_code::View *ipgm_view);
+  PGMController(r_code::_View *ipgm_view);
   virtual ~PGMController();
 
   void take_input(r_exec::View *input);
@@ -127,7 +127,7 @@ private:
 
   void push_new_signaling_job();
 public:
-  AntiPGMController(r_code::View *ipgm_view);
+  AntiPGMController(r_code::_View *ipgm_view);
   ~AntiPGMController();
 
   void take_input(r_exec::View *input);

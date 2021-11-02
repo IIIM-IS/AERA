@@ -134,7 +134,7 @@ float32 View::MorphChange(float32 change, float32 source_thr, float32 destinatio
   return destination_thr + change;
 }
 
-View::View(View *view, Group *group) : r_code::View(), controller_(NULL) {
+View::View(View *view, Group *group) : r_code::_View(), controller_(NULL) {
 
   Group *source = view->get_host();
   object_ = view->object_;

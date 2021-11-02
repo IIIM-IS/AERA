@@ -88,7 +88,7 @@ private:
   float32 arg1;
   bool arg2;
 public:
-  TestController(r_code::View *icpp_pgm_view) : r_exec::Controller(icpp_pgm_view) {
+  TestController(r_code::_View *icpp_pgm_view) : r_exec::Controller(icpp_pgm_view) {
 
     // Load arguments here: one float and one Boolean.
     uint16 arg_set_index = get_object()->code(ICPP_PGM_ARGS).asIndex();
@@ -118,7 +118,7 @@ public:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-r_exec::Controller *test_program(r_code::View *view) {
+r_exec::Controller *test_program(r_code::_View *view) {
 
   return new TestController(view);
 }

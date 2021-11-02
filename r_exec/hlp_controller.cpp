@@ -83,7 +83,7 @@ using namespace r_code;
 
 namespace r_exec {
 
-HLPController::HLPController(r_code::View *view) : OController(view), strong_requirement_count_(0), weak_requirement_count_(0), requirement_count_(0) {
+HLPController::HLPController(_View *view) : OController(view), strong_requirement_count_(0), weak_requirement_count_(0), requirement_count_(0) {
 
   bindings_ = new HLPBindingMap();
 

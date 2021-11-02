@@ -83,7 +83,7 @@ using namespace r_code;
 
 namespace r_exec {
 
-AutoFocusController::AutoFocusController(r_code::View *view) : Controller(view) {
+AutoFocusController::AutoFocusController(_View *view) : Controller(view) {
 
   // Load arguments: pass_through, acquire_models, decompile_models, list of output groups: 1st must be the primary, 2nd the secondary, then other groups.
   Code *icpp_pgm = get_object();

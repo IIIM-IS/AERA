@@ -126,7 +126,7 @@ protected:
 public:
   virtual ~Object(); // un-registers from the rMem's object_register.
 
-  r_code::View *build_view(r_code::SysView *source) {
+  r_code::_View *build_view(r_code::SysView *source) {
 
     return Code::build_view<r_exec::View>(source);
   }

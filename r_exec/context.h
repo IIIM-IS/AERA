@@ -409,7 +409,7 @@ public:
     }case VWS: {
 
       uint16 i = 0;
-      UNORDERED_SET<r_code::View *, r_code::View::Hash, r_code::View::Equal>::const_iterator v;
+      UNORDERED_SET<r_code::_View *, r_code::_View::Hash, r_code::_View::Equal>::const_iterator v;
       object_->acq_views();
       for (v = object_->views_.begin(); i < index - 1; ++i, ++v) {
 

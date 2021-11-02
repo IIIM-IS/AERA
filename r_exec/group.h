@@ -191,7 +191,7 @@ public:
   UNORDERED_MAP<Group *, bool> viewing_groups_;
 
   // Populated within update; ordered by increasing ijt; cleared at the beginning of update.
-  std::multiset<P<View>, r_code::View::Less> newly_salient_views_;
+  std::multiset<P<View>, r_code::_View::Less> newly_salient_views_;
 
   // Populated upon ipgm injection; used at update time; cleared afterward.
   std::vector<Controller *> new_controllers_;

@@ -166,7 +166,7 @@ private:
   }
   void rate(_Fact *target, bool success, TPXMap &map, RatingMap &ratings);
 public:
-  AutoFocusController(r_code::View *view);
+  AutoFocusController(r_code::_View *view);
   ~AutoFocusController();
 
   r_code::Code *get_core_object() const;

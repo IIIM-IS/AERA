@@ -290,7 +290,7 @@ MDLController *MDLController::New(View *view, bool &inject_in_secondary_group) {
   return new PrimaryMDLController(view);
 }
 
-MDLController::MDLController(r_code::View *view) : HLPController(view) {
+MDLController::MDLController(_View *view) : HLPController(view) {
 
   Code *object = get_unpacked_object();
   uint16 obj_set_index = object->code(MDL_OBJS).asIndex();
@@ -1156,7 +1156,7 @@ MDLController::RequirementEntry::RequirementEntry(_Fact *f_p_f_imdl, MDLControll
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-PMDLController::PMDLController(r_code::View *view) : MDLController(view) {
+PMDLController::PMDLController(_View *view) : MDLController(view) {
 }
 
 void PMDLController::add_g_monitor(_GMonitor *m) {
@@ -1287,7 +1287,7 @@ inline microseconds PMDLController::get_sim_thz(Timestamp now, Timestamp deadlin
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TopLevelMDLController::TopLevelMDLController(r_code::View *view) : PMDLController(view) {
+TopLevelMDLController::TopLevelMDLController(_View *view) : PMDLController(view) {
 }
 
 void TopLevelMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed) {
@@ -1498,7 +1498,7 @@ void TopLevelMDLController::register_req_outcome(Fact *f_pred, bool success, boo
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-PrimaryMDLController::PrimaryMDLController(r_code::View *view) : PMDLController(view) {
+PrimaryMDLController::PrimaryMDLController(_View *view) : PMDLController(view) {
 }
 
 void PrimaryMDLController::set_secondary(SecondaryMDLController *secondary) {
@@ -2684,7 +2684,7 @@ bool PrimaryMDLController::get_template_timings(HLPBindingMap *bm, Timestamp& af
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SecondaryMDLController::SecondaryMDLController(r_code::View *view) : MDLController(view) {
+SecondaryMDLController::SecondaryMDLController(_View *view) : MDLController(view) {
 }
 
 void SecondaryMDLController::set_primary(PrimaryMDLController *primary) {

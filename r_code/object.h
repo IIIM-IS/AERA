@@ -105,13 +105,13 @@ public:
   virtual void trace(std::ostream& out) = 0;
 };
 
-class View;
+class _View;
 
 class dll_export SysView :
   public ImageObject {
 public:
   SysView();
-  SysView(View *source);
+  SysView(_View *source);
 
   void write(word32 *data);
   void read(word32 *data);
@@ -152,7 +152,7 @@ public:
 
 class Object;
 
-class dll_export View :
+class dll_export _View :
   public _Object {
 protected:
   Atom code_[VIEW_CODE_MAX_SIZE]; // dimensioned to hold the largest view (group view): head atom, iptr to ijt, sln, res, rptr to grp, rptr to org, vis, cov, 3 atoms for ijt's timestamp; oid is the last word32 (not an atom).
@@ -160,12 +160,12 @@ public:
   Code *references_[2]; // does not include the viewed object; no smart pointer here (a view is held by a group and holds a ref to said group in references[0]).
   P<Code> object_; // viewed object.
 
-  View() : object_(NULL) {
+  _View() : object_(NULL) {
 
     references_[0] = references_[1] = NULL;
   }
 
-  View(SysView *source, Code *object) {
+  _View(SysView *source, Code *object) {
 
     for (uint16 i = 0; i < source->code_.size(); ++i)
       code_[i] = source->code_[i];
@@ -173,7 +173,7 @@ public:
     object_ = object;
   }
 
-  virtual ~View() {}
+  virtual ~_View() {}
 
   Atom &code(uint16 i) { return code_[i]; }
   Atom code(uint16 i) const { return code_[i]; }
@@ -192,21 +192,21 @@ public:
 
   class Hash {
   public:
-    size_t operator ()(View *v) const {
+    size_t operator ()(_View *v) const {
       return (size_t)(Code *)v->references_[0]; // i.e. the group the view belongs to.
     }
   };
 
   class Equal {
   public:
-    bool operator ()(const View *lhs, const View *rhs) const {
+    bool operator ()(const _View *lhs, const _View *rhs) const {
       return lhs->references_[0] == rhs->references_[0];
     }
   };
 
   class Less {
   public:
-    bool operator ()(const View *lhs, const View *rhs) const {
+    bool operator ()(const _View *lhs, const _View *rhs) const {
       return lhs->get_ijt() < rhs->get_ijt();
     }
   };
@@ -226,7 +226,7 @@ protected:
       code(i) = source->code_[i];
     set_oid(source->oid_);
   }
-  template<class V> View *build_view(SysView *source) {
+  template<class V> _View *build_view(SysView *source) {
 
     return new V(source, this);
   }
@@ -253,9 +253,9 @@ public:
   virtual bool invalidate() { return false; }
 
   r_code::list<Code *> markers_;
-  UNORDERED_SET<View *, View::Hash, View::Equal> views_; // indexed by groups.
+  UNORDERED_SET<_View *, _View::Hash, _View::Equal> views_; // indexed by groups.
 
-  virtual View *build_view(SysView *source) = 0;
+  virtual _View *build_view(SysView *source) = 0;
 
   virtual void acq_views() {}
   virtual void rel_views() {}
@@ -269,7 +269,7 @@ public:
 
   virtual void mod(uint16 member_index, float32 value) {};
   virtual void set(uint16 member_index, float32 value) {};
-  virtual View *get_view(Code *group, bool lock) { return NULL; }
+  virtual _View *get_view(Code *group, bool lock) { return NULL; }
   virtual void add_reference(Code *object) const {} // called only on local objects.
   void remove_marker(Code *m) {
 
@@ -360,9 +360,9 @@ public:
   }
   virtual ~LocalObject() {}
 
-  View *build_view(SysView *source) {
+  _View *build_view(SysView *source) {
 
-    return Code::build_view<View>(source);
+    return Code::build_view<_View>(source);
   }
 
   uint32 get_oid() const { return oid_; }

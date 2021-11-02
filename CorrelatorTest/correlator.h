@@ -93,7 +93,7 @@ public:
 class IPGMContext :
   public State {
 public:
-  std::vector<P<r_code::View> > views_;
+  std::vector<P<r_code::_View> > views_;
   std::vector<P<State> > states_;
 
   void trace(std::ostream& out) {
@@ -115,8 +115,8 @@ public:
 class Pattern :
   public State {
 public:
-  std::vector<P<r_code::View> > left_;
-  std::vector<P<r_code::View> > right_;
+  std::vector<P<r_code::_View> > left_;
+  std::vector<P<r_code::_View> > right_;
 
   void trace(std::ostream& out) {
 
@@ -150,7 +150,7 @@ class Correlator {
 private:
   std::vector<uint32> episode_;
 public:
-  void take_input(r_code::View *input) {
+  void take_input(r_code::_View *input) {
 
     episode_.push_back(input->code(VIEW_OID).atom_);
   }

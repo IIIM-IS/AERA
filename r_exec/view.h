@@ -92,7 +92,7 @@ class LObject;
 // Shared resources:
 // none: all mod/set operations are pushed on the group and executed at update time.
 class r_exec_dll View :
-  public r_code::View {
+  public r_code::_View {
 private:
   static uint32 lastOID_;
   static uint32 GetOID();
@@ -112,7 +112,7 @@ private:
   float32 initial_sln_;
   float32 initial_act_;
 
-  void init(r_code::View::SyncMode sync,
+  void init(r_code::_View::SyncMode sync,
     Timestamp ijt,
     float32 sln,
     int32 res,
@@ -139,14 +139,14 @@ public:
   View(r_code::SysView *source, r_code::Code *object);
   View(View *view, Group *group); // copy the view and assigns it to the group (used for cov); morph ctrl values.
   View(const View *view, bool new_OID = false); // simple copy.
-  View(r_code::View::SyncMode sync,
+  View(r_code::_View::SyncMode sync,
     Timestamp ijt,
     float32 sln,
     int32 res,
     r_code::Code *host,
     r_code::Code *origin,
     r_code::Code *object); // regular view; res set to -1 means forever.
-  View(r_code::View::SyncMode sync,
+  View(r_code::_View::SyncMode sync,
     Timestamp ijt,
     float32 sln,
     int32 res,
@@ -165,7 +165,7 @@ public:
 
   Group *get_host();
 
-  r_code::View::SyncMode get_sync();
+  r_code::_View::SyncMode get_sync();
   float32 get_res();
   float32 get_sln();
   float32 get_act();

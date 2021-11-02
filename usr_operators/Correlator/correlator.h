@@ -86,7 +86,7 @@
 
 
 extern "C" {
-r_exec::Controller dll_export *correlator(r_code::View *view);
+r_exec::Controller dll_export *correlator(r_code::_View *view);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -190,7 +190,7 @@ private:
 public:
   Correlator();
 
-  void take_input(r_code::View* input);
+  void take_input(r_code::_View* input);
   CorrelatorOutput* get_output(bool useEntireHistory = false);
 
   void dump(std::ostream& out = std::cout, std::string(*oid2str)(uint32) = NULL) const;
@@ -257,7 +257,7 @@ public:
 
   // stores the object pointed to by the provided View
   // runtime: O(log N) where N = size of episode so far
-  void take_input(r_code::View* input);
+  void take_input(r_code::_View* input);
 
   // trains the correlator on the episode so far and
   // returns the found correlations

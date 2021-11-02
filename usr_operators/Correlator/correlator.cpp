@@ -88,7 +88,7 @@ private:
   Correlator *correlator;
   r_comp::Decompiler decompiler;
 public:
-  CorrelatorController(r_code::View *icpp_pgm_view) : r_exec::Controller(icpp_pgm_view) {
+  CorrelatorController(r_code::_View *icpp_pgm_view) : r_exec::Controller(icpp_pgm_view) {
 
     // Load arguments here.
     uint16 arg_set_index = get_object()->code(ICPP_PGM_ARGS).asIndex();
@@ -207,7 +207,7 @@ public:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-r_exec::Controller *correlator(r_code::View *view) {
+r_exec::Controller *correlator(r_code::_View *view) {
 
   return new CorrelatorController(view);
 }
@@ -227,7 +227,7 @@ Correlator::Correlator() : episode_(), episode_start_(0), winepi() {
 }
 
 
-void Correlator::take_input(r_code::View* input) {
+void Correlator::take_input(r_code::_View* input) {
 
   if (!input || !input->object)
     return;
@@ -468,7 +468,7 @@ Correlator::Correlator() : episode_start_(0) {
 // stores the object pointed to by the provided View
 // also finds a binary encoding to associate with the object
 // runtime: O(log N) where N = size of episode so far
-void Correlator::take_input(r_code::View* input) {
+void Correlator::take_input(r_code::_View* input) {
 
   if (!input || !input->object_)
     return;

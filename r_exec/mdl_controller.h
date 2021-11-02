@@ -288,7 +288,7 @@ protected:
 
   bool monitor_predictions(_Fact *input);
 
-  MDLController(r_code::View *view);
+  MDLController(r_code::_View *view);
 public:
   static MDLController *New(View *view, bool &inject_in_secondary_group);
 
@@ -353,7 +353,7 @@ protected:
 
   std::chrono::microseconds get_sim_thz(Timestamp now, Timestamp deadline) const;
 
-  PMDLController(r_code::View *view);
+  PMDLController(r_code::_View *view);
 public:
   void add_g_monitor(_GMonitor *m);
   void remove_g_monitor(_GMonitor *m);
@@ -400,7 +400,7 @@ private:
 
   void check_last_match_time(bool match) {}
 public:
-  TopLevelMDLController(r_code::View *view);
+  TopLevelMDLController(r_code::_View *view);
 
   void take_input(r_exec::View *input);
   void reduce(r_exec::View *input);
@@ -470,7 +470,7 @@ private:
 
   bool abduction_allowed(HLPBindingMap *bm);
 public:
-  PrimaryMDLController(r_code::View *view);
+  PrimaryMDLController(r_code::_View *view);
 
   void set_secondary(SecondaryMDLController *secondary);
 
@@ -545,7 +545,7 @@ private:
   void kill_views(); // force res in both primary/secondary to 0.
   void check_last_match_time(bool match); // kill if no match after secondary_thz;
 public:
-  SecondaryMDLController(r_code::View *view);
+  SecondaryMDLController(r_code::_View *view);
 
   void set_primary(PrimaryMDLController *primary);
 

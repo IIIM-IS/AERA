@@ -174,14 +174,14 @@ int32 main(int argc, char **argv) {
       break;
     }
 
-  std::set<r_code::View *, r_code::View::Less> correlator_inputs;
+  std::set<_View *, _View::Less> correlator_inputs;
   for (uint32 i = 0; i < objects.size(); ++i) {
 
     Code *object = objects[i];
     if (object->code(0).asOpcode() == r_exec::Opcodes::IPgm)
       continue;
 
-    UNORDERED_SET<View *, View::Hash, View::Equal>::const_iterator v;
+    UNORDERED_SET<_View *, _View::Hash, _View::Equal>::const_iterator v;
     for (v = object->views_.begin(); v != object->views_.end(); ++v) {
 
       if (!(*v)->references_[0])
@@ -201,7 +201,7 @@ int32 main(int argc, char **argv) {
   uint16 episode_end_opcode = r_exec::Metadata.get_class(episode_end_class_name)->atom_.asOpcode();
   uint16 episode_count = 0;
 
-  std::set<r_code::View *, r_code::View::Less>::const_iterator v;
+  std::set<_View *, _View::Less>::const_iterator v;
   for (v = correlator_inputs.begin(); v != correlator_inputs.end(); ++v) {
 
     if ((*v)->object_->code(0).asOpcode() == episode_end_opcode) {

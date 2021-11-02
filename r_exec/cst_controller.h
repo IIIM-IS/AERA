@@ -202,7 +202,7 @@ private:
   void kill_views();
   void check_last_match_time(bool match); // kill if no match after primary_thz;
 public:
-  CSTController(r_code::View *view);
+  CSTController(r_code::_View *view);
   ~CSTController();
 
   void take_input(r_exec::View *input);

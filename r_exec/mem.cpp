@@ -360,7 +360,7 @@ bool _Mem::load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 s
       break;
     }
 
-    UNORDERED_SET<r_code::View *, r_code::View::Hash, r_code::View::Equal>::const_iterator v;
+    UNORDERED_SET<_View *, _View::Hash, _View::Equal>::const_iterator v;
     for (v = object->views_.begin(); v != object->views_.end(); ++v) {
 
       // init hosts' member_set.
@@ -1021,7 +1021,7 @@ void _Mem::propagate_sln(Code *object, float32 change, float32 source_sln_thr) {
     return;
   }
 
-  UNORDERED_SET<r_code::View *, r_code::View::Hash, r_code::View::Equal>::const_iterator it;
+  UNORDERED_SET<_View *, _View::Hash, _View::Equal>::const_iterator it;
   for (it = object->views_.begin(); it != object->views_.end(); ++it) {
 
     float32 morphed_sln_change = View::MorphChange(change, source_sln_thr, ((View*)*it)->get_host()->get_sln_thr());

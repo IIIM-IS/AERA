@@ -493,7 +493,7 @@ Sim* CSTOverlay::get_simulation(Controller *root) const {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-CSTController::CSTController(r_code::View *view) : HLPController(view) {
+CSTController::CSTController(_View *view) : HLPController(view) {
 
   CSTOverlay *o = new CSTOverlay(this, bindings_); // master overlay.
   o->load_patterns();
