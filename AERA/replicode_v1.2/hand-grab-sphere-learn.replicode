@@ -170,7 +170,7 @@ M7:(mdl |[]
 !def DRIVE_PASS1_START 0s:300ms:0us
 !def DRIVE_PASS1_END 0s:700ms:0us
 ; Execute explicit babbling commands.
-!def DRIVE_PASS2_START 1s:700ms:0us
+!def DRIVE_PASS2_START 3s:100ms:0us
 
 ; Initial conditions.
 start:(pgm |[] |[] |[] []
@@ -368,6 +368,35 @@ pgm_babble3:(pgm |[]
    (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 300000us)))
 []
    (inj []
+      Command:(cmd move [h 5] 1)
+      |[]
+   )
+   (inj []
+      f_Command:(fact Command after before 1 1)
+      |[]
+   )
+   (inj []
+      g:(goal f_Command self nil 1)
+      |[]
+   )
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact g t0:(+ after 10000us) t0 1 1)
+      [SYNC_ONCE t0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd move [h 5])" |[]])
+1) |[]
+(ipgm pgm_babble3 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babble4:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) after: before: ::) |[])
+[]
+   (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 400000us)))
+[]
+   (inj []
       Command:(cmd grab [h] 1)
       |[]
    )
@@ -384,36 +413,7 @@ pgm_babble3:(pgm |[]
       (fact g t0:(+ after 10000us) t0 1 1)
       [SYNC_ONCE t0 1 forever primary nil]
    )
-   (prb [1 "print" "injected (cmd grab [h]" |[]])
-1) |[]
-(ipgm pgm_babble3 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
-   [SYNC_ONCE now 0 forever primary nil 1]
-
-pgm_babble4:(pgm |[]
-[]
-   ; This fact repeats periodically. We use it as a "heartbeat".
-   (ptn (fact (mk.val h essence hand :) after: before: ::) |[])
-[]
-   (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 400000us)))
-[]
-   (inj []
-      Command:(cmd release [h] 1)
-      |[]
-   )
-   (inj []
-      f_Command:(fact Command after before 1 1)
-      |[]
-   )
-   (inj []
-      g:(goal f_Command self nil 1)
-      |[]
-   )
-   (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
-      (fact g t0:(+ after 10000us) t0 1 1)
-      [SYNC_ONCE t0 1 forever primary nil]
-   )
-   (prb [1 "print" "injected (cmd release [h])" |[]])
+   (prb [1 "print" "injected (cmd grab [h])" |[]])
 1) |[]
 (ipgm pgm_babble4 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
@@ -426,7 +426,7 @@ pgm_babble5:(pgm |[]
    (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 500000us)))
 []
    (inj []
-      Command:(cmd move [h 5] 1)
+      Command:(cmd move [h -5] 1)
       |[]
    )
    (inj []
@@ -455,6 +455,35 @@ pgm_babble6:(pgm |[]
    (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 600000us)))
 []
    (inj []
+      Command:(cmd release [h] 1)
+      |[]
+   )
+   (inj []
+      f_Command:(fact Command after before 1 1)
+      |[]
+   )
+   (inj []
+      g:(goal f_Command self nil 1)
+      |[]
+   )
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact g t0:(+ after 10000us) t0 1 1)
+      [SYNC_ONCE t0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd release [h])" |[]])
+1) |[]
+(ipgm pgm_babble6 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babble7:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) after: before: ::) |[])
+[]
+   (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 700000us)))
+[]
+   (inj []
       Command:(cmd grab [h] 1)
       |[]
    )
@@ -473,15 +502,15 @@ pgm_babble6:(pgm |[]
    )
    (prb [1 "print" "injected (cmd grab [h])" |[]])
 1) |[]
-(ipgm pgm_babble6 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_babble7 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-pgm_babble7:(pgm |[]
+pgm_babble8:(pgm |[]
 []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) after: before: ::) |[])
 []
-   (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 700000us)))
+   (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 800000us)))
 []
    (inj []
       Command:(cmd release [h] 1)
@@ -502,15 +531,15 @@ pgm_babble7:(pgm |[]
    )
    (prb [1 "print" "injected (cmd release [h])" |[]])
 1) |[]
-(ipgm pgm_babble7 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_babble8 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-pgm_babble8:(pgm |[]
+pgm_babble9:(pgm |[]
 []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) after: before: ::) |[])
 []
-   (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 800000us)))
+   (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 900000us)))
 []
    (inj []
       Command:(cmd grab [h] 1)
@@ -531,15 +560,392 @@ pgm_babble8:(pgm |[]
    )
    (prb [1 "print" "injected (cmd grab [h])" |[]])
 1) |[]
-(ipgm pgm_babble8 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_babble9 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-pgm_babble9:(pgm |[]
+pgm_babble10:(pgm |[]
 []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) after: before: ::) |[])
 []
-   (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 900000us)))
+   (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 1000000us)))
+[]
+   (inj []
+      Command:(cmd release [h] 1)
+      |[]
+   )
+   (inj []
+      f_Command:(fact Command after before 1 1)
+      |[]
+   )
+   (inj []
+      g:(goal f_Command self nil 1)
+      |[]
+   )
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact g t0:(+ after 10000us) t0 1 1)
+      [SYNC_ONCE t0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd release [h])" |[]])
+1) |[]
+(ipgm pgm_babble10 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babble11:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) after: before: ::) |[])
+[]
+   (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 1100000us)))
+[]
+   (inj []
+      Command:(cmd grab [h] 1)
+      |[]
+   )
+   (inj []
+      f_Command:(fact Command after before 1 1)
+      |[]
+   )
+   (inj []
+      g:(goal f_Command self nil 1)
+      |[]
+   )
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact g t0:(+ after 10000us) t0 1 1)
+      [SYNC_ONCE t0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd grab [h])" |[]])
+1) |[]
+(ipgm pgm_babble11 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babble12:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) after: before: ::) |[])
+[]
+   (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 1200000us)))
+[]
+   (inj []
+      Command:(cmd release [h] 1)
+      |[]
+   )
+   (inj []
+      f_Command:(fact Command after before 1 1)
+      |[]
+   )
+   (inj []
+      g:(goal f_Command self nil 1)
+      |[]
+   )
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact g t0:(+ after 10000us) t0 1 1)
+      [SYNC_ONCE t0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd release [h])" |[]])
+1) |[]
+(ipgm pgm_babble12 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babble13:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) after: before: ::) |[])
+[]
+   (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 1300000us)))
+[]
+   (inj []
+      Command:(cmd move [h 5] 1)
+      |[]
+   )
+   (inj []
+      f_Command:(fact Command after before 1 1)
+      |[]
+   )
+   (inj []
+      g:(goal f_Command self nil 1)
+      |[]
+   )
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact g t0:(+ after 10000us) t0 1 1)
+      [SYNC_ONCE t0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd move [h 5])" |[]])
+1) |[]
+(ipgm pgm_babble13 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babble14:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) after: before: ::) |[])
+[]
+   (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 1400000us)))
+[]
+   (inj []
+      Command:(cmd grab [h] 1)
+      |[]
+   )
+   (inj []
+      f_Command:(fact Command after before 1 1)
+      |[]
+   )
+   (inj []
+      g:(goal f_Command self nil 1)
+      |[]
+   )
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact g t0:(+ after 10000us) t0 1 1)
+      [SYNC_ONCE t0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd grab [h])" |[]])
+1) |[]
+(ipgm pgm_babble14 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babble15:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) after: before: ::) |[])
+[]
+   (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 1500000us)))
+[]
+   (inj []
+      Command:(cmd release [h] 1)
+      |[]
+   )
+   (inj []
+      f_Command:(fact Command after before 1 1)
+      |[]
+   )
+   (inj []
+      g:(goal f_Command self nil 1)
+      |[]
+   )
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact g t0:(+ after 10000us) t0 1 1)
+      [SYNC_ONCE t0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd release [h])" |[]])
+1) |[]
+(ipgm pgm_babble15 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babble16:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) after: before: ::) |[])
+[]
+   (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 1600000us)))
+[]
+   (inj []
+      Command:(cmd grab [h] 1)
+      |[]
+   )
+   (inj []
+      f_Command:(fact Command after before 1 1)
+      |[]
+   )
+   (inj []
+      g:(goal f_Command self nil 1)
+      |[]
+   )
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact g t0:(+ after 10000us) t0 1 1)
+      [SYNC_ONCE t0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd grab [h])" |[]])
+1) |[]
+(ipgm pgm_babble16 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babble17:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) after: before: ::) |[])
+[]
+   (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 1700000us)))
+[]
+   (inj []
+      Command:(cmd move [h -5] 1)
+      |[]
+   )
+   (inj []
+      f_Command:(fact Command after before 1 1)
+      |[]
+   )
+   (inj []
+      g:(goal f_Command self nil 1)
+      |[]
+   )
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact g t0:(+ after 10000us) t0 1 1)
+      [SYNC_ONCE t0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd move [h 5])" |[]])
+1) |[]
+(ipgm pgm_babble17 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babble18:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) after: before: ::) |[])
+[]
+   (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 1800000us)))
+[]
+   (inj []
+      Command:(cmd release [h] 1)
+      |[]
+   )
+   (inj []
+      f_Command:(fact Command after before 1 1)
+      |[]
+   )
+   (inj []
+      g:(goal f_Command self nil 1)
+      |[]
+   )
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact g t0:(+ after 10000us) t0 1 1)
+      [SYNC_ONCE t0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd release [h])" |[]])
+1) |[]
+(ipgm pgm_babble18 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babble19:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) after: before: ::) |[])
+[]
+   (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 1900000us)))
+[]
+   (inj []
+      Command:(cmd grab [h] 1)
+      |[]
+   )
+   (inj []
+      f_Command:(fact Command after before 1 1)
+      |[]
+   )
+   (inj []
+      g:(goal f_Command self nil 1)
+      |[]
+   )
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact g t0:(+ after 10000us) t0 1 1)
+      [SYNC_ONCE t0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd grab [h])" |[]])
+1) |[]
+(ipgm pgm_babble19 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babble20:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) after: before: ::) |[])
+[]
+   (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 2000000us)))
+[]
+   (inj []
+      Command:(cmd release [h] 1)
+      |[]
+   )
+   (inj []
+      f_Command:(fact Command after before 1 1)
+      |[]
+   )
+   (inj []
+      g:(goal f_Command self nil 1)
+      |[]
+   )
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact g t0:(+ after 10000us) t0 1 1)
+      [SYNC_ONCE t0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd release [h])" |[]])
+1) |[]
+(ipgm pgm_babble20 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babble21:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) after: before: ::) |[])
+[]
+   (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 2100000us)))
+[]
+   (inj []
+      Command:(cmd move [h 5] 1)
+      |[]
+   )
+   (inj []
+      f_Command:(fact Command after before 1 1)
+      |[]
+   )
+   (inj []
+      g:(goal f_Command self nil 1)
+      |[]
+   )
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact g t0:(+ after 10000us) t0 1 1)
+      [SYNC_ONCE t0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd move [h 5])" |[]])
+1) |[]
+(ipgm pgm_babble21 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babble22:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) after: before: ::) |[])
+[]
+   (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 2200000us)))
+[]
+   (inj []
+      Command:(cmd grab [h] 1)
+      |[]
+   )
+   (inj []
+      f_Command:(fact Command after before 1 1)
+      |[]
+   )
+   (inj []
+      g:(goal f_Command self nil 1)
+      |[]
+   )
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact g t0:(+ after 10000us) t0 1 1)
+      [SYNC_ONCE t0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd grab [h])" |[]])
+1) |[]
+(ipgm pgm_babble22 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babble23:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) after: before: ::) |[])
+[]
+   (>= after (+ this.vw.ijt (+ DRIVE_PASS1_END 2300000us)))
 []
    (inj []
       Command:(cmd move [h 20] 1)
@@ -560,7 +966,7 @@ pgm_babble9:(pgm |[]
    )
    (prb [1 "print" "injected (cmd move [h 2])" |[]])
 1) |[]
-(ipgm pgm_babble9 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_babble23 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
 ; Before DRIVE_PASS1_START, just re-inject the same values.
