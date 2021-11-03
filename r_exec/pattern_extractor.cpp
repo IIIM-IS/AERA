@@ -343,12 +343,24 @@ Code *_TPX::build_cst(const std::vector<Component> &components, BindingMap *bm, 
   Code *cst = _Mem::Get()->build_object(Atom::CompositeState(Opcodes::Cst, CST_ARITY));
 
   uint16 actual_component_count = 0;
+  // Add the main_component first since its variables are assigned first.
+  for (uint16 i = 0; i < components.size(); ++i) {
+    if (components[i].discarded)
+      continue;
+    if (components[i].object == main_component) {
+      cst->add_reference(abstracted_component);
+      ++actual_component_count;
+      break;
+    }
+  }
+
   for (uint16 i = 0; i < components.size(); ++i) { // reference patterns;
 
     if (components[i].discarded)
       continue;
     if (components[i].object == main_component)
-      cst->add_reference(abstracted_component);
+      // Already added.
+      continue;
     else
       cst->add_reference(bm->abstract_object(components[i].object, true));
     ++actual_component_count;
