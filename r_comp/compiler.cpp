@@ -1353,7 +1353,7 @@ bool Compiler::str(std::string &s) {
 
     switch (char c = (char)in_stream_->get()) {
     case '"':
-      if (!count) {
+      if (!started) {
 
         started = true;
         break;
