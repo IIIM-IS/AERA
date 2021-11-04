@@ -201,7 +201,7 @@ protected:
   void filter_icst_components(ICST *icst, uint32 icst_index, std::vector<Component> &components);
 
   /**
-   * Find an f_icst for the component by lookingin inputs_ and icsts_.
+   * Find an f_icst for the component by looking in inputs_ and icsts_.
    * \param component The cst component to search for.
    * \param results Call this with an empty vector<FindFIcstResult>. If no f_icst is found, then this is empty. Otherwise an
    * entry has the found f_icst and the index in the f_icst of the component that matches the given component.
@@ -211,7 +211,7 @@ protected:
   void _find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results, bool find_multiple);
 
   /**
-   * Find an f_icst for the component by lookingin inputs_ and icsts_.
+   * Find an f_icst for the component by looking in inputs_ and icsts_.
    * \param component The cst component to search for.
    * \param results Call this with an empty vector<FindFIcstResult>. If no f_icst is found, then this is empty. Otherwise an
    * entry has the found f_icst and the index in the f_icst of the component that matches the given component.
@@ -221,7 +221,7 @@ protected:
   void find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results, bool find_multiple = false);
 
   /**
-   * Find an f_icst for the component by lookingin inputs_ and icsts_, or if not found then try to make one with a new cst.
+   * Find an f_icst for the component by looking in inputs_ and icsts_, or if not found then try to make one with a new cst.
    * \param component The cst component to search for.
    * \param results Call this with an empty vector<FindFIcstResult>. If no f_icst is found, then this is empty. Otherwise an
    * entry has the found f_icst and the index in the f_icst of the component that matches the given component.
