@@ -178,15 +178,60 @@ protected:
     Component(_Fact *object) : object(object), discarded(false) {}
   };
 
+  /**
+   * See find_f_icst.
+   */
+  class FindFIcstResult {
+  public:
+    FindFIcstResult(_Fact* f_icst, uint16 component_index)
+    {
+      this->f_icst = f_icst;
+      this->component_index = component_index;
+    }
+
+    P<_Fact> f_icst;
+    uint16 component_index;
+  };
+
   r_code::list<Input> inputs_; // time-controlled buffer (inputs older than tpx_time_horizon from now are discarded).
   std::vector<P<r_code::Code> > mdls_; // new mdls.
   std::vector<P<r_code::Code> > csts_; // new csts.
   std::vector<P<_Fact> > icsts_; // new icsts.
 
   void filter_icst_components(ICST *icst, uint32 icst_index, std::vector<Component> &components);
-  _Fact *_find_f_icst(_Fact *component, uint16 &component_index);
-  _Fact *find_f_icst(_Fact *component, uint16 &component_index);
-  _Fact *find_f_icst(_Fact *component, uint16 &component_index, P<r_code::Code> &new_cst);
+
+  /**
+   * Find an f_icst for the component by lookingin inputs_ and icsts_.
+   * \param component The cst component to search for.
+   * \param results Call this with an empty vector<FindFIcstResult>. If no f_icst is found, then this is empty. Otherwise an
+   * entry has the found f_icst and the index in the f_icst of the component that matches the given component.
+   * \param find_multiple If true then add an entry to results for each f_icst found in  inputs_ and icsts_ . If false, then
+   * results has at most one entry.
+   */
+  void _find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results, bool find_multiple);
+
+  /**
+   * Find an f_icst for the component by lookingin inputs_ and icsts_.
+   * \param component The cst component to search for.
+   * \param results Call this with an empty vector<FindFIcstResult>. If no f_icst is found, then this is empty. Otherwise an
+   * entry has the found f_icst and the index in the f_icst of the component that matches the given component.
+   * \param find_multiple (optional) If true then add an entry to results for each f_icst found in  inputs_ and icsts_ .
+   * If omitted or false, then results has at most one entry.
+   */
+  void find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results, bool find_multiple = false);
+
+  /**
+   * Find an f_icst for the component by lookingin inputs_ and icsts_, or if not found then try to make one with a new cst.
+   * \param component The cst component to search for.
+   * \param results Call this with an empty vector<FindFIcstResult>. If no f_icst is found, then this is empty. Otherwise an
+   * entry has the found f_icst and the index in the f_icst of the component that matches the given component.
+   * \param new_cst If no existing f_icst is found, then this sets new_cst to a new cst and results has one entry with the
+   * new f_icst.
+   * \param find_multiple (optional) If true then add an entry to results for each f_icst found in  inputs_ and icsts_ .
+   * If omitted or false, then results has at most one entry.
+   */
+  void find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results, P<r_code::Code> &new_cst, bool find_multiple = false);
+
   _Fact *make_f_icst(_Fact *component, uint16 &component_index, P<r_code::Code> &new_cst);
   r_code::Code *build_cst(const std::vector<Component> &components, BindingMap *bm, _Fact *main_component);
 

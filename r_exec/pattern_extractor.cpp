@@ -226,7 +226,7 @@ void _TPX::filter_icst_components(ICST *icst, uint32 icst_index, std::vector<Com
   delete[] found;
 }
 
-_Fact *_TPX::_find_f_icst(_Fact *component, uint16 &component_index) {
+void _TPX::_find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results, bool find_multiple) {
 
   r_code::list<Input>::const_iterator i;
   for (i = inputs_.begin(); i != inputs_.end(); ++i) {
@@ -235,8 +235,12 @@ _Fact *_TPX::_find_f_icst(_Fact *component, uint16 &component_index) {
     if (candidate->code(0).asOpcode() == Opcodes::ICst) {
 
       ICST *icst = (ICST *)candidate;
-      if (icst->contains(component, component_index))
-        return i->input_;
+      uint16 component_index;
+      if (icst->contains(component, component_index)) {
+        results.push_back(FindFIcstResult(i->input_, component_index));
+        if (!find_multiple)
+          return;
+      }
     }
   }
 
@@ -244,34 +248,39 @@ _Fact *_TPX::_find_f_icst(_Fact *component, uint16 &component_index) {
   for (f_icst = icsts_.begin(); f_icst != icsts_.end(); ++f_icst) {
 
     ICST *icst = (ICST *)(*f_icst)->get_reference(0);
-    if (icst->contains(component, component_index))
-      return (*f_icst);
+    uint16 component_index;
+    if (icst->contains(component, component_index)) {
+      results.push_back(FindFIcstResult(*f_icst, component_index));
+      if (!find_multiple)
+        return;
+    }
   }
-
-  return NULL;
 }
 
-_Fact *_TPX::find_f_icst(_Fact *component, uint16 &component_index) {
+void _TPX::find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results, bool find_multiple) {
 
   uint16 opcode = component->get_reference(0)->code(0).asOpcode();
   if (opcode == Opcodes::Cmd || opcode == Opcodes::IMdl) // cmds/imdls cannot be components of a cst.
-    return NULL;
+    return;
 
-  return _find_f_icst(component, component_index);
+  _find_f_icst(component, results, find_multiple);
 }
 
-_Fact *_TPX::find_f_icst(_Fact *component, uint16 &component_index, P<Code> &new_cst) {
+void _TPX::find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results, P<Code> &new_cst, bool find_multiple) {
 
   uint16 opcode = component->get_reference(0)->code(0).asOpcode();
   if (opcode == Opcodes::Cmd || opcode == Opcodes::IMdl)
     // cmds/imdls cannot be components of a cst.
-    return NULL;
+    return;
 
-  _Fact *f_icst = _find_f_icst(component, component_index);
-  if (f_icst != NULL)
-    return f_icst;
+  _find_f_icst(component, results, find_multiple);
+  if (results.size() > 0)
+    return;
 
-  return make_f_icst(component, component_index, new_cst);
+  uint16 component_index;
+  _Fact* f_icst = make_f_icst(component, component_index, new_cst);
+  if (f_icst)
+    results.push_back(FindFIcstResult(f_icst, component_index));
 }
 
 _Fact *_TPX::make_f_icst(_Fact *component, uint16 &component_index, P<Code> &new_cst) {
@@ -574,10 +583,10 @@ void GTPX::reduce(r_exec::View *input) { // input->object: f->success.
     lhs_duration = duration_cast<microseconds>(cause.input_->get_before() - cause.input_->get_after());
     rhs_duration = duration_cast<microseconds>(consequent->get_before() - consequent->get_after());
 
-    uint16 cause_index;
+    std::vector<FindFIcstResult> results;
     P<Code> new_cst;
-    _Fact *f_icst = find_f_icst(cause.input_, cause_index, new_cst);
-    if (f_icst == NULL) {
+    find_f_icst(cause.input_, results, new_cst);
+    if (results.size() == 0) {
 
       if (build_mdl(cause.input_, consequent, guard_builder, period))
         inject_hlps(analysis_starting_time);
@@ -586,13 +595,13 @@ void GTPX::reduce(r_exec::View *input) { // input->object: f->success.
       Code *unpacked_cst;
       if (!new_cst) {
 
-        Code *cst = f_icst->get_reference(0)->get_reference(0);
+        Code *cst = results[0].f_icst->get_reference(0)->get_reference(0);
         unpacked_cst = cst->get_reference(cst->references_size() - CST_HIDDEN_REFS); // the cst is packed, retrieve the pattern from the unpacked code.
       } else
         unpacked_cst = new_cst;
 
-      _Fact *cause_pattern = (_Fact *)unpacked_cst->get_reference(cause_index);
-      if (build_mdl(f_icst, cause_pattern, consequent, guard_builder, period, new_cst))
+      _Fact *cause_pattern = (_Fact *)unpacked_cst->get_reference(results[0].component_index);
+      if (build_mdl(results[0].f_icst, cause_pattern, consequent, guard_builder, period, new_cst))
         inject_hlps(analysis_starting_time);
     }
     ++i;
@@ -718,26 +727,40 @@ void PTPX::reduce(r_exec::View *input) {
     else
       guard_builder = new TimingGuardBuilder(period); // TODO: use the durations.
 
-    uint16 cause_index;
+    std::vector<FindFIcstResult> results;
     P<Code> new_cst;
-    _Fact *f_icst = find_f_icst(cause.input_, cause_index, new_cst);
-    if (f_icst == NULL) {
+    find_f_icst(cause.input_, results, new_cst, true);
+    if (results.size() == 0) {
 
       if (build_mdl(cause.input_, consequent, guard_builder, period))
         inject_hlps(analysis_starting_time);
     } else {
 
-      Code *unpacked_cst;
+      for (size_t i = 0; i < results.size(); ++i) {
+        Code *unpacked_cst;
+        if (!new_cst) {
+
+          Code *cst = results[i].f_icst->get_reference(0)->get_reference(0);
+          unpacked_cst = cst->get_reference(cst->references_size() - CST_HIDDEN_REFS); // the cst is packed, retrieve the pattern from the unpacked code.
+        } else
+          unpacked_cst = new_cst;
+
+        _Fact *cause_pattern = (_Fact *)unpacked_cst->get_reference(results[i].component_index);
+        if (build_mdl(results[i].f_icst, cause_pattern, consequent, guard_builder, period, new_cst))
+          inject_hlps(analysis_starting_time);
+      }
+
       if (!new_cst) {
-
-        Code *cst = f_icst->get_reference(0)->get_reference(0);
-        unpacked_cst = cst->get_reference(cst->references_size() - CST_HIDDEN_REFS); // the cst is packed, retrieve the pattern from the unpacked code.
-      } else
-        unpacked_cst = new_cst;
-
-      _Fact *cause_pattern = (_Fact *)unpacked_cst->get_reference(cause_index);
-      if (build_mdl(f_icst, cause_pattern, consequent, guard_builder, period, new_cst))
-        inject_hlps(analysis_starting_time);
+        // find_f_icst returned results without making a new cst. Check if we can make one.
+        uint16 component_index;
+        P<_Fact> f_icst = make_f_icst(cause.input_, component_index, new_cst);
+        if (!!f_icst) {
+          Code *unpacked_cst = new_cst;
+          _Fact *cause_pattern = (_Fact *)unpacked_cst->get_reference(component_index);
+          if (build_mdl(f_icst, cause_pattern, consequent, guard_builder, period, new_cst))
+            inject_hlps(analysis_starting_time);
+        }
+      }
     }
   }
 }
@@ -892,18 +915,18 @@ void CTPX::reduce(r_exec::View *input) {
     } else
       guard_builder = get_default_guard_builder(cause.input_, consequent, period);
 
-    uint16 cause_index;
-    _Fact *f_icst = find_f_icst(cause.input_, cause_index);
-    if (f_icst == NULL) { // m0:[premise.value premise.after premise.before][cause->consequent] and m1:[lhs1->imdl m0[...][...]] with lhs1 either the premise or an icst containing the premise.
+    std::vector<FindFIcstResult> results;
+    find_f_icst(cause.input_, results);
+    if (results.size() == 0) { // m0:[premise.value premise.after premise.before][cause->consequent] and m1:[lhs1->imdl m0[...][...]] with lhs1 either the premise or an icst containing the premise.
 
       if (build_mdl(cause.input_, consequent, guard_builder, period))
         inject_hlps(analysis_starting_time);
     } else {
 
-      Code *cst = f_icst->get_reference(0)->get_reference(0); // cst is packed.
+      Code *cst = results[0].f_icst->get_reference(0)->get_reference(0); // cst is packed.
       Code *unpacked_cst = cst->get_reference(cst->references_size() - CST_HIDDEN_REFS); // get the unpacked code to retreive the pattern.
-      _Fact *cause_pattern = (_Fact *)cst->get_reference(cause_index);
-      if (build_mdl(f_icst, cause_pattern, consequent, guard_builder, period)) // m0:[premise.value premise.after premise.before][icst->consequent] and m1:[lhs1->imdl m0[...][...]] with lhs1 either the premise or an icst containing the premise.
+      _Fact *cause_pattern = (_Fact *)cst->get_reference(results[0].component_index);
+      if (build_mdl(results[0].f_icst, cause_pattern, consequent, guard_builder, period)) // m0:[premise.value premise.after premise.before][icst->consequent] and m1:[lhs1->imdl m0[...][...]] with lhs1 either the premise or an icst containing the premise.
         inject_hlps(analysis_starting_time);
     }
   }
@@ -1039,12 +1062,14 @@ bool CTPX::build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, Gua
 
 bool CTPX::build_requirement(HLPBindingMap *bm, Code *m0, microseconds period) { // check for mdl existence at the same time (ModelBase::mdlCS_-wise).
 
-  uint16 premise_index;
+  std::vector<FindFIcstResult> results;
   P<Code> new_cst;
-  _Fact *f_icst = find_f_icst(target_, premise_index, new_cst);
-  if (f_icst == NULL) {//std::cout<<Utils::RelativeTime(Now())<<" failed xxxxxxxxx M1 / 0\n";
-    return false; }
+  find_f_icst(target_, results, new_cst);
+  if (results.size() == 0)
+    return false;
 
+  _Fact* f_icst = results[0].f_icst;
+  uint16 premise_index = results[0].component_index;
   P<Fact> f_im0 = bm->build_f_ihlp(m0, Opcodes::IMdl, false);
   Utils::SetTimestamp<Code>(f_im0, FACT_AFTER, f_icst->get_after());
   Utils::SetTimestamp<Code>(f_im0, FACT_BEFORE, f_icst->get_before());
