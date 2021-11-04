@@ -72,7 +72,7 @@ S1:(cst |[]
 []
    (fact (icst S0 |[] [H: P:] : :) T0: T1: : :)
    (fact (icst S3 |[] [C: X: P:] : :) T0: T1: : :); X is also exposed from S3.
-   (fact (mk.val H: attached nil :) T0: T1: : :); Change anti-fact to fact of attached to nil.
+   (|fact (mk.val H: attached : :) T0: T1: : :)
 |[]
 |[]
 [stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
@@ -113,11 +113,11 @@ S2:(cst |[]
    (<> C nil); Make sure the object C is not nil.
 [stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
-; When I my hand H is attached to a thing C and I release my hand, it is not attached anymore.
+; When my hand H is attached to a thing C and I release my hand, it is not attached anymore.
 M4:(mdl [H: C: T0: T1:]
 []
    (fact (cmd release [H:] :) T2: T1_cmd: : :); Change T1 to T1_cmd.
-   (fact (mk.val H: attached nil :) T1_RHS: T3: : :); Change T1 to T1_RHS. Change anti-fact to fact of attached to nil.
+   (|fact (mk.val H: attached : :) T1_RHS: T3: : :); Change T1 to T1_RHS.
 []
    T1_RHS:(+ T0 0s:100ms:0us); Copy from M0.
    T3:(+ T1 0s:100ms:0us);     Copy from M0.
@@ -226,7 +226,7 @@ pgm_inject_drive:(pgm |[]
 []
    (inj []
       ; The end of the time interval will be used in m_drive as the end of the goal interval.
-      f_run:(fact run after (+ before 0s:400ms:0us) 1 1)
+      f_run:(fact run after (+ before 0s:500ms:0us) 1 1)
       |[]
    )
    (inj []
@@ -426,15 +426,14 @@ pgm_cmd_move_h_attached_s:(pgm |[]
 (ipgm pgm_cmd_move_h_attached_s |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-pgm_cmd_move_h_attached_nil:(pgm |[]
+pgm_cmd_move_h_not_attached:(pgm |[]
 []
    (ptn (fact G:(goal (fact (cmd move [h DeltaP_in:] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
-   (ptn (fact (mk.val h attached Attached_obj: :) After: Before: ::) |[])
+   (ptn (|fact (mk.val h attached : :) After: Before: ::) |[])
    (ptn (fact (mk.val h position pos_h: :) After_h: Before_h: ::) |[])
    (ptn (fact (mk.val c position pos_c: :) After_c: Before_c: ::) |[])
    (ptn (fact (mk.val s position pos_s: :) After_s: Before_s: ::) |[])
 []
-   (= Attached_obj nil)
    (= (is_sim G) false)
    (< Cmd_after Before)
    (> Cmd_before After)
@@ -455,11 +454,11 @@ pgm_cmd_move_h_attached_nil:(pgm |[]
       [SYNC_ONCE After 1 1 stdin nil]
    )
    (inj []
-      Next_attached:(mk.val h attached Attached_obj 1); Still attached to the same object.
+      Next_attached:(mk.val h attached nil 1); Still not attached. We will make an anti-fact.
       |[]
    )
    (inj []
-      (fact Next_attached (+ After sampling_period) (+ Before sampling_period) 1 1)
+      (|fact Next_attached (+ After sampling_period) (+ Before sampling_period) 1 1)
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
    (inj []
@@ -486,9 +485,9 @@ pgm_cmd_move_h_attached_nil:(pgm |[]
       (fact Next_pos_s (+ After sampling_period) (+ Before sampling_period) 1 1)
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
-   (prb [1 "print" "pgm_cmd_move_h_attached_nil from command:" [Command]])
+   (prb [1 "print" "pgm_cmd_move_h_not_attached from command:" [Command]])
 1) |[]
-(ipgm pgm_cmd_move_h_attached_nil |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_cmd_move_h_not_attached |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
 pgm_cmd_release_h:(pgm |[]
@@ -515,11 +514,11 @@ pgm_cmd_release_h:(pgm |[]
       [SYNC_ONCE After 1 1 stdin nil]
    )
    (inj []
-      Next_attached:(mk.val h attached nil 1); h is now unattached.
+      Next_attached:(mk.val h attached nil 1); h is now unattached. We will make an anti-fact.
       |[]
    )
    (inj []
-      (fact Next_attached (+ After sampling_period) (+ Before sampling_period) 1 1)
+      (|fact Next_attached (+ After sampling_period) (+ Before sampling_period) 1 1)
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
    (inj []
@@ -554,12 +553,11 @@ pgm_cmd_release_h:(pgm |[]
 pgm_cmd_grab_h:(pgm |[]
 []
    (ptn (fact G:(goal (fact Command:(cmd grab [h] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
-   (ptn (fact (mk.val h attached Attached_obj: :) After: Before: ::) |[])
+   (ptn (|fact (mk.val h attached : :) After: Before: ::) |[])
    (ptn (fact (mk.val h position pos_h: :) After_h: Before_h: ::) |[])
    (ptn (fact (mk.val c position pos_c: :) After_c: Before_c: ::) |[])
    (ptn (fact (mk.val s position pos_s: :) After_s: Before_s: ::) |[])
 []
-   (= Attached_obj nil); The hand must be unattached. TODO: handle the case when it is already attached.
    (= pos_h pos_s); For h to grab s, they must be at the same position.
    (= (is_sim G) false)
    (< Cmd_after Before)
