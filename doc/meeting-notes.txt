@@ -712,11 +712,22 @@ Simulator
   * DONE. error for reference in a mdl or cst guard https://github.com/IIIM-IS/AERA/pull/191
   * DONE. Creating the primary group before stdin https://github.com/IIIM-IS/AERA/pull/188
 
-next meeting
+2021-11-04
 * Review/merge new functionality pull requests for:
-  * Making the CTPX learn models in hand-grab-sphere https://github.com/IIIM-IS/AERA/pull/192
-  * REVIEWING. PTPX: Make a candidate model from every matching f_icst https://github.com/IIIM-IS/replicode/pull/165
-* Review diag_mode_rel_0_1 tags https://github.com/IIIM-IS/replicode/issues?q=is%3Aopen+is%3Aissue+milestone%3Adiag_mode_rel_0_1
+  * DONE. PTPX: Make a candidate model from every matching f_icst https://github.com/IIIM-IS/replicode/pull/165
+  * DONE. Increment resilience (to learn models in hand-grab-sphere) https://github.com/IIIM-IS/AERA/pull/192
+* Review/merge bug fix pull requests for:
+  * DONE. Allow an empty string https://github.com/IIIM-IS/AERA/pull/193
+* DONE. Review diag_mode_rel_0_1 tags https://github.com/IIIM-IS/replicode/issues?q=is%3Aopen+is%3Aissue+milestone%3Adiag_mode_rel_0_1
+* hand-grab-sphere-learn
+  * DONE. Change (mk.val h attached nil) to anti-fact
+  * DONE. Discuss progress on learning models
+
+next meeting
+* Check how many objects in hand-grab-sphere https://github.com/IIIM-IS/AERA/issues/128
+* Close the experimental branch. Make dev from master.
+* hand-grab-sphere-learn
+  * Try CTPX allowing (mk.val h attached c) "change" to (|fact (mk.val h attached :))
 
 TODO
 * PTPX: Learned cst may only have icsts. But using a cst for later model-building requires a non-icst fact. Should icst->contains be recursive? (Need limit.) Or always include a fact in new_cst?
