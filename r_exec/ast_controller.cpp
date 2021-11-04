@@ -103,7 +103,9 @@ void PASTController::reduce(View *v, _Fact *input) {
     //std::cout<<Utils::RelativeTime(Now())<<" TPX"<<target_->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<" reduced: "<<input->get_oid()<<" counter-evidence: "<<input->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<std::endl;
     kill();
     tpx_->signal(v);
+#if 0 // Set 0 to not invalidate. Temporary solution to https://github.com/IIIM-IS/replicode/issues/162
     target_->invalidate();//std::cout<<Utils::RelativeTime(Now())<<" "<<target_->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<"|"<<std::dec<<target_->get_oid()<<" invalidated"<<std::endl;
+#endif
     break;
   case MATCH_FAILURE:
     //std::cout<<Utils::RelativeTime(Now())<<" "<<std::hex<<this<<std::dec<<" target: "<<target_->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<" stored: "<<input->get_oid()<<std::endl;
