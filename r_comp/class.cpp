@@ -78,6 +78,7 @@
 #include "class.h"
 #include "segments.h"
 
+using namespace std;
 using namespace r_code;
 
 namespace r_comp {

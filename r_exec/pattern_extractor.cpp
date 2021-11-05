@@ -80,6 +80,7 @@
 #include "mem.h"
 #include "model_base.h"
 
+using namespace std;
 using namespace std::chrono;
 using namespace r_code;
 

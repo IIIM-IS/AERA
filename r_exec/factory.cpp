@@ -79,6 +79,7 @@
 #include "mdl_controller.h"
 #include "mem.h"
 
+using namespace std;
 using namespace std::chrono;
 using namespace r_code;
 

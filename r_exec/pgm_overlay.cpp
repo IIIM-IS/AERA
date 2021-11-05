@@ -83,6 +83,7 @@
 #include "context.h"
 #include "callbacks.h"
 
+using namespace std;
 using namespace r_code;
 
 // pgm layout:

@@ -139,7 +139,7 @@ namespace tcp_io_device {
     * Initialize the TCP connection and wait for a client to connect to it.
     * \param port the port in which the TCP/IP connection should be communicating with the environment simulation.
     */
-    int initTCP(string port);
+    int initTCP(std::string port);
 
     /**
      * Call the parent class load(), then set up the objects for the external environment.
@@ -171,13 +171,13 @@ namespace tcp_io_device {
     std::shared_ptr<SafeQueue> receive_queue_;
     std::shared_ptr<SafeQueue> send_queue_;
 
-    std::map<int, string> id_mapping_;
-    std::map<string, r_code::Code*> entities_;
-    std::map<string, uint16> commands_;
-    std::map<string, r_code::Code*> objects_;
+    std::map<int, std::string> id_mapping_;
+    std::map<std::string, r_code::Code*> entities_;
+    std::map<std::string, uint16> commands_;
+    std::map<std::string, r_code::Code*> objects_;
 
-    std::map<string, MetaData> meta_data_map_;
-    std::map<string, MsgData> data_map_;
+    std::map<std::string, MetaData> meta_data_map_;
+    std::map<std::string, MsgData> data_map_;
 
     Thread* timeTickThread_;
     Timestamp lastInjectTime_;
@@ -222,7 +222,7 @@ namespace tcp_io_device {
     * \param cmd the ejected r_code::Code*.
     * \return The constructed TCPMessage which can be sent to the environment simulation.
     */
-    std::unique_ptr< TCPMessage> constructMessageFromCommand(string cmd_identifier, string entity, r_code::Code* cmd);
+    std::unique_ptr< TCPMessage> constructMessageFromCommand(std::string cmd_identifier, std::string entity, r_code::Code* cmd);
 
     /**
     * Message handler for incoming messages. Passes them on to specific handlers by the given TCPMessage_Type

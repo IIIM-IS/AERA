@@ -83,7 +83,6 @@
 #include <fstream>
 
 
-using namespace std;
 using namespace core;
 
 namespace r_comp {
@@ -144,8 +143,8 @@ template<class I> class Image :
 public:
   static Image<I> *Build(Timestamp timestamp, uint32 map_size, uint32 code_size, uint32 names_size);
   // file IO
-  static Image<I> *Read(ifstream &stream);
-  static void Write(Image<I> *image, ofstream &stream);
+  static Image<I> *Read(std::ifstream &stream);
+  static void Write(Image<I> *image, std::ofstream &stream);
 
   Image();
   ~Image();

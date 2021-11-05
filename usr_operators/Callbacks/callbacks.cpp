@@ -81,6 +81,7 @@
 #include "../r_exec/mem.h"
 #include "../r_comp/decompiler.h" //debug
 
+using namespace std;
 using namespace std::chrono;
 using namespace r_code;
 

@@ -79,6 +79,7 @@
 
 #include <iostream>
 
+using namespace std;
 using namespace std::chrono;
 using namespace r_code;
 

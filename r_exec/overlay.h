@@ -119,7 +119,7 @@ std::ostream __declspec(dllexport) &_Mem_Output(TraceLevel l);
   * stream will output the entire string as a single operation, then when all threads use
   * OUTPUT_LINE it will avoid scrambling output of individual values.
   */
-#define OUTPUT_LINE(level, vals) (_Mem_Output(level) << (ostringstream() << vals << '\n').str()).flush()
+#define OUTPUT_LINE(level, vals) (_Mem_Output(level) << (std::ostringstream() << vals << '\n').str()).flush()
 
 class View;
 

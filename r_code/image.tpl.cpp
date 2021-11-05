@@ -86,7 +86,7 @@ template<class I> Image<I> *Image<I>::Build(Timestamp timestamp, uint32 map_size
   return (Image<I> *)image;
 }
 
-template<class I> Image<I> *Image<I>::Read(ifstream &stream) {
+template<class I> Image<I> *Image<I>::Read(std::ifstream &stream) {
 
   Timestamp timestamp;
   uint32 map_size;
@@ -101,7 +101,7 @@ template<class I> Image<I> *Image<I>::Read(ifstream &stream) {
   return image;
 }
 
-template<class I> void Image<I>::Write(Image<I> *image, ofstream &stream) {
+template<class I> void Image<I>::Write(Image<I> *image, std::ofstream &stream) {
 
   Timestamp timestamp = image->timestamp();
   uint32 map_size = image->map_size();

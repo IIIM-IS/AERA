@@ -85,6 +85,7 @@
 
 //#define DECOMPILE_ONE_BY_ONE
 
+using namespace std;
 using namespace std::chrono;
 using namespace r_code;
 using namespace r_comp;

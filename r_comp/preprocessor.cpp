@@ -81,6 +81,7 @@
 #include "../submodules/CoreLibrary/CoreLibrary/utils.h"
 namespace fs = std::experimental::filesystem;
 
+using namespace std;
 using namespace r_code;
 
 namespace r_comp {

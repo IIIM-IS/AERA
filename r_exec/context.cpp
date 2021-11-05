@@ -82,6 +82,7 @@
 #include "mem.h"
 
 
+using namespace std;
 using namespace r_code;
 
 namespace r_exec {

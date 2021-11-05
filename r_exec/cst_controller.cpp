@@ -79,6 +79,7 @@
 #include "mem.h"
 #include "hlp_context.h"
 
+using namespace std;
 using namespace std::chrono;
 using namespace r_code;
 

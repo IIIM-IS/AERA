@@ -1,5 +1,6 @@
 #include "tcp_io_device.h"
 
+using namespace std;
 using namespace std::chrono;
 using namespace r_code;
 using namespace r_exec;

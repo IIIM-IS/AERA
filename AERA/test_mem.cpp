@@ -77,6 +77,7 @@
 
 #include "test_mem.h"
 
+using namespace std;
 using namespace std::chrono;
 using namespace r_code;
 using namespace r_exec;
