@@ -108,7 +108,7 @@ namespace tcp_io_device {
     * Initialize the TCP connection and wait for a client to connect to it.
     * \param port the port in which the TCP/IP connection should be communicating with the environment simulation.
     */
-    int initTCP(string port);
+    int initTCP(std::string port);
   };
 }
 
