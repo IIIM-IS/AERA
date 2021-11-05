@@ -157,7 +157,6 @@
     <ClCompile Include="object.cpp" />
     <ClCompile Include="r_code.cpp" />
     <ClCompile Include="code_utils.cpp" />
-    <ClCompile Include="vector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="atom.h" />
