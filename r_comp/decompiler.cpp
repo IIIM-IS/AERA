@@ -199,7 +199,7 @@ uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, T
   return object_count;
 }
 
-uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, Timestamp::duration time_offset, std::vector<SysObject *> &imported_objects,
+uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, Timestamp::duration time_offset, vector<SysObject *> &imported_objects,
   bool include_oid, bool include_label, bool include_views) {
 
   partial_decompilation_ = true;

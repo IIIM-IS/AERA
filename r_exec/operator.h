@@ -128,7 +128,7 @@ bool syn(const Context &context);
 
 class Operator {
 private:
-  static r_code::vector<Operator> Operators_; // indexed by opcodes.
+  static r_code::resized_vector<Operator> Operators_; // indexed by opcodes.
 
   bool(*operator_)(const Context &);
   bool(*overload_)(const Context &);

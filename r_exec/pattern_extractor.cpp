@@ -198,7 +198,7 @@ _TPX::_TPX(AutoFocusController *auto_focus, _Fact *target) : TPX(auto_focus, tar
 _TPX::~_TPX() {
 }
 
-void _TPX::filter_icst_components(ICST *icst, uint32 icst_index, std::vector<Component> &components) {
+void _TPX::filter_icst_components(ICST *icst, uint32 icst_index, vector<Component> &components) {
 
   uint32 found_component_count = 0;
   uint32 *found = new uint32[icst->components_.size()];
@@ -226,7 +226,7 @@ void _TPX::filter_icst_components(ICST *icst, uint32 icst_index, std::vector<Com
   delete[] found;
 }
 
-void _TPX::_find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results, bool find_multiple) {
+void _TPX::_find_f_icst(_Fact *component, vector<FindFIcstResult>& results, bool find_multiple) {
 
   r_code::list<Input>::const_iterator i;
   for (i = inputs_.begin(); i != inputs_.end(); ++i) {
@@ -244,7 +244,7 @@ void _TPX::_find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results,
     }
   }
 
-  std::vector<P<_Fact> >::const_iterator f_icst;
+  vector<P<_Fact> >::const_iterator f_icst;
   for (f_icst = icsts_.begin(); f_icst != icsts_.end(); ++f_icst) {
 
     ICST *icst = (ICST *)(*f_icst)->get_reference(0);
@@ -257,7 +257,7 @@ void _TPX::_find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results,
   }
 }
 
-void _TPX::find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results, bool find_multiple) {
+void _TPX::find_f_icst(_Fact *component, vector<FindFIcstResult>& results, bool find_multiple) {
 
   uint16 opcode = component->get_reference(0)->code(0).asOpcode();
   if (opcode == Opcodes::Cmd || opcode == Opcodes::IMdl) // cmds/imdls cannot be components of a cst.
@@ -266,7 +266,7 @@ void _TPX::find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results, 
   _find_f_icst(component, results, find_multiple);
 }
 
-void _TPX::find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results, P<Code> &new_cst, bool find_multiple) {
+void _TPX::find_f_icst(_Fact *component, vector<FindFIcstResult>& results, P<Code> &new_cst, bool find_multiple) {
 
   uint16 opcode = component->get_reference(0)->code(0).asOpcode();
   if (opcode == Opcodes::Cmd || opcode == Opcodes::IMdl)
@@ -290,8 +290,8 @@ _Fact *_TPX::make_f_icst(_Fact *component, uint16 &component_index, P<Code> &new
     // cmds/imdls cannot be components of a cst.
     return NULL;
 
-  std::vector<Component> components; // no icst found, try to identify components to assemble a cst.
-  std::vector<uint32> icst_components;
+  vector<Component> components; // no icst found, try to identify components to assemble a cst.
+  vector<uint32> icst_components;
 
   r_code::list<Input>::const_iterator i;
   for (i = inputs_.begin(); i != inputs_.end(); ++i) {
@@ -345,7 +345,7 @@ _Fact *_TPX::make_f_icst(_Fact *component, uint16 &component_index, P<Code> &new
   return f_icst;
 }
 
-Code *_TPX::build_cst(const std::vector<Component> &components, BindingMap *bm, _Fact *main_component) {
+Code *_TPX::build_cst(const vector<Component> &components, BindingMap *bm, _Fact *main_component) {
 
   _Fact *abstracted_component = (_Fact *)bm->abstract_object(main_component, false);
 
@@ -441,7 +441,7 @@ void _TPX::build_mdl_tail(Code *mdl, uint16 write_index) {
 
 void _TPX::inject_hlps() const {
 
-  std::vector<P<Code> >::const_iterator c;
+  vector<P<Code> >::const_iterator c;
   for (c = csts_.begin(); c != csts_.end(); ++c)
     _Mem::Get()->pack_hlp(*c);
   auto_focus_->inject_hlps(csts_);
@@ -583,7 +583,7 @@ void GTPX::reduce(r_exec::View *input) { // input->object: f->success.
     lhs_duration = duration_cast<microseconds>(cause.input_->get_before() - cause.input_->get_after());
     rhs_duration = duration_cast<microseconds>(consequent->get_before() - consequent->get_after());
 
-    std::vector<FindFIcstResult> results;
+    vector<FindFIcstResult> results;
     P<Code> new_cst;
     find_f_icst(cause.input_, results, new_cst);
     if (results.size() == 0) {
@@ -727,7 +727,7 @@ void PTPX::reduce(r_exec::View *input) {
     else
       guard_builder = new TimingGuardBuilder(period); // TODO: use the durations.
 
-    std::vector<FindFIcstResult> results;
+    vector<FindFIcstResult> results;
     P<Code> new_cst;
     find_f_icst(cause.input_, results, new_cst, true);
     if (results.size() == 0) {
@@ -915,7 +915,7 @@ void CTPX::reduce(r_exec::View *input) {
     } else
       guard_builder = get_default_guard_builder(cause.input_, consequent, period);
 
-    std::vector<FindFIcstResult> results;
+    vector<FindFIcstResult> results;
     find_f_icst(cause.input_, results);
     if (results.size() == 0) { // m0:[premise.value premise.after premise.before][cause->consequent] and m1:[lhs1->imdl m0[...][...]] with lhs1 either the premise or an icst containing the premise.
 
@@ -1062,7 +1062,7 @@ bool CTPX::build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, Gua
 
 bool CTPX::build_requirement(HLPBindingMap *bm, Code *m0, microseconds period) { // check for mdl existence at the same time (ModelBase::mdlCS_-wise).
 
-  std::vector<FindFIcstResult> results;
+  vector<FindFIcstResult> results;
   P<Code> new_cst;
   find_f_icst(target_, results, new_cst);
   if (results.size() == 0)

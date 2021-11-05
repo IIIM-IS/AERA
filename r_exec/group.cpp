@@ -775,7 +775,7 @@ void Group::_initiate_sln_propagation(Code *object, float32 change, float32 sour
 
   if (fabs(change) > object->get_psln_thr()) {
 
-    std::vector<Code *> path;
+    vector<Code *> path;
     path.push_back(object);
 
     if (object->code(0).getDescriptor() == Atom::MARKER) { // if marker, propagate to references.
@@ -793,7 +793,7 @@ void Group::_initiate_sln_propagation(Code *object, float32 change, float32 sour
   }
 }
 
-void Group::_initiate_sln_propagation(Code *object, float32 change, float32 source_sln_thr, std::vector<Code *> &path) const {
+void Group::_initiate_sln_propagation(Code *object, float32 change, float32 source_sln_thr, vector<Code *> &path) const {
 
   if (fabs(change) > object->get_psln_thr()) {
 
@@ -816,7 +816,7 @@ void Group::_initiate_sln_propagation(Code *object, float32 change, float32 sour
   }
 }
 
-void Group::_propagate_sln(Code *object, float32 change, float32 source_sln_thr, std::vector<Code *> &path) const {
+void Group::_propagate_sln(Code *object, float32 change, float32 source_sln_thr, vector<Code *> &path) const {
 
   if (object == _Mem::Get()->get_root())
     return;
@@ -835,11 +835,11 @@ void Group::_propagate_sln(Code *object, float32 change, float32 source_sln_thr,
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Group::inject_hlps(std::vector<View *> &views) {
+void Group::inject_hlps(vector<View *> &views) {
 
   enter();
 
-  std::vector<View *>::const_iterator view;
+  vector<View *>::const_iterator view;
   for (view = views.begin(); view != views.end(); ++view) {
 
     Atom a = (*view)->object_->code(0);

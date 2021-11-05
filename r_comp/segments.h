@@ -113,10 +113,10 @@ public:
   std::unordered_map<std::string, Class> classes_; // non-sys classes, operators and device functions.
   std::unordered_map<std::string, Class> sys_classes_;
 
-  r_code::vector<std::string> class_names_; // classes and sys-classes; does not include set classes.
-  r_code::vector<std::string> operator_names_;
-  r_code::vector<std::string> function_names_;
-  r_code::vector<Class> classes_by_opcodes_; // classes indexed by opcodes; used to retrieve member names; registers all classes (incl. set classes).
+  r_code::resized_vector<std::string> class_names_; // classes and sys-classes; does not include set classes.
+  r_code::resized_vector<std::string> operator_names_;
+  r_code::resized_vector<std::string> function_names_;
+  r_code::resized_vector<Class> classes_by_opcodes_; // classes indexed by opcodes; used to retrieve member names; registers all classes (incl. set classes).
 
   Class *get_class(std::string &class_name);
   Class *get_class(uint16 opcode);
@@ -128,7 +128,7 @@ public:
 
 class dll_export ObjectMap {
 public:
-  r_code::vector<uint16> objects_;
+  r_code::resized_vector<uint16> objects_;
 
   void shift(uint16 offset);
 
@@ -139,7 +139,7 @@ public:
 
 class dll_export CodeSegment {
 public:
-  r_code::vector<r_code::SysObject *> objects_;
+  r_code::resized_vector<r_code::SysObject *> objects_;
 
   ~CodeSegment();
 
@@ -176,7 +176,7 @@ private:
   uint32 get_reference_count(const r_code::Code *object) const;
   void build_references();
   void build_references(r_code::SysObject *sys_object, r_code::Code *object);
-  void unpack_objects(r_code::vector<r_code::Code *> &ram_objects);
+  void unpack_objects(r_code::resized_vector<r_code::Code *> &ram_objects);
 public:
   ObjectMap object_map_;
   CodeSegment code_segment_;
@@ -190,8 +190,8 @@ public:
   void add_sys_object(r_code::SysObject *object, std::string name); // called by the compiler.
   void add_sys_object(r_code::SysObject *object); // called by add_object().
 
-  void get_objects(r_code::Mem *mem, r_code::vector<r_code::Code *> &ram_objects);
-  template<class O> void get_objects(r_code::vector<r_code::Code *> &ram_objects) {
+  void get_objects(r_code::Mem *mem, r_code::resized_vector<r_code::Code *> &ram_objects);
+  template<class O> void get_objects(r_code::resized_vector<r_code::Code *> &ram_objects) {
 
     for (uint32 i = 0; i < code_segment_.objects_.size(); ++i) {
 

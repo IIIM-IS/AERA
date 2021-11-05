@@ -82,7 +82,7 @@
 #include <sstream>
 #include <unordered_set>
 #include "atom.h"
-#include "vector.h"
+#include "resized_vector.h"
 #include "list.h"
 #include "replicode_defs.h"
 
@@ -98,8 +98,8 @@ namespace r_code {
 
 class dll_export ImageObject {
 public:
-  r_code::vector<Atom> code_;
-  r_code::vector<uint16> references_;
+  r_code::resized_vector<Atom> code_;
+  r_code::resized_vector<uint16> references_;
 
   virtual void write(word32 *data) = 0;
   virtual void read(word32 *data) = 0;
@@ -130,8 +130,8 @@ class dll_export SysObject :
 private:
   static uint32 lastOID_;
 public:
-  r_code::vector<uint32> markers_; // indexes in the relocation segment
-  r_code::vector<SysView *> views_;
+  r_code::resized_vector<uint32> markers_; // indexes in the relocation segment
+  r_code::resized_vector<SysView *> views_;
 
   uint32 oid_;
 #ifdef WITH_DETAIL_OID
@@ -351,8 +351,8 @@ class dll_export LocalObject :
   public Code {
 protected:
   uint32 oid_;
-  r_code::vector<Atom> code_;
-  r_code::vector<P<Code> > references_;
+  r_code::resized_vector<Atom> code_;
+  r_code::resized_vector<P<Code> > references_;
 public:
   LocalObject() : Code() {}
   LocalObject(SysObject *source) : Code() {

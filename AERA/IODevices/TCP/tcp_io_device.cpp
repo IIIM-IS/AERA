@@ -89,7 +89,7 @@ namespace tcp_io_device {
 
 
   template<class O, class S>
-  bool TcpIoDevice<O, S>::load(std::vector<r_code::Code*>* objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid)
+  bool TcpIoDevice<O, S>::load(vector<r_code::Code*>* objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid)
   {
     // Call the method in the parent class.
     if (!MemExec<O, S>::load(objects, stdin_oid, stdout_oid, self_oid)) {
@@ -265,7 +265,7 @@ namespace tcp_io_device {
   }
 
   template<class O, class S>
-  r_code::Code* TcpIoDevice<O, S>::findObject(std::vector<r_code::Code*>* objects, const char* name)
+  r_code::Code* TcpIoDevice<O, S>::findObject(vector<r_code::Code*>* objects, const char* name)
   {
     // Find the object OID.
     uint32 oid = r_exec::Seed.object_names_.findSymbol(name);

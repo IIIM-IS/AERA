@@ -138,7 +138,7 @@ void test_injection(r_exec::_Mem *mem, float32 n) {
   // uint64 tt3 = 0;
   // uint64 tt4 = 0;
 
-  // std::vector<uint64> v1, v2, v3, v4;
+  // vector<uint64> v1, v2, v3, v4;
   // v1.reserve(n);
   // v2.reserve(n);
   // v3.reserve(n);
@@ -265,7 +265,7 @@ void write_to_file(r_comp::Image *image, std::string &image_path, Decompiler *de
     r_code::Image<r_code::ImageImpl> *read_image = (r_code::Image<r_code::ImageImpl> *)r_code::Image<r_code::ImageImpl>::Read(input);
     input.close();
 
-    r_code::vector<Code *> objects;
+    resized_vector<Code *> objects;
     r_comp::Image *temp_image = new r_comp::Image();
     temp_image->load(read_image);
 
@@ -357,7 +357,7 @@ int32 main(int argc, char **argv) {
       // Use the debug stream from settings.xml.
       mem->set_default_runtime_output_stream(&runtime_output_stream);
 
-    r_code::vector<r_code::Code *> ram_objects;
+    resized_vector<r_code::Code *> ram_objects;
     r_exec::Seed.get_objects(mem, ram_objects);
 
     mem->init(microseconds(settings.base_period_),

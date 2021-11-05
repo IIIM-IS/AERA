@@ -424,13 +424,13 @@ void AutoFocusController::reduce(r_exec::View *input) {
   reductionCS_.leave();
 }
 
-void AutoFocusController::inject_hlps(const std::vector<P<Code> > &hlps) const { // inject in the primary group; models will be injected in the secondary group automatically.
+void AutoFocusController::inject_hlps(const vector<P<Code> > &hlps) const { // inject in the primary group; models will be injected in the secondary group automatically.
 
-  std::vector<View *> views;
+  vector<View *> views;
 
   auto now = Now();
 
-  std::vector<P<Code> >::const_iterator hlp;
+  vector<P<Code> >::const_iterator hlp;
   for (hlp = hlps.begin(); hlp != hlps.end(); ++hlp) {
 
     View *view = new View(View::SYNC_ONCE, now, 0, -1, output_groups_[0], NULL, *hlp, 1); // SYNC_ONCE,sln=0,res=forever,act=1.

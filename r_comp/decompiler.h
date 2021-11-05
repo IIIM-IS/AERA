@@ -119,7 +119,7 @@ private:
   void write_any(uint16 read_index, bool &after_tail_wildcard, bool apply_time_offset, uint16 write_as_view_index = 0); // decodes any element in an expression or a set.
 
   typedef void (Decompiler::*Renderer)(uint16);
-  r_code::vector<Renderer> renderers_; // indexed by opcodes; when not there, write_expression() is used.
+  r_code::resized_vector<Renderer> renderers_; // indexed by opcodes; when not there, write_expression() is used.
 
   // Renderers.
   void write_expression(uint16 read_index); // default renderer.

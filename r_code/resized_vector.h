@@ -87,7 +87,7 @@ using namespace core;
 namespace r_code {
 
 // auto-resized vector
-template<typename T> class vector :
+template<typename T> class resized_vector :
   private std::vector<T> {
 public:
   uint32 size() const { return std::vector<T>::size(); }

@@ -103,7 +103,7 @@ Class::Class(ReturnType t) : type(t), str_opcode("undefined") {
 
 Class::Class(Atom atom,
   std::string str_opcode,
-  std::vector<StructureMember> r,
+  vector<StructureMember> r,
   ReturnType t) : atom_(atom),
   str_opcode(str_opcode),
   things_to_read(r),

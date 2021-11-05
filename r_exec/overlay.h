@@ -191,7 +191,7 @@ protected:
 
   Controller *controller_;
 
-  r_code::vector<r_code::Atom> values_; // value array: stores the results of computations.
+  r_code::resized_vector<r_code::Atom> values_; // value array: stores the results of computations.
   // Copy of the pgm/hlp code. Will be patched during matching and evaluation:
   // any area indexed by a vl_ptr will be overwritten with:
   //   the evaluation result if it fits in a single atom,

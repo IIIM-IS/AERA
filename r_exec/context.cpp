@@ -511,7 +511,7 @@ bool match(const IPGMContext &input, const IPGMContext &pattern) { // in red, pa
   return true;
 }
 
-bool match(const IPGMContext &input, const IPGMContext &pattern, const IPGMContext &productions, std::vector<uint16> &production_indices) {
+bool match(const IPGMContext &input, const IPGMContext &pattern, const IPGMContext &productions, vector<uint16> &production_indices) {
 
   IPGMContext &skeleton = IPGMContext();
   uint16 last_patch_index;
@@ -558,7 +558,7 @@ build_productions:
   return true;
 }
 
-void reduce(const IPGMContext &context, const IPGMContext &input_set, const IPGMContext &section, std::vector<uint16> &input_indices, std::vector<uint16> &production_indices) {
+void reduce(const IPGMContext &context, const IPGMContext &input_set, const IPGMContext &section, vector<uint16> &input_indices, vector<uint16> &production_indices) {
 
   IPGMContext pattern = section.get_child_deref(1);
   if (pattern[0].asOpcode() != Opcodes::Ptn && pattern[0].asOpcode() != Opcodes::AntiPtn)
@@ -572,7 +572,7 @@ void reduce(const IPGMContext &context, const IPGMContext &input_set, const IPGM
   if (!production_count)
     return;
 
-  std::vector<uint16>::iterator i;
+  vector<uint16>::iterator i;
   for (i = input_indices.begin(); i != input_indices.end();) { // to be successful, at least one input must match the pattern.
 
     IPGMContext c = input_set.get_child_deref(*i);
@@ -611,11 +611,11 @@ bool IPGMContext::Red(const IPGMContext &context) {
   if (!negative_section.get_child_deref(1).evaluate_no_dereference()) // evaluate the pattern only.
     return false;
 
-  std::vector<uint16> input_indices; // todo list of inputs to match.
+  vector<uint16> input_indices; // todo list of inputs to match.
   for (uint16 i = 1; i <= input_set.get_children_count(); ++i)
     input_indices.push_back(i);
 
-  std::vector<uint16> production_indices; // list of productions built upon successful matches.
+  vector<uint16> production_indices; // list of productions built upon successful matches.
 
   if (input_set[0].getDescriptor() != Atom::SET &&
     input_set[0].getDescriptor() != Atom::S_SET &&

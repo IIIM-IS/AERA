@@ -492,7 +492,7 @@ void Image::add_objects(r_code::list<P<r_code::Code> > &objects, bool include_in
   build_references();
 }
 
-void Image::add_objects(r_code::list<P<r_code::Code> > &objects, std::vector<SysObject *> &imported_objects) {
+void Image::add_objects(r_code::list<P<r_code::Code> > &objects, vector<SysObject *> &imported_objects) {
 
   r_code::list<P<r_code::Code> >::const_iterator o;
   for (o = objects.begin(); o != objects.end(); ++o)
@@ -549,7 +549,7 @@ void Image::add_object(Code *object, bool include_invalidated) {
 #endif
 }
 
-SysObject *Image::add_object(Code *object, std::vector<SysObject *> &imported_objects) {
+SysObject *Image::add_object(Code *object, vector<SysObject *> &imported_objects) {
 
   unordered_map<Code *, uint16>::iterator it = ptrs_to_indices_.find(object);
   if (it != ptrs_to_indices_.end()) // object already there.
@@ -675,14 +675,14 @@ void Image::build_references(SysObject *sys_object, Code *object) {
   object->rel_views();
 }
 
-void Image::get_objects(Mem *mem, r_code::vector<Code *> &ram_objects) {
+void Image::get_objects(Mem *mem, resized_vector<Code *> &ram_objects) {
 
   for (uint16 i = 0; i < code_segment_.objects_.size(); ++i)
     ram_objects[i] = mem->build_object(code_segment_.objects_[i]);
   unpack_objects(ram_objects);
 }
 
-void Image::unpack_objects(r_code::vector<Code *> &ram_objects) {
+void Image::unpack_objects(resized_vector<Code *> &ram_objects) {
 
   // For each object, translate its reference indices into pointers; build its views; for each view translate its reference indices into pointers.
   for (uint16 i = 0; i < code_segment_.objects_.size(); ++i) {

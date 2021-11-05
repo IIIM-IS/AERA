@@ -123,7 +123,7 @@ template<class O, class S> TestMem<O, S>::~TestMem() {
 }
 
 template<class O, class S> bool TestMem<O, S>::load
-(std::vector<Code*> *objects, uint32 stdin_oid, uint32 stdout_oid,
+(vector<Code*> *objects, uint32 stdin_oid, uint32 stdout_oid,
   uint32 self_oid) {
   // Call the method in the parent class.
   if (!MemExec<O, S>::load(objects, stdin_oid, stdout_oid, self_oid))
@@ -153,7 +153,7 @@ template<class O, class S> bool TestMem<O, S>::load
 }
 
 template<class O, class S> Code*
-TestMem<O, S>::findObject(std::vector<Code*> *objects, const char* name) {
+TestMem<O, S>::findObject(vector<Code*> *objects, const char* name) {
   // Find the object OID.
   uint32 oid = r_exec::Seed.object_names_.findSymbol(name);
   if (oid == UNDEFINED_OID)

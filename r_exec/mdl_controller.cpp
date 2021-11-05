@@ -139,7 +139,7 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
     bool chaining_allowed = (c_s >= WEAK_REQUIREMENT_ENABLED);
     bool did_check_simulated_chaining = false;
     bool check_simulated_chaining_result;
-    std::vector<BindingResult> bind_results;
+    vector<BindingResult> bind_results;
     switch (c_s) {
     case WEAK_REQUIREMENT_DISABLED:
     case STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT: // silent monitoring of a prediction that will not be injected.
@@ -200,7 +200,7 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
   }
 }
 
-bool PrimaryMDLOverlay::check_simulated_chaining(const HLPBindingMap *bm, Fact *f_imdl, Pred *prediction, std::vector<BindingResult >& results) {
+bool PrimaryMDLOverlay::check_simulated_chaining(const HLPBindingMap *bm, Fact *f_imdl, Pred *prediction, vector<BindingResult >& results) {
 
   for (uint32 i = 0; i < prediction->get_simulations_size(); ++i) {
 
@@ -497,7 +497,7 @@ public:
   bool have_saved_template_timings_;
 };
 
-ChainingStatus MDLController::retrieve_simulated_imdl_fwd(const HLPBindingMap *bm, Fact *f_imdl, Sim* sim, std::vector<BindingResult>& results) {
+ChainingStatus MDLController::retrieve_simulated_imdl_fwd(const HLPBindingMap *bm, Fact *f_imdl, Sim* sim, vector<BindingResult>& results) {
 
   uint32 wr_count;
   uint32 sr_count;
@@ -2067,7 +2067,7 @@ _Fact* PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super
           // TODO: Handle the case when there are other than one Sim in the prediction.
           if (ground->get_pred() && ground->get_pred()->get_simulations_size() == 1) {
             // Check if a call to signal already caused this same LHS to be abduced with the same conditions, in this Sim.
-            std::vector<P<Code> >& sim_already_signalled = ground->get_pred()->get_simulation((uint16)0)->already_signalled_;
+            vector<P<Code> >& sim_already_signalled = ground->get_pred()->get_simulation((uint16)0)->already_signalled_;
             bool found = false;
             // TODO: Do we need a critical section for this loop?
             for (auto signalled = sim_already_signalled.begin(); signalled != sim_already_signalled.end(); ++signalled) {

@@ -146,11 +146,11 @@ public:
     static void* inst;
     struct OID2string {
       r_comp::Decompiler& decompiler;
-      r_code::vector<r_code::SysObject*>& objects;
+      resized_vector<r_code::SysObject*>& objects;
       uint32& object_count;
       Timestamp::duration& time_offset;
 
-      OID2string(r_comp::Decompiler& d, r_code::vector<r_code::SysObject*>& o, uint32& c, Timestamp::duration& t) :
+      OID2string(r_comp::Decompiler& d, resized_vector<r_code::SysObject*>& o, uint32& c, Timestamp::duration& t) :
         decompiler(d), objects(o), object_count(c), time_offset(t) {inst = this;}
 
       static std::string wrapper(uint32 id) {

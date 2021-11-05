@@ -170,7 +170,7 @@ _Fact* CSTOverlay::inject_production(View* input) {
   } else { // there are simulations; the production is therefore a prediction; add the simulations to the latter.
 
     // Make a temporary copy of simulations_ for calling the Pred constructor.
-    std::vector<P<Sim>> simulations_copy;
+    vector<P<Sim>> simulations_copy;
     for (auto sim = simulations_.begin(); sim != simulations_.end(); ++sim)
       simulations_copy.push_back(*sim);
     // Add the simulations to the prediction.
@@ -701,7 +701,7 @@ Fact *CSTController::get_f_ihlp(HLPBindingMap *bindings, bool wr_enabled) const 
   return bindings->build_f_ihlp(get_object(), Opcodes::ICst, false);
 }
 
-Fact *CSTController::get_f_icst(HLPBindingMap *bindings, std::vector<P<_Fact> > *axiom_inputs, std::vector<P<_Fact> > *non_axiom_inputs) const {
+Fact *CSTController::get_f_icst(HLPBindingMap *bindings, vector<P<_Fact> > *axiom_inputs, vector<P<_Fact> > *non_axiom_inputs) const {
 
   Fact *f_icst = get_f_ihlp(bindings, false);
   ICST* icst = (ICST *)f_icst->get_reference(0);

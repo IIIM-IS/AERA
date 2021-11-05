@@ -89,7 +89,7 @@ unordered_map<std::string, RepliMacro *> RepliStruct::RepliMacros_;
 unordered_map<std::string, int32> RepliStruct::Counters_;
 std::list<RepliCondition *> RepliStruct::Conditions_;
 uint32 RepliStruct::GlobalLine_ = 1;
-std::vector<std::string> RepliStruct::LoadedFilePaths_;
+vector<std::string> RepliStruct::LoadedFilePaths_;
 
 RepliStruct::RepliStruct(RepliStruct::Type type) {
   type_ = type;
@@ -1169,7 +1169,7 @@ void Preprocessor::instantiateClass(RepliStruct *tpl_class, std::list<RepliStruc
   // append an ID to the tpl class name.
   instantiated_class_name += std::to_string(LastClassID++);
 
-  std::vector<StructureMember> members;
+  vector<StructureMember> members;
   std::list<RepliStruct *> _tpl_args;
   for (std::list<RepliStruct *>::reverse_iterator i = tpl_args.rbegin(); i != tpl_args.rend(); ++i)
     _tpl_args.push_back(*i);
@@ -1180,7 +1180,7 @@ void Preprocessor::instantiateClass(RepliStruct *tpl_class, std::list<RepliStruc
   ++class_opcode_;
 }
 
-void Preprocessor::getMember(std::vector<StructureMember> &members, RepliStruct *m, std::list<RepliStruct *> &tpl_args, bool instantiate) {
+void Preprocessor::getMember(vector<StructureMember> &members, RepliStruct *m, std::list<RepliStruct *> &tpl_args, bool instantiate) {
 
   size_t p;
   std::string name;
@@ -1266,7 +1266,7 @@ void Preprocessor::getMember(std::vector<StructureMember> &members, RepliStruct 
   }
 }
 
-void Preprocessor::getMembers(RepliStruct *s, std::vector<StructureMember> &members, std::list<RepliStruct *> &tpl_args, bool instantiate) {
+void Preprocessor::getMembers(RepliStruct *s, vector<StructureMember> &members, std::list<RepliStruct *> &tpl_args, bool instantiate) {
 
   for (std::list<RepliStruct *>::iterator j(s->args_.begin()); j != s->args_.end(); ++j)
     getMember(members, *j, tpl_args, instantiate);
@@ -1301,10 +1301,10 @@ void Preprocessor::initialize(Metadata *metadata) {
   uint16 function_opcode = 0;
   uint16 operator_opcode = 0;
 
-  std::vector<StructureMember> r_xpr;
+  vector<StructureMember> r_xpr;
   metadata->classes_[std::string(Class::Expression)] = Class(Atom::Object(class_opcode_, 0), Class::Expression, r_xpr); // to read unspecified expressions in classes and sets.
   ++class_opcode_;
-  std::vector<StructureMember> r_type;
+  vector<StructureMember> r_type;
   metadata->classes_[std::string(Class::Type)] = Class(Atom::Object(class_opcode_, 0), Class::Type, r_type); // to read object types in expressions and sets.
   ++class_opcode_;
 
@@ -1314,7 +1314,7 @@ void Preprocessor::initialize(Metadata *metadata) {
       continue;
 
     RepliStruct *s = *(*i)->args_.begin();
-    std::vector<StructureMember> members;
+    vector<StructureMember> members;
     if ((*i)->cmd_ == "!class") {
 
       std::string sset = "[]";
@@ -1383,7 +1383,7 @@ void Preprocessor::initialize(Metadata *metadata) {
       ++operator_opcode;
     } else if ((*i)->cmd_ == "!dfn") { // don't bother to read the members, it's always a set.
 
-      std::vector<StructureMember> r_set;
+      vector<StructureMember> r_set;
       r_set.push_back(StructureMember(&Compiler::read_set, ""));
 
       std::string function_name = s->cmd_;

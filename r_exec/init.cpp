@@ -162,7 +162,7 @@ thread_ret TDecompiler::Decompile(void *args) {
   r_comp::Decompiler decompiler;
   decompiler.init(&r_exec::Metadata);
 
-  std::vector<SysObject *> imported_objects;
+  vector<SysObject *> imported_objects;
 
   r_comp::Image *image = new r_comp::Image();
   image->add_objects(_this->objects_, imported_objects);
@@ -207,9 +207,9 @@ void TDecompiler::add_objects(const r_code::list<P<Code> > &objects) {
     objects_.push_back(*o);
 }
 
-void TDecompiler::add_objects(const std::vector<P<Code> > &objects) {
+void TDecompiler::add_objects(const vector<P<Code> > &objects) {
 
-  std::vector<P<Code> >::const_iterator o;
+  vector<P<Code> >::const_iterator o;
   for (o = objects.begin(); o != objects.end(); ++o)
     objects_.push_back(*o);
 }
@@ -227,7 +227,7 @@ void TDecompiler::decompile() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::vector<PipeOStream *> PipeOStream::Streams_;
+vector<PipeOStream *> PipeOStream::Streams_;
 
 PipeOStream PipeOStream::NullStream_;
 

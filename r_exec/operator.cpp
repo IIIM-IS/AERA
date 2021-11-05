@@ -90,7 +90,7 @@ using namespace r_code;
 
 namespace r_exec {
 
-r_code::vector<Operator> Operator::Operators_;
+resized_vector<Operator> Operator::Operators_;
 
 void Operator::Register(uint16 opcode, bool(*o)(const Context &)) {
 

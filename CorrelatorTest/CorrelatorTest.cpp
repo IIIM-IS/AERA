@@ -153,7 +153,7 @@ int32 main(int argc, char **argv) {
   r_code::Image<ImageImpl> *img = (r_code::Image<ImageImpl> *)r_code::Image<ImageImpl>::Read(input);
   input.close();
 
-  r_code::vector<Code *> objects;
+  resized_vector<Code *> objects;
   r_comp::Image *_i = new r_comp::Image();
   _i->load(img);
   _i->get_objects<LocalObject>(objects);

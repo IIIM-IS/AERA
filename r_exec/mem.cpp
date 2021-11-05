@@ -290,7 +290,7 @@ void _Mem::store(Code *object) {
   object->set_strorage_index(location);
 }
 
-bool _Mem::load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid) { // no cov at init time.
+bool _Mem::load(vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid) { // no cov at init time.
 
   uint32 i;
   reduction_cores_ = new ReductionCore *[reduction_core_count_];
@@ -437,7 +437,7 @@ Timestamp _Mem::start() {
   time_job_queue_ = new PipeNN<P<TimeJob>, 1024>();
   reduction_job_queue_ = new PipeNN<P<_ReductionJob>, 1024>();
 
-  std::vector<std::pair<View *, Group *> > initial_reduction_jobs;
+  vector<std::pair<View *, Group *> > initial_reduction_jobs;
 
   uint32 i;
   auto now = Now();
@@ -528,7 +528,7 @@ void _Mem::run_in_diagnostic_time(milliseconds run_time) {
   // Assume 8 threads (on 4 cores), so allow 10000 * 8 = 80000 jobs per cycle.
   const size_t max_reduction_jobs_per_cycle = 80000;
   size_t n_reduction_jobs_this_sampling_period = 0;
-  std::vector<P<_ReductionJob>> reduction_job_queue;
+  vector<P<_ReductionJob>> reduction_job_queue;
   // Use a deque so we can efficiently remove from the front.
   std::deque<P<TimeJob>> ordered_time_job_queue;
 
@@ -931,9 +931,9 @@ void _Mem::inject_async(View *view) {
   }
 }
 
-void _Mem::inject_hlps(std::vector<View *> views, Group *destination) {
+void _Mem::inject_hlps(vector<View *> views, Group *destination) {
 
-  std::vector<View *>::const_iterator view;
+  vector<View *>::const_iterator view;
   for (view = views.begin(); view != views.end(); ++view)
     bind(*view);
 
@@ -1147,7 +1147,7 @@ void _Mem::pack_hlp(Code *hlp) const { // produces a new object where a set of p
 
   Code *unpacked_hlp = clone(hlp);
 
-  std::vector<Atom> trailing_code; // copy of the original code (the latter will be overwritten by packed facts).
+  vector<Atom> trailing_code; // copy of the original code (the latter will be overwritten by packed facts).
   uint16 trailing_code_index = hlp->code(HLP_FWD_GUARDS).asIndex();
   for (uint16 i = trailing_code_index; i < hlp->code_size(); ++i)
     trailing_code.push_back(hlp->code(i));
@@ -1155,7 +1155,7 @@ void _Mem::pack_hlp(Code *hlp) const { // produces a new object where a set of p
   uint16 group_set_index = hlp->code(HLP_OUT_GRPS).asIndex();
   uint16 group_count = hlp->code(group_set_index).getAtomCount();
 
-  std::vector<P<Code> > references;
+  vector<P<Code> > references;
 
   uint16 pattern_set_index = hlp->code(HLP_OBJS).asIndex();
   uint16 pattern_count = hlp->code(pattern_set_index).getAtomCount();
@@ -1203,7 +1203,7 @@ void _Mem::pack_hlp(Code *hlp) const { // produces a new object where a set of p
   hlp->add_reference(unpacked_hlp); // hidden reference.
 }
 
-void _Mem::pack_fact(Code *fact, Code *hlp, uint16 &write_index, std::vector<P<Code> > *references) {
+void _Mem::pack_fact(Code *fact, Code *hlp, uint16 &write_index, vector<P<Code> > *references) {
 
   uint16 extent_index = write_index + fact->code_size();
   for (uint16 i = 0; i < fact->code_size(); ++i) {
@@ -1224,7 +1224,7 @@ void _Mem::pack_fact(Code *fact, Code *hlp, uint16 &write_index, std::vector<P<C
   write_index = extent_index;
 }
 
-void _Mem::pack_fact_object(Code *fact_object, Code *hlp, uint16 &write_index, std::vector<P<Code> > *references) {
+void _Mem::pack_fact_object(Code *fact_object, Code *hlp, uint16 &write_index, vector<P<Code> > *references) {
 
   uint16 extent_index = write_index + fact_object->code_size();
   uint16 offset = write_index;

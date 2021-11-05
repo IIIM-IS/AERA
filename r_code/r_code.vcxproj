@@ -168,7 +168,7 @@
     <ClInclude Include="r_code.h" />
     <ClInclude Include="time_buffer.h" />
     <ClInclude Include="utils.h" />
-    <ClInclude Include="vector.h" />
+    <ClInclude Include="resized_vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

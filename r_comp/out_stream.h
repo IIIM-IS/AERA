@@ -80,7 +80,7 @@
 
 #include <iostream>
 
-#include "../r_code/vector.h"
+#include "../r_code/resized_vector.h"
 
 namespace r_comp {
 
@@ -88,8 +88,8 @@ namespace r_comp {
 // ex: labels and variables, i.e. when iptrs are discovered and these hold indexes are < read_index and do not point to variables
 class OutStream {
 public:
-  r_code::vector<uint16> code_indexes_to_stream_indexes_;
-  r_code::vector<std::streampos> positions_;
+  r_code::resized_vector<uint16> code_indexes_to_stream_indexes_;
+  r_code::resized_vector<std::streampos> positions_;
   OutStream(std::ostringstream *s) : stream_(s) {}
   std::ostringstream *stream_;
   template<typename T> OutStream &push(const T &t, uint16 code_index) {

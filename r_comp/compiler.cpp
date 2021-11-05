@@ -953,7 +953,7 @@ bool Compiler::hlp_reference(uint16 &index) {
   return false;
 }
 
-bool Compiler::this_indirection(std::vector<int16> &v, const ReturnType t) {
+bool Compiler::this_indirection(vector<int16> &v, const ReturnType t) {
 
   std::streampos i = in_stream_->tellg();
   if (match_symbol("this.", false)) {
@@ -1017,7 +1017,7 @@ bool Compiler::this_indirection(std::vector<int16> &v, const ReturnType t) {
   return false;
 }
 
-bool Compiler::local_indirection(std::vector<int16> &v, const ReturnType t, uint16 &cast_opcode) {
+bool Compiler::local_indirection(vector<int16> &v, const ReturnType t, uint16 &cast_opcode) {
 
   std::streampos i = in_stream_->tellg();
   std::string m;
@@ -1097,7 +1097,7 @@ bool Compiler::local_indirection(std::vector<int16> &v, const ReturnType t, uint
   return false;
 }
 
-bool Compiler::global_indirection(std::vector<int16> &v, const ReturnType t) {
+bool Compiler::global_indirection(vector<int16> &v, const ReturnType t) {
 
   std::streampos i = in_stream_->tellg();
   std::string m;
@@ -2520,7 +2520,7 @@ bool Compiler::read_reference(uint16 write_index, uint16 &extent_index, bool wri
       current_object_->code_[write_index] = Atom::RPointer(index);
     return true;
   }
-  std::vector<int16> v;
+  vector<int16> v;
   if (this_indirection(v, t)) {
 
     if (write) {
