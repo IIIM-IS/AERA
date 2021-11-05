@@ -158,13 +158,10 @@ void PGMController::reduce(r_exec::View *input) {
 
   r_code::list<P<Overlay> >::const_iterator o;
   uint32 oid = input->object_->get_oid();
-  //uint64 t=Now()-Utils::GetTimeReference();
-  //std::cout<<Time::ToString_seconds(t)<<" got "<<oid_<<" "<<input->get_sync()<<std::endl;
   if (time_scope_.count() > 0) {
 
     reductionCS_.enter();
     auto now = Now(); // call must be located after the CS.enter() since (*o)->reduce() may update (*o)->birth_time.
-    //uint64 t=now-Utils::GetTimeReference();
     for (o = overlays_.begin(); o != overlays_.end();) {
 
       if ((*o)->is_invalidated())
@@ -173,16 +170,11 @@ void PGMController::reduce(r_exec::View *input) {
 
         auto  birth_time = ((PGMOverlay *)*o)->get_birth_time();
         if (birth_time.time_since_epoch().count() > 0 && now - birth_time > time_scope_) {
-          //std::cout<<Time::ToString_seconds(t)<<" kill "<<std::hex<<(void *)*o<<std::dec<<" born: "<<Time::ToString_seconds(birth_time-Utils::GetTimeReference())<<" after "<<Time::ToString_seconds(now-birth_time)<<std::endl;
-          //std::cout<<std::hex<<(void *)*o<<std::dec<<" ------------kill "<<input->object->get_oid()<<" ignored "<<std::endl;
           o = overlays_.erase(o);
         } else {
-          //void *oo=*o;
           Overlay *offspring = (*o)->reduce(input);
           if (offspring) {
             overlays_.push_front(offspring);
-            //std::cout<<Time::ToString_seconds(t)<<" "<<std::hex<<oo<<std::dec<<" born: "<<Time::ToString_seconds(((PGMOverlay *)oo)->get_birth_time()-Utils::GetTimeReference())<<" reduced "<<input->object->get_oid()<<" "<<input->get_sync()<<" offspring: "<<std::hex<<offspring<<std::dec<<std::endl;
-            //std::cout<<std::hex<<(void *)oo<<std::dec<<" --------------- reduced "<<input->object->get_oid()<<" "<<input->get_sync()<<std::endl;
           }
           if (!is_alive())
             break;

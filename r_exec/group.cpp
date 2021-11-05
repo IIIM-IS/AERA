@@ -558,10 +558,6 @@ void Group::update(Timestamp planned_time) {
   }
 
   auto now = Now();
-  //if(get_secondary_group()!=NULL)
-  // std::cout<<Utils::RelativeTime(Now())<<" UPR\n";
-  //if(this==_Mem::Get()->get_stdin())
-  // std::cout<<Utils::RelativeTime(Now())<<" ----------------------------------------------------------------\n";
   newly_salient_views_.clear();
 
   // execute pending operations.
@@ -661,10 +657,6 @@ void Group::update(Timestamp planned_time) {
   }
 
   leave();
-
-  //if(get_secondary_group()!=NULL)
-  //if(this==_Mem::Get()->get_stdin())
-  // std::cout<<Utils::RelativeTime(Now())<<" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void Group::_update_saliency(GroupState *state, View *view) {
@@ -1008,8 +1000,6 @@ void Group::inject(View *view) { // the view can hold anything but groups and no
   }
 
   leave();
-  //if(get_oid()==2)
-  // std::cout<<Utils::RelativeTime(Now())<<" stdin <- "<<view->object->get_oid()<<std::endl;
 }
 
 void Group::inject_new_object(View *view) { // the view can hold anything but groups and notifications.
@@ -1030,8 +1020,6 @@ void Group::inject_new_object(View *view) { // the view can hold anything but gr
 
   inject(view);
   notifyNew(view);
-  //uint64 t1=Now();
-  //std::cout<<"injection: "<<t1-t0<<std::endl;
 }
 
 void Group::inject_existing_object(View *view) { // the view can hold anything but groups and notifications.
@@ -1139,7 +1127,6 @@ void Group::inject_reduction_jobs(View *view) { // group is assumed to be c-sali
 
       if (v->second->get_act() > get_act_thr())//{ // active ipgm/icpp_pgm/rgrp view.
         v->second->controller_->_take_input(view); // view will be copied.
-        //std::cout<<std::hex<<(void *)v->second->controller<<std::dec<<" <- "<<view->object->get_oid()<<std::endl;}
 
     FOR_ALL_VIEWS_WITH_INPUTS_END
   }

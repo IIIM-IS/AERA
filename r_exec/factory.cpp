@@ -894,14 +894,12 @@ ICST::ICST(SysObject *source) : LObject(source) {
 bool ICST::is_invalidated() {
 
   if (LObject::is_invalidated()) {
-    //std::cout<<Time::ToString_seconds(Now()-Utils::GetTimeReference())<<" "<<std::hex<<this<<std::dec<<" icst was invalidated"<<std::endl;
     return true; }
   for (uint32 i = 0; i < components_.size(); ++i) {
 
     if (components_[i]->is_invalidated()) {
 
       invalidate();
-      //std::cout<<Time::ToString_seconds(Now()-Utils::GetTimeReference())<<" "<<std::hex<<this<<std::dec<<" icst invalidated"<<std::endl;
       return true;
     }
   }

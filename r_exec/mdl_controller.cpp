@@ -196,7 +196,6 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
     if (f_p_f_imdl == NULL) // i.e. if reduction not triggered a requirement.
       store_evidence(input, prediction, is_simulation);
   case MATCH_FAILURE:
-    //std::cout<<" no match\n";
     return false;
   }
 }
@@ -226,7 +225,6 @@ SecondaryMDLOverlay::~SecondaryMDLOverlay() {
 }
 
 bool SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *req_controller) { // no caching since no bwd.
-//std::cout<<std::hex<<this<<std::dec<<" "<<input->object->get_oid();
   P<HLPBindingMap> bm = new HLPBindingMap(bindings_);
   bm->reset_fwd_timings(input);
   switch (bm->match_fwd_lenient(input, ((MDLController *)controller_)->get_lhs())) {
@@ -254,7 +252,6 @@ bool SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *
     case STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT:
     case WEAK_REQUIREMENT_ENABLED:
       if (evaluate_fwd_guards()) { // may update bindings.
-//std::cout<<" match\n";
         f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
         ((SecondaryMDLController *)controller_)->predict(bindings_, input, NULL, true, r_p, ground);
         match = true;
@@ -268,7 +265,6 @@ bool SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *
     return match;
   }case MATCH_SUCCESS_NEGATIVE:
   case MATCH_FAILURE:
-    //std::cout<<" no match\n";
     return false;
   }
 }
@@ -831,7 +827,6 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
 
       Code *imdl = (*e).evidence_->get_pred()->get_target()->get_reference(0);
       uint16 tpl_index = imdl->code(I_HLP_TPL_ARGS).asIndex();
-      //std::cout<<"IMDL: "<<imdl->code(tpl_index+1).asFloat()<<" ["<<Time::ToString_seconds((*e).after-Utils::GetTimeReference())<<" "<<Time::ToString_seconds((*e).before-Utils::GetTimeReference())<<"]"<<std::endl;
 
       if ((*e).is_too_old(now)) // garbage collection.
         e = requirements_.positive_evidences_.erase(e);
@@ -854,7 +849,6 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
             r = WEAK_REQUIREMENT_ENABLED;
             bm->load(&_original);
             ground = (*e).evidence_;
-            //std::cout<<"Chosen IMDL: "<<imdl->code(tpl_index+1).asFloat()<<" ["<<Time::ToString_seconds((*e).after-Utils::GetTimeReference())<<" "<<Time::ToString_seconds((*e).before-Utils::GetTimeReference())<<"]"<<std::endl;
           }
 
           r_p.weak_requirements_.controllers.insert((*e).controller_);
@@ -1466,8 +1460,6 @@ void TopLevelMDLController::register_drive_outcome(Fact *drive, bool success) co
   Group *drives_host = (Group *)get_out_group(out_group_count); // the drives group is the last of the output groups.
   View *view = new View(View::SYNC_ONCE, now, 1, 1, drives_host, primary_host, f_drive_success); // sln=1,res=1.
   _Mem::Get()->inject(view); // inject in the drives group (will be caught by the drive injectors).
-  //if(success)std::cout<<Utils::RelativeTime(Now())<<" drive success\n";
-  //else std::cout<<Utils::RelativeTime(Now())<<" drive failure\n";
 }
 
 void TopLevelMDLController::register_simulated_goal_outcome(Fact *goal, bool success, _Fact *evidence) const { // evidence is a simulated prediction.

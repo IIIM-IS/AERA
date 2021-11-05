@@ -103,7 +103,7 @@ PMonitor::~PMonitor() {
 
 bool PMonitor::reduce(_Fact *input) { // input is always an actual fact.
 
-  if (target_->is_invalidated()) {//std::cout<<Time::ToString_seconds(Now()-Utils::GetTimeReference())<<" "<<std::hex<<this<<std::dec<<" target has been invalidated\n";
+  if (target_->is_invalidated()) {
     return true; }
 
   if (target_->get_pred()->grounds_invalidated(input)) { // input is a counter-evidence for one of the antecedents: abort.
@@ -132,16 +132,13 @@ bool PMonitor::reduce(_Fact *input) { // input is always an actual fact.
     //uint32 oid=input->get_oid();
     switch (((Fact *)input)->is_evidence(prediction_target_)) {
     case MATCH_SUCCESS_POSITIVE:
-      //std::cout<<Time::ToString_seconds(Now()-Utils::GetTimeReference())<<" "<<std::hex<<this<<std::dec<<" target: "<<prediction_target_->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<" reduced: "<<input->get_oid()<<" positive\n";
       controller_->register_pred_outcome(target_, true, input, input->get_cfd(), rate_failures_);
       return true;
     case MATCH_SUCCESS_NEGATIVE:
-      //std::cout<<Time::ToString_seconds(Now()-Utils::GetTimeReference())<<" "<<std::hex<<this<<std::dec<<" target: "<<prediction_target_->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<" reduced: "<<input->get_oid()<<" negative\n";
       if (rate_failures_)
         controller_->register_pred_outcome(target_, false, input, input->get_cfd(), rate_failures_);
       return true;
     case MATCH_FAILURE:
-      //std::cout<<Time::ToString_seconds(Now()-Utils::GetTimeReference())<<" "<<std::hex<<this<<std::dec<<" target: "<<prediction_target_->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<" reduced: "<<input->get_oid()<<" failure\n";
       return false;
     }
   }

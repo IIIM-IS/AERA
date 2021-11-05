@@ -343,13 +343,11 @@ void InitOpcodes(const r_comp::Metadata& metadata) {
 
     _Opcodes[it->first] = it->second.atom_.asOpcode();
     r_code::AddOpcodeName(it->second.atom_.asOpcode(), it->first.c_str());
-    //std::cout<<it->first<<":"<<it->second.atom_.asOpcode()<<std::endl;
   }
   for (it = metadata.sys_classes_.begin(); it != metadata.sys_classes_.end(); ++it) {
 
     _Opcodes[it->first] = it->second.atom_.asOpcode();
     r_code::AddOpcodeName(it->second.atom_.asOpcode(), it->first.c_str());
-    //std::cout<<it->first<<":"<<it->second.atom_.asOpcode()<<std::endl;
   }
 
   // load class Opcodes.

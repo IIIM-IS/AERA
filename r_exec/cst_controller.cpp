@@ -201,7 +201,6 @@ CSTOverlay *CSTOverlay::get_offspring(HLPBindingMap *map, _Fact *input, bool is_
   if (match_deadline_.time_since_epoch().count() == 0)
     match_deadline_ = map->get_fwd_before();
   update(map, input, is_axiom);
-  //std::cout<<std::hex<<this<<std::dec<<" produced: "<<std::hex<<offspring<<std::dec<<std::endl;
   return offspring;
 }
 
@@ -270,10 +269,6 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
     if (((_Fact *)input->object_) == non_axiom_inputs_[i])
       return false;
   }
-  // if(match_deadline.time_since_epoch().count() == 0)
-  // std::cout<<Time::ToString_seconds(Now()-st)<<" "<<std::hex<<this<<std::dec<<" (0) "<<input->object->get_oid()<<std::endl;
-  // else
-  // std::cout<<Time::ToString_seconds(Now()-st)<<" "<<std::hex<<this<<std::dec<<" ("<<Time::ToString_seconds(match_deadline-st)<<") "<<input->object->get_oid()<<std::endl;
   _Fact *input_object;
   Pred *prediction = ((_Fact *)input->object_)->get_pred();
   bool is_simulation;
@@ -384,11 +379,6 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
   bool bound_pattern_is_axiom;
   _Fact *bound_pattern = bind_pattern(input_object, bm, predictionSimulation, bound_pattern_is_axiom);
   if (bound_pattern) {
-    //if(match_deadline.time_since_epoch().count() == 0){
-    // std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" "<<std::hex<<this<<std::dec<<" (0) ";
-    //} else{
-    // std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" "<<std::hex<<this<<std::dec<<" ("<<Time::ToString_seconds(match_deadline-Utils::GetTimeReference())<<") ";
-    //}
     if (axiom_patterns_.size() + non_axiom_patterns_.size() == 1) { // last match.
 
       if (!code_) {
@@ -396,21 +386,18 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
         load_code();
         bindings_ = bm;
         if (evaluate_fwd_guards()) { // may update bindings; full match.
-//std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" full match\n";
           offspring = get_offspring(bm, (_Fact *)input->object_, bound_pattern_is_axiom);
           inject_production(input);
           invalidate();
           store_evidence(input->object_, prediction, is_simulation);
           return true;
         } else {
-          //std::cout<<" guards failed\n";
           delete[] code_;
           code_ = NULL;
           // JTNote: This returns after bindings_ is modified. Should they be restored?
           return false;
         }
       } else { // guards already evaluated, full match.
-//std::cout<<Time::ToString_seconds(now-Utils::GetTimeReference())<<" full match\n";
         offspring = get_offspring(bm, (_Fact *)input->object_, bound_pattern_is_axiom);
         inject_production(input);
         invalidate();
@@ -418,7 +405,6 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
         return true;
       }
     } else {
-      //std::cout<<" match\n";
       offspring = get_offspring(bm, (_Fact *)input->object_, bound_pattern_is_axiom, bound_pattern);
       store_evidence(input->object_, prediction, is_simulation);
       return true;
@@ -564,7 +550,6 @@ void CSTController::reduce(r_exec::View *input) {
       }
     }
   } else {
-    // std::cout<<"CTRL: "<<get_host()->get_oid()<<" > "<<input->object->get_oid()<<std::endl;
     bool match = false;
     CSTOverlay *offspring;
     r_code::list<P<Overlay> >::const_iterator o;

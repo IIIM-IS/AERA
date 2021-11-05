@@ -306,7 +306,7 @@ void AutoFocusController::take_input(r_exec::View *input) {
   if (input->object_->code(0).asOpcode() == Opcodes::Fact ||
     input->object_->code(0).asOpcode() == Opcodes::AntiFact ||
     input->object_->code(0).asOpcode() == Opcodes::MkRdx) // discard everything but facts, |facts and mk.rdx.
-    Controller::__take_input<AutoFocusController>(input);// std::cout<<"A/F::TI: "<<get_host()->get_oid()<<" > "<<input->object->get_oid()<<std::endl;
+    Controller::__take_input<AutoFocusController>(input);
 }
 
 void AutoFocusController::reduce(r_exec::View *input) {
@@ -340,7 +340,6 @@ void AutoFocusController::reduce(r_exec::View *input) {
         tpx = build_tpx<GTPX>((_Fact *)production, pattern, bm, goal_ratings_, f_ihlp, f_ihlp->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED).asBoolean());
         // jm goals.insert(std::pair<P<Code>,P<TPX> >((_Fact *)production,tpx));
         goals_.insert(std::make_pair((_Fact *)production, tpx));
-        //std::cout<<Utils::RelativeTime(Now())<<" goal focus["<<production->get_oid()<<"]\n";
       } else {
 
         Pred *pred = ((_Fact *)production)->get_pred();
@@ -350,8 +349,6 @@ void AutoFocusController::reduce(r_exec::View *input) {
           tpx = build_tpx<PTPX>((_Fact *)production, pattern, bm, prediction_ratings_, f_ihlp, f_ihlp->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED).asBoolean());
           //predictions.insert(std::pair<P<Code>,P<TPX> >((_Fact *)production,tpx));
           predictions_.insert(std::make_pair((_Fact *)production, tpx));
-
-          //std::cout<<Utils::RelativeTime(Now())<<" pred focus["<<production->get_oid()<<"]\n";
         }
       }
     }

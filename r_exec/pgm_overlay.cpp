@@ -670,10 +670,6 @@ Overlay *PGMOverlay::reduce(r_exec::View *input) {
       if (check_guards() && inject_productions()) {
 
         ((PGMController *)controller_)->notify_reduction();
-        /*std::cout<<std::hex<<this<<std::dec<<" full match:";
-        for(uint16 i=0;i<input_views_.size();++i)
-            std::cout<<" "<<input_views_[i]->object->get_oid();
-        std::cout<<std::endl;*/
         PGMOverlay *offspring = new PGMOverlay(this, input_index, value_commit_index_);
         invalidate();
         return offspring;
@@ -685,10 +681,6 @@ Overlay *PGMOverlay::reduce(r_exec::View *input) {
       }
     } else { // create an overlay in a state where the last input is not matched: this overlay will be able to catch other candidates for the input patterns that have already been matched.
 
-        /*std::cout<<std::hex<<this<<std::dec<<" partial match:";
-        for(uint16 i=0;i<input_views_.size();++i)
-            std::cout<<" "<<input_views_[i]->object->get_oid();
-        std::cout<<std::endl;*/
       PGMOverlay *offspring = new PGMOverlay(this, input_index, value_commit_index_);
       commit();
       if (birth_time_.time_since_epoch().count() == 0)

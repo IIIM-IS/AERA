@@ -117,7 +117,7 @@ public:
       //r_exec::ReductionJob<CorrelatorController> *j=new r_exec::ReductionJob<CorrelatorController>(input,this);
       //r_exec::_Mem::Get()->pushReductionJob(j);once=true;
       reduce(input); once = true;
-    } else {//std::cout<<"input\n";
+    } else {
       correlator->take_input(input); }
   }
 

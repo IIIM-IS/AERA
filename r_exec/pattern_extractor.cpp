@@ -129,7 +129,6 @@ bool TPX::take_input(View *input, _Fact *abstracted_input, BindingMap *bm) {
 }
 
 void TPX::signal(View *input) const { // input->object is f->success or|f->success.
-    //std::cout<<Utils::RelativeTime(Now())<<" "<<input->object->get_reference(0)->get_reference(1)->get_oid()<<": end of focus["<<target->get_oid()<<"]\n";
 }
 
 void TPX::ack_pred_success(_Fact *predicted_f) {
@@ -139,32 +138,29 @@ bool TPX::filter(View *input, _Fact *abstracted_input, BindingMap *bm) {
 
   if (input->object_->get_reference(0)->code(0).asOpcode() == Opcodes::ICst) // if we get an icst we are called by auto_focus::dispatch_no_inject: the input is irrelevant.
     return false;
-  //std::cout<<Utils::RelativeTime(Now())<<" tpx ["<<target->get_oid()<<"] <- "<<input->object->get_oid();
-  if (target_bindings_->intersect(bm)) {//std::cout<<" lvl0"<<std::endl;
+  if (target_bindings_->intersect(bm)) {
     return true; }
   if (target_bindings_->is_fully_specified())
     return false;
   for (uint32 i = 0; i < new_maps_.size(); ++i)
-    if (new_maps_[i]->intersect(bm)) {//std::cout<<" lvl1"<<std::endl;
+    if (new_maps_[i]->intersect(bm)) {
       return true; }
 
   P<BindingMap> _bm = new BindingMap(target_bindings_);
   _bm->reset_fwd_timings(input->object_);
   time_buffer<CInput, CInput::IsInvalidated> &cache = auto_focus_->get_cache();
   if (_bm->match_fwd_strict(input->object_, (_Fact *)target_->get_reference(0)->get_reference(0))) { // both GTPX and PTPX' target are f0->g/p->f1: we need to match on f1.
-//std::cout<<" match";
     new_maps_.push_back(_bm);
     time_buffer<CInput, CInput::IsInvalidated>::iterator i;
     auto now = Now();
     for (i = cache.begin(now); i != cache.end(); ++i) {
 
-      if (i->injected_) {//std::cout<<" ?"<<(*i).input->object->get_oid()<<" ("<<Utils::RelativeTime(i->ijt)<<") skip\n";
+      if (i->injected_) {
         continue; }
       if (_bm->intersect(i->bindings_)) {
         i->injected_ = true;
         auto_focus_->inject_input(i->input_, i->abstraction_, i->bindings_);
-        //std::cout<<" ?"<<(*i).input->object->get_oid()<<" ("<<Utils::RelativeTime(i->ijt)<<") success\n";
-      }//else std::cout<<" ?"<<(*i).input->object->get_oid()<<" ("<<Utils::RelativeTime(i->ijt)<<") failure\n";
+      }
     }
     return true;
   } else {
@@ -181,7 +177,6 @@ bool TPX::filter(View *input, _Fact *abstracted_input, BindingMap *bm) {
         return false;
     }
     cache.push_back(ci);
-    //std::cout<<" cached"<<" ("<<Utils::RelativeTime(input->get_ijt())<<")\n";
     return false;
   }
 }
@@ -1040,7 +1035,6 @@ bool CTPX::build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builde
   P<Code> m0 = build_mdl_head(bm, 3, cause, consequent, write_index, false);
   guard_builder->build(m0, NULL, cause, write_index);
   build_mdl_tail(m0, write_index);
-  //std::cout<<Utils::RelativeTime(Now())<<" found --------------------- M0\n";
   return build_requirement(bm, m0, period); // existence checks performed there.
 }
 
@@ -1107,7 +1101,6 @@ bool CTPX::build_requirement(HLPBindingMap *bm, Code *m0, microseconds period) {
       csts_.push_back(new_cst);
     mdls_.push_back(m1);
   } // if m1 alrady exists, new_cst==NULL.
-  //std::cout<<Utils::RelativeTime(Now()<<" found --------------------- M1\n";
   return true;
 }
 

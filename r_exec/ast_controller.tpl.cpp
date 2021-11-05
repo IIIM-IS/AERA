@@ -116,9 +116,8 @@ template<class U> void ASTController<U>::reduce(View *input) {
     return;
 
   _Fact *input_object = input->object_;
-  if (input_object->is_invalidated()) {//std::cout<<Time::ToString_seconds(Now()-Utils::GetTimeReference())<<" TPX"<<target->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<" got inv data "<<input->object->get_oid()<<std::endl;
+  if (input_object->is_invalidated()) {
     return; }
-  //uint64 t0=Now();
   reductionCS_.enter();
 
   if (input_object == target_) {
@@ -130,11 +129,9 @@ template<class U> void ASTController<U>::reduce(View *input) {
 
   Pred *prediction = input_object->get_pred();
   if (prediction) {
-    //std::cout<<Time::ToString_seconds(Now()-Utils::GetTimeReference())<<" TPX"<<target->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<" got pred "<<prediction->get_target()->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<std::endl;
     switch (prediction->get_target()->is_timeless_evidence(target_)) {
     case MATCH_SUCCESS_POSITIVE:
     case MATCH_SUCCESS_NEGATIVE: // a model predicted the next value of the target.
-        //std::cout<<Time::ToString_seconds(Now()-Utils::GetTimeReference())<<" TPX"<<target->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<" killed\n";
       kill();
       break;
     case MATCH_FAILURE:
@@ -144,12 +141,9 @@ template<class U> void ASTController<U>::reduce(View *input) {
     reductionCS_.leave();
     return;
   }
-  //std::cout<<Time::ToString_seconds(Now()-Utils::GetTimeReference())<<" TPX"<<target->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<" got "<<input->object->get_reference(0)->code(MK_VAL_VALUE).asFloat()<<std::endl;
   ((U *)this)->reduce(input, input_object);
 
   reductionCS_.leave();
-  //uint64 t1=Now();
-  //std::cout<<"ASTC: "<<t1-t0<<std::endl;
 }
 
 template<class U> void ASTController<U>::kill() {

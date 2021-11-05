@@ -101,7 +101,7 @@ template<class C, class U> bool Object<C, U>::invalidate() {
 
   if (invalidated_)
     return true;
-  invalidated_ = 1;//std::cout<<std::dec<<get_oid()<<" invalidated\n";
+  invalidated_ = 1;
 
   acq_views();
   views_.clear();

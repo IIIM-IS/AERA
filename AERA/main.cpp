@@ -175,33 +175,7 @@ void test_injection(r_exec::_Mem *mem, float32 n) {
 
   auto t1 = r_exec::Now();
   auto t2 = t1 - t0;
-  std::cout << "for-loop total time: " << duration_cast<microseconds>(t2).count() << std::endl;
-  /* uint64 acc=0;
-      for(uint32 i=0;i<n;++i){
-          acc+=v1[i];
-          std::cout<<v1[i]<<'\t';
-      }
-      std::cout<<"\nfor-loop accumulated time make_object: "<<acc<< std::endl;
-      acc=0;
-      for(uint32 i=0;i<n;++i){
-          acc+=v2[i];
-  // std::cout<<v2[i]<<'/'<<mem->timings_report[i]<<'\t';
-          std::cout<<v2[i]<<'\t';
-      }
-      std::cout<<"\nfor-loop accumulated time new Fact   : "<<acc<< std::endl;
-      acc=0;
-      for(uint32 i=0;i<n;++i){
-          acc+=v3[i];
-          std::cout<<v3[i]<<'\t';
-      }
-      std::cout<<"\nfor-loop accumulated time build_view : "<<acc<< std::endl;
-      acc=0;
-      for(uint32 i=0;i<n;++i){
-          acc+=v4[i];
-          std::cout<<v4[i]<<'\t';
-      }
-      std::cout<<"\nfor-loop accumulated time mem->inject: "<<acc<< std::endl;
-  */
+  cout << "for-loop total time: " << duration_cast<microseconds>(t2).count() << std::endl;
 }
 
 void test_many_injections(r_exec::_Mem *mem, milliseconds sampling_period, uint32 nRuns, float32 nObjects) {
@@ -450,7 +424,6 @@ int32 main(int argc, char **argv) {
           decompile(decompiler, image, starting_time.time_since_epoch(), settings.ignore_named_objects_);
       }
       delete image;
-      //std::cout<<"get_image(): "<<probe.us()<<"us"<<std::endl;
     }
 
     if (settings.get_models_) {
@@ -479,7 +452,6 @@ int32 main(int argc, char **argv) {
           decompile(decompiler, image, starting_time.time_since_epoch(), settings.ignore_named_models_);
       }
       delete image;
-      //std::cout<<"get_models(): "<<probe.us()<<"us"<<std::endl;
     }
     delete mem;
 
