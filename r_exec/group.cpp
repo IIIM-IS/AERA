@@ -104,7 +104,7 @@ inline bool Group::is_eligible_input(View *view) {
 
 View *Group::get_view(uint32 OID) {
 
-  UNORDERED_MAP<uint32, P<View> >::const_iterator it = other_views_.find(OID);
+  unordered_map<uint32, P<View> >::const_iterator it = other_views_.find(OID);
   if (it != other_views_.end())
     return it->second;
   it = group_views_.find(OID);
@@ -1146,7 +1146,7 @@ void Group::inject_reduction_jobs(View *view) { // group is assumed to be c-sali
   // build reduction jobs from host's own inputs and overlays from viewing groups, if no cov and view is not a notification.
   // NB: visibility is not transitive;
   // no shadowing: if a view already exists in the viewing group, there will be twice the reductions: all of the identicals will be trimmed down at injection time.
-  UNORDERED_MAP<Group *, bool>::const_iterator vg;
+  unordered_map<Group *, bool>::const_iterator vg;
   for (vg = viewing_groups_.begin(); vg != viewing_groups_.end(); ++vg) {
 
     if (vg->second || view->is_notification()) // no reduction jobs when cov==true or view is a notification.
@@ -1173,7 +1173,7 @@ void Group::notifyNew(View *view) {
 
 void Group::cov(View *view) {
 
-  UNORDERED_MAP<Group *, bool>::const_iterator vg;
+  unordered_map<Group *, bool>::const_iterator vg;
   for (vg = viewing_groups_.begin(); vg != viewing_groups_.end(); ++vg) {
 
     if (vg->second) // cov==true, viewing group c-salient and c-active (otherwise it wouldn't be a viewing group).
@@ -1185,7 +1185,7 @@ void Group::cov() {
 
   // cov, i.e. injecting now newly salient views in the viewing groups from which the group is visible and has cov.
   // reduction jobs will be added at each of the eligible viewing groups' own update time.
-  UNORDERED_MAP<Group *, bool>::const_iterator vg;
+  unordered_map<Group *, bool>::const_iterator vg;
   for (vg = viewing_groups_.begin(); vg != viewing_groups_.end(); ++vg) {
 
     if (vg->second) { // cov==true.
@@ -1242,7 +1242,7 @@ void Group::delete_view(View *v) {
   }
 }
 
-void Group::delete_view(UNORDERED_MAP<uint32, P<View> >::const_iterator &v) {
+void Group::delete_view(unordered_map<uint32, P<View> >::const_iterator &v) {
 
   if (v->second->is_notification())
     v = notification_views_.erase(v);

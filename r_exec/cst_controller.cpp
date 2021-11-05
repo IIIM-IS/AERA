@@ -147,7 +147,7 @@ _Fact* CSTOverlay::inject_production(View* input) {
 
       Pred *prediction = new Pred(f_icst, 1);
       Fact *f_p_f_icst = new Fact(prediction, now, now, 1, 1);
-      UNORDERED_SET<P<_Fact>, PHash<_Fact> >::const_iterator pred;
+      unordered_set<P<_Fact>, PHash<_Fact> >::const_iterator pred;
       for (pred = predictions_.begin(); pred != predictions_.end(); ++pred) // add antecedents to the prediction.
         prediction->grounds_.push_back(*pred);
       if (!((CSTController *)controller_)->inject_prediction(f_p_f_icst, lowest_cfd_, time_to_live)) // inject a f->pred->icst in the primary group, no rdx.

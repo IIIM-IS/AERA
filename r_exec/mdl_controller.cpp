@@ -2362,7 +2362,7 @@ void PrimaryMDLController::register_req_outcome(Fact *f_pred, bool success, bool
     rate_model(false);
 
   active_requirementsCS_.enter();
-  UNORDERED_MAP<P<_Fact>, RequirementsPair, PHash<_Fact> >::const_iterator r = active_requirements_.find(f_pred);
+  unordered_map<P<_Fact>, RequirementsPair, PHash<_Fact> >::const_iterator r = active_requirements_.find(f_pred);
   if (r != active_requirements_.end()) { // some requirements were controlling the prediction: give feedback.
 
     for (auto c = r->second.weak_requirements_.controllers.begin(); c != r->second.weak_requirements_.controllers.end(); ++c) {
@@ -2816,7 +2816,7 @@ void SecondaryMDLController::register_req_outcome(Fact *f_imdl, bool success, bo
     rate_model();
 
     active_requirementsCS_.enter();
-    UNORDERED_MAP<P<_Fact>, RequirementsPair, PHash<_Fact> >::const_iterator r = active_requirements_.find(f_imdl);
+    unordered_map<P<_Fact>, RequirementsPair, PHash<_Fact> >::const_iterator r = active_requirements_.find(f_imdl);
     if (r != active_requirements_.end()) { // some requirements were controlling the prediction: give feedback.
 
       for (auto c = r->second.weak_requirements_.controllers.begin(); c != r->second.weak_requirements_.controllers.end(); ++c) {

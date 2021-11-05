@@ -125,12 +125,12 @@ private:
     }
   };
 
-  typedef UNORDERED_MAP<P<_Fact>, P<TPX>, r_code::PHash<_Fact> > TPXMap;
+  typedef std::unordered_map<P<_Fact>, P<TPX>, r_code::PHash<_Fact> > TPXMap;
 
   TPXMap goals_; // f->g->f->target.
   TPXMap predictions_; // f->p->f->target.
 
-  typedef UNORDERED_MAP<P<_Fact>, Rating, r_code::PHash<_Fact> > RatingMap;
+  typedef std::unordered_map<P<_Fact>, Rating, r_code::PHash<_Fact> > RatingMap;
 
   // entries are patterns, i.e. abstract targets.
   RatingMap goal_ratings_;

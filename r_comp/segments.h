@@ -78,6 +78,7 @@
 #ifndef segments_h
 #define segments_h
 
+#include <unordered_map>
 #include "../r_code/object.h"
 #include "../r_code/list.h"
 
@@ -109,8 +110,8 @@ private:
 public:
   Metadata();
 
-  UNORDERED_MAP<std::string, Class> classes_; // non-sys classes, operators and device functions.
-  UNORDERED_MAP<std::string, Class> sys_classes_;
+  std::unordered_map<std::string, Class> classes_; // non-sys classes, operators and device functions.
+  std::unordered_map<std::string, Class> sys_classes_;
 
   r_code::vector<std::string> class_names_; // classes and sys-classes; does not include set classes.
   r_code::vector<std::string> operator_names_;
@@ -149,7 +150,7 @@ public:
 
 class dll_export ObjectNames {
 public:
-  UNORDERED_MAP<uint32, std::string> symbols_; // indexed by objects' OIDs.
+  std::unordered_map<uint32, std::string> symbols_; // indexed by objects' OIDs.
 
   ~ObjectNames();
 
@@ -168,7 +169,7 @@ public:
 class dll_export Image {
 private:
   uint32 map_offset_;
-  UNORDERED_MAP<r_code::Code *, uint16> ptrs_to_indices_; // used for injection in memory.
+  std::unordered_map<r_code::Code *, uint16> ptrs_to_indices_; // used for injection in memory.
 
   void add_object(r_code::Code *object, bool include_invalidated);
   r_code::SysObject *add_object(r_code::Code *object, std::vector<r_code::SysObject *> &imported_objects);

@@ -80,6 +80,7 @@
 
 #include <ostream>
 #include <sstream>
+#include <unordered_set>
 #include "atom.h"
 #include "vector.h"
 #include "list.h"
@@ -253,7 +254,7 @@ public:
   virtual bool invalidate() { return false; }
 
   r_code::list<Code *> markers_;
-  UNORDERED_SET<_View *, _View::Hash, _View::Equal> views_; // indexed by groups.
+  std::unordered_set<_View *, _View::Hash, _View::Equal> views_; // indexed by groups.
 
   virtual _View *build_view(SysView *source) = 0;
 

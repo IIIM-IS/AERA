@@ -329,7 +329,7 @@ bool Compiler::read(const StructureMember &m, bool &indented, bool enforce, uint
 
 bool Compiler::getGlobalReferenceIndex(const std::string reference_name, const ReturnType t, ImageObject *object, uint16 &index, Class *&_class) {
 
-  UNORDERED_MAP<std::string, Reference>::iterator it = global_references_.find(reference_name);
+  unordered_map<std::string, Reference>::iterator it = global_references_.find(reference_name);
   if (it != global_references_.end() && (t == ANY || (t != ANY && it->second.class_.type == t))) {
 
     _class = &it->second.class_;
@@ -355,7 +355,7 @@ void Compiler::addLocalReference(const std::string reference_name, const uint16 
     std::string class_name = reference_name.substr(pos + 1);
     std::string ref_name = reference_name.substr(0, pos);
 
-    UNORDERED_MAP<std::string, Class>::iterator it = metadata_->classes_.find(class_name);
+    unordered_map<std::string, Class>::iterator it = metadata_->classes_.find(class_name);
     if (it != metadata_->classes_.end())
       local_references_[ref_name] = Reference(index, p, it->second);
     else
@@ -901,7 +901,7 @@ bool Compiler::local_reference(uint16 &index, const ReturnType t) {
   std::string r;
   if (symbol_expr_set(r)) {
 
-    UNORDERED_MAP<std::string, Reference>::iterator it = local_references_.find(r);
+    unordered_map<std::string, Reference>::iterator it = local_references_.find(r);
     if (it != local_references_.end() && (t == ANY || it->second.class_.type == ANY || (t != ANY && it->second.class_.type == t))) {
 
       index = it->second.index_;
@@ -1027,7 +1027,7 @@ bool Compiler::local_indirection(std::vector<int16> &v, const ReturnType t, uint
 
     uint16 index;
     ReturnType type;
-    UNORDERED_MAP<std::string, Reference>::iterator it = local_references_.find(m);
+    unordered_map<std::string, Reference>::iterator it = local_references_.find(m);
     if (it != local_references_.end()) {
 
       index = it->second.index_;
@@ -1392,7 +1392,7 @@ bool Compiler::object(Class &p) {
       return false;
     }
   }
-  UNORDERED_MAP<std::string, Class>::const_iterator it = metadata_->classes_.find(s);
+  unordered_map<std::string, Class>::const_iterator it = metadata_->classes_.find(s);
   if (it == metadata_->classes_.end()) {
 
     in_stream_->seekg(i);
@@ -1429,7 +1429,7 @@ bool Compiler::sys_object(Class &p) {
       return false;
     }
   }
-  UNORDERED_MAP<std::string, Class>::const_iterator it = metadata_->sys_classes_.find(s);
+  unordered_map<std::string, Class>::const_iterator it = metadata_->sys_classes_.find(s);
   if (it == metadata_->sys_classes_.end()) {
 
     in_stream_->seekg(i);
@@ -1470,7 +1470,7 @@ bool Compiler::marker(Class &p) {
       return false;
     }
   }
-  UNORDERED_MAP<std::string, Class>::const_iterator it = metadata_->sys_classes_.find("mk." + s);
+  unordered_map<std::string, Class>::const_iterator it = metadata_->sys_classes_.find("mk." + s);
   if (it == metadata_->sys_classes_.end()) {
 
     in_stream_->seekg(i);
@@ -1489,7 +1489,7 @@ bool Compiler::op(Class &p, const ReturnType t) { // return true if type matches
     in_stream_->seekg(i);
     return false;
   }
-  UNORDERED_MAP<std::string, Class>::const_iterator it = metadata_->classes_.find(s);
+  unordered_map<std::string, Class>::const_iterator it = metadata_->classes_.find(s);
   if (it == metadata_->classes_.end() || (t != ANY && it->second.type != ANY && it->second.type != t)) {
 
     in_stream_->seekg(i);
@@ -1519,7 +1519,7 @@ bool Compiler::function(Class &p) {
     in_stream_->seekg(i);
     return false;
   }
-  UNORDERED_MAP<std::string, Class>::const_iterator it = metadata_->classes_.find(s);
+  unordered_map<std::string, Class>::const_iterator it = metadata_->classes_.find(s);
   if (it == metadata_->classes_.end()) {
 
     in_stream_->seekg(i);
@@ -2647,7 +2647,7 @@ bool Compiler::read_tail_wildcard(uint16 write_index, uint16 &extent_index, bool
 
 std::string Compiler::getObjectName(const uint16 index) const {
 
-  UNORDERED_MAP<std::string, Reference>::const_iterator r;
+  unordered_map<std::string, Reference>::const_iterator r;
   for (r = global_references_.begin(); r != global_references_.end(); ++r) {
 
     if (r->second.index_ == index)

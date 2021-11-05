@@ -76,10 +76,11 @@
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 #include "callbacks.h"
 
+using namespace std;
 
 namespace r_exec {
 
-UNORDERED_MAP<std::string, Callbacks::Callback> Callbacks::Callbacks_;
+unordered_map<std::string, Callbacks::Callback> Callbacks::Callbacks_;
 
 void Callbacks::Register(std::string &callback_name, Callback callback) {
 
@@ -88,7 +89,7 @@ void Callbacks::Register(std::string &callback_name, Callback callback) {
 
 Callbacks::Callback Callbacks::Get(std::string &callback_name) {
 
-  UNORDERED_MAP<std::string, Callback>::const_iterator it = Callbacks_.find(callback_name);
+  unordered_map<std::string, Callback>::const_iterator it = Callbacks_.find(callback_name);
   if (it != Callbacks_.end())
     return it->second;
   return NULL;

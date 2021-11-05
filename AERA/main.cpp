@@ -389,7 +389,7 @@ int32 main(int argc, char **argv) {
     std::string stdout_symbol("stdout");
     uint32 self_oid;
     std::string self_symbol("self");
-    UNORDERED_MAP<uint32, std::string>::const_iterator n;
+    unordered_map<uint32, std::string>::const_iterator n;
     for (n = r_exec::Seed.object_names_.symbols_.begin(); n != r_exec::Seed.object_names_.symbols_.end(); ++n) {
 
       if (n->second == stdin_symbol)

@@ -89,8 +89,8 @@ class RepliMacro;
 class RepliCondition;
 class RepliStruct {
 public:
-  static UNORDERED_MAP<std::string, RepliMacro *> RepliMacros_;
-  static UNORDERED_MAP<std::string, int32> Counters_;
+  static std::unordered_map<std::string, RepliMacro *> RepliMacros_;
+  static std::unordered_map<std::string, int32> Counters_;
   static std::list<RepliCondition *> Conditions_;
   static uint32 GlobalLine_;
   static std::vector<std::string> LoadedFilePaths_;
@@ -167,7 +167,7 @@ public:
   RepliCondition(const std::string &name, bool reversed);
   ~RepliCondition();
   bool reverse();
-  bool isActive(UNORDERED_MAP<std::string, RepliMacro*> &repliMacros, UNORDERED_MAP<std::string, int32> &counters);
+  bool isActive(std::unordered_map<std::string, RepliMacro*> &repliMacros, std::unordered_map<std::string, int32> &counters);
 };
 
 class dll_export Preprocessor {
@@ -179,7 +179,7 @@ private:
   }ClassType;
   Metadata *metadata_;
   uint16 class_opcode_; // shared with sys_classes_
-  UNORDERED_MAP<std::string, RepliStruct *> template_classes_;
+  std::unordered_map<std::string, RepliStruct *> template_classes_;
   void instantiateClass(RepliStruct *tpl_class, std::list<RepliStruct *> &tpl_args, std::string &instantiated_class_name);
   bool isSet(std::string class_name);
   bool isTemplateClass(RepliStruct *s);

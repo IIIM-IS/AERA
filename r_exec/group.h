@@ -79,6 +79,7 @@
 #define group_h
 
 #include <set>
+#include <unordered_map>
 
 #include "../submodules/CoreLibrary/CoreLibrary/utils.h"
 #include "object.h"
@@ -177,18 +178,18 @@ private:
 public:
   // xxx_views are meant for erasing views with res==0. They are specialized by type to ease update operations.
   // Active overlays are to be found in xxx_ipgm_views.
-  UNORDERED_MAP<uint32, P<View> > ipgm_views_;
-  UNORDERED_MAP<uint32, P<View> > anti_ipgm_views_;
-  UNORDERED_MAP<uint32, P<View> > input_less_ipgm_views_;
-  UNORDERED_MAP<uint32, P<View> > notification_views_;
-  UNORDERED_MAP<uint32, P<View> > group_views_;
-  UNORDERED_MAP<uint32, P<View> > other_views_;
+  std::unordered_map<uint32, P<View> > ipgm_views_;
+  std::unordered_map<uint32, P<View> > anti_ipgm_views_;
+  std::unordered_map<uint32, P<View> > input_less_ipgm_views_;
+  std::unordered_map<uint32, P<View> > notification_views_;
+  std::unordered_map<uint32, P<View> > group_views_;
+  std::unordered_map<uint32, P<View> > other_views_;
 
   // Defined to create reduction jobs in the viewing groups from the viewed group.
   // Empty when the viewed group is invisible (this means that visible groups can be non c-active or non c-salient).
   // Maintained by the viewing groups (at update time).
   // Viewing groups are c-active and c-salient. the bool is the cov.
-  UNORDERED_MAP<Group *, bool> viewing_groups_;
+  std::unordered_map<Group *, bool> viewing_groups_;
 
   // Populated within update; ordered by increasing ijt; cleared at the beginning of update.
   std::multiset<P<View>, r_code::_View::Less> newly_salient_views_;
@@ -245,7 +246,7 @@ public:
 
   bool invalidate(); // removes all views of itself and of any other object.
 
-  bool all_views_cond(uint8 &selector, UNORDERED_MAP<uint32, P<View> >::const_iterator &it, UNORDERED_MAP<uint32, P<View> >::const_iterator &end) {
+  bool all_views_cond(uint8 &selector, std::unordered_map<uint32, P<View> >::const_iterator &it, std::unordered_map<uint32, P<View> >::const_iterator &end) {
     while (it == end) {
       switch (selector++) {
       case 0:
@@ -278,20 +279,20 @@ public:
 
 #define FOR_ALL_VIEWS_BEGIN(g,it) { \
     uint8 selector; \
-    UNORDERED_MAP<uint32,P<View> >::const_iterator it=g->ipgm_views_.begin(); \
-    UNORDERED_MAP<uint32,P<View> >::const_iterator end=g->ipgm_views_.end(); \
+    std::unordered_map<uint32,P<View> >::const_iterator it=g->ipgm_views_.begin(); \
+    std::unordered_map<uint32,P<View> >::const_iterator end=g->ipgm_views_.end(); \
     for(selector=0;g->all_views_cond(selector,it,end);++it){
 
 #define FOR_ALL_VIEWS_BEGIN_NO_INC(g,it) { \
     uint8 selector; \
-    UNORDERED_MAP<uint32,P<View> >::const_iterator it=g->ipgm_views_.begin(); \
-    UNORDERED_MAP<uint32,P<View> >::const_iterator end=g->ipgm_views_.end(); \
+    std::unordered_map<uint32,P<View> >::const_iterator it=g->ipgm_views_.begin(); \
+    std::unordered_map<uint32,P<View> >::const_iterator end=g->ipgm_views_.end(); \
     for(selector=0;g->all_views_cond(selector,it,end);){
 
 #define FOR_ALL_VIEWS_END } \
   }
 
-  bool views_with_inputs_cond(uint8 &selector, UNORDERED_MAP<uint32, P<View> >::const_iterator &it, UNORDERED_MAP<uint32, P<View> >::const_iterator &end) {
+  bool views_with_inputs_cond(uint8 &selector, std::unordered_map<uint32, P<View> >::const_iterator &it, std::unordered_map<uint32, P<View> >::const_iterator &end) {
     while (it == end) {
       switch (selector++) {
       case 0:
@@ -308,14 +309,14 @@ public:
 
 #define FOR_ALL_VIEWS_WITH_INPUTS_BEGIN(g,it) { \
     uint8 selector; \
-    UNORDERED_MAP<uint32,P<View> >::const_iterator it=g->ipgm_views_.begin(); \
-    UNORDERED_MAP<uint32,P<View> >::const_iterator end=g->ipgm_views_.end(); \
+    std::unordered_map<uint32,P<View> >::const_iterator it=g->ipgm_views_.begin(); \
+    std::unordered_map<uint32,P<View> >::const_iterator end=g->ipgm_views_.end(); \
     for(selector=0;g->views_with_inputs_cond(selector,it,end);++it){
 
 #define FOR_ALL_VIEWS_WITH_INPUTS_END } \
   }
 
-  bool non_ntf_views_cond(uint8 &selector, UNORDERED_MAP<uint32, P<View> >::const_iterator &it, UNORDERED_MAP<uint32, P<View> >::const_iterator &end) {
+  bool non_ntf_views_cond(uint8 &selector, std::unordered_map<uint32, P<View> >::const_iterator &it, std::unordered_map<uint32, P<View> >::const_iterator &end) {
     while (it == end) {
       switch (selector++) {
       case 0:
@@ -344,8 +345,8 @@ public:
 
 #define FOR_ALL_NON_NTF_VIEWS_BEGIN(g,it) { \
     uint8 selector; \
-    UNORDERED_MAP<uint32,P<View> >::const_iterator it=g->ipgm_views_.begin(); \
-    UNORDERED_MAP<uint32,P<View> >::const_iterator end=g->ipgm_views_.end(); \
+    std::unordered_map<uint32,P<View> >::const_iterator it=g->ipgm_views_.begin(); \
+    std::unordered_map<uint32,P<View> >::const_iterator end=g->ipgm_views_.end(); \
     for(selector=0;g->non_ntf_views_cond(selector,it,end);++it){
 
 #define FOR_ALL_NON_NTF_VIEWS_END } \
@@ -464,7 +465,7 @@ public:
   };
 
   void delete_view(View *v);
-  void delete_view(UNORDERED_MAP<uint32, P<View> >::const_iterator &v);
+  void delete_view(std::unordered_map<uint32, P<View> >::const_iterator &v);
 
   Group *get_secondary_group();
   void load_secondary_mdl_controller(View *view);

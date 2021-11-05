@@ -78,6 +78,7 @@
 #ifndef class_h
 #define class_h
 
+#include <vector>
 #include "structure_member.h"
 
 

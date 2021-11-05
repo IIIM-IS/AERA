@@ -80,6 +80,7 @@
 
 #include <iostream>
 
+using namespace std;
 
 namespace r_code {
 
@@ -170,7 +171,7 @@ SysObject::SysObject(Code *source) {
   for (i = 0; i < source->code_size(); ++i)
     code_[i] = source->code(i);
 
-  UNORDERED_SET<_View *, _View::Hash, _View::Equal>::const_iterator v;
+  unordered_set<_View *, _View::Hash, _View::Equal>::const_iterator v;
   source->acq_views();
   for (i = 0, v = source->views_.begin(); v != source->views_.end(); ++i, ++v)
     views_[i] = new SysView(*v);

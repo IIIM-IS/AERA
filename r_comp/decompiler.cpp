@@ -113,7 +113,7 @@ Decompiler::~Decompiler() {
 
 std::string Decompiler::get_variable_name(uint16 index, bool postfix) {
 
-  UNORDERED_MAP<uint16, std::string>::iterator it = variable_names_.find(index);
+  unordered_map<uint16, std::string>::iterator it = variable_names_.find(index);
   if (it == variable_names_.end()) {
 
     std::string s = "v" + std::to_string(last_variable_id_++);
@@ -139,7 +139,7 @@ std::string Decompiler::get_hlp_variable_name(uint16 index) {
 std::string Decompiler::get_object_name(uint16 index) {
 
   std::string s;
-  UNORDERED_MAP<uint16, std::string>::iterator it = object_names_.find(index);
+  unordered_map<uint16, std::string>::iterator it = object_names_.find(index);
   if (it == object_names_.end()) {
 
     s = "unknown-object";
@@ -214,7 +214,7 @@ uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, T
   return object_count;
 }
 
-uint32 Decompiler::decompile_references(r_comp::Image *image, UNORDERED_MAP<uint16, std::string>* object_names) {
+uint32 Decompiler::decompile_references(r_comp::Image *image, unordered_map<uint16, std::string>* object_names) {
 
   if (object_names) {
     // Pre-populate object_names_ and object_indices_.
@@ -224,8 +224,8 @@ uint32 Decompiler::decompile_references(r_comp::Image *image, UNORDERED_MAP<uint
     }
   }
 
-  UNORDERED_MAP<const Class *, uint16> object_ID_per_class;
-  UNORDERED_MAP<std::string, Class>::const_iterator it;
+  unordered_map<const Class *, uint16> object_ID_per_class;
+  unordered_map<std::string, Class>::const_iterator it;
   for (it = metadata_->sys_classes_.begin(); it != metadata_->sys_classes_.end(); ++it)
     object_ID_per_class[&(it->second)] = 0;
 
@@ -238,7 +238,7 @@ uint32 Decompiler::decompile_references(r_comp::Image *image, UNORDERED_MAP<uint
   for (uint16 i = 0; i < image->code_segment_.objects_.size(); ++i) {
 
     SysObject *sys_object = (SysObject *)image->code_segment_.objects_[i];
-    UNORDERED_MAP<uint32, std::string>::const_iterator n = image->object_names_.symbols_.find(sys_object->oid_);
+    unordered_map<uint32, std::string>::const_iterator n = image->object_names_.symbols_.find(sys_object->oid_);
     if (n != image->object_names_.symbols_.end()) {
 
       s = n->second;
@@ -259,7 +259,7 @@ uint32 Decompiler::decompile_references(r_comp::Image *image, UNORDERED_MAP<uint
   for (uint16 i = 0; i < image->code_segment_.objects_.size(); ++i) {
     SysObject *sys_object = (SysObject *)image->code_segment_.objects_[i];
 
-    UNORDERED_MAP<uint32, std::string>::const_iterator n = image->object_names_.symbols_.find(sys_object->oid_);
+    unordered_map<uint32, std::string>::const_iterator n = image->object_names_.symbols_.find(sys_object->oid_);
     if (n != image->object_names_.symbols_.end())
       // Already set the user-defined name in the first pass.
       continue;

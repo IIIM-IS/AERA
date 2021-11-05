@@ -78,6 +78,7 @@
 #ifndef r_code_list_h
 #define r_code_list_h
 
+#include <vector>
 #include "../submodules/CoreLibrary/CoreLibrary/types.h"
 
 

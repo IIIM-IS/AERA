@@ -128,7 +128,7 @@ private:
     };
   };
 
-  typedef UNORDERED_SET<MEntry, typename MEntry::Hash, typename MEntry::Equal> MdlSet;
+  typedef std::unordered_set<MEntry, typename MEntry::Hash, typename MEntry::Equal> MdlSet;
 
   MdlSet black_list_; // mdls are already packed when inserted (they come from the white list).
   MdlSet white_list_; // mdls are packed just before insertion.

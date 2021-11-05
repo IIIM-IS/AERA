@@ -80,7 +80,9 @@
 
 #include <iostream>
 #include <set>
+#include <unordered_map>
 
+using namespace std;
 using namespace std::chrono;
 
 namespace r_code {
@@ -185,10 +187,10 @@ void Atom::TraceContext::write_indents(std::ostream& out) {
 }
 
 // These are filled by r_exec::Init().
-UNORDERED_MAP<uint16, std::set<std::string>> OpcodeNames;
+unordered_map<uint16, std::set<std::string>> OpcodeNames;
 
 std::string GetOpcodeName(uint16 opcode) {
-  UNORDERED_MAP<uint16, std::set<std::string>>::iterator names =
+  unordered_map<uint16, std::set<std::string>>::iterator names =
     OpcodeNames.find(opcode);
   if (names == OpcodeNames.end())
     return "unknown";
@@ -205,7 +207,7 @@ std::string GetOpcodeName(uint16 opcode) {
 }
 
 void AddOpcodeName(uint16 opcode, const char* name) {
-  UNORDERED_MAP<uint16, std::set<std::string>>::iterator it =
+  unordered_map<uint16, std::set<std::string>>::iterator it =
     OpcodeNames.find(opcode);
   if (it == OpcodeNames.end())
     // No existing entry for the opcode.

@@ -166,7 +166,7 @@ int32 main(int argc, char **argv) {
   // Second, filter objects: retain only those which are actual inputs in stdin and store them in a time-ordered list.
   uint32 stdin_oid;
   std::string stdin_str("stdin");
-  UNORDERED_MAP<uint32, std::string>::const_iterator n;
+  unordered_map<uint32, std::string>::const_iterator n;
   for (n = _i->object_names_.symbols_.begin(); n != _i->object_names_.symbols_.end(); ++n)
     if (n->second == stdin_str) {
 
@@ -181,7 +181,7 @@ int32 main(int argc, char **argv) {
     if (object->code(0).asOpcode() == r_exec::Opcodes::IPgm)
       continue;
 
-    UNORDERED_SET<_View *, _View::Hash, _View::Equal>::const_iterator v;
+    unordered_set<_View *, _View::Hash, _View::Equal>::const_iterator v;
     for (v = object->views_.begin(); v != object->views_.end(); ++v) {
 
       if (!(*v)->references_[0])

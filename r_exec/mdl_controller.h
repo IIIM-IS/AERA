@@ -225,7 +225,7 @@ protected:
   float32 get_success_rate() const;
 
   CriticalSection active_requirementsCS_;
-  UNORDERED_MAP<P<_Fact>, RequirementsPair, r_code::PHash<_Fact> > active_requirements_; // Key: P<_Fact>: f1 as in f0->pred->f1->imdl; Value:requirements having allowed the production of prediction.
+  std::unordered_map<P<_Fact>, RequirementsPair, r_code::PHash<_Fact> > active_requirements_; // Key: P<_Fact>: f1 as in f0->pred->f1->imdl; Value:requirements having allowed the production of prediction.
 
   /**
    * A DefeasibleWeakRequirement holds the weak requirement which is the ground for a defeasible

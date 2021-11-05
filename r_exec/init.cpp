@@ -99,7 +99,7 @@ dll_export Timestamp (*Now)();
 dll_export r_comp::Metadata Metadata;
 dll_export r_comp::Image Seed;
 
-UNORDERED_MAP<std::string, uint16> _Opcodes;
+unordered_map<std::string, uint16> _Opcodes;
 
 dll_export r_comp::Compiler Compiler;
 r_exec_dll r_comp::Preprocessor Preprocessor;
@@ -337,7 +337,7 @@ uint16 RetrieveOpcode(const char *name) {
 }
 
 void InitOpcodes(const r_comp::Metadata& metadata) {
-  UNORDERED_MAP<std::string, r_comp::Class>::const_iterator it;
+  unordered_map<std::string, r_comp::Class>::const_iterator it;
   for (it = metadata.classes_.begin(); it != metadata.classes_.end(); ++it) {
 
     _Opcodes[it->first] = it->second.atom_.asOpcode();
@@ -494,7 +494,7 @@ bool Init(const char *user_operator_library_path,
     memset(op_name, 0, 256);
     GetOperatorName(op_name);
 
-    UNORDERED_MAP<std::string, uint16>::iterator it = _Opcodes.find(op_name);
+    unordered_map<std::string, uint16>::iterator it = _Opcodes.find(op_name);
     if (it == _Opcodes.end()) {
 
       std::cerr << "Operator " << op_name << " is undefined" << std::endl;
@@ -597,7 +597,7 @@ bool Init(const char *user_operator_library_path,
 
 uint16 GetOpcode(const char *name) {
 
-  UNORDERED_MAP<std::string, uint16>::iterator it = _Opcodes.find(name);
+  unordered_map<std::string, uint16>::iterator it = _Opcodes.find(name);
   if (it == _Opcodes.end())
     return 0xFFFF;
   return it->second;

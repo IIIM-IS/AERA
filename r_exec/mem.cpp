@@ -360,7 +360,7 @@ bool _Mem::load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 s
       break;
     }
 
-    UNORDERED_SET<_View *, _View::Hash, _View::Equal>::const_iterator v;
+    unordered_set<_View *, _View::Hash, _View::Equal>::const_iterator v;
     for (v = object->views_.begin(); v != object->views_.end(); ++v) {
 
       // init hosts' member_set.
@@ -457,7 +457,7 @@ Timestamp _Mem::start() {
 
       if (c_active) {
 
-        UNORDERED_MAP<uint32, P<View> >::const_iterator v;
+        unordered_map<uint32, P<View> >::const_iterator v;
 
         // build signaling jobs for active input-less overlays.
         for (v = g->input_less_ipgm_views_.begin(); v != g->input_less_ipgm_views_.end(); ++v) {
@@ -1021,7 +1021,7 @@ void _Mem::propagate_sln(Code *object, float32 change, float32 source_sln_thr) {
     return;
   }
 
-  UNORDERED_SET<_View *, _View::Hash, _View::Equal>::const_iterator it;
+  unordered_set<_View *, _View::Hash, _View::Equal>::const_iterator it;
   for (it = object->views_.begin(); it != object->views_.end(); ++it) {
 
     float32 morphed_sln_change = View::MorphChange(change, source_sln_thr, ((View*)*it)->get_host()->get_sln_thr());

@@ -167,7 +167,7 @@ template<class C, class U> View *Object<C, U>::get_view(r_code::Code *group, boo
   r_code::_View probe;
   probe.references_[0] = group;
 
-  UNORDERED_SET<r_code::_View *, r_code::_View::Hash, r_code::_View::Equal>::const_iterator v = views_.find(&probe);
+  std::unordered_set<r_code::_View *, r_code::_View::Hash, r_code::_View::Equal>::const_iterator v = views_.find(&probe);
   if (v != views_.end()) {
 
     if (lock)

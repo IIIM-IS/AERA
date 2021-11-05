@@ -102,7 +102,7 @@ inline bool Group::invalidate() {
     return true;
 
   // unregister from all groups it views.
-  UNORDERED_MAP<uint32, P<View> >::const_iterator gv;
+  std::unordered_map<uint32, P<View> >::const_iterator gv;
   for (gv = group_views_.begin(); gv != group_views_.end(); ++gv) {
 
     ((Group *)gv->second->object_)->enter();

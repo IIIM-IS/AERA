@@ -77,10 +77,11 @@
 
 #include "cpp_programs.h"
 
+using namespace std;
 
 namespace r_exec {
 
-UNORDERED_MAP<std::string, CPPPrograms::Program> CPPPrograms::Programs_;
+unordered_map<std::string, CPPPrograms::Program> CPPPrograms::Programs_;
 
 void CPPPrograms::Register(const std::string &pgm_name, Program pgm) {
 
@@ -89,7 +90,7 @@ void CPPPrograms::Register(const std::string &pgm_name, Program pgm) {
 
 CPPPrograms::Program CPPPrograms::Get(const std::string &pgm_name) {
 
-  UNORDERED_MAP<std::string, Program>::const_iterator it = Programs_.find(pgm_name);
+  unordered_map<std::string, Program>::const_iterator it = Programs_.find(pgm_name);
   if (it != Programs_.end())
     return it->second;
   return NULL;

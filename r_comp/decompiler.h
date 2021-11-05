@@ -103,13 +103,13 @@ private:
 
   std::chrono::microseconds time_offset_; // 0 means no offset.
 
-  UNORDERED_MAP<uint16, std::string> variable_names_; // in the form vxxx where xxx is an integer representing the order of referencing of the variable/label in the code.
+  std::unordered_map<uint16, std::string> variable_names_; // in the form vxxx where xxx is an integer representing the order of referencing of the variable/label in the code.
   uint16 last_variable_id_;
   std::string get_variable_name(uint16 index, bool postfix); // associates iptr/vptr indexes to names; inserts them in out_stream_ if necessary; when postfix==true, a trailing ':' is added.
   std::string get_hlp_variable_name(uint16 index);
 
-  UNORDERED_MAP<uint16, std::string> object_names_; // in the form class_namexxx where xxx is an integer representing the order of appearence of the object in the image; or: user-defined names when they are provided.
-  UNORDERED_MAP<std::string, uint16> object_indices_; // inverted version of the object_names.
+  std::unordered_map<uint16, std::string> object_names_; // in the form class_namexxx where xxx is an integer representing the order of appearence of the object in the image; or: user-defined names when they are provided.
+  std::unordered_map<std::string, uint16> object_indices_; // inverted version of the object_names.
   std::string get_object_name(uint16 index); // retrieves the name of an object.
 
   void write_indent(uint16 i);
@@ -137,7 +137,7 @@ private:
 
   bool partial_decompilation_; // used when decompiling on-the-fly.
   bool ignore_named_objects_;
-  UNORDERED_SET<uint16> named_objects_;
+  std::unordered_set<uint16> named_objects_;
   std::vector<r_code::SysObject *> imported_objects_; // referenced objects added to the image that were not in the original list of objects to be decompiled.
 public:
   Decompiler();
@@ -163,7 +163,7 @@ public:
    * image->object_names_.symbols_ and create names for objects that don't have an OID.
    * \return The number of objects, or 0 for error.
    */
-  uint32 decompile_references(r_comp::Image *image, UNORDERED_MAP<uint16, std::string>* object_names = NULL);
+  uint32 decompile_references(r_comp::Image *image, std::unordered_map<uint16, std::string>* object_names = NULL);
 
   /**
    * Decompile a single object.

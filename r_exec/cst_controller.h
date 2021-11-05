@@ -105,8 +105,8 @@ protected:
   // The set of accumulated DefeasibleValidity from inputs, which is copied to each produced Pred.
   std::unordered_set<P<DefeasibleValidity>, r_code::PHash<DefeasibleValidity> > defeasible_validities_;
 
-  UNORDERED_SET<P<_Fact>, r_code::PHash<_Fact> > predictions_; // f0->pred->f1->obj.
-  UNORDERED_SET<P<Sim>, r_code::PHash<Sim> > simulations_;
+  std::unordered_set<P<_Fact>, r_code::PHash<_Fact> > predictions_; // f0->pred->f1->obj.
+  std::unordered_set<P<Sim>, r_code::PHash<Sim> > simulations_;
   // This tracks whether promoting has already been done for this Sim. It needs to be a list of Sim
   // because this overlay may be for the initial non-simulated icst which can be promoted for multiple sims.
   std::vector<Sim*> promoted_in_sim_;
