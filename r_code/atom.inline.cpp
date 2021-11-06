@@ -145,14 +145,14 @@ inline Atom Atom::IPGMPointer(uint16 index) {
   return Atom((IPGM_PTR << 24) + (index & 0x0FFF));
 }
 
-inline Atom Atom::InObjPointer(uint8 inputIndex, uint16 index) {
+inline Atom Atom::InObjPointer(uint8 input_index, uint16 index) {
 
-  return Atom((IN_OBJ_PTR << 24) + (inputIndex << 12) + (index & 0x0FFF));
+  return Atom((IN_OBJ_PTR << 24) + (input_index << 12) + (index & 0x0FFF));
 }
 
-inline Atom Atom::DInObjPointer(uint8 relativeIndex, uint16 index) {
+inline Atom Atom::DInObjPointer(uint8 relative_index, uint16 index) {
 
-  return Atom((D_IN_OBJ_PTR << 24) + (relativeIndex << 12) + (index & 0x0FFF));
+  return Atom((D_IN_OBJ_PTR << 24) + (relative_index << 12) + (index & 0x0FFF));
 }
 
 inline Atom Atom::OutObjPointer(uint16 index) {
@@ -205,14 +205,14 @@ inline Atom Atom::SSet(uint16 opcode, uint8 elementCount) {
   return Atom((S_SET << 24) + ((opcode & 0x0FFF) << 8) + elementCount);
 }
 
-inline Atom Atom::Set(uint8 elementCount) {
+inline Atom Atom::Set(uint8 element_count) {
 
-  return Atom((SET << 24) + elementCount);
+  return Atom((SET << 24) + element_count);
 }
 
-inline Atom Atom::CPointer(uint8 elementCount) {
+inline Atom Atom::CPointer(uint8 element_count) {
 
-  return Atom((C_PTR << 24) + elementCount);
+  return Atom((C_PTR << 24) + element_count);
 }
 
 inline Atom Atom::Object(uint16 opcode, uint8 arity) {
@@ -230,9 +230,9 @@ inline Atom Atom::Operator(uint16 opcode, uint8 arity) {
   return Atom((OPERATOR << 24) + ((opcode & 0x0FFF) << 8) + arity);
 }
 
-inline Atom Atom::Node(uint8 nodeID) {
+inline Atom Atom::Node(uint8 node_id) {
 
-  return Atom((NODE << 24) + (nodeID << 8));
+  return Atom((NODE << 24) + (node_id << 8));
 }
 
 inline Atom Atom::UndefinedNode() {
@@ -240,9 +240,9 @@ inline Atom Atom::UndefinedNode() {
   return Atom(0xA0FFFFFF);
 }
 
-inline Atom Atom::Device(uint8 nodeID, uint8 classID, uint8 devID) {
+inline Atom Atom::Device(uint8 node_id, uint8 class_id, uint8 dev_id) {
 
-  return Atom((DEVICE << 24) + (nodeID << 16) + (classID << 8) + devID);
+  return Atom((DEVICE << 24) + (node_id << 16) + (class_id << 8) + dev_id);
 }
 
 inline Atom Atom::UndefinedDevice() {
@@ -260,12 +260,12 @@ inline Atom Atom::UndefinedDeviceFunction() {
   return Atom(0xA2FFFFFF);
 }
 
-inline Atom Atom::String(uint8 characterCount) {
+inline Atom Atom::String(uint8 character_count) {
 
-  uint8 blocks = characterCount / 4;
-  if (characterCount % 4)
+  uint8 blocks = character_count / 4;
+  if (character_count % 4)
     ++blocks;
-  return Atom((STRING << 24) + (blocks << 8) + characterCount);
+  return Atom((STRING << 24) + (blocks << 8) + character_count);
 }
 
 inline Atom Atom::UndefinedString() {

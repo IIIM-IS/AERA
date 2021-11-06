@@ -166,8 +166,8 @@ public:
   static Atom RPointer(uint16 index);
   static Atom VLPointer(uint16 index);
   static Atom IPGMPointer(uint16 index);
-  static Atom InObjPointer(uint8 inputIndex, uint16 index); // inputIndex: index of the input view; index: index of data in the object's code.
-  static Atom DInObjPointer(uint8 relativeIndex, uint16 index); // relativeIndex: index of an in-obj-ptr in the program's (patched) code; index: index of data in the referenced object code.
+  static Atom InObjPointer(uint8 input_index, uint16 index); // input_index: index of the input view; index: index of data in the object's code.
+  static Atom DInObjPointer(uint8 relative_index, uint16 index); // relative_index: index of an in-obj-ptr in the program's (patched) code; index: index of data in the referenced object code.
   static Atom OutObjPointer(uint16 index);
   static Atom ValuePointer(uint16 index);
   static Atom ProductionPointer(uint16 index);
@@ -177,19 +177,19 @@ public:
   static Atom View();
   static Atom Mks();
   static Atom Vws();
-  static Atom Node(uint8 nodeID);
+  static Atom Node(uint8 node_id);
   static Atom UndefinedNode();
-  static Atom Device(uint8 nodeID, uint8 classID, uint8 devID);
+  static Atom Device(uint8 node_id, uint8 class_id, uint8 dev_id);
   static Atom UndefinedDevice();
   static Atom DeviceFunction(uint16 opcode);
   static Atom UndefinedDeviceFunction();
-  static Atom CPointer(uint8 elementCount);
-  static Atom SSet(uint16 opcode, uint8 elementCount);
-  static Atom Set(uint8 elementCount);
+  static Atom CPointer(uint8 element_count);
+  static Atom SSet(uint16 opcode, uint8 element_count);
+  static Atom Set(uint8 element_count);
   static Atom Object(uint16 opcode, uint8 arity);
   static Atom Marker(uint16 opcode, uint8 arity);
   static Atom Operator(uint16 opcode, uint8 arity);
-  static Atom String(uint8 characterCount);
+  static Atom String(uint8 character_count);
   static Atom UndefinedString();
   static Atom Timestamp();
   static Atom UndefinedTimestamp();
