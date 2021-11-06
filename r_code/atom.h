@@ -95,17 +95,17 @@ class dll_export Atom {
 public:
   /**
    * Atom::TraceContext holds the indentation level and other context info
-   * for the trace method.Before iterating over Atom objects(which may have
+   * for the trace method. Before iterating over Atom objects (which may have
    * different indentation levels or other details), create an
    * Atom::TraceContext and pass it to Atom::trace.
    */
   class dll_export TraceContext {
   public:
-    uint8 Members_to_go;
-    uint8 Timestamp_data;
-    uint8 String_data;
-    uint8 Char_count;
-    uint64 Timestamp_high;
+    uint8 members_to_go_;
+    uint8 timestamp_data_;
+    uint8 string_data_;
+    uint8 char_count_;
+    uint64 timestamp_high_;
 
     TraceContext();
     void write_indents(std::ostream& out);

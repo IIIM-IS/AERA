@@ -88,27 +88,27 @@ using namespace std::chrono;
 namespace r_code {
 
 Atom::TraceContext::TraceContext() {
-  Members_to_go = 0;
-  Timestamp_data = 0;
-  String_data = 0;
-  Char_count = 0;
+  members_to_go_ = 0;
+  timestamp_data_ = 0;
+  string_data_ = 0;
+  char_count_ = 0;
 }
 
 void Atom::trace(TraceContext& context, std::ostream& out) const {
 
   context.write_indents(out);
-  if (context.Timestamp_data) {
+  if (context.timestamp_data_) {
     // Output the timestamp value now. Otherwise, it could be interpreted
     // as an op code, etc.
-    --context.Timestamp_data;
+    --context.timestamp_data_;
     out << atom_;
 
-    if (context.Timestamp_data == 1)
+    if (context.timestamp_data_ == 1)
       // Save for the next step.
-      context.Timestamp_high = atom_;
+      context.timestamp_high_ = atom_;
     else {
       // Imitate Utils::GetTimestamp.
-      auto timestamp = core::Timestamp(microseconds(context.Timestamp_high << 32 | atom_));
+      auto timestamp = core::Timestamp(microseconds(context.timestamp_high_ << 32 | atom_));
       out << " " << Utils::RelativeTime(timestamp);
     }
     return;
@@ -137,31 +137,31 @@ void Atom::trace(TraceContext& context, std::ostream& out) const {
   case NODE: out << "nid: " << std::dec << (uint32)getNodeID(); return;
   case DEVICE: out << "did: " << std::dec << (uint32)getNodeID() << " " << (uint32)getClassID() << " " << (uint32)getDeviceID(); return;
   case DEVICE_FUNCTION: out << "fid: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ")"; return;
-  case C_PTR: out << "cptr: " << std::dec << (uint16)getAtomCount(); context.Members_to_go = getAtomCount(); return;
-  case SET: out << "set: " << std::dec << (uint16)getAtomCount(); context.Members_to_go = getAtomCount(); return;
-  case OBJECT: out << "obj: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.Members_to_go = getAtomCount(); return;
-  case S_SET: out << "s_set: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.Members_to_go = getAtomCount(); return;
-  case MARKER: out << "mk: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.Members_to_go = getAtomCount(); return;
-  case OPERATOR: out << "op: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.Members_to_go = getAtomCount(); return;
-  case STRING: out << "st: " << std::dec << (uint16)getAtomCount(); context.Members_to_go = context.String_data = getAtomCount(); context.Char_count = (atom_ & 0x000000FF); return;
-  case TIMESTAMP: out << "us"; context.Members_to_go = context.Timestamp_data = 2; return;
-  case GROUP: out << "grp: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.Members_to_go = getAtomCount(); return;
+  case C_PTR: out << "cptr: " << std::dec << (uint16)getAtomCount(); context.members_to_go_ = getAtomCount(); return;
+  case SET: out << "set: " << std::dec << (uint16)getAtomCount(); context.members_to_go_ = getAtomCount(); return;
+  case OBJECT: out << "obj: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.members_to_go_ = getAtomCount(); return;
+  case S_SET: out << "s_set: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.members_to_go_ = getAtomCount(); return;
+  case MARKER: out << "mk: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.members_to_go_ = getAtomCount(); return;
+  case OPERATOR: out << "op: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.members_to_go_ = getAtomCount(); return;
+  case STRING: out << "st: " << std::dec << (uint16)getAtomCount(); context.members_to_go_ = context.string_data_ = getAtomCount(); context.char_count_ = (atom_ & 0x000000FF); return;
+  case TIMESTAMP: out << "us"; context.members_to_go_ = context.timestamp_data_ = 2; return;
+  case GROUP: out << "grp: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.members_to_go_ = getAtomCount(); return;
   case INSTANTIATED_PROGRAM:
   case INSTANTIATED_ANTI_PROGRAM:
   case INSTANTIATED_INPUT_LESS_PROGRAM:
-    out << "ipgm: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.Members_to_go = getAtomCount(); return;
-  case COMPOSITE_STATE: out << "cst: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.Members_to_go = getAtomCount(); return;
-  case MODEL: out << "mdl: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.Members_to_go = getAtomCount(); return;
+    out << "ipgm: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.members_to_go_ = getAtomCount(); return;
+  case COMPOSITE_STATE: out << "cst: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.members_to_go_ = getAtomCount(); return;
+  case MODEL: out << "mdl: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.members_to_go_ = getAtomCount(); return;
   case NULL_PROGRAM: out << "null pgm " << takesPastInputs() ? "all inputs" : "new inputs"; return;
   default:
-    if (context.String_data) {
+    if (context.string_data_) {
 
-      --context.String_data;
+      --context.string_data_;
       std::string s;
       char *content = (char *)&atom_;
       for (uint8 i = 0; i < 4; ++i) {
 
-        if (context.Char_count-- > 0)
+        if (context.char_count_-- > 0)
           s += content[i];
         else
           break;
@@ -179,10 +179,10 @@ void Atom::trace(TraceContext& context, std::ostream& out) const {
 
 void Atom::TraceContext::write_indents(std::ostream& out) {
 
-  if (Members_to_go) {
+  if (members_to_go_) {
 
     out << "   ";
-    --Members_to_go;
+    --members_to_go_;
   }
 }
 
