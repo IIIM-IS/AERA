@@ -231,15 +231,15 @@ public:
   uint8 asRelativeIndex() const; // applicable to D_IN_OBJ_PTR.
   uint16 asOpcode() const;
   uint16 asCastOpcode() const; // applicable to CODE_VL_PTR.
+  uint8 getNodeID() const; // applicable to nodes and devices.
+  uint8 getClassID() const; // applicable to devices.
+  uint8 getDeviceID() const; // applicable to devices.
+  uint8 asAssignmentIndex() const;
   uint8 getAtomCount() const; // arity of operators and
                                       // objects/markers/structured sets,
                                       // number of atoms in pointers chains,
                                       // number of blocks of characters in
                                       // strings.
-  uint8 getNodeID() const; // applicable to nodes and devices.
-  uint8 getClassID() const; // applicable to devices.
-  uint8 getDeviceID() const; // applicable to devices.
-  uint8 asAssignmentIndex() const;
 
   bool takesPastInputs() const; // applicable to NULL_PROGRAM.
   template<class C> C *asRawPointer() const { return (C *)atom_; }
