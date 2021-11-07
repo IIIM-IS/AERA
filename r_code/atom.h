@@ -113,7 +113,7 @@ public:
 
   typedef enum {
     NIL = 0x80,
-    BOOLEAN_ = 0x81,
+    BOOLEAN_ = 0x81, // Spell with underbar to distinguish from Windows BOOLEAN.
     WILDCARD = 0x82,
     T_WILDCARD = 0x83,
     I_PTR = 0x84, // internal pointer.
