@@ -163,8 +163,8 @@ public:
   static Atom Wildcard(uint16 opcode = 0x00);
   static Atom TailWildcard();
   static Atom IPointer(uint16 index);
-  static Atom RPointer(uint16 index);
   static Atom VLPointer(uint16 index);
+  static Atom RPointer(uint16 index);
   static Atom IPGMPointer(uint16 index);
   static Atom InObjPointer(uint8 input_index, uint16 index); // input_index: index of the input view; index: index of data in the object's code.
   static Atom DInObjPointer(uint8 relative_index, uint16 index); // relative_index: index of an in-obj-ptr in the program's (patched) code; index: index of data in the referenced object code.
@@ -177,18 +177,18 @@ public:
   static Atom View();
   static Atom Mks();
   static Atom Vws();
+  static Atom SSet(uint16 opcode, uint8 element_count);
+  static Atom Set(uint8 element_count);
+  static Atom CPointer(uint8 element_count);
+  static Atom Object(uint16 opcode, uint8 arity);
+  static Atom Marker(uint16 opcode, uint8 arity);
+  static Atom Operator(uint16 opcode, uint8 arity);
   static Atom Node(uint8 node_id);
   static Atom UndefinedNode();
   static Atom Device(uint8 node_id, uint8 class_id, uint8 dev_id);
   static Atom UndefinedDevice();
   static Atom DeviceFunction(uint16 opcode);
   static Atom UndefinedDeviceFunction();
-  static Atom CPointer(uint8 element_count);
-  static Atom SSet(uint16 opcode, uint8 element_count);
-  static Atom Set(uint8 element_count);
-  static Atom Object(uint16 opcode, uint8 arity);
-  static Atom Marker(uint16 opcode, uint8 arity);
-  static Atom Operator(uint16 opcode, uint8 arity);
   static Atom String(uint8 character_count);
   static Atom UndefinedString();
   static Atom Timestamp();
