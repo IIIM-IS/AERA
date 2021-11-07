@@ -200,9 +200,9 @@ inline Atom Atom::Vws() {
   return Atom(VWS << 24);
 }
 
-inline Atom Atom::SSet(uint16 opcode, uint8 elementCount) {
+inline Atom Atom::SSet(uint16 opcode, uint8 element_count) {
 
-  return Atom((S_SET << 24) + ((opcode & 0x0FFF) << 8) + elementCount);
+  return Atom((S_SET << 24) + ((opcode & 0x0FFF) << 8) + element_count);
 }
 
 inline Atom Atom::Set(uint8 element_count) {
