@@ -170,7 +170,6 @@ void Atom::trace(TraceContext& context, std::ostream& out) const {
     } else if (isFloat()) {
 
       out << "nb: " << std::scientific << asFloat() << std::defaultfloat;
-      return;
     } else
       out << "undef";
     return;
