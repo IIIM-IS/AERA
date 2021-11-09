@@ -400,6 +400,10 @@ bool _Fact::CounterEvidence(const Code *lhs, const Code *rhs) {
           lhs_desc == Atom::R_PTR && rhs_desc == Atom::NIL)
         // nil is counter-evidence of a referenced object.
         return true;
+      if (lhs_desc == Atom::NIL && rhs_desc == Atom::I_PTR ||
+          lhs_desc == Atom::I_PTR && rhs_desc == Atom::NIL)
+        // nil is counter-evidence of a structured object.
+        return true;
 
       if (lhs_desc != rhs_desc) // values of different types.
         return false;
