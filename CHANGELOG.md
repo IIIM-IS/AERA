@@ -1,5 +1,5 @@
-AERA_v0.2 (2020-06-19)
-----------------------
+replicode-syntax-v1.2 (2020-06-19)
+----------------------------------
 
 * Rename the folder Test to AERA.
   Note: To see changes before this renaming, browse at the earlier commit: 
