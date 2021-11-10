@@ -72,7 +72,7 @@ S1:(cst |[]
 []
    (fact (icst S0 |[] [H: P:] : :) T0: T1: : :)
    (fact (icst S3 |[] [C: X: P:] : :) T0: T1: : :); X is also exposed from S3.
-   (|fact (mk.val H: attached : :) T0: T1: : :)
+   (fact (mk.val H: attached |[] :) T0: T1: : :); Change anti-fact to fact of attached to |[].
 |[]
 |[]
 [stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
@@ -81,7 +81,7 @@ S1:(cst |[]
 M2:(mdl [H: C: T0: T1:]
 []
    (fact (cmd grab [H:] :) T2: T1_cmd: : :); Change T1 to T1_cmd.
-   (fact (mk.val H: attached C: :) T1_RHS: T3: : :); Change T1 to T1_RHS.
+   (fact (mk.val H: attached [C:] :) T1_RHS: T3: : :); Change T1 to T1_RHS.
 []
    T1_RHS:(+ T0 0s:100ms:0us); Copy from M0.
    T3:(+ T1 0s:100ms:0us);     Copy from M0.
@@ -106,7 +106,7 @@ S2:(cst |[]
 []
    (fact (icst S0 |[] [H: P:] : :) T0: T1: : :)
    (fact (icst S3 |[] [C: X: P:] : :) T0: T1: : :); X is also exposed from S3.
-   (fact (mk.val H: attached C: :) T0: T1: : :)
+   (fact (mk.val H: attached [C:] :) T0: T1: : :)
 []
    (<> C nil); Make sure the object C is not nil.
 []
@@ -117,7 +117,7 @@ S2:(cst |[]
 M4:(mdl [H: C: T0: T1:]
 []
    (fact (cmd release [H:] :) T2: T1_cmd: : :); Change T1 to T1_cmd.
-   (|fact (mk.val H: attached : :) T1_RHS: T3: : :); Change T1 to T1_RHS.
+   (fact (mk.val H: attached |[] :) T1_RHS: T3: : :); Change T1 to T1_RHS. Change anti-fact to fact of attached to |[].
 []
    T1_RHS:(+ T0 0s:100ms:0us); Copy from M0.
    T3:(+ T1 0s:100ms:0us);     Copy from M0.
@@ -202,7 +202,7 @@ start:(pgm |[] |[] |[] []
    )
 
    (inj []
-      h_attached_c:(mk.val h attached c 1)
+      h_attached_c:(mk.val h attached [c] 1)
       |[]
    )
    (inj []
@@ -566,7 +566,7 @@ pgm_babble9:(pgm |[]
 ; Before DRIVE_PASS1_START, just re-inject the same values.
 pgm_before_drive:(pgm |[]
 []
-   (ptn (fact (mk.val h attached Attached_obj: :) After: Before: ::) |[])
+   (ptn (fact (mk.val h attached [Attached_obj:] :) After: Before: ::) |[])
    (ptn (fact (mk.val h position pos_h: :) After_h: Before_h: ::) |[])
    (ptn (fact (mk.val c position pos_c: :) After_c: Before_c: ::) |[])
    (ptn (fact (mk.val s position pos_s: :) After_s: Before_s: ::) |[])
@@ -580,7 +580,7 @@ pgm_before_drive:(pgm |[]
    (> Before_s After)
 []
    (inj []
-      Next_attached:(mk.val h attached Attached_obj 1); Still attached to the same object.
+      Next_attached:(mk.val h attached [Attached_obj] 1); Still attached to the same object.
       |[]
    )
    (inj []
@@ -618,7 +618,7 @@ pgm_before_drive:(pgm |[]
 pgm_cmd_move_h_attached_c:(pgm |[]
 []
    (ptn (fact G:(goal (fact (cmd move [h DeltaP_in:] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
-   (ptn (fact (mk.val h attached Attached_obj: :) After: Before: ::) |[])
+   (ptn (fact (mk.val h attached [Attached_obj:] :) After: Before: ::) |[])
    (ptn (fact (mk.val h position pos_h: :) After_h: Before_h: ::) |[])
    (ptn (fact (mk.val c position pos_c: :) After_c: Before_c: ::) |[])
    (ptn (fact (mk.val s position pos_s: :) After_s: Before_s: ::) |[])
@@ -644,7 +644,7 @@ pgm_cmd_move_h_attached_c:(pgm |[]
       [SYNC_ONCE After 1 1 stdin nil]
    )
    (inj []
-      Next_attached:(mk.val h attached Attached_obj 1); Still attached to the same object.
+      Next_attached:(mk.val h attached [Attached_obj] 1); Still attached to the same object.
       |[]
    )
    (inj []
@@ -683,7 +683,7 @@ pgm_cmd_move_h_attached_c:(pgm |[]
 pgm_cmd_move_h_attached_s:(pgm |[]
 []
    (ptn (fact G:(goal (fact (cmd move [h DeltaP_in:] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
-   (ptn (fact (mk.val h attached Attached_obj: :) After: Before: ::) |[])
+   (ptn (fact (mk.val h attached [Attached_obj:] :) After: Before: ::) |[])
    (ptn (fact (mk.val h position pos_h: :) After_h: Before_h: ::) |[])
    (ptn (fact (mk.val c position pos_c: :) After_c: Before_c: ::) |[])
    (ptn (fact (mk.val s position pos_s: :) After_s: Before_s: ::) |[])
@@ -709,7 +709,7 @@ pgm_cmd_move_h_attached_s:(pgm |[]
       [SYNC_ONCE After 1 1 stdin nil]
    )
    (inj []
-      Next_attached:(mk.val h attached Attached_obj 1); Still attached to the same object.
+      Next_attached:(mk.val h attached [Attached_obj] 1); Still attached to the same object.
       |[]
    )
    (inj []
@@ -749,7 +749,7 @@ pgm_cmd_move_h_attached_s:(pgm |[]
 pgm_cmd_move_h_not_attached:(pgm |[]
 []
    (ptn (fact G:(goal f_G:(fact (cmd move [h DeltaP_in:] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
-   (ptn (|fact (mk.val h attached : :) After: Before: ::) |[])
+   (ptn (fact (mk.val h attached |[] :) After: Before: ::) |[])
    (ptn (fact (mk.val h position pos_h: :) After_h: Before_h: ::) |[])
    (ptn (fact (mk.val c position pos_c: :) After_c: Before_c: ::) |[])
    (ptn (fact (mk.val s position pos_s: :) After_s: Before_s: ::) |[])
@@ -774,11 +774,11 @@ pgm_cmd_move_h_not_attached:(pgm |[]
       [SYNC_ONCE After 1 1 stdin nil]
    )
    (inj []
-      Next_attached:(mk.val h attached nil 1); Still not attached. We will make an anti-fact.
+      Next_attached:(mk.val h attached |[] 1); Still not attached.
       |[]
    )
    (inj []
-      (|fact Next_attached (+ After sampling_period) (+ Before sampling_period) 1 1)
+      (fact Next_attached (+ After sampling_period) (+ Before sampling_period) 1 1)
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
    (inj []
@@ -813,7 +813,7 @@ pgm_cmd_move_h_not_attached:(pgm |[]
 pgm_cmd_release_h:(pgm |[]
 []
    (ptn (fact G:(goal (fact Command:(cmd release [h] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
-   (ptn (fact (mk.val h attached Attached_obj: :) After: Before: ::) |[])
+   (ptn (fact (mk.val h attached [Attached_obj:] :) After: Before: ::) |[])
    (ptn (fact (mk.val h position pos_h: :) After_h: Before_h: ::) |[])
    (ptn (fact (mk.val c position pos_c: :) After_c: Before_c: ::) |[])
    (ptn (fact (mk.val s position pos_s: :) After_s: Before_s: ::) |[])
@@ -834,11 +834,11 @@ pgm_cmd_release_h:(pgm |[]
       [SYNC_ONCE After 1 1 stdin nil]
    )
    (inj []
-      Next_attached:(mk.val h attached nil 1); h is now unattached. We will make an anti-fact.
+      Next_attached:(mk.val h attached |[] 1); h is now unattached.
       |[]
    )
    (inj []
-      (|fact Next_attached (+ After sampling_period) (+ Before sampling_period) 1 1)
+      (fact Next_attached (+ After sampling_period) (+ Before sampling_period) 1 1)
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
    (inj []
@@ -873,7 +873,7 @@ pgm_cmd_release_h:(pgm |[]
 pgm_cmd_release_h_not_attached:(pgm |[]
 []
    (ptn (fact G:(goal (fact Command:(cmd release [h] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
-   (ptn (|fact (mk.val h attached : :) After: Before: ::) |[])
+   (ptn (fact (mk.val h attached |[] :) After: Before: ::) |[])
    (ptn (fact (mk.val h position pos_h: :) After_h: Before_h: ::) |[])
    (ptn (fact (mk.val c position pos_c: :) After_c: Before_c: ::) |[])
    (ptn (fact (mk.val s position pos_s: :) After_s: Before_s: ::) |[])
@@ -894,11 +894,11 @@ pgm_cmd_release_h_not_attached:(pgm |[]
       [SYNC_ONCE After 1 1 stdin nil]
    )
    (inj []
-      Next_attached:(mk.val h attached nil 1); h is still unattached. We will make an anti-fact.
+      Next_attached:(mk.val h attached |[] 1); h is still unattached.
       |[]
    )
    (inj []
-      (|fact Next_attached (+ After sampling_period) (+ Before sampling_period) 1 1)
+      (fact Next_attached (+ After sampling_period) (+ Before sampling_period) 1 1)
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
    (inj []
@@ -933,7 +933,7 @@ pgm_cmd_release_h_not_attached:(pgm |[]
 pgm_cmd_grab_h_s:(pgm |[]
 []
    (ptn (fact G:(goal f_G:(fact Command:(cmd grab [h] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
-   (ptn (|fact (mk.val h attached : :) After: Before: ::) |[])
+   (ptn (fact (mk.val h attached |[] :) After: Before: ::) |[])
    (ptn (fact (mk.val h position pos_h: :) After_h: Before_h: ::) |[])
    (ptn (fact (mk.val c position pos_c: :) After_c: Before_c: ::) |[])
    (ptn (fact (mk.val s position pos_s: :) After_s: Before_s: ::) |[])
@@ -956,7 +956,7 @@ pgm_cmd_grab_h_s:(pgm |[]
       [SYNC_ONCE After 1 1 stdin nil]
    )
    (inj []
-      Next_attached:(mk.val h attached s 1); We already checked that s is at the hand's position.
+      Next_attached:(mk.val h attached [s] 1); We already checked that s is at the hand's position.
       |[]
    )
    (inj []
@@ -995,7 +995,7 @@ pgm_cmd_grab_h_s:(pgm |[]
 pgm_cmd_grab_h_c:(pgm |[]
 []
    (ptn (fact G:(goal (fact Command:(cmd grab [h] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
-   (ptn (|fact (mk.val h attached : :) After: Before: ::) |[])
+   (ptn (fact (mk.val h attached |[] :) After: Before: ::) |[])
    (ptn (fact (mk.val h position pos_h: :) After_h: Before_h: ::) |[])
    (ptn (fact (mk.val c position pos_c: :) After_c: Before_c: ::) |[])
    (ptn (fact (mk.val s position pos_s: :) After_s: Before_s: ::) |[])
@@ -1018,7 +1018,7 @@ pgm_cmd_grab_h_c:(pgm |[]
       [SYNC_ONCE After 1 1 stdin nil]
    )
    (inj []
-      Next_attached:(mk.val h attached c 1); We already checked that c is at the hand's position.
+      Next_attached:(mk.val h attached [c] 1); We already checked that c is at the hand's position.
       |[]
    )
    (inj []
@@ -1057,7 +1057,7 @@ pgm_cmd_grab_h_c:(pgm |[]
 pgm_cmd_grab_h_fail:(pgm |[]
 []
    (ptn (fact G:(goal (fact Command:(cmd grab [h] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
-   (ptn (|fact (mk.val h attached : :) After: Before: ::) |[])
+   (ptn (fact (mk.val h attached |[] :) After: Before: ::) |[])
    (ptn (fact (mk.val h position pos_h: :) After_h: Before_h: ::) |[])
    (ptn (fact (mk.val c position pos_c: :) After_c: Before_c: ::) |[])
    (ptn (fact (mk.val s position pos_s: :) After_s: Before_s: ::) |[])
@@ -1080,11 +1080,11 @@ pgm_cmd_grab_h_fail:(pgm |[]
       [SYNC_ONCE After 1 1 stdin nil]
    )
    (inj []
-      Next_attached:(mk.val h attached nil 1); both c and s are at the hand position, so grab fails. We will make an anti-fact.
+      Next_attached:(mk.val h attached |[] 1); both c and s are at the hand position, so grab fails.
       |[]
    )
    (inj []
-      (|fact Next_attached (+ After sampling_period) (+ Before sampling_period) 1 1)
+      (fact Next_attached (+ After sampling_period) (+ Before sampling_period) 1 1)
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
    (inj []
