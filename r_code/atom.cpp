@@ -79,8 +79,6 @@
 #include "atom.h"
 
 #include <iostream>
-#include <set>
-#include <unordered_map>
 
 using namespace std;
 using namespace std::chrono;
@@ -186,16 +184,16 @@ void Atom::TraceContext::write_indents(std::ostream& out) {
 }
 
 // These are filled by r_exec::Init().
-unordered_map<uint16, std::set<std::string>> OpcodeNames;
+unordered_map<uint16, set<string>> OpcodeNames;
 
-std::string GetOpcodeName(uint16 opcode) {
-  unordered_map<uint16, std::set<std::string>>::iterator names =
+string GetOpcodeName(uint16 opcode) {
+  unordered_map<uint16, set<string>>::iterator names =
     OpcodeNames.find(opcode);
   if (names == OpcodeNames.end())
     return "unknown";
 
-  std::string result;
-  for (std::set<std::string>::iterator it = names->second.begin();
+  string result;
+  for (set<string>::iterator it = names->second.begin();
     it != names->second.end(); ++it) {
     if (result.size() != 0)
       result += "/";
@@ -205,14 +203,13 @@ std::string GetOpcodeName(uint16 opcode) {
   return result;
 }
 
-void AddOpcodeName(uint16 opcode, const char* name) {
-  unordered_map<uint16, std::set<std::string>>::iterator it =
-    OpcodeNames.find(opcode);
-  if (it == OpcodeNames.end())
-    // No existing entry for the opcode.
-    OpcodeNames[opcode] = std::set<std::string>();
+bool SetOpcodeNames(const std::unordered_map<uint16, std::set<std::string>>& opcode_names) {
+  if (OpcodeNames.size() > 0)
+    // GetOpcodeName has already been using a set of opcodes. The new codes could be inconsistent. Fail.
+    return false;
 
-  // This copies the char* .
-  OpcodeNames[opcode].insert(name);
+  OpcodeNames = opcode_names;
+  return true;
 }
+
 }

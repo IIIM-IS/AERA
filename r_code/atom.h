@@ -79,6 +79,8 @@
 #define r_code_atom_h
 
 #include <string>
+#include <unordered_map>
+#include <set>
 #include "../submodules/CoreLibrary/CoreLibrary/types.h"
 
 #undef THIS
@@ -248,12 +250,12 @@ public:
 };
 
 /**
- * Add to the names for the opcode. This is searched by GetOpcodeName.
- * because we don't want to export a DLL function with std::string.)</param>
- * \param opcode The opcode.
- * \param name The opcode name, which is copied.
+ * Set the map of opcode names used by GetOpcodeName.
+ * \param opcode_names The map where the key is the opcode id and the value is a set of names.
+ * This copies the map.
+ * \return True for success, false if the opcode names have already been set.
  */
-void __declspec(dllexport) AddOpcodeName(uint16 opcode, const char* name);
+bool __declspec(dllexport) SetOpcodeNames(const std::unordered_map<uint16, std::set<std::string>>& opcode_names);
 
 /**
  * Get the name or set of names of the opcode. (The same opcode can be

@@ -338,17 +338,28 @@ uint16 RetrieveOpcode(const char *name) {
 }
 
 bool InitOpcodes(const r_comp::Metadata& metadata) {
+  unordered_map<uint16, set<string>> opcode_names;
   unordered_map<std::string, r_comp::Class>::const_iterator it;
   for (it = metadata.classes_.begin(); it != metadata.classes_.end(); ++it) {
 
     _Opcodes[it->first] = it->second.atom_.asOpcode();
-    r_code::AddOpcodeName(it->second.atom_.asOpcode(), it->first.c_str());
+    auto opcode = it->second.atom_.asOpcode();
+    if (opcode_names.find(opcode) == opcode_names.end())
+      // No existing entry for the opcode.
+      opcode_names[opcode] = set<string>();
+    opcode_names[opcode].insert(it->first.c_str());
   }
   for (it = metadata.sys_classes_.begin(); it != metadata.sys_classes_.end(); ++it) {
 
     _Opcodes[it->first] = it->second.atom_.asOpcode();
-    r_code::AddOpcodeName(it->second.atom_.asOpcode(), it->first.c_str());
+    auto opcode = it->second.atom_.asOpcode();
+    if (opcode_names.find(opcode) == opcode_names.end())
+      // No existing entry for the opcode.
+      opcode_names[opcode] = set<string>();
+    opcode_names[opcode].insert(it->first.c_str());
   }
+  if (!r_code::SetOpcodeNames(opcode_names))
+    return false;
 
   // load class Opcodes.
   View::ViewOpcode_ = _Opcodes.find("view")->second;
