@@ -513,6 +513,12 @@ void BindingMap::init(Code *object, uint16 index) {
     get_object_variable(object->get_reference(a.asIndex()));
     break;
   case Atom::I_PTR:
+    if (object->code(a.asIndex()).getDescriptor() == Atom::SET &&
+        object->code(a.asIndex()).getAtomCount() == 1)
+      // Special case: Treat a singleton set as just its one member (without recursion). To generalize, we may
+      // need a Value class which can hold other Value classes, and maybe restrict recursion.
+      return init(object, a.asIndex() + 1);
+
     get_structure_variable(object, a.asIndex());
     break;
   default:
