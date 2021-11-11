@@ -337,7 +337,7 @@ uint16 RetrieveOpcode(const char *name) {
   return _Opcodes.find(name)->second;
 }
 
-void InitOpcodes(const r_comp::Metadata& metadata) {
+bool InitOpcodes(const r_comp::Metadata& metadata) {
   unordered_map<std::string, r_comp::Class>::const_iterator it;
   for (it = metadata.classes_.begin(); it != metadata.classes_.end(); ++it) {
 
@@ -449,6 +449,8 @@ void InitOpcodes(const r_comp::Metadata& metadata) {
   Operator::Register(operator_opcode++, is_sim);
   Operator::Register(operator_opcode++, minimum);
   Operator::Register(operator_opcode++, maximum);
+
+  return true;
 }
 
 bool Init(const char *user_operator_library_path,
@@ -456,7 +458,8 @@ bool Init(const char *user_operator_library_path,
 
   Now = time_base;
 
-  InitOpcodes(Metadata);
+  if (!InitOpcodes(Metadata))
+    return false;
 
   if (!user_operator_library_path) // when no rMem is used.
     return true;

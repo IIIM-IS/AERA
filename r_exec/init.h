@@ -169,8 +169,9 @@ public:
  * r_exec::_Opcodes, r_code::OpcodeNames, View::ViewOpcode_,  and the
  * values in the Opcodes class such as Opcodes::Fact. Also call
  * Operator::Register to set up standard operators in Operator::Operators_.
+ * \return True for success.
  */
-void r_exec_dll InitOpcodes(const r_comp::Metadata& metadata);
+bool r_exec_dll InitOpcodes(const r_comp::Metadata& metadata);
 
 // Initialize Now, compile user.classes.replicode, builds the Seed and loads the user-defined operators.
 // Return false in case of a problem (e.g. file not found, operator not found, etc.).
