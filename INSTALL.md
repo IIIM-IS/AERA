@@ -8,7 +8,7 @@ Prerequisites
 
 * Required: On Windows, Visual Studio
 * Required: Git
-* Required: The Replicode code repository from https://github.com/IIIM-IS/AERA
+* Required: The AERA code repository from https://github.com/IIIM-IS/AERA
 
 Following are the detailed steps for each platform to install the prerequisites.
 
@@ -20,13 +20,13 @@ In the installer, under "Desktop development with C++", check "Windows 10 SDK (1
 
 To install Git, download and install GitHub for Desktop from https://desktop.github.com .
 
-To get the Replicode code repository, launch GitHub for Desktop and sign in to GitHub. In the File menu, 
+To get the AERA code repository, launch GitHub for Desktop and sign in to GitHub. In the File menu, 
 click "Clone a Repository". Click the URL tab and enter `https://github.com/IIIM-IS/AERA` . 
 It should be a recursive clone (which is the default).
 
 Build
 =====
-Launch Visual Studio and open the project `Replicode.sln` from the cloned repository. E.g.:
+Launch Visual Studio and open the project `AERA.sln` from the cloned repository. E.g.:
   `C:\Users\Alice\Documents\GitHub\replicode\AERA.sln` .
   If a dialog box appears asking to retarget the Windows version, click cancel. 
 
