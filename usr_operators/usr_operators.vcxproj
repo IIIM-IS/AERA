@@ -145,13 +145,6 @@
   <ItemGroup>
     <ClCompile Include="auto_focus_callback.cpp" />
     <ClCompile Include="Callbacks\callbacks.cpp" />
-    <ClCompile Include="Correlator\correlator.cpp" />
-    <ClCompile Include="Correlator\CorrelatorCore.cpp" />
-    <ClCompile Include="Correlator\ForwardLayer.cpp" />
-    <ClCompile Include="Correlator\LstmBlock.cpp" />
-    <ClCompile Include="Correlator\LstmLayer.cpp" />
-    <ClCompile Include="Correlator\LstmNetwork.cpp" />
-    <ClCompile Include="Correlator\winepi.cpp" />
     <ClCompile Include="Operators\operators.cpp" />
     <ClCompile Include="TestProgram\test_program.cpp" />
     <ClCompile Include="usr_operators.cpp" />
@@ -159,14 +152,6 @@
   <ItemGroup>
     <ClInclude Include="auto_focus_callback.h" />
     <ClInclude Include="Callbacks\callbacks.h" />
-    <ClInclude Include="Correlator\correlator.h" />
-    <ClInclude Include="Correlator\CorrelatorCore.h" />
-    <ClInclude Include="Correlator\ForwardLayer.h" />
-    <ClInclude Include="Correlator\LstmBlock.h" />
-    <ClInclude Include="Correlator\LstmLayer.h" />
-    <ClInclude Include="Correlator\LstmNetwork.h" />
-    <ClInclude Include="Correlator\VectorMath.h" />
-    <ClInclude Include="Correlator\winepi.h" />
     <ClInclude Include="Operators\operators.h" />
     <ClInclude Include="TestProgram\test_program.h" />
     <ClInclude Include="types.h" />
