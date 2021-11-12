@@ -723,11 +723,18 @@ Simulator
   * DONE. Change (mk.val h attached nil) to anti-fact
   * DONE. Discuss progress on learning models
 
-next meeting
-* Check how many objects in hand-grab-sphere https://github.com/IIIM-IS/AERA/issues/128
-* Close the experimental branch. Make dev from master.
+2021-11-12
+* DONE. Make pull request to update copyright headers. https://github.com/IIIM-IS/AERA/pull/197
+* DONE. Check how many objects in hand-grab-sphere https://github.com/IIIM-IS/AERA/issues/128
+  Answer: 11,875. (Not close to 65,536.)
 * hand-grab-sphere-learn
-  * Try CTPX allowing (mk.val h attached c) "change" to (|fact (mk.val h attached :))
+  * DONE. Change "attached C" to "attached [C]" and "anti-fact to "attached |[]" .
+  * DONE. Babble to learn grab and release models.
+
+next meeting
+* Update the pull request so copyright years have a range. Merge it. https://github.com/IIIM-IS/AERA/pull/197
+* Make Correlator branch. Remove Correlator code from master.
+* Close the experimental branch. Make dev from master.
 
 TODO
 * PTPX: Learned cst may only have icsts. But using a cst for later model-building requires a non-icst fact. Should icst->contains be recursive? (Need limit.) Or always include a fact in new_cst?
