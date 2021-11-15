@@ -1,6 +1,6 @@
 <AERAConfiguration>
   <!-- Parameter to set which mem to use + aditional params specific to the mem.
-       mem_file an be either test_mem or tcp_io_device at the moment-->
+       mem_file can be either test_mem or tcp_io_device at the moment-->
   <IODevice
 	  io_device="test_mem"
   />
