@@ -226,7 +226,7 @@ public:
   static const int32 null_storage_index = -1;
   static const uint32 CodeMarkersInitialSize = 8;
 protected:
-  int32 storage_index_; // -1: not sored; >0 index of the object in a vector-based container.
+  int32 storage_index_; // -1: not stored; >= 0: index of the object in a vector-based container.
 
   void load(SysObject *source) {
 
