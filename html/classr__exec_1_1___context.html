@@ -100,11 +100,11 @@ virtual <a class="el" href="classr__code_1_1_atom.html">Atom</a> &amp;&#160;</td
 <tr class="memitem:a21d49bf399c30cbcce87e81d519c0548"><td class="memItemLeft" align="right" valign="top"><a id="a21d49bf399c30cbcce87e81d519c0548"></a>
 virtual uint16&#160;</td><td class="memItemRight" valign="bottom"><b>get_object_code_size</b> () const =0</td></tr>
 <tr class="separator:a21d49bf399c30cbcce87e81d519c0548"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af24abf776c79583a0df52b265edceea0"><td class="memItemLeft" align="right" valign="top"><a id="af24abf776c79583a0df52b265edceea0"></a>
-virtual uint16&#160;</td><td class="memItemRight" valign="bottom"><b>getChildrenCount</b> () const =0</td></tr>
-<tr class="separator:af24abf776c79583a0df52b265edceea0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a637463df334b9d8912840b8231c32d74"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classr__exec_1_1___context.html">_Context</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1___context.html#a637463df334b9d8912840b8231c32d74">getChild_new</a> (uint16 index) const =0</td></tr>
-<tr class="separator:a637463df334b9d8912840b8231c32d74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ee63d3f9ea252909009b0784437f085"><td class="memItemLeft" align="right" valign="top"><a id="a1ee63d3f9ea252909009b0784437f085"></a>
+virtual uint16&#160;</td><td class="memItemRight" valign="bottom"><b>get_children_count</b> () const =0</td></tr>
+<tr class="separator:a1ee63d3f9ea252909009b0784437f085"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fcefa7d7369ed1a9b195f9f0f91d136"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classr__exec_1_1___context.html">_Context</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1___context.html#a9fcefa7d7369ed1a9b195f9f0f91d136">get_child_new</a> (uint16 index) const =0</td></tr>
+<tr class="separator:a9fcefa7d7369ed1a9b195f9f0f91d136"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab753a21e948d0e7d17c3cb2d4a75f909"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classr__exec_1_1___context.html">_Context</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1___context.html#ab753a21e948d0e7d17c3cb2d4a75f909">dereference_new</a> () const =0</td></tr>
 <tr class="separator:ab753a21e948d0e7d17c3cb2d4a75f909"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d3bb1e421ca9eb13f73ebc4444ef043"><td class="memItemLeft" align="right" valign="top"><a id="a5d3bb1e421ca9eb13f73ebc4444ef043"></a>
@@ -177,7 +177,7 @@ Data&#160;</td><td class="memItemRight" valign="bottom"><b>data_</b></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="__context_8h_source.html#l00089">89</a> of file <a class="el" href="__context_8h_source.html">_context.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="__context_8h_source.html#l00096">96</a> of file <a class="el" href="__context_8h_source.html">_context.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ab753a21e948d0e7d17c3cb2d4a75f909"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab753a21e948d0e7d17c3cb2d4a75f909">&#9670;&nbsp;</a></span>dereference_new()</h2>
@@ -207,8 +207,8 @@ Data&#160;</td><td class="memItemRight" valign="bottom"><b>data_</b></td></tr>
 
 </div>
 </div>
-<a id="a637463df334b9d8912840b8231c32d74"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a637463df334b9d8912840b8231c32d74">&#9670;&nbsp;</a></span>getChild_new()</h2>
+<a id="a9fcefa7d7369ed1a9b195f9f0f91d136"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9fcefa7d7369ed1a9b195f9f0f91d136">&#9670;&nbsp;</a></span>get_child_new()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -217,7 +217,7 @@ Data&#160;</td><td class="memItemRight" valign="bottom"><b>data_</b></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="classr__exec_1_1___context.html">_Context</a>* r_exec::_Context::getChild_new </td>
+          <td class="memname">virtual <a class="el" href="classr__exec_1_1___context.html">_Context</a>* r_exec::_Context::get_child_new </td>
           <td>(</td>
           <td class="paramtype">uint16&#160;</td>
           <td class="paramname"><em>index</em></td><td>)</td>
@@ -230,9 +230,9 @@ Data&#160;</td><td class="memItemRight" valign="bottom"><b>data_</b></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Call getChild and return a new allocated copy of the child. The caller is responsible to delete it. </p>
+<p>Call get_child and return a new allocated copy of the child. The caller is responsible to delete it. </p>
 
-<p>Implemented in <a class="el" href="classr__exec_1_1_i_p_g_m_context.html#a95cfb6511c13fce5f31624c1274eefb0">r_exec::IPGMContext</a>, and <a class="el" href="classr__exec_1_1_h_l_p_context.html#afa08d840cb04208a8884db21e5d7ec1b">r_exec::HLPContext</a>.</p>
+<p>Implemented in <a class="el" href="classr__exec_1_1_i_p_g_m_context.html#aa9e1efdae26046da78ee8d96c0d8c4e4">r_exec::IPGMContext</a>, and <a class="el" href="classr__exec_1_1_h_l_p_context.html#a26b1d05da695fc4f23741b670bc5903e">r_exec::HLPContext</a>.</p>
 
 </div>
 </div>

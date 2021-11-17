@@ -84,8 +84,8 @@ uint32&#160;</td><td class="memItemRight" valign="bottom"><b>decompile</b> (<a c
 <tr class="memitem:a0ac160b88f0dc22537c338c09b4372d5"><td class="memItemLeft" align="right" valign="top"><a id="a0ac160b88f0dc22537c338c09b4372d5"></a>
 uint32&#160;</td><td class="memItemRight" valign="bottom"><b>decompile</b> (<a class="el" href="classr__comp_1_1_image.html">r_comp::Image</a> *image, std::ostringstream *stream, Timestamp::duration time_offset, std::vector&lt; <a class="el" href="classr__code_1_1_sys_object.html">r_code::SysObject</a> * &gt; &amp;imported_objects, bool include_oid=true, bool include_label=true, bool include_views=true)</td></tr>
 <tr class="separator:a0ac160b88f0dc22537c338c09b4372d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5483ca0bc9ad1d33d3d8776d134af656"><td class="memItemLeft" align="right" valign="top">uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__comp_1_1_decompiler.html#a5483ca0bc9ad1d33d3d8776d134af656">decompile_references</a> (<a class="el" href="classr__comp_1_1_image.html">r_comp::Image</a> *image, UNORDERED_MAP&lt; uint16, std::string &gt; *object_names=NULL)</td></tr>
-<tr class="separator:a5483ca0bc9ad1d33d3d8776d134af656"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e076c05e8d033c3313372e0f0a3f15a"><td class="memItemLeft" align="right" valign="top">uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__comp_1_1_decompiler.html#a6e076c05e8d033c3313372e0f0a3f15a">decompile_references</a> (<a class="el" href="classr__comp_1_1_image.html">r_comp::Image</a> *image, std::unordered_map&lt; uint16, std::string &gt; *object_names=NULL)</td></tr>
+<tr class="separator:a6e076c05e8d033c3313372e0f0a3f15a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6940d4714ed8d80eb4672354c785335b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__comp_1_1_decompiler.html#a6940d4714ed8d80eb4672354c785335b">decompile_object</a> (uint16 object_index, std::ostringstream *stream, Timestamp::duration time_offset, bool include_oid=true, bool include_label=true, bool include_views=true)</td></tr>
 <tr class="separator:a6940d4714ed8d80eb4672354c785335b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad72af194ccaf562461fa58bd6e32924d"><td class="memItemLeft" align="right" valign="top"><a id="ad72af194ccaf562461fa58bd6e32924d"></a>
@@ -94,7 +94,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>decompile_object</b> 
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="decompiler_8h_source.html#l00090">90</a> of file <a class="el" href="decompiler_8h_source.html">decompiler.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="decompiler_8h_source.html#l00098">98</a> of file <a class="el" href="decompiler_8h_source.html">decompiler.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a6940d4714ed8d80eb4672354c785335b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6940d4714ed8d80eb4672354c785335b">&#9670;&nbsp;</a></span>decompile_object()</h2>
@@ -157,12 +157,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>decompile_object</b> 
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="decompiler_8cpp_source.html#l00306">306</a> of file <a class="el" href="decompiler_8cpp_source.html">decompiler.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="decompiler_8cpp_source.html#l00314">314</a> of file <a class="el" href="decompiler_8cpp_source.html">decompiler.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a5483ca0bc9ad1d33d3d8776d134af656"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5483ca0bc9ad1d33d3d8776d134af656">&#9670;&nbsp;</a></span>decompile_references()</h2>
+<a id="a6e076c05e8d033c3313372e0f0a3f15a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e076c05e8d033c3313372e0f0a3f15a">&#9670;&nbsp;</a></span>decompile_references()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -176,7 +176,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>decompile_object</b> 
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">UNORDERED_MAP&lt; uint16, std::string &gt; *&#160;</td>
+          <td class="paramtype">std::unordered_map&lt; uint16, std::string &gt; *&#160;</td>
           <td class="paramname"><em>object_names</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
@@ -195,7 +195,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>decompile_object</b> 
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The number of objects, or 0 for error. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="decompiler_8cpp_source.html#l00217">217</a> of file <a class="el" href="decompiler_8cpp_source.html">decompiler.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="decompiler_8cpp_source.html#l00225">225</a> of file <a class="el" href="decompiler_8cpp_source.html">decompiler.cpp</a>.</p>
 
 </div>
 </div>

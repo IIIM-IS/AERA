@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['matchesaxiom_727',['matchesAxiom',['../classr__exec_1_1___mem.html#afada413e6aa92c968cfa3835593d88d0',1,'r_exec::_Mem']]],
-  ['matchobject_728',['MatchObject',['../classr__exec_1_1___fact.html#aff9d3fb0e136652d4e9125454c8e8ecf',1,'r_exec::_Fact']]],
-  ['metadata_729',['MetaData',['../classtcp__io__device_1_1_meta_data.html#a7b888fb0c02311018762c4c0ed0fd031',1,'tcp_io_device::MetaData']]],
-  ['msgdata_730',['MsgData',['../classtcp__io__device_1_1_msg_data.html#abdc827eb7bc62a13ccba640b42e2cff9',1,'tcp_io_device::MsgData']]]
+  ['load_621',['load',['../class_test_mem.html#a2308897f92bc95a57b7c3229555c6423',1,'TestMem']]],
+  ['loadreplicodefile_622',['loadReplicodeFile',['../classr__comp_1_1_repli_struct.html#aef34dbb7c33ec168baf79b4c770a255b',1,'r_comp::RepliStruct']]]
 ];

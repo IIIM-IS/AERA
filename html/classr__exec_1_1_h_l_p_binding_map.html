@@ -79,7 +79,6 @@ Inheritance diagram for r_exec::HLPBindingMap:</div>
   <img src="classr__exec_1_1_h_l_p_binding_map.png" usemap="#r_5Fexec::HLPBindingMap_map" alt=""/>
   <map id="r_5Fexec::HLPBindingMap_map" name="r_5Fexec::HLPBindingMap_map">
 <area href="classr__exec_1_1_binding_map.html" alt="r_exec::BindingMap" shape="rect" coords="0,56,148,80"/>
-<area href="classcore_1_1___object.html" alt="core::_Object" shape="rect" coords="0,0,148,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -160,6 +159,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> (<a class="e
 <tr class="memitem:a50910fd337cf84f00611e0f6b93ca29e inherit pub_methods_classr__exec_1_1_binding_map"><td class="memItemLeft" align="right" valign="top"><a id="a50910fd337cf84f00611e0f6b93ca29e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>reset_fwd_timings</b> (<a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *reference_fact)</td></tr>
 <tr class="separator:a50910fd337cf84f00611e0f6b93ca29e inherit pub_methods_classr__exec_1_1_binding_map"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d4b075b0b50c4dfd7914b9ad9fd67fe inherit pub_methods_classr__exec_1_1_binding_map"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1_binding_map.html#a4d4b075b0b50c4dfd7914b9ad9fd67fe">match_fwd_timings</a> (Timestamp after, Timestamp before)</td></tr>
+<tr class="separator:a4d4b075b0b50c4dfd7914b9ad9fd67fe inherit pub_methods_classr__exec_1_1_binding_map"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8711751c5dc3710b0d775164735149e5 inherit pub_methods_classr__exec_1_1_binding_map"><td class="memItemLeft" align="right" valign="top"><a id="a8711751c5dc3710b0d775164735149e5"></a>
 MatchResult&#160;</td><td class="memItemRight" valign="bottom"><b>match_fwd_lenient</b> (const <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *f_object, const <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *f_pattern)</td></tr>
 <tr class="separator:a8711751c5dc3710b0d775164735149e5 inherit pub_methods_classr__exec_1_1_binding_map"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -201,9 +202,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>bind_variable</b> (<a
 <tr class="memitem:aca24554627d05aa1fedba4d84f3de6ea inherit pub_methods_classr__exec_1_1_binding_map"><td class="memItemLeft" align="right" valign="top"><a id="aca24554627d05aa1fedba4d84f3de6ea"></a>
 uint16&#160;</td><td class="memItemRight" valign="bottom"><b>get_value_code_size</b> (uint16 id)</td></tr>
 <tr class="separator:aca24554627d05aa1fedba4d84f3de6ea inherit pub_methods_classr__exec_1_1_binding_map"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2fc5545e1018959012dc2e009a2cc0e2 inherit pub_methods_classr__exec_1_1_binding_map"><td class="memItemLeft" align="right" valign="top"><a id="a2fc5545e1018959012dc2e009a2cc0e2"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>intersect</b> (<a class="el" href="classr__exec_1_1_binding_map.html">BindingMap</a> *bm)</td></tr>
-<tr class="separator:a2fc5545e1018959012dc2e009a2cc0e2 inherit pub_methods_classr__exec_1_1_binding_map"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3dbe0ff163f255d95616654c4544614 inherit pub_methods_classr__exec_1_1_binding_map"><td class="memItemLeft" align="right" valign="top"><a id="af3dbe0ff163f255d95616654c4544614"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>intersect</b> (<a class="el" href="classr__exec_1_1_binding_map.html">BindingMap</a> *bm) const</td></tr>
+<tr class="separator:af3dbe0ff163f255d95616654c4544614 inherit pub_methods_classr__exec_1_1_binding_map"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7f00d858911dce10213adeef7765fb5 inherit pub_methods_classr__exec_1_1_binding_map"><td class="memItemLeft" align="right" valign="top"><a id="af7f00d858911dce10213adeef7765fb5"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_fully_specified</b> () const</td></tr>
 <tr class="separator:af7f00d858911dce10213adeef7765fb5 inherit pub_methods_classr__exec_1_1_binding_map"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -222,13 +223,6 @@ int16&#160;</td><td class="memItemRight" valign="bottom"><b>get_fwd_before_index
 <tr class="memitem:a5e0f358cf0e7c5e10a212d24f7e30a0f inherit pub_methods_classr__exec_1_1_binding_map"><td class="memItemLeft" align="right" valign="top"><a id="a5e0f358cf0e7c5e10a212d24f7e30a0f"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>scan_variable</b> (uint16 id) const</td></tr>
 <tr class="separator:a5e0f358cf0e7c5e10a212d24f7e30a0f inherit pub_methods_classr__exec_1_1_binding_map"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classcore_1_1___object"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcore_1_1___object')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcore_1_1___object.html">core::_Object</a></td></tr>
-<tr class="memitem:a4a0780ae30bd77ef7b7c2f99b1bc61c0 inherit pub_methods_classcore_1_1___object"><td class="memItemLeft" align="right" valign="top"><a id="a4a0780ae30bd77ef7b7c2f99b1bc61c0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>incRef</b> ()</td></tr>
-<tr class="separator:a4a0780ae30bd77ef7b7c2f99b1bc61c0 inherit pub_methods_classcore_1_1___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a313a01f165e666c7e590fccd531f09b1 inherit pub_methods_classcore_1_1___object"><td class="memItemLeft" align="right" valign="top"><a id="a313a01f165e666c7e590fccd531f09b1"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>decRef</b> ()</td></tr>
-<tr class="separator:a313a01f165e666c7e590fccd531f09b1 inherit pub_methods_classcore_1_1___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -239,9 +233,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>add_unbound_value</b>
 <tr class="memitem:a172fc3fb14cb0fc988f14b7441bd0b9f inherit pro_methods_classr__exec_1_1_binding_map"><td class="memItemLeft" align="right" valign="top"><a id="a172fc3fb14cb0fc988f14b7441bd0b9f"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>match_timings</b> (Timestamp stored_after, Timestamp stored_before, Timestamp after, Timestamp before, uint32 destination_after_index, uint32 destination_before_index)</td></tr>
 <tr class="separator:a172fc3fb14cb0fc988f14b7441bd0b9f inherit pro_methods_classr__exec_1_1_binding_map"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae56cc4d3abec2d84b44c86d4a9e66b24 inherit pro_methods_classr__exec_1_1_binding_map"><td class="memItemLeft" align="right" valign="top"><a id="ae56cc4d3abec2d84b44c86d4a9e66b24"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>match_fwd_timings</b> (const <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *f_object, const <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *f_pattern)</td></tr>
-<tr class="separator:ae56cc4d3abec2d84b44c86d4a9e66b24 inherit pro_methods_classr__exec_1_1_binding_map"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78d4e859e960b92356dc09b29c2dd072 inherit pro_methods_classr__exec_1_1_binding_map"><td class="memItemLeft" align="right" valign="top"><a id="a78d4e859e960b92356dc09b29c2dd072"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>match_fwd_timings</b> (const <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *f_object)</td></tr>
+<tr class="separator:a78d4e859e960b92356dc09b29c2dd072 inherit pro_methods_classr__exec_1_1_binding_map"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a784d3af86118a2943d51ac26e38e7eb6 inherit pro_methods_classr__exec_1_1_binding_map"><td class="memItemLeft" align="right" valign="top"><a id="a784d3af86118a2943d51ac26e38e7eb6"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>match</b> (const <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *object, uint16 o_base_index, uint16 o_index, const <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *pattern, uint16 p_index, uint16 o_arity)</td></tr>
 <tr class="separator:a784d3af86118a2943d51ac26e38e7eb6 inherit pro_methods_classr__exec_1_1_binding_map"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -258,7 +252,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>abstract_member</b> (
 <tr class="separator:a5f7f0e90f3ee219eb40ea88b75665654 inherit pro_methods_classr__exec_1_1_binding_map"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classr__exec_1_1_binding_map"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classr__exec_1_1_binding_map')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classr__exec_1_1_binding_map.html">r_exec::BindingMap</a></td></tr>
 <tr class="memitem:ac0f8142e54fac374a0671fca465b615f inherit pro_attribs_classr__exec_1_1_binding_map"><td class="memItemLeft" align="right" valign="top"><a id="ac0f8142e54fac374a0671fca465b615f"></a>
-std::vector&lt; <a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1_value.html">Value</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>map_</b></td></tr>
+std::vector&lt; P&lt; <a class="el" href="classr__exec_1_1_value.html">Value</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>map_</b></td></tr>
 <tr class="separator:ac0f8142e54fac374a0671fca465b615f inherit pro_attribs_classr__exec_1_1_binding_map"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba175edf35e28efb606e3171199c97a8 inherit pro_attribs_classr__exec_1_1_binding_map"><td class="memItemLeft" align="right" valign="top"><a id="aba175edf35e28efb606e3171199c97a8"></a>
 uint32&#160;</td><td class="memItemRight" valign="bottom"><b>unbound_values_</b></td></tr>
@@ -272,14 +266,10 @@ int16&#160;</td><td class="memItemRight" valign="bottom"><b>fwd_after_index_</b>
 <tr class="memitem:aa9ff472438833c022ce878518650cb99 inherit pro_attribs_classr__exec_1_1_binding_map"><td class="memItemLeft" align="right" valign="top"><a id="aa9ff472438833c022ce878518650cb99"></a>
 int16&#160;</td><td class="memItemRight" valign="bottom"><b>fwd_before_index_</b></td></tr>
 <tr class="separator:aa9ff472438833c022ce878518650cb99 inherit pro_attribs_classr__exec_1_1_binding_map"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_classcore_1_1___object"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classcore_1_1___object')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classcore_1_1___object.html">core::_Object</a></td></tr>
-<tr class="memitem:a78942b476c06f3f3cab6c8fb0dba30e4 inherit pro_attribs_classcore_1_1___object"><td class="memItemLeft" align="right" valign="top"><a id="a78942b476c06f3f3cab6c8fb0dba30e4"></a>
-int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</b></td></tr>
-<tr class="separator:a78942b476c06f3f3cab6c8fb0dba30e4 inherit pro_attribs_classcore_1_1___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="binding__map_8h_source.html#l00316">316</a> of file <a class="el" href="binding__map_8h_source.html">binding_map.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="binding__map_8h_source.html#l00337">337</a> of file <a class="el" href="binding__map_8h_source.html">binding_map.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="binding__map_8h_source.html">binding_map.h</a></li>
 <li><a class="el" href="binding__map_8cpp_source.html">binding_map.cpp</a></li>

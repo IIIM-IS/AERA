@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['replicode_760',['Replicode',['../index.html',1,'']]],
-  ['replicode_761',['Replicode',['../md_submodules_replicode__i_n_s_t_a_l_l.html',1,'']]]
+  ['replicode_2dsyntax_2dv1_2e2_20_282020_2d06_2d19_29_659',['replicode-syntax-v1.2 (2020-06-19)',['../md_submodules__a_e_r_a__c_h_a_n_g_e_l_o_g.html',1,'']]]
 ];

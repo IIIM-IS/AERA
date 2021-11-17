@@ -84,7 +84,6 @@ Inheritance diagram for r_exec::PMDLController:</div>
 <area href="classr__exec_1_1_h_l_p_controller.html" alt="r_exec::HLPController" shape="rect" coords="101,168,293,192"/>
 <area href="classr__exec_1_1_o_controller.html" alt="r_exec::OController" shape="rect" coords="101,112,293,136"/>
 <area href="classr__exec_1_1_controller.html" alt="r_exec::Controller" shape="rect" coords="101,56,293,80"/>
-<area href="classcore_1_1___object.html" alt="core::_Object" shape="rect" coords="101,0,293,24"/>
 <area href="classr__exec_1_1_primary_m_d_l_controller.html" alt="r_exec::PrimaryMDLController" shape="rect" coords="0,336,192,360"/>
 <area href="classr__exec_1_1_top_level_m_d_l_controller.html" alt="r_exec::TopLevelMDLController" shape="rect" coords="202,336,394,360"/>
   </map>
@@ -129,21 +128,20 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>remove_monitor</b> (<
 <tr class="memitem:a432a299afd681ee2434cc7371ea57edc inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a432a299afd681ee2434cc7371ea57edc"></a>
 <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>get_f_ihlp</b> (<a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> *bindings, bool wr_enabled) const</td></tr>
 <tr class="separator:a432a299afd681ee2434cc7371ea57edc inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97fa000cf44ba22bd1ade089e359bf6b inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a97fa000cf44ba22bd1ade089e359bf6b"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>store_requirement</b> (<a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *f_p_f_imdl, <a class="el" href="classr__exec_1_1_m_d_l_controller.html">MDLController</a> *controller, bool chaining_was_allowed, bool is_simulation)=0</td></tr>
-<tr class="separator:a97fa000cf44ba22bd1ade089e359bf6b inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39fa785fcf5660bbe3a2192a963047af inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1_m_d_l_controller.html#a39fa785fcf5660bbe3a2192a963047af">store_requirement</a> (<a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *f_p_f_imdl, <a class="el" href="classr__exec_1_1_m_d_l_controller.html">MDLController</a> *controller, bool chaining_was_allowed)=0</td></tr>
+<tr class="separator:a39fa785fcf5660bbe3a2192a963047af inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abef031d9a2bcb542125868b73b07aea4 inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="abef031d9a2bcb542125868b73b07aea4"></a>
 ChainingStatus&#160;</td><td class="memItemRight" valign="bottom"><b>retrieve_imdl_fwd</b> (<a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> *bm, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *f_imdl, <a class="el" href="classr__exec_1_1_requirements_pair.html">RequirementsPair</a> &amp;r_p, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *&amp;ground, <a class="el" href="classr__exec_1_1_m_d_l_controller.html">MDLController</a> *req_controller, bool &amp;wr_enabled)</td></tr>
 <tr class="separator:abef031d9a2bcb542125868b73b07aea4 inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4822ee25748ac79591511305b3a0648 inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="ae4822ee25748ac79591511305b3a0648"></a>
 ChainingStatus&#160;</td><td class="memItemRight" valign="bottom"><b>retrieve_imdl_bwd</b> (<a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> *bm, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *f_imdl, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *&amp;ground)</td></tr>
 <tr class="separator:ae4822ee25748ac79591511305b3a0648 inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ecf525189307069ec31ef664b245504 inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a7ecf525189307069ec31ef664b245504"></a>
-ChainingStatus&#160;</td><td class="memItemRight" valign="bottom"><b>retrieve_simulated_imdl_fwd</b> (<a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> *bm, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *f_imdl, <a class="el" href="classr__exec_1_1_controller.html">Controller</a> *root)</td></tr>
-<tr class="separator:a7ecf525189307069ec31ef664b245504 inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a259614fccaa63bb83e5e821991dcc4a0 inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a259614fccaa63bb83e5e821991dcc4a0"></a>
-ChainingStatus&#160;</td><td class="memItemRight" valign="bottom"><b>retrieve_simulated_imdl_bwd</b> (<a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> *bm, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *f_imdl, <a class="el" href="classr__exec_1_1_controller.html">Controller</a> *root, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *&amp;ground)</td></tr>
-<tr class="separator:a259614fccaa63bb83e5e821991dcc4a0 inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b8a6d1053a6f21eed4f932fc26c76e1 inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a7b8a6d1053a6f21eed4f932fc26c76e1"></a>
+ChainingStatus&#160;</td><td class="memItemRight" valign="bottom"><b>retrieve_simulated_imdl_fwd</b> (const <a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> *bm, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *f_imdl, <a class="el" href="classr__exec_1_1_sim.html">Sim</a> *sim, std::vector&lt; <a class="el" href="classr__exec_1_1_binding_result.html">BindingResult</a> &gt; &amp;results)</td></tr>
+<tr class="separator:a7b8a6d1053a6f21eed4f932fc26c76e1 inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0ce7f4901d87cab8f697dc75400be06 inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="ac0ce7f4901d87cab8f697dc75400be06"></a>
+ChainingStatus&#160;</td><td class="memItemRight" valign="bottom"><b>retrieve_simulated_imdl_bwd</b> (<a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> *bm, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *f_imdl, <a class="el" href="classr__exec_1_1_sim.html">Sim</a> *prediction_sim, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *&amp;ground, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *&amp;strong_requirement_ground)</td></tr>
+<tr class="separator:ac0ce7f4901d87cab8f697dc75400be06 inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa01111d7a6b30df3a003c23f5a53f59a inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="aa01111d7a6b30df3a003c23f5a53f59a"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>predict</b> (<a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> *bm, <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *input, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *f_imdl, bool chaining_was_allowed, <a class="el" href="classr__exec_1_1_requirements_pair.html">RequirementsPair</a> &amp;r_p, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *ground)=0</td></tr>
 <tr class="separator:aa01111d7a6b30df3a003c23f5a53f59a inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -211,9 +209,9 @@ uint16&#160;</td><td class="memItemRight" valign="bottom"><b>get_out_group_count
 <tr class="memitem:a7862c83a5460ce2b946840c85d8731f4 inherit pub_methods_classr__exec_1_1_h_l_p_controller"><td class="memItemLeft" align="right" valign="top"><a id="a7862c83a5460ce2b946840c85d8731f4"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>has_tpl_args</b> () const</td></tr>
 <tr class="separator:a7862c83a5460ce2b946840c85d8731f4 inherit pub_methods_classr__exec_1_1_h_l_p_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a55f881c993b13c6940cac79fcb3584 inherit pub_methods_classr__exec_1_1_h_l_p_controller"><td class="memItemLeft" align="right" valign="top"><a id="a9a55f881c993b13c6940cac79fcb3584"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>inject_prediction</b> (<a class="el" href="classr__exec_1_1_fact.html">Fact</a> *prediction, float32 confidence) const</td></tr>
-<tr class="separator:a9a55f881c993b13c6940cac79fcb3584 inherit pub_methods_classr__exec_1_1_h_l_p_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a841df236752b21237d34c87128592f06 inherit pub_methods_classr__exec_1_1_h_l_p_controller"><td class="memItemLeft" align="right" valign="top"><a id="a841df236752b21237d34c87128592f06"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>inject_prediction</b> (<a class="el" href="classr__exec_1_1_fact.html">Fact</a> *prediction, float32 confidence) const</td></tr>
+<tr class="separator:a841df236752b21237d34c87128592f06 inherit pub_methods_classr__exec_1_1_h_l_p_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classr__exec_1_1_controller"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classr__exec_1_1_controller')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classr__exec_1_1_controller.html">r_exec::Controller</a></td></tr>
 <tr class="memitem:a15a5022bba221396a281281fa919e5cc inherit pub_methods_classr__exec_1_1_controller"><td class="memItemLeft" align="right" valign="top"><a id="a15a5022bba221396a281281fa919e5cc"></a>
 std::chrono::microseconds&#160;</td><td class="memItemRight" valign="bottom"><b>get_tsc</b> ()</td></tr>
@@ -230,12 +228,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_activated</b> () c
 <tr class="memitem:a4beac9326cb8bf91dfa200a6ca3dfdb6 inherit pub_methods_classr__exec_1_1_controller"><td class="memItemLeft" align="right" valign="top"><a id="a4beac9326cb8bf91dfa200a6ca3dfdb6"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_alive</b> () const</td></tr>
 <tr class="separator:a4beac9326cb8bf91dfa200a6ca3dfdb6 inherit pub_methods_classr__exec_1_1_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a395016b3efea231bad0cb6cd4bddb0f0 inherit pub_methods_classr__exec_1_1_controller"><td class="memItemLeft" align="right" valign="top"><a id="a395016b3efea231bad0cb6cd4bddb0f0"></a>
-<a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getObject</b> () const</td></tr>
-<tr class="separator:a395016b3efea231bad0cb6cd4bddb0f0 inherit pub_methods_classr__exec_1_1_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:addf477c2f5537463b6e5636d2eed8ae8 inherit pub_methods_classr__exec_1_1_controller"><td class="memItemLeft" align="right" valign="top"><a id="addf477c2f5537463b6e5636d2eed8ae8"></a>
-<a class="el" href="classr__exec_1_1_view.html">r_exec::View</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getView</b> () const</td></tr>
-<tr class="separator:addf477c2f5537463b6e5636d2eed8ae8 inherit pub_methods_classr__exec_1_1_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab63c5f0ea4c444abf555fd172bed3ea9 inherit pub_methods_classr__exec_1_1_controller"><td class="memItemLeft" align="right" valign="top"><a id="ab63c5f0ea4c444abf555fd172bed3ea9"></a>
+<a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>get_object</b> () const</td></tr>
+<tr class="separator:ab63c5f0ea4c444abf555fd172bed3ea9 inherit pub_methods_classr__exec_1_1_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a224327288dc7c60609b4854474907309 inherit pub_methods_classr__exec_1_1_controller"><td class="memItemLeft" align="right" valign="top"><a id="a224327288dc7c60609b4854474907309"></a>
+<a class="el" href="classr__exec_1_1_view.html">r_exec::View</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>get_view</b> () const</td></tr>
+<tr class="separator:a224327288dc7c60609b4854474907309 inherit pub_methods_classr__exec_1_1_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91840f2d501f4f84575db9552e977e45 inherit pub_methods_classr__exec_1_1_controller"><td class="memItemLeft" align="right" valign="top"><a id="a91840f2d501f4f84575db9552e977e45"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>_take_input</b> (<a class="el" href="classr__exec_1_1_view.html">r_exec::View</a> *input)</td></tr>
 <tr class="separator:a91840f2d501f4f84575db9552e977e45 inherit pub_methods_classr__exec_1_1_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -251,13 +249,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>set_view</b> (<a clas
 <tr class="memitem:a0ff6d5170c3da1f83dea3c774500412d inherit pub_methods_classr__exec_1_1_controller"><td class="memItemLeft" align="right" valign="top"><a id="a0ff6d5170c3da1f83dea3c774500412d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>debug</b> (<a class="el" href="classr__exec_1_1_view.html">View</a> *input)</td></tr>
 <tr class="separator:a0ff6d5170c3da1f83dea3c774500412d inherit pub_methods_classr__exec_1_1_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classcore_1_1___object"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcore_1_1___object')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcore_1_1___object.html">core::_Object</a></td></tr>
-<tr class="memitem:a4a0780ae30bd77ef7b7c2f99b1bc61c0 inherit pub_methods_classcore_1_1___object"><td class="memItemLeft" align="right" valign="top"><a id="a4a0780ae30bd77ef7b7c2f99b1bc61c0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>incRef</b> ()</td></tr>
-<tr class="separator:a4a0780ae30bd77ef7b7c2f99b1bc61c0 inherit pub_methods_classcore_1_1___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a313a01f165e666c7e590fccd531f09b1 inherit pub_methods_classcore_1_1___object"><td class="memItemLeft" align="right" valign="top"><a id="a313a01f165e666c7e590fccd531f09b1"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>decRef</b> ()</td></tr>
-<tr class="separator:a313a01f165e666c7e590fccd531f09b1 inherit pub_methods_classcore_1_1___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -276,38 +267,36 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>monitor_goals</b> (<a
 <tr class="memitem:a45db97cb1901c5a2f5e6fbc7f61babf7"><td class="memItemLeft" align="right" valign="top"><a id="a45db97cb1901c5a2f5e6fbc7f61babf7"></a>
 std::chrono::microseconds&#160;</td><td class="memItemRight" valign="bottom"><b>get_sim_thz</b> (Timestamp now, Timestamp deadline) const</td></tr>
 <tr class="separator:a45db97cb1901c5a2f5e6fbc7f61babf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe64599745de95f3dc878ab24ecdb127"><td class="memItemLeft" align="right" valign="top"><a id="afe64599745de95f3dc878ab24ecdb127"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>PMDLController</b> (<a class="el" href="classr__code_1_1_view.html">r_code::View</a> *view)</td></tr>
-<tr class="separator:afe64599745de95f3dc878ab24ecdb127"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d01b4fbf8a8c788635e8af5e668a844"><td class="memItemLeft" align="right" valign="top"><a id="a3d01b4fbf8a8c788635e8af5e668a844"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>PMDLController</b> (<a class="el" href="classr__code_1_1___view.html">r_code::_View</a> *view)</td></tr>
+<tr class="separator:a3d01b4fbf8a8c788635e8af5e668a844"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classr__exec_1_1_m_d_l_controller"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classr__exec_1_1_m_d_l_controller')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classr__exec_1_1_m_d_l_controller.html">r_exec::MDLController</a></td></tr>
 <tr class="memitem:afe274e6b4a9815e37521f1f4ba3121a5 inherit pro_methods_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="afe274e6b4a9815e37521f1f4ba3121a5"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>_store_requirement</b> (<a class="el" href="classr__code_1_1list.html">r_code::list</a>&lt; <a class="el" href="classr__exec_1_1_m_d_l_controller_1_1_requirement_entry.html">RequirementEntry</a> &gt; *cache, <a class="el" href="classr__exec_1_1_m_d_l_controller_1_1_requirement_entry.html">RequirementEntry</a> &amp;e)</td></tr>
 <tr class="separator:afe274e6b4a9815e37521f1f4ba3121a5 inherit pro_methods_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5692255cfd52e60d60596190db918d6 inherit pro_methods_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="ad5692255cfd52e60d60596190db918d6"></a>
-float32&#160;</td><td class="memItemRight" valign="bottom"><b>get_cfd</b> () const</td></tr>
-<tr class="separator:ad5692255cfd52e60d60596190db918d6 inherit pro_methods_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09faba9e6928f1dd2a40ac9d9daa7baa inherit pro_methods_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top">float32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1_m_d_l_controller.html#a09faba9e6928f1dd2a40ac9d9daa7baa">get_success_rate</a> () const</td></tr>
+<tr class="separator:a09faba9e6928f1dd2a40ac9d9daa7baa inherit pro_methods_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acff8b45979b3ef44adaca619e90d8d5f inherit pro_methods_classr__exec_1_1_m_d_l_controller"><td class="memTemplParams" colspan="2"><a id="acff8b45979b3ef44adaca619e90d8d5f"></a>
 template&lt;class C &gt; </td></tr>
 <tr class="memitem:acff8b45979b3ef44adaca619e90d8d5f inherit pro_methods_classr__exec_1_1_m_d_l_controller"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>reduce_cache</b> (<a class="el" href="classr__exec_1_1_fact.html">Fact</a> *f_p_f_imdl, <a class="el" href="classr__exec_1_1_m_d_l_controller.html">MDLController</a> *controller)</td></tr>
 <tr class="separator:acff8b45979b3ef44adaca619e90d8d5f inherit pro_methods_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa21f27d7b64604457ff2ac6b3c10b6f6 inherit pro_methods_classr__exec_1_1_m_d_l_controller"><td class="memTemplParams" colspan="2"><a id="aa21f27d7b64604457ff2ac6b3c10b6f6"></a>
+<tr class="memitem:a52ac61fcb1a242fd749d8188d9240d9d inherit pro_methods_classr__exec_1_1_m_d_l_controller"><td class="memTemplParams" colspan="2"><a id="a52ac61fcb1a242fd749d8188d9240d9d"></a>
 template&lt;class E &gt; </td></tr>
-<tr class="memitem:aa21f27d7b64604457ff2ac6b3c10b6f6 inherit pro_methods_classr__exec_1_1_m_d_l_controller"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>reduce_cache</b> (<a class="el" href="classr__exec_1_1_h_l_p_controller_1_1_cache.html">Cache</a>&lt; E &gt; *cache, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *f_p_f_imdl, <a class="el" href="classr__exec_1_1_m_d_l_controller.html">MDLController</a> *controller)</td></tr>
-<tr class="separator:aa21f27d7b64604457ff2ac6b3c10b6f6 inherit pro_methods_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52ac61fcb1a242fd749d8188d9240d9d inherit pro_methods_classr__exec_1_1_m_d_l_controller"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>reduce_cache</b> (<a class="el" href="classr__exec_1_1_critical_section_list.html">CriticalSectionList</a>&lt; E &gt; *cache, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *f_p_f_imdl, <a class="el" href="classr__exec_1_1_m_d_l_controller.html">MDLController</a> *controller)</td></tr>
+<tr class="separator:a52ac61fcb1a242fd749d8188d9240d9d inherit pro_methods_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9cb5c5fbf12cdcc681be58156965ba7d inherit pro_methods_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a9cb5c5fbf12cdcc681be58156965ba7d"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>monitor_predictions</b> (<a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *input)</td></tr>
 <tr class="separator:a9cb5c5fbf12cdcc681be58156965ba7d inherit pro_methods_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3540c287c4cc97b61e61b369ea0bc60c inherit pro_methods_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a3540c287c4cc97b61e61b369ea0bc60c"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>MDLController</b> (<a class="el" href="classr__code_1_1_view.html">r_code::View</a> *view)</td></tr>
-<tr class="separator:a3540c287c4cc97b61e61b369ea0bc60c inherit pro_methods_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0dc7542aaae902816e0f638c2a3f47eb inherit pro_methods_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a0dc7542aaae902816e0f638c2a3f47eb"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>MDLController</b> (<a class="el" href="classr__code_1_1___view.html">r_code::_View</a> *view)</td></tr>
+<tr class="separator:a0dc7542aaae902816e0f638c2a3f47eb inherit pro_methods_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classr__exec_1_1_h_l_p_controller"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classr__exec_1_1_h_l_p_controller')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classr__exec_1_1_h_l_p_controller.html">r_exec::HLPController</a></td></tr>
-<tr class="memitem:ae822cb5718766c32064732cb8099b7c3 inherit pro_methods_classr__exec_1_1_h_l_p_controller"><td class="memTemplParams" colspan="2"><a id="ae822cb5718766c32064732cb8099b7c3"></a>
+<tr class="memitem:aff42c3c62b1c9e2c8288a146c850d64a inherit pro_methods_classr__exec_1_1_h_l_p_controller"><td class="memTemplParams" colspan="2"><a id="aff42c3c62b1c9e2c8288a146c850d64a"></a>
 template&lt;class E &gt; </td></tr>
-<tr class="memitem:ae822cb5718766c32064732cb8099b7c3 inherit pro_methods_classr__exec_1_1_h_l_p_controller"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>_store_evidence</b> (<a class="el" href="classr__exec_1_1_h_l_p_controller_1_1_cache.html">Cache</a>&lt; E &gt; *cache, <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *evidence)</td></tr>
-<tr class="separator:ae822cb5718766c32064732cb8099b7c3 inherit pro_methods_classr__exec_1_1_h_l_p_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a94d626ab23a94d2c46b658108cdf4418 inherit pro_methods_classr__exec_1_1_h_l_p_controller"><td class="memItemLeft" align="right" valign="top"><a id="a94d626ab23a94d2c46b658108cdf4418"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>evaluate_bwd_guards</b> (<a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> *bm)</td></tr>
-<tr class="separator:a94d626ab23a94d2c46b658108cdf4418 inherit pro_methods_classr__exec_1_1_h_l_p_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff42c3c62b1c9e2c8288a146c850d64a inherit pro_methods_classr__exec_1_1_h_l_p_controller"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>_store_evidence</b> (<a class="el" href="classr__exec_1_1_critical_section_list.html">CriticalSectionList</a>&lt; E &gt; *cache, <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *evidence)</td></tr>
+<tr class="separator:aff42c3c62b1c9e2c8288a146c850d64a inherit pro_methods_classr__exec_1_1_h_l_p_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a879d2ae14cc6c8dde1936e7b3f7d3b48 inherit pro_methods_classr__exec_1_1_h_l_p_controller"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1_h_l_p_controller.html#a879d2ae14cc6c8dde1936e7b3f7d3b48">evaluate_bwd_guards</a> (<a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> *bm, bool narrow_fwd_timings=false)</td></tr>
+<tr class="separator:a879d2ae14cc6c8dde1936e7b3f7d3b48 inherit pro_methods_classr__exec_1_1_h_l_p_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa44fc72662a353e861e07228f9ae03b1 inherit pro_methods_classr__exec_1_1_h_l_p_controller"><td class="memItemLeft" align="right" valign="top"><a id="aa44fc72662a353e861e07228f9ae03b1"></a>
 MatchResult&#160;</td><td class="memItemRight" valign="bottom"><b>check_evidences</b> (<a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *target, <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *&amp;evidence)</td></tr>
 <tr class="separator:aa44fc72662a353e861e07228f9ae03b1 inherit pro_methods_classr__exec_1_1_h_l_p_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -326,13 +315,13 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>kill_views</b
 <tr class="memitem:a2db0d3b82f49a9e3cc886da7efd87a4c inherit pro_methods_classr__exec_1_1_h_l_p_controller"><td class="memItemLeft" align="right" valign="top"><a id="a2db0d3b82f49a9e3cc886da7efd87a4c"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>check_last_match_time</b> (bool match)=0</td></tr>
 <tr class="separator:a2db0d3b82f49a9e3cc886da7efd87a4c inherit pro_methods_classr__exec_1_1_h_l_p_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b4d6b0ccc392f5879c4884f6e837630 inherit pro_methods_classr__exec_1_1_h_l_p_controller"><td class="memItemLeft" align="right" valign="top"><a id="a0b4d6b0ccc392f5879c4884f6e837630"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>HLPController</b> (<a class="el" href="classr__code_1_1_view.html">r_code::View</a> *view)</td></tr>
-<tr class="separator:a0b4d6b0ccc392f5879c4884f6e837630 inherit pro_methods_classr__exec_1_1_h_l_p_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3de0730282f4d8091a09838ad72d8868 inherit pro_methods_classr__exec_1_1_h_l_p_controller"><td class="memItemLeft" align="right" valign="top"><a id="a3de0730282f4d8091a09838ad72d8868"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>HLPController</b> (<a class="el" href="classr__code_1_1___view.html">r_code::_View</a> *view)</td></tr>
+<tr class="separator:a3de0730282f4d8091a09838ad72d8868 inherit pro_methods_classr__exec_1_1_h_l_p_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classr__exec_1_1_o_controller"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classr__exec_1_1_o_controller')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classr__exec_1_1_o_controller.html">r_exec::OController</a></td></tr>
-<tr class="memitem:a3ddc94774b7ec301d516660c32faf398 inherit pro_methods_classr__exec_1_1_o_controller"><td class="memItemLeft" align="right" valign="top"><a id="a3ddc94774b7ec301d516660c32faf398"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>OController</b> (<a class="el" href="classr__code_1_1_view.html">r_code::View</a> *view)</td></tr>
-<tr class="separator:a3ddc94774b7ec301d516660c32faf398 inherit pro_methods_classr__exec_1_1_o_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a111615253e561e492aff7bdbc96a8814 inherit pro_methods_classr__exec_1_1_o_controller"><td class="memItemLeft" align="right" valign="top"><a id="a111615253e561e492aff7bdbc96a8814"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>OController</b> (<a class="el" href="classr__code_1_1___view.html">r_code::_View</a> *view)</td></tr>
+<tr class="separator:a111615253e561e492aff7bdbc96a8814 inherit pro_methods_classr__exec_1_1_o_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classr__exec_1_1_controller"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classr__exec_1_1_controller')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classr__exec_1_1_controller.html">r_exec::Controller</a></td></tr>
 <tr class="memitem:a9925e4963175caf8cc64e9ca45b114a5 inherit pro_methods_classr__exec_1_1_controller"><td class="memItemLeft" align="right" valign="top"><a id="a9925e4963175caf8cc64e9ca45b114a5"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>take_input</b> (<a class="el" href="classr__exec_1_1_view.html">r_exec::View</a> *input)</td></tr>
@@ -341,20 +330,20 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>take_input</b
 template&lt;class C &gt; </td></tr>
 <tr class="memitem:aed9b4c80e9acb6e3767b95d2250be712 inherit pro_methods_classr__exec_1_1_controller"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>__take_input</b> (<a class="el" href="classr__exec_1_1_view.html">r_exec::View</a> *input)</td></tr>
 <tr class="separator:aed9b4c80e9acb6e3767b95d2250be712 inherit pro_methods_classr__exec_1_1_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aceda86ddd19796fbdc26842a70365172 inherit pro_methods_classr__exec_1_1_controller"><td class="memItemLeft" align="right" valign="top"><a id="aceda86ddd19796fbdc26842a70365172"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Controller</b> (<a class="el" href="classr__code_1_1_view.html">r_code::View</a> *view)</td></tr>
-<tr class="separator:aceda86ddd19796fbdc26842a70365172 inherit pro_methods_classr__exec_1_1_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a291a01000a15d1e24b5b5a0603bfe2a2 inherit pro_methods_classr__exec_1_1_controller"><td class="memItemLeft" align="right" valign="top"><a id="a291a01000a15d1e24b5b5a0603bfe2a2"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Controller</b> (<a class="el" href="classr__code_1_1___view.html">r_code::_View</a> *view)</td></tr>
+<tr class="separator:a291a01000a15d1e24b5b5a0603bfe2a2 inherit pro_methods_classr__exec_1_1_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a820b1f9ae0a9aaa313fce27141a9e4f4"><td class="memItemLeft" align="right" valign="top"><a id="a820b1f9ae0a9aaa313fce27141a9e4f4"></a>
-<a class="el" href="classcore_1_1_critical_section.html">CriticalSection</a>&#160;</td><td class="memItemRight" valign="bottom"><b>g_monitorsCS_</b></td></tr>
+CriticalSection&#160;</td><td class="memItemRight" valign="bottom"><b>g_monitorsCS_</b></td></tr>
 <tr class="separator:a820b1f9ae0a9aaa313fce27141a9e4f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd7b4cf43341b3a5c52aa83de30a770e"><td class="memItemLeft" align="right" valign="top"><a id="abd7b4cf43341b3a5c52aa83de30a770e"></a>
-<a class="el" href="classr__code_1_1list.html">r_code::list</a>&lt; <a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1___g_monitor.html">_GMonitor</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>g_monitors_</b></td></tr>
+<a class="el" href="classr__code_1_1list.html">r_code::list</a>&lt; P&lt; <a class="el" href="classr__exec_1_1___g_monitor.html">_GMonitor</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>g_monitors_</b></td></tr>
 <tr class="separator:abd7b4cf43341b3a5c52aa83de30a770e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f5e77ba8419aaee8337952c73299587"><td class="memItemLeft" align="right" valign="top"><a id="a9f5e77ba8419aaee8337952c73299587"></a>
-<a class="el" href="classr__code_1_1list.html">r_code::list</a>&lt; <a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1___g_monitor.html">_GMonitor</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>r_monitors_</b></td></tr>
+<a class="el" href="classr__code_1_1list.html">r_code::list</a>&lt; P&lt; <a class="el" href="classr__exec_1_1___g_monitor.html">_GMonitor</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>r_monitors_</b></td></tr>
 <tr class="separator:a9f5e77ba8419aaee8337952c73299587"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classr__exec_1_1_m_d_l_controller"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classr__exec_1_1_m_d_l_controller')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classr__exec_1_1_m_d_l_controller.html">r_exec::MDLController</a></td></tr>
 <tr class="memitem:a85e02e9d5719b8e0f0054d00b4e80ae1 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a85e02e9d5719b8e0f0054d00b4e80ae1"></a>
@@ -364,20 +353,20 @@ Protected Attributes</h2></td></tr>
 <a class="el" href="classr__exec_1_1_m_d_l_controller_1_1_requirement_cache.html">RequirementCache</a>&#160;</td><td class="memItemRight" valign="bottom"><b>simulated_requirements_</b></td></tr>
 <tr class="separator:af4389aeb012731a14aeecc2827106c73 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a538d67f50206e597350273a6cdcfee8c inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a538d67f50206e597350273a6cdcfee8c"></a>
-<a class="el" href="classcore_1_1_critical_section.html">CriticalSection</a>&#160;</td><td class="memItemRight" valign="bottom"><b>p_monitorsCS_</b></td></tr>
+CriticalSection&#160;</td><td class="memItemRight" valign="bottom"><b>p_monitorsCS_</b></td></tr>
 <tr class="separator:a538d67f50206e597350273a6cdcfee8c inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0db2cbab60a6e971ed494494a6f73ba2 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a0db2cbab60a6e971ed494494a6f73ba2"></a>
-<a class="el" href="classr__code_1_1list.html">r_code::list</a>&lt; <a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1_p_monitor.html">PMonitor</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>p_monitors_</b></td></tr>
+<a class="el" href="classr__code_1_1list.html">r_code::list</a>&lt; P&lt; <a class="el" href="classr__exec_1_1_p_monitor.html">PMonitor</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>p_monitors_</b></td></tr>
 <tr class="separator:a0db2cbab60a6e971ed494494a6f73ba2 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a140b5d46ea5b3b1ab358fa381286fb85 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a140b5d46ea5b3b1ab358fa381286fb85"></a>
-<a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>lhs_</b></td></tr>
+P&lt; <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>lhs_</b></td></tr>
 <tr class="separator:a140b5d46ea5b3b1ab358fa381286fb85 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e0ae2ba376e639d23dfc0f11fc3d808 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a5e0ae2ba376e639d23dfc0f11fc3d808"></a>
-<a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>rhs_</b></td></tr>
+P&lt; <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>rhs_</b></td></tr>
 <tr class="separator:a5e0ae2ba376e639d23dfc0f11fc3d808 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36016aae13e43d5f601e2372e834c744 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a36016aae13e43d5f601e2372e834c744"></a>
-RequirementType&#160;</td><td class="memItemRight" valign="bottom"><b>is_requirement_</b></td></tr>
-<tr class="separator:a36016aae13e43d5f601e2372e834c744 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff04c256c49cdeb997720ae8172c7137 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="aff04c256c49cdeb997720ae8172c7137"></a>
+RequirementType&#160;</td><td class="memItemRight" valign="bottom"><b>requirement_type_</b></td></tr>
+<tr class="separator:aff04c256c49cdeb997720ae8172c7137 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3e0f6710d093b88390077b868c86d28 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="ae3e0f6710d093b88390077b868c86d28"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_reuse_</b></td></tr>
 <tr class="separator:ae3e0f6710d093b88390077b868c86d28 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -385,20 +374,23 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_reuse_</b></td></t
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_cmd_</b></td></tr>
 <tr class="separator:a24f1035a2a6d91db111933765e22586c inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5be66b1afea3ca1fa3691996753c20f8 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a5be66b1afea3ca1fa3691996753c20f8"></a>
-<a class="el" href="classcore_1_1_critical_section.html">CriticalSection</a>&#160;</td><td class="memItemRight" valign="bottom"><b>active_requirementsCS_</b></td></tr>
+CriticalSection&#160;</td><td class="memItemRight" valign="bottom"><b>active_requirementsCS_</b></td></tr>
 <tr class="separator:a5be66b1afea3ca1fa3691996753c20f8 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d3abce37765b5251fb71252690538c1 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a8d3abce37765b5251fb71252690538c1"></a>
-UNORDERED_MAP&lt; <a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt;, <a class="el" href="classr__exec_1_1_requirements_pair.html">RequirementsPair</a>, <a class="el" href="classr__code_1_1_p_hash.html">r_code::PHash</a>&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>active_requirements_</b></td></tr>
-<tr class="separator:a8d3abce37765b5251fb71252690538c1 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7965443870e3f8ec74b1f4baa0595598 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a7965443870e3f8ec74b1f4baa0595598"></a>
+std::unordered_map&lt; P&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt;, <a class="el" href="classr__exec_1_1_requirements_pair.html">RequirementsPair</a>, <a class="el" href="classr__code_1_1_p_hash.html">r_code::PHash</a>&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>active_requirements_</b></td></tr>
+<tr class="separator:a7965443870e3f8ec74b1f4baa0595598 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b982d6a856beb85d0a2d4b78945ff28 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a3b982d6a856beb85d0a2d4b78945ff28"></a>
+<a class="el" href="classr__exec_1_1_critical_section_list.html">CriticalSectionList</a>&lt; <a class="el" href="classr__exec_1_1_m_d_l_controller_1_1_defeasible_weak_requirement.html">DefeasibleWeakRequirement</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>defeasible_weak_requirements_</b></td></tr>
+<tr class="separator:a3b982d6a856beb85d0a2d4b78945ff28 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classr__exec_1_1_h_l_p_controller"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classr__exec_1_1_h_l_p_controller')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classr__exec_1_1_h_l_p_controller.html">r_exec::HLPController</a></td></tr>
-<tr class="memitem:a12b14831e02973a050d8ab35d20ed64f inherit pro_attribs_classr__exec_1_1_h_l_p_controller"><td class="memItemLeft" align="right" valign="top"><a id="a12b14831e02973a050d8ab35d20ed64f"></a>
-<a class="el" href="classr__exec_1_1_h_l_p_controller_1_1_cache.html">Cache</a>&lt; <a class="el" href="classr__exec_1_1_h_l_p_controller_1_1_evidence_entry.html">EvidenceEntry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>evidences_</b></td></tr>
-<tr class="separator:a12b14831e02973a050d8ab35d20ed64f inherit pro_attribs_classr__exec_1_1_h_l_p_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a317022227b3c6f65b33537b82142c3eb inherit pro_attribs_classr__exec_1_1_h_l_p_controller"><td class="memItemLeft" align="right" valign="top"><a id="a317022227b3c6f65b33537b82142c3eb"></a>
-<a class="el" href="classr__exec_1_1_h_l_p_controller_1_1_cache.html">Cache</a>&lt; <a class="el" href="classr__exec_1_1_h_l_p_controller_1_1_predicted_evidence_entry.html">PredictedEvidenceEntry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>predicted_evidences_</b></td></tr>
-<tr class="separator:a317022227b3c6f65b33537b82142c3eb inherit pro_attribs_classr__exec_1_1_h_l_p_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2d14f0eb281f994f4eb1bc49549e18c inherit pro_attribs_classr__exec_1_1_h_l_p_controller"><td class="memItemLeft" align="right" valign="top"><a id="ac2d14f0eb281f994f4eb1bc49549e18c"></a>
+<a class="el" href="classr__exec_1_1_critical_section_list.html">CriticalSectionList</a>&lt; <a class="el" href="classr__exec_1_1_h_l_p_controller_1_1_evidence_entry.html">EvidenceEntry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>evidences_</b></td></tr>
+<tr class="separator:ac2d14f0eb281f994f4eb1bc49549e18c inherit pro_attribs_classr__exec_1_1_h_l_p_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71cce644dd77145fd5e49e4f484670c5 inherit pro_attribs_classr__exec_1_1_h_l_p_controller"><td class="memItemLeft" align="right" valign="top"><a id="a71cce644dd77145fd5e49e4f484670c5"></a>
+<a class="el" href="classr__exec_1_1_critical_section_list.html">CriticalSectionList</a>&lt; <a class="el" href="classr__exec_1_1_h_l_p_controller_1_1_predicted_evidence_entry.html">PredictedEvidenceEntry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>predicted_evidences_</b></td></tr>
+<tr class="separator:a71cce644dd77145fd5e49e4f484670c5 inherit pro_attribs_classr__exec_1_1_h_l_p_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad762a1db5a06de379026e6252a594a9 inherit pro_attribs_classr__exec_1_1_h_l_p_controller"><td class="memItemLeft" align="right" valign="top"><a id="aad762a1db5a06de379026e6252a594a9"></a>
-<a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>bindings_</b></td></tr>
+P&lt; <a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>bindings_</b></td></tr>
 <tr class="separator:aad762a1db5a06de379026e6252a594a9 inherit pro_attribs_classr__exec_1_1_h_l_p_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5c4f9686da3e0c3bdc039e6fdc36f8a inherit pro_attribs_classr__exec_1_1_h_l_p_controller"><td class="memItemLeft" align="right" valign="top"><a id="ad5c4f9686da3e0c3bdc039e6fdc36f8a"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>has_tpl_args_</b></td></tr>
@@ -407,14 +399,14 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>has_tpl_args_</b></td
 uint32&#160;</td><td class="memItemRight" valign="bottom"><b>ref_count_</b></td></tr>
 <tr class="separator:a06dc88851aa91760e46fec98299e2476 inherit pro_attribs_classr__exec_1_1_h_l_p_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36fd33562b68875030f15a0bb2e7845a inherit pro_attribs_classr__exec_1_1_h_l_p_controller"><td class="memItemLeft" align="right" valign="top"><a id="a36fd33562b68875030f15a0bb2e7845a"></a>
-std::vector&lt; <a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1_h_l_p_controller.html">HLPController</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>controllers_</b></td></tr>
+std::vector&lt; P&lt; <a class="el" href="classr__exec_1_1_h_l_p_controller.html">HLPController</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>controllers_</b></td></tr>
 <tr class="separator:a36fd33562b68875030f15a0bb2e7845a inherit pro_attribs_classr__exec_1_1_h_l_p_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42a33a312021e2d7be2687c8590816a4 inherit pro_attribs_classr__exec_1_1_h_l_p_controller"><td class="memItemLeft" align="right" valign="top"><a id="a42a33a312021e2d7be2687c8590816a4"></a>
 Timestamp&#160;</td><td class="memItemRight" valign="bottom"><b>last_match_time_</b></td></tr>
 <tr class="separator:a42a33a312021e2d7be2687c8590816a4 inherit pro_attribs_classr__exec_1_1_h_l_p_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classr__exec_1_1_o_controller"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classr__exec_1_1_o_controller')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classr__exec_1_1_o_controller.html">r_exec::OController</a></td></tr>
 <tr class="memitem:ad28019c7f5930b2513f17efc5ef7ca23 inherit pro_attribs_classr__exec_1_1_o_controller"><td class="memItemLeft" align="right" valign="top"><a id="ad28019c7f5930b2513f17efc5ef7ca23"></a>
-<a class="el" href="classr__code_1_1list.html">r_code::list</a>&lt; <a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1_overlay.html">Overlay</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>overlays_</b></td></tr>
+<a class="el" href="classr__code_1_1list.html">r_code::list</a>&lt; P&lt; <a class="el" href="classr__exec_1_1_overlay.html">Overlay</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>overlays_</b></td></tr>
 <tr class="separator:ad28019c7f5930b2513f17efc5ef7ca23 inherit pro_attribs_classr__exec_1_1_o_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classr__exec_1_1_controller"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classr__exec_1_1_controller')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classr__exec_1_1_controller.html">r_exec::Controller</a></td></tr>
 <tr class="memitem:af78ca31cdbf053453cb617522d1ebcd7 inherit pro_attribs_classr__exec_1_1_controller"><td class="memItemLeft" align="right" valign="top"><a id="af78ca31cdbf053453cb617522d1ebcd7"></a>
@@ -426,16 +418,12 @@ volatile uint32&#160;</td><td class="memItemRight" valign="bottom"><b>activated_
 <tr class="memitem:a844c25d20169f009b8a3dd20af5c86dd inherit pro_attribs_classr__exec_1_1_controller"><td class="memItemLeft" align="right" valign="top"><a id="a844c25d20169f009b8a3dd20af5c86dd"></a>
 std::chrono::microseconds&#160;</td><td class="memItemRight" valign="bottom"><b>time_scope_</b></td></tr>
 <tr class="separator:a844c25d20169f009b8a3dd20af5c86dd inherit pro_attribs_classr__exec_1_1_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c657bb048db4cd3889865c524e2f1a2 inherit pro_attribs_classr__exec_1_1_controller"><td class="memItemLeft" align="right" valign="top"><a id="a2c657bb048db4cd3889865c524e2f1a2"></a>
-<a class="el" href="classr__code_1_1_view.html">r_code::View</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>view_</b></td></tr>
-<tr class="separator:a2c657bb048db4cd3889865c524e2f1a2 inherit pro_attribs_classr__exec_1_1_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a828fb8e11f772e036723b49d7a4900e6 inherit pro_attribs_classr__exec_1_1_controller"><td class="memItemLeft" align="right" valign="top"><a id="a828fb8e11f772e036723b49d7a4900e6"></a>
+<a class="el" href="classr__code_1_1___view.html">r_code::_View</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>view_</b></td></tr>
+<tr class="separator:a828fb8e11f772e036723b49d7a4900e6 inherit pro_attribs_classr__exec_1_1_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada86ac20f77db6a9fc44001248c8cc2c inherit pro_attribs_classr__exec_1_1_controller"><td class="memItemLeft" align="right" valign="top"><a id="ada86ac20f77db6a9fc44001248c8cc2c"></a>
-<a class="el" href="classcore_1_1_critical_section.html">CriticalSection</a>&#160;</td><td class="memItemRight" valign="bottom"><b>reductionCS_</b></td></tr>
+CriticalSection&#160;</td><td class="memItemRight" valign="bottom"><b>reductionCS_</b></td></tr>
 <tr class="separator:ada86ac20f77db6a9fc44001248c8cc2c inherit pro_attribs_classr__exec_1_1_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_classcore_1_1___object"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classcore_1_1___object')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classcore_1_1___object.html">core::_Object</a></td></tr>
-<tr class="memitem:a78942b476c06f3f3cab6c8fb0dba30e4 inherit pro_attribs_classcore_1_1___object"><td class="memItemLeft" align="right" valign="top"><a id="a78942b476c06f3f3cab6c8fb0dba30e4"></a>
-int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</b></td></tr>
-<tr class="separator:a78942b476c06f3f3cab6c8fb0dba30e4 inherit pro_attribs_classcore_1_1___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -461,7 +449,7 @@ static const uint32&#160;</td><td class="memItemRight" valign="bottom"><b>RHSCon
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="mdl__controller_8h_source.html#l00290">290</a> of file <a class="el" href="mdl__controller_8h_source.html">mdl_controller.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mdl__controller_8h_source.html#l00349">349</a> of file <a class="el" href="mdl__controller_8h_source.html">mdl_controller.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="mdl__controller_8h_source.html">mdl_controller.h</a></li>
 <li><a class="el" href="mdl__controller_8cpp_source.html">mdl_controller.cpp</a></li>

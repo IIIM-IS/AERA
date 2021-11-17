@@ -98,7 +98,6 @@ Gotchas</h1>
 <li>A program accumulates matched patterns and will run even if one of the facts is "old". You must use boolean guards to control this.</li>
 <li><code>pong.2.simplified.replicode</code>: Prediction is made after the actual fact is injected. (But the prediction doesn't look at it, and the prediction check uses the output of auto focus which correctly doesn't appear until the next frame.)</li>
 <li>For external cmd, need a program to intercept (fact (goal (fact (cmd ...)))) and eject the cmd. Such a goal abduced from a mdl is put in primary, so the program must be instantiated in primary.</li>
-<li>Prediction failures may come from false assumptions. In <code>settings.xml</code>, try <code>enable_assumptions="no"</code> .</li>
 <li>Objects with a short resilience aren't in <code>decompiled_objects.txt</code>. In <code>settings.xml</code>, try <code>keep_invalidated_objects=yes</code> .</li>
 <li>If not debugging the code, then in Visual Studio run in the "Release" configuration so that it runs faster.</li>
 <li>Math operations on two floating point numbers produce a floating point number, as expected. And addition and subtraction of two time values produces a time value, as expected. But the result of operations with mixed types is not obvious. Below 'nb' is a floating-point number and 'us' is a 64-bit timestamp in microseconds.<ul>
