@@ -1660,7 +1660,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
 #endif
         OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << f_imdl_info << " mdl " << 
           get_object()->get_oid() << ": " << input->get_oid() << " -> fact " << production->get_oid() << 
-          " pred fact mk.val VALUE " << bound_rhs->get_reference(0)->traceString(MK_VAL_VALUE));
+          " pred fact mk.val VALUE " << bound_rhs->get_reference(0)->trace_string(MK_VAL_VALUE));
       } else {
 
         Code *mk_rdx;
@@ -1681,7 +1681,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
 #endif
         OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " fact " << f_imdl->get_oid() << f_imdl_info << " imdl mdl " << 
           get_object()->get_oid() << ": " << input->get_oid() << " -> fact " << production->get_oid() << 
-          " pred fact mk.val VALUE " << bound_rhs->get_reference(0)->traceString(MK_VAL_VALUE));
+          " pred fact mk.val VALUE " << bound_rhs->get_reference(0)->trace_string(MK_VAL_VALUE));
       }
     }
   } else { // no monitoring for simulated predictions.

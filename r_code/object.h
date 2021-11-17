@@ -305,14 +305,6 @@ public:
   }
 
   /**
-   * Print the trace of code(i) to the out stream, using a default TraceContext (no indentation).
-   */
-  void trace(uint16 i, std::ostream& out) const {
-    Atom::TraceContext context;
-    trace(i, out, context);
-  }
-
-  /**
    * Print the trace of this Code to the out stream.
    */
   void trace(std::ostream& out) const {
@@ -337,7 +329,7 @@ public:
   /**
    * Return the trace as a string. For debugging purposes only(can be inefficient).
    */
-  std::string traceString() const {
+  std::string trace_string() const {
     std::ostringstream out;
     trace(out);
     return out.str();
@@ -346,9 +338,10 @@ public:
   /**
    * Return the trace of code(i) as a string, using a default TraceContext (no indentation).
    */
-  std::string traceString(uint16 i) const {
+  std::string trace_string(uint16 i) const {
+    Atom::TraceContext context;
     std::ostringstream out;
-    trace(i, out);
+    trace(i, out, context);
     return out.str();
   }
 };

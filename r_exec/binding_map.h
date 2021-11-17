@@ -122,11 +122,11 @@ public:
    * Return the trace of the value as a string by creating a temporary Code
    * object and calling valuate(). For debugging purposes only(can be inefficient).
    */
-  std::string traceString() const {
+  std::string trace_string() const {
     P<LObject> code = new LObject();
     uint16 extent_index = 1;
     valuate(code, 0, extent_index);
-    return code->traceString();
+    return code->trace_string();
   }
 };
 
