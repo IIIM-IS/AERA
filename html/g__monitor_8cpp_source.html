@@ -186,12 +186,12 @@ $(function() {
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keywordflow">switch</span> (sim-&gt;get_mode()) {</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordflow">case</span> SIM_MANDATORY:</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;      sim_successes_.mandatory_solutions.push_back(std::pair&lt;P&lt;_Fact&gt;, P&lt;Sim&gt; &gt;(f_pred_f_success, sim));</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;      sim_successes_.mandatory_solutions.push_back(std::pair&lt;<a class="code" href="classcore_1_1_p.html">P&lt;_Fact&gt;</a>, <a class="code" href="classcore_1_1_p.html">P&lt;Sim&gt;</a> &gt;(f_pred_f_success, sim));</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;      OUTPUT_LINE(GOAL_MON, Utils::RelativeTime(Now()) &lt;&lt; <span class="stringliteral">&quot; goal monitor for &quot;</span> &lt;&lt; target_-&gt;get_oid() &lt;&lt;</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        <span class="stringliteral">&quot;: store mandatory solution &quot;</span> &lt;&lt; f_pred_f_success-&gt;get_oid());</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;      <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keywordflow">case</span> SIM_OPTIONAL:</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;      sim_successes_.optional_solutions.push_back(std::pair&lt;P&lt;_Fact&gt;, P&lt;Sim&gt; &gt;(f_pred_f_success, sim));</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;      sim_successes_.optional_solutions.push_back(std::pair&lt;<a class="code" href="classcore_1_1_p.html">P&lt;_Fact&gt;</a>, <a class="code" href="classcore_1_1_p.html">P&lt;Sim&gt;</a> &gt;(f_pred_f_success, sim));</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;      OUTPUT_LINE(GOAL_MON, Utils::RelativeTime(Now()) &lt;&lt; <span class="stringliteral">&quot; goal monitor for &quot;</span> &lt;&lt; target_-&gt;get_oid() &lt;&lt;</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        <span class="stringliteral">&quot;: store optional solution &quot;</span> &lt;&lt; f_pred_f_success-&gt;get_oid());</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;      <span class="keywordflow">break</span>;</div>
@@ -202,12 +202,12 @@ $(function() {
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <span class="keywordflow">switch</span> (sim-&gt;get_mode()) {</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <span class="keywordflow">case</span> SIM_MANDATORY:</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;      sim_failures_.mandatory_solutions.push_back(std::pair&lt;P&lt;_Fact&gt;, P&lt;Sim&gt; &gt;(f_pred_f_success, sim));</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;      sim_failures_.mandatory_solutions.push_back(std::pair&lt;<a class="code" href="classcore_1_1_p.html">P&lt;_Fact&gt;</a>, <a class="code" href="classcore_1_1_p.html">P&lt;Sim&gt;</a> &gt;(f_pred_f_success, sim));</div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;      OUTPUT_LINE(GOAL_MON, Utils::RelativeTime(Now()) &lt;&lt; <span class="stringliteral">&quot; goal monitor for &quot;</span> &lt;&lt; target_-&gt;get_oid() &lt;&lt;</div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        <span class="stringliteral">&quot;: store mandatory solution &quot;</span> &lt;&lt; f_pred_f_success-&gt;get_oid());</div>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;      <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    <span class="keywordflow">case</span> SIM_OPTIONAL:</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;      sim_failures_.optional_solutions.push_back(std::pair&lt;P&lt;_Fact&gt;, P&lt;Sim&gt; &gt;(f_pred_f_success, sim));</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;      sim_failures_.optional_solutions.push_back(std::pair&lt;<a class="code" href="classcore_1_1_p.html">P&lt;_Fact&gt;</a>, <a class="code" href="classcore_1_1_p.html">P&lt;Sim&gt;</a> &gt;(f_pred_f_success, sim));</div>
 <div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;      OUTPUT_LINE(GOAL_MON, Utils::RelativeTime(Now()) &lt;&lt; <span class="stringliteral">&quot; goal monitor for &quot;</span> &lt;&lt; target_-&gt;get_oid() &lt;&lt;</div>
 <div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        <span class="stringliteral">&quot;: store optional solution &quot;</span> &lt;&lt; f_pred_f_success-&gt;get_oid());</div>
 <div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;      <span class="keywordflow">break</span>;</div>
@@ -466,7 +466,7 @@ $(function() {
 <div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160; </div>
 <div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;  <span class="comment">// check_simulated_imdl can change the binding map, so pass a copy.</span></div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;  P&lt;BindingMap&gt; bindings_copy(<span class="keyword">new</span> <a class="code" href="classr__exec_1_1_binding_map.html">BindingMap</a>(bindings_));</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> bindings_copy(<span class="keyword">new</span> <a class="code" href="classr__exec_1_1_binding_map.html">BindingMap</a>(bindings_));</div>
 <div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;  <a class="code" href="classr__exec_1_1_sim.html">Sim</a>* prediction_sim = prediction-&gt;<a class="code" href="classr__exec_1_1_pred.html#afb5c88afa89a1ef3e42444c3c96ea06e">get_simulation</a>(target_-&gt;get_goal()-&gt;get_sim()-&gt;root_);</div>
 <div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;  <span class="keywordflow">if</span> (simulating_ &amp;&amp; prediction_sim) { <span class="comment">// report the simulated outcome: this will inject a simulated prediction of the outcome, to allow any g-monitor deciding on this ground.</span></div>
 <div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160; </div>
@@ -654,7 +654,7 @@ $(function() {
 <div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160; </div>
 <div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;  <span class="comment">// check_simulated_imdl can change the binding map, so pass a copy.</span></div>
-<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;  P&lt;BindingMap&gt; bindings_copy(<span class="keyword">new</span> <a class="code" href="classr__exec_1_1_binding_map.html">BindingMap</a>(bindings_));</div>
+<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> bindings_copy(<span class="keyword">new</span> <a class="code" href="classr__exec_1_1_binding_map.html">BindingMap</a>(bindings_));</div>
 <div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;  <a class="code" href="classr__exec_1_1_sim.html">Sim</a>* prediction_sim = prediction-&gt;<a class="code" href="classr__exec_1_1_pred.html#afb5c88afa89a1ef3e42444c3c96ea06e">get_simulation</a>(target_-&gt;get_goal()-&gt;get_sim()-&gt;root_);</div>
 <div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;  <span class="keywordflow">if</span> (prediction_sim) {</div>
 <div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160; </div>
@@ -714,6 +714,7 @@ $(function() {
 <div class="ttc" id="aclassr__exec_1_1_sim_html"><div class="ttname"><a href="classr__exec_1_1_sim.html">r_exec::Sim</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00230">factory.h:231</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___g_monitor_html_a101039104d71c5d9a2f60beabfc7e6b9"><div class="ttname"><a href="classr__exec_1_1___g_monitor.html#a101039104d71c5d9a2f60beabfc7e6b9">r_exec::_GMonitor::store_simulated_outcome</a></div><div class="ttdeci">void store_simulated_outcome(_Fact *f_pred_f_success, Sim *sim)</div><div class="ttdef"><b>Definition:</b> <a href="g__monitor_8cpp_source.html#l00112">g_monitor.cpp:112</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___fact_html"><div class="ttname"><a href="classr__exec_1_1___fact.html">r_exec::_Fact</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00154">factory.h:155</a></div></div>
+<div class="ttc" id="aclasscore_1_1_p_html"><div class="ttname"><a href="classcore_1_1_p.html">core::P</a></div><div class="ttdef"><b>Definition:</b> <a href="base_8h_source.html#l00102">base.h:102</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_r_monitor_html_a2918c362790c58257c743fdb562a2fb3"><div class="ttname"><a href="classr__exec_1_1_r_monitor.html#a2918c362790c58257c743fdb562a2fb3">r_exec::RMonitor::signal</a></div><div class="ttdeci">bool signal(Pred *prediction)</div><div class="ttdef"><b>Definition:</b> <a href="g__monitor_8cpp_source.html#l00394">g_monitor.cpp:394</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_code_html"><div class="ttname"><a href="classr__code_1_1_code.html">r_code::Code</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00223">r_code/object.h:224</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_pred_html"><div class="ttname"><a href="classr__exec_1_1_pred.html">r_exec::Pred</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00375">factory.h:376</a></div></div>

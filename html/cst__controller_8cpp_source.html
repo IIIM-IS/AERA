@@ -436,7 +436,7 @@ $(function() {
 <div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;        Fact* f_p_promoted_fact = <span class="keyword">new</span> Fact(p_promoted_fact, now, now, 1, 1);</div>
 <div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160; </div>
 <div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;        <span class="comment">// The promoted fact may be defeated by a predicted fact for the same time interval, so make it defeasible.</span></div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;        P&lt;DefeasibleValidity&gt; defeasible_validity = <span class="keyword">new</span> DefeasibleValidity();</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;        <a class="code" href="classcore_1_1_p.html">P&lt;DefeasibleValidity&gt;</a> defeasible_validity = <span class="keyword">new</span> DefeasibleValidity();</div>
 <div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;        p_promoted_fact-&gt;defeasible_validities_.insert(defeasible_validity);</div>
 <div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;        p_promoted_fact-&gt;is_promoted_ = <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160; </div>
@@ -453,7 +453,7 @@ $(function() {
 <div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;    predictionSimulation-&gt;defeasible_promoted_facts_.CS_.leave();</div>
 <div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;  }</div>
 <div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160; </div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;  P&lt;HLPBindingMap&gt; bm = <span class="keyword">new</span> HLPBindingMap();</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;HLPBindingMap&gt;</a> bm = <span class="keyword">new</span> HLPBindingMap();</div>
 <div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;  <span class="keywordtype">bool</span> bound_pattern_is_axiom;</div>
 <div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;  _Fact *bound_pattern = bind_pattern(input_object, bm, predictionSimulation, bound_pattern_is_axiom);</div>
 <div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;  <span class="keywordflow">if</span> (bound_pattern) {</div>
@@ -616,7 +616,7 @@ $(function() {
 <div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160; </div>
 <div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;      <span class="keywordflow">if</span> (!get_requirement_count()) { <span class="comment">// models will attempt to produce the icst</span></div>
 <div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160; </div>
-<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;        P&lt;HLPBindingMap&gt; bm = <span class="keyword">new</span> HLPBindingMap(bindings_);</div>
+<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;        <a class="code" href="classcore_1_1_p.html">P&lt;HLPBindingMap&gt;</a> bm = <span class="keyword">new</span> HLPBindingMap(bindings_);</div>
 <div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;        bm-&gt;init_from_f_ihlp(goal_target);</div>
 <div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classr__exec_1_1_h_l_p_controller.html#a879d2ae14cc6c8dde1936e7b3f7d3b48">evaluate_bwd_guards</a>(bm)) { <span class="comment">// leaves the controller constant: no need to protect; bm may be updated.</span></div>
 <div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;          <span class="keywordflow">if</span> (goal-&gt;is_simulation())</div>
@@ -764,7 +764,7 @@ $(function() {
 <div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;  <span class="keywordflow">return</span> bindings-&gt;build_f_ihlp(get_object(), Opcodes::ICst, <span class="keyword">false</span>);</div>
 <div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;}</div>
 <div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160; </div>
-<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;Fact *CSTController::get_f_icst(HLPBindingMap *bindings, vector&lt;P&lt;_Fact&gt; &gt; *axiom_inputs, vector&lt;P&lt;_Fact&gt; &gt; *non_axiom_inputs)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;Fact *CSTController::get_f_icst(HLPBindingMap *bindings, vector&lt;<a class="code" href="classcore_1_1_p.html">P&lt;_Fact&gt;</a> &gt; *axiom_inputs, vector&lt;<a class="code" href="classcore_1_1_p.html">P&lt;_Fact&gt;</a> &gt; *non_axiom_inputs)<span class="keyword"> const </span>{</div>
 <div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160; </div>
 <div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;  Fact *f_icst = get_f_ihlp(bindings, <span class="keyword">false</span>);</div>
 <div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;  ICST* icst = (ICST *)f_icst-&gt;get_reference(0);</div>
@@ -846,6 +846,7 @@ $(function() {
 <div class="ttc" id="aclassr__code_1_1___view_html"><div class="ttname"><a href="classr__code_1_1___view.html">r_code::_View</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00163">r_code/object.h:164</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_sim_html"><div class="ttname"><a href="classr__exec_1_1_sim.html">r_exec::Sim</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00230">factory.h:231</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___fact_html"><div class="ttname"><a href="classr__exec_1_1___fact.html">r_exec::_Fact</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00154">factory.h:155</a></div></div>
+<div class="ttc" id="aclasscore_1_1_p_html"><div class="ttname"><a href="classcore_1_1_p.html">core::P</a></div><div class="ttdef"><b>Definition:</b> <a href="base_8h_source.html#l00102">base.h:102</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_code_html"><div class="ttname"><a href="classr__code_1_1_code.html">r_code::Code</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00223">r_code/object.h:224</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_c_s_t_overlay_html_a8458669a34fdb0280ffda1ac30075828"><div class="ttname"><a href="classr__exec_1_1_c_s_t_overlay.html#a8458669a34fdb0280ffda1ac30075828">r_exec::CSTOverlay::inject_production</a></div><div class="ttdeci">_Fact * inject_production(View *input)</div><div class="ttdef"><b>Definition:</b> <a href="cst__controller_8cpp_source.html#l00136">cst_controller.cpp:136</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_h_l_p_controller_html"><div class="ttname"><a href="classr__exec_1_1_h_l_p_controller.html">r_exec::HLPController</a></div><div class="ttdef"><b>Definition:</b> <a href="hlp__controller_8h_source.html#l00104">hlp_controller.h:105</a></div></div>

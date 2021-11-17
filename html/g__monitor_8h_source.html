@@ -170,14 +170,14 @@ $(function() {
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;  Timestamp deadline_; <span class="comment">// of the goal.</span></div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;  Timestamp sim_thz_timestamp_;</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;  <a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *goal_target_; <span class="comment">// convenience; f1-&gt;object.</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;  P&lt;Fact&gt; f_imdl_;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;Fact&gt;</a> f_imdl_;</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;  SimMode sim_mode_;</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;  uint32 <span class="keyword">volatile</span> simulating_; <span class="comment">// 32 bits alignment.</span></div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;  <span class="comment">// The first in the pair is the (fact (pred (fact (success...)))) or</span></div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;  <span class="comment">// (fact (pred (|fact (success...)))) where the success&#39;s object is the (fact (goal ...)).</span></div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;  <span class="keyword">typedef</span> std::list&lt;std::pair&lt;P&lt;_Fact&gt;, P&lt;Sim&gt; &gt; &gt; SolutionList;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;  <span class="keyword">typedef</span> std::list&lt;std::pair&lt;P&lt;_Fact&gt;, <a class="code" href="classcore_1_1_p.html">P&lt;Sim&gt;</a> &gt; &gt; SolutionList;</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;  </div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;  <span class="comment">/* From the (fact (pred (fact (success...)))) of a solution, get the goal from</span></div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="comment">   * the success object&#39;s (fact (goal ...)).</span></div>
@@ -327,6 +327,7 @@ $(function() {
 <div class="ttc" id="aclassr__exec_1_1_sim_html"><div class="ttname"><a href="classr__exec_1_1_sim.html">r_exec::Sim</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00230">factory.h:231</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___g_monitor_html_a101039104d71c5d9a2f60beabfc7e6b9"><div class="ttname"><a href="classr__exec_1_1___g_monitor.html#a101039104d71c5d9a2f60beabfc7e6b9">r_exec::_GMonitor::store_simulated_outcome</a></div><div class="ttdeci">void store_simulated_outcome(_Fact *f_pred_f_success, Sim *sim)</div><div class="ttdef"><b>Definition:</b> <a href="g__monitor_8cpp_source.html#l00112">g_monitor.cpp:112</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___fact_html"><div class="ttname"><a href="classr__exec_1_1___fact.html">r_exec::_Fact</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00154">factory.h:155</a></div></div>
+<div class="ttc" id="aclasscore_1_1_p_html"><div class="ttname"><a href="classcore_1_1_p.html">core::P</a></div><div class="ttdef"><b>Definition:</b> <a href="base_8h_source.html#l00102">base.h:102</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_r_monitor_html_a2918c362790c58257c743fdb562a2fb3"><div class="ttname"><a href="classr__exec_1_1_r_monitor.html#a2918c362790c58257c743fdb562a2fb3">r_exec::RMonitor::signal</a></div><div class="ttdeci">bool signal(Pred *prediction)</div><div class="ttdef"><b>Definition:</b> <a href="g__monitor_8cpp_source.html#l00394">g_monitor.cpp:394</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_s_r_monitor_html"><div class="ttname"><a href="classr__exec_1_1_s_r_monitor.html">r_exec::SRMonitor</a></div><div class="ttdef"><b>Definition:</b> <a href="g__monitor_8h_source.html#l00249">g_monitor.h:250</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_s_g_monitor_html"><div class="ttname"><a href="classr__exec_1_1_s_g_monitor.html">r_exec::SGMonitor</a></div><div class="ttdef"><b>Definition:</b> <a href="g__monitor_8h_source.html#l00232">g_monitor.h:233</a></div></div>

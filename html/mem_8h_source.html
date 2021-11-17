@@ -211,8 +211,8 @@ $(function() {
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;  uint32 probe_level_;</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;  <span class="keywordtype">bool</span> enable_assumptions_;</div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160; </div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;  PipeNN&lt;P&lt;_ReductionJob&gt;, 1024&gt; *reduction_job_queue_;</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;  PipeNN&lt;P&lt;TimeJob&gt;, 1024&gt; *time_job_queue_;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;  <a class="code" href="classcore_1_1_pipe_n_n.html">PipeNN&lt;P&lt;_ReductionJob&gt;</a>, 1024&gt; *reduction_job_queue_;</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;  <a class="code" href="classcore_1_1_pipe_n_n.html">PipeNN&lt;P&lt;TimeJob&gt;</a>, 1024&gt; *time_job_queue_;</div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;  <a class="code" href="classr__exec_1_1_reduction_core.html">ReductionCore</a> **reduction_cores_;</div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;  <a class="code" href="classr__exec_1_1_time_core.html">TimeCore</a> **time_cores_;</div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;  <a class="code" href="classr__exec_1_1_time_job_1_1_compare.html">TimeJob::Compare</a> time_job_compare_;</div>
@@ -225,19 +225,19 @@ $(function() {
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;  std::chrono::microseconds time_job_avg_latency_; <span class="comment">// latency: deadline-the time the job is popped from the pipe; if &lt;0, not registered (as it is too late for action); the higher the better.</span></div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;  std::chrono::microseconds _time_job_avg_latency_; <span class="comment">// previous value.</span></div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;  CriticalSection time_jobCS_;</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;  CriticalSection reduction_jobCS_;</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;  <a class="code" href="classcore_1_1_critical_section.html">CriticalSection</a> time_jobCS_;</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;  <a class="code" href="classcore_1_1_critical_section.html">CriticalSection</a> reduction_jobCS_;</div>
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;  uint32 core_count_;</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;  CriticalSection core_countCS_;</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;  <a class="code" href="classcore_1_1_critical_section.html">CriticalSection</a> core_countCS_;</div>
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160; </div>
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;  State state_;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;  CriticalSection stateCS_;</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;  Semaphore *stop_sem_; <span class="comment">// blocks the rMem until all cores terminate.</span></div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;  <a class="code" href="classcore_1_1_critical_section.html">CriticalSection</a> stateCS_;</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;  <a class="code" href="classcore_1_1_semaphore.html">Semaphore</a> *stop_sem_; <span class="comment">// blocks the rMem until all cores terminate.</span></div>
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160; </div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;  <a class="code" href="classr__code_1_1list.html">r_code::list&lt;P&lt;r_code::Code&gt;</a> &gt; objects_; <span class="comment">// store objects in order of injection: holds the initial objects (and dynamically created ones if MemStatic is used).</span></div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160; </div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;  P&lt;Group&gt; root_; <span class="comment">// holds everything.</span></div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;Group&gt;</a> root_; <span class="comment">// holds everything.</span></div>
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *stdin_;</div>
 <div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *stdout_;</div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *self_;</div>
@@ -349,9 +349,9 @@ $(function() {
 <div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160; </div>
 <div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;  <span class="comment">// Internal core processing ////////////////////////////////////////////////////////////////</span></div>
 <div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160; </div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;  P&lt;_ReductionJob&gt; pop_reduction_job(<span class="keywordtype">bool</span> waitForItem = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;_ReductionJob&gt;</a> pop_reduction_job(<span class="keywordtype">bool</span> waitForItem = <span class="keyword">true</span>);</div>
 <div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;  <span class="keywordtype">void</span> push_reduction_job(_ReductionJob *j);</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;  P&lt;TimeJob&gt; pop_time_job(<span class="keywordtype">bool</span> waitForItem = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;TimeJob&gt;</a> pop_time_job(<span class="keywordtype">bool</span> waitForItem = <span class="keyword">true</span>);</div>
 <div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;  <span class="keywordtype">void</span> push_time_job(TimeJob *j);</div>
 <div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160; </div>
 <div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;  <span class="keywordtype">void</span> inject_from_io_device(View *view);</div>
@@ -458,8 +458,8 @@ $(function() {
 <div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160; </div>
 <div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;  <span class="comment">// packing of high-level patterns: upon dynamic generation or transmission.</span></div>
 <div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;  <span class="keywordtype">void</span> pack_hlp(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *hlp) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> pack_fact(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *fact, <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *hlp, uint16 &amp;write_index, std::vector&lt;P&lt;r_code::Code&gt; &gt; *references);</div>
-<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> pack_fact_object(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *fact_object, <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *hlp, uint16 &amp;write_index, std::vector&lt;P&lt;r_code::Code&gt; &gt; *references);</div>
+<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> pack_fact(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *fact, <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *hlp, uint16 &amp;write_index, std::vector&lt;<a class="code" href="classcore_1_1_p.html">P&lt;r_code::Code&gt;</a> &gt; *references);</div>
+<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> pack_fact_object(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *fact_object, <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *hlp, uint16 &amp;write_index, std::vector&lt;<a class="code" href="classcore_1_1_p.html">P&lt;r_code::Code&gt;</a> &gt; *references);</div>
 <div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160; </div>
 <div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *clone(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *original) <span class="keyword">const</span>; <span class="comment">// shallow copy.</span></div>
 <div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160; </div>
@@ -469,7 +469,7 @@ $(function() {
 <div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160; </div>
 <div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;  <span class="keywordtype">bool</span> matches_axiom(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* obj);</div>
 <div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160; </div>
-<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> init_timings(Timestamp now, <span class="keyword">const</span> <a class="code" href="classr__code_1_1list.html">r_code::list</a>&lt;P&lt;r_code::Code&gt;&gt;&amp; objects);</div>
+<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> init_timings(Timestamp now, <span class="keyword">const</span> <a class="code" href="classr__code_1_1list.html">r_code::list</a>&lt;<a class="code" href="classcore_1_1_p.html">P&lt;r_code::Code&gt;</a>&gt;&amp; objects);</div>
 <div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160; </div>
 <div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;  <span class="comment">//std::vector&lt;uint64&gt; timings_report; // debug facility.</span></div>
 <div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160; </div>
@@ -484,7 +484,7 @@ $(function() {
 <div class="line"><a name="l00626"></a><span class="lineno"><a class="line" href="classr__exec_1_1_mem_static.html">  626</a></span>&#160;<span class="keyword">class </span>r_exec_dll <a class="code" href="classr__exec_1_1_mem_static.html">MemStatic</a> :</div>
 <div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;  <span class="keyword">public</span> <a class="code" href="classr__exec_1_1___mem.html">_Mem</a> {</div>
 <div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;  CriticalSection objectsCS_; <span class="comment">// protects last_oid_ and objects_.</span></div>
+<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;  <a class="code" href="classcore_1_1_critical_section.html">CriticalSection</a> objectsCS_; <span class="comment">// protects last_oid_ and objects_.</span></div>
 <div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;  uint32 last_oid_;</div>
 <div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;  <span class="keywordtype">void</span> bind(<a class="code" href="classr__exec_1_1_view.html">View</a> *view); <span class="comment">// assigns an oid, stores view-&gt;object in objects if needed.</span></div>
 <div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;  <span class="keywordtype">void</span> set_last_oid(int32 oid);</div>
@@ -549,16 +549,20 @@ $(function() {
 <div class="ttc" id="aclassr__exec_1_1___mem_html_a3d9f7bf9026ea758ec318e58c62f3340"><div class="ttname"><a href="classr__exec_1_1___mem.html#a3d9f7bf9026ea758ec318e58c62f3340">r_exec::_Mem::inject_marker_value_from_io_device</a></div><div class="ttdeci">View * inject_marker_value_from_io_device(r_code::Code *obj, r_code::Code *prop, r_code::Code *val, Timestamp after, Timestamp before)</div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00478">mem.h:478</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___mem_html_aeec12bb86e3dfb5d5d923224618b6cd2"><div class="ttname"><a href="classr__exec_1_1___mem.html#aeec12bb86e3dfb5d5d923224618b6cd2">r_exec::_Mem::get_sampling_period</a></div><div class="ttdeci">std::chrono::microseconds get_sampling_period() const</div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00242">mem.h:242</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_atom_html"><div class="ttname"><a href="classr__code_1_1_atom.html">r_code::Atom</a></div><div class="ttdef"><b>Definition:</b> <a href="atom_8h_source.html#l00104">atom.h:104</a></div></div>
+<div class="ttc" id="aclasscore_1_1_pipe_n_n_html"><div class="ttname"><a href="classcore_1_1_pipe_n_n.html">core::PipeNN</a></div><div class="ttdef"><b>Definition:</b> <a href="pipe_8h_source.html#l00150">pipe.h:151</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_sys_object_html"><div class="ttname"><a href="classr__code_1_1_sys_object.html">r_code::SysObject</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00135">r_code/object.h:136</a></div></div>
+<div class="ttc" id="aclasscore_1_1_p_html"><div class="ttname"><a href="classcore_1_1_p.html">core::P</a></div><div class="ttdef"><b>Definition:</b> <a href="base_8h_source.html#l00102">base.h:102</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_code_html"><div class="ttname"><a href="classr__code_1_1_code.html">r_code::Code</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00223">r_code/object.h:224</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___mem_html_ae655601d9f74076a8797893b78ea904d"><div class="ttname"><a href="classr__exec_1_1___mem.html#ae655601d9f74076a8797893b78ea904d">r_exec::_Mem::inject_fact_from_io_device</a></div><div class="ttdeci">View * inject_fact_from_io_device(r_code::Code *object, Timestamp after, Timestamp before, r_code::Code *group)</div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00514">mem.h:514</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___mem_html_ad4a01cd8ad925affcb55df8aaab8fb23"><div class="ttname"><a href="classr__exec_1_1___mem.html#ad4a01cd8ad925affcb55df8aaab8fb23">r_exec::_Mem::inject_marker_value_from_io_device</a></div><div class="ttdeci">View * inject_marker_value_from_io_device(r_code::Code *obj, r_code::Code *prop, Atom val, Timestamp after, Timestamp before)</div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00393">mem.h:393</a></div></div>
+<div class="ttc" id="aclasscore_1_1_critical_section_html"><div class="ttname"><a href="classcore_1_1_critical_section.html">core::CriticalSection</a></div><div class="ttdef"><b>Definition:</b> <a href="submodules_2_core_library_2_core_library_2utils_8h_source.html#l00234">submodules/CoreLibrary/CoreLibrary/utils.h:234</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_time_core_html"><div class="ttname"><a href="classr__exec_1_1_time_core.html">r_exec::TimeCore</a></div><div class="ttdef"><b>Definition:</b> <a href="time__core_8h_source.html#l00110">time_core.h:111</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___mem_html_a74d4a9b9b9e674d661fbecab12f74330"><div class="ttname"><a href="classr__exec_1_1___mem.html#a74d4a9b9b9e674d661fbecab12f74330">r_exec::_Mem::inject_marker_value_from_io_device</a></div><div class="ttdeci">View * inject_marker_value_from_io_device(r_code::Code *obj, r_code::Code *prop, Atom val, Timestamp after, Timestamp before, r_code::Code *group)</div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00373">mem.h:373</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_view_html"><div class="ttname"><a href="classr__exec_1_1_view.html">r_exec::View</a></div><div class="ttdef"><b>Definition:</b> <a href="view_8h_source.html#l00101">view.h:102</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_group_html"><div class="ttname"><a href="classr__exec_1_1_group.html">r_exec::Group</a></div><div class="ttdef"><b>Definition:</b> <a href="group_8h_source.html#l00105">group.h:107</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___mem_html_ae514511d34345fe72a226d4f9a019cf7"><div class="ttname"><a href="classr__exec_1_1___mem.html#ae514511d34345fe72a226d4f9a019cf7">r_exec::_Mem::set_default_runtime_output_stream</a></div><div class="ttdeci">void set_default_runtime_output_stream(std::ostream *default_runtime_output_stream)</div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00611">mem.h:611</a></div></div>
 <div class="ttc" id="aclassr__comp_1_1_image_html"><div class="ttname"><a href="classr__comp_1_1_image.html">r_comp::Image</a></div><div class="ttdef"><b>Definition:</b> <a href="segments_8h_source.html#l00176">segments.h:176</a></div></div>
+<div class="ttc" id="aclasscore_1_1_semaphore_html"><div class="ttname"><a href="classcore_1_1_semaphore.html">core::Semaphore</a></div><div class="ttdef"><b>Definition:</b> <a href="submodules_2_core_library_2_core_library_2utils_8h_source.html#l00209">submodules/CoreLibrary/CoreLibrary/utils.h:209</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_mem_html"><div class="ttname"><a href="classr__code_1_1_mem.html">r_code::Mem</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00390">r_code/object.h:390</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_mem_volatile_html"><div class="ttname"><a href="classr__exec_1_1_mem_volatile.html">r_exec::MemVolatile</a></div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00644">mem.h:645</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_controller_html"><div class="ttname"><a href="classr__exec_1_1_controller.html">r_exec::Controller</a></div><div class="ttdef"><b>Definition:</b> <a href="overlay_8h_source.html#l00136">overlay.h:137</a></div></div>

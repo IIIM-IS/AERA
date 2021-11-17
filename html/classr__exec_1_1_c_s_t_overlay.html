@@ -82,6 +82,7 @@ Inheritance diagram for r_exec::CSTOverlay:</div>
   <map id="r_5Fexec::CSTOverlay_map" name="r_5Fexec::CSTOverlay_map">
 <area href="classr__exec_1_1_h_l_p_overlay.html" alt="r_exec::HLPOverlay" shape="rect" coords="0,112,127,136"/>
 <area href="classr__exec_1_1_overlay.html" alt="r_exec::Overlay" shape="rect" coords="0,56,127,80"/>
+<area href="classcore_1_1___object.html" alt="core::_Object" shape="rect" coords="0,0,127,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -145,6 +146,13 @@ virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_invalidate
 <tr class="memitem:a7fafe7fc62b1afafc3f13d4ba7238dd1 inherit pub_methods_classr__exec_1_1_overlay"><td class="memItemLeft" align="right" valign="top"><a id="a7fafe7fc62b1afafc3f13d4ba7238dd1"></a>
 <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>build_object</b> (<a class="el" href="classr__code_1_1_atom.html">r_code::Atom</a> head) const</td></tr>
 <tr class="separator:a7fafe7fc62b1afafc3f13d4ba7238dd1 inherit pub_methods_classr__exec_1_1_overlay"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classcore_1_1___object"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcore_1_1___object')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcore_1_1___object.html">core::_Object</a></td></tr>
+<tr class="memitem:a4a0780ae30bd77ef7b7c2f99b1bc61c0 inherit pub_methods_classcore_1_1___object"><td class="memItemLeft" align="right" valign="top"><a id="a4a0780ae30bd77ef7b7c2f99b1bc61c0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>incRef</b> ()</td></tr>
+<tr class="separator:a4a0780ae30bd77ef7b7c2f99b1bc61c0 inherit pub_methods_classcore_1_1___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a313a01f165e666c7e590fccd531f09b1 inherit pub_methods_classcore_1_1___object"><td class="memItemLeft" align="right" valign="top"><a id="a313a01f165e666c7e590fccd531f09b1"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>decRef</b> ()</td></tr>
+<tr class="separator:a313a01f165e666c7e590fccd531f09b1 inherit pub_methods_classcore_1_1___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -222,32 +230,32 @@ Timestamp&#160;</td><td class="memItemRight" valign="bottom"><b>match_deadline_<
 float32&#160;</td><td class="memItemRight" valign="bottom"><b>lowest_cfd_</b></td></tr>
 <tr class="separator:a635b73731597e7007e62fd6278b7346d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ff6de90b014367d0b4cafc46702a9f8"><td class="memItemLeft" align="right" valign="top"><a id="a7ff6de90b014367d0b4cafc46702a9f8"></a>
-std::unordered_set&lt; P&lt; <a class="el" href="classr__exec_1_1_defeasible_validity.html">DefeasibleValidity</a> &gt;, <a class="el" href="classr__code_1_1_p_hash.html">r_code::PHash</a>&lt; <a class="el" href="classr__exec_1_1_defeasible_validity.html">DefeasibleValidity</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>defeasible_validities_</b></td></tr>
+std::unordered_set&lt; <a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1_defeasible_validity.html">DefeasibleValidity</a> &gt;, <a class="el" href="classr__code_1_1_p_hash.html">r_code::PHash</a>&lt; <a class="el" href="classr__exec_1_1_defeasible_validity.html">DefeasibleValidity</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>defeasible_validities_</b></td></tr>
 <tr class="separator:a7ff6de90b014367d0b4cafc46702a9f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72f8292cebef8a0768f54d040e2a5917"><td class="memItemLeft" align="right" valign="top"><a id="a72f8292cebef8a0768f54d040e2a5917"></a>
-std::unordered_set&lt; P&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt;, <a class="el" href="classr__code_1_1_p_hash.html">r_code::PHash</a>&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>predictions_</b></td></tr>
+std::unordered_set&lt; <a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt;, <a class="el" href="classr__code_1_1_p_hash.html">r_code::PHash</a>&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>predictions_</b></td></tr>
 <tr class="separator:a72f8292cebef8a0768f54d040e2a5917"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af711ff939abd021e6313b1e1026ba87b"><td class="memItemLeft" align="right" valign="top"><a id="af711ff939abd021e6313b1e1026ba87b"></a>
-std::unordered_set&lt; P&lt; <a class="el" href="classr__exec_1_1_sim.html">Sim</a> &gt;, <a class="el" href="classr__code_1_1_p_hash.html">r_code::PHash</a>&lt; <a class="el" href="classr__exec_1_1_sim.html">Sim</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>simulations_</b></td></tr>
+std::unordered_set&lt; <a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1_sim.html">Sim</a> &gt;, <a class="el" href="classr__code_1_1_p_hash.html">r_code::PHash</a>&lt; <a class="el" href="classr__exec_1_1_sim.html">Sim</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>simulations_</b></td></tr>
 <tr class="separator:af711ff939abd021e6313b1e1026ba87b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd1841496619ba2ac786a96958758d4d"><td class="memItemLeft" align="right" valign="top"><a id="abd1841496619ba2ac786a96958758d4d"></a>
 std::vector&lt; <a class="el" href="classr__exec_1_1_sim.html">Sim</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>promoted_in_sim_</b></td></tr>
 <tr class="separator:abd1841496619ba2ac786a96958758d4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc15b122ebbe0cf719c71359b5dc3e6b"><td class="memItemLeft" align="right" valign="top"><a id="abc15b122ebbe0cf719c71359b5dc3e6b"></a>
-<a class="el" href="classr__code_1_1list.html">r_code::list</a>&lt; P&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>axiom_patterns_</b></td></tr>
+<a class="el" href="classr__code_1_1list.html">r_code::list</a>&lt; <a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>axiom_patterns_</b></td></tr>
 <tr class="separator:abc15b122ebbe0cf719c71359b5dc3e6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf688c5b285823e93b908c94cb1eb4e9"><td class="memItemLeft" align="right" valign="top"><a id="abf688c5b285823e93b908c94cb1eb4e9"></a>
-<a class="el" href="classr__code_1_1list.html">r_code::list</a>&lt; P&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>non_axiom_patterns_</b></td></tr>
+<a class="el" href="classr__code_1_1list.html">r_code::list</a>&lt; <a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>non_axiom_patterns_</b></td></tr>
 <tr class="separator:abf688c5b285823e93b908c94cb1eb4e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa85b01bea16ab10c79402cfcae2e8186"><td class="memItemLeft" align="right" valign="top"><a id="aa85b01bea16ab10c79402cfcae2e8186"></a>
-std::vector&lt; P&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>axiom_inputs_</b></td></tr>
+std::vector&lt; <a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>axiom_inputs_</b></td></tr>
 <tr class="separator:aa85b01bea16ab10c79402cfcae2e8186"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a275e25b580b5af8a3eb12b5f0a7cf230"><td class="memItemLeft" align="right" valign="top"><a id="a275e25b580b5af8a3eb12b5f0a7cf230"></a>
-std::vector&lt; P&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>non_axiom_inputs_</b></td></tr>
+std::vector&lt; <a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>non_axiom_inputs_</b></td></tr>
 <tr class="separator:a275e25b580b5af8a3eb12b5f0a7cf230"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classr__exec_1_1_h_l_p_overlay"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classr__exec_1_1_h_l_p_overlay')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classr__exec_1_1_h_l_p_overlay.html">r_exec::HLPOverlay</a></td></tr>
 <tr class="memitem:a61b8fd2c1c59fbd1609953788e0d32c4 inherit pro_attribs_classr__exec_1_1_h_l_p_overlay"><td class="memItemLeft" align="right" valign="top"><a id="a61b8fd2c1c59fbd1609953788e0d32c4"></a>
-P&lt; <a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>bindings_</b></td></tr>
+<a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>bindings_</b></td></tr>
 <tr class="separator:a61b8fd2c1c59fbd1609953788e0d32c4 inherit pro_attribs_classr__exec_1_1_h_l_p_overlay"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classr__exec_1_1_overlay"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classr__exec_1_1_overlay')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classr__exec_1_1_overlay.html">r_exec::Overlay</a></td></tr>
 <tr class="memitem:af57fb8fe65d9ab7a884fb5f850fc4257 inherit pro_attribs_classr__exec_1_1_overlay"><td class="memItemLeft" align="right" valign="top"><a id="af57fb8fe65d9ab7a884fb5f850fc4257"></a>
@@ -271,6 +279,10 @@ std::vector&lt; uint16 &gt;&#160;</td><td class="memItemRight" valign="bottom"><
 <tr class="memitem:a38ae264c26009f4fe5bd660298650ec0 inherit pro_attribs_classr__exec_1_1_overlay"><td class="memItemLeft" align="right" valign="top"><a id="a38ae264c26009f4fe5bd660298650ec0"></a>
 uint16&#160;</td><td class="memItemRight" valign="bottom"><b>value_commit_index_</b></td></tr>
 <tr class="separator:a38ae264c26009f4fe5bd660298650ec0 inherit pro_attribs_classr__exec_1_1_overlay"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classcore_1_1___object"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classcore_1_1___object')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classcore_1_1___object.html">core::_Object</a></td></tr>
+<tr class="memitem:a78942b476c06f3f3cab6c8fb0dba30e4 inherit pro_attribs_classcore_1_1___object"><td class="memItemLeft" align="right" valign="top"><a id="a78942b476c06f3f3cab6c8fb0dba30e4"></a>
+int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</b></td></tr>
+<tr class="separator:a78942b476c06f3f3cab6c8fb0dba30e4 inherit pro_attribs_classcore_1_1___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>

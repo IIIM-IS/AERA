@@ -175,7 +175,7 @@ $(function() {
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="comment">// viewing_groups_: accessed by Mem::injectNow and Mem::update.</span></div>
 <div class="line"><a name="l00105"></a><span class="lineno"><a class="line" href="classr__exec_1_1_group.html">  105</a></span>&#160;<span class="keyword">class </span>r_exec_dll <a class="code" href="classr__exec_1_1_group.html">Group</a> :</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;  <span class="keyword">public</span> <a class="code" href="classr__exec_1_1_l_object.html">LObject</a>,</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;  <span class="keyword">public</span> CriticalSection {</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;  <span class="keyword">public</span> <a class="code" href="classcore_1_1_critical_section.html">CriticalSection</a> {</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="keyword">private</span>:</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;  <span class="comment">// Ctrl values.</span></div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;  uint32 sln_thr_changes_;</div>
@@ -324,7 +324,7 @@ $(function() {
 <div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160; </div>
 <div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;  <span class="keywordtype">bool</span> invalidate(); <span class="comment">// removes all views of itself and of any other object.</span></div>
 <div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160; </div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;  <span class="keywordtype">bool</span> all_views_cond(uint8 &amp;selector, std::unordered_map&lt;uint32, P&lt;View&gt; &gt;::const_iterator &amp;it, std::unordered_map&lt;uint32, P&lt;View&gt; &gt;::const_iterator &amp;end) {</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;  <span class="keywordtype">bool</span> all_views_cond(uint8 &amp;selector, std::unordered_map&lt;uint32, <a class="code" href="classcore_1_1_p.html">P&lt;View&gt;</a> &gt;::const_iterator &amp;it, std::unordered_map&lt;uint32, <a class="code" href="classcore_1_1_p.html">P&lt;View&gt;</a> &gt;::const_iterator &amp;end) {</div>
 <div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    <span class="keywordflow">while</span> (it == end) {</div>
 <div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;      <span class="keywordflow">switch</span> (selector++) {</div>
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;      <span class="keywordflow">case</span> 0:</div>
@@ -370,7 +370,7 @@ $(function() {
 <div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;<span class="preprocessor">#define FOR_ALL_VIEWS_END } \</span></div>
 <div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;<span class="preprocessor">  }</span></div>
 <div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160; </div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;  <span class="keywordtype">bool</span> views_with_inputs_cond(uint8 &amp;selector, std::unordered_map&lt;uint32, P&lt;View&gt; &gt;::const_iterator &amp;it, std::unordered_map&lt;uint32, P&lt;View&gt; &gt;::const_iterator &amp;end) {</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;  <span class="keywordtype">bool</span> views_with_inputs_cond(uint8 &amp;selector, std::unordered_map&lt;uint32, <a class="code" href="classcore_1_1_p.html">P&lt;View&gt;</a> &gt;::const_iterator &amp;it, std::unordered_map&lt;uint32, <a class="code" href="classcore_1_1_p.html">P&lt;View&gt;</a> &gt;::const_iterator &amp;end) {</div>
 <div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;    <span class="keywordflow">while</span> (it == end) {</div>
 <div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;      <span class="keywordflow">switch</span> (selector++) {</div>
 <div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;      <span class="keywordflow">case</span> 0:</div>
@@ -394,7 +394,7 @@ $(function() {
 <div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;<span class="preprocessor">#define FOR_ALL_VIEWS_WITH_INPUTS_END } \</span></div>
 <div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;<span class="preprocessor">  }</span></div>
 <div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160; </div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;  <span class="keywordtype">bool</span> non_ntf_views_cond(uint8 &amp;selector, std::unordered_map&lt;uint32, P&lt;View&gt; &gt;::const_iterator &amp;it, std::unordered_map&lt;uint32, P&lt;View&gt; &gt;::const_iterator &amp;end) {</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;  <span class="keywordtype">bool</span> non_ntf_views_cond(uint8 &amp;selector, std::unordered_map&lt;uint32, <a class="code" href="classcore_1_1_p.html">P&lt;View&gt;</a> &gt;::const_iterator &amp;it, std::unordered_map&lt;uint32, <a class="code" href="classcore_1_1_p.html">P&lt;View&gt;</a> &gt;::const_iterator &amp;end) {</div>
 <div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;    <span class="keywordflow">while</span> (it == end) {</div>
 <div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;      <span class="keywordflow">switch</span> (selector++) {</div>
 <div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;      <span class="keywordflow">case</span> 0:</div>
@@ -543,7 +543,7 @@ $(function() {
 <div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;  };</div>
 <div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160; </div>
 <div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;  <span class="keywordtype">void</span> delete_view(<a class="code" href="classr__exec_1_1_view.html">View</a> *v);</div>
-<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;  <span class="keywordtype">void</span> delete_view(std::unordered_map&lt;uint32, P&lt;View&gt; &gt;::const_iterator &amp;v);</div>
+<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;  <span class="keywordtype">void</span> delete_view(std::unordered_map&lt;uint32, <a class="code" href="classcore_1_1_p.html">P&lt;View&gt;</a> &gt;::const_iterator &amp;v);</div>
 <div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160; </div>
 <div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;  <a class="code" href="classr__exec_1_1_group.html">Group</a> *get_secondary_group();</div>
 <div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;  <span class="keywordtype">void</span> load_secondary_mdl_controller(<a class="code" href="classr__exec_1_1_view.html">View</a> *view);</div>
@@ -563,8 +563,10 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassr__code_1_1_sys_object_html"><div class="ttname"><a href="classr__code_1_1_sys_object.html">r_code::SysObject</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00135">r_code/object.h:136</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_l_object_html"><div class="ttname"><a href="classr__exec_1_1_l_object.html">r_exec::LObject</a></div><div class="ttdef"><b>Definition:</b> <a href="r__exec_2object_8h_source.html#l00194">r_exec/object.h:195</a></div></div>
+<div class="ttc" id="aclasscore_1_1_p_html"><div class="ttname"><a href="classcore_1_1_p.html">core::P</a></div><div class="ttdef"><b>Definition:</b> <a href="base_8h_source.html#l00102">base.h:102</a></div></div>
 <div class="ttc" id="aclassr__code_1_1___view_1_1_less_html"><div class="ttname"><a href="classr__code_1_1___view_1_1_less.html">r_code::_View::Less</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00215">r_code/object.h:215</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_group_1_1_operation_html"><div class="ttname"><a href="classr__exec_1_1_group_1_1_operation.html">r_exec::Group::Operation</a></div><div class="ttdef"><b>Definition:</b> <a href="group_8h_source.html#l00207">group.h:207</a></div></div>
+<div class="ttc" id="aclasscore_1_1_critical_section_html"><div class="ttname"><a href="classcore_1_1_critical_section.html">core::CriticalSection</a></div><div class="ttdef"><b>Definition:</b> <a href="submodules_2_core_library_2_core_library_2utils_8h_source.html#l00234">submodules/CoreLibrary/CoreLibrary/utils.h:234</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_view_html"><div class="ttname"><a href="classr__exec_1_1_view.html">r_exec::View</a></div><div class="ttdef"><b>Definition:</b> <a href="view_8h_source.html#l00101">view.h:102</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_group_html"><div class="ttname"><a href="classr__exec_1_1_group.html">r_exec::Group</a></div><div class="ttdef"><b>Definition:</b> <a href="group_8h_source.html#l00105">group.h:107</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_group_1_1_mod_set_html"><div class="ttname"><a href="classr__exec_1_1_group_1_1_mod_set.html">r_exec::Group::ModSet</a></div><div class="ttdef"><b>Definition:</b> <a href="group_8h_source.html#l00215">group.h:216</a></div></div>

@@ -84,6 +84,7 @@ Inheritance diagram for r_exec::_GMonitor:</div>
   <img src="classr__exec_1_1___g_monitor.png" usemap="#r_5Fexec::_5FGMonitor_map" alt=""/>
   <map id="r_5Fexec::_5FGMonitor_map" name="r_5Fexec::_5FGMonitor_map">
 <area href="classr__exec_1_1_monitor.html" alt="r_exec::Monitor" shape="rect" coords="63,56,180,80"/>
+<area href="classcore_1_1___object.html" alt="core::_Object" shape="rect" coords="63,0,180,24"/>
 <area href="classr__exec_1_1_g_monitor.html" alt="r_exec::GMonitor" shape="rect" coords="0,168,117,192"/>
 <area href="classr__exec_1_1_s_g_monitor.html" alt="r_exec::SGMonitor" shape="rect" coords="127,168,244,192"/>
 <area href="classr__exec_1_1_r_monitor.html" alt="r_exec::RMonitor" shape="rect" coords="0,224,117,248"/>
@@ -107,11 +108,18 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_alive</b> () const
 <tr class="memitem:a606668fa43312b1d9ab6a0a3df31a8ce inherit pub_methods_classr__exec_1_1_monitor"><td class="memItemLeft" align="right" valign="top"><a id="a606668fa43312b1d9ab6a0a3df31a8ce"></a>
 virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>reduce</b> (<a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *input)=0</td></tr>
 <tr class="separator:a606668fa43312b1d9ab6a0a3df31a8ce inherit pub_methods_classr__exec_1_1_monitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classcore_1_1___object"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcore_1_1___object')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcore_1_1___object.html">core::_Object</a></td></tr>
+<tr class="memitem:a4a0780ae30bd77ef7b7c2f99b1bc61c0 inherit pub_methods_classcore_1_1___object"><td class="memItemLeft" align="right" valign="top"><a id="a4a0780ae30bd77ef7b7c2f99b1bc61c0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>incRef</b> ()</td></tr>
+<tr class="separator:a4a0780ae30bd77ef7b7c2f99b1bc61c0 inherit pub_methods_classcore_1_1___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a313a01f165e666c7e590fccd531f09b1 inherit pub_methods_classcore_1_1___object"><td class="memItemLeft" align="right" valign="top"><a id="a313a01f165e666c7e590fccd531f09b1"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>decRef</b> ()</td></tr>
+<tr class="separator:a313a01f165e666c7e590fccd531f09b1 inherit pub_methods_classcore_1_1___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
 Protected Types</h2></td></tr>
 <tr class="memitem:a44d44c6e4b3300f6327d31bc81a1f431"><td class="memItemLeft" align="right" valign="top"><a id="a44d44c6e4b3300f6327d31bc81a1f431"></a>
-typedef std::list&lt; std::pair&lt; P&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt;, P&lt; <a class="el" href="classr__exec_1_1_sim.html">Sim</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>SolutionList</b></td></tr>
+typedef std::list&lt; std::pair&lt; <a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt;, <a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1_sim.html">Sim</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>SolutionList</b></td></tr>
 <tr class="separator:a44d44c6e4b3300f6327d31bc81a1f431"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
@@ -147,7 +155,7 @@ Timestamp&#160;</td><td class="memItemRight" valign="bottom"><b>sim_thz_timestam
 <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>goal_target_</b></td></tr>
 <tr class="separator:a070c4d6c759c31cee7bbbec811e1cba1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb6ea88298ab9d1b887f2910ed3dfe54"><td class="memItemLeft" align="right" valign="top"><a id="aeb6ea88298ab9d1b887f2910ed3dfe54"></a>
-P&lt; <a class="el" href="classr__exec_1_1_fact.html">Fact</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>f_imdl_</b></td></tr>
+<a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1_fact.html">Fact</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>f_imdl_</b></td></tr>
 <tr class="separator:aeb6ea88298ab9d1b887f2910ed3dfe54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ef7cfe901be442858a585523d3aaf81"><td class="memItemLeft" align="right" valign="top"><a id="a9ef7cfe901be442858a585523d3aaf81"></a>
 SimMode&#160;</td><td class="memItemRight" valign="bottom"><b>sim_mode_</b></td></tr>
@@ -163,14 +171,18 @@ uint32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>simulating
 <tr class="separator:a71c77fb2ad24a56ffb63f063e469ae17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classr__exec_1_1_monitor"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classr__exec_1_1_monitor')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classr__exec_1_1_monitor.html">r_exec::Monitor</a></td></tr>
 <tr class="memitem:a839e58f290e1936c8933b90a72973ff2 inherit pro_attribs_classr__exec_1_1_monitor"><td class="memItemLeft" align="right" valign="top"><a id="a839e58f290e1936c8933b90a72973ff2"></a>
-P&lt; <a class="el" href="classr__exec_1_1_binding_map.html">BindingMap</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>bindings_</b></td></tr>
+<a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1_binding_map.html">BindingMap</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>bindings_</b></td></tr>
 <tr class="separator:a839e58f290e1936c8933b90a72973ff2 inherit pro_attribs_classr__exec_1_1_monitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89e2aeed3fa00333ace8c7679b27725e inherit pro_attribs_classr__exec_1_1_monitor"><td class="memItemLeft" align="right" valign="top"><a id="a89e2aeed3fa00333ace8c7679b27725e"></a>
-P&lt; <a class="el" href="classr__exec_1_1_fact.html">Fact</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>target_</b></td></tr>
+<a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1_fact.html">Fact</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>target_</b></td></tr>
 <tr class="separator:a89e2aeed3fa00333ace8c7679b27725e inherit pro_attribs_classr__exec_1_1_monitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a63abc43808bba168024f3f959375189c inherit pro_attribs_classr__exec_1_1_monitor"><td class="memItemLeft" align="right" valign="top"><a id="a63abc43808bba168024f3f959375189c"></a>
 <a class="el" href="classr__exec_1_1_m_d_l_controller.html">MDLController</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>controller_</b></td></tr>
 <tr class="separator:a63abc43808bba168024f3f959375189c inherit pro_attribs_classr__exec_1_1_monitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classcore_1_1___object"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classcore_1_1___object')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classcore_1_1___object.html">core::_Object</a></td></tr>
+<tr class="memitem:a78942b476c06f3f3cab6c8fb0dba30e4 inherit pro_attribs_classcore_1_1___object"><td class="memItemLeft" align="right" valign="top"><a id="a78942b476c06f3f3cab6c8fb0dba30e4"></a>
+int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</b></td></tr>
+<tr class="separator:a78942b476c06f3f3cab6c8fb0dba30e4 inherit pro_attribs_classcore_1_1___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">

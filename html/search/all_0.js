@@ -7,9 +7,11 @@ var searchData=
   ['_5fgmonitor_4',['_GMonitor',['../classr__exec_1_1___g_monitor.html',1,'r_exec']]],
   ['_5fiterator_5',['_iterator',['../classr__code_1_1list_1_1__iterator.html',1,'r_code::list']]],
   ['_5fmem_6',['_Mem',['../classr__exec_1_1___mem.html',1,'r_exec']]],
-  ['_5fpgmcontroller_7',['_PGMController',['../classr__exec_1_1___p_g_m_controller.html',1,'r_exec']]],
-  ['_5freductionjob_8',['_ReductionJob',['../classr__exec_1_1___reduction_job.html',1,'r_exec']]],
-  ['_5fthread_9',['_Thread',['../class_test_mem_1_1___thread.html',1,'TestMem']]],
-  ['_5ftpx_10',['_TPX',['../classr__exec_1_1___t_p_x.html',1,'r_exec']]],
-  ['_5fview_11',['_View',['../classr__code_1_1___view.html',1,'r_code']]]
+  ['_5fobject_7',['_Object',['../classcore_1_1___object.html',1,'core']]],
+  ['_5fobjectadapter_8',['_ObjectAdapter',['../classcore_1_1___object_adapter.html',1,'core']]],
+  ['_5fpgmcontroller_9',['_PGMController',['../classr__exec_1_1___p_g_m_controller.html',1,'r_exec']]],
+  ['_5freductionjob_10',['_ReductionJob',['../classr__exec_1_1___reduction_job.html',1,'r_exec']]],
+  ['_5fthread_11',['_Thread',['../class_test_mem_1_1___thread.html',1,'TestMem']]],
+  ['_5ftpx_12',['_TPX',['../classr__exec_1_1___t_p_x.html',1,'r_exec']]],
+  ['_5fview_13',['_View',['../classr__code_1_1___view.html',1,'r_code']]]
 ];

@@ -536,7 +536,7 @@ $(function() {
 <div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;      }</div>
 <div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (cmd[0].asOpcode() == Opcodes::Cmd) { <span class="comment">// command to an external device, build a cmd object and send it.</span></div>
 <div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160; </div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;      P&lt;Code&gt; command = _Mem::Get()-&gt;build_object(cmd[0]);</div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;      <a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> command = _Mem::Get()-&gt;build_object(cmd[0]);</div>
 <div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;      cmd.copy((<a class="code" href="classr__code_1_1_code.html">Code</a>*)command, 0);</div>
 <div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160; </div>
 <div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;      <a class="code" href="classr__code_1_1_code.html">Code</a>* executed_command = _Mem::Get()-&gt;eject(command);</div>
@@ -549,7 +549,7 @@ $(function() {
 <div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;      <span class="keyword">auto</span> frame_start = now - (relative_time % _Mem::Get()-&gt;get_sampling_period());</div>
 <div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;      <span class="keyword">auto</span> after = max(now, frame_start + 2 * Utils::GetTimeTolerance());</div>
 <div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;      <span class="keyword">auto</span> before = frame_start + _Mem::Get()-&gt;get_sampling_period();</div>
-<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;      P&lt;Code&gt; fact;</div>
+<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;      <a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> fact;</div>
 <div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;      <span class="keywordflow">if</span> (executed_command) {</div>
 <div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;        <span class="comment">// Set fact to the efferent copy of the command and inject it.</span></div>
 <div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;        fact = <span class="keyword">new</span> Fact(executed_command, after, before, 1, 1);</div>
@@ -918,6 +918,7 @@ $(function() {
 <div class="ttc" id="aclassr__code_1_1_atom_html"><div class="ttname"><a href="classr__code_1_1_atom.html">r_code::Atom</a></div><div class="ttdef"><b>Definition:</b> <a href="atom_8h_source.html#l00104">atom.h:104</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_p_g_m_overlay_html_ae3772dd287706c90aadf130136437aff"><div class="ttname"><a href="classr__exec_1_1_p_g_m_overlay.html#ae3772dd287706c90aadf130136437aff">r_exec::PGMOverlay::__match</a></div><div class="ttdeci">MatchResult __match(r_exec::View *input, uint16 pattern_index)</div><div class="ttdef"><b>Definition:</b> <a href="pgm__overlay_8cpp_source.html#l00756">pgm_overlay.cpp:756</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_l_object_html"><div class="ttname"><a href="classr__exec_1_1_l_object.html">r_exec::LObject</a></div><div class="ttdef"><b>Definition:</b> <a href="r__exec_2object_8h_source.html#l00194">r_exec/object.h:195</a></div></div>
+<div class="ttc" id="aclasscore_1_1_p_html"><div class="ttname"><a href="classcore_1_1_p.html">core::P</a></div><div class="ttdef"><b>Definition:</b> <a href="base_8h_source.html#l00102">base.h:102</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_code_html"><div class="ttname"><a href="classr__code_1_1_code.html">r_code::Code</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00223">r_code/object.h:224</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_view_html"><div class="ttname"><a href="classr__exec_1_1_view.html">r_exec::View</a></div><div class="ttdef"><b>Definition:</b> <a href="view_8h_source.html#l00101">view.h:102</a></div></div>
 <!-- start footer part -->

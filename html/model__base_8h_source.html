@@ -174,7 +174,7 @@ $(function() {
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="keyword">private</span>:</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;  <span class="keyword">static</span> <a class="code" href="classr__exec_1_1_model_base.html">ModelBase</a> *singleton_;</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;  CriticalSection mdlCS_;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;  <a class="code" href="classcore_1_1_critical_section.html">CriticalSection</a> mdlCS_;</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;  std::chrono::microseconds thz_;</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
@@ -188,7 +188,7 @@ $(function() {
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    MEntry();</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    MEntry(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *mdl, <span class="keywordtype">bool</span> packed);</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    P&lt;r_code::Code&gt; mdl_;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <a class="code" href="classcore_1_1_p.html">P&lt;r_code::Code&gt;</a> mdl_;</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keywordtype">bool</span> packed_;</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    Timestamp touch_time_; <span class="comment">// last time the mdl was successfully compared to.</span></div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    uint32 hash_code_;</div>
@@ -219,7 +219,7 @@ $(function() {
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;  <span class="keyword">static</span> <a class="code" href="classr__exec_1_1_model_base.html">ModelBase</a> *Get();</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;  <span class="keywordtype">void</span> load(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *mdl); <span class="comment">// called by _Mem::load(); models with no views go to the black_list_.</span></div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;  <span class="keywordtype">void</span> get_models(<a class="code" href="classr__code_1_1list.html">r_code::list</a>&lt;P&lt;r_code::Code&gt; &gt; &amp;models); <span class="comment">// white_list_ first, black_list_ next.</span></div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;  <span class="keywordtype">void</span> get_models(<a class="code" href="classr__code_1_1list.html">r_code::list</a>&lt;<a class="code" href="classcore_1_1_p.html">P&lt;r_code::Code&gt;</a> &gt; &amp;models); <span class="comment">// white_list_ first, black_list_ next.</span></div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160; </div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *check_existence(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *mdl); <span class="comment">// caveat: mdl is unpacked; return (a) NULL if the model is in the black list, (b) a model in the white list if the mdl has been registered there or (c) the mdl itself if not in the model base, in which case the mdl is added to the white list.</span></div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;  <span class="keywordtype">void</span> check_existence(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *m0, <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *m1, <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *&amp;_m0, <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *&amp;_m1); <span class="comment">// m1 is a requirement on m0; _m0 and _m1 are the return values as defined above; m0 added only if m1 is not black listed.</span></div>
@@ -232,8 +232,10 @@ $(function() {
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassr__exec_1_1___fact_html"><div class="ttname"><a href="classr__exec_1_1___fact.html">r_exec::_Fact</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00154">factory.h:155</a></div></div>
+<div class="ttc" id="aclasscore_1_1_p_html"><div class="ttname"><a href="classcore_1_1_p.html">core::P&lt; r_code::Code &gt;</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_code_html"><div class="ttname"><a href="classr__code_1_1_code.html">r_code::Code</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00223">r_code/object.h:224</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_model_base_1_1_m_entry_1_1_equal_html"><div class="ttname"><a href="classr__exec_1_1_model_base_1_1_m_entry_1_1_equal.html">r_exec::ModelBase::MEntry::Equal</a></div><div class="ttdef"><b>Definition:</b> <a href="model__base_8h_source.html#l00132">model_base.h:132</a></div></div>
+<div class="ttc" id="aclasscore_1_1_critical_section_html"><div class="ttname"><a href="classcore_1_1_critical_section.html">core::CriticalSection</a></div><div class="ttdef"><b>Definition:</b> <a href="submodules_2_core_library_2_core_library_2utils_8h_source.html#l00234">submodules/CoreLibrary/CoreLibrary/utils.h:234</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_model_base_html"><div class="ttname"><a href="classr__exec_1_1_model_base.html">r_exec::ModelBase</a></div><div class="ttdef"><b>Definition:</b> <a href="model__base_8h_source.html#l00101">model_base.h:101</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_model_base_1_1_m_entry_1_1_hash_html"><div class="ttname"><a href="classr__exec_1_1_model_base_1_1_m_entry_1_1_hash.html">r_exec::ModelBase::MEntry::Hash</a></div><div class="ttdef"><b>Definition:</b> <a href="model__base_8h_source.html#l00127">model_base.h:127</a></div></div>
 <div class="ttc" id="aclassr__code_1_1list_html"><div class="ttname"><a href="classr__code_1_1list.html">r_code::list</a></div><div class="ttdef"><b>Definition:</b> <a href="list_8h_source.html#l00099">list.h:99</a></div></div>

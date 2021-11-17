@@ -183,7 +183,7 @@ $(function() {
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;dll_export <a class="code" href="classr__comp_1_1_compiler.html">r_comp::Compiler</a> Compiler;</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;r_exec_dll <a class="code" href="classr__comp_1_1_preprocessor.html">r_comp::Preprocessor</a> Preprocessor;</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;SharedLibrary userOperatorLibrary;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<a class="code" href="classcore_1_1_shared_library.html">SharedLibrary</a> userOperatorLibrary;</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="keywordtype">bool</span> Compile(std::istream &amp;source_code, <span class="keyword">const</span> std::string&amp; filePath, std::string &amp;error, <span class="keywordtype">bool</span> compile_metadata) {</div>
@@ -233,7 +233,7 @@ $(function() {
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;thread_ret TDecompiler::Decompile(<span class="keywordtype">void</span> *args) {</div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;  P&lt;TDecompiler&gt; _this = (TDecompiler *)args;</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;TDecompiler&gt;</a> _this = (TDecompiler *)args;</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;  _this-&gt;spawned_ = 1;</div>
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;  <a class="code" href="classr__comp_1_1_decompiler.html">r_comp::Decompiler</a> decompiler;</div>
@@ -261,7 +261,7 @@ $(function() {
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;  thread_ret_val(0);</div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;}</div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160; </div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;TDecompiler::TDecompiler(uint32 ostream_id, std::string header) : _Object(), ostream_id_(ostream_id), header_(header), thread_(NULL), spawned_(0) {</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;TDecompiler::TDecompiler(uint32 ostream_id, std::string header) : <a class="code" href="classcore_1_1___object.html">_Object</a>(), ostream_id_(ostream_id), header_(header), thread_(NULL), spawned_(0) {</div>
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160; </div>
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;  objects_.reserve(ObjectsInitialSize);</div>
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;}</div>
@@ -277,14 +277,14 @@ $(function() {
 <div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;  objects_.push_back(<span class="keywordtype">object</span>);</div>
 <div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;}</div>
 <div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160; </div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;<span class="keywordtype">void</span> TDecompiler::add_objects(<span class="keyword">const</span> <a class="code" href="classr__code_1_1list.html">r_code::list</a>&lt;P&lt;Code&gt; &gt; &amp;objects) {</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;<span class="keywordtype">void</span> TDecompiler::add_objects(<span class="keyword">const</span> <a class="code" href="classr__code_1_1list.html">r_code::list</a>&lt;<a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> &gt; &amp;objects) {</div>
 <div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160; </div>
 <div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;  <a class="code" href="classr__code_1_1list.html">r_code::list&lt;P&lt;Code&gt;</a> &gt;::const_iterator o;</div>
 <div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;  <span class="keywordflow">for</span> (o = objects.begin(); o != objects.end(); ++o)</div>
 <div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;    objects_.push_back(*o);</div>
 <div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;}</div>
 <div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160; </div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;<span class="keywordtype">void</span> TDecompiler::add_objects(<span class="keyword">const</span> vector&lt;P&lt;Code&gt; &gt; &amp;objects) {</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;<span class="keywordtype">void</span> TDecompiler::add_objects(<span class="keyword">const</span> vector&lt;<a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> &gt; &amp;objects) {</div>
 <div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
 <div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;  vector&lt;P&lt;Code&gt; &gt;::const_iterator o;</div>
 <div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;  <span class="keywordflow">for</span> (o = objects.begin(); o != objects.end(); ++o)</div>
@@ -698,10 +698,13 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassr__comp_1_1_preprocessor_html"><div class="ttname"><a href="classr__comp_1_1_preprocessor.html">r_comp::Preprocessor</a></div><div class="ttdef"><b>Definition:</b> <a href="preprocessor_8h_source.html#l00180">preprocessor.h:180</a></div></div>
 <div class="ttc" id="aclassr__code_1_1___view_html"><div class="ttname"><a href="classr__code_1_1___view.html">r_code::_View</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00163">r_code/object.h:164</a></div></div>
-<div class="ttc" id="aclassr__comp_1_1_image_html_a783edad562cc9cf2100e37c7b6dca7fa"><div class="ttname"><a href="classr__comp_1_1_image.html#a783edad562cc9cf2100e37c7b6dca7fa">r_comp::Image::add_objects</a></div><div class="ttdeci">void add_objects(r_code::list&lt; P&lt; r_code::Code &gt; &gt; &amp;objects, bool include_invalidated=false)</div></div>
+<div class="ttc" id="aclasscore_1_1_shared_library_html"><div class="ttname"><a href="classcore_1_1_shared_library.html">core::SharedLibrary</a></div><div class="ttdef"><b>Definition:</b> <a href="submodules_2_core_library_2_core_library_2utils_8h_source.html#l00148">submodules/CoreLibrary/CoreLibrary/utils.h:148</a></div></div>
+<div class="ttc" id="aclassr__comp_1_1_image_html_a783edad562cc9cf2100e37c7b6dca7fa"><div class="ttname"><a href="classr__comp_1_1_image.html#a783edad562cc9cf2100e37c7b6dca7fa">r_comp::Image::add_objects</a></div><div class="ttdeci">void add_objects(r_code::list&lt; P&lt; r_code::Code &gt; &gt; &amp;objects, bool include_invalidated=false)</div><div class="ttdef"><b>Definition:</b> <a href="segments_8cpp_source.html#l00491">segments.cpp:491</a></div></div>
 <div class="ttc" id="aclassr__comp_1_1_compiler_html"><div class="ttname"><a href="classr__comp_1_1_compiler.html">r_comp::Compiler</a></div><div class="ttdef"><b>Definition:</b> <a href="compiler_8h_source.html#l00097">compiler.h:97</a></div></div>
+<div class="ttc" id="aclasscore_1_1_p_html"><div class="ttname"><a href="classcore_1_1_p.html">core::P</a></div><div class="ttdef"><b>Definition:</b> <a href="base_8h_source.html#l00102">base.h:102</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_code_html"><div class="ttname"><a href="classr__code_1_1_code.html">r_code::Code</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00223">r_code/object.h:224</a></div></div>
 <div class="ttc" id="aclassr__comp_1_1_decompiler_html"><div class="ttname"><a href="classr__comp_1_1_decompiler.html">r_comp::Decompiler</a></div><div class="ttdef"><b>Definition:</b> <a href="decompiler_8h_source.html#l00098">decompiler.h:98</a></div></div>
+<div class="ttc" id="aclasscore_1_1___object_html"><div class="ttname"><a href="classcore_1_1___object.html">core::_Object</a></div><div class="ttdef"><b>Definition:</b> <a href="base_8h_source.html#l00128">base.h:128</a></div></div>
 <div class="ttc" id="aclassr__comp_1_1_image_html"><div class="ttname"><a href="classr__comp_1_1_image.html">r_comp::Image</a></div><div class="ttdef"><b>Definition:</b> <a href="segments_8h_source.html#l00176">segments.h:176</a></div></div>
 <div class="ttc" id="aclassr__code_1_1list_html"><div class="ttname"><a href="classr__code_1_1list.html">r_code::list</a></div><div class="ttdef"><b>Definition:</b> <a href="list_8h_source.html#l00099">list.h:99</a></div></div>
 <div class="ttc" id="aclassr__comp_1_1_metadata_html"><div class="ttname"><a href="classr__comp_1_1_metadata.html">r_comp::Metadata</a></div><div class="ttdef"><b>Definition:</b> <a href="segments_8h_source.html#l00109">segments.h:109</a></div></div>

@@ -165,7 +165,7 @@ $(function() {
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;uint32 TimeJob::job_count_ = 0;</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;TimeJob::TimeJob(Timestamp target_time) : _Object(), target_time_(target_time) {</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;TimeJob::TimeJob(Timestamp target_time) : <a class="code" href="classcore_1_1___object.html">_Object</a>(), target_time_(target_time) {</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;  <span class="comment">// Increment without thread lock. It&#39;s only for tracing.</span></div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;  job_id_ = ++job_count_;</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;}</div>
@@ -355,6 +355,7 @@ $(function() {
 <div class="ttc" id="aclassr__exec_1_1_time_job_html"><div class="ttname"><a href="classr__exec_1_1_time_job.html">r_exec::TimeJob</a></div><div class="ttdef"><b>Definition:</b> <a href="time__job_8h_source.html#l00094">time_job.h:95</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_code_html"><div class="ttname"><a href="classr__code_1_1_code.html">r_code::Code</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00223">r_code/object.h:224</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_injection_job_html_a375bb229dcce22f38aa63e9c6127cdda"><div class="ttname"><a href="classr__exec_1_1_injection_job.html#a375bb229dcce22f38aa63e9c6127cdda">r_exec::InjectionJob::InjectionJob</a></div><div class="ttdeci">InjectionJob(View *v, Timestamp target_time, bool is_from_io_device)</div><div class="ttdef"><b>Definition:</b> <a href="time__job_8cpp_source.html#l00190">time_job.cpp:190</a></div></div>
+<div class="ttc" id="aclasscore_1_1___object_html"><div class="ttname"><a href="classcore_1_1___object.html">core::_Object</a></div><div class="ttdef"><b>Definition:</b> <a href="base_8h_source.html#l00128">base.h:128</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_view_html"><div class="ttname"><a href="classr__exec_1_1_view.html">r_exec::View</a></div><div class="ttdef"><b>Definition:</b> <a href="view_8h_source.html#l00101">view.h:102</a></div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

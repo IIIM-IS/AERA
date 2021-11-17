@@ -176,7 +176,7 @@ $(function() {
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;}</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;TPX::TPX(AutoFocusController *auto_focus, _Fact *target, _Fact *pattern, BindingMap *bindings) : _Object(), auto_focus_(auto_focus), target_(target), abstracted_target_(pattern), target_bindings_(bindings), cst_hook_(NULL) { <span class="comment">// called by GTPX and PTPX&#39;s ctor.</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;TPX::TPX(AutoFocusController *auto_focus, _Fact *target, _Fact *pattern, BindingMap *bindings) : <a class="code" href="classcore_1_1___object.html">_Object</a>(), auto_focus_(auto_focus), target_(target), abstracted_target_(pattern), target_bindings_(bindings), cst_hook_(NULL) { <span class="comment">// called by GTPX and PTPX&#39;s ctor.</span></div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;  <span class="keywordflow">if</span> (bindings-&gt;is_fully_specified()) { <span class="comment">// get a hook on a cst controller so we get icsts from it: this is needed if the target is an underspecified icst.</span></div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
@@ -189,9 +189,9 @@ $(function() {
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;  }</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;}</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;TPX::TPX(AutoFocusController *auto_focus, _Fact *target) : _Object(), auto_focus_(auto_focus) { <span class="comment">// called by CTPX&#39;s ctor.</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;TPX::TPX(AutoFocusController *auto_focus, _Fact *target) : <a class="code" href="classcore_1_1___object.html">_Object</a>(), auto_focus_(auto_focus) { <span class="comment">// called by CTPX&#39;s ctor.</span></div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;  P&lt;BindingMap&gt; bm = <span class="keyword">new</span> BindingMap();</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> bm = <span class="keyword">new</span> BindingMap();</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;  abstracted_target_ = (_Fact *)bm-&gt;abstract_object(target, <span class="keyword">false</span>);</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;  target_ = target;</div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;  target_bindings_ = bm;</div>
@@ -223,7 +223,7 @@ $(function() {
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <span class="keywordflow">if</span> (new_maps_[i]-&gt;intersect(bm)) {</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">true</span>; }</div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; </div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;  P&lt;BindingMap&gt; _bm = <span class="keyword">new</span> BindingMap(target_bindings_);</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> _bm = <span class="keyword">new</span> BindingMap(target_bindings_);</div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;  _bm-&gt;reset_fwd_timings(input-&gt;object_);</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;  <a class="code" href="classr__code_1_1time__buffer.html">time_buffer&lt;CInput, CInput::IsInvalidated&gt;</a> &amp;cache = auto_focus_-&gt;get_cache();</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;  <span class="keywordflow">if</span> (_bm-&gt;match_fwd_strict(input-&gt;object_, (_Fact *)target_-&gt;get_reference(0)-&gt;get_reference(0))) { <span class="comment">// both GTPX and PTPX&#39; target are f0-&gt;g/p-&gt;f1: we need to match on f1.</span></div>
@@ -338,7 +338,7 @@ $(function() {
 <div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;  <a class="code" href="classr__exec_1_1___t_p_x.html#abd27107a9193343c409e739aec1bc5fd">_find_f_icst</a>(component, results, find_multiple);</div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;}</div>
 <div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160; </div>
-<div class="line"><a name="l00272"></a><span class="lineno"><a class="line" href="classr__exec_1_1___t_p_x.html#a392b9b97e2f35af6a15f0bb24588ba64">  272</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classr__exec_1_1___t_p_x.html#af986f9065f127e273ebe56ec8588da8b">_TPX::find_f_icst</a>(<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *component, vector&lt;FindFIcstResult&gt;&amp; results, P&lt;Code&gt; &amp;new_cst, <span class="keywordtype">bool</span> find_multiple) {</div>
+<div class="line"><a name="l00272"></a><span class="lineno"><a class="line" href="classr__exec_1_1___t_p_x.html#a392b9b97e2f35af6a15f0bb24588ba64">  272</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classr__exec_1_1___t_p_x.html#af986f9065f127e273ebe56ec8588da8b">_TPX::find_f_icst</a>(<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *component, vector&lt;FindFIcstResult&gt;&amp; results, <a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> &amp;new_cst, <span class="keywordtype">bool</span> find_multiple) {</div>
 <div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160; </div>
 <div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;  uint16 opcode = component-&gt;get_reference(0)-&gt;code(0).asOpcode();</div>
 <div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;  <span class="keywordflow">if</span> (opcode == Opcodes::Cmd || opcode == Opcodes::IMdl)</div>
@@ -355,7 +355,7 @@ $(function() {
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    results.push_back(<a class="code" href="classr__exec_1_1___t_p_x_1_1_find_f_icst_result.html">FindFIcstResult</a>(f_icst, component_index));</div>
 <div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;}</div>
 <div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160; </div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *_TPX::make_f_icst(<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *component, uint16 &amp;component_index, P&lt;Code&gt; &amp;new_cst) {</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *_TPX::make_f_icst(<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *component, uint16 &amp;component_index, <a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> &amp;new_cst) {</div>
 <div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160; </div>
 <div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;  uint16 opcode = component-&gt;get_reference(0)-&gt;code(0).asOpcode();</div>
 <div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;  <span class="keywordflow">if</span> (opcode == Opcodes::Cmd || opcode == Opcodes::IMdl)</div>
@@ -410,7 +410,7 @@ $(function() {
 <div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    }</div>
 <div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;  }</div>
 <div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160; </div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;  P&lt;HLPBindingMap&gt; bm = <span class="keyword">new</span> HLPBindingMap();</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;HLPBindingMap&gt;</a> bm = <span class="keyword">new</span> HLPBindingMap();</div>
 <div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;  new_cst = build_cst(components, bm, component);</div>
 <div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;  _Fact *f_icst = bm-&gt;build_f_ihlp(new_cst, Opcodes::ICst, <span class="keyword">false</span>);</div>
 <div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;  icsts_.push_back(f_icst); <span class="comment">// the f_icst can be reused in subsequent model building attempts.</span></div>
@@ -531,7 +531,7 @@ $(function() {
 <div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160; </div>
 <div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;    std::string header(<span class="stringliteral">&quot;&gt; from buffer -------------------\n\n&quot;</span>);</div>
 <div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160; </div>
-<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;    P&lt;TDecompiler&gt; td = <span class="keyword">new</span> TDecompiler(1, header);</div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;    <a class="code" href="classcore_1_1_p.html">P&lt;TDecompiler&gt;</a> td = <span class="keyword">new</span> TDecompiler(1, header);</div>
 <div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;    td-&gt;add_objects(tmp);</div>
 <div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;    td-&gt;decompile();</div>
 <div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160; </div>
@@ -597,12 +597,12 @@ $(function() {
 <div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;<span class="keywordtype">void</span> GTPX::reduce(<a class="code" href="classr__exec_1_1_view.html">r_exec::View</a> *input) { <span class="comment">// input-&gt;object: f-&gt;success.</span></div>
 <div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160; </div>
 <div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;  _Fact *consequent = (_Fact *)input-&gt;object_-&gt;get_reference(0)-&gt;get_reference(1);</div>
-<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;  P&lt;BindingMap&gt; consequent_bm = <span class="keyword">new</span> BindingMap();</div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> consequent_bm = <span class="keyword">new</span> BindingMap();</div>
 <div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;  _Fact *abstracted_consequent = (_Fact *)consequent_bm-&gt;abstract_object(consequent, <span class="keyword">false</span>);</div>
 <div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160; </div>
 <div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;  <span class="keywordflow">for</span> (uint32 i = 0; i &lt; predictions_.size(); ++i) { <span class="comment">// check if some models have successfully predicted the target: if so, abort.</span></div>
 <div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160; </div>
-<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;    P&lt;BindingMap&gt; bm = <span class="keyword">new</span> BindingMap(consequent_bm);</div>
+<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;    <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> bm = <span class="keyword">new</span> BindingMap(consequent_bm);</div>
 <div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;    bm-&gt;reset_fwd_timings(predictions_[i]);</div>
 <div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;    <span class="keywordflow">if</span> (bm-&gt;match_fwd_strict(predictions_[i], consequent))</div>
 <div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;      <span class="keywordflow">return</span>;</div>
@@ -613,7 +613,7 @@ $(function() {
 <div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;  <span class="keywordflow">if</span> (target_-&gt;get_reference(0)-&gt;code(0).asOpcode() == Opcodes::MkVal)</div>
 <div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;    <span class="keywordflow">return</span>; <span class="comment">// this case will be handled by CTPXs.</span></div>
 <div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160; </div>
-<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;  P&lt;GuardBuilder&gt; guard_builder;</div>
+<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;GuardBuilder&gt;</a> guard_builder;</div>
 <div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160; </div>
 <div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;  microseconds period;</div>
 <div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;  microseconds lhs_duration;</div>
@@ -655,7 +655,7 @@ $(function() {
 <div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;    rhs_duration = duration_cast&lt;microseconds&gt;(consequent-&gt;get_before() - consequent-&gt;get_after());</div>
 <div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160; </div>
 <div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;    vector&lt;FindFIcstResult&gt; results;</div>
-<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;    P&lt;Code&gt; new_cst;</div>
+<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;    <a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> new_cst;</div>
 <div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;    <a class="code" href="classr__exec_1_1___t_p_x.html#af986f9065f127e273ebe56ec8588da8b">find_f_icst</a>(cause.input_, results, new_cst);</div>
 <div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;    <span class="keywordflow">if</span> (results.size() == 0) {</div>
 <div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160; </div>
@@ -681,10 +681,10 @@ $(function() {
 <div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160; </div>
 <div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;<span class="keywordtype">bool</span> GTPX::build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, microseconds period) {</div>
 <div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160; </div>
-<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;  P&lt;BindingMap&gt; bm = <span class="keyword">new</span> BindingMap();</div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> bm = <span class="keyword">new</span> BindingMap();</div>
 <div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160; </div>
 <div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;  uint16 write_index;</div>
-<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;  P&lt;Code&gt; m0 = build_mdl_head(bm, 0, cause, consequent, write_index);</div>
+<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> m0 = build_mdl_head(bm, 0, cause, consequent, write_index);</div>
 <div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;  guard_builder-&gt;build(m0, NULL, cause, write_index);</div>
 <div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160;  build_mdl_tail(m0, write_index);</div>
 <div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160; </div>
@@ -701,10 +701,10 @@ $(function() {
 <div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160; </div>
 <div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;<span class="keywordtype">bool</span> GTPX::build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, microseconds period, <a class="code" href="classr__code_1_1_code.html">Code</a> *new_cst) {</div>
 <div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160; </div>
-<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;  P&lt;BindingMap&gt; bm = <span class="keyword">new</span> BindingMap();</div>
+<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> bm = <span class="keyword">new</span> BindingMap();</div>
 <div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160; </div>
 <div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;  uint16 write_index;</div>
-<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;  P&lt;Code&gt; m0 = build_mdl_head(bm, 0, f_icst, consequent, write_index);</div>
+<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> m0 = build_mdl_head(bm, 0, f_icst, consequent, write_index);</div>
 <div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;  guard_builder-&gt;build(m0, NULL, cause_pattern, write_index);</div>
 <div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;  build_mdl_tail(m0, write_index);</div>
 <div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160; </div>
@@ -758,8 +758,8 @@ $(function() {
 <div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;  _Fact *consequent = <span class="keyword">new</span> Fact((Fact *)f_imdl_); <span class="comment">// input-&gt;object is the prediction failure: ignore and consider |f-&gt;imdl instead.</span></div>
 <div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;  consequent-&gt;set_opposite();</div>
 <div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160; </div>
-<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;  P&lt;BindingMap&gt; end_bm = <span class="keyword">new</span> BindingMap();</div>
-<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;  P&lt;_Fact&gt; abstract_input = (_Fact *)end_bm-&gt;abstract_object(consequent, <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> end_bm = <span class="keyword">new</span> BindingMap();</div>
+<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;_Fact&gt;</a> abstract_input = (_Fact *)end_bm-&gt;abstract_object(consequent, <span class="keyword">false</span>);</div>
 <div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;  <a class="code" href="classr__code_1_1list_1_1const__iterator.html">r_code::list&lt;Input&gt;::const_iterator</a> i;</div>
 <div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;  <span class="keywordflow">for</span> (i = inputs_.begin(); i != inputs_.end();) { <span class="comment">// filter out inputs irrelevant for the prediction.</span></div>
 <div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160; </div>
@@ -772,7 +772,7 @@ $(function() {
 <div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;      ++i;</div>
 <div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160;  }</div>
 <div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160; </div>
-<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;  P&lt;GuardBuilder&gt; guard_builder;</div>
+<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;GuardBuilder&gt;</a> guard_builder;</div>
 <div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;  microseconds period;</div>
 <div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;  microseconds lhs_duration;</div>
 <div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;  microseconds rhs_duration;</div>
@@ -798,7 +798,7 @@ $(function() {
 <div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;      guard_builder = <span class="keyword">new</span> TimingGuardBuilder(period); <span class="comment">// TODO: use the durations.</span></div>
 <div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160; </div>
 <div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;    vector&lt;FindFIcstResult&gt; results;</div>
-<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;    P&lt;Code&gt; new_cst;</div>
+<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;    <a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> new_cst;</div>
 <div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;    <a class="code" href="classr__exec_1_1___t_p_x.html#af986f9065f127e273ebe56ec8588da8b">find_f_icst</a>(cause.input_, results, new_cst, <span class="keyword">true</span>);</div>
 <div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;    <span class="keywordflow">if</span> (results.size() == 0) {</div>
 <div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160; </div>
@@ -823,7 +823,7 @@ $(function() {
 <div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;      <span class="keywordflow">if</span> (!new_cst) {</div>
 <div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;        <span class="comment">// find_f_icst returned results without making a new cst. Check if we can make one.</span></div>
 <div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;        uint16 component_index;</div>
-<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;        P&lt;_Fact&gt; f_icst = make_f_icst(cause.input_, component_index, new_cst);</div>
+<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;        <a class="code" href="classcore_1_1_p.html">P&lt;_Fact&gt;</a> f_icst = make_f_icst(cause.input_, component_index, new_cst);</div>
 <div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;        <span class="keywordflow">if</span> (!!f_icst) {</div>
 <div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;          <a class="code" href="classr__code_1_1_code.html">Code</a> *unpacked_cst = new_cst;</div>
 <div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;          _Fact *cause_pattern = (_Fact *)unpacked_cst-&gt;get_reference(component_index);</div>
@@ -837,10 +837,10 @@ $(function() {
 <div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160; </div>
 <div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;<span class="keywordtype">bool</span> PTPX::build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, microseconds period) {</div>
 <div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160; </div>
-<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;  P&lt;BindingMap&gt; bm = <span class="keyword">new</span> BindingMap();</div>
+<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> bm = <span class="keyword">new</span> BindingMap();</div>
 <div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160; </div>
 <div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;  uint16 write_index;</div>
-<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160;  P&lt;Code&gt; m0 = build_mdl_head(bm, 0, cause, consequent, write_index);</div>
+<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> m0 = build_mdl_head(bm, 0, cause, consequent, write_index);</div>
 <div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160;  guard_builder-&gt;build(m0, NULL, cause, write_index);</div>
 <div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;  build_mdl_tail(m0, write_index);</div>
 <div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160; </div>
@@ -857,10 +857,10 @@ $(function() {
 <div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160; </div>
 <div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;<span class="keywordtype">bool</span> PTPX::build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, microseconds period, <a class="code" href="classr__code_1_1_code.html">Code</a> *new_cst) {</div>
 <div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160; </div>
-<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160;  P&lt;BindingMap&gt; bm = <span class="keyword">new</span> BindingMap();</div>
+<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> bm = <span class="keyword">new</span> BindingMap();</div>
 <div class="line"><a name="l00794"></a><span class="lineno">  794</span>&#160; </div>
 <div class="line"><a name="l00795"></a><span class="lineno">  795</span>&#160;  uint16 write_index;</div>
-<div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160;  P&lt;Code&gt; m0 = build_mdl_head(bm, 0, f_icst, consequent, write_index);</div>
+<div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> m0 = build_mdl_head(bm, 0, f_icst, consequent, write_index);</div>
 <div class="line"><a name="l00797"></a><span class="lineno">  797</span>&#160;  guard_builder-&gt;build(m0, NULL, cause_pattern, write_index);</div>
 <div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160;  build_mdl_tail(m0, write_index);</div>
 <div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160; </div>
@@ -892,7 +892,7 @@ $(function() {
 <div class="line"><a name="l00826"></a><span class="lineno">  826</span>&#160;<span class="keywordtype">void</span> CTPX::store_input(<a class="code" href="classr__exec_1_1_view.html">r_exec::View</a> *input) {</div>
 <div class="line"><a name="l00827"></a><span class="lineno">  827</span>&#160; </div>
 <div class="line"><a name="l00828"></a><span class="lineno">  828</span>&#160;  _Fact *input_object = (_Fact *)input-&gt;object_;</div>
-<div class="line"><a name="l00829"></a><span class="lineno">  829</span>&#160;  P&lt;BindingMap&gt; bm = <span class="keyword">new</span> BindingMap();</div>
+<div class="line"><a name="l00829"></a><span class="lineno">  829</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> bm = <span class="keyword">new</span> BindingMap();</div>
 <div class="line"><a name="l00830"></a><span class="lineno">  830</span>&#160;  _Fact *abstracted_input = (_Fact *)bm-&gt;abstract_object(input_object, <span class="keyword">false</span>);</div>
 <div class="line"><a name="l00831"></a><span class="lineno">  831</span>&#160;  Input i(input, abstracted_input, bm);</div>
 <div class="line"><a name="l00832"></a><span class="lineno">  832</span>&#160;  inputs_.push_front(i);</div>
@@ -920,8 +920,8 @@ $(function() {
 <div class="line"><a name="l00854"></a><span class="lineno">  854</span>&#160; </div>
 <div class="line"><a name="l00855"></a><span class="lineno">  855</span>&#160;  _Fact *consequent = (_Fact *)input-&gt;object_; <span class="comment">// counter-evidence for the premise.</span></div>
 <div class="line"><a name="l00856"></a><span class="lineno">  856</span>&#160; </div>
-<div class="line"><a name="l00857"></a><span class="lineno">  857</span>&#160;  P&lt;BindingMap&gt; end_bm = <span class="keyword">new</span> BindingMap();</div>
-<div class="line"><a name="l00858"></a><span class="lineno">  858</span>&#160;  P&lt;_Fact&gt; abstract_input = (_Fact *)end_bm-&gt;abstract_object(consequent, <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00857"></a><span class="lineno">  857</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> end_bm = <span class="keyword">new</span> BindingMap();</div>
+<div class="line"><a name="l00858"></a><span class="lineno">  858</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;_Fact&gt;</a> abstract_input = (_Fact *)end_bm-&gt;abstract_object(consequent, <span class="keyword">false</span>);</div>
 <div class="line"><a name="l00859"></a><span class="lineno">  859</span>&#160;  <a class="code" href="classr__code_1_1list_1_1const__iterator.html">r_code::list&lt;Input&gt;::const_iterator</a> i;</div>
 <div class="line"><a name="l00860"></a><span class="lineno">  860</span>&#160;  <span class="keywordflow">for</span> (i = inputs_.begin(); i != inputs_.end();) {</div>
 <div class="line"><a name="l00861"></a><span class="lineno">  861</span>&#160; </div>
@@ -930,8 +930,8 @@ $(function() {
 <div class="line"><a name="l00864"></a><span class="lineno">  864</span>&#160;      <span class="keywordtype">bool</span> icstIsOK = <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00865"></a><span class="lineno">  865</span>&#160;      ICST *icst = (ICST*)i-&gt;input_-&gt;get_reference(0);</div>
 <div class="line"><a name="l00866"></a><span class="lineno">  866</span>&#160;      <span class="keywordflow">for</span> (uint32 j = 0; j &lt; icst-&gt;components_.size(); ++j) {</div>
-<div class="line"><a name="l00867"></a><span class="lineno">  867</span>&#160;        P&lt;BindingMap&gt; component_bm = <span class="keyword">new</span> BindingMap();</div>
-<div class="line"><a name="l00868"></a><span class="lineno">  868</span>&#160;        P&lt;_Fact&gt; unused = (_Fact *)component_bm-&gt;abstract_object(icst-&gt;components_[j], <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00867"></a><span class="lineno">  867</span>&#160;        <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> component_bm = <span class="keyword">new</span> BindingMap();</div>
+<div class="line"><a name="l00868"></a><span class="lineno">  868</span>&#160;        <a class="code" href="classcore_1_1_p.html">P&lt;_Fact&gt;</a> unused = (_Fact *)component_bm-&gt;abstract_object(icst-&gt;components_[j], <span class="keyword">false</span>);</div>
 <div class="line"><a name="l00869"></a><span class="lineno">  869</span>&#160;        <span class="keywordflow">if</span> (!(target_bindings_-&gt;intersect(component_bm) || end_bm-&gt;intersect(component_bm))) {</div>
 <div class="line"><a name="l00870"></a><span class="lineno">  870</span>&#160;          icstIsOK = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00871"></a><span class="lineno">  871</span>&#160;          <span class="keywordflow">break</span>;</div>
@@ -959,7 +959,7 @@ $(function() {
 <div class="line"><a name="l00893"></a><span class="lineno">  893</span>&#160;    need_guard = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00894"></a><span class="lineno">  894</span>&#160; </div>
 <div class="line"><a name="l00895"></a><span class="lineno">  895</span>&#160;  <span class="keyword">auto</span> period = duration_cast&lt;microseconds&gt;(Utils::GetTimestamp&lt;Code&gt;(consequent, FACT_AFTER) - Utils::GetTimestamp&lt;Code&gt;(target_, FACT_AFTER)); <span class="comment">// sampling period.</span></div>
-<div class="line"><a name="l00896"></a><span class="lineno">  896</span>&#160;  P&lt;GuardBuilder&gt; guard_builder;</div>
+<div class="line"><a name="l00896"></a><span class="lineno">  896</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;GuardBuilder&gt;</a> guard_builder;</div>
 <div class="line"><a name="l00897"></a><span class="lineno">  897</span>&#160; </div>
 <div class="line"><a name="l00898"></a><span class="lineno">  898</span>&#160;  <span class="keywordflow">for</span> (i = inputs_.begin(); i != inputs_.end(); ++i) {</div>
 <div class="line"><a name="l00899"></a><span class="lineno">  899</span>&#160; </div>
@@ -1097,7 +1097,7 @@ $(function() {
 <div class="line"><a name="l01031"></a><span class="lineno"> 1031</span>&#160;<span class="comment">// m1:[icst-&gt;imdl m0[...][...]] with icst containing the premise.</span></div>
 <div class="line"><a name="l01032"></a><span class="lineno"> 1032</span>&#160;<span class="keywordtype">bool</span> CTPX::build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, microseconds period) {</div>
 <div class="line"><a name="l01033"></a><span class="lineno"> 1033</span>&#160; </div>
-<div class="line"><a name="l01034"></a><span class="lineno"> 1034</span>&#160;  P&lt;HLPBindingMap&gt; bm = <span class="keyword">new</span> HLPBindingMap();</div>
+<div class="line"><a name="l01034"></a><span class="lineno"> 1034</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;HLPBindingMap&gt;</a> bm = <span class="keyword">new</span> HLPBindingMap();</div>
 <div class="line"><a name="l01035"></a><span class="lineno"> 1035</span>&#160;  bm-&gt;init(target_-&gt;get_reference(0), MK_VAL_VALUE);</div>
 <div class="line"><a name="l01036"></a><span class="lineno"> 1036</span>&#160;  bm-&gt;init(target_, FACT_AFTER);</div>
 <div class="line"><a name="l01037"></a><span class="lineno"> 1037</span>&#160;  bm-&gt;init(target_, FACT_BEFORE);</div>
@@ -1105,7 +1105,7 @@ $(function() {
 <div class="line"><a name="l01039"></a><span class="lineno"> 1039</span>&#160;  uint16 write_index;</div>
 <div class="line"><a name="l01040"></a><span class="lineno"> 1040</span>&#160;  <span class="comment">// Set allow_shared_timing_vars false. See BindingMap::abstract_fact .</span></div>
 <div class="line"><a name="l01041"></a><span class="lineno"> 1041</span>&#160;  <span class="comment">// NOTE: This solution is strictly temporary. We should have a heuristic for comparing time values which allows deviations. See https://github.com/IIIM-IS/replicode/pull/110 .</span></div>
-<div class="line"><a name="l01042"></a><span class="lineno"> 1042</span>&#160;  P&lt;Code&gt; m0 = build_mdl_head(bm, 3, cause, consequent, write_index, <span class="keyword">false</span>);</div>
+<div class="line"><a name="l01042"></a><span class="lineno"> 1042</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> m0 = build_mdl_head(bm, 3, cause, consequent, write_index, <span class="keyword">false</span>);</div>
 <div class="line"><a name="l01043"></a><span class="lineno"> 1043</span>&#160;  guard_builder-&gt;build(m0, NULL, cause, write_index);</div>
 <div class="line"><a name="l01044"></a><span class="lineno"> 1044</span>&#160;  build_mdl_tail(m0, write_index);</div>
 <div class="line"><a name="l01045"></a><span class="lineno"> 1045</span>&#160;  <span class="keywordflow">return</span> build_requirement(bm, m0, period); <span class="comment">// existence checks performed there.</span></div>
@@ -1115,7 +1115,7 @@ $(function() {
 <div class="line"><a name="l01049"></a><span class="lineno"> 1049</span>&#160;<span class="comment">// m1:[icst-&gt;imdl m0[...][...]] with icst containing the premise.</span></div>
 <div class="line"><a name="l01050"></a><span class="lineno"> 1050</span>&#160;<span class="keywordtype">bool</span> CTPX::build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, microseconds period) {</div>
 <div class="line"><a name="l01051"></a><span class="lineno"> 1051</span>&#160; </div>
-<div class="line"><a name="l01052"></a><span class="lineno"> 1052</span>&#160;  P&lt;BindingMap&gt; bm = <span class="keyword">new</span> BindingMap();</div>
+<div class="line"><a name="l01052"></a><span class="lineno"> 1052</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> bm = <span class="keyword">new</span> BindingMap();</div>
 <div class="line"><a name="l01053"></a><span class="lineno"> 1053</span>&#160;  bm-&gt;init(target_-&gt;get_reference(0), MK_VAL_VALUE);</div>
 <div class="line"><a name="l01054"></a><span class="lineno"> 1054</span>&#160;  bm-&gt;init(target_, FACT_AFTER);</div>
 <div class="line"><a name="l01055"></a><span class="lineno"> 1055</span>&#160;  bm-&gt;init(target_, FACT_BEFORE);</div>
@@ -1131,14 +1131,14 @@ $(function() {
 <div class="line"><a name="l01065"></a><span class="lineno"> 1065</span>&#160;<span class="keywordtype">bool</span> CTPX::build_requirement(HLPBindingMap *bm, <a class="code" href="classr__code_1_1_code.html">Code</a> *m0, microseconds period) { <span class="comment">// check for mdl existence at the same time (ModelBase::mdlCS_-wise).</span></div>
 <div class="line"><a name="l01066"></a><span class="lineno"> 1066</span>&#160; </div>
 <div class="line"><a name="l01067"></a><span class="lineno"> 1067</span>&#160;  vector&lt;FindFIcstResult&gt; results;</div>
-<div class="line"><a name="l01068"></a><span class="lineno"> 1068</span>&#160;  P&lt;Code&gt; new_cst;</div>
+<div class="line"><a name="l01068"></a><span class="lineno"> 1068</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> new_cst;</div>
 <div class="line"><a name="l01069"></a><span class="lineno"> 1069</span>&#160;  <a class="code" href="classr__exec_1_1___t_p_x.html#af986f9065f127e273ebe56ec8588da8b">find_f_icst</a>(target_, results, new_cst);</div>
 <div class="line"><a name="l01070"></a><span class="lineno"> 1070</span>&#160;  <span class="keywordflow">if</span> (results.size() == 0)</div>
 <div class="line"><a name="l01071"></a><span class="lineno"> 1071</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l01072"></a><span class="lineno"> 1072</span>&#160; </div>
 <div class="line"><a name="l01073"></a><span class="lineno"> 1073</span>&#160;  _Fact* f_icst = results[0].f_icst;</div>
 <div class="line"><a name="l01074"></a><span class="lineno"> 1074</span>&#160;  uint16 premise_index = results[0].component_index;</div>
-<div class="line"><a name="l01075"></a><span class="lineno"> 1075</span>&#160;  P&lt;Fact&gt; f_im0 = bm-&gt;build_f_ihlp(m0, Opcodes::IMdl, <span class="keyword">false</span>);</div>
+<div class="line"><a name="l01075"></a><span class="lineno"> 1075</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;Fact&gt;</a> f_im0 = bm-&gt;build_f_ihlp(m0, Opcodes::IMdl, <span class="keyword">false</span>);</div>
 <div class="line"><a name="l01076"></a><span class="lineno"> 1076</span>&#160;  Utils::SetTimestamp&lt;Code&gt;(f_im0, FACT_AFTER, f_icst-&gt;get_after());</div>
 <div class="line"><a name="l01077"></a><span class="lineno"> 1077</span>&#160;  Utils::SetTimestamp&lt;Code&gt;(f_im0, FACT_BEFORE, f_icst-&gt;get_before());</div>
 <div class="line"><a name="l01078"></a><span class="lineno"> 1078</span>&#160; </div>
@@ -1151,11 +1151,11 @@ $(function() {
 <div class="line"><a name="l01085"></a><span class="lineno"> 1085</span>&#160;    unpacked_cst = new_cst;</div>
 <div class="line"><a name="l01086"></a><span class="lineno"> 1086</span>&#160;  _Fact *premise_pattern = (_Fact *)unpacked_cst-&gt;get_reference(premise_index);</div>
 <div class="line"><a name="l01087"></a><span class="lineno"> 1087</span>&#160; </div>
-<div class="line"><a name="l01088"></a><span class="lineno"> 1088</span>&#160;  P&lt;BindingMap&gt; _bm = <span class="keyword">new</span> BindingMap();</div>
+<div class="line"><a name="l01088"></a><span class="lineno"> 1088</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> _bm = <span class="keyword">new</span> BindingMap();</div>
 <div class="line"><a name="l01089"></a><span class="lineno"> 1089</span>&#160; </div>
 <div class="line"><a name="l01090"></a><span class="lineno"> 1090</span>&#160;  uint16 write_index;</div>
-<div class="line"><a name="l01091"></a><span class="lineno"> 1091</span>&#160;  P&lt;Code&gt; m1 = build_mdl_head(_bm, 0, f_icst, f_im0, write_index);</div>
-<div class="line"><a name="l01092"></a><span class="lineno"> 1092</span>&#160;  P&lt;GuardBuilder&gt; guard_builder = <span class="keyword">new</span> GuardBuilder();</div>
+<div class="line"><a name="l01091"></a><span class="lineno"> 1091</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> m1 = build_mdl_head(_bm, 0, f_icst, f_im0, write_index);</div>
+<div class="line"><a name="l01092"></a><span class="lineno"> 1092</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;GuardBuilder&gt;</a> guard_builder = <span class="keyword">new</span> GuardBuilder();</div>
 <div class="line"><a name="l01093"></a><span class="lineno"> 1093</span>&#160;  guard_builder-&gt;build(m1, premise_pattern, NULL, write_index);</div>
 <div class="line"><a name="l01094"></a><span class="lineno"> 1094</span>&#160;  build_mdl_tail(m1, write_index);</div>
 <div class="line"><a name="l01095"></a><span class="lineno"> 1095</span>&#160; </div>
@@ -1190,7 +1190,9 @@ $(function() {
 <div class="ttc" id="aclassr__exec_1_1___fact_html"><div class="ttname"><a href="classr__exec_1_1___fact.html">r_exec::_Fact</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00154">factory.h:155</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___t_p_x_1_1_find_f_icst_result_html"><div class="ttname"><a href="classr__exec_1_1___t_p_x_1_1_find_f_icst_result.html">r_exec::_TPX::FindFIcstResult</a></div><div class="ttdef"><b>Definition:</b> <a href="pattern__extractor_8h_source.html#l00191">pattern_extractor.h:191</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_i_c_s_t_html"><div class="ttname"><a href="classr__exec_1_1_i_c_s_t.html">r_exec::ICST</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00585">factory.h:586</a></div></div>
+<div class="ttc" id="aclasscore_1_1_p_html"><div class="ttname"><a href="classcore_1_1_p.html">core::P</a></div><div class="ttdef"><b>Definition:</b> <a href="base_8h_source.html#l00102">base.h:102</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_code_html"><div class="ttname"><a href="classr__code_1_1_code.html">r_code::Code</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00223">r_code/object.h:224</a></div></div>
+<div class="ttc" id="aclasscore_1_1___object_html"><div class="ttname"><a href="classcore_1_1___object.html">core::_Object</a></div><div class="ttdef"><b>Definition:</b> <a href="base_8h_source.html#l00128">base.h:128</a></div></div>
 <div class="ttc" id="aclassr__code_1_1list_1_1iterator_html"><div class="ttname"><a href="classr__code_1_1list_1_1iterator.html">r_code::list::iterator</a></div><div class="ttdef"><b>Definition:</b> <a href="list_8h_source.html#l00294">list.h:295</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_view_html"><div class="ttname"><a href="classr__exec_1_1_view.html">r_exec::View</a></div><div class="ttdef"><b>Definition:</b> <a href="view_8h_source.html#l00101">view.h:102</a></div></div>
 <div class="ttc" id="aclassr__code_1_1time__buffer_1_1iterator_html"><div class="ttname"><a href="classr__code_1_1time__buffer_1_1iterator.html">r_code::time_buffer::iterator</a></div><div class="ttdef"><b>Definition:</b> <a href="time__buffer_8h_source.html#l00107">time_buffer.h:107</a></div></div>

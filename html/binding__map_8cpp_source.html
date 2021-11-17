@@ -162,7 +162,7 @@ $(function() {
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="keyword">namespace </span>r_exec {</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;Value::Value(BindingMap *map) : _Object(), map_(map) {</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;Value::Value(BindingMap *map) : <a class="code" href="classcore_1_1___object.html">_Object</a>(), map_(map) {</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;}</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
@@ -470,7 +470,7 @@ $(function() {
 <div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;  <span class="keywordflow">return</span> _f_ihlp;</div>
 <div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;}</div>
 <div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160; </div>
-<div class="line"><a name="l00408"></a><span class="lineno"><a class="line" href="classr__exec_1_1_binding_map.html#a0eedb3fe137ffa6fafdda0af147b978c">  408</a></span>&#160;<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *<a class="code" href="classr__exec_1_1_binding_map.html#a0eedb3fe137ffa6fafdda0af147b978c">BindingMap::abstract_fact</a>(<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *fact, <a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *original, <span class="keywordtype">bool</span> force_sync, <span class="keywordtype">bool</span> allow_shared_timing_vars) { <span class="comment">// abstract values as they are encountered.</span></div>
+<div class="line"><a name="l00408"></a><span class="lineno"><a class="line" href="classr__exec_1_1_binding_map.html#a0eedb3fe137ffa6fafdda0af147b978c">  408</a></span>&#160;<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *BindingMap::abstract_fact(<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *fact, <a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *original, <span class="keywordtype">bool</span> force_sync, <span class="keywordtype">bool</span> allow_shared_timing_vars) { <span class="comment">// abstract values as they are encountered.</span></div>
 <div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160; </div>
 <div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;  <span class="keywordflow">if</span> (fwd_after_index_ == -1)</div>
 <div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;    first_index_ = map_.size();</div>
@@ -505,9 +505,9 @@ $(function() {
 <div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160; </div>
 <div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;  uint16 opcode = <span class="keywordtype">object</span>-&gt;code(0).asOpcode();</div>
 <div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;  <span class="keywordflow">if</span> (opcode == Opcodes::Fact)</div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classr__exec_1_1_binding_map.html#a0eedb3fe137ffa6fafdda0af147b978c">abstract_fact</a>(<span class="keyword">new</span> <a class="code" href="classr__exec_1_1_fact.html">Fact</a>(), (<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *)<span class="keywordtype">object</span>, force_sync, allow_shared_timing_vars);</div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;    <span class="keywordflow">return</span> abstract_fact(<span class="keyword">new</span> <a class="code" href="classr__exec_1_1_fact.html">Fact</a>(), (<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *)<span class="keywordtype">object</span>, force_sync, allow_shared_timing_vars);</div>
 <div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;  <span class="keywordflow">else</span> <span class="keywordflow">if</span> (opcode == Opcodes::AntiFact)</div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classr__exec_1_1_binding_map.html#a0eedb3fe137ffa6fafdda0af147b978c">abstract_fact</a>(<span class="keyword">new</span> <a class="code" href="classr__exec_1_1_anti_fact.html">AntiFact</a>(), (<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *)<span class="keywordtype">object</span>, force_sync, allow_shared_timing_vars);</div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;    <span class="keywordflow">return</span> abstract_fact(<span class="keyword">new</span> <a class="code" href="classr__exec_1_1_anti_fact.html">AntiFact</a>(), (<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *)<span class="keywordtype">object</span>, force_sync, allow_shared_timing_vars);</div>
 <div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;  <span class="keywordflow">else</span> <span class="keywordflow">if</span> (opcode == Opcodes::Cmd) {</div>
 <div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160; </div>
 <div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;    uint16 extent_index = CMD_ARITY + 1;</div>
@@ -569,7 +569,7 @@ $(function() {
 <div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;      <span class="keywordflow">for</span> (uint16 i = 1; i &lt;= element_count; ++i)</div>
 <div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;        abstract_member(<span class="keywordtype">object</span>, ai + i, abstracted_object, _write_index + i, extent_index, allow_shared_variable);</div>
 <div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;    } <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;      abstracted_object-&gt;code(write_index) = <a class="code" href="classr__exec_1_1_binding_map.html#a1c155644687e1c559d830e00d0f494c8">get_structure_variable</a>(<span class="keywordtype">object</span>, ai, allow_shared_variable);</div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;      abstracted_object-&gt;code(write_index) = get_structure_variable(<span class="keywordtype">object</span>, ai, allow_shared_variable);</div>
 <div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;    <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;  <span class="keywordflow">default</span>:</div>
 <div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;    abstracted_object-&gt;code(write_index) = get_atom_variable(a);</div>
@@ -591,7 +591,7 @@ $(function() {
 <div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;      <span class="comment">// need a Value class which can hold other Value classes, and maybe restrict recursion.</span></div>
 <div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;      <span class="keywordflow">return</span> init(<span class="keywordtype">object</span>, a.asIndex() + 1);</div>
 <div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160; </div>
-<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;    <a class="code" href="classr__exec_1_1_binding_map.html#a1c155644687e1c559d830e00d0f494c8">get_structure_variable</a>(<span class="keywordtype">object</span>, a.asIndex());</div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;    get_structure_variable(<span class="keywordtype">object</span>, a.asIndex());</div>
 <div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;    <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;  <span class="keywordflow">default</span>:</div>
 <div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;    get_atom_variable(a);</div>
@@ -612,7 +612,7 @@ $(function() {
 <div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;  <span class="keywordflow">return</span> Atom::VLPointer(size);</div>
 <div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;}</div>
 <div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160; </div>
-<div class="line"><a name="l00550"></a><span class="lineno"><a class="line" href="classr__exec_1_1_binding_map.html#a1c155644687e1c559d830e00d0f494c8">  550</a></span>&#160;<a class="code" href="classr__code_1_1_atom.html">Atom</a> <a class="code" href="classr__exec_1_1_binding_map.html#a1c155644687e1c559d830e00d0f494c8">BindingMap::get_structure_variable</a>(<a class="code" href="classr__code_1_1_code.html">Code</a> *<span class="keywordtype">object</span>, uint16 index, <span class="keywordtype">bool</span> allow_shared_variable) {</div>
+<div class="line"><a name="l00550"></a><span class="lineno"><a class="line" href="classr__exec_1_1_binding_map.html#a1c155644687e1c559d830e00d0f494c8">  550</a></span>&#160;<a class="code" href="classr__code_1_1_atom.html">Atom</a> BindingMap::get_structure_variable(<a class="code" href="classr__code_1_1_code.html">Code</a> *<span class="keywordtype">object</span>, uint16 index, <span class="keywordtype">bool</span> allow_shared_variable) {</div>
 <div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160; </div>
 <div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;  <span class="keywordflow">if</span> (allow_shared_variable) {</div>
 <div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;    <span class="keywordflow">for</span> (uint32 i = 0; i &lt; map_.size(); ++i) {</div>
@@ -640,15 +640,15 @@ $(function() {
 <div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;  <span class="keywordflow">return</span> Atom::VLPointer(size);</div>
 <div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;}</div>
 <div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160; </div>
-<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;BindingMap::BindingMap() : _Object(), fwd_after_index_(-1), fwd_before_index_(-1), unbound_values_(0) {</div>
+<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;BindingMap::BindingMap() : <a class="code" href="classcore_1_1___object.html">_Object</a>(), fwd_after_index_(-1), fwd_before_index_(-1), unbound_values_(0) {</div>
 <div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;}</div>
 <div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160; </div>
-<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;BindingMap::BindingMap(<span class="keyword">const</span> BindingMap *source) : _Object() {</div>
+<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;BindingMap::BindingMap(<span class="keyword">const</span> BindingMap *source) : <a class="code" href="classcore_1_1___object.html">_Object</a>() {</div>
 <div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160; </div>
 <div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;  *<span class="keyword">this</span> = *source;</div>
 <div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;}</div>
 <div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160; </div>
-<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;BindingMap::BindingMap(<span class="keyword">const</span> BindingMap &amp;source) : _Object() {</div>
+<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;BindingMap::BindingMap(<span class="keyword">const</span> BindingMap &amp;source) : <a class="code" href="classcore_1_1___object.html">_Object</a>() {</div>
 <div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160; </div>
 <div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;  *<span class="keyword">this</span> = source;</div>
 <div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;}</div>
@@ -1268,13 +1268,12 @@ $(function() {
 <div class="line"><a name="l01204"></a><span class="lineno"> 1204</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassr__exec_1_1_anti_fact_html"><div class="ttname"><a href="classr__exec_1_1_anti_fact.html">r_exec::AntiFact</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00352">factory.h:353</a></div></div>
-<div class="ttc" id="aclassr__exec_1_1_binding_map_html_a1c155644687e1c559d830e00d0f494c8"><div class="ttname"><a href="classr__exec_1_1_binding_map.html#a1c155644687e1c559d830e00d0f494c8">r_exec::BindingMap::get_structure_variable</a></div><div class="ttdeci">Atom get_structure_variable(r_code::Code *object, uint16 index, bool allow_shared_variable=true)</div><div class="ttdef"><b>Definition:</b> <a href="binding__map_8cpp_source.html#l00550">binding_map.cpp:550</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_atom_html"><div class="ttname"><a href="classr__code_1_1_atom.html">r_code::Atom</a></div><div class="ttdef"><b>Definition:</b> <a href="atom_8h_source.html#l00104">atom.h:104</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___fact_html"><div class="ttname"><a href="classr__exec_1_1___fact.html">r_exec::_Fact</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00154">factory.h:155</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_code_html"><div class="ttname"><a href="classr__code_1_1_code.html">r_code::Code</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00223">r_code/object.h:224</a></div></div>
+<div class="ttc" id="aclasscore_1_1___object_html"><div class="ttname"><a href="classcore_1_1___object.html">core::_Object</a></div><div class="ttdef"><b>Definition:</b> <a href="base_8h_source.html#l00128">base.h:128</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_local_object_html"><div class="ttname"><a href="classr__code_1_1_local_object.html">r_code::LocalObject</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00350">r_code/object.h:351</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_structure_value_html"><div class="ttname"><a href="classr__exec_1_1_structure_value.html">r_exec::StructureValue</a></div><div class="ttdef"><b>Definition:</b> <a href="binding__map_8h_source.html#l00176">binding_map.h:177</a></div></div>
-<div class="ttc" id="aclassr__exec_1_1_binding_map_html_a0eedb3fe137ffa6fafdda0af147b978c"><div class="ttname"><a href="classr__exec_1_1_binding_map.html#a0eedb3fe137ffa6fafdda0af147b978c">r_exec::BindingMap::abstract_fact</a></div><div class="ttdeci">_Fact * abstract_fact(_Fact *fact, _Fact *original, bool force_sync, bool allow_shared_timing_vars=true)</div><div class="ttdef"><b>Definition:</b> <a href="binding__map_8cpp_source.html#l00408">binding_map.cpp:408</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_fact_html"><div class="ttname"><a href="classr__exec_1_1_fact.html">r_exec::Fact</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00341">factory.h:342</a></div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

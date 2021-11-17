@@ -218,14 +218,14 @@ $(function() {
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;  <span class="keywordtype">bool</span> load(<span class="keyword">const</span> <span class="keywordtype">char</span> *file_name) {</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    core::XMLNode mainNode = core::XMLNode::openFileHelper(file_name, <span class="stringliteral">&quot;AERAConfiguration&quot;</span>);</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    <a class="code" href="structcore_1_1_x_m_l_node.html">core::XMLNode</a> mainNode = core::XMLNode::openFileHelper(file_name, <span class="stringliteral">&quot;AERAConfiguration&quot;</span>);</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="keywordflow">if</span> (!mainNode) {</div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160; </div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;      std::cerr &lt;&lt; <span class="stringliteral">&quot;&gt; Error: AERAConfiguration is unreadable&quot;</span> &lt;&lt; std::endl;</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    }</div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    core::XMLNode mem = mainNode.getChildNode(<span class="stringliteral">&quot;IODevice&quot;</span>);</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    <a class="code" href="structcore_1_1_x_m_l_node.html">core::XMLNode</a> mem = mainNode.getChildNode(<span class="stringliteral">&quot;IODevice&quot;</span>);</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    <span class="keywordflow">if</span> (!!mem) {</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;      io_device_ = mem.getAttribute(<span class="stringliteral">&quot;io_device&quot;</span>);</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    }</div>
@@ -234,7 +234,7 @@ $(function() {
 <div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    }</div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160; </div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    core::XMLNode load = mainNode.getChildNode(<span class="stringliteral">&quot;Load&quot;</span>);</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    <a class="code" href="structcore_1_1_x_m_l_node.html">core::XMLNode</a> load = mainNode.getChildNode(<span class="stringliteral">&quot;Load&quot;</span>);</div>
 <div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    <span class="keywordflow">if</span> (!!load) {</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;      usr_operator_path_ = load.getAttribute(<span class="stringliteral">&quot;usr_operator_path&quot;</span>);</div>
@@ -246,7 +246,7 @@ $(function() {
 <div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    }</div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160; </div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    core::XMLNode init = mainNode.getChildNode(<span class="stringliteral">&quot;Init&quot;</span>);</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    <a class="code" href="structcore_1_1_x_m_l_node.html">core::XMLNode</a> init = mainNode.getChildNode(<span class="stringliteral">&quot;Init&quot;</span>);</div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    <span class="keywordflow">if</span> (!!init) {</div>
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160; </div>
 <div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;      <span class="keyword">const</span> <span class="keywordtype">char</span> *base_period = init.getAttribute(<span class="stringliteral">&quot;base_period&quot;</span>);</div>
@@ -262,7 +262,7 @@ $(function() {
 <div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;    }</div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160; </div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    core::XMLNode system = mainNode.getChildNode(<span class="stringliteral">&quot;System&quot;</span>);</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    <a class="code" href="structcore_1_1_x_m_l_node.html">core::XMLNode</a> system = mainNode.getChildNode(<span class="stringliteral">&quot;System&quot;</span>);</div>
 <div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    <span class="keywordflow">if</span> (!!system) {</div>
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160; </div>
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;      <span class="keyword">const</span> <span class="keywordtype">char</span> *mdl_inertia_sr_thr = system.getAttribute(<span class="stringliteral">&quot;mdl_inertia_sr_thr&quot;</span>);</div>
@@ -296,7 +296,7 @@ $(function() {
 <div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    }</div>
 <div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160; </div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    core::XMLNode debug = mainNode.getChildNode(<span class="stringliteral">&quot;Debug&quot;</span>);</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    <a class="code" href="structcore_1_1_x_m_l_node.html">core::XMLNode</a> debug = mainNode.getChildNode(<span class="stringliteral">&quot;Debug&quot;</span>);</div>
 <div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    <span class="keywordflow">if</span> (!!debug) {</div>
 <div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160; </div>
 <div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;      <span class="keyword">const</span> <span class="keywordtype">char</span> *debug_string = debug.getAttribute(<span class="stringliteral">&quot;debug&quot;</span>);</div>
@@ -309,7 +309,7 @@ $(function() {
 <div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;      runtime_output_file_path_ = runtime_output_file_path;</div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;      sscanf(trace_levels, <span class="stringliteral">&quot;%x&quot;</span>, &amp;trace_levels_);</div>
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160; </div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;      core::XMLNode resilience = debug.getChildNode(<span class="stringliteral">&quot;Resilience&quot;</span>);</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;      <a class="code" href="structcore_1_1_x_m_l_node.html">core::XMLNode</a> resilience = debug.getChildNode(<span class="stringliteral">&quot;Resilience&quot;</span>);</div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;      <span class="keywordflow">if</span> (!!resilience) {</div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160; </div>
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span> *ntf_mk_resilience = resilience.getAttribute(<span class="stringliteral">&quot;ntf_mk_resilience&quot;</span>);</div>
@@ -322,7 +322,7 @@ $(function() {
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        std::cerr &lt;&lt; <span class="stringliteral">&quot;&gt; Error: Debug/Resilience section is unreadable&quot;</span> &lt;&lt; std::endl;</div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;      }</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;      core::XMLNode objects = debug.getChildNode(<span class="stringliteral">&quot;Objects&quot;</span>);</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;      <a class="code" href="structcore_1_1_x_m_l_node.html">core::XMLNode</a> objects = debug.getChildNode(<span class="stringliteral">&quot;Objects&quot;</span>);</div>
 <div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;      <span class="keywordflow">if</span> (!!objects) {</div>
 <div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160; </div>
 <div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span> *get_objects = objects.getAttribute(<span class="stringliteral">&quot;get_objects&quot;</span>);</div>
@@ -356,7 +356,7 @@ $(function() {
 <div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    }</div>
 <div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160; </div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    core::XMLNode run = mainNode.getChildNode(<span class="stringliteral">&quot;Run&quot;</span>);</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    <a class="code" href="structcore_1_1_x_m_l_node.html">core::XMLNode</a> run = mainNode.getChildNode(<span class="stringliteral">&quot;Run&quot;</span>);</div>
 <div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    <span class="keywordflow">if</span> (!!run) {</div>
 <div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160; </div>
 <div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;      <span class="keyword">const</span> <span class="keywordtype">char</span> *run_time = run.getAttribute(<span class="stringliteral">&quot;run_time&quot;</span>);</div>
@@ -367,7 +367,7 @@ $(function() {
 <div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;      probe_level_ = atoi(probe_level);</div>
 <div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;      enable_assumptions_ = (strcmp(enable_assumptions, <span class="stringliteral">&quot;yes&quot;</span>) == 0);</div>
 <div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160; </div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;      core::XMLNode models = run.getChildNode(<span class="stringliteral">&quot;Models&quot;</span>);</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;      <a class="code" href="structcore_1_1_x_m_l_node.html">core::XMLNode</a> models = run.getChildNode(<span class="stringliteral">&quot;Models&quot;</span>);</div>
 <div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;      <span class="keywordflow">if</span> (!!models) {</div>
 <div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160; </div>
 <div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span> *get_models = models.getAttribute(<span class="stringliteral">&quot;get_models&quot;</span>);</div>
@@ -404,6 +404,7 @@ $(function() {
 <div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclass_settings_html"><div class="ttname"><a href="class_settings.html">Settings</a></div><div class="ttdef"><b>Definition:</b> <a href="settings_8h_source.html#l00091">settings.h:91</a></div></div>
+<div class="ttc" id="astructcore_1_1_x_m_l_node_html"><div class="ttname"><a href="structcore_1_1_x_m_l_node.html">core::XMLNode</a></div><div class="ttdef"><b>Definition:</b> <a href="xml__parser_8h_source.html#l00171">xml_parser.h:172</a></div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

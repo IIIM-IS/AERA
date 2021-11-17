@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['winepi_367',['WinEpi',['../class_win_epi.html',1,'']]]
+  ['_7etemplatetimingsupdater_378',['~TemplateTimingsUpdater',['../classr__exec_1_1_template_timings_updater.html#aa141d37511769679cb246779cadfc1be',1,'r_exec::TemplateTimingsUpdater']]]
 ];

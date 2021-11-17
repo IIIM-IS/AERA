@@ -194,13 +194,13 @@ $(function() {
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    is_simulation = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;  }</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;  P&lt;HLPBindingMap&gt; bm = <span class="keyword">new</span> HLPBindingMap(bindings_);</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;HLPBindingMap&gt;</a> bm = <span class="keyword">new</span> HLPBindingMap(bindings_);</div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;  bm-&gt;reset_fwd_timings(input_object);</div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;  <span class="keywordflow">switch</span> (bm-&gt;match_fwd_lenient(input_object, ((MDLController *)controller_)-&gt;get_lhs())) {</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;  <span class="keywordflow">case</span> MATCH_SUCCESS_POSITIVE: {</div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    load_code();</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    P&lt;HLPBindingMap&gt; original_bindings = bindings_;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <a class="code" href="classcore_1_1_p.html">P&lt;HLPBindingMap&gt;</a> original_bindings = bindings_;</div>
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    <span class="keywordtype">bool</span> is_req = ((MDLController *)controller_)-&gt;is_requirement();</div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    <span class="keywordtype">bool</span> match = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    Fact *f_imdl = ((MDLController *)controller_)-&gt;get_f_ihlp(bm, <span class="keyword">false</span>);</div>
@@ -303,13 +303,13 @@ $(function() {
 <div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;}</div>
 <div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160; </div>
 <div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;<span class="keywordtype">bool</span> SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *req_controller) { <span class="comment">// no caching since no bwd.</span></div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;  P&lt;HLPBindingMap&gt; bm = <span class="keyword">new</span> HLPBindingMap(bindings_);</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;HLPBindingMap&gt;</a> bm = <span class="keyword">new</span> HLPBindingMap(bindings_);</div>
 <div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;  bm-&gt;reset_fwd_timings(input);</div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;  <span class="keywordflow">switch</span> (bm-&gt;match_fwd_lenient(input, ((MDLController *)controller_)-&gt;get_lhs())) {</div>
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;  <span class="keywordflow">case</span> MATCH_SUCCESS_POSITIVE: {</div>
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160; </div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    load_code();</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    P&lt;HLPBindingMap&gt; original_bindings = bindings_;</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    <a class="code" href="classcore_1_1_p.html">P&lt;HLPBindingMap&gt;</a> original_bindings = bindings_;</div>
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    bindings_ = bm;</div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    <span class="keywordtype">bool</span> match = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    Fact *f_imdl = ((MDLController *)controller_)-&gt;get_f_ihlp(bm, <span class="keyword">false</span>);</div>
@@ -1362,7 +1362,7 @@ $(function() {
 <div class="line"><a name="l01317"></a><span class="lineno"> 1317</span>&#160;    <span class="keywordflow">if</span> (confidence &lt;= get_host()-&gt;code(GRP_SLN_THR).asFloat()) <span class="comment">// cfd is too low for any sub-goal to be injected.</span></div>
 <div class="line"><a name="l01318"></a><span class="lineno"> 1318</span>&#160;      <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l01319"></a><span class="lineno"> 1319</span>&#160; </div>
-<div class="line"><a name="l01320"></a><span class="lineno"> 1320</span>&#160;    P&lt;HLPBindingMap&gt; bm = <span class="keyword">new</span> HLPBindingMap(bindings_);</div>
+<div class="line"><a name="l01320"></a><span class="lineno"> 1320</span>&#160;    <a class="code" href="classcore_1_1_p.html">P&lt;HLPBindingMap&gt;</a> bm = <span class="keyword">new</span> HLPBindingMap(bindings_);</div>
 <div class="line"><a name="l01321"></a><span class="lineno"> 1321</span>&#160;    bm-&gt;reset_bwd_timings(goal_target);</div>
 <div class="line"><a name="l01322"></a><span class="lineno"> 1322</span>&#160;    <span class="keywordflow">if</span> (bm-&gt;match_bwd_strict(goal_target, rhs_)) <span class="comment">// the rhs of a top-level model is never a |fact, hence strict matching instead of lenient.</span></div>
 <div class="line"><a name="l01323"></a><span class="lineno"> 1323</span>&#160;      abduce(bm, (Fact *)input-&gt;object_, confidence);</div>
@@ -1390,7 +1390,7 @@ $(function() {
 <div class="line"><a name="l01345"></a><span class="lineno"> 1345</span>&#160; </div>
 <div class="line"><a name="l01346"></a><span class="lineno"> 1346</span>&#160;  <span class="keywordflow">if</span> (<a class="code" href="classr__exec_1_1_h_l_p_controller.html#a879d2ae14cc6c8dde1936e7b3f7d3b48">evaluate_bwd_guards</a>(bm)) { <span class="comment">// bm may be updated.</span></div>
 <div class="line"><a name="l01347"></a><span class="lineno"> 1347</span>&#160; </div>
-<div class="line"><a name="l01348"></a><span class="lineno"> 1348</span>&#160;    P&lt;_Fact&gt; bound_lhs = (_Fact *)bm-&gt;bind_pattern(get_lhs());</div>
+<div class="line"><a name="l01348"></a><span class="lineno"> 1348</span>&#160;    <a class="code" href="classcore_1_1_p.html">P&lt;_Fact&gt;</a> bound_lhs = (_Fact *)bm-&gt;bind_pattern(get_lhs());</div>
 <div class="line"><a name="l01349"></a><span class="lineno"> 1349</span>&#160;    _Fact *evidence;</div>
 <div class="line"><a name="l01350"></a><span class="lineno"> 1350</span>&#160;    Fact *f_imdl;</div>
 <div class="line"><a name="l01351"></a><span class="lineno"> 1351</span>&#160; </div>
@@ -1814,7 +1814,7 @@ $(function() {
 <div class="line"><a name="l01770"></a><span class="lineno"> 1770</span>&#160;    <span class="keywordflow">if</span> (confidence &lt;= host-&gt;code(GRP_SLN_THR).asFloat()) <span class="comment">// cfd is too low for any sub-goal to be injected.</span></div>
 <div class="line"><a name="l01771"></a><span class="lineno"> 1771</span>&#160;      <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l01772"></a><span class="lineno"> 1772</span>&#160; </div>
-<div class="line"><a name="l01773"></a><span class="lineno"> 1773</span>&#160;    P&lt;HLPBindingMap&gt; bm = <span class="keyword">new</span> HLPBindingMap(bindings_);</div>
+<div class="line"><a name="l01773"></a><span class="lineno"> 1773</span>&#160;    <a class="code" href="classcore_1_1_p.html">P&lt;HLPBindingMap&gt;</a> bm = <span class="keyword">new</span> HLPBindingMap(bindings_);</div>
 <div class="line"><a name="l01774"></a><span class="lineno"> 1774</span>&#160;    bm-&gt;reset_bwd_timings(goal_target);</div>
 <div class="line"><a name="l01775"></a><span class="lineno"> 1775</span>&#160;    <span class="keywordtype">bool</span> opposite = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l01776"></a><span class="lineno"> 1776</span>&#160;    MatchResult match_result = bm-&gt;match_bwd_lenient(goal_target, rhs_);</div>
@@ -1866,7 +1866,7 @@ $(function() {
 <div class="line"><a name="l01822"></a><span class="lineno"> 1822</span>&#160;  <span class="keywordflow">if</span> (!abduction_allowed(bm))</div>
 <div class="line"><a name="l01823"></a><span class="lineno"> 1823</span>&#160;    <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l01824"></a><span class="lineno"> 1824</span>&#160; </div>
-<div class="line"><a name="l01825"></a><span class="lineno"> 1825</span>&#160;  P&lt;Fact&gt; f_imdl = get_f_ihlp(bm, <span class="keyword">false</span>);</div>
+<div class="line"><a name="l01825"></a><span class="lineno"> 1825</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;Fact&gt;</a> f_imdl = get_f_ihlp(bm, <span class="keyword">false</span>);</div>
 <div class="line"><a name="l01826"></a><span class="lineno"> 1826</span>&#160;  Sim *sim = super_goal-&gt;get_goal()-&gt;get_sim();</div>
 <div class="line"><a name="l01827"></a><span class="lineno"> 1827</span>&#160;  <span class="keyword">auto</span> sim_thz = sim-&gt;get_thz(); <span class="comment">// 0 if super-goal had no time for simulation.</span></div>
 <div class="line"><a name="l01828"></a><span class="lineno"> 1828</span>&#160;  <span class="keyword">auto</span> min_sim_thz = _Mem::Get()-&gt;get_min_sim_time_horizon() / 2; <span class="comment">// time allowance for the simulated predictions to flow upward.</span></div>
@@ -1966,7 +1966,7 @@ $(function() {
 <div class="line"><a name="l01922"></a><span class="lineno"> 1922</span>&#160;  <span class="comment">// Imitate PrimaryMDLController::reduce to set up the binding map.</span></div>
 <div class="line"><a name="l01923"></a><span class="lineno"> 1923</span>&#160;  <a class="code" href="classr__exec_1_1_goal.html">Goal</a> *super_goal = f_super_goal-&gt;get_goal();</div>
 <div class="line"><a name="l01924"></a><span class="lineno"> 1924</span>&#160;  <a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *f_goal_target = super_goal-&gt;get_target();</div>
-<div class="line"><a name="l01925"></a><span class="lineno"> 1925</span>&#160;  P&lt;HLPBindingMap&gt; bm = <span class="keyword">new</span> <a class="code" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a>(bindings_);</div>
+<div class="line"><a name="l01925"></a><span class="lineno"> 1925</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;HLPBindingMap&gt;</a> bm = <span class="keyword">new</span> <a class="code" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a>(bindings_);</div>
 <div class="line"><a name="l01926"></a><span class="lineno"> 1926</span>&#160;  bm-&gt;reset_bwd_timings(f_goal_target);</div>
 <div class="line"><a name="l01927"></a><span class="lineno"> 1927</span>&#160;  MatchResult match_result = bm-&gt;match_bwd_lenient(f_goal_target, get_rhs());</div>
 <div class="line"><a name="l01928"></a><span class="lineno"> 1928</span>&#160;  <span class="keywordflow">if</span> (!(match_result == MATCH_SUCCESS_NEGATIVE || match_result == MATCH_SUCCESS_POSITIVE)) {</div>
@@ -1986,7 +1986,7 @@ $(function() {
 <div class="line"><a name="l01942"></a><span class="lineno"> 1942</span>&#160;  <a class="code" href="classr__exec_1_1_goal.html">Goal</a>* super_goal_copy = <span class="keyword">new</span> <a class="code" href="classr__exec_1_1_goal.html">Goal</a></div>
 <div class="line"><a name="l01943"></a><span class="lineno"> 1943</span>&#160;    (f_goal_target, super_goal-&gt;get_actor(), <span class="keyword">new</span> <a class="code" href="classr__exec_1_1_sim.html">Sim</a>(SIM_ROOT, seconds(0), super_goal-&gt;<a class="code" href="classr__exec_1_1_goal.html#a929bea301488088d0ed96cbae25e2ef9">get_sim</a>()-&gt;<a class="code" href="classr__exec_1_1_sim.html#a2966f430d20d1104b60f9c9ca397ed75">get_f_super_goal</a>(), <span class="keyword">false</span>, <span class="keyword">this</span>, 1),</div>
 <div class="line"><a name="l01944"></a><span class="lineno"> 1944</span>&#160;     super_goal-&gt;get_psln_thr());</div>
-<div class="line"><a name="l01945"></a><span class="lineno"> 1945</span>&#160;  P&lt;Fact&gt; f_super_goal_copy = <span class="keyword">new</span> <a class="code" href="classr__exec_1_1_fact.html">Fact</a>(</div>
+<div class="line"><a name="l01945"></a><span class="lineno"> 1945</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;Fact&gt;</a> f_super_goal_copy = <span class="keyword">new</span> <a class="code" href="classr__exec_1_1_fact.html">Fact</a>(</div>
 <div class="line"><a name="l01946"></a><span class="lineno"> 1946</span>&#160;    super_goal_copy, f_super_goal-&gt;get_after(), f_super_goal-&gt;get_before(), f_super_goal-&gt;get_cfd(),</div>
 <div class="line"><a name="l01947"></a><span class="lineno"> 1947</span>&#160;    f_super_goal-&gt;get_psln_thr());</div>
 <div class="line"><a name="l01948"></a><span class="lineno"> 1948</span>&#160;<span class="preprocessor">#ifdef WITH_DETAIL_OID</span></div>
@@ -2002,7 +2002,7 @@ $(function() {
 <div class="line"><a name="l01958"></a><span class="lineno"> 1958</span>&#160; </div>
 <div class="line"><a name="l01959"></a><span class="lineno"> 1959</span>&#160;  <span class="keywordflow">if</span> (<a class="code" href="classr__exec_1_1_h_l_p_controller.html#a879d2ae14cc6c8dde1936e7b3f7d3b48">evaluate_bwd_guards</a>(bm, <span class="keyword">true</span>)) { <span class="comment">// bm may be updated.</span></div>
 <div class="line"><a name="l01960"></a><span class="lineno"> 1960</span>&#160; </div>
-<div class="line"><a name="l01961"></a><span class="lineno"> 1961</span>&#160;    P&lt;_Fact&gt; bound_lhs = (<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *)bm-&gt;bind_pattern(get_lhs());</div>
+<div class="line"><a name="l01961"></a><span class="lineno"> 1961</span>&#160;    <a class="code" href="classcore_1_1_p.html">P&lt;_Fact&gt;</a> bound_lhs = (<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *)bm-&gt;bind_pattern(get_lhs());</div>
 <div class="line"><a name="l01962"></a><span class="lineno"> 1962</span>&#160;    <span class="keywordflow">if</span> (opposite)</div>
 <div class="line"><a name="l01963"></a><span class="lineno"> 1963</span>&#160;      bound_lhs-&gt;set_opposite();</div>
 <div class="line"><a name="l01964"></a><span class="lineno"> 1964</span>&#160;    bound_lhs-&gt;set_cfd(confidence);</div>
@@ -2082,7 +2082,7 @@ $(function() {
 <div class="line"><a name="l02038"></a><span class="lineno"> 2038</span>&#160;  _Fact* injected_lhs = NULL;</div>
 <div class="line"><a name="l02039"></a><span class="lineno"> 2039</span>&#160;  <span class="keywordflow">if</span> (<a class="code" href="classr__exec_1_1_h_l_p_controller.html#a879d2ae14cc6c8dde1936e7b3f7d3b48">evaluate_bwd_guards</a>(bm, <span class="keyword">true</span>)) { <span class="comment">// bm may be updated.</span></div>
 <div class="line"><a name="l02040"></a><span class="lineno"> 2040</span>&#160; </div>
-<div class="line"><a name="l02041"></a><span class="lineno"> 2041</span>&#160;    P&lt;_Fact&gt; bound_lhs = (_Fact *)bm-&gt;bind_pattern(get_lhs());</div>
+<div class="line"><a name="l02041"></a><span class="lineno"> 2041</span>&#160;    <a class="code" href="classcore_1_1_p.html">P&lt;_Fact&gt;</a> bound_lhs = (_Fact *)bm-&gt;bind_pattern(get_lhs());</div>
 <div class="line"><a name="l02042"></a><span class="lineno"> 2042</span>&#160;    <span class="keywordflow">if</span> (opposite)</div>
 <div class="line"><a name="l02043"></a><span class="lineno"> 2043</span>&#160;      bound_lhs-&gt;set_opposite();</div>
 <div class="line"><a name="l02044"></a><span class="lineno"> 2044</span>&#160;    bound_lhs-&gt;set_cfd(confidence);</div>
@@ -2273,7 +2273,7 @@ $(function() {
 <div class="line"><a name="l02229"></a><span class="lineno"> 2229</span>&#160;  <span class="keywordflow">case</span> NO_REQUIREMENT:</div>
 <div class="line"><a name="l02230"></a><span class="lineno"> 2230</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="classr__exec_1_1_h_l_p_controller.html#a879d2ae14cc6c8dde1936e7b3f7d3b48">evaluate_bwd_guards</a>(bm, <span class="keyword">true</span>)) { <span class="comment">// bm may be updated.</span></div>
 <div class="line"><a name="l02231"></a><span class="lineno"> 2231</span>&#160;      <span class="comment">// valuate f_imdl from updated bm into a copy.</span></div>
-<div class="line"><a name="l02232"></a><span class="lineno"> 2232</span>&#160;      P&lt;Fact&gt; f_imdl_copy = <span class="keyword">new</span> <a class="code" href="classr__exec_1_1_fact.html">Fact</a>(</div>
+<div class="line"><a name="l02232"></a><span class="lineno"> 2232</span>&#160;      <a class="code" href="classcore_1_1_p.html">P&lt;Fact&gt;</a> f_imdl_copy = <span class="keyword">new</span> <a class="code" href="classr__exec_1_1_fact.html">Fact</a>(</div>
 <div class="line"><a name="l02233"></a><span class="lineno"> 2233</span>&#160;        bm-&gt;bind_pattern(f_imdl-&gt;get_reference(0)), f_imdl-&gt;get_after(), f_imdl-&gt;get_before(),</div>
 <div class="line"><a name="l02234"></a><span class="lineno"> 2234</span>&#160;        f_imdl-&gt;get_cfd(), f_imdl-&gt;get_psln_thr());</div>
 <div class="line"><a name="l02235"></a><span class="lineno"> 2235</span>&#160;      <span class="comment">// If root is provided, pass NULL as the sim to use the Sim in ground for forward chaining.</span></div>
@@ -2286,7 +2286,7 @@ $(function() {
 <div class="line"><a name="l02242"></a><span class="lineno"> 2242</span>&#160;        get_requirement_count(wr_count, sr_count);</div>
 <div class="line"><a name="l02243"></a><span class="lineno"> 2243</span>&#160;        <span class="keywordflow">if</span> (wr_count &gt; 0 &amp;&amp; sr_count &gt; 0) {</div>
 <div class="line"><a name="l02244"></a><span class="lineno"> 2244</span>&#160;          <span class="comment">// Attach a DefeasibleValidity object to the prediction so that it can be invalidated later by a strong requirement.</span></div>
-<div class="line"><a name="l02245"></a><span class="lineno"> 2245</span>&#160;          P&lt;DefeasibleValidity&gt; defeasible_validity = <span class="keyword">new</span> <a class="code" href="classr__exec_1_1_defeasible_validity.html">DefeasibleValidity</a>();</div>
+<div class="line"><a name="l02245"></a><span class="lineno"> 2245</span>&#160;          <a class="code" href="classcore_1_1_p.html">P&lt;DefeasibleValidity&gt;</a> defeasible_validity = <span class="keyword">new</span> <a class="code" href="classr__exec_1_1_defeasible_validity.html">DefeasibleValidity</a>();</div>
 <div class="line"><a name="l02246"></a><span class="lineno"> 2246</span>&#160;          injected_lhs-&gt;get_pred()-&gt;defeasible_validities_.insert(defeasible_validity);</div>
 <div class="line"><a name="l02247"></a><span class="lineno"> 2247</span>&#160; </div>
 <div class="line"><a name="l02248"></a><span class="lineno"> 2248</span>&#160;          <span class="comment">// Add to the list which is later checked if we match a strong requirement.</span></div>
@@ -2590,7 +2590,7 @@ $(function() {
 <div class="line"><a name="l02546"></a><span class="lineno"> 2546</span>&#160;  <span class="keywordflow">if</span> (confidence &lt;= host-&gt;code(GRP_SLN_THR).asFloat()) <span class="comment">// cfd is too low for any assumption to be injected.</span></div>
 <div class="line"><a name="l02547"></a><span class="lineno"> 2547</span>&#160;    <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l02548"></a><span class="lineno"> 2548</span>&#160; </div>
-<div class="line"><a name="l02549"></a><span class="lineno"> 2549</span>&#160;  P&lt;HLPBindingMap&gt; bm = <span class="keyword">new</span> HLPBindingMap(bindings_);</div>
+<div class="line"><a name="l02549"></a><span class="lineno"> 2549</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;HLPBindingMap&gt;</a> bm = <span class="keyword">new</span> HLPBindingMap(bindings_);</div>
 <div class="line"><a name="l02550"></a><span class="lineno"> 2550</span>&#160;  bm-&gt;reset_bwd_timings(input);</div>
 <div class="line"><a name="l02551"></a><span class="lineno"> 2551</span>&#160;  <span class="keywordtype">bool</span> opposite = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l02552"></a><span class="lineno"> 2552</span>&#160;  MatchResult match_result = bm-&gt;match_bwd_lenient(input, rhs_);</div>
@@ -2607,7 +2607,7 @@ $(function() {
 <div class="line"><a name="l02563"></a><span class="lineno"> 2563</span>&#160; </div>
 <div class="line"><a name="l02564"></a><span class="lineno"> 2564</span>&#160;<span class="keywordtype">void</span> PrimaryMDLController::assume_lhs(HLPBindingMap *bm, <span class="keywordtype">bool</span> opposite, _Fact *input, float32 confidence) { <span class="comment">// produce an assumption and inject in primary; no rdx.</span></div>
 <div class="line"><a name="l02565"></a><span class="lineno"> 2565</span>&#160; </div>
-<div class="line"><a name="l02566"></a><span class="lineno"> 2566</span>&#160;  P&lt;Fact&gt; f_imdl = get_f_ihlp(bm, <span class="keyword">false</span>);</div>
+<div class="line"><a name="l02566"></a><span class="lineno"> 2566</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;Fact&gt;</a> f_imdl = get_f_ihlp(bm, <span class="keyword">false</span>);</div>
 <div class="line"><a name="l02567"></a><span class="lineno"> 2567</span>&#160;  Fact *ground;</div>
 <div class="line"><a name="l02568"></a><span class="lineno"> 2568</span>&#160;  <span class="keywordflow">switch</span> (retrieve_imdl_bwd(bm, f_imdl, ground)) {</div>
 <div class="line"><a name="l02569"></a><span class="lineno"> 2569</span>&#160;  <span class="keywordflow">case</span> WEAK_REQUIREMENT_ENABLED:</div>
@@ -2716,7 +2716,7 @@ $(function() {
 <div class="line"><a name="l02672"></a><span class="lineno"> 2672</span>&#160;  }</div>
 <div class="line"><a name="l02673"></a><span class="lineno"> 2673</span>&#160; </div>
 <div class="line"><a name="l02674"></a><span class="lineno"> 2674</span>&#160;  <span class="comment">// Make a copy of the binding map and evaluate the backward guards.</span></div>
-<div class="line"><a name="l02675"></a><span class="lineno"> 2675</span>&#160;  P&lt;HLPBindingMap&gt; bm_copy = <span class="keyword">new</span> <a class="code" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a>(bm);</div>
+<div class="line"><a name="l02675"></a><span class="lineno"> 2675</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;HLPBindingMap&gt;</a> bm_copy = <span class="keyword">new</span> <a class="code" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a>(bm);</div>
 <div class="line"><a name="l02676"></a><span class="lineno"> 2676</span>&#160;  <span class="keywordflow">if</span> (!<a class="code" href="classr__exec_1_1_h_l_p_controller.html#a879d2ae14cc6c8dde1936e7b3f7d3b48">evaluate_bwd_guards</a>(bm_copy))</div>
 <div class="line"><a name="l02677"></a><span class="lineno"> 2677</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l02678"></a><span class="lineno"> 2678</span>&#160; </div>
@@ -2925,6 +2925,7 @@ $(function() {
 <div class="ttc" id="aclassr__exec_1_1_primary_m_d_l_controller_html_a1be878a662059c602757f8487e419b81"><div class="ttname"><a href="classr__exec_1_1_primary_m_d_l_controller.html#a1be878a662059c602757f8487e419b81">r_exec::PrimaryMDLController::check_simulated_imdl</a></div><div class="ttdeci">bool check_simulated_imdl(Fact *goal, HLPBindingMap *bm, Sim *prediction_sim)</div><div class="ttdef"><b>Definition:</b> <a href="mdl__controller_8cpp_source.html#l02213">mdl_controller.cpp:2213</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___fact_html"><div class="ttname"><a href="classr__exec_1_1___fact.html">r_exec::_Fact</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00154">factory.h:155</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_defeasible_validity_html"><div class="ttname"><a href="classr__exec_1_1_defeasible_validity.html">r_exec::DefeasibleValidity</a></div><div class="ttdef"><b>Definition:</b> <a href="overlay_8h_source.html#l00262">overlay.h:263</a></div></div>
+<div class="ttc" id="aclasscore_1_1_p_html"><div class="ttname"><a href="classcore_1_1_p.html">core::P</a></div><div class="ttdef"><b>Definition:</b> <a href="base_8h_source.html#l00102">base.h:102</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_code_html"><div class="ttname"><a href="classr__code_1_1_code.html">r_code::Code</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00223">r_code/object.h:224</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_template_timings_updater_html"><div class="ttname"><a href="classr__exec_1_1_template_timings_updater.html">r_exec::TemplateTimingsUpdater</a></div><div class="ttdef"><b>Definition:</b> <a href="mdl__controller_8cpp_source.html#l00430">mdl_controller.cpp:430</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___fact_html_aff9d3fb0e136652d4e9125454c8e8ecf"><div class="ttname"><a href="classr__exec_1_1___fact.html#aff9d3fb0e136652d4e9125454c8e8ecf">r_exec::_Fact::MatchObject</a></div><div class="ttdeci">static bool MatchObject(const r_code::Code *lhs, const r_code::Code *rhs, bool same_binding_state=false)</div><div class="ttdef"><b>Definition:</b> <a href="factory_8cpp_source.html#l00364">factory.cpp:364</a></div></div>

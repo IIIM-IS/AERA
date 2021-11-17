@@ -466,19 +466,19 @@ $(function() {
 <div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;          <span class="keywordflow">if</span> (ptpx_on_) {</div>
 <div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;            <span class="comment">// The PTPX may need the input. Save it in cross_buffer_ up to tpx_time_horizon.</span></div>
 <div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;            <span class="keywordflow">if</span> (opcode == Opcodes::ICst) {</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;              P&lt;BindingMap&gt; bm = ((ICST *)payload)-&gt;bindings_;</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;              <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> bm = ((ICST *)payload)-&gt;bindings_;</div>
 <div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;              _Fact *abstract_f_ihlp = bm-&gt;abstract_f_ihlp((_Fact *)input_object);</div>
 <div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;              cross_buffer_.push_back(Input(input, abstract_f_ihlp, bm));</div>
 <div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;            }</div>
 <div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;            <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;              P&lt;BindingMap&gt; bm = <span class="keyword">new</span> BindingMap();</div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;              P&lt;_Fact&gt; abstract_input = (_Fact *)bm-&gt;abstract_object(input_object, <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;              <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> bm = <span class="keyword">new</span> BindingMap();</div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;              <a class="code" href="classcore_1_1_p.html">P&lt;_Fact&gt;</a> abstract_input = (_Fact *)bm-&gt;abstract_object(input_object, <span class="keyword">false</span>);</div>
 <div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;              cross_buffer_.push_back(Input(primary_view, abstract_input, bm));</div>
 <div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;            }</div>
 <div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;          }</div>
 <div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;        } <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160; </div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;          P&lt;BindingMap&gt; bm = <span class="keyword">new</span> BindingMap();</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;          <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> bm = <span class="keyword">new</span> BindingMap();</div>
 <div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;          <span class="keywordflow">if</span> (opcode == Opcodes::ICst) { <span class="comment">// dispatch but don&#39;t inject again (since it comes from inside).</span></div>
 <div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160; </div>
 <div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;            bm = ((ICST *)payload)-&gt;bindings_;</div>
@@ -488,7 +488,7 @@ $(function() {
 <div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;            cross_buffer_.push_back(Input(input, abstract_f_ihlp, bm));</div>
 <div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;          } <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160; </div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;            P&lt;_Fact&gt; abstract_input = (_Fact *)bm-&gt;abstract_object(input_object, <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;            <a class="code" href="classcore_1_1_p.html">P&lt;_Fact&gt;</a> abstract_input = (_Fact *)bm-&gt;abstract_object(input_object, <span class="keyword">false</span>);</div>
 <div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;            <span class="keywordtype">bool</span> injected = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;            dispatch(input, abstract_input, bm, injected, goals_);</div>
 <div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;            dispatch(input, abstract_input, bm, injected, predictions_);</div>
@@ -501,7 +501,7 @@ $(function() {
 <div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;  reductionCS_.leave();</div>
 <div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;}</div>
 <div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160; </div>
-<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;<span class="keywordtype">void</span> AutoFocusController::inject_hlps(<span class="keyword">const</span> vector&lt;P&lt;Code&gt; &gt; &amp;hlps)<span class="keyword"> const </span>{ <span class="comment">// inject in the primary group; models will be injected in the secondary group automatically.</span></div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;<span class="keywordtype">void</span> AutoFocusController::inject_hlps(<span class="keyword">const</span> vector&lt;<a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> &gt; &amp;hlps)<span class="keyword"> const </span>{ <span class="comment">// inject in the primary group; models will be injected in the secondary group automatically.</span></div>
 <div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160; </div>
 <div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;  vector&lt;View *&gt; views;</div>
 <div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160; </div>
@@ -529,6 +529,7 @@ $(function() {
 <div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassr__code_1_1___view_html"><div class="ttname"><a href="classr__code_1_1___view.html">r_code::_View</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00163">r_code/object.h:164</a></div></div>
+<div class="ttc" id="aclasscore_1_1_p_html"><div class="ttname"><a href="classcore_1_1_p.html">core::P</a></div><div class="ttdef"><b>Definition:</b> <a href="base_8h_source.html#l00102">base.h:102</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_code_html"><div class="ttname"><a href="classr__code_1_1_code.html">r_code::Code</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00223">r_code/object.h:224</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_view_html"><div class="ttname"><a href="classr__exec_1_1_view.html">r_exec::View</a></div><div class="ttdef"><b>Definition:</b> <a href="view_8h_source.html#l00101">view.h:102</a></div></div>
 <div class="ttc" id="aclassr__code_1_1time__buffer_1_1iterator_html"><div class="ttname"><a href="classr__code_1_1time__buffer_1_1iterator.html">r_code::time_buffer::iterator</a></div><div class="ttdef"><b>Definition:</b> <a href="time__buffer_8h_source.html#l00107">time_buffer.h:107</a></div></div>

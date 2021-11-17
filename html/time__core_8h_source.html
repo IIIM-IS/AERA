@@ -165,12 +165,12 @@ $(function() {
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="keyword">namespace </span>r_exec {</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
 <div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="classr__exec_1_1_delegated_core.html">   96</a></span>&#160;<span class="keyword">class </span><a class="code" href="classr__exec_1_1_delegated_core.html">DelegatedCore</a> :</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;  <span class="keyword">public</span> Thread {</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;  <span class="keyword">public</span> <a class="code" href="classcore_1_1_thread.html">Thread</a> {</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;  Timer timer_;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;  <a class="code" href="classcore_1_1_timer.html">Timer</a> timer_;</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;  Timestamp target_time_;</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;  std::chrono::microseconds time_to_wait_;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;  P&lt;TimeJob&gt; job_;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;TimeJob&gt;</a> job_;</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;  <span class="keyword">static</span> thread_ret thread_function_call Wait(<span class="keywordtype">void</span> *args);</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
@@ -179,7 +179,7 @@ $(function() {
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;};</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
 <div class="line"><a name="l00110"></a><span class="lineno"><a class="line" href="classr__exec_1_1_time_core.html">  110</a></span>&#160;<span class="keyword">class </span>r_exec_dll <a class="code" href="classr__exec_1_1_time_core.html">TimeCore</a> :</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;  <span class="keyword">public</span> Thread {</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;  <span class="keyword">public</span> <a class="code" href="classcore_1_1_thread.html">Thread</a> {</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;  <span class="keyword">static</span> thread_ret thread_function_call Run(<span class="keywordtype">void</span> *args);</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
@@ -192,6 +192,9 @@ $(function() {
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassr__exec_1_1_time_job_html"><div class="ttname"><a href="classr__exec_1_1_time_job.html">r_exec::TimeJob</a></div><div class="ttdef"><b>Definition:</b> <a href="time__job_8h_source.html#l00094">time_job.h:95</a></div></div>
+<div class="ttc" id="aclasscore_1_1_timer_html"><div class="ttname"><a href="classcore_1_1_timer.html">core::Timer</a></div><div class="ttdef"><b>Definition:</b> <a href="submodules_2_core_library_2_core_library_2utils_8h_source.html#l00244">submodules/CoreLibrary/CoreLibrary/utils.h:244</a></div></div>
+<div class="ttc" id="aclasscore_1_1_thread_html"><div class="ttname"><a href="classcore_1_1_thread.html">core::Thread</a></div><div class="ttdef"><b>Definition:</b> <a href="submodules_2_core_library_2_core_library_2utils_8h_source.html#l00159">submodules/CoreLibrary/CoreLibrary/utils.h:159</a></div></div>
+<div class="ttc" id="aclasscore_1_1_p_html"><div class="ttname"><a href="classcore_1_1_p.html">core::P</a></div><div class="ttdef"><b>Definition:</b> <a href="base_8h_source.html#l00102">base.h:102</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_time_core_html"><div class="ttname"><a href="classr__exec_1_1_time_core.html">r_exec::TimeCore</a></div><div class="ttdef"><b>Definition:</b> <a href="time__core_8h_source.html#l00110">time_core.h:111</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_delegated_core_html"><div class="ttname"><a href="classr__exec_1_1_delegated_core.html">r_exec::DelegatedCore</a></div><div class="ttdef"><b>Definition:</b> <a href="time__core_8h_source.html#l00096">time_core.h:97</a></div></div>
 <!-- start footer part -->
