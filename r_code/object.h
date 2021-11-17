@@ -356,7 +356,7 @@ public:
 // Implementation for local objects (non distributed).
 class dll_export LocalObject :
   public Code {
-protected:
+private:
   uint32 oid_;
   r_code::resized_vector<Atom> code_;
   r_code::resized_vector<P<Code> > references_;
