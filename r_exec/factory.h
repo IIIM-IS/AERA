@@ -427,7 +427,7 @@ public:
 
   std::vector<P<_Fact> > grounds_; // f1->obj; predictions that were used to build this predictions (i.e. antecedents); empty if simulated.
   // The set of DefeasibleValidity which is copied to each Pred made from this one. See is_invalidated().
-  std::unordered_set<P<DefeasibleValidity>, r_code::PHash<DefeasibleValidity> > defeasible_validities_;
+  std::set<P<DefeasibleValidity> > defeasible_validities_;
   // This is set true when a DefeasibleValidity is added for a promoted prediction.
   bool is_promoted_;
 

@@ -110,7 +110,7 @@ protected:
   float32 lowest_cfd_; // among the inputs (forward chaining).
 
   // The set of accumulated DefeasibleValidity from inputs, which is copied to each produced Pred.
-  std::unordered_set<P<DefeasibleValidity>, r_code::PHash<DefeasibleValidity> > defeasible_validities_;
+  std::set<P<DefeasibleValidity> > defeasible_validities_;
 
   std::unordered_set<P<_Fact>, r_code::PHash<_Fact> > predictions_; // f0->pred->f1->obj.
   std::unordered_set<P<Sim>, r_code::PHash<Sim> > simulations_;
