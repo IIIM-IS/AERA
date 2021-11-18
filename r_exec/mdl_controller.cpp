@@ -1847,6 +1847,8 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
 
     Fact *ground;
     Fact *strong_requirement_ground;
+    P<HLPBindingMap> save_bm = new HLPBindingMap(bm);
+    P<Code> save_imdl = f_imdl->get_reference(0);
     switch (retrieve_imdl_bwd(bm, f_imdl, ground)) {
     case WEAK_REQUIREMENT_ENABLED:
       f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(true);
@@ -1860,7 +1862,10 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
           // with a simulated predicted command, but simulated forward chaining may fail. Therefore we also call
           // abduce_simulated_imdl which adds an SRMonitor for a goal to instantiate the model (the same as below),
           // so that if another simulation branch makes a predicted requirement it can simulate instantiating the model.
-          abduce_simulated_imdl(bm, super_goal, f_imdl, opposite, confidence, sub_sim);
+          // Used the saved state of the imdl before retrieve_imdl_bwd bound variables from the requirement.
+          save_imdl->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(false);
+          abduce_simulated_imdl(save_bm, super_goal,
+            new Fact(save_imdl, f_imdl->get_after(), f_imdl->get_before(), confidence, 1), opposite, confidence, sub_sim);
         }
       }
       break;
