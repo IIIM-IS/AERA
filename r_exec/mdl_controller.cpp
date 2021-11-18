@@ -2068,9 +2068,10 @@ _Fact* PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super
         if (!sim) {
           // This was called from check_simulated_imdl. Keep simulating forward. Don't loop by abducing the LHS as a goal again.
           // TODO: Handle the case when there are other than one Sim in the prediction.
-          if (ground->get_pred() && ground->get_pred()->get_simulations_size() == 1) {
+          Pred* ground_pred = ground->get_pred();
+          if (ground_pred && ground_pred->get_simulations_size() == 1) {
             // Check if a call to signal already caused this same LHS to be abduced with the same conditions, in this Sim.
-            vector<P<Code> >& sim_already_signalled = ground->get_pred()->get_simulation((uint16)0)->already_signalled_;
+            vector<P<Code> >& sim_already_signalled = ground_pred->get_simulation((uint16)0)->already_signalled_;
             bool found = false;
             // TODO: Do we need a critical section for this loop?
             for (auto signalled = sim_already_signalled.begin(); signalled != sim_already_signalled.end(); ++signalled) {
@@ -2089,7 +2090,7 @@ _Fact* PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super
           }
 
           // Copy all the Sims from ground.
-          Pred *pred = new Pred(bound_lhs, ground->get_pred(), 1);
+          Pred *pred = new Pred(bound_lhs, ground_pred, 1);
           Fact* fact_pred_bound_lhs = new Fact(pred, now, now, 1, 1);
           inject_simulation(fact_pred_bound_lhs, now);
           injected_lhs = fact_pred_bound_lhs;
