@@ -2070,13 +2070,13 @@ _Fact* PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super
           // TODO: Handle the case when there are other than one Sim in the prediction.
           Pred* ground_pred = ground->get_pred();
           if (ground_pred && ground_pred->get_simulations_size() == 1) {
-            // Check if a call to signal already caused this same LHS to be abduced with the same conditions, in this Sim.
-            vector<P<Code> >& sim_already_signalled = ground_pred->get_simulation((uint16)0)->already_signalled_;
+            // Check if a call to signal already caused this same LHS to be abduced with the same conditions, in this Sim by this controller.
+            vector<pair<Controller*, P<_Fact> > >& sim_already_signalled = ground_pred->get_simulation((uint16)0)->already_signalled_;
             bool found = false;
             // TODO: Do we need a critical section for this loop?
             for (auto signalled = sim_already_signalled.begin(); signalled != sim_already_signalled.end(); ++signalled) {
               // TODO: Check if signalled is invalidated?
-              if (_Fact::MatchObject(bound_lhs, *signalled)) {
+              if (signalled->first == this && _Fact::MatchObject(bound_lhs, signalled->second)) {
                 found = true;
                 break;
               }
@@ -2086,7 +2086,7 @@ _Fact* PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super
               // Don't signal again.
               break;
             // Save for checking later and continue.
-            sim_already_signalled.push_back((_Fact*)bound_lhs);
+            sim_already_signalled.push_back(pair<Controller*, P<_Fact> >(this, (_Fact*)bound_lhs));
           }
 
           // Copy all the Sims from ground.
