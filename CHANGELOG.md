@@ -8,3 +8,13 @@ replicode-syntax-v1.2 (2020-06-19)
 * Rename the Test project to AERA.
 * Rename folders V1.1 and V1.2 to replicode_v1.1 and replicode_v1.2, to distinguish the
   Replicode syntax version from the AERA system release version.
+
+AERA Diagnostic Mode v0.1 (2021-11-19)
+-------------------------------------
+
+A release optimized to run in "diagnostic time" which is now the default in settings.xml .
+
+* Added example hand-grab-sphere.replicode where all models are coded in the seed.
+* Added example hand-grab-sphere-learn.replicode which learns the grab and release models, as well
+  as the anti-requirement model where grab fails if the sphere and cube are at the same position.
+* Make other bug fixes and enhancements. Please see https://github.com/IIIM-IS/AERA/blob/master/doc/meeting-notes.txt
