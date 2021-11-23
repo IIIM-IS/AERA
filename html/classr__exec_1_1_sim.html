@@ -462,7 +462,7 @@ int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</
         </tr>
       </table>
 </div><div class="memdoc">
-<p>If f_obj does not match any of the goal targets stored in the root <a class="el" href="classr__exec_1_1_sim.html">Sim</a> object, then store it in the root <a class="el" href="classr__exec_1_1_sim.html">Sim</a> object for future checks and return true. (In this case, you should inject it as a goal.) Othewise if the goal target was already registered then return false, meaning that it does not need to be made into a goal again. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>If f_obj does not match any of the goal targets stored in the root <a class="el" href="classr__exec_1_1_sim.html">Sim</a> object, then store it in the root <a class="el" href="classr__exec_1_1_sim.html">Sim</a> object for future checks and return true. (In this case, you should inject it as a goal.) Otherwise if the goal target was already registered then return false, meaning that it does not need to be made into a goal again. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">f_obj</td><td>The (fact of the) object, such as (fact (mk_val ...)). </td></tr>
   </table>
