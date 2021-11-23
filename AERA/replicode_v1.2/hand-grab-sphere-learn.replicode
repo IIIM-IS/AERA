@@ -41,6 +41,7 @@ M0:(mdl [H: P0: T0: T1:]
    T1_RHS:(+ T0 0s:100ms:0us)
    T3:(+ T1 0s:100ms:0us)
 []
+   (<> P1 P0); Don't make a subgoal that doesn't change anything.
    DeltaP:(- P1 P0)
    T2:(- T1_RHS 0s:80ms:0us); Change 50ms delay to 20ms.
    T1_cmd:(- T3 0s:100ms:0us)

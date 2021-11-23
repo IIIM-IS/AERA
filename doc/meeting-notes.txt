@@ -731,10 +731,22 @@ Simulator
   * DONE. Change "attached C" to "attached [C]" and "anti-fact to "attached |[]" .
   * DONE. Babble to learn grab and release models.
 
+2021-11-19
+* Visualizer
+  * DONE. Merge pull request for tool tip hover (Karl)
+* DONE. Update the pull request so copyright years have a range. Merge. https://github.com/IIIM-IS/AERA/pull/197
+* DONE. Make Correlator branch. Remove Correlator code from master.
+* pong
+  *DONE. Merge request for the same repeated simulated command https://github.com/IIIM-IS/AERA/pull/200
+* Release
+  * DONE. Confirm name AERA Diagnostic Mode v0.1 . Commit CHANGELOG (AERA and AERA_Visualizer).
+  * DONE. Tag AERA and AERA_Visualizer.
+  * DONE. Make dev from master (AERA and AERA_Visualizer). Close the experimental branch.
+  * DONE! Make AERA and AERA_Visualizer public.
+
 next meeting
-* Update the pull request so copyright years have a range. Merge it. https://github.com/IIIM-IS/AERA/pull/197
-* Make Correlator branch. Remove Correlator code from master.
-* Close the experimental branch. Make dev from master.
+* pong
+  * Match timings between strong and weak requirements.
 
 TODO
 * PTPX: Learned cst may only have icsts. But using a cst for later model-building requires a non-icst fact. Should icst->contains be recursive? (Need limit.) Or always include a fact in new_cst?
