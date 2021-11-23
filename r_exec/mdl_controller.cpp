@@ -781,7 +781,8 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
             // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
             if (_original.match_fwd_strict(_f_imdl, f_imdl)) {
 
-              if ((*e).confidence_ > negative_cfd) {
+              if ((*e).confidence_ > negative_cfd ||
+                  !_f_imdl->match_timings_overlap(strong_requirement_ground->get_pred()->get_target())) {
 
                 r = WEAK_REQUIREMENT_ENABLED;
                 bm->load(&_original);
