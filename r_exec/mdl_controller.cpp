@@ -782,7 +782,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
             if (_original.match_fwd_strict(_f_imdl, f_imdl)) {
 
               if ((*e).confidence_ > negative_cfd ||
-                  !_f_imdl->match_timings_overlap(strong_requirement_ground->get_pred()->get_target())) {
+                  _f_imdl->get_after() >= strong_requirement_ground->get_pred()->get_target()->get_before()) {
 
                 r = WEAK_REQUIREMENT_ENABLED;
                 bm->load(&_original);
