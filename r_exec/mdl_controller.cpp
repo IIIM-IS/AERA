@@ -784,14 +784,21 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
               if ((*e).confidence_ > negative_cfd ||
                   _f_imdl->get_after() >= strong_requirement_ground->get_pred()->get_target()->get_before()) {
 
-                r = WEAK_REQUIREMENT_ENABLED;
-                bm->load(&_original);
-                ground = (*e).evidence_;
-                break;
+                if (r != WEAK_REQUIREMENT_ENABLED) {
+                  r = WEAK_REQUIREMENT_ENABLED;
+                  bm->load(&_original);
+                  ground = (*e).evidence_;
+                }
               } else {
-                // For informational purposes, set ground in case this returns STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
-                ground = (*e).evidence_;
-                r = STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
+                // Make sure the strong requirement timings overlap the weak requirement. We already made sure
+                // the strong requirement is not earlier than the weak. Now make sure it is not later.
+                if (strong_requirement_ground &&
+                    strong_requirement_ground->get_pred()->get_target()->get_after() < _f_imdl->get_before()) {
+                  if (r != WEAK_REQUIREMENT_ENABLED) {
+                    ground = (*e).evidence_;
+                    r = STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
+                  }
+                }
               }
             }
           }
