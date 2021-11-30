@@ -1696,6 +1696,16 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
     }
   } else { // no monitoring for simulated predictions.
 
+    if (ground) {
+      // Check if there could be a strong requirement in the future that could defeat the ground.
+      uint32 wr_count;
+      uint32 sr_count;
+      get_requirement_count(wr_count, sr_count);
+      if (wr_count > 0 && sr_count > 0)
+        // Attach a DefeasibleValidity object to the prediction so that it can be invalidated later by a strong requirement.
+        pred->defeasible_validities_.insert(ground->get_pred()->get_defeasible_consequence());
+    }
+
     // In the Pred constructor, we already copied the simulations from prediction.
     if (!HLPController::inject_prediction(production, confidence)) // inject a simulated prediction in the primary group.
       return;
