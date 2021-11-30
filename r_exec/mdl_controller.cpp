@@ -794,6 +794,8 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
                 // the strong requirement is not earlier than the weak. Now make sure it is not later.
                 if (strong_requirement_ground &&
                     strong_requirement_ground->get_pred()->get_target()->get_after() < _f_imdl->get_before()) {
+                  if ((*e).evidence_->get_pred()->has_defeasible_consequence())
+                    (*e).evidence_->get_pred()->get_defeasible_consequence()->invalidate();
                   if (r != WEAK_REQUIREMENT_ENABLED) {
                     ground = (*e).evidence_;
                     r = STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
@@ -2257,12 +2259,11 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, S
         get_requirement_count(wr_count, sr_count);
         if (wr_count > 0 && sr_count > 0) {
           // Attach a DefeasibleValidity object to the prediction so that it can be invalidated later by a strong requirement.
-          P<DefeasibleValidity> defeasible_validity = new DefeasibleValidity();
-          injected_lhs->get_pred()->defeasible_validities_.insert(defeasible_validity);
+          injected_lhs->get_pred()->defeasible_validities_.insert(ground->get_pred()->get_defeasible_consequence());
 
           // Add to the list which is later checked if we match a strong requirement.
           defeasible_weak_requirements_.CS_.enter();
-          defeasible_weak_requirements_.list_.push_front(DefeasibleWeakRequirement(ground, defeasible_validity));
+          defeasible_weak_requirements_.list_.push_front(DefeasibleWeakRequirement(ground, ground->get_pred()->get_defeasible_consequence()));
           defeasible_weak_requirements_.CS_.leave();
         }
       }
