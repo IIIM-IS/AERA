@@ -744,15 +744,29 @@ Simulator
   * DONE. Make dev from master (AERA and AERA_Visualizer). Close the experimental branch.
   * DONE! Make AERA and AERA_Visualizer public.
 
-next meeting
+2021-11-25
 * pong
-  * Match timings between strong and weak requirements.
+  * OK. Merge pull request to not let old strong requirement disable a weak requirement. https://github.com/IIIM-IS/AERA/pull/202
+  * DONE. Make stable over long simulations. (Still need more pull requests.)
+
+2021-12-07
+* pong
+  * DONE. Make pull request for stability over long simulations with duplicate commands. https://github.com/IIIM-IS/AERA/pull/203
+  * DONE. Replace vec3 with separate X and Y. icst as top goal. (Still need more pull requests.)
+
+2021-12-10
+* pong
+  * DONE. Review/merge pull request for stability over long simulations with duplicate commands. https://github.com/IIIM-IS/AERA/pull/203
+
+next meeting
+* Generality
+  * Make issue to propose separating int from float in Replicode.
+  * Make issue to propose float with ranges. [X inf]
 
 TODO
 * PTPX: Learned cst may only have icsts. But using a cst for later model-building requires a non-icst fact. Should icst->contains be recursive? (Need limit.) Or always include a fact in new_cst?
 * pong.test
   * Add paddle. Make goal for the ball to be at a position which requires moving the paddle to bounce it.
-  * mdl_122: Needed to put velocity in the cmd. Need a model builder to get it from the velocity fact.
   * Remove cst_ball_position, etc. and learn them.
   * Learn the exception "bounce" model.
 * Make hand-grab-sphere example learn the models.
