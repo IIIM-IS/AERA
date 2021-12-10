@@ -468,7 +468,31 @@ public:
    */
   bool has_simulation(Sim* sim) const;
 
+  /**
+   * Check if this Pred has a defeasible consequence.
+   * \return True if this has a defeasible consequence.
+   */
+  bool has_defeasible_consequence() const { return !!defeasible_consequence_; }
+
+  /**
+   * Get this Pred's defeasible consequence, creating one if it doesn't already exist. If you don't want to
+   * create a defeasible consequence , check has_defeasible_consequence() first.
+   * \return This Pred's defeasible_consequence_.
+   */
+  DefeasibleValidity* get_defeasible_consequence() {
+    if (!defeasible_consequence_)
+      defeasible_consequence_ = new DefeasibleValidity();
+    return defeasible_consequence_;
+  }
+
 private:
+  /**
+   * defeasible_consequence_ is a unique DefeasibleValidity for this Pred which is attached to predicted consequences so
+   * that they can be invalidated if this Pred is defeated. (However, invalidating the DefeasibleValidity does not
+   * invalidate this Pred.)
+   */
+  P<DefeasibleValidity> defeasible_consequence_;
+
   void construct(_Fact *target, const std::vector<P<Sim> >& simulations, float32 psln_thr);
 };
 

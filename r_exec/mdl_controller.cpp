@@ -784,14 +784,23 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
               if ((*e).confidence_ > negative_cfd ||
                   _f_imdl->get_after() >= strong_requirement_ground->get_pred()->get_target()->get_before()) {
 
-                r = WEAK_REQUIREMENT_ENABLED;
-                bm->load(&_original);
-                ground = (*e).evidence_;
-                break;
+                if (r != WEAK_REQUIREMENT_ENABLED) {
+                  r = WEAK_REQUIREMENT_ENABLED;
+                  bm->load(&_original);
+                  ground = (*e).evidence_;
+                }
               } else {
-                // For informational purposes, set ground in case this returns STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
-                ground = (*e).evidence_;
-                r = STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
+                // Make sure the strong requirement timings overlap the weak requirement. We already made sure
+                // the strong requirement is not earlier than the weak. Now make sure it is not later.
+                if (strong_requirement_ground &&
+                    strong_requirement_ground->get_pred()->get_target()->get_after() < _f_imdl->get_before()) {
+                  if ((*e).evidence_->get_pred()->has_defeasible_consequence())
+                    (*e).evidence_->get_pred()->get_defeasible_consequence()->invalidate();
+                  if (r != WEAK_REQUIREMENT_ENABLED) {
+                    ground = (*e).evidence_;
+                    r = STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
+                  }
+                }
               }
             }
           }
@@ -1687,6 +1696,16 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
     }
   } else { // no monitoring for simulated predictions.
 
+    if (ground) {
+      // Check if there could be a strong requirement in the future that could defeat the ground.
+      uint32 wr_count;
+      uint32 sr_count;
+      get_requirement_count(wr_count, sr_count);
+      if (wr_count > 0 && sr_count > 0)
+        // Attach a DefeasibleValidity object to the prediction so that it can be invalidated later by a strong requirement.
+        pred->defeasible_validities_.insert(ground->get_pred()->get_defeasible_consequence());
+    }
+
     // In the Pred constructor, we already copied the simulations from prediction.
     if (!HLPController::inject_prediction(production, confidence)) // inject a simulated prediction in the primary group.
       return;
@@ -2250,13 +2269,7 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, S
         get_requirement_count(wr_count, sr_count);
         if (wr_count > 0 && sr_count > 0) {
           // Attach a DefeasibleValidity object to the prediction so that it can be invalidated later by a strong requirement.
-          P<DefeasibleValidity> defeasible_validity = new DefeasibleValidity();
-          injected_lhs->get_pred()->defeasible_validities_.insert(defeasible_validity);
-
-          // Add to the list which is later checked if we match a strong requirement.
-          defeasible_weak_requirements_.CS_.enter();
-          defeasible_weak_requirements_.list_.push_front(DefeasibleWeakRequirement(ground, defeasible_validity));
-          defeasible_weak_requirements_.CS_.leave();
+          injected_lhs->get_pred()->defeasible_validities_.insert(ground->get_pred()->get_defeasible_consequence());
         }
       }
 
@@ -2266,26 +2279,6 @@ bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, S
   default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
     if (c_s == STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT && prediction_sim && ground && strong_requirement_ground) {
       // A strong requirement disabled the weak requirement.
-
-      // Check if the strong requirement defeats a result from a weak requirement.
-      defeasible_weak_requirements_.CS_.enter();
-      for (auto e = defeasible_weak_requirements_.list_.begin(); e != defeasible_weak_requirements_.list_.end();) {
-        if (e->weak_requirement_->is_invalidated() || e->defeasible_validity_->is_invalidated())
-          // Garbage collection.
-          e = defeasible_weak_requirements_.list_.erase(e);
-        else if (((_Fact*)e->weak_requirement_) == ground) {
-          // The strong requirement defeats the result based on the weak requirement, so invalidate the
-          // DefeasibleValidity object which was attached to the resulting and following predictions.
-          e->defeasible_validity_->invalidate();
-
-          // We are done checking the grounds for this result, so delete this entry.
-          e = defeasible_weak_requirements_.list_.erase(e);
-        }
-        else
-          ++e;
-      }
-      defeasible_weak_requirements_.CS_.leave();
-
 #ifdef WITH_DETAIL_OID
       OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << get_object()->get_oid() << ": fact (" <<
         to_string(ground->get_detail_oid()) << ") pred fact imdl, from goal req " << goal->get_oid() <<
