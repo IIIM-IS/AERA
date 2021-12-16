@@ -2099,12 +2099,12 @@ _Fact* PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super
           Fact* fact_pred_bound_lhs = new Fact(pred, now, now, 1, 1);
           if (ground_pred && ground_pred->get_simulations_size() == 1) {
             // Check if a call to signal already caused this same LHS to be abduced with the same conditions, in this Sim by this controller.
-            vector<pair<Controller*, P<_Fact> > >& sim_already_signalled = ground_pred->get_simulation((uint16)0)->already_signalled_;
+            vector<P<_Fact> >& sim_already_signalled = ground_pred->get_simulation((uint16)0)->already_signalled_;
             bool found = false;
             // TODO: Do we need a critical section for this loop?
             for (auto signalled = sim_already_signalled.begin(); signalled != sim_already_signalled.end(); ++signalled) {
               // TODO: Check if signalled is invalidated?
-              Pred* signalled_pred = signalled->second->get_pred();
+              Pred* signalled_pred = (*signalled)->get_pred();
               if (_Fact::MatchObject(bound_lhs, signalled_pred->get_target())) {
                 // Use the existing command but remove DefeasibleValidities which are not in the new command. This effectively
                 // sets the defeasible_validities_ of the existing command to the intersection of it and the
@@ -2126,7 +2126,7 @@ _Fact* PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super
               // Don't signal again.
               break;
             // Save for checking later and continue.
-            sim_already_signalled.push_back(pair<Controller*, P<_Fact> >(this, fact_pred_bound_lhs));
+            sim_already_signalled.push_back(fact_pred_bound_lhs);
           }
 
           inject_simulation(fact_pred_bound_lhs, now);
