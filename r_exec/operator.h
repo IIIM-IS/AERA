@@ -123,6 +123,7 @@ public:
 
   void setAtomicResult(Atom a) const { implementation_->setAtomicResult(a); }
   void setTimestampResult(Timestamp t) const { implementation_->setTimestampResult(t); }
+  void setDurationResult(std::chrono::microseconds d) const { implementation_->setDurationResult(d); }
   void setCompoundResultHead(Atom a) const { implementation_->setCompoundResultHead(a); }
   void addCompoundResultPart(Atom a) const { implementation_->addCompoundResultPart(a); }
 

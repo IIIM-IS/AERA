@@ -180,6 +180,13 @@ bool gtr(const Context &context) {
       return true;
     }
   }
+  else if (lhs[0].getDescriptor() == Atom::DURATION) {
+    if (rhs[0].getDescriptor() == Atom::DURATION) {
+      bool r = Utils::GetDuration(&lhs[0]) > Utils::GetDuration(&rhs[0]);
+      context.setAtomicResult(Atom::Boolean(r));
+      return true;
+    }
+  }
 
   context.setAtomicResult(Atom::UndefinedBoolean());
   return false;
@@ -205,6 +212,13 @@ bool lsr(const Context &context) {
     if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
       bool r = Utils::GetTimestamp(&lhs[0]) < Utils::GetTimestamp(&rhs[0]);
+      context.setAtomicResult(Atom::Boolean(r));
+      return true;
+    }
+  }
+  else if (lhs[0].getDescriptor() == Atom::DURATION) {
+    if (rhs[0].getDescriptor() == Atom::DURATION) {
+      bool r = Utils::GetDuration(&lhs[0]) < Utils::GetDuration(&rhs[0]);
       context.setAtomicResult(Atom::Boolean(r));
       return true;
     }
@@ -238,6 +252,13 @@ bool gte(const Context &context) {
       return true;
     }
   }
+  else if (lhs[0].getDescriptor() == Atom::DURATION) {
+    if (rhs[0].getDescriptor() == Atom::DURATION) {
+      bool r = Utils::GetDuration(&lhs[0]) >= Utils::GetDuration(&rhs[0]);
+      context.setAtomicResult(Atom::Boolean(r));
+      return true;
+    }
+  }
 
   context.setAtomicResult(Atom::UndefinedBoolean());
   return false;
@@ -263,6 +284,13 @@ bool lse(const Context &context) {
     if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
       bool r = Utils::GetTimestamp(&lhs[0]) <= Utils::GetTimestamp(&rhs[0]);
+      context.setAtomicResult(Atom::Boolean(r));
+      return true;
+    }
+  }
+  else if (lhs[0].getDescriptor() == Atom::DURATION) {
+    if (rhs[0].getDescriptor() == Atom::DURATION) {
+      bool r = Utils::GetDuration(&lhs[0]) <= Utils::GetDuration(&rhs[0]);
       context.setAtomicResult(Atom::Boolean(r));
       return true;
     }
@@ -305,9 +333,16 @@ bool add(const Context &context) {
         return true;
       }
     }
+    else if (rhs[0].getDescriptor() == Atom::DURATION) {
+      if (lhs[0] != Atom::PlusInfinity()) {
+        context.setDurationResult(Utils::GetDuration(&rhs[0]) + microseconds((int64)lhs[0].asFloat()));
+        return true;
+      }
+    }
   } else if (lhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
     if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
+      // TODO: Remove this case since it should not be allowed.
 
       context.setTimestampResult(Utils::GetTimestamp(&lhs[0]) + Utils::GetTimestamp(&rhs[0]).time_since_epoch());
       return true;
@@ -316,6 +351,26 @@ bool add(const Context &context) {
       if (rhs[0] != Atom::PlusInfinity()) {
 
         context.setTimestampResult(Utils::GetTimestamp(&lhs[0]) + microseconds((int64)rhs[0].asFloat()));
+        return true;
+      }
+    }
+    else if (rhs[0].getDescriptor() == Atom::DURATION) {
+      context.setTimestampResult(Utils::GetTimestamp(&lhs[0]) + Utils::GetDuration(&rhs[0]));
+      return true;
+    }
+  }
+  else if (lhs[0].getDescriptor() == Atom::DURATION) {
+    if (rhs[0].getDescriptor() == Atom::DURATION) {
+      context.setDurationResult(Utils::GetDuration(&lhs[0]) + Utils::GetDuration(&rhs[0]));
+      return true;
+    }
+    else if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
+      context.setTimestampResult(Utils::GetDuration(&lhs[0]) + Utils::GetTimestamp(&rhs[0]));
+      return true;
+    }
+    else if (rhs[0].isFloat()) {
+      if (rhs[0] != Atom::PlusInfinity()) {
+        context.setDurationResult(Utils::GetDuration(&lhs[0]) + microseconds((int64)rhs[0].asFloat()));
         return true;
       }
     }
@@ -355,6 +410,7 @@ bool sub(const Context &context) {
 
     if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
+      // TODO: Should be setDurationResult.
       context.setTimestampResult(Utils::GetTimestamp(&lhs[0]) - Utils::GetTimestamp(&rhs[0]).time_since_epoch());
       return true;
     } else if (rhs[0].isFloat()) {
@@ -362,6 +418,22 @@ bool sub(const Context &context) {
       if (rhs[0] != Atom::PlusInfinity()) {
 
         context.setTimestampResult(Utils::GetTimestamp(&lhs[0]) - microseconds((int64)rhs[0].asFloat()));
+        return true;
+      }
+    }
+    else if (rhs[0].getDescriptor() == Atom::DURATION) {
+      context.setTimestampResult(Utils::GetTimestamp(&lhs[0]) - Utils::GetDuration(&rhs[0]));
+      return true;
+    }
+  }
+  else if (lhs[0].getDescriptor() == Atom::DURATION) {
+    if (rhs[0].getDescriptor() == Atom::DURATION) {
+      context.setDurationResult(Utils::GetDuration(&lhs[0]) - Utils::GetDuration(&rhs[0]));
+      return true;
+    }
+    else if (rhs[0].isFloat()) {
+      if (rhs[0] != Atom::PlusInfinity()) {
+        context.setDurationResult(Utils::GetDuration(&lhs[0]) - microseconds((int64)rhs[0].asFloat()));
         return true;
       }
     }
@@ -421,11 +493,19 @@ bool mul(const Context &context) {
       context.setAtomicResult(Atom::Float(lhs[0].asFloat()*rhs[0].asFloat()));
       return true;
     } else if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
+      // TODO: Remove this case since it should not be allowed.
 
       context.setAtomicResult(Atom::Float(Utils::GetMicrosecondsSinceEpoch(&rhs[0]).count() * lhs[0].asFloat()));
       return true;
     }
+    else if (rhs[0].getDescriptor() == Atom::DURATION) {
+      if (lhs[0] != Atom::PlusInfinity()) {
+        context.setAtomicResult(Atom::Float(lhs[0].asFloat() * (float32)Utils::GetDuration(&rhs[0]).count()));
+        return true;
+      }
+    }
   } else if (lhs[0].getDescriptor() == Atom::TIMESTAMP) {
+    // TODO: Remove this case since it should not be allowed.
 
     if (rhs[0].isFloat()) {
 
@@ -434,6 +514,20 @@ bool mul(const Context &context) {
     } else if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
 
       context.setAtomicResult(Atom::Float(Utils::GetMicrosecondsSinceEpoch(&lhs[0]).count() * Utils::GetMicrosecondsSinceEpoch(&lhs[0]).count()));
+      return true;
+    }
+  }
+  else if (lhs[0].getDescriptor() == Atom::DURATION) {
+    if (rhs[0].isFloat()) {
+      if (rhs[0] != Atom::PlusInfinity()) {
+        float64 lhs_float = (float64)Utils::GetDuration(&lhs[0]).count();
+        context.setDurationResult(microseconds((int64)(lhs_float * rhs[0].asFloat())));
+        return true;
+      }
+    }
+    else if (rhs[0].getDescriptor() == Atom::DURATION) {
+      // Counter-intuitive, but is the existing behavior.
+      context.setAtomicResult(Atom::Float((float32)Utils::GetDuration(&lhs[0]).count() * (float32)Utils::GetDuration(&rhs[0]).count()));
       return true;
     }
   }
@@ -495,6 +589,7 @@ bool div(const Context &context) {
         return true;
       }
     } else if (rhs[0].getDescriptor() == Atom::TIMESTAMP) {
+      // TODO: Remove this case since it should not be allowed.
 
       float64 rhs_t = (float64)Utils::GetMicrosecondsSinceEpoch(&rhs[0]).count();
       if (rhs_t != 0) {
@@ -503,7 +598,14 @@ bool div(const Context &context) {
         return true;
       }
     }
+    else if (rhs[0].getDescriptor() == Atom::DURATION) {
+      if (lhs[0] != Atom::PlusInfinity()) {
+        context.setAtomicResult(Atom::Float(lhs[0].asFloat() / (float32)Utils::GetDuration(&rhs[0]).count()));
+        return true;
+      }
+    }
   } else if (lhs[0].getDescriptor() == Atom::TIMESTAMP) {
+    // TODO: Remove this case since it should not be allowed.
 
     if (rhs[0].isFloat()) {
 
@@ -522,6 +624,20 @@ bool div(const Context &context) {
         context.setAtomicResult(Atom::Float(lhs_t / rhs_t));
         return true;
       }
+    }
+  }
+  else if (lhs[0].getDescriptor() == Atom::DURATION) {
+    if (rhs[0].isFloat()) {
+      if (rhs[0] != Atom::PlusInfinity()) {
+        float64 lhs_float = (float64)Utils::GetDuration(&lhs[0]).count();
+        context.setDurationResult(microseconds((int64)(lhs_float / rhs[0].asFloat())));
+        return true;
+      }
+    }
+    else if (rhs[0].getDescriptor() == Atom::DURATION) {
+      // Counter-intuitive, but is the existing behavior.
+      context.setAtomicResult(Atom::Float((float32)Utils::GetDuration(&lhs[0]).count() / (float32)Utils::GetDuration(&rhs[0]).count()));
+      return true;
     }
   }
 
@@ -549,7 +665,14 @@ bool dis(const Context &context) {
 
       auto lhs_t = Utils::GetMicrosecondsSinceEpoch(&lhs[0]).count();
       auto rhs_t = Utils::GetMicrosecondsSinceEpoch(&rhs[0]).count();
+      // TODO: This should be setDurationResult.
       context.setTimestampResult(Timestamp(microseconds(abs(lhs_t - rhs_t))));
+      return true;
+    }
+  }
+  else if (lhs[0].getDescriptor() == Atom::DURATION) {
+    if (rhs[0].getDescriptor() == Atom::DURATION) {
+      context.setDurationResult(abs(Utils::GetDuration(&lhs[0]) - Utils::GetDuration(&rhs[0])));
       return true;
     }
   }
@@ -702,6 +825,10 @@ bool minimum(const Context &context) {
       duration_cast<microseconds>(Utils::GetTimestamp(&rhs[0]).time_since_epoch()))));
     return true;
   }
+  else if (lhs[0].getDescriptor() == Atom::DURATION && rhs[0].getDescriptor() == Atom::DURATION) {
+    context.setDurationResult(min(Utils::GetDuration(&lhs[0]), Utils::GetDuration(&rhs[0])));
+    return true;
+  }
 
   context.setAtomicResult(Atom::Nil());
   return false;
@@ -733,6 +860,10 @@ bool maximum(const Context &context) {
     context.setTimestampResult(Timestamp(max(
       duration_cast<microseconds>(Utils::GetTimestamp(&lhs[0]).time_since_epoch()),
       duration_cast<microseconds>(Utils::GetTimestamp(&rhs[0]).time_since_epoch()))));
+    return true;
+  }
+  else if (lhs[0].getDescriptor() == Atom::DURATION && rhs[0].getDescriptor() == Atom::DURATION) {
+    context.setDurationResult(max(Utils::GetDuration(&lhs[0]), Utils::GetDuration(&rhs[0])));
     return true;
   }
 
