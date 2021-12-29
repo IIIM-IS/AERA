@@ -129,6 +129,28 @@ public:
   static bool Equal(float32 l, float32 r);
   static bool Synchronous(Timestamp l, Timestamp r);
 
+  /**
+   * Get the signed 64-bit integer at code[index] and code[index + 1].
+   * \param code The Atom array.
+   * \param index The index in code of the first uint32 value.
+   * \return The signed 64-bit integer.
+   */
+  static int64 GetInt64(const Atom *code, size_t index) {
+    uint64 high = code[index].atom_;
+    return high << 32 | code[index + 1].atom_;
+  }
+
+  /**
+   * Set the uint32 values at code[index] and code[index + 1] to the big-endian of value.
+   * \param code The Atom array. You must make sure the array has room up to code[index + 1].
+   * \param index The index in code for the first uint32 value.
+   * \param value The signed 64-bit integer to set.
+   */
+  static void SetInt64(Atom *code, size_t index, int64 value) {
+    code[index].atom_ = (uint64)value >> 32;
+    code[index + 1].atom_ = value & 0x00000000FFFFFFFF;
+  }
+
   static Timestamp GetTimestamp(const Atom *iptr);
   static std::chrono::microseconds GetMicrosecondsSinceEpoch(const Atom *iptr) { 
     return std::chrono::duration_cast<std::chrono::microseconds>(GetTimestamp(iptr).time_since_epoch()); 
@@ -161,8 +183,7 @@ public:
   template<class O> static Timestamp GetTimestamp(const O *object, uint16 index) {
 
     uint16 t_index = object->code(index).asIndex();
-    uint64 high = object->code(t_index + 1).atom_;
-    return Timestamp(std::chrono::microseconds(high << 32 | object->code(t_index + 2).atom_));
+    return Timestamp(std::chrono::microseconds(GetInt64(&object->code(0), t_index + 1)));
   }
 
   /**
@@ -174,11 +195,11 @@ public:
    */
   template<class O> static void SetTimestamp(O *object, uint16 index, Timestamp timestamp) {
 
-    uint64 t = std::chrono::duration_cast<std::chrono::microseconds>(timestamp.time_since_epoch()).count();
     uint16 t_index = object->code(index).asIndex();
     object->code(t_index) = Atom::Timestamp();
-    object->code(t_index + 1).atom_ = t >> 32;
-    object->code(t_index + 2).atom_ = t & 0x00000000FFFFFFFF;
+    // This will resize the code array if needed.
+    object->code(t_index + 2).atom_ = 0;
+    SetInt64(&object->code(0), t_index + 1, std::chrono::duration_cast<std::chrono::microseconds>(timestamp.time_since_epoch()).count());
   }
 
   static std::string GetString(const Atom *iptr);

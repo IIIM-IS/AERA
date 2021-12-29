@@ -127,24 +127,21 @@ bool Utils::Synchronous(Timestamp l, Timestamp r) {
 
 Timestamp Utils::GetTimestamp(const Atom *iptr) {
 
-  uint64 high = iptr[1].atom_;
-  return Timestamp(microseconds(high << 32 | iptr[2].atom_));
+  return Timestamp(microseconds(GetInt64(iptr, 1)));
 }
 
 void Utils::SetTimestamp(Atom *iptr, Timestamp timestamp) {
 
-  uint64 t = duration_cast<microseconds>(timestamp.time_since_epoch()).count();
   iptr[0] = Atom::Timestamp();
-  iptr[1].atom_ = t >> 32;
-  iptr[2].atom_ = t & 0x00000000FFFFFFFF;
+  SetInt64(iptr, 1, duration_cast<microseconds>(timestamp.time_since_epoch()).count());
 }
 
 void Utils::SetTimestampStruct(Code *object, uint16 index, Timestamp timestamp) {
 
-  uint64 t = duration_cast<microseconds>(timestamp.time_since_epoch()).count();
   object->code(index) = Atom::Timestamp();
-  object->code(++index) = Atom(t >> 32);
-  object->code(++index) = Atom(t & 0x00000000FFFFFFFF);
+  // This will resize the code array if needed.
+  object->code(index + 2) = 0;
+  SetInt64(&object->code(0), index + 1, duration_cast<microseconds>(timestamp.time_since_epoch()).count());
 }
 
 std::string Utils::GetString(const Atom *iptr) {
