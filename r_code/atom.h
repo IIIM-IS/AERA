@@ -159,7 +159,8 @@ public:
     INSTANTIATED_ANTI_PROGRAM = 0xCC,
     COMPOSITE_STATE = 0xCD,
     MODEL = 0xCE,
-    NULL_PROGRAM = 0xCF
+    NULL_PROGRAM = 0xCF,
+    DURATION = 0xD0
   }Type;
 
   // encoders
@@ -203,6 +204,7 @@ public:
   static Atom UndefinedString();
   static Atom Timestamp();
   static Atom UndefinedTimestamp();
+  static Atom Duration();
   static Atom InstantiatedProgram(uint16 opcode, uint8 arity);
   static Atom Group(uint16 opcode, uint8 arity);
   static Atom InstantiatedCPPProgram(uint16 opcode, uint8 arity);

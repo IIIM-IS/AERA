@@ -144,6 +144,12 @@ void Utils::SetTimestampStruct(Code *object, uint16 index, Timestamp timestamp) 
   SetInt64(&object->code(0), index + 1, duration_cast<microseconds>(timestamp.time_since_epoch()).count());
 }
 
+void Utils::SetDurationStruct(Code *object, uint16 index, microseconds duration) {
+  object->resize_code(index + 3);
+  object->code(index) = Atom::Duration();
+  SetInt64(&object->code(0), index + 1, duration.count());
+}
+
 std::string Utils::GetString(const Atom *iptr) {
 
   std::string s;
