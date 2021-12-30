@@ -766,11 +766,15 @@ Simulator
     Not convinced it's needed. Integers are small. Opcode for number is special: First bit is 0.
   * DONE. Update issue to propose separating timestamp and duration. https://github.com/IIIM-IS/AERA/issues/138
 
-next meeting
+2021-12-30
 * pong
-  * Review/merge pull request to keep only one copy of identical simulated LHS commands https://github.com/IIIM-IS/AERA/pull/204
+  * DONE. Review/merge pull request to keep only one copy of identical simulated LHS commands https://github.com/IIIM-IS/AERA/pull/204
 * Generality
-  * Make pull request to implement separating timestamp and duration in https://github.com/IIIM-IS/AERA/issues/138
+  * DONE. Review/merge pull request to support duration in issue #138. https://github.com/IIIM-IS/AERA/pull/205
+
+next meeting
+* Generality
+  * Make pull request to implement separating timestamp and duration in issue #138.
   * Make issue to propose numbers with ranges. Maybe more general: Range of numbers, range of durations, range of timestamps, combos?
 
 TODO
