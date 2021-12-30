@@ -38,7 +38,7 @@
 !dfn (tick :)
 
 ; The sampling_period should be 2 * base_period, where base_period is from settings.xml.
-!def sampling_period 100000us
+!def sampling_period 100ms
 
 ; application ontology.
 

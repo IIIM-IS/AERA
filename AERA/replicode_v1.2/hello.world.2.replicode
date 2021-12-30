@@ -10,7 +10,7 @@ pgm1:(pgm |[] |[] |[] []
    )
 1) |[]
 
-ipgm1:(ipgm pgm1 |[] RUN_ONCE 50000us VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+ipgm1:(ipgm pgm1 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
 
 pgm2:(pgm |[] []
    (ptn (ent ::) |[])

@@ -4,7 +4,7 @@ p1:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
 paddle:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 p1_is_a_paddle:(mk.val p1 essence paddle 1) |[]
 ; Even though (fact p1_is_a_paddle ::) is not used in this file, the pattern extractor needs it.
-f_p1_is_a_paddle:(fact p1_is_a_paddle 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+f_p1_is_a_paddle:(fact p1_is_a_paddle 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 
 ; Make the discrete positions using ont instead of ent so that we don't need essence statements.
 y0:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
@@ -18,7 +18,7 @@ y7:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
 y8:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
 y9:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
 
-!def inject_drive_time 4000000us
+!def inject_drive_time 4000ms
 
 m_run_position:(mdl |[] []
    ; The goal target timings are the same as the drive timings.
@@ -90,11 +90,11 @@ pgm_inject_drive:(pgm |[]
    (ptn (fact (mk.val p1 essence paddle :) after: before: ::) |[])
 []
    (>= after (+ this.vw.ijt inject_drive_time))
-   (<= after (+ (+ this.vw.ijt inject_drive_time) 1150000us))
+   (<= after (+ (+ this.vw.ijt inject_drive_time) 1150ms))
 []
    (inj []
       ; The end of the time interval will be used in m_run_position as the end of the goal interval.
-      f_run:(fact run after (+ (+ this.vw.ijt inject_drive_time) 1000000us) 1 1)
+      f_run:(fact run after (+ (+ this.vw.ijt inject_drive_time) 1000ms) 1 1)
       |[]
    )
    (inj []
@@ -103,7 +103,7 @@ pgm_inject_drive:(pgm |[]
    )
    (inj []
       ; Delay a little to allow predictions for this sampling period before injecting the drive.
-      (fact g t1:(+ after 10000us) t1 1 1)
+      (fact g t1:(+ after 10ms) t1 1 1)
       [SYNC_ONCE t1 1 forever primary nil]
    )
    (prb [1 "print" "injected drive" |[]])

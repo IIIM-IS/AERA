@@ -8,19 +8,19 @@
 attached:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 h:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
 h_is_a_hand:(mk.val h essence hand 1) |[]
-(fact h_is_a_hand 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+(fact h_is_a_hand 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 c:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
 c_is_a_cube:(mk.val c essence cube 1) |[]
-(fact c_is_a_cube 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+(fact c_is_a_cube 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 c_is_a_hand:(mk.val c essence hand 1) |[]
 ; This is needed for S3.
-(|fact c_is_a_hand 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+(|fact c_is_a_hand 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 s:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
 s_is_a_sphere:(mk.val s essence sphere 1) |[]
-(fact s_is_a_sphere 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+(fact s_is_a_sphere 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 s_is_a_hand:(mk.val s essence hand 1) |[]
 ; This is needed for S3.
-(|fact s_is_a_hand 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+(|fact s_is_a_hand 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 
 ; Hand H has position P.
 S0:(cst |[]
@@ -38,15 +38,15 @@ M0:(mdl [H: P0: T0: T1:]
    (fact (mk.val H: position P1: :) T1_RHS: T3: : :); Change T1 to T1_RHS.
 []
    P1:(+ P0 DeltaP)
-   T1_RHS:(+ T0 0s:100ms:0us)
-   T3:(+ T1 0s:100ms:0us)
+   T1_RHS:(+ T0 100ms)
+   T3:(+ T1 100ms)
 []
    (<> P1 P0); Don't make a subgoal that doesn't change anything.
    DeltaP:(- P1 P0)
-   T2:(- T1_RHS 0s:80ms:0us); Change 50ms delay to 20ms.
-   T1_cmd:(- T3 0s:100ms:0us)
-   T0:(- T1_RHS 0s:100ms:0us)
-   T1:(- T3 0s:100ms:0us)
+   T2:(- T1_RHS 80ms); Change 50ms delay to 20ms.
+   T1_cmd:(- T3 100ms)
+   T0:(- T1_RHS 100ms)
+   T1:(- T3 100ms)
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; If we observe state S0 (hand H has position P0), then if M0 predicts something (position P1) it will be right.
@@ -84,13 +84,13 @@ M2:(mdl [H: C: T0: T1:]
    (fact (cmd grab [H:] :) T2: T1_cmd: : :); Change T1 to T1_cmd.
    (fact (mk.val H: attached [C:] :) T1_RHS: T3: : :); Change T1 to T1_RHS.
 []
-   T1_RHS:(+ T0 0s:100ms:0us); Copy from M0.
-   T3:(+ T1 0s:100ms:0us);     Copy from M0.
+   T1_RHS:(+ T0 100ms); Copy from M0.
+   T3:(+ T1 100ms);     Copy from M0.
 []
-   T2:(- T1_RHS 0s:80ms:0us);  Copy from M0.
-   T1_cmd:(- T3 0s:100ms:0us); Copy from M0.
-   T0:(- T1_RHS 0s:100ms:0us); Copy from M0.
-   T1:(- T3 0s:100ms:0us);     Copy from M0.
+   T2:(- T1_RHS 80ms);  Copy from M0.
+   T1_cmd:(- T3 100ms); Copy from M0.
+   T0:(- T1_RHS 100ms); Copy from M0.
+   T1:(- T3 100ms);     Copy from M0.
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; M2 will work (something will be attached to hand H) if it is at the same position as hand H and it is not already attached.
@@ -120,13 +120,13 @@ M4:(mdl [H: C: T0: T1:]
    (fact (cmd release [H:] :) T2: T1_cmd: : :); Change T1 to T1_cmd.
    (fact (mk.val H: attached |[] :) T1_RHS: T3: : :); Change T1 to T1_RHS. Change anti-fact to fact of attached to |[].
 []
-   T1_RHS:(+ T0 0s:100ms:0us); Copy from M0.
-   T3:(+ T1 0s:100ms:0us);     Copy from M0.
+   T1_RHS:(+ T0 100ms); Copy from M0.
+   T3:(+ T1 100ms);     Copy from M0.
 []
-   T2:(- T1_RHS 0s:80ms:0us);  Copy from M0.
-   T1_cmd:(- T3 0s:100ms:0us); Copy from M0.
-   T0:(- T1_RHS 0s:100ms:0us); Copy from M0.
-   T1:(- T3 0s:100ms:0us);     Copy from M0.
+   T2:(- T1_RHS 80ms);  Copy from M0.
+   T1_cmd:(- T3 100ms); Copy from M0.
+   T0:(- T1_RHS 100ms); Copy from M0.
+   T1:(- T3 100ms);     Copy from M0.
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; M4 will work (some C will not be attached to hand H) if it is at the same position as hand H and it is already attached.
@@ -144,15 +144,15 @@ M6:(mdl [H: C: P0: T0: T1:]
    (fact (imdl M0 [H: P0: T0_M0: T1_M0:] [DeltaP: P1: T1_RHS: T3:] : :) T0_cmd: T1_cmd: : :); Change timings from T1 T3 to T0_cmd T1_cmd. T2 is not exposed from M0. T1_RHS is also exposed. Distinguish T0_M0 and T1_M0.
    (fact (mk.val C: position P1: :) T1_RHS: T3: : :); Fix bug as explained: Change C to P1. Change T1 to T1_RHS.
 []
-   T1_RHS:(+ T0 0s:100ms:0us); Repeat from M0.
-   T3:(+ T1 0s:100ms:0us);     Repeat from M0.
+   T1_RHS:(+ T0 100ms); Repeat from M0.
+   T3:(+ T1 100ms);     Repeat from M0.
 []
-   T0_cmd:(- T1_RHS 0s:100ms:0us); Copy from M0, but subtract 100ms because the LHS is not a command.
-   T1_cmd:(- T3 0s:100ms:0us);     Copy from M0.
-   T0:(- T1_RHS 0s:100ms:0us);     Copy from M0.
-   T1:(- T3 0s:100ms:0us);         Copy from M0.
-   T0_M0:(- T1_RHS 0s:100ms:0us);  Duplicate T0.
-   T1_M0:(- T3 0s:100ms:0us);      Duplicate T0.
+   T0_cmd:(- T1_RHS 100ms); Copy from M0, but subtract 100ms because the LHS is not a command.
+   T1_cmd:(- T3 100ms);     Copy from M0.
+   T0:(- T1_RHS 100ms);     Copy from M0.
+   T1:(- T3 100ms);         Copy from M0.
+   T0_M0:(- T1_RHS 100ms);  Duplicate T0.
+   T1_M0:(- T3 100ms);      Duplicate T0.
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; When some C is attached to hand H and the hand moves to position P1, then C will also be at P1.
@@ -168,7 +168,7 @@ M7:(mdl |[]
 !def pS0 0
 !def pS1 15
 
-!def DRIVE_START 0s:300ms:0us
+!def DRIVE_START 300ms
 
 ; Initial conditions.
 start:(pgm |[] |[] |[] []
@@ -227,7 +227,7 @@ pgm_inject_drive:(pgm |[]
 []
    (inj []
       ; The end of the time interval will be used in m_drive as the end of the goal interval.
-      f_run:(fact run after (+ before 0s:500ms:0us) 1 1)
+      f_run:(fact run after (+ before 500ms) 1 1)
       |[]
    )
    (inj []
@@ -236,7 +236,7 @@ pgm_inject_drive:(pgm |[]
    )
    (inj []
       ; Delay a little to allow predictions for this sampling period before injecting the drive.
-      (fact g t0:(+ after 10000us) t0 1 1)
+      (fact g t0:(+ after 10ms) t0 1 1)
       [SYNC_ONCE t0 1 forever primary nil]
    )
    (prb [1 "print" "injected drive" |[]])
@@ -321,7 +321,7 @@ pgm_cmd_move_h_attached_c:(pgm |[]
       |[]
    )
    (inj []
-      (fact Command (+ After 20000us) Before 1 1)
+      (fact Command (+ After 20ms) Before 1 1)
       [SYNC_ONCE After 1 1 stdin nil]
    )
    (inj []
@@ -386,7 +386,7 @@ pgm_cmd_move_h_attached_s:(pgm |[]
       |[]
    )
    (inj []
-      (fact Command (+ After 20000us) Before 1 1)
+      (fact Command (+ After 20ms) Before 1 1)
       [SYNC_ONCE After 1 1 stdin nil]
    )
    (inj []
@@ -451,7 +451,7 @@ pgm_cmd_move_h_not_attached:(pgm |[]
       |[]
    )
    (inj []
-      (fact Command (+ After 20000us) Before 1 1)
+      (fact Command (+ After 20ms) Before 1 1)
       [SYNC_ONCE After 1 1 stdin nil]
    )
    (inj []
@@ -511,7 +511,7 @@ pgm_cmd_release_h:(pgm |[]
 []
    ; Inject the fact that the command was executed.
    (inj []
-      (fact Command (+ After 20000us) Before 1 1)
+      (fact Command (+ After 20ms) Before 1 1)
       [SYNC_ONCE After 1 1 stdin nil]
    )
    (inj []
@@ -572,7 +572,7 @@ pgm_cmd_grab_h:(pgm |[]
 []
    ; Inject the fact that the command was executed.
    (inj []
-      (fact Command (+ After 20000us) Before 1 1)
+      (fact Command (+ After 20ms) Before 1 1)
       [SYNC_ONCE After 1 1 stdin nil]
    )
    (inj []

@@ -11,13 +11,13 @@ some_object_1:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
 some_hand_1_pos:(mk.val some_hand_1 position (vec3 0 0 0) 1) |[]
 
 ; A fact indicating that the state described in the marker holds true NOW. Let us call this fact F1.
-fact_some_hand_1_pos:(fact some_hand_1_pos 0us 0us 1 1) |[]
+fact_some_hand_1_pos:(fact some_hand_1_pos 0s:0ms:0us 0s:0ms:0us 1 1) |[]
 
 ; A marker indicating that the position of B is (0,0,0)
 some_object_1_pos:(mk.val some_object_1 position (vec3 0 0 0) 1) |[]
 
 ; A fact indicating that the state described in the marker above holds true NOW. Let us call this fact F2.
-fact_some_object_1_pos:(fact some_object_1_pos 0us 0us 1 1) |[]
+fact_some_object_1_pos:(fact some_object_1_pos 0s:0ms:0us 0s:0ms:0us 1 1) |[]
 
 ; A definition of a composite state that holds true when F1 and F2 are true. That fact that the position values for
 ; A and B are identical is detected and will be useful later for abstraction.
@@ -31,19 +31,19 @@ same_pos_cst:(cst |[] [fact_some_hand_1_pos fact_some_object_1_pos] |[] |[] [std
 some_hand:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
 some_object:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
 
-; A grab command is created. It specifies A as the target entity (doing the grabbing) and 10000us as the 
+; A grab command is created. It specifies A as the target entity (doing the grabbing) and 10ms as the 
 ; deadline for execution.
 cmd_grab:(cmd grab_hand [some_hand] 1) |[]
 
 ; This fact indicates that existence of this command is true NOW. Let us call this fact F1.
-fact_cmd_grab:(fact cmd_grab 0us 0us 1 1) |[]
+fact_cmd_grab:(fact cmd_grab 0s:0ms:0us 0s:0ms:0us 1 1) |[]
 
 ; A marker that indicates that A and B have an attachment relation.
 attached:(mk.val some_hand attachment some_object 1) |[]
 
 ; This fact indicates that attachment marker above is true 100000 microseconds in the FUTURE. 
 ; Let us call this fact F2.
-fact_attached:(fact attached 100000us 100000us 1 1) |[]
+fact_attached:(fact attached 0s:100ms:0us 0s:100ms:0us 1 1) |[]
 
 ; Defines a model from F1 and F2. 
 ; This can be viewed as: 
@@ -65,13 +65,13 @@ some_object_2:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
 i_same_pos_cst:(icst same_pos_cst |[] [some_hand_2 some_object_2 (vec3 0 0 0) 0us] false 1) |[]
 
 ; This fact indicates that the instansiated composite state is true NOW. Let us call this fact F1.
-f_i_same_pos_cst:(fact i_same_pos_cst 0us 0us 1 1) |[]
+f_i_same_pos_cst:(fact i_same_pos_cst 0s:0ms:0us 0s:0ms:0us 1 1) |[]
 
 ; Instansiates the model "grab_mdl" with A and B as parameters and 100000 microseconds as the deadline.
-i_grab_mdl:(imdl grab_mdl |[] [some_hand_2 some_object_2 100000us 0us] false 1) |[]
+i_grab_mdl:(imdl grab_mdl |[] [some_hand_2 some_object_2 100ms 0us] false 1) |[]
 
 ; This fact indicates that model just created exists NOW. Let us call it F2.
-f_i_grab_mdl:(fact i_grab_mdl 0us 0us 1 1) |[]
+f_i_grab_mdl:(fact i_grab_mdl 0s:0ms:0us 0s:0ms:0us 1 1) |[]
 
 ; Define a new model with facts F1 and F2. This can be viewed as: "F1 causes F2" or "To achieve F2, F1 is necessary".
 ; More clearly: If I have an instansiated compositate state that indicates two objects share the same position, 
@@ -103,7 +103,7 @@ test_fwd_same_pos:(pgm |[] |[] |[] []
 1) |[]
 
 ; This program has ACTIVATION=1 and will thus run.
-i_test_fwd_same_pos:(ipgm test_fwd_same_pos |[] RUN_ONCE 150000us VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+i_test_fwd_same_pos:(ipgm test_fwd_same_pos |[] RUN_ONCE 150ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ;----------------------------------------------------------------------
 
@@ -118,7 +118,7 @@ inj_goal:(pgm |[] |[] |[] []
       [SYNC_ONCE now 0 forever stdin nil]
    )
    (inj []
-      v1:(fact v0 (+ now 30000us) (+ now 30000us) 1 1)
+      v1:(fact v0 (+ now 30ms) (+ now 30ms) 1 1)
       [SYNC_ONCE now 0 forever stdin nil]
    )
    (inj []
@@ -132,7 +132,7 @@ inj_goal:(pgm |[] |[] |[] []
 1) |[]
 
 ; This program has ACTIVATION=1 and will thus run.
-i_inj_goal:(ipgm inj_goal |[] RUN_ONCE 150000us VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+i_inj_goal:(ipgm inj_goal |[] RUN_ONCE 150ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
 
 ;----------------------------------------------------------------------
 
@@ -170,7 +170,7 @@ i_environment_resp:(ipgm environment_resp |[] RUN_ALWAYS 0us VOLATILE NOTIFY 1) 
 
 ;----------------------------------------------------------------------
 
-; This program injects the grab command and a fact indicating that it has 30000us as its deadline.
+; This program injects the grab command and a fact indicating that it has 30ms as its deadline.
 ; Only present for testing - we do not need this if have the inj_goal program running.
 
 inj_cmd:(pgm |[] |[] |[] []
@@ -179,10 +179,10 @@ inj_cmd:(pgm |[] |[] |[] []
       [SYNC_ONCE now 0 forever stdin nil]
    )
    (inj []
-      v1:(fact v0 (+ now 30000us) (+ now 30000us) 1 1)
+      v1:(fact v0 (+ now 30ms) (+ now 30ms) 1 1)
       [SYNC_ONCE now 1 forever stdin nil]
    )
 1) |[]
 
 ; Note that this instansiated program has ACTIVATION=0 and thus does nothing
-i_inj_cmd:(ipgm inj_cmd |[] RUN_ONCE 150000us VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 0]]
+i_inj_cmd:(ipgm inj_cmd |[] RUN_ONCE 150ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 0]]
