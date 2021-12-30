@@ -129,11 +129,48 @@ public:
   static bool Equal(float32 l, float32 r);
   static bool Synchronous(Timestamp l, Timestamp r);
 
+  /**
+   * Get the signed 64-bit integer at code[index] and code[index + 1].
+   * \param code The Atom array.
+   * \param index The index in code of the first uint32 value.
+   * \return The signed 64-bit integer.
+   */
+  static int64 GetInt64(const Atom *code, size_t index) {
+    uint64 high = code[index].atom_;
+    return high << 32 | code[index + 1].atom_;
+  }
+
+  /**
+   * Set the uint32 values at code[index] and code[index + 1] to the big-endian of value.
+   * \param code The Atom array. You must make sure the array has room up to code[index + 1].
+   * \param index The index in code for the first uint32 value.
+   * \param value The signed 64-bit integer to set.
+   */
+  static void SetInt64(Atom *code, size_t index, int64 value) {
+    code[index].atom_ = (uint64)value >> 32;
+    code[index + 1].atom_ = value & 0x00000000FFFFFFFF;
+  }
+
+  /**
+   * Interpret iptr[1] and iptr[2] as an signed 64-bit integer and return it as time stamp.
+   * This assumes that the caller has already checked iptr[0] == Atom::TIMESTAMP, if needed.
+   * \param iptr A pointer into the Atom array.
+   * \return The time stamp.
+   */
   static Timestamp GetTimestamp(const Atom *iptr);
+
   static std::chrono::microseconds GetMicrosecondsSinceEpoch(const Atom *iptr) { 
     return std::chrono::duration_cast<std::chrono::microseconds>(GetTimestamp(iptr).time_since_epoch()); 
   }
-  static void SetTimestamp(Atom *iptr, Timestamp t);
+
+  /**
+   * Set iptr[0] to Atom::Timestamp() and set iptr[1] and iptr[2] to the signed 64-bit value
+   * of the time stamp.
+   * \param iptr A pointer into the Atom array.
+   * \param timestamp The time stamp.
+   */
+  static void SetTimestamp(Atom *iptr, Timestamp timestamp);
+
   /**
    * Set the Code array values at index with the structure for the timestamp.
    * \param object The object with the Code array.
@@ -141,7 +178,7 @@ public:
    * index of the I_PTR to the structure as in SetTimestamp<Code>() or  GetTimestamp()).
    * \param timestamp The time stamp to put in the structure at the index.
    */
-  static void SetTimestampStruct(Code *object, uint16 index, Timestamp t); // Expands object->code to allocate atoms.
+  static void SetTimestampStruct(Code *object, uint16 index, Timestamp timestamp); // Expands object->code to allocate atoms.
 
   static const uint64 MaxTHZ = 0xFFFFFFFF;
 
@@ -151,6 +188,7 @@ public:
     uint16 t_index = object->code(index).asIndex();
     return object->code_size() > t_index + 2;
   }
+
   /**
    * Get the time stamp pointed to by the I_PTR at index.
    * \param object The object with the Code array.
@@ -161,8 +199,7 @@ public:
   template<class O> static Timestamp GetTimestamp(const O *object, uint16 index) {
 
     uint16 t_index = object->code(index).asIndex();
-    uint64 high = object->code(t_index + 1).atom_;
-    return Timestamp(std::chrono::microseconds(high << 32 | object->code(t_index + 2).atom_));
+    return Timestamp(std::chrono::microseconds(GetInt64(&object->code(0), t_index + 1)));
   }
 
   /**
@@ -174,12 +211,91 @@ public:
    */
   template<class O> static void SetTimestamp(O *object, uint16 index, Timestamp timestamp) {
 
-    uint64 t = std::chrono::duration_cast<std::chrono::microseconds>(timestamp.time_since_epoch()).count();
     uint16 t_index = object->code(index).asIndex();
     object->code(t_index) = Atom::Timestamp();
-    object->code(t_index + 1).atom_ = t >> 32;
-    object->code(t_index + 2).atom_ = t & 0x00000000FFFFFFFF;
+    // This will resize the code array if needed.
+    object->code(t_index + 2).atom_ = 0;
+    SetInt64(&object->code(0), t_index + 1, std::chrono::duration_cast<std::chrono::microseconds>(timestamp.time_since_epoch()).count());
   }
+
+  /**
+   * Make a string from (timestamp - time_reference) in the form XXXs:YYYms:ZZZus, with a minus sign
+   * if it is negative.
+   * \param timestamp The time stamp.
+   * \param time_reference The reference time to subtract from timestamp, usuall the session start time.
+   * We do this because timestamp is seconds since 01/01/1970, so the seconds would be very large.
+   * \return The formatted time string.
+   */
+  static std::string ToString_s_ms_us(Timestamp timestamp, Timestamp time_reference);
+
+  /**
+   * Interpret iptr[1] and iptr[2] as an signed 64-bit integer and return it as a duration.
+   * This assumes that the caller has already checked iptr[0] == Atom::DURATION, if needed.
+   * \param iptr A pointer into the Atom array.
+   * \return The duration.
+   */
+  static std::chrono::microseconds GetDuration(const Atom *iptr) {
+    return std::chrono::microseconds(GetInt64(iptr, 1));
+  }
+
+  /**
+   * Set iptr[0] to Atom::Duration() and set iptr[1] and iptr[2] to the signed 64-bit value of the duration.
+   * \param iptr A pointer into the Atom array.
+   * \param duration The duration.
+   */
+  static void SetDuration(Atom *iptr, std::chrono::microseconds duration) {
+    iptr[0] = Atom::Duration();
+    SetInt64(iptr, 1, duration.count());
+  }
+
+  /**
+   * Set the Code array values at index with the structure for the duration.
+   * \param object The object with the Code array. This expands object->code to allocate atoms.
+   * \param index The index in the Code array to place the duration structure (not the
+   * index of the I_PTR to the structure as in SetDuration<Code>() or  GetDuration()).
+   * \param duration The duration to put in the structure at the index.
+   */
+  static void SetDurationStruct(Code *object, uint16 index, std::chrono::microseconds duration);
+
+  /**
+   * Get the duration pointed to by the I_PTR at index.
+   * This assumes that the caller has already checked that the code pointed to is
+   * Atom::DURATION, if needed.
+   * \param object The object with the Code array.
+   * \param index The index in the Code array of the I_PTR to the duration structure (like
+   * SetDuration<Code>() but not the index of the duration structure itself as in SetDurationStruct()).
+   * \return The duration.
+   */
+  template<class O> static std::chrono::microseconds GetDuration(const O *object, uint16 index) {
+
+    uint16 t_index = object->code(index).asIndex();
+    return std::chrono::microseconds(GetInt64(&object->code(0), t_index + 1));
+  }
+
+  /**
+   * Set the Code array values at index with the structure for the duration.
+   * \param object The object with the Code array.
+   * \param index The index in the Code array of the I_PTR to the duration structure (like
+   * GetDuration() but not the index of the time stamp structure itself as in SetDurationStruct()).
+   * \param duration The duration to put in the structure at the index.
+   */
+  template<class O> static void SetDuration(O *object, uint16 index, std::chrono::microseconds duration) {
+
+    uint16 t_index = object->code(index).asIndex();
+    object->code(t_index) = Atom::Duration();
+    // This will resize the code array if needed.
+    object->code(t_index + 2).atom_ = 0;
+    SetInt64(&object->code(0), t_index + 1, duration.count());
+  }
+
+  /**
+   * Make a string from duration in the form XXXus, with a minus sign if it is negative. However if
+   * the microseconds portion is zero, then use YYYms. Or if the microseconds and milliseconds portions
+   * are zero, then use ZZZs. (This is the complement to how the compiler parses durations.)
+   * \param duration The duration.
+   * \return The formatted time string.
+   */
+  static std::string ToString_us(std::chrono::microseconds duration);
 
   static std::string GetString(const Atom *iptr);
   static void SetString(Atom *iptr, const std::string &s);

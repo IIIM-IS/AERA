@@ -12,9 +12,9 @@ B:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
 data:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 
 A_is_data:(mk.val A essence data 1) |[]; (mk.val an_object a_property a_value)
-f_A_is_data:(fact A_is_data 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+f_A_is_data:(fact A_is_data 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 B_is_data:(mk.val B essence data 1) |[]
-f_B_is_data:(fact B_is_data 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+f_B_is_data:(fact B_is_data 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 
 ;;;;;;;;;;;;;;;;
 ;; attributes ;;

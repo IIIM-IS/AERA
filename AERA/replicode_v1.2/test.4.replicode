@@ -25,12 +25,12 @@ pgm1:(pgm |[] |[] |[] []
       |[]
    )
    (inj []
-      (fact c now 200000us 1 1)
+      (fact c now 200ms 1 1)
       [SYNC_ONCE now 1 1 stdin nil]
    )
 1) |[]
 
-ipgm1:(ipgm pgm1 |[] RUN_ONCE 150000us VOLATILE SILENT 1) [[SYNC_ONCE now 0 2 stdin nil 1]]
+ipgm1:(ipgm pgm1 |[] RUN_ONCE 150ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 2 stdin nil 1]]
 
 pgm2:(pgm |[] []
    (ptn (fact (cmd lift_hand [h: z:] :) t0: t1: ::) |[])
@@ -47,7 +47,7 @@ pgm2:(pgm |[] []
    )
 1) |[]
 
-ipgm2:(ipgm pgm2 |[] RUN_ONCE 100000us VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 2 stdin nil 1]]
+ipgm2:(ipgm pgm2 |[] RUN_ONCE 100ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 2 stdin nil 1]]
 
 ; ---------------------------------------
 
@@ -78,7 +78,7 @@ pgm3:(pgm |[] |[] |[] []
    )
 1) |[]
 
-ipgm3:(ipgm pgm3 |[] RUN_ONCE 200000us VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+ipgm3:(ipgm pgm3 |[] RUN_ONCE 200ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
 
 pgm4:(pgm |[] |[] |[] []
    (inj []
@@ -86,7 +86,7 @@ pgm4:(pgm |[] |[] |[] []
       |[]
    )
    (inj []
-      (fact c now (+ now 10000us) 1 1)
+      (fact c now (+ now 10ms) 1 1)
       [SYNC_ONCE now 1 1 stdin nil]
    )
    (inj []
@@ -99,7 +99,7 @@ pgm4:(pgm |[] |[] |[] []
    )
 1) |[]
 
-ipgm4:(ipgm pgm4 |[] RUN_ONCE 260000us VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 2 stdin nil 1]]
+ipgm4:(ipgm pgm4 |[] RUN_ONCE 260ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 2 stdin nil 1]]
 
 ; ---------------------------------------
 
@@ -109,7 +109,7 @@ pgm6:(pgm |[] |[] |[] []
       |[]
    )
    (inj []
-      (fact c now (+ now 10000us) 1 1)
+      (fact c now (+ now 10ms) 1 1)
       [SYNC_ONCE now 1 1 stdin nil]
    )
    (inj []
@@ -122,4 +122,4 @@ pgm6:(pgm |[] |[] |[] []
    )
 1) |[]
 
-ipgm6:(ipgm pgm6 |[] RUN_ONCE 360000us VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 2 stdin nil 1]]
+ipgm6:(ipgm pgm6 |[] RUN_ONCE 360ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 2 stdin nil 1]]

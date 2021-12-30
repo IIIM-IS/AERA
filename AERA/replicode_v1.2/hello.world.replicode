@@ -10,7 +10,7 @@ pgm0:(pgm |[] |[] |[] []
 ; Set act to 1 or 0 in the ipgm view (instantiated program) to either activate or deactivate the program
 ;                                                         [sync:SYNC_ONCE ijt:now sln:0 res:1 grp:stdin org:nil act:1]
 ;     (ipgm code:pgm0 args:[] run:bl tsc:us res:bl nfr:bl) ; bl is boolean and us is timestamp
-ipgm0:(ipgm pgm0 |[] RUN_ONCE 50000us VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+ipgm0:(ipgm pgm0 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
 
 
 ; Method 2: one object injected at a point in time, caught by another program.
@@ -22,7 +22,7 @@ pgm1:(pgm |[] |[] |[] []
    )
 1) |[]
 
-ipgm1:(ipgm pgm1 |[] RUN_ONCE 50000us VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 0]]
+ipgm1:(ipgm pgm1 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 0]]
 
 pgm2:(pgm |[] []
    (ptn (ent ::) |[])
@@ -37,10 +37,10 @@ ipgm2:(ipgm pgm2 |[] RUN_ONCE 0us VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin n
 
 pgm3:(pgm |[] |[] |[] []
    (inj []
-      (ins pgm3 |[] RUN_ONCE 50000us VOLATILE SILENT)
+      (ins pgm3 |[] RUN_ONCE 50ms VOLATILE SILENT)
       [SYNC_ONCE now 0 forever stdin nil 1]
    )
    (prb [1 "print" "hello world 3" |[]])
 1) |[]
 
-ipgm3:(ipgm pgm3 |[] RUN_ONCE 50000us VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 0]]
+ipgm3:(ipgm pgm3 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 0]]

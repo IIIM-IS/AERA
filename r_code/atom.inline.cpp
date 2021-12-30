@@ -290,6 +290,10 @@ inline Atom Atom::UndefinedTimestamp() {
   return Atom(0xC7FFFFFF);
 }
 
+inline Atom Atom::Duration() {
+  return Atom(DURATION << 24);
+}
+
 inline Atom Atom::InstantiatedProgram(uint16 opcode, uint8 arity) {
 
   return Atom((INSTANTIATED_PROGRAM << 24) + ((opcode & 0x0FFF) << 8) + arity);

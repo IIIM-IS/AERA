@@ -159,7 +159,7 @@ std::string Decompiler::get_object_name(uint16 index) {
 void Decompiler::init(r_comp::Metadata *metadata) {
 
   metadata_ = metadata;
-  time_offset_ = microseconds(0);
+  time_reference_ = Timestamp(seconds(0));
 
   partial_decompilation_ = false;
   ignore_named_objects_ = false;
@@ -195,19 +195,19 @@ void Decompiler::init(r_comp::Metadata *metadata) {
   }
 }
 
-uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, Timestamp::duration time_offset, bool ignore_named_objects) {
+uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, Timestamp time_reference, bool ignore_named_objects) {
 
   ignore_named_objects_ = ignore_named_objects;
 
   uint32 object_count = decompile_references(image);
 
   for (uint16 i = 0; i < image->code_segment_.objects_.size(); ++i)
-    decompile_object(i, stream, time_offset);
+    decompile_object(i, stream, time_reference);
 
   return object_count;
 }
 
-uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, Timestamp::duration time_offset, vector<SysObject *> &imported_objects,
+uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, Timestamp time_reference, vector<SysObject *> &imported_objects,
   bool include_oid, bool include_label, bool include_views) {
 
   partial_decompilation_ = true;
@@ -217,7 +217,7 @@ uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, T
   uint32 object_count = decompile_references(image);
 
   for (uint16 i = 0; i < image->code_segment_.objects_.size(); ++i)
-    decompile_object(i, stream, time_offset, include_oid, include_label, include_views);
+    decompile_object(i, stream, time_reference, include_oid, include_label, include_views);
 
   return object_count;
 }
@@ -312,7 +312,7 @@ uint32 Decompiler::decompile_references(r_comp::Image *image, unordered_map<uint
 }
 
 void Decompiler::decompile_object(
-  uint16 object_index, std::ostringstream *stream, Timestamp::duration time_offset, bool include_oid,
+  uint16 object_index, std::ostringstream *stream, Timestamp time_reference, bool include_oid,
   bool include_label, bool include_views) {
 
   if (!out_stream_)
@@ -323,7 +323,7 @@ void Decompiler::decompile_object(
     out_stream_ = new OutStream(stream);
   }
 
-  time_offset_ = duration_cast<microseconds>(time_offset);
+  time_reference_ = time_reference;
 
   variable_names_.clear();
   last_variable_id_ = 0;
@@ -401,9 +401,9 @@ void Decompiler::decompile_object(
   write_indent(0);
 }
 
-void Decompiler::decompile_object(const std::string object_name, std::ostringstream *stream, Timestamp::duration time_offset) {
+void Decompiler::decompile_object(const std::string object_name, std::ostringstream *stream, Timestamp time_reference) {
 
-  decompile_object(object_indices_[object_name], stream, time_offset);
+  decompile_object(object_indices_[object_name], stream, time_reference);
 }
 
 void Decompiler::write_indent(uint16 i) {
@@ -933,10 +933,11 @@ void Decompiler::write_any(uint16 read_index, bool &after_tail_wildcard, bool ap
       else {
 
         Atom first = current_object_->code_[index + 1];
-        auto ts = Utils::GetMicrosecondsSinceEpoch(&current_object_->code_[index]);
-        if (!in_hlp_ && ts.count() > 0 && apply_time_offset)
-          ts -= time_offset_;
-        out_stream_->push(Time::ToString_seconds(ts), read_index);
+        auto ts = Utils::GetTimestamp(&current_object_->code_[index]);
+        if (!in_hlp_ && ts.time_since_epoch() > seconds(0) && apply_time_offset)
+          out_stream_->push(Utils::ToString_s_ms_us(ts, time_reference_), read_index);
+        else
+          out_stream_->push(Utils::ToString_s_ms_us(ts, Timestamp(seconds(0))), read_index);
       }
       break;
     case Atom::C_PTR: {

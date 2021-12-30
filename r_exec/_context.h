@@ -141,6 +141,7 @@ public:
 
   void setAtomicResult(Atom a) const;
   void setTimestampResult(Timestamp t) const;
+  void setDurationResult(std::chrono::microseconds d) const;
   void setCompoundResultHead(Atom a) const;
   void addCompoundResultPart(Atom a) const;
 

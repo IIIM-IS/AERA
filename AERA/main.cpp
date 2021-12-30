@@ -199,7 +199,7 @@ void test_many_injections(r_exec::_Mem *mem, milliseconds sampling_period, uint3
   }
 }
 
-void decompile(Decompiler &decompiler, r_comp::Image *image, Timestamp::duration time_offset, bool ignore_named_objects) {
+void decompile(Decompiler &decompiler, r_comp::Image *image, Timestamp time_reference, bool ignore_named_objects) {
 
 #ifdef DECOMPILE_ONE_BY_ONE
   uint32 object_count = decompiler.decompile_references(image);
@@ -217,21 +217,21 @@ void decompile(Decompiler &decompiler, r_comp::Image *image, Timestamp::duration
     }
     std::ostringstream decompiled_code;
     decompiler.decompile_object(index, &decompiled_code, time_offset);
-    std::cout << "\n\n> DECOMPILATION. TimeReference " << Time::ToString_seconds(time_offset) << "\n\n" <<
+    std::cout << "\n\n> DECOMPILATION. TimeReference " << Time::ToString_seconds(time_reference) << "\n\n" <<
       decompiled_code.str() << std::endl;
   }
 #else
   std::ostringstream decompiled_code;
-  uint32 object_count = decompiler.decompile(image, &decompiled_code, time_offset, ignore_named_objects);
+  uint32 object_count = decompiler.decompile(image, &decompiled_code, time_reference, ignore_named_objects);
   //uint32 object_count=image->code_segment_.objects.size();
-  std::cout << "\n\n> DECOMPILATION. TimeReference " << Time::ToString_seconds(time_offset) << "\n\n" << 
+  std::cout << "\n\n> DECOMPILATION. TimeReference " << Utils::ToString_s_ms_us(time_reference, Timestamp(seconds(0))) << "\n\n" <<
     decompiled_code.str() << std::endl;
   std::cout << "> image taken at: " << Time::ToString_year(image->timestamp_) << std::endl;
   std::cout << "> " << object_count << " objects\n";
 #endif
 }
 
-void write_to_file(r_comp::Image *image, std::string &image_path, Decompiler *decompiler, Timestamp::duration time_offset) {
+void write_to_file(r_comp::Image *image, std::string &image_path, Decompiler *decompiler, Timestamp time_reference) {
 
   ofstream output(image_path.c_str(), ios::binary | ios::out);
   r_code::Image<r_code::ImageImpl> *serialized_image = image->serialize<r_code::Image<r_code::ImageImpl> >();
@@ -252,7 +252,7 @@ void write_to_file(r_comp::Image *image, std::string &image_path, Decompiler *de
     r_comp::Image *temp_image = new r_comp::Image();
     temp_image->load(read_image);
 
-    decompile(*decompiler, temp_image, time_offset, false);
+    decompile(*decompiler, temp_image, time_reference, false);
     delete temp_image;
 
     delete read_image;
@@ -414,7 +414,7 @@ int32 main(int argc, char **argv) {
       image->object_names_.symbols_ = r_exec::Seed.object_names_.symbols_;
 
       if (settings.write_objects_)
-        write_to_file(image, settings.objects_path_, settings.test_objects_ ? &decompiler : NULL, starting_time.time_since_epoch());
+        write_to_file(image, settings.objects_path_, settings.test_objects_ ? &decompiler : NULL, starting_time);
 
       if (settings.decompile_objects_ && (!settings.write_objects_ || !settings.test_objects_)) {
 
@@ -424,12 +424,12 @@ int32 main(int argc, char **argv) {
           outfile.open(settings.decompilation_file_path_.c_str(), std::ios_base::trunc);
           std::streambuf *coutbuf = std::cout.rdbuf(outfile.rdbuf());
 
-          decompile(decompiler, image, starting_time.time_since_epoch(), settings.ignore_named_objects_);
+          decompile(decompiler, image, starting_time, settings.ignore_named_objects_);
 
           std::cout.rdbuf(coutbuf);
           outfile.close();
         } else
-          decompile(decompiler, image, starting_time.time_since_epoch(), settings.ignore_named_objects_);
+          decompile(decompiler, image, starting_time, settings.ignore_named_objects_);
       }
       delete image;
     }
@@ -442,7 +442,7 @@ int32 main(int argc, char **argv) {
       image->object_names_.symbols_ = r_exec::Seed.object_names_.symbols_;
 
       if (settings.write_models_)
-        write_to_file(image, settings.models_path_, settings.test_models_ ? &decompiler : NULL, starting_time.time_since_epoch());
+        write_to_file(image, settings.models_path_, settings.test_models_ ? &decompiler : NULL, starting_time);
 
       if (settings.decompile_models_ && (!settings.write_models_ || !settings.test_models_)) {
 
@@ -452,12 +452,12 @@ int32 main(int argc, char **argv) {
           outfile.open(argv[2], std::ios_base::trunc);
           std::streambuf *coutbuf = std::cout.rdbuf(outfile.rdbuf());
 
-          decompile(decompiler, image, starting_time.time_since_epoch(), settings.ignore_named_models_);
+          decompile(decompiler, image, starting_time, settings.ignore_named_models_);
 
           std::cout.rdbuf(coutbuf);
           outfile.close();
         } else
-          decompile(decompiler, image, starting_time.time_since_epoch(), settings.ignore_named_models_);
+          decompile(decompiler, image, starting_time, settings.ignore_named_models_);
       }
       delete image;
     }

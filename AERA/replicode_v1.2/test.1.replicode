@@ -51,7 +51,7 @@ m_run_0:(mdl |[] []
 |[]
 []
    t0:(now)
-   t1:(+ t0 100000us)
+   t1:(+ t0 100ms)
 [stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 
@@ -77,13 +77,13 @@ pgm1:(pgm |[] |[] |[] []
       |[]
    )
    (inj []
-      (fact c now (+ now 200000us) 1 1)
+      (fact c now (+ now 200ms) 1 1)
       [SYNC_ONCE now 1 1 stdin nil]
    )
    (prb [1 "print" "pgm1 running (lifting hand)" |[]])
 1) |[]
 
-ipgm1:(ipgm pgm1 |[] RUN_ONCE 150000us VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+ipgm1:(ipgm pgm1 |[] RUN_ONCE 150ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
 
 pgm2:(pgm |[] []
    (ptn (fact (cmd lift_hand [h: z:] :) t0: t1: ::) |[])

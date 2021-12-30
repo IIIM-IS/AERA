@@ -109,7 +109,7 @@ private:
   r_comp::Metadata *metadata_;
   r_comp::Image *image_;
 
-  std::chrono::microseconds time_offset_; // 0 means no offset.
+  Timestamp time_reference_;
 
   std::unordered_map<uint16, std::string> variable_names_; // in the form vxxx where xxx is an integer representing the order of referencing of the variable/label in the code.
   uint16 last_variable_id_;
@@ -154,11 +154,11 @@ public:
   void init(r_comp::Metadata *metadata);
   uint32 decompile(r_comp::Image *image,
     std::ostringstream *stream,
-    Timestamp::duration time_offset,
+    Timestamp time_reference,
     bool ignore_named_objects); // decompiles the whole image; returns the number of objects.
   uint32 decompile(r_comp::Image *image,
     std::ostringstream *stream,
-    Timestamp::duration time_offset,
+    Timestamp time_reference,
     std::vector<r_code::SysObject *> &imported_objects,
     bool include_oid = true, bool include_label = true, bool include_views = true); // idem, ignores named objects if in the imported object list.
 
@@ -177,16 +177,16 @@ public:
    * Decompile a single object.
    * \param object_index The position of the object in image_->code_segment_.objects_.
    * \param stream The output stream.
-   * \param time_offset The time since the start of the run for showing relative times.
+   * \param time_reference The timestamp of the start of the run for showing relative times.
    * \param include_oid (optional) If true, prepend with the OID (and detail OID if enabled). If omitted, include the OID.
    * \param include_label (optional) If true, prepend the label and ':'. If omitted, include the label.
    * \param include_views (optional) If true, include the set of view, or |[] if there are not views. If omitted, include the views.
    */
   void decompile_object(
-    uint16 object_index, std::ostringstream *stream, Timestamp::duration time_offset, bool include_oid = true, 
+    uint16 object_index, std::ostringstream *stream, Timestamp time_reference, bool include_oid = true, 
     bool include_label = true, bool include_views = true);
 
-  void decompile_object(const std::string object_name, std::ostringstream *stream, Timestamp::duration time_offset); // decompiles a single object given its name: use this function to follow references.
+  void decompile_object(const std::string object_name, std::ostringstream *stream, Timestamp time_reference); // decompiles a single object given its name: use this function to follow references.
 };
 }
 

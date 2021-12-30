@@ -872,7 +872,7 @@ bool Compiler::nil_st() {
 bool Compiler::label(std::string &l) {
 
   std::streampos i = in_stream_->tellg();
-  if (symbol_expr(l) && !is_decimal(l[0]) && (char)in_stream_->get() == ':')
+  if (symbol_expr(l) && l[0] != '-' && !is_decimal(l[0]) && (char)in_stream_->get() == ':')
     return true;
   in_stream_->clear();
   in_stream_->seekg(i);
@@ -1224,14 +1224,10 @@ bool Compiler::number(float32 &n) {
     in_stream_->seekg(i);
     return false;
   }
-  if (match_symbol("us", true)) {
-    // Assume this is a timestamp, not a number.
-    in_stream_->clear();
-    in_stream_->seekg(i);
-    return false;
-  }
-  if (match_symbol("s", true)) {
-    // Assume this is a timestamp, not a number.
+  if (match_symbol("us", true) ||
+      match_symbol("ms", true) ||
+      match_symbol("s", true)) {
+    // Assume this is a timestamp or duration, not a number.
     in_stream_->clear();
     in_stream_->seekg(i);
     return false;
@@ -1276,7 +1272,7 @@ bool Compiler::boolean(bool &b) {
   return false;
 }
 
-bool Compiler::timestamp(uint64 &ts) {
+bool Compiler::timestamp(int64 &result) {
 
   std::streampos i = in_stream_->tellg();
   if (match_symbol("0x", true)) {
@@ -1285,23 +1281,33 @@ bool Compiler::timestamp(uint64 &ts) {
     in_stream_->seekg(i);
     return false;
   }
-  *in_stream_ >> std::dec >> ts;
+  *in_stream_ >> std::dec >> result;
   if (in_stream_->fail() || in_stream_->eof()) {
 
     in_stream_->clear();
     in_stream_->seekg(i);
     return false;
   }
-  if (!match_symbol("us", false)) {
-
-    in_stream_->clear();
-    in_stream_->seekg(i);
-    return false;
+  if (match_symbol("us", false))
+    return true;
+  else if (match_symbol("ms", false)) {
+    result *= 1000;
+    return true;
   }
-  return true;
+  else if (match_symbol("s", false)) {
+    // Make sure this is not for timestamp_s_ms_us.
+    if (!match_symbol(":", true)) {
+      result *= 1000000;
+      return true;
+    }
+  }
+
+  in_stream_->clear();
+  in_stream_->seekg(i);
+  return false;
 }
 
-bool Compiler::timestamp_s_ms_us(uint64 &ts) {
+bool Compiler::timestamp_s_ms_us(int64 &ts) {
 
   std::streampos i = in_stream_->tellg();
   if (match_symbol("0x", true)) {
@@ -1310,7 +1316,8 @@ bool Compiler::timestamp_s_ms_us(uint64 &ts) {
     return false;
   }
 
-  uint64 s;
+  bool negative = match_symbol("-", false);
+  int64 s;
   *in_stream_ >> std::dec >> s;
   if (in_stream_->fail() || in_stream_->eof()) {
     in_stream_->clear();
@@ -1323,7 +1330,7 @@ bool Compiler::timestamp_s_ms_us(uint64 &ts) {
     return false;
   }
 
-  uint64 ms;
+  int64 ms;
   *in_stream_ >> std::dec >> ms;
   if (in_stream_->fail() || in_stream_->eof()) {
     in_stream_->clear();
@@ -1336,7 +1343,7 @@ bool Compiler::timestamp_s_ms_us(uint64 &ts) {
     return false;
   }
 
-  uint64 us;
+  int64 us;
   *in_stream_ >> std::dec >> us;
   if (in_stream_->fail() || in_stream_->eof()) {
     in_stream_->clear();
@@ -1350,6 +1357,8 @@ bool Compiler::timestamp_s_ms_us(uint64 &ts) {
   }
 
   ts = s * 1000000 + ms * 1000 + us;
+  if (negative)
+    ts = -ts;
   return true;
 }
 
@@ -2079,15 +2088,16 @@ bool Compiler::read_timestamp(bool &indented, bool enforce, const Class *p, uint
   if (read_tail_wildcard(write_index, extent_index, write))
     return true;
 
-  uint64 ts;
+  int64 ts;
   if (timestamp(ts)) {
 
     if (write) {
 
       current_object_->code_[write_index] = Atom::IPointer(extent_index);
       current_object_->code_[extent_index++] = Atom::Timestamp();
-      current_object_->code_[extent_index++] = ts >> 32;
-      current_object_->code_[extent_index++] = (ts & 0x00000000FFFFFFFF);
+      current_object_->code_[extent_index + 1] = 0;
+      Utils::SetInt64(&current_object_->code_[0], extent_index, ts);
+      extent_index += 2;
     }
     return true;
   }
@@ -2096,8 +2106,9 @@ bool Compiler::read_timestamp(bool &indented, bool enforce, const Class *p, uint
 
       current_object_->code_[write_index] = Atom::IPointer(extent_index);
       current_object_->code_[extent_index++] = Atom::Timestamp();
-      current_object_->code_[extent_index++] = ts >> 32;
-      current_object_->code_[extent_index++] = (ts & 0x00000000FFFFFFFF);
+      current_object_->code_[extent_index + 1] = 0;
+      Utils::SetInt64(&current_object_->code_[0], extent_index, ts);
+      extent_index += 2;
     }
     return true;
   }

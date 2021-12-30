@@ -159,7 +159,9 @@
 
 ; system internal constants.
 !def MAX_TIME 922337203685477580us; See Utils_MaxTime
-
+; A gigasecond is about 31 years. This is to use as a time stamp which is way in
+; the future. In the seed code, the system adds this to the session start time.
+!def GIGASEC 1000000000s:0ms:0us
 
 ; initial groups.
 
