@@ -87,6 +87,7 @@
 
 #include <math.h>
 
+using namespace std;
 using namespace std::chrono;
 
 namespace r_code {
@@ -144,10 +145,47 @@ void Utils::SetTimestampStruct(Code *object, uint16 index, Timestamp timestamp) 
   SetInt64(&object->code(0), index + 1, duration_cast<microseconds>(timestamp.time_since_epoch()).count());
 }
 
+string Utils::ToString_s_ms_us(Timestamp timestamp, Timestamp time_reference) {
+  auto duration = timestamp - time_reference;
+  uint64 t = abs(duration_cast<microseconds>(duration).count());
+
+  uint64 us = t % 1000;
+  uint64 ms = t / 1000;
+  uint64 s = ms / 1000;
+  ms = ms % 1000;
+
+  std::string result = (duration < microseconds(0) ? "-" : "");
+  result += std::to_string(s);
+  result += "s:";
+  result += std::to_string(ms);
+  result += "ms:";
+  result += std::to_string(us);
+  result += "us";
+
+  return result;
+}
+
 void Utils::SetDurationStruct(Code *object, uint16 index, microseconds duration) {
   object->resize_code(index + 3);
   object->code(index) = Atom::Duration();
   SetInt64(&object->code(0), index + 1, duration.count());
+}
+
+string Utils::ToString_us(microseconds duration) {
+  uint64 us = abs(duration_cast<microseconds>(duration).count());
+
+  std::string sign = (duration < microseconds(0) ? "-" : "");
+  if (us % 1000 != 0)
+    return sign + std::to_string(us) + "us";
+  else {
+    uint64 ms = us / 1000;
+    if (ms % 1000 != 0)
+      return sign + std::to_string(ms) + "ms";
+    else {
+      uint64 s = ms / 1000;
+      return sign + std::to_string(s) + "s";
+    }
+  }
 }
 
 std::string Utils::GetString(const Atom *iptr) {
@@ -210,7 +248,7 @@ int32 Utils::GetResilience(float32 resilience, float32 origin_upr, float32 desti
 
 std::string Utils::RelativeTime(Timestamp t) {
 
-  return Time::ToString_seconds(t - TimeReference);
+  return ToString_s_ms_us(t, TimeReference);
 }
 
 bool Utils::has_reference(const Atom* code, uint16 index) {

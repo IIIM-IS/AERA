@@ -219,6 +219,16 @@ public:
   }
 
   /**
+   * Make a string from (timestamp - time_reference) in the form XXXs:YYYms:ZZZus, with a minus sign
+   * if it is negative.
+   * \param timestamp The time stamp.
+   * \param time_reference The reference time to subtract from timestamp, usuall the session start time.
+   * We do this because timestamp is seconds since 01/01/1970, so the seconds would be very large.
+   * \return The formatted time string.
+   */
+  static std::string ToString_s_ms_us(Timestamp timestamp, Timestamp time_reference);
+
+  /**
    * Interpret iptr[1] and iptr[2] as an signed 64-bit integer and return it as a duration.
    * This assumes that the caller has already checked iptr[0] == Atom::DURATION, if needed.
    * \param iptr A pointer into the Atom array.
@@ -277,6 +287,15 @@ public:
     object->code(t_index + 2).atom_ = 0;
     SetInt64(&object->code(0), t_index + 1, duration.count());
   }
+
+  /**
+   * Make a string from duration in the form XXXus, with a minus sign if it is negative. However if
+   * the microseconds portion is zero, then use YYYms. Or if the microseconds and milliseconds portions
+   * are zero, then use ZZZs. (This is the complement to how the compiler parses durations.)
+   * \param duration The duration.
+   * \return The formatted time string.
+   */
+  static std::string ToString_us(std::chrono::microseconds duration);
 
   static std::string GetString(const Atom *iptr);
   static void SetString(Atom *iptr, const std::string &s);

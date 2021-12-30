@@ -470,7 +470,7 @@ void _TPX::inject_hlps(Timestamp analysis_starting_time) {
     auto d = duration_cast<microseconds>(analysis_end - analysis_starting_time);
     char _timing[255];
     itoa(d.count(), _timing, 10);
-    header = Time::ToString_seconds(Now() - Utils::GetTimeReference());
+    header = Utils::ToString_s_ms_us(Now(), Utils::GetTimeReference());
     std::string s0 = (" > ");
     s0 += get_header() + std::string(":production [");
     std::string timing(_timing);

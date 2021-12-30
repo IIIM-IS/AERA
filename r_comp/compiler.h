@@ -211,18 +211,18 @@ private:
   bool tail_wildcard();
   /**
    * Read a timestamp of the form XXXus, where XXX is a decimal.
-   * \param ts Set ts to the timestamp in microseconds.
+   * \param result Set result to the timestamp in microseconds.
    * \return True for success, false if this is not a timestamp (and in_stream_ is not advanced).
    */
-  bool timestamp(uint64 &ts);
+  bool timestamp(int64 &result);
   /**
    * Read a timestamp of the form XXXs:YYYms:ZZZus, where XXX, YYY and ZZZ are decimal
    * seconds, milliseconds and microseconds. This is the reverse of the output of
-   * Time::ToString_seconds used by the decompiler.
+   * Utils::ToString_s_ms_us used by the decompiler.
    * \param ts Set ts to the timestamp in microseconds.
    * \return True for success, false if this is not a timestamp (and in_stream_ is not advanced).
    */
-  bool timestamp_s_ms_us(uint64 &ts);
+  bool timestamp_s_ms_us(int64 &ts);
   bool str(std::string &s);
   bool number(float32 &n);
   bool hex(uint32 &h);

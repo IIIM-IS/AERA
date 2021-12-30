@@ -177,7 +177,7 @@ thread_ret TDecompiler::Decompile(void *args) {
   image->object_names_.symbols_ = r_exec::Seed.object_names_.symbols_;
 
   std::ostringstream decompiled_code;
-  decompiler.decompile(image, &decompiled_code, duration_cast<microseconds>(Utils::GetTimeReference().time_since_epoch()), imported_objects);
+  decompiler.decompile(image, &decompiled_code, Utils::GetTimeReference(), imported_objects);
 
   if (_this->ostream_id_ == 0) {
 
