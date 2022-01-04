@@ -232,15 +232,15 @@ class r_exec_dll Sim :
 public:
   Sim(Sim *s); // is_requirement=false (not copied).
   // For SIM_MANDATORY or SIM_OPTIONAL, provide solution_controller, solution_cfd and solution_before. Otherwise, defaults for SIM_ROOT.
-  Sim(SimMode mode, std::chrono::microseconds thz, Fact *super_goal, bool opposite, Controller *root, float32 psln_thr, Controller *solution_controller = NULL, float32 solution_cfd = 0, Timestamp solution_before = Timestamp(std::chrono::seconds(0)));
+  // For SIM_ROOT, solution_before is unused so use Utils::GetTimeReference() which is 0s:0ms:0us in the decompiled output.
+  Sim(SimMode mode, std::chrono::microseconds thz, Fact *super_goal, bool opposite, Controller *root, float32 psln_thr, Controller *solution_controller = NULL, float32 solution_cfd = 0, Timestamp solution_before = r_code::Utils::GetTimeReference());
   bool invalidate();
   bool is_invalidated();
   // If SIM_MANDATORY or SIM_OPTIONAL: qualifies a sub-goal of the branch's root.
   SimMode get_mode() const { return (SimMode)(int)code(SIM_MODE).asFloat(); }
   // simulation time allowance (this is not the goal deadline); 0 indicates no time for simulation.
   std::chrono::microseconds get_thz() const {
-    // The time horizon is stored as a timestamp, but it is actually a duration.
-    return std::chrono::duration_cast<std::chrono::microseconds>(r_code::Utils::GetTimestamp<Code>(this, SIM_THZ).time_since_epoch());
+    return r_code::Utils::GetDuration<Code>(this, SIM_THZ);
   }
 
   /**

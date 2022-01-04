@@ -472,8 +472,7 @@ Timestamp _Mem::start() {
         for (v = g->input_less_ipgm_views_.begin(); v != g->input_less_ipgm_views_.end(); ++v) {
 
           if (v->second->controller_ != NULL && v->second->controller_->is_activated()) {
-            // The time scope is stored as a timestamp, but it is actually a duration.
-            P<TimeJob> j = new InputLessPGMSignalingJob(v->second, now + Utils::GetTimestamp<Code>(v->second->object_, IPGM_TSC).time_since_epoch());
+            P<TimeJob> j = new InputLessPGMSignalingJob(v->second, now + Utils::GetDuration<Code>(v->second->object_, IPGM_TSC));
             time_job_queue_->push(j);
           }
         }
@@ -482,8 +481,7 @@ Timestamp _Mem::start() {
         for (v = g->anti_ipgm_views_.begin(); v != g->anti_ipgm_views_.end(); ++v) {
 
           if (v->second->controller_ != NULL && v->second->controller_->is_activated()) {
-            // The time scope is stored as a timestamp, but it is actually a duration.
-            P<TimeJob> j = new AntiPGMSignalingJob(v->second, now + Utils::GetTimestamp<Code>(v->second->object_, IPGM_TSC).time_since_epoch());
+            P<TimeJob> j = new AntiPGMSignalingJob(v->second, now + Utils::GetDuration<Code>(v->second->object_, IPGM_TSC));
             time_job_queue_->push(j);
           }
         }

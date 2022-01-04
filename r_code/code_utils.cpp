@@ -266,6 +266,7 @@ bool Utils::has_reference(const Atom* code, uint16 index) {
   case Atom::MARKER:
   case Atom::OPERATOR:
   case Atom::TIMESTAMP:
+  case Atom::DURATION:
   case Atom::GROUP: {
     uint16 count = atom.getAtomCount();
     for (uint16 i = 1; i <= count; ++i) {

@@ -922,23 +922,18 @@ void Decompiler::write_any(uint16 read_index, bool &after_tail_wildcard, bool ap
         out_stream_->push("|st", read_index);
       else {
 
-        Atom first = current_object_->code_[index + 1];
         std::string s = Utils::GetString(&current_object_->code_[index]);
         *out_stream_ << '\"' << s << '\"';
       }
       break;
     case Atom::TIMESTAMP:
       if (atom.readsAsNil())
-        out_stream_->push("|us", read_index);
-      else {
-
-        Atom first = current_object_->code_[index + 1];
-        auto ts = Utils::GetTimestamp(&current_object_->code_[index]);
-        if (!in_hlp_ && ts.time_since_epoch() > seconds(0) && apply_time_offset)
-          out_stream_->push(Utils::ToString_s_ms_us(ts, time_reference_), read_index);
-        else
-          out_stream_->push(Utils::ToString_s_ms_us(ts, Timestamp(seconds(0))), read_index);
-      }
+        out_stream_->push("|ts", read_index);
+      else
+        out_stream_->push(Utils::ToString_s_ms_us(Utils::GetTimestamp(&current_object_->code_[index]), time_reference_), read_index);
+      break;
+    case Atom::DURATION:
+      out_stream_->push(Utils::ToString_us(Utils::GetDuration(&current_object_->code_[index])), read_index);
       break;
     case Atom::C_PTR: {
 

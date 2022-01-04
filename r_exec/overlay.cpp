@@ -197,12 +197,10 @@ Controller::Controller(_View *view) : _Object(), invalidated_(0), activated_(0),
   case Atom::INSTANTIATED_PROGRAM:
   case Atom::INSTANTIATED_INPUT_LESS_PROGRAM:
   case Atom::INSTANTIATED_ANTI_PROGRAM:
-    // The time scope is stored as a timestamp, but it is actually a duration.
-    time_scope_ = duration_cast<microseconds>(Utils::GetTimestamp<Code>(get_object(), IPGM_TSC).time_since_epoch());
+    time_scope_ = Utils::GetDuration<Code>(get_object(), IPGM_TSC);
     break;
   case Atom::INSTANTIATED_CPP_PROGRAM:
-    // The time scope is stored as a timestamp, but it is actually a duration.
-    time_scope_ = duration_cast<microseconds>(Utils::GetTimestamp<Code>(get_object(), ICPP_PGM_TSC).time_since_epoch());
+    time_scope_ = Utils::GetDuration<Code>(get_object(), ICPP_PGM_TSC);
     break;
   }
 }

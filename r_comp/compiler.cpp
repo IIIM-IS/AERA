@@ -799,10 +799,10 @@ bool Compiler::nil_nb() {
   return false;
 }
 
-bool Compiler::nil_us() {
+bool Compiler::nil_ts() {
 
   std::streampos i = in_stream_->tellg();
-  if (match_symbol_separator("|ms", false))
+  if (match_symbol_separator("|ts", false))
     return true;
   in_stream_->clear();
   in_stream_->seekg(i);
@@ -1272,7 +1272,7 @@ bool Compiler::boolean(bool &b) {
   return false;
 }
 
-bool Compiler::timestamp(int64 &result) {
+bool Compiler::duration(int64 &result) {
 
   std::streampos i = in_stream_->tellg();
   if (match_symbol("0x", true)) {
@@ -1974,6 +1974,8 @@ bool Compiler::read_any(bool &indented, bool enforce, const Class *p, uint16 wri
     return false;
   if (read_timestamp(indented, false, NULL, write_index, extent_index, write))
     return true;
+  if (read_duration(indented, false, NULL, write_index, extent_index, write))
+    return true;
   if (err_)
     return false;
   if (read_string(indented, false, NULL, write_index, extent_index, write))
@@ -2077,7 +2079,7 @@ bool Compiler::read_boolean(bool &indented, bool enforce, const Class *p, uint16
 
 bool Compiler::read_timestamp(bool &indented, bool enforce, const Class *p, uint16 write_index, uint16 &extent_index, bool write) { // p always NULL
 
-  if (read_nil_us(write_index, extent_index, write))
+  if (read_nil_ts(write_index, extent_index, write))
     return true;
   if (read_variable(write_index, extent_index, write, TIMESTAMP))
     return true;
@@ -2089,18 +2091,6 @@ bool Compiler::read_timestamp(bool &indented, bool enforce, const Class *p, uint
     return true;
 
   int64 ts;
-  if (timestamp(ts)) {
-
-    if (write) {
-
-      current_object_->code_[write_index] = Atom::IPointer(extent_index);
-      current_object_->code_[extent_index++] = Atom::Timestamp();
-      current_object_->code_[extent_index + 1] = 0;
-      Utils::SetInt64(&current_object_->code_[0], extent_index, ts);
-      extent_index += 2;
-    }
-    return true;
-  }
   if (timestamp_s_ms_us(ts)) {
     if (write) {
 
@@ -2120,6 +2110,44 @@ bool Compiler::read_timestamp(bool &indented, bool enforce, const Class *p, uint
   if (enforce) {
 
     set_error(" error: expected a timestamp or an expr evaluating to a timestamp");
+    return false;
+  }
+  return false;
+}
+
+// p is always NULL.
+bool Compiler::read_duration(bool &indented, bool enforce, const Class *p, uint16 write_index, uint16 &extent_index, bool write) {
+
+  if (read_variable(write_index, extent_index, write, DURATION))
+    return true;
+  if (read_reference(write_index, extent_index, write, DURATION))
+    return true;
+  if (read_wildcard(write_index, extent_index, write))
+    return true;
+  if (read_tail_wildcard(write_index, extent_index, write))
+    return true;
+
+  int64 d;
+  if (duration(d)) {
+
+    if (write) {
+
+      current_object_->code_[write_index] = Atom::IPointer(extent_index);
+      current_object_->code_[extent_index++] = Atom::Duration();
+      current_object_->code_[extent_index + 1] = 0;
+      Utils::SetInt64(&current_object_->code_[0], extent_index, d);
+      extent_index += 2;
+    }
+    return true;
+  }
+
+  State s = save_state();
+  if (expression(indented, DURATION, write_index, extent_index, write))
+    return true;
+  restore_state(s);
+  if (enforce) {
+
+    set_error(" error: expected a duration or an expr evaluating to a duration");
     return false;
   }
   return false;
@@ -2407,9 +2435,9 @@ bool Compiler::read_nil_nb(uint16 write_index, uint16 &extent_index, bool write)
   return false;
 }
 
-bool Compiler::read_nil_us(uint16 write_index, uint16 &extent_index, bool write) {
+bool Compiler::read_nil_ts(uint16 write_index, uint16 &extent_index, bool write) {
 
-  if (nil_us()) {
+  if (nil_ts()) {
 
     if (write) {
 

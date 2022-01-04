@@ -740,8 +740,7 @@ Sim::Sim(SimMode mode, microseconds thz, Fact *super_goal, bool opposite, Contro
   code(SIM_SOLUTION_BEFORE) = Atom::IPointer(SIM_ARITY + 4);
   code(SIM_ARITY) = Atom::Float(psln_thr);
 
-  // The time horizon is stored as a timestamp, but it is actually a duration.
-  Utils::SetTimestamp<Code>(this, SIM_THZ, Timestamp(thz));
+  Utils::SetDuration<Code>(this, SIM_THZ, thz);
   Utils::SetTimestamp<Code>(this, SIM_SOLUTION_BEFORE, solution_before);
 }
 

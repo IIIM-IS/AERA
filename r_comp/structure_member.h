@@ -105,7 +105,8 @@ typedef enum {
   NODE_ID = 6,
   DEVICE_ID = 7,
   FUNCTION_ID = 8,
-  CLASS = 9
+  CLASS = 9,
+  DURATION = 10
 }ReturnType;
 
 typedef bool (Compiler::*_Read)(bool &, bool, const Class *, uint16, uint16 &, bool); // reads from the stream and writes in an object.
@@ -131,7 +132,8 @@ private:
     R_FUNCTION = 7,
     R_EXPRESSION = 8,
     R_SET = 9,
-    R_CLASS = 10
+    R_CLASS = 10,
+    R_DURATION = 11
   }ReadID; // used for serialization
   _Read read_;
   ReturnType type_;

@@ -153,7 +153,7 @@ private:
   bool read_nil(uint16 write_index, uint16 &extent_index, bool write);
   bool read_nil_set(uint16 write_index, uint16 &extent_index, bool write);
   bool read_nil_nb(uint16 write_index, uint16 &extent_index, bool write);
-  bool read_nil_us(uint16 write_index, uint16 &extent_index, bool write);
+  bool read_nil_ts(uint16 write_index, uint16 &extent_index, bool write);
   bool read_forever_nb(uint16 write_index, uint16 &extent_index, bool write);
   bool read_nil_nid(uint16 write_index, uint16 &extent_index, bool write);
   bool read_nil_did(uint16 write_index, uint16 &extent_index, bool write);
@@ -191,7 +191,7 @@ private:
         // Lexical units.
   bool nil();
   bool nil_nb();
-  bool nil_us();
+  bool nil_ts();
   bool forever();
   bool nil_nid();
   bool nil_did();
@@ -210,11 +210,11 @@ private:
   bool wildcard();
   bool tail_wildcard();
   /**
-   * Read a timestamp of the form XXXus, where XXX is a decimal.
-   * \param result Set result to the timestamp in microseconds.
-   * \return True for success, false if this is not a timestamp (and in_stream_ is not advanced).
+   * Read a duration of the form XXXus, where XXX is a decimal.
+   * \param result Set result to the duration in microseconds.
+   * \return True for success, false if this is not a duration (and in_stream_ is not advanced).
    */
-  bool timestamp(int64 &result);
+  bool duration(int64 &result);
   /**
    * Read a timestamp of the form XXXs:YYYms:ZZZus, where XXX, YYY and ZZZ are decimal
    * seconds, milliseconds and microseconds. This is the reverse of the output of
@@ -281,6 +281,7 @@ public:
   bool read_any(bool &indented, bool enforce, const Class *p, uint16 write_index, uint16 &extent_index, bool write); // calls all of the functions below.
   bool read_number(bool &indented, bool enforce, const Class *p, uint16 write_index, uint16 &extent_index, bool write);
   bool read_timestamp(bool &indented, bool enforce, const Class *p, uint16 write_index, uint16 &extent_index, bool write);
+  bool read_duration(bool &indented, bool enforce, const Class *p, uint16 write_index, uint16 &extent_index, bool write);
   bool read_boolean(bool &indented, bool enforce, const Class *p, uint16 write_index, uint16 &extent_index, bool write);
   bool read_string(bool &indented, bool enforce, const Class *p, uint16 write_index, uint16 &extent_index, bool write);
   bool read_node(bool &indented, bool enforce, const Class *p, uint16 write_index, uint16 &extent_index, bool write);
