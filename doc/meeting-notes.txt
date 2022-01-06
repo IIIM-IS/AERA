@@ -772,9 +772,12 @@ Simulator
 * Generality
   * DONE. Review/merge pull request to support duration in issue #138. https://github.com/IIIM-IS/AERA/pull/205
 
+2022-01-06
+* Generality
+  * DONE. Review/merge pull request to implement separating timestamp and duration in issue #138. https://github.com/IIIM-IS/AERA/pull/206
+
 next meeting
 * Generality
-  * Make pull request to implement separating timestamp and duration in issue #138.
   * Make issue to propose numbers with ranges. Maybe more general: Range of numbers, range of durations, range of timestamps, combos?
 
 TODO
