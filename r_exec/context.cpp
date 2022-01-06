@@ -344,6 +344,10 @@ void IPGMContext::copy_structure_to_value_array(bool prefix, uint16 write_index,
       for (uint16 i = 1; i <= atom_count; ++i)
         overlay_->values_[write_index++] = code_[index_ + i];
       break;
+    case Atom::DURATION:
+      for (uint16 i = 1; i <= atom_count; ++i)
+        overlay_->values_[write_index++] = code_[index_ + i];
+      break;
     case Atom::C_PTR:
       if (!dereference_cptr) {
 

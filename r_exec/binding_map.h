@@ -182,6 +182,7 @@ public:
   StructureValue(BindingMap *map, const r_code::Code *source, uint16 structure_index);
   StructureValue(BindingMap *map, Atom *source, uint16 structure_index);
   StructureValue(BindingMap *map, Timestamp time);
+  StructureValue(BindingMap *map, std::chrono::microseconds duration);
 
   Value *copy(BindingMap *map) const;
   void valuate(r_code::Code *destination, uint16 write_index, uint16 &extent_index) const;

@@ -242,6 +242,12 @@ StructureValue::StructureValue(BindingMap *map, Timestamp time) : BoundValue(map
   Utils::SetTimestamp(&structure_->code(0), time);
 }
 
+StructureValue::StructureValue(BindingMap *map, microseconds duration) : BoundValue(map) {
+  structure_ = new LocalObject();
+  structure_->resize_code(3);
+  Utils::SetDuration(&structure_->code(0), duration);
+}
+
 Value *StructureValue::copy(BindingMap *map) const {
 
   return new StructureValue(map, structure_);
@@ -1102,6 +1108,7 @@ Code *HLPBindingMap::bind_pattern(Code *pattern) const {
       map_[p_atom.asIndex()]->valuate(bound_pattern, i, extent_index);
       break;
     case Atom::TIMESTAMP:
+    case Atom::DURATION:
     case Atom::STRING: { // avoid misinterpreting raw data that could be lead by descriptors.
       bound_pattern->code(i) = p_atom;
       uint16 atom_count = p_atom.getAtomCount();
@@ -1139,6 +1146,7 @@ bool HLPBindingMap::need_binding(Code *pattern) const {
     case Atom::VL_PTR:
       return true;
     case Atom::TIMESTAMP:
+    case Atom::DURATION:
     case Atom::STRING:
       i += p_atom.getAtomCount();
       break;

@@ -454,10 +454,10 @@ public:
     auto other_template_before_index = other_template_set_index + other_template_set_count;
 
     Timestamp other_f_imdl_template_after, other_f_imdl_template_before;
-    if (!getTimestamp(
+    if (!get_timestamp(
         other_imdl, other_template_set_index + (other_template_set_count - 1), other_f_imdl_template_after, bm))
       return;
-    if (!getTimestamp(other_imdl, other_template_set_index + other_template_set_count, 
+    if (!get_timestamp(other_imdl, other_template_set_index + other_template_set_count, 
         other_f_imdl_template_before, bm))
       return;
 
@@ -483,7 +483,7 @@ public:
    * imdl->code(index) is an I_PTR to a timestamp struct, then set timestamp to it.
    * Return true if timestamp was set, otherwise false.
    */
-  static bool getTimestamp(Code* imdl, int index, Timestamp& timestamp, const HLPBindingMap *bm) {
+  static bool get_timestamp(Code* imdl, int index, Timestamp& timestamp, const HLPBindingMap *bm) {
     if (imdl->code(index).getDescriptor() == Atom::VL_PTR &&
         bm->is_timestamp(imdl->code(index).asIndex())) {
       timestamp = Utils::GetTimestamp(bm->get_code(imdl->code(index).asIndex()));

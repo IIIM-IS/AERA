@@ -594,13 +594,14 @@ public:
   bool matches_axiom(r_code::Code* obj);
 
   /**
-   * This is called on starting the executive to adjust the timestamps of all the initial
-   * user-supplied facts by adding now. Therefore, if a the initial fact is defined with a
-   * timestamp of 100us, it is changed to now + 100us.
-   * \param now The value to add to the timestamps of all the initial facts.
-   * \param objects he list of objects to search for facts.
+   * This is called on starting the executive to adjust all user-defined objects by
+   * adding time_reference to any time stamp (fact timings as well as other time stamps).
+   * Therefore, if the object is defined with a time stamp of 100ms, it is changed to
+   * time_reference + 100ms.
+   * \param time_reference The value to add to the time stamps of all objects.
+   * \param objects The list of objects to search for time stamps.
    */
-  static void init_timings(Timestamp now, const r_code::list<P<r_code::Code>>& objects);
+  static void init_timestamps(Timestamp time_reference, const r_code::list<P<r_code::Code>>& objects);
 
   //std::vector<uint64> timings_report; // debug facility.
 

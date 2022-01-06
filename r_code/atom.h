@@ -113,9 +113,10 @@ public:
   public:
     uint8 members_to_go_;
     uint8 timestamp_data_;
+    uint8 duration_data_;
     uint8 string_data_;
     uint8 char_count_;
-    uint64 timestamp_high_;
+    uint64 int64_high_;
 
     TraceContext();
     void write_indents(std::ostream& out);

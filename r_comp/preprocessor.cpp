@@ -1221,8 +1221,10 @@ void Preprocessor::getMember(vector<StructureMember> &members, RepliStruct *m, s
       members.push_back(StructureMember(&Compiler::read_any, name));
     else if (type == "nb")
       members.push_back(StructureMember(&Compiler::read_number, name));
-    else if (type == "us")
+    else if (type == "ts")
       members.push_back(StructureMember(&Compiler::read_timestamp, name));
+    else if (type == "us")
+      members.push_back(StructureMember(&Compiler::read_duration, name));
     else if (type == "bl")
       members.push_back(StructureMember(&Compiler::read_boolean, name));
     else if (type == "st")
@@ -1286,8 +1288,10 @@ ReturnType Preprocessor::getReturnType(RepliStruct *s) {
 
   if (s->tail_ == ":nb")
     return NUMBER;
-  else if (s->tail_ == ":us")
+  else if (s->tail_ == ":ts")
     return TIMESTAMP;
+  else if (s->tail_ == ":us")
+    return DURATION;
   else if (s->tail_ == ":bl")
     return BOOLEAN;
   else if (s->tail_ == ":st")

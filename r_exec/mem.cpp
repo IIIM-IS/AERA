@@ -393,46 +393,47 @@ bool _Mem::load(vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 stdout
   return true;
 }
 
-void _Mem::init_timings(Timestamp now, const r_code::list<P<Code>>& objects) {
+/**
+ * If the code at index is a time stamp then add time_reference to it. If it is an
+ * I_PTR the recursively call this again to update it. Don't follow references.
+ * \param time_reference The value to add to the time stamp.
+ * \param code The code to check.
+ * \param index Check at code[index].
+ */
+static void update_timestamps(Timestamp time_reference, Atom* code, uint16 index) {
+  Atom atom = code[index];
 
-  auto time_tolerance = Utils::GetTimeTolerance() * 2;
-  r_code::list<P<Code> >::const_iterator o;
-  for (o = objects.begin(); o != objects.end(); ++o) {
-
-    uint16 opcode = (*o)->code(0).asOpcode();
-    if (opcode == Opcodes::Fact || opcode == Opcodes::AntiFact) {
-
-      // Use these as offsets from now.
-      auto after = Utils::GetTimestamp<Code>(*o, FACT_AFTER).time_since_epoch();
-      auto before = Utils::GetTimestamp<Code>(*o, FACT_BEFORE).time_since_epoch();
-
-      if (after < Utils_MaxTime - now)
-        Utils::SetTimestamp<Code>(*o, FACT_AFTER, after + now);
-      if (before < Utils_MaxTime - now - time_tolerance)
-        Utils::SetTimestamp<Code>(*o, FACT_BEFORE, before + now + time_tolerance);
-      else
-        Utils::SetTimestamp<Code>(*o, FACT_BEFORE, Utils_MaxTime);
-    }
-    else if (opcode == Opcodes::IMdl || opcode == Opcodes::ICst) {
-      // Look for timestamps in the template values and exposed values, and add now.
-      // TODO: There should be a more general mechanism to locate timestamps in facts, imdls, and elsewhere.
-      for (int pass = 1; pass <= 2; ++pass) {
-        auto set_index = (pass == 1 ? (*o)->code(I_HLP_TPL_ARGS).asIndex()
-                                    : (*o)->code(I_HLP_EXPOSED_ARGS).asIndex());
-        auto set_count = (*o)->code(set_index).getAtomCount();
-        for (int i = 1; i <= set_count; ++i) {
-          auto index = set_index + i;
-          if ((*o)->code(set_index + i).getDescriptor() == Atom::I_PTR) {
-            auto timestamp_index = (*o)->code(set_index + i).asIndex();
-            if ((*o)->code(timestamp_index).getDescriptor() == Atom::TIMESTAMP) {
-              auto timestamp = Utils::GetTimestamp<Code>(*o, set_index + i).time_since_epoch();
-              Utils::SetTimestampStruct(*o, timestamp_index, timestamp + now);
-            }
-          }
-        }
-      }
-    }
+  switch (atom.getDescriptor()) {
+  case Atom::TIMESTAMP: {
+    auto ts = Utils::GetTimestamp(code + index).time_since_epoch();
+    if (ts >= Utils_MaxTime - time_reference)
+      // Adding time_reference would overflow, so just set to the max time stamp.
+      Utils::SetTimestamp(code + index, Utils_MaxTime);
+    else
+      Utils::SetTimestamp(code + index, ts + time_reference);
+    break;
   }
+  case Atom::I_PTR:
+    update_timestamps(time_reference, code, atom.asIndex());
+    break;
+  case Atom::C_PTR:
+  case Atom::SET:
+  case Atom::OBJECT:
+  case Atom::S_SET:
+  case Atom::MARKER:
+  case Atom::OPERATOR:
+  case Atom::GROUP: {
+    uint16 count = atom.getAtomCount();
+    for (uint16 i = 1; i <= count; ++i)
+      update_timestamps(time_reference, code, index + i);
+    break;
+  }
+  }
+}
+
+void _Mem::init_timestamps(Timestamp time_reference, const r_code::list<P<Code>>& objects) {
+  for (auto o = objects.begin(); o != objects.end(); ++o)
+    update_timestamps(time_reference, &(*o)->code(0), 0);
 }
 
 Timestamp _Mem::start() {
@@ -452,7 +453,7 @@ Timestamp _Mem::start() {
   auto now = Now();
   Utils::SetTimeReference(now);
   ModelBase::Get()->set_thz(secondary_thz_);
-  init_timings(now, objects_);
+  init_timestamps(now, objects_);
 
   for (i = 0; i < initial_groups_.size(); ++i) {
 
@@ -472,8 +473,7 @@ Timestamp _Mem::start() {
         for (v = g->input_less_ipgm_views_.begin(); v != g->input_less_ipgm_views_.end(); ++v) {
 
           if (v->second->controller_ != NULL && v->second->controller_->is_activated()) {
-            // The time scope is stored as a timestamp, but it is actually a duration.
-            P<TimeJob> j = new InputLessPGMSignalingJob(v->second, now + Utils::GetTimestamp<Code>(v->second->object_, IPGM_TSC).time_since_epoch());
+            P<TimeJob> j = new InputLessPGMSignalingJob(v->second, now + Utils::GetDuration<Code>(v->second->object_, IPGM_TSC));
             time_job_queue_->push(j);
           }
         }
@@ -482,8 +482,7 @@ Timestamp _Mem::start() {
         for (v = g->anti_ipgm_views_.begin(); v != g->anti_ipgm_views_.end(); ++v) {
 
           if (v->second->controller_ != NULL && v->second->controller_->is_activated()) {
-            // The time scope is stored as a timestamp, but it is actually a duration.
-            P<TimeJob> j = new AntiPGMSignalingJob(v->second, now + Utils::GetTimestamp<Code>(v->second->object_, IPGM_TSC).time_since_epoch());
+            P<TimeJob> j = new AntiPGMSignalingJob(v->second, now + Utils::GetDuration<Code>(v->second->object_, IPGM_TSC));
             time_job_queue_->push(j);
           }
         }
