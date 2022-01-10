@@ -98,9 +98,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4ddaf2f53cf6de2a743773cde5b65743"><td class="memItemLeft" align="right" valign="top"><a id="a4ddaf2f53cf6de2a743773cde5b65743"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Sim</b> (<a class="el" href="classr__exec_1_1_sim.html">Sim</a> *s)</td></tr>
 <tr class="separator:a4ddaf2f53cf6de2a743773cde5b65743"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc450ce3783fe8159448a7ce73c442e7"><td class="memItemLeft" align="right" valign="top"><a id="abc450ce3783fe8159448a7ce73c442e7"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Sim</b> (SimMode mode, std::chrono::microseconds thz, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *super_goal, bool opposite, <a class="el" href="classr__exec_1_1_controller.html">Controller</a> *root, float32 psln_thr, <a class="el" href="classr__exec_1_1_controller.html">Controller</a> *solution_controller=NULL, float32 solution_cfd=0, Timestamp solution_before=Timestamp(std::chrono::seconds(0)))</td></tr>
-<tr class="separator:abc450ce3783fe8159448a7ce73c442e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8273b82b9a404b8124e6b8c9b287cdf1"><td class="memItemLeft" align="right" valign="top"><a id="a8273b82b9a404b8124e6b8c9b287cdf1"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Sim</b> (SimMode mode, std::chrono::microseconds thz, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *super_goal, bool opposite, <a class="el" href="classr__exec_1_1_controller.html">Controller</a> *root, float32 psln_thr, <a class="el" href="classr__exec_1_1_controller.html">Controller</a> *solution_controller=NULL, float32 solution_cfd=0, Timestamp solution_before=r_code::Utils::GetTimeReference())</td></tr>
+<tr class="separator:a8273b82b9a404b8124e6b8c9b287cdf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7b3c3b44cfc3c225a1dc3ab6f3a4c3e"><td class="memItemLeft" align="right" valign="top"><a id="aa7b3c3b44cfc3c225a1dc3ab6f3a4c3e"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>invalidate</b> ()</td></tr>
 <tr class="separator:aa7b3c3b44cfc3c225a1dc3ab6f3a4c3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -263,9 +263,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_requirement_</b></
 <tr class="memitem:a8b52650c960b372281d2bb9f170dc47b"><td class="memItemLeft" align="right" valign="top"><a id="a8b52650c960b372281d2bb9f170dc47b"></a>
 <a class="el" href="classr__code_1_1list.html">r_code::list</a>&lt; <a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>defeating_facts_</b></td></tr>
 <tr class="separator:a8b52650c960b372281d2bb9f170dc47b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6068f4510bd22d5cd9dbeeb2fb33bba0"><td class="memItemLeft" align="right" valign="top"><a id="a6068f4510bd22d5cd9dbeeb2fb33bba0"></a>
-std::vector&lt; std::pair&lt; <a class="el" href="classr__exec_1_1_controller.html">Controller</a> *, <a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>already_signalled_</b></td></tr>
-<tr class="separator:a6068f4510bd22d5cd9dbeeb2fb33bba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09747537dc30c72a15270db11c30677d"><td class="memItemLeft" align="right" valign="top"><a id="a09747537dc30c72a15270db11c30677d"></a>
+std::vector&lt; <a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>already_signalled_</b></td></tr>
+<tr class="separator:a09747537dc30c72a15270db11c30677d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_attribs_classr__code_1_1_code"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classr__code_1_1_code')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classr__code_1_1_code.html">r_code::Code</a></td></tr>
 <tr class="memitem:a7749d28d23b924c3d31476945dd854ff inherit pub_attribs_classr__code_1_1_code"><td class="memItemLeft" align="right" valign="top"><a id="a7749d28d23b924c3d31476945dd854ff"></a>
 <a class="el" href="classr__code_1_1list.html">r_code::list</a>&lt; <a class="el" href="classr__code_1_1_code.html">Code</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>markers_</b></td></tr>
@@ -387,7 +387,7 @@ int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</
 </div><div class="memdoc">
 <p>Recursively search this or parent <a class="el" href="classr__exec_1_1_sim.html">Sim</a> objects to get the <a class="el" href="classr__exec_1_1_sim.html">Sim</a> object where get_mode() == SIM_ROOT. </p><dl class="section return"><dt>Returns</dt><dd>The root <a class="el" href="classr__exec_1_1_sim.html">Sim</a> object, or NULL if not found (which shouldn't happen). </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="factory_8cpp_source.html#l00770">770</a> of file <a class="el" href="factory_8cpp_source.html">factory.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="factory_8cpp_source.html#l00769">769</a> of file <a class="el" href="factory_8cpp_source.html">factory.cpp</a>.</p>
 
 </div>
 </div>
@@ -470,7 +470,7 @@ int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if f_obj has been registered and should be injected as a goal, false if it is already registered and should not be injected as a goal. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="factory_8cpp_source.html#l00784">784</a> of file <a class="el" href="factory_8cpp_source.html">factory.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="factory_8cpp_source.html#l00783">783</a> of file <a class="el" href="factory_8cpp_source.html">factory.cpp</a>.</p>
 
 </div>
 </div>

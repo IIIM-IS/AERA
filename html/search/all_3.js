@@ -23,9 +23,8 @@ var searchData=
   ['criticalsectionlist_58',['CriticalSectionList',['../classr__exec_1_1_critical_section_list.html',1,'r_exec']]],
   ['criticalsectionlist_3c_20r_5fexec_3a_3ahlpcontroller_3a_3aevidenceentry_20_3e_59',['CriticalSectionList&lt; r_exec::HLPController::EvidenceEntry &gt;',['../classr__exec_1_1_critical_section_list.html',1,'r_exec']]],
   ['criticalsectionlist_3c_20r_5fexec_3a_3ahlpcontroller_3a_3apredictedevidenceentry_20_3e_60',['CriticalSectionList&lt; r_exec::HLPController::PredictedEvidenceEntry &gt;',['../classr__exec_1_1_critical_section_list.html',1,'r_exec']]],
-  ['criticalsectionlist_3c_20r_5fexec_3a_3amdlcontroller_3a_3adefeasibleweakrequirement_20_3e_61',['CriticalSectionList&lt; r_exec::MDLController::DefeasibleWeakRequirement &gt;',['../classr__exec_1_1_critical_section_list.html',1,'r_exec']]],
-  ['criticalsectionlist_3c_20r_5fexec_3a_3asim_3a_3adefeasiblepromotedfact_20_3e_62',['CriticalSectionList&lt; r_exec::Sim::DefeasiblePromotedFact &gt;',['../classr__exec_1_1_critical_section_list.html',1,'r_exec']]],
-  ['cstcontroller_63',['CSTController',['../classr__exec_1_1_c_s_t_controller.html',1,'r_exec']]],
-  ['cstoverlay_64',['CSTOverlay',['../classr__exec_1_1_c_s_t_overlay.html',1,'r_exec']]],
-  ['ctpx_65',['CTPX',['../classr__exec_1_1_c_t_p_x.html',1,'r_exec']]]
+  ['criticalsectionlist_3c_20r_5fexec_3a_3asim_3a_3adefeasiblepromotedfact_20_3e_61',['CriticalSectionList&lt; r_exec::Sim::DefeasiblePromotedFact &gt;',['../classr__exec_1_1_critical_section_list.html',1,'r_exec']]],
+  ['cstcontroller_62',['CSTController',['../classr__exec_1_1_c_s_t_controller.html',1,'r_exec']]],
+  ['cstoverlay_63',['CSTOverlay',['../classr__exec_1_1_c_s_t_overlay.html',1,'r_exec']]],
+  ['ctpx_64',['CTPX',['../classr__exec_1_1_c_t_p_x.html',1,'r_exec']]]
 ];

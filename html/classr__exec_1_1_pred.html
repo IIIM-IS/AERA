@@ -119,6 +119,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_simulation</b> () 
 <tr class="separator:a93157d5d630a9cfee0725cc8921d6c01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8ffb4d8ce2660aa833c0731f85c93e0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1_pred.html#ad8ffb4d8ce2660aa833c0731f85c93e0">has_simulation</a> (<a class="el" href="classr__exec_1_1_sim.html">Sim</a> *sim) const</td></tr>
 <tr class="separator:ad8ffb4d8ce2660aa833c0731f85c93e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab37df54691485faa6e60b0847e651d17"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1_pred.html#ab37df54691485faa6e60b0847e651d17">has_defeasible_consequence</a> () const</td></tr>
+<tr class="separator:ab37df54691485faa6e60b0847e651d17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a2cfee90e716ac25165573fbfc32dc1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classr__exec_1_1_defeasible_validity.html">DefeasibleValidity</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1_pred.html#a1a2cfee90e716ac25165573fbfc32dc1">get_defeasible_consequence</a> ()</td></tr>
+<tr class="separator:a1a2cfee90e716ac25165573fbfc32dc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classr__exec_1_1_l_object"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classr__exec_1_1_l_object')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classr__exec_1_1_l_object.html">r_exec::LObject</a></td></tr>
 <tr class="memitem:ad131e72784c846e4833dda820500bcc2 inherit pub_methods_classr__exec_1_1_l_object"><td class="memItemLeft" align="right" valign="top"><a id="ad131e72784c846e4833dda820500bcc2"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>LObject</b> (<a class="el" href="classr__code_1_1_mem.html">r_code::Mem</a> *mem=NULL)</td></tr>
@@ -495,6 +499,34 @@ int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a1a2cfee90e716ac25165573fbfc32dc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a2cfee90e716ac25165573fbfc32dc1">&#9670;&nbsp;</a></span>get_defeasible_consequence()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classr__exec_1_1_defeasible_validity.html">DefeasibleValidity</a>* r_exec::Pred::get_defeasible_consequence </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get this <a class="el" href="classr__exec_1_1_pred.html">Pred</a>'s defeasible consequence, creating one if it doesn't already exist. If you don't want to create a defeasible consequence , check <a class="el" href="classr__exec_1_1_pred.html#ab37df54691485faa6e60b0847e651d17">has_defeasible_consequence()</a> first. </p><dl class="section return"><dt>Returns</dt><dd>This <a class="el" href="classr__exec_1_1_pred.html">Pred</a>'s defeasible_consequence_. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="factory_8h_source.html#l00482">482</a> of file <a class="el" href="factory_8h_source.html">factory.h</a>.</p>
+
+</div>
+</div>
 <a id="a93157d5d630a9cfee0725cc8921d6c01"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a93157d5d630a9cfee0725cc8921d6c01">&#9670;&nbsp;</a></span>get_simulation() <span class="overload">[1/2]</span></h2>
 
@@ -582,6 +614,34 @@ int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</
 <p>Get the size of the list of simulations. </p><dl class="section return"><dt>Returns</dt><dd>The size of the list of simulations. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="factory_8h_source.html#l00441">441</a> of file <a class="el" href="factory_8h_source.html">factory.h</a>.</p>
+
+</div>
+</div>
+<a id="ab37df54691485faa6e60b0847e651d17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab37df54691485faa6e60b0847e651d17">&#9670;&nbsp;</a></span>has_defeasible_consequence()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool r_exec::Pred::has_defeasible_consequence </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Check if this <a class="el" href="classr__exec_1_1_pred.html">Pred</a> has a defeasible consequence. </p><dl class="section return"><dt>Returns</dt><dd>True if this has a defeasible consequence. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="factory_8h_source.html#l00475">475</a> of file <a class="el" href="factory_8h_source.html">factory.h</a>.</p>
 
 </div>
 </div>

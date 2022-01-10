@@ -415,422 +415,426 @@ $(function() {
 <div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;      <span class="keywordflow">for</span> (uint16 i = 1; i &lt;= atom_count; ++i)</div>
 <div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;        overlay_-&gt;values_[write_index++] = code_[index_ + i];</div>
 <div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;      <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;    <span class="keywordflow">case</span> Atom::C_PTR:</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;      if (!dereference_cptr) {</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160; </div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;        copy_member_to_value_array(1, prefix, write_index++, extent_index, <span class="keyword">false</span>);</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;        <span class="keywordflow">for</span> (uint16 i = 2; i &lt;= atom_count; ++i)</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;          overlay_-&gt;values_[write_index++] = code_[index_ + i];</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;        <span class="comment">//Atom::Trace(&amp;overlay_-&gt;values[0],overlay_-&gt;values.size());</span></div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;        <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;      } <span class="comment">// else, dereference the c_ptr.</span></div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    <span class="keywordflow">default</span>:</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;      <span class="keywordflow">if</span> (is_cmd_with_cptr()) {</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160; </div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;        <span class="keywordflow">for</span> (uint16 i = 1; i &lt;= atom_count; ++i)</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;          copy_member_to_value_array(i, prefix, write_index++, extent_index, i != 2);</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;      } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;    <span class="keywordflow">case</span> Atom::DURATION:</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;      for (uint16 i = 1; i &lt;= atom_count; ++i)</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;        overlay_-&gt;values_[write_index++] = code_[index_ + i];</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;      <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    <span class="keywordflow">case</span> Atom::C_PTR:</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;      if (!dereference_cptr) {</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160; </div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;        copy_member_to_value_array(1, prefix, write_index++, extent_index, <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;        <span class="keywordflow">for</span> (uint16 i = 2; i &lt;= atom_count; ++i)</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;          overlay_-&gt;values_[write_index++] = code_[index_ + i];</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;        <span class="comment">//Atom::Trace(&amp;overlay_-&gt;values[0],overlay_-&gt;values.size());</span></div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;      } <span class="comment">// else, dereference the c_ptr.</span></div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;    <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;      <span class="keywordflow">if</span> (is_cmd_with_cptr()) {</div>
 <div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160; </div>
 <div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;        <span class="keywordflow">for</span> (uint16 i = 1; i &lt;= atom_count; ++i)</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;          copy_member_to_value_array(i, prefix, write_index++, extent_index, !(!dereference_cptr &amp;&amp; i == 1));</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;      }</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;    }</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;  }</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;}</div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160; </div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;<span class="keywordtype">void</span> IPGMContext::copy_member_to_value_array(uint16 child_index, <span class="keywordtype">bool</span> prefix, uint16 write_index, uint16 &amp;extent_index, <span class="keywordtype">bool</span> dereference_cptr) {</div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160; </div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;  uint16 _index = index_ + child_index;</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;  <a class="code" href="classr__code_1_1_atom.html">Atom</a> head;</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;dereference:</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;  head = code_[_index];</div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;  <span class="keywordflow">switch</span> (head.getDescriptor()) { <span class="comment">// dereference until either we reach some non-pointer or a reference or a value pointer.</span></div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;  <span class="keywordflow">case</span> Atom::I_PTR:</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;  <span class="keywordflow">case</span> Atom::CODE_VL_PTR:</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;    _index = head.asIndex();</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;    <span class="keywordflow">goto</span> dereference;</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;  <span class="keywordflow">case</span> Atom::VALUE_PTR:</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;    overlay_-&gt;values_[write_index] = Atom::IPointer(head.asIndex());</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;    <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;  <span class="keywordflow">case</span> Atom::PROD_PTR:</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;  <span class="keywordflow">case</span> Atom::IN_OBJ_PTR:</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;  <span class="keywordflow">case</span> Atom::D_IN_OBJ_PTR:</div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;  <span class="keywordflow">case</span> Atom::R_PTR:</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;    overlay_-&gt;values_[write_index] = head;</div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;    <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;  <span class="keywordflow">case</span> Atom::C_PTR:</div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;    <span class="keywordflow">if</span> (dereference_cptr) {</div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160; </div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;      uint16 saved_index = index_;</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;      index_ = _index;</div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;      IPGMContext cptr = dereference();</div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;      overlay_-&gt;values_[write_index] = cptr[0];</div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;      index_ = saved_index;</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;      <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;    }</div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;  }</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160; </div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;  <span class="keywordflow">if</span> (head.isStructural()) {</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160; </div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;    uint16 saved_index = index_;</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;    index_ = _index;</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;    <span class="keywordflow">if</span> (prefix) {</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;          copy_member_to_value_array(i, prefix, write_index++, extent_index, i != 2);</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;      } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160; </div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;        <span class="keywordflow">for</span> (uint16 i = 1; i &lt;= atom_count; ++i)</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;          copy_member_to_value_array(i, prefix, write_index++, extent_index, !(!dereference_cptr &amp;&amp; i == 1));</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;      }</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;    }</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;  }</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;}</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160; </div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;<span class="keywordtype">void</span> IPGMContext::copy_member_to_value_array(uint16 child_index, <span class="keywordtype">bool</span> prefix, uint16 write_index, uint16 &amp;extent_index, <span class="keywordtype">bool</span> dereference_cptr) {</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160; </div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;  uint16 _index = index_ + child_index;</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;  <a class="code" href="classr__code_1_1_atom.html">Atom</a> head;</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;dereference:</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;  head = code_[_index];</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;  <span class="keywordflow">switch</span> (head.getDescriptor()) { <span class="comment">// dereference until either we reach some non-pointer or a reference or a value pointer.</span></div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;  <span class="keywordflow">case</span> Atom::I_PTR:</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;  <span class="keywordflow">case</span> Atom::CODE_VL_PTR:</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;    _index = head.asIndex();</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;    <span class="keywordflow">goto</span> dereference;</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;  <span class="keywordflow">case</span> Atom::VALUE_PTR:</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;    overlay_-&gt;values_[write_index] = Atom::IPointer(head.asIndex());</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;    <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;  <span class="keywordflow">case</span> Atom::PROD_PTR:</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;  <span class="keywordflow">case</span> Atom::IN_OBJ_PTR:</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;  <span class="keywordflow">case</span> Atom::D_IN_OBJ_PTR:</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;  <span class="keywordflow">case</span> Atom::R_PTR:</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;    overlay_-&gt;values_[write_index] = head;</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;    <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;  <span class="keywordflow">case</span> Atom::C_PTR:</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;    <span class="keywordflow">if</span> (dereference_cptr) {</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160; </div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;      uint16 saved_index = index_;</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;      index_ = _index;</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;      IPGMContext cptr = dereference();</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;      overlay_-&gt;values_[write_index] = cptr[0];</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;      index_ = saved_index;</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;      <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;    }</div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;  }</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160; </div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;  <span class="keywordflow">if</span> (head.isStructural()) {</div>
 <div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160; </div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;      overlay_-&gt;values_[write_index] = Atom::IPointer(extent_index);</div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;      copy_structure_to_value_array(<span class="keyword">true</span>, extent_index, extent_index, dereference_cptr);</div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;    } <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;      copy_structure_to_value_array(<span class="keyword">true</span>, write_index, extent_index, dereference_cptr);</div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;    index_ = saved_index;</div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;  } <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;    overlay_-&gt;values_[write_index] = head;</div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;}</div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160; </div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;<span class="keywordtype">void</span> IPGMContext::getMember(<span class="keywordtype">void</span> *&amp;<span class="keywordtype">object</span>, uint32 &amp;view_oid, ObjectType &amp;object_type, int16 &amp;member_index)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160; </div>
-<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;  <span class="keywordflow">if</span> ((*<span class="keyword">this</span>)[0].getDescriptor() != Atom::I_PTR) { <span class="comment">// ill-formed mod/set expression.</span></div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;    uint16 saved_index = index_;</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;    index_ = _index;</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;    <span class="keywordflow">if</span> (prefix) {</div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160; </div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;      overlay_-&gt;values_[write_index] = Atom::IPointer(extent_index);</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;      copy_structure_to_value_array(<span class="keyword">true</span>, extent_index, extent_index, dereference_cptr);</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;    } <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;      copy_structure_to_value_array(<span class="keyword">true</span>, write_index, extent_index, dereference_cptr);</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;    index_ = saved_index;</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;  } <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;    overlay_-&gt;values_[write_index] = head;</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;}</div>
 <div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160; </div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;    <span class="keywordtype">object</span> = NULL;</div>
-<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;    object_type = TYPE_UNDEFINED;</div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;    member_index = 0;</div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;    <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;  }</div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160; </div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;  IPGMContext cptr = IPGMContext(object_, view_, code_, (*<span class="keyword">this</span>)[0].asIndex(), (InputLessPGMOverlay *)overlay_, data_); <span class="comment">// dereference manually (1 offset) to retain the cptr as is.</span></div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160; </div>
-<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;  <span class="keywordflow">if</span> (cptr[0].getDescriptor() != Atom::C_PTR) { <span class="comment">// ill-formed mod/set expression.</span></div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;<span class="keywordtype">void</span> IPGMContext::getMember(<span class="keywordtype">void</span> *&amp;<span class="keywordtype">object</span>, uint32 &amp;view_oid, ObjectType &amp;object_type, int16 &amp;member_index)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160; </div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;  <span class="keywordflow">if</span> ((*<span class="keyword">this</span>)[0].getDescriptor() != Atom::I_PTR) { <span class="comment">// ill-formed mod/set expression.</span></div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160; </div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;    <span class="keywordtype">object</span> = NULL;</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;    object_type = TYPE_UNDEFINED;</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;    member_index = 0;</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;    <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;  }</div>
 <div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160; </div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;    <span class="keywordtype">object</span> = NULL;</div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;    object_type = TYPE_UNDEFINED;</div>
-<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;    member_index = 0;</div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;    <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;  }</div>
-<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160; </div>
-<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;  IPGMContext c = cptr.get_child_deref(1); <span class="comment">// this, vl_ptr, value_ptr or rptr.</span></div>
-<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160; </div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;  uint16 atom_count = cptr.get_children_count();</div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;  <span class="keywordflow">for</span> (uint16 i = 2; i &lt; atom_count; ++i) { <span class="comment">// stop before the last iptr.</span></div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160; </div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;    <span class="keywordflow">if</span> (cptr[i].getDescriptor() == Atom::VIEW)</div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;      c = IPGMContext(c.get_object(), c.view_, &amp;c.view_-&gt;code(0), 0, NULL, VIEW);</div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;    <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;      c = c.get_child_deref(cptr[i].asIndex());</div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;  }</div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160; </div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;  <span class="comment">// at this point, c is an iptr dereferenced to an object or a view; the next iptr holds the member index.</span></div>
-<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;  <span class="comment">// c is pointing at the first atom of an object or a view.</span></div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;  <span class="keywordflow">switch</span> (c[0].getDescriptor()) {</div>
-<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;  <span class="keywordflow">case</span> Atom::OBJECT:</div>
-<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;  <span class="keywordflow">case</span> Atom::MARKER:</div>
-<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;  <span class="keywordflow">case</span> Atom::INSTANTIATED_PROGRAM:</div>
-<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;  <span class="keywordflow">case</span> Atom::INSTANTIATED_CPP_PROGRAM:</div>
-<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;  <span class="keywordflow">case</span> Atom::INSTANTIATED_INPUT_LESS_PROGRAM:</div>
-<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;  <span class="keywordflow">case</span> Atom::INSTANTIATED_ANTI_PROGRAM:</div>
-<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;  <span class="keywordflow">case</span> Atom::COMPOSITE_STATE:</div>
-<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;  <span class="keywordflow">case</span> Atom::MODEL:</div>
-<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;    object_type = TYPE_OBJECT;</div>
-<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;    <span class="keywordtype">object</span> = c.get_object();</div>
-<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;    <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;  <span class="keywordflow">case</span> Atom::GROUP:</div>
-<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;  <span class="keywordflow">case</span> Atom::SET: <span class="comment">// dynamically generated views can be sets.</span></div>
-<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;  <span class="keywordflow">case</span> Atom::S_SET: <span class="comment">// views are always copied; set the object to the view&#39;s group on which to perform an operation for the view&#39;s oid.</span></div>
-<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;    <span class="keywordflow">if</span> (c.data_ == VALUE_ARRAY)</div>
-<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;      <span class="keywordtype">object</span> = (Group *)c[VIEW_CODE_MAX_SIZE].atom_; <span class="comment">// first reference of grp in a view stored in athe value array.</span></div>
-<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;    <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;      <span class="keywordtype">object</span> = c.view_-&gt;get_host();</div>
-<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;    view_oid = c[VIEW_OID].atom_; <span class="comment">// oid is hidden at the end of the view code; stored directly as a uint32.</span></div>
-<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;    object_type = TYPE_VIEW;</div>
-<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;    <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;  <span class="keywordflow">default</span>: <span class="comment">// atomic value or ill-formed mod/set expression.</span></div>
-<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;    <span class="keywordtype">object</span> = NULL;</div>
-<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;    object_type = TYPE_UNDEFINED;</div>
-<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;    <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;  }</div>
-<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160; </div>
-<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;  <span class="comment">// get the index held by the last iptr.</span></div>
-<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;  member_index = cptr[atom_count].asIndex();</div>
-<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;}</div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;  IPGMContext cptr = IPGMContext(object_, view_, code_, (*<span class="keyword">this</span>)[0].asIndex(), (InputLessPGMOverlay *)overlay_, data_); <span class="comment">// dereference manually (1 offset) to retain the cptr as is.</span></div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160; </div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;  <span class="keywordflow">if</span> (cptr[0].getDescriptor() != Atom::C_PTR) { <span class="comment">// ill-formed mod/set expression.</span></div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160; </div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;    <span class="keywordtype">object</span> = NULL;</div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;    object_type = TYPE_UNDEFINED;</div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;    member_index = 0;</div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;    <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;  }</div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160; </div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;  IPGMContext c = cptr.get_child_deref(1); <span class="comment">// this, vl_ptr, value_ptr or rptr.</span></div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160; </div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;  uint16 atom_count = cptr.get_children_count();</div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;  <span class="keywordflow">for</span> (uint16 i = 2; i &lt; atom_count; ++i) { <span class="comment">// stop before the last iptr.</span></div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160; </div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;    <span class="keywordflow">if</span> (cptr[i].getDescriptor() == Atom::VIEW)</div>
+<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;      c = IPGMContext(c.get_object(), c.view_, &amp;c.view_-&gt;code(0), 0, NULL, VIEW);</div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;      c = c.get_child_deref(cptr[i].asIndex());</div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;  }</div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160; </div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;  <span class="comment">// at this point, c is an iptr dereferenced to an object or a view; the next iptr holds the member index.</span></div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;  <span class="comment">// c is pointing at the first atom of an object or a view.</span></div>
+<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;  <span class="keywordflow">switch</span> (c[0].getDescriptor()) {</div>
+<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;  <span class="keywordflow">case</span> Atom::OBJECT:</div>
+<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;  <span class="keywordflow">case</span> Atom::MARKER:</div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;  <span class="keywordflow">case</span> Atom::INSTANTIATED_PROGRAM:</div>
+<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;  <span class="keywordflow">case</span> Atom::INSTANTIATED_CPP_PROGRAM:</div>
+<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;  <span class="keywordflow">case</span> Atom::INSTANTIATED_INPUT_LESS_PROGRAM:</div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;  <span class="keywordflow">case</span> Atom::INSTANTIATED_ANTI_PROGRAM:</div>
+<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;  <span class="keywordflow">case</span> Atom::COMPOSITE_STATE:</div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;  <span class="keywordflow">case</span> Atom::MODEL:</div>
+<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;    object_type = TYPE_OBJECT;</div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;    <span class="keywordtype">object</span> = c.get_object();</div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;    <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;  <span class="keywordflow">case</span> Atom::GROUP:</div>
+<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;  <span class="keywordflow">case</span> Atom::SET: <span class="comment">// dynamically generated views can be sets.</span></div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;  <span class="keywordflow">case</span> Atom::S_SET: <span class="comment">// views are always copied; set the object to the view&#39;s group on which to perform an operation for the view&#39;s oid.</span></div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;    <span class="keywordflow">if</span> (c.data_ == VALUE_ARRAY)</div>
+<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;      <span class="keywordtype">object</span> = (Group *)c[VIEW_CODE_MAX_SIZE].atom_; <span class="comment">// first reference of grp in a view stored in athe value array.</span></div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;      <span class="keywordtype">object</span> = c.view_-&gt;get_host();</div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;    view_oid = c[VIEW_OID].atom_; <span class="comment">// oid is hidden at the end of the view code; stored directly as a uint32.</span></div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;    object_type = TYPE_VIEW;</div>
+<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;    <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;  <span class="keywordflow">default</span>: <span class="comment">// atomic value or ill-formed mod/set expression.</span></div>
+<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;    <span class="keywordtype">object</span> = NULL;</div>
+<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;    object_type = TYPE_UNDEFINED;</div>
+<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;    <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;  }</div>
 <div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160; </div>
-<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;<span class="keywordtype">bool</span> IPGMContext::is_cmd_with_cptr()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160; </div>
-<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;  <span class="keywordflow">if</span> ((*<span class="keyword">this</span>)[0].getDescriptor() != Atom::OBJECT)</div>
-<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;  <span class="keywordflow">if</span> ((*<span class="keyword">this</span>)[0].asOpcode() != Opcodes::ICmd)</div>
-<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;  <span class="keywordflow">return</span> (*<span class="keyword">this</span>)[1].asOpcode() == Opcodes::Mod ||</div>
-<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;    (*this)[1].asOpcode() == Opcodes::Set;</div>
-<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;}</div>
-<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160; </div>
-<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;uint16 IPGMContext::addProduction(<a class="code" href="classr__code_1_1_code.html">Code</a> *<span class="keywordtype">object</span>, <span class="keywordtype">bool</span> check_for_existence)<span class="keyword"> const </span>{ <span class="comment">// called by operators (ins and red).</span></div>
-<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160; </div>
-<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;  ((InputLessPGMOverlay *)overlay_)-&gt;productions_.push_back(_Mem::Get()-&gt;check_existence(<span class="keywordtype">object</span>));</div>
-<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;  <span class="keywordflow">return</span> ((InputLessPGMOverlay *)overlay_)-&gt;productions_.size() - 1;</div>
-<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;}</div>
+<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;  <span class="comment">// get the index held by the last iptr.</span></div>
+<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;  member_index = cptr[atom_count].asIndex();</div>
+<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;}</div>
+<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160; </div>
+<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;<span class="keywordtype">bool</span> IPGMContext::is_cmd_with_cptr()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160; </div>
+<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;  <span class="keywordflow">if</span> ((*<span class="keyword">this</span>)[0].getDescriptor() != Atom::OBJECT)</div>
+<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;  <span class="keywordflow">if</span> ((*<span class="keyword">this</span>)[0].asOpcode() != Opcodes::ICmd)</div>
+<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;  <span class="keywordflow">return</span> (*<span class="keyword">this</span>)[1].asOpcode() == Opcodes::Mod ||</div>
+<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;    (*this)[1].asOpcode() == Opcodes::Set;</div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;}</div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160; </div>
+<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;uint16 IPGMContext::addProduction(<a class="code" href="classr__code_1_1_code.html">Code</a> *<span class="keywordtype">object</span>, <span class="keywordtype">bool</span> check_for_existence)<span class="keyword"> const </span>{ <span class="comment">// called by operators (ins and red).</span></div>
 <div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160; </div>
-<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;<span class="comment">// Utilities for executive-dependent operators ////////////////////////////////////////////////////////////////////////////////</span></div>
-<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160; </div>
-<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;<span class="keywordtype">bool</span> match(<span class="keyword">const</span> IPGMContext &amp;input, <span class="keyword">const</span> IPGMContext &amp;pattern) { <span class="comment">// in red, patterns like (ptn object: [guards]) are allowed.</span></div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;  ((InputLessPGMOverlay *)overlay_)-&gt;productions_.push_back(_Mem::Get()-&gt;check_existence(<span class="keywordtype">object</span>));</div>
+<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;  <span class="keywordflow">return</span> ((InputLessPGMOverlay *)overlay_)-&gt;productions_.size() - 1;</div>
+<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;}</div>
 <div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160; </div>
-<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;    <span class="comment">// patch the pattern with a ptr to the input.</span></div>
-<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;  <span class="keywordflow">if</span> (input.is_reference()) {</div>
-<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160; </div>
-<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;    uint16 ptr = pattern.addProduction(input.get_object(), <span class="keyword">false</span>); <span class="comment">// the object obviously is not new.</span></div>
-<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;    pattern.patch_code(pattern.getIndex() + 1, Atom::ProductionPointer(ptr));</div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;  } <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;    pattern.patch_code(pattern.getIndex() + 1, Atom::IPointer(input.getIndex()));</div>
-<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160; </div>
-<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;  <span class="comment">// evaluate the set of guards.</span></div>
-<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;  IPGMContext guard_set = pattern.get_child_deref(2);</div>
-<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;  uint16 guard_count = guard_set.get_children_count();</div>
-<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;  <span class="keywordflow">for</span> (uint16 i = 1; i &lt;= guard_count; ++i) {</div>
-<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160; </div>
-<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;    <span class="keywordflow">if</span> (!guard_set.get_child_deref(i).evaluate_no_dereference()) <span class="comment">// WARNING: no check for duplicates.</span></div>
-<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;  }</div>
+<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;<span class="comment">// Utilities for executive-dependent operators ////////////////////////////////////////////////////////////////////////////////</span></div>
+<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160; </div>
+<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;<span class="keywordtype">bool</span> match(<span class="keyword">const</span> IPGMContext &amp;input, <span class="keyword">const</span> IPGMContext &amp;pattern) { <span class="comment">// in red, patterns like (ptn object: [guards]) are allowed.</span></div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160; </div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;    <span class="comment">// patch the pattern with a ptr to the input.</span></div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;  <span class="keywordflow">if</span> (input.is_reference()) {</div>
+<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160; </div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;    uint16 ptr = pattern.addProduction(input.get_object(), <span class="keyword">false</span>); <span class="comment">// the object obviously is not new.</span></div>
+<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;    pattern.patch_code(pattern.getIndex() + 1, Atom::ProductionPointer(ptr));</div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;  } <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;    pattern.patch_code(pattern.getIndex() + 1, Atom::IPointer(input.getIndex()));</div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160; </div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;  <span class="comment">// evaluate the set of guards.</span></div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;  IPGMContext guard_set = pattern.get_child_deref(2);</div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;  uint16 guard_count = guard_set.get_children_count();</div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;  <span class="keywordflow">for</span> (uint16 i = 1; i &lt;= guard_count; ++i) {</div>
 <div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160; </div>
-<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;}</div>
-<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160; </div>
-<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;<span class="keywordtype">bool</span> match(<span class="keyword">const</span> IPGMContext &amp;input, <span class="keyword">const</span> IPGMContext &amp;pattern, <span class="keyword">const</span> IPGMContext &amp;productions, vector&lt;uint16&gt; &amp;production_indices) {</div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160; </div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;  IPGMContext &amp;skeleton = IPGMContext();</div>
-<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;  uint16 last_patch_index;</div>
-<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;  <span class="keywordflow">if</span> (pattern[0].asOpcode() == Opcodes::Ptn) {</div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;    <span class="keywordflow">if</span> (!guard_set.get_child_deref(i).evaluate_no_dereference()) <span class="comment">// WARNING: no check for duplicates.</span></div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;  }</div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160; </div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;}</div>
+<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160; </div>
+<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;<span class="keywordtype">bool</span> match(<span class="keyword">const</span> IPGMContext &amp;input, <span class="keyword">const</span> IPGMContext &amp;pattern, <span class="keyword">const</span> IPGMContext &amp;productions, vector&lt;uint16&gt; &amp;production_indices) {</div>
 <div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160; </div>
-<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;    skeleton = pattern.get_child_deref(1);</div>
-<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;    <span class="keywordflow">if</span> (!skeleton.match(input))</div>
-<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;    last_patch_index = pattern.get_last_patch_index();</div>
-<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;    <span class="keywordflow">if</span> (!match(input, pattern))</div>
-<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160; </div>
-<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;    <span class="keywordflow">goto</span> build_productions;</div>
-<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;  }</div>
-<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160; </div>
-<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;  <span class="keywordflow">if</span> (pattern[0].asOpcode() == Opcodes::AntiPtn) {</div>
-<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160; </div>
-<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;    skeleton = pattern.get_child_deref(1);</div>
-<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;    <span class="keywordflow">if</span> (skeleton.match(input))</div>
-<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;    last_patch_index = pattern.get_last_patch_index();</div>
-<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;    <span class="keywordflow">if</span> (match(input, pattern))</div>
-<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160; </div>
-<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;    <span class="keywordflow">goto</span> build_productions;</div>
-<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;  }</div>
-<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160; </div>
-<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160; </div>
-<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;build_productions:</div>
-<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;  <span class="comment">// compute all productions for this input.</span></div>
-<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;  uint16 production_count = productions.get_children_count();</div>
-<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160;  uint16 production_index;</div>
-<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;  <span class="keywordflow">for</span> (uint16 i = 1; i &lt;= production_count; ++i) {</div>
-<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160; </div>
-<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;    IPGMContext prod = productions.get_child(i);</div>
-<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;    <span class="comment">//prod.trace();</span></div>
-<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;    prod.evaluate();</div>
-<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160;    prod.copy_to_value_array(production_index);</div>
-<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;    production_indices.push_back(production_index);</div>
-<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;  }</div>
-<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160; </div>
-<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;  pattern.unpatch_code(last_patch_index);</div>
-<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;}</div>
+<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;  IPGMContext &amp;skeleton = IPGMContext();</div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;  uint16 last_patch_index;</div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;  <span class="keywordflow">if</span> (pattern[0].asOpcode() == Opcodes::Ptn) {</div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160; </div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;    skeleton = pattern.get_child_deref(1);</div>
+<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;    <span class="keywordflow">if</span> (!skeleton.match(input))</div>
+<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;    last_patch_index = pattern.get_last_patch_index();</div>
+<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;    <span class="keywordflow">if</span> (!match(input, pattern))</div>
+<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160; </div>
+<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;    <span class="keywordflow">goto</span> build_productions;</div>
+<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;  }</div>
+<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160; </div>
+<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160;  <span class="keywordflow">if</span> (pattern[0].asOpcode() == Opcodes::AntiPtn) {</div>
+<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160; </div>
+<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;    skeleton = pattern.get_child_deref(1);</div>
+<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;    <span class="keywordflow">if</span> (skeleton.match(input))</div>
+<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;    last_patch_index = pattern.get_last_patch_index();</div>
+<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;    <span class="keywordflow">if</span> (match(input, pattern))</div>
+<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160; </div>
+<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;    <span class="keywordflow">goto</span> build_productions;</div>
+<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;  }</div>
+<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160; </div>
+<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160; </div>
+<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;build_productions:</div>
+<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;  <span class="comment">// compute all productions for this input.</span></div>
+<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;  uint16 production_count = productions.get_children_count();</div>
+<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;  uint16 production_index;</div>
+<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;  <span class="keywordflow">for</span> (uint16 i = 1; i &lt;= production_count; ++i) {</div>
+<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160; </div>
+<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;    IPGMContext prod = productions.get_child(i);</div>
+<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;    <span class="comment">//prod.trace();</span></div>
+<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;    prod.evaluate();</div>
+<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;    prod.copy_to_value_array(production_index);</div>
+<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;    production_indices.push_back(production_index);</div>
+<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;  }</div>
 <div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160; </div>
-<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;<span class="keywordtype">void</span> reduce(<span class="keyword">const</span> IPGMContext &amp;context, <span class="keyword">const</span> IPGMContext &amp;input_set, <span class="keyword">const</span> IPGMContext &amp;section, vector&lt;uint16&gt; &amp;input_indices, vector&lt;uint16&gt; &amp;production_indices) {</div>
-<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160; </div>
-<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;  IPGMContext pattern = section.get_child_deref(1);</div>
-<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;  <span class="keywordflow">if</span> (pattern[0].asOpcode() != Opcodes::Ptn &amp;&amp; pattern[0].asOpcode() != Opcodes::AntiPtn)</div>
-<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;    <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;  pattern.unpatch_code(last_patch_index);</div>
+<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;}</div>
+<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160; </div>
+<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;<span class="keywordtype">void</span> reduce(<span class="keyword">const</span> IPGMContext &amp;context, <span class="keyword">const</span> IPGMContext &amp;input_set, <span class="keyword">const</span> IPGMContext &amp;section, vector&lt;uint16&gt; &amp;input_indices, vector&lt;uint16&gt; &amp;production_indices) {</div>
 <div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160; </div>
-<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;  IPGMContext productions = section.get_child_deref(2);</div>
-<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;  <span class="keywordflow">if</span> (productions[0].getDescriptor() != Atom::SET)</div>
+<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;  IPGMContext pattern = section.get_child_deref(1);</div>
+<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;  <span class="keywordflow">if</span> (pattern[0].asOpcode() != Opcodes::Ptn &amp;&amp; pattern[0].asOpcode() != Opcodes::AntiPtn)</div>
 <div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;    <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160; </div>
-<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;  uint16 production_count = productions.get_children_count();</div>
-<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;  <span class="keywordflow">if</span> (!production_count)</div>
+<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;  IPGMContext productions = section.get_child_deref(2);</div>
+<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;  <span class="keywordflow">if</span> (productions[0].getDescriptor() != Atom::SET)</div>
 <div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;    <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160; </div>
-<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;  vector&lt;uint16&gt;::iterator i;</div>
-<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;  <span class="keywordflow">for</span> (i = input_indices.begin(); i != input_indices.end();) { <span class="comment">// to be successful, at least one input must match the pattern.</span></div>
-<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160; </div>
-<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;    IPGMContext c = input_set.get_child_deref(*i);</div>
-<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;    <span class="keywordflow">if</span> (c.is_undefined()) {</div>
-<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160; </div>
-<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;      i = input_indices.erase(i);</div>
-<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;      <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;    }</div>
+<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;  uint16 production_count = productions.get_children_count();</div>
+<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;  <span class="keywordflow">if</span> (!production_count)</div>
+<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160;    <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160; </div>
+<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;  vector&lt;uint16&gt;::iterator i;</div>
+<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;  <span class="keywordflow">for</span> (i = input_indices.begin(); i != input_indices.end();) { <span class="comment">// to be successful, at least one input must match the pattern.</span></div>
+<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160; </div>
+<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;    IPGMContext c = input_set.get_child_deref(*i);</div>
+<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;    <span class="keywordflow">if</span> (c.is_undefined()) {</div>
 <div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160; </div>
-<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;    <span class="keywordtype">bool</span> failure = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;    <span class="keywordflow">if</span> (!match(c, pattern, productions, production_indices)) {</div>
-<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160; </div>
-<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;      failure = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;      <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;    }</div>
+<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;      i = input_indices.erase(i);</div>
+<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;      <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;    }</div>
+<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160; </div>
+<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;    <span class="keywordtype">bool</span> failure = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;    <span class="keywordflow">if</span> (!match(c, pattern, productions, production_indices)) {</div>
 <div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160; </div>
-<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;    <span class="keywordflow">if</span> (failure)</div>
-<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160;      ++i;</div>
-<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;    <span class="keywordflow">else</span> <span class="comment">// pattern matched: remove the input from the todo list.</span></div>
-<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;      i = input_indices.erase(i);</div>
-<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;  }</div>
-<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;}</div>
-<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160; </div>
-<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160;<span class="keywordtype">bool</span> IPGMContext::Red(<span class="keyword">const</span> IPGMContext &amp;context) {</div>
-<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;  <span class="comment">//context.trace();</span></div>
-<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;  IPGMContext input_set = context.get_child_deref(1);</div>
-<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160;  <span class="keywordflow">if</span> (!input_set.evaluate_no_dereference())</div>
-<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160; </div>
-<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;  <span class="comment">// a section is a set of one pattern and a set of productions.</span></div>
-<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;  IPGMContext positive_section = context.get_child_deref(2);</div>
-<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;  <span class="keywordflow">if</span> (!positive_section.get_child_deref(1).evaluate_no_dereference()) <span class="comment">// evaluate the pattern only.</span></div>
-<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160; </div>
-<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;  IPGMContext negative_section = context.get_child_deref(3);</div>
-<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;  <span class="keywordflow">if</span> (!negative_section.get_child_deref(1).evaluate_no_dereference()) <span class="comment">// evaluate the pattern only.</span></div>
+<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;      failure = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160;      <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;    }</div>
+<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160; </div>
+<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;    <span class="keywordflow">if</span> (failure)</div>
+<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;      ++i;</div>
+<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160;    <span class="keywordflow">else</span> <span class="comment">// pattern matched: remove the input from the todo list.</span></div>
+<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160;      i = input_indices.erase(i);</div>
+<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;  }</div>
+<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;}</div>
+<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160; </div>
+<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160;<span class="keywordtype">bool</span> IPGMContext::Red(<span class="keyword">const</span> IPGMContext &amp;context) {</div>
+<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160;  <span class="comment">//context.trace();</span></div>
+<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;  IPGMContext input_set = context.get_child_deref(1);</div>
+<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;  <span class="keywordflow">if</span> (!input_set.evaluate_no_dereference())</div>
+<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160; </div>
+<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;  <span class="comment">// a section is a set of one pattern and a set of productions.</span></div>
+<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;  IPGMContext positive_section = context.get_child_deref(2);</div>
+<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;  <span class="keywordflow">if</span> (!positive_section.get_child_deref(1).evaluate_no_dereference()) <span class="comment">// evaluate the pattern only.</span></div>
 <div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160; </div>
-<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;  vector&lt;uint16&gt; input_indices; <span class="comment">// todo list of inputs to match.</span></div>
-<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160;  <span class="keywordflow">for</span> (uint16 i = 1; i &lt;= input_set.get_children_count(); ++i)</div>
-<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160;    input_indices.push_back(i);</div>
+<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;  IPGMContext negative_section = context.get_child_deref(3);</div>
+<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160;  <span class="keywordflow">if</span> (!negative_section.get_child_deref(1).evaluate_no_dereference()) <span class="comment">// evaluate the pattern only.</span></div>
+<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160; </div>
-<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160;  vector&lt;uint16&gt; production_indices; <span class="comment">// list of productions built upon successful matches.</span></div>
-<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160; </div>
-<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;  <span class="keywordflow">if</span> (input_set[0].getDescriptor() != Atom::SET &amp;&amp;</div>
-<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;    input_set[0].getDescriptor() != Atom::S_SET &amp;&amp;</div>
-<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;    positive_section[0].getDescriptor() != Atom::SET &amp;&amp;</div>
-<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;    negative_section[0].getDescriptor() != Atom::SET)</div>
-<div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;    <span class="keywordflow">goto</span> failure;</div>
-<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160; </div>
-<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;  uint16 input_count = input_set.get_children_count();</div>
-<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;  <span class="keywordflow">if</span> (!input_count)</div>
+<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160;  vector&lt;uint16&gt; input_indices; <span class="comment">// todo list of inputs to match.</span></div>
+<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;  <span class="keywordflow">for</span> (uint16 i = 1; i &lt;= input_set.get_children_count(); ++i)</div>
+<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;    input_indices.push_back(i);</div>
+<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160; </div>
+<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;  vector&lt;uint16&gt; production_indices; <span class="comment">// list of productions built upon successful matches.</span></div>
+<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160; </div>
+<div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;  <span class="keywordflow">if</span> (input_set[0].getDescriptor() != Atom::SET &amp;&amp;</div>
+<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;    input_set[0].getDescriptor() != Atom::S_SET &amp;&amp;</div>
+<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;    positive_section[0].getDescriptor() != Atom::SET &amp;&amp;</div>
+<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;    negative_section[0].getDescriptor() != Atom::SET)</div>
 <div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;    <span class="keywordflow">goto</span> failure;</div>
 <div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160; </div>
-<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;  reduce(context, input_set, positive_section, input_indices, production_indices); <span class="comment">// input_indices now filled only with the inputs that did not match the positive pattern.</span></div>
-<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;  reduce(context, input_set, negative_section, input_indices, production_indices); <span class="comment">// input_indices now filled only with the inputs that did not match the positive nor the negative pattern.</span></div>
-<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;  <span class="keywordflow">if</span> (production_indices.size()) {</div>
+<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;  uint16 input_count = input_set.get_children_count();</div>
+<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;  <span class="keywordflow">if</span> (!input_count)</div>
+<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;    <span class="keywordflow">goto</span> failure;</div>
 <div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160; </div>
-<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;    <span class="comment">// build the set of all productions in the value array.</span></div>
-<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;    context.setCompoundResultHead(Atom::Set(production_indices.size()));</div>
-<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;    <span class="keywordflow">for</span> (uint16 i = 0; i &lt; production_indices.size(); ++i) <span class="comment">// fill the set with iptrs to productions: the latter are copied in the value array.</span></div>
-<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;      context.addCompoundResultPart(Atom::IPointer(production_indices[i]));</div>
-<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;    <span class="comment">//(*context).trace();</span></div>
-<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160;  }</div>
-<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;failure:</div>
-<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;  context.setCompoundResultHead(Atom::Set(0));</div>
-<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;}</div>
-<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160; </div>
-<div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;<span class="keywordtype">bool</span> IPGMContext::Ins(<span class="keyword">const</span> IPGMContext &amp;context) {</div>
-<div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160; </div>
-<div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160;  IPGMContext <span class="keywordtype">object</span> = context.get_child_deref(1);</div>
-<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160;  IPGMContext args = context.get_child_deref(2);</div>
-<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160;  IPGMContext run = context.get_child_deref(3);</div>
-<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160;  IPGMContext tsc = context.get_child_deref(4);</div>
-<div class="line"><a name="l00660"></a><span class="lineno">  660</span>&#160;  IPGMContext res = context.get_child_deref(5);</div>
-<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160;  IPGMContext nfr = context.get_child_deref(6);</div>
-<div class="line"><a name="l00662"></a><span class="lineno">  662</span>&#160; </div>
-<div class="line"><a name="l00663"></a><span class="lineno">  663</span>&#160;  <a class="code" href="classr__code_1_1_code.html">Code</a> *pgm = <span class="keywordtype">object</span>.get_object();</div>
-<div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160;  uint16 pgm_opcode = pgm-&gt;code(0).asOpcode();</div>
-<div class="line"><a name="l00665"></a><span class="lineno">  665</span>&#160;  <span class="keywordflow">if</span> (pgm_opcode != Opcodes::Pgm &amp;&amp;</div>
-<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;    pgm_opcode != Opcodes::AntiPgm) {</div>
-<div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160; </div>
-<div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;    context.setAtomicResult(Atom::Nil());</div>
-<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;  }</div>
+<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;  reduce(context, input_set, positive_section, input_indices, production_indices); <span class="comment">// input_indices now filled only with the inputs that did not match the positive pattern.</span></div>
+<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;  reduce(context, input_set, negative_section, input_indices, production_indices); <span class="comment">// input_indices now filled only with the inputs that did not match the positive nor the negative pattern.</span></div>
+<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;  <span class="keywordflow">if</span> (production_indices.size()) {</div>
+<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160; </div>
+<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;    <span class="comment">// build the set of all productions in the value array.</span></div>
+<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;    context.setCompoundResultHead(Atom::Set(production_indices.size()));</div>
+<div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160;    <span class="keywordflow">for</span> (uint16 i = 0; i &lt; production_indices.size(); ++i) <span class="comment">// fill the set with iptrs to productions: the latter are copied in the value array.</span></div>
+<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;      context.addCompoundResultPart(Atom::IPointer(production_indices[i]));</div>
+<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;    <span class="comment">//(*context).trace();</span></div>
+<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;  }</div>
+<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;failure:</div>
+<div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;  context.setCompoundResultHead(Atom::Set(0));</div>
+<div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160;}</div>
+<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160; </div>
+<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160;<span class="keywordtype">bool</span> IPGMContext::Ins(<span class="keyword">const</span> IPGMContext &amp;context) {</div>
+<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160; </div>
+<div class="line"><a name="l00660"></a><span class="lineno">  660</span>&#160;  IPGMContext <span class="keywordtype">object</span> = context.get_child_deref(1);</div>
+<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160;  IPGMContext args = context.get_child_deref(2);</div>
+<div class="line"><a name="l00662"></a><span class="lineno">  662</span>&#160;  IPGMContext run = context.get_child_deref(3);</div>
+<div class="line"><a name="l00663"></a><span class="lineno">  663</span>&#160;  IPGMContext tsc = context.get_child_deref(4);</div>
+<div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160;  IPGMContext res = context.get_child_deref(5);</div>
+<div class="line"><a name="l00665"></a><span class="lineno">  665</span>&#160;  IPGMContext nfr = context.get_child_deref(6);</div>
+<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160; </div>
+<div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160;  <a class="code" href="classr__code_1_1_code.html">Code</a> *pgm = <span class="keywordtype">object</span>.get_object();</div>
+<div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;  uint16 pgm_opcode = pgm-&gt;code(0).asOpcode();</div>
+<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;  <span class="keywordflow">if</span> (pgm_opcode != Opcodes::Pgm &amp;&amp;</div>
+<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;    pgm_opcode != Opcodes::AntiPgm) {</div>
 <div class="line"><a name="l00671"></a><span class="lineno">  671</span>&#160; </div>
-<div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160;  <span class="keywordflow">if</span> (pgm &amp;&amp; args[0].getDescriptor() == Atom::SET) {</div>
-<div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160; </div>
-<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;    uint16 pattern_set_index = pgm-&gt;code(PGM_TPL_ARGS).asIndex();</div>
-<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;    uint16 arg_count = args[0].getAtomCount();</div>
-<div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160;    <span class="keywordflow">if</span> (pgm-&gt;code(pattern_set_index).getAtomCount() != arg_count) {</div>
+<div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160;    context.setAtomicResult(Atom::Nil());</div>
+<div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;  }</div>
+<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160; </div>
+<div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160;  <span class="keywordflow">if</span> (pgm &amp;&amp; args[0].getDescriptor() == Atom::SET) {</div>
 <div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160; </div>
-<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;      context.setAtomicResult(Atom::Nil());</div>
-<div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;    }</div>
+<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;    uint16 pattern_set_index = pgm-&gt;code(PGM_TPL_ARGS).asIndex();</div>
+<div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160;    uint16 arg_count = args[0].getAtomCount();</div>
+<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;    <span class="keywordflow">if</span> (pgm-&gt;code(pattern_set_index).getAtomCount() != arg_count) {</div>
 <div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160; </div>
-<div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160;    <span class="comment">// match args with the tpl patterns in _object.</span></div>
-<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;    IPGMContext pattern_set(pgm, pattern_set_index);</div>
-<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;    <span class="keywordflow">for</span> (uint16 i = 1; i &lt;= arg_count; ++i) {</div>
+<div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160;      context.setAtomicResult(Atom::Nil());</div>
+<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;    }</div>
 <div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160; </div>
-<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;      IPGMContext arg = args.get_child_deref(i);</div>
-<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;      IPGMContext skel = pattern_set.get_child_deref(i).get_child_deref(1);</div>
-<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;      <span class="keywordflow">if</span> (!skel.match(arg)) {</div>
+<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;    <span class="comment">// match args with the tpl patterns in _object.</span></div>
+<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;    IPGMContext pattern_set(pgm, pattern_set_index);</div>
+<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;    <span class="keywordflow">for</span> (uint16 i = 1; i &lt;= arg_count; ++i) {</div>
 <div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160; </div>
-<div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;        context.setAtomicResult(Atom::Nil());</div>
-<div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;      }</div>
-<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;    }</div>
-<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160; </div>
-<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;    <a class="code" href="classr__code_1_1_code.html">Code</a> *ipgm; <span class="comment">// created in the production array.</span></div>
-<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;    <span class="keywordflow">if</span> (pgm_opcode == Opcodes::AntiPgm)</div>
-<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;      ipgm = context.build_object(Atom::InstantiatedAntiProgram(Opcodes::IPgm, IPGM_ARITY));</div>
-<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;    <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160; </div>
-<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;      uint16 input_index = pgm-&gt;code(PGM_INPUTS).asIndex();</div>
-<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;      uint16 input_count = pgm-&gt;code(input_index).getAtomCount();</div>
-<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;      <span class="keywordflow">if</span> (input_count == 0)</div>
-<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;        ipgm = context.build_object(Atom::InstantiatedInputLessProgram(Opcodes::IPgm, IPGM_ARITY));</div>
-<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;      <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;        ipgm = context.build_object(Atom::InstantiatedProgram(Opcodes::IPgm, IPGM_ARITY));</div>
-<div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160;    }</div>
-<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160; </div>
-<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;    ipgm-&gt;code(IPGM_PGM) = Atom::RPointer(0); <span class="comment">// points to the pgm object.</span></div>
-<div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;    ipgm-&gt;add_reference(pgm);</div>
-<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160; </div>
-<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;    uint16 extent_index = 0;</div>
-<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;    ipgm-&gt;code(IPGM_ARGS) = Atom::IPointer(IPGM_ARITY + 1); <span class="comment">// points to the arg set.</span></div>
-<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;    args.copy(ipgm, IPGM_ARITY + 1, extent_index); <span class="comment">// writes the args after psln_thr.</span></div>
+<div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;      IPGMContext arg = args.get_child_deref(i);</div>
+<div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;      IPGMContext skel = pattern_set.get_child_deref(i).get_child_deref(1);</div>
+<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;      <span class="keywordflow">if</span> (!skel.match(arg)) {</div>
+<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160; </div>
+<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;        context.setAtomicResult(Atom::Nil());</div>
+<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;      }</div>
+<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;    }</div>
+<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160; </div>
+<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;    <a class="code" href="classr__code_1_1_code.html">Code</a> *ipgm; <span class="comment">// created in the production array.</span></div>
+<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;    <span class="keywordflow">if</span> (pgm_opcode == Opcodes::AntiPgm)</div>
+<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;      ipgm = context.build_object(Atom::InstantiatedAntiProgram(Opcodes::IPgm, IPGM_ARITY));</div>
+<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;    <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160; </div>
+<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;      uint16 input_index = pgm-&gt;code(PGM_INPUTS).asIndex();</div>
+<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;      uint16 input_count = pgm-&gt;code(input_index).getAtomCount();</div>
+<div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160;      <span class="keywordflow">if</span> (input_count == 0)</div>
+<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160;        ipgm = context.build_object(Atom::InstantiatedInputLessProgram(Opcodes::IPgm, IPGM_ARITY));</div>
+<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;      <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;        ipgm = context.build_object(Atom::InstantiatedProgram(Opcodes::IPgm, IPGM_ARITY));</div>
+<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;    }</div>
+<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160; </div>
+<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;    ipgm-&gt;code(IPGM_PGM) = Atom::RPointer(0); <span class="comment">// points to the pgm object.</span></div>
+<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;    ipgm-&gt;add_reference(pgm);</div>
 <div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160; </div>
-<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;    ipgm-&gt;code(IPGM_RUN) = run[0];</div>
-<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;    ipgm-&gt;code(IPGM_TSC) = Atom::IPointer(extent_index); <span class="comment">// points to the tsc.</span></div>
-<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160; </div>
-<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;    ipgm-&gt;code(extent_index++) = tsc[0]; <span class="comment">// writes the tsc after the args.</span></div>
-<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;    ipgm-&gt;code(extent_index++) = tsc[1];</div>
-<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;    ipgm-&gt;code(extent_index++) = tsc[2];</div>
+<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;    uint16 extent_index = 0;</div>
+<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;    ipgm-&gt;code(IPGM_ARGS) = Atom::IPointer(IPGM_ARITY + 1); <span class="comment">// points to the arg set.</span></div>
+<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;    args.copy(ipgm, IPGM_ARITY + 1, extent_index); <span class="comment">// writes the args after psln_thr.</span></div>
+<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160; </div>
+<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;    ipgm-&gt;code(IPGM_RUN) = run[0];</div>
+<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;    ipgm-&gt;code(IPGM_TSC) = Atom::IPointer(extent_index); <span class="comment">// points to the tsc.</span></div>
 <div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160; </div>
-<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160;    ipgm-&gt;code(IPGM_RES) = res[0]; <span class="comment">// res.</span></div>
-<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;    ipgm-&gt;code(IPGM_NFR) = nfr[0]; <span class="comment">// nfr.</span></div>
-<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;    ipgm-&gt;code(IPGM_ARITY) = Atom::Float(1); <span class="comment">// psln_thr.</span></div>
+<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160;    ipgm-&gt;code(extent_index++) = tsc[0]; <span class="comment">// writes the tsc after the args.</span></div>
+<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;    ipgm-&gt;code(extent_index++) = tsc[1];</div>
+<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;    ipgm-&gt;code(extent_index++) = tsc[2];</div>
 <div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160; </div>
-<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;    context.setAtomicResult(Atom::ProductionPointer(context.addProduction(ipgm, <span class="keyword">true</span>))); <span class="comment">// object may be new: we don&#39;t know at this point, therefore check=true.</span></div>
-<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;  }</div>
+<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;    ipgm-&gt;code(IPGM_RES) = res[0]; <span class="comment">// res.</span></div>
+<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;    ipgm-&gt;code(IPGM_NFR) = nfr[0]; <span class="comment">// nfr.</span></div>
+<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;    ipgm-&gt;code(IPGM_ARITY) = Atom::Float(1); <span class="comment">// psln_thr.</span></div>
 <div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160; </div>
-<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;  context.setAtomicResult(Atom::Nil());</div>
-<div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;}</div>
+<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;    context.setAtomicResult(Atom::ProductionPointer(context.addProduction(ipgm, <span class="keyword">true</span>))); <span class="comment">// object may be new: we don&#39;t know at this point, therefore check=true.</span></div>
+<div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;  }</div>
 <div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160; </div>
-<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;<span class="keywordtype">bool</span> IPGMContext::Fvw(<span class="keyword">const</span> IPGMContext &amp;context) {</div>
-<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160; </div>
-<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;  IPGMContext <span class="keywordtype">object</span> = context.get_child_deref(1);</div>
-<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;  IPGMContext group = context.get_child_deref(2);</div>
-<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160; </div>
-<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;  <a class="code" href="classr__code_1_1_code.html">Code</a> *_object = <span class="keywordtype">object</span>.get_object();</div>
-<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;  Group *_group = (Group *)group.get_object();</div>
-<div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;  <span class="keywordflow">if</span> (!_object || !_group) {</div>
+<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;  context.setAtomicResult(Atom::Nil());</div>
+<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;}</div>
+<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160; </div>
+<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;<span class="keywordtype">bool</span> IPGMContext::Fvw(<span class="keyword">const</span> IPGMContext &amp;context) {</div>
+<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160; </div>
+<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;  IPGMContext <span class="keywordtype">object</span> = context.get_child_deref(1);</div>
+<div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;  IPGMContext group = context.get_child_deref(2);</div>
 <div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160; </div>
-<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;    context.setAtomicResult(Atom::Nil());</div>
-<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;  }</div>
+<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;  <a class="code" href="classr__code_1_1_code.html">Code</a> *_object = <span class="keywordtype">object</span>.get_object();</div>
+<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;  Group *_group = (Group *)group.get_object();</div>
+<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;  <span class="keywordflow">if</span> (!_object || !_group) {</div>
 <div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160; </div>
-<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;  View *v = (View *)_object-&gt;get_view(_group, <span class="keyword">true</span>); <span class="comment">// returns (a copy of: deprecated) of the view, if any.</span></div>
-<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;  <span class="keywordflow">if</span> (v) { <span class="comment">// copy the view in the value array: code on VIEW_CODE_MAX_SIZE followed by 2 atoms holding raw pointers to grp and org.</span></div>
-<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160; </div>
-<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;    context.setCompoundResultHead(v-&gt;code(0));</div>
-<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;    <span class="keywordflow">for</span> (uint16 i = 1; i &lt; VIEW_CODE_MAX_SIZE; ++i)</div>
-<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;      context.addCompoundResultPart(v-&gt;code(i));</div>
-<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;    context.addCompoundResultPart(<a class="code" href="classr__code_1_1_atom.html">Atom</a>((uint32)v-&gt;references_[0]));</div>
-<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;    context.addCompoundResultPart(<a class="code" href="classr__code_1_1_atom.html">Atom</a>((uint32)v-&gt;references_[1]));</div>
-<div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;    <span class="keyword">delete</span> v;</div>
-<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;  }</div>
-<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160; </div>
-<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;  context.setAtomicResult(Atom::Nil());</div>
-<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;}</div>
-<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;}</div>
+<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;    context.setAtomicResult(Atom::Nil());</div>
+<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;  }</div>
+<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160; </div>
+<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;  View *v = (View *)_object-&gt;get_view(_group, <span class="keyword">true</span>); <span class="comment">// returns (a copy of: deprecated) of the view, if any.</span></div>
+<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;  <span class="keywordflow">if</span> (v) { <span class="comment">// copy the view in the value array: code on VIEW_CODE_MAX_SIZE followed by 2 atoms holding raw pointers to grp and org.</span></div>
+<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160; </div>
+<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;    context.setCompoundResultHead(v-&gt;code(0));</div>
+<div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;    <span class="keywordflow">for</span> (uint16 i = 1; i &lt; VIEW_CODE_MAX_SIZE; ++i)</div>
+<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;      context.addCompoundResultPart(v-&gt;code(i));</div>
+<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;    context.addCompoundResultPart(<a class="code" href="classr__code_1_1_atom.html">Atom</a>((uint32)v-&gt;references_[0]));</div>
+<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;    context.addCompoundResultPart(<a class="code" href="classr__code_1_1_atom.html">Atom</a>((uint32)v-&gt;references_[1]));</div>
+<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;    <span class="keyword">delete</span> v;</div>
+<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;  }</div>
+<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160; </div>
+<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;  context.setAtomicResult(Atom::Nil());</div>
+<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;}</div>
+<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassr__code_1_1_atom_html"><div class="ttname"><a href="classr__code_1_1_atom.html">r_code::Atom</a></div><div class="ttdef"><b>Definition:</b> <a href="atom_8h_source.html#l00104">atom.h:104</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_code_html"><div class="ttname"><a href="classr__code_1_1_code.html">r_code::Code</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00223">r_code/object.h:224</a></div></div>

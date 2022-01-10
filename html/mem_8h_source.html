@@ -469,81 +469,81 @@ $(function() {
 <div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160; </div>
 <div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;  <span class="keywordtype">bool</span> matches_axiom(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* obj);</div>
 <div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160; </div>
-<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> init_timings(Timestamp now, <span class="keyword">const</span> <a class="code" href="classr__code_1_1list.html">r_code::list</a>&lt;<a class="code" href="classcore_1_1_p.html">P&lt;r_code::Code&gt;</a>&gt;&amp; objects);</div>
-<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160; </div>
-<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;  <span class="comment">//std::vector&lt;uint64&gt; timings_report; // debug facility.</span></div>
-<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160; </div>
-<div class="line"><a name="l00611"></a><span class="lineno"><a class="line" href="classr__exec_1_1___mem.html#ae514511d34345fe72a226d4f9a019cf7">  611</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classr__exec_1_1___mem.html#ae514511d34345fe72a226d4f9a019cf7">set_default_runtime_output_stream</a>(std::ostream *default_runtime_output_stream) {</div>
-<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160;    default_runtime_output_stream_ = default_runtime_output_stream;</div>
-<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;  }</div>
-<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160; </div>
-<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;  <span class="keyword">static</span> std::ostream &amp;Output(TraceLevel l);</div>
-<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160;};</div>
-<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160; </div>
-<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160;<span class="comment">// _Mem that stores the objects as long as they are not invalidated.</span></div>
-<div class="line"><a name="l00626"></a><span class="lineno"><a class="line" href="classr__exec_1_1_mem_static.html">  626</a></span>&#160;<span class="keyword">class </span>r_exec_dll <a class="code" href="classr__exec_1_1_mem_static.html">MemStatic</a> :</div>
-<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;  <span class="keyword">public</span> <a class="code" href="classr__exec_1_1___mem.html">_Mem</a> {</div>
-<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;  <a class="code" href="classcore_1_1_critical_section.html">CriticalSection</a> objectsCS_; <span class="comment">// protects last_oid_ and objects_.</span></div>
-<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;  uint32 last_oid_;</div>
-<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;  <span class="keywordtype">void</span> bind(<a class="code" href="classr__exec_1_1_view.html">View</a> *view); <span class="comment">// assigns an oid, stores view-&gt;object in objects if needed.</span></div>
-<div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;  <span class="keywordtype">void</span> set_last_oid(int32 oid);</div>
-<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;  <a class="code" href="classr__exec_1_1_mem_static.html">MemStatic</a>();</div>
-<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;  <span class="keyword">virtual</span> ~<a class="code" href="classr__exec_1_1_mem_static.html">MemStatic</a>();</div>
-<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160; </div>
-<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;  <span class="keywordtype">void</span> delete_object(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *<span class="keywordtype">object</span>); <span class="comment">// erase the object from objects if needed.</span></div>
-<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;  <span class="comment">// return an image containing valid objects, or all objects if include_invalidated.</span></div>
-<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;  <a class="code" href="classr__comp_1_1_image.html">r_comp::Image</a> *get_objects(<span class="keywordtype">bool</span> include_invalidated = <span class="keyword">false</span>);</div>
-<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;};</div>
-<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160; </div>
-<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;<span class="comment">// _Mem that does not store objects.</span></div>
-<div class="line"><a name="l00644"></a><span class="lineno"><a class="line" href="classr__exec_1_1_mem_volatile.html">  644</a></span>&#160;<span class="keyword">class </span>r_exec_dll <a class="code" href="classr__exec_1_1_mem_volatile.html">MemVolatile</a> :</div>
-<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;  <span class="keyword">public</span> <a class="code" href="classr__exec_1_1___mem.html">_Mem</a> {</div>
-<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;  <span class="keyword">volatile</span> int32 last_oid_;</div>
-<div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160;  uint32 get_oid();</div>
-<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;  <span class="keywordtype">void</span> bind(<a class="code" href="classr__exec_1_1_view.html">View</a> *view); <span class="comment">// assigns an oid (atomic operation).</span></div>
-<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;  <span class="keywordtype">void</span> set_last_oid(int32 oid);</div>
-<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;  <a class="code" href="classr__exec_1_1_mem_volatile.html">MemVolatile</a>();</div>
-<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;  <span class="keyword">virtual</span> ~<a class="code" href="classr__exec_1_1_mem_volatile.html">MemVolatile</a>();</div>
-<div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160; </div>
-<div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160;  <span class="keywordtype">void</span> delete_object(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *<span class="keywordtype">object</span>) {}</div>
-<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160; </div>
-<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160;  <a class="code" href="classr__comp_1_1_image.html">r_comp::Image</a> *get_objects(<span class="keywordtype">bool</span> include_invalidated = <span class="keyword">false</span>) { <span class="keywordflow">return</span> NULL; }</div>
-<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160;};</div>
-<div class="line"><a name="l00660"></a><span class="lineno">  660</span>&#160; </div>
-<div class="line"><a name="l00668"></a><span class="lineno"><a class="line" href="classr__exec_1_1_mem_exec.html">  668</a></span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">class</span> O, <span class="keyword">class</span> S&gt; <span class="keyword">class </span><a class="code" href="classr__exec_1_1_mem_exec.html">MemExec</a> :</div>
-<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;  <span class="keyword">public</span> S {</div>
-<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00671"></a><span class="lineno">  671</span>&#160;  <a class="code" href="classr__exec_1_1_mem_exec.html">MemExec</a>();</div>
-<div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160;  <span class="keyword">virtual</span> ~<a class="code" href="classr__exec_1_1_mem_exec.html">MemExec</a>();</div>
-<div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160; </div>
-<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;  <span class="comment">// Called at load time.</span></div>
-<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *build_object(<a class="code" href="classr__code_1_1_sys_object.html">r_code::SysObject</a> *source) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160; </div>
-<div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;  <span class="comment">// Called at runtime.</span></div>
-<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *_build_object(<a class="code" href="classr__code_1_1_atom.html">Atom</a> head) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *build_object(<a class="code" href="classr__code_1_1_atom.html">Atom</a> head) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160; </div>
-<div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160;  <span class="comment">// Executive device functions ////////////////////////////////////////////////////////</span></div>
-<div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160; </div>
-<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *check_existence(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *<span class="keywordtype">object</span>);</div>
-<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160; </div>
-<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;  <span class="comment">// Called by the communication device (I/O).</span></div>
-<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;  <span class="keywordtype">void</span> inject(O *<span class="keywordtype">object</span>, <a class="code" href="classr__exec_1_1_view.html">View</a> *view);</div>
-<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;};</div>
-<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160; </div>
-<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;}</div>
-<div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160; </div>
-<div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;<span class="preprocessor">#include &quot;mem.tpl.cpp&quot;</span></div>
-<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160; </div>
-<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> init_timestamps(Timestamp time_reference, <span class="keyword">const</span> <a class="code" href="classr__code_1_1list.html">r_code::list</a>&lt;<a class="code" href="classcore_1_1_p.html">P&lt;r_code::Code&gt;</a>&gt;&amp; objects);</div>
+<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160; </div>
+<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160;  <span class="comment">//std::vector&lt;uint64&gt; timings_report; // debug facility.</span></div>
+<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160; </div>
+<div class="line"><a name="l00612"></a><span class="lineno"><a class="line" href="classr__exec_1_1___mem.html#ae514511d34345fe72a226d4f9a019cf7">  612</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classr__exec_1_1___mem.html#ae514511d34345fe72a226d4f9a019cf7">set_default_runtime_output_stream</a>(std::ostream *default_runtime_output_stream) {</div>
+<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;    default_runtime_output_stream_ = default_runtime_output_stream;</div>
+<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;  }</div>
+<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160; </div>
+<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160;  <span class="keyword">static</span> std::ostream &amp;Output(TraceLevel l);</div>
+<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160;};</div>
+<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160; </div>
+<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160;<span class="comment">// _Mem that stores the objects as long as they are not invalidated.</span></div>
+<div class="line"><a name="l00627"></a><span class="lineno"><a class="line" href="classr__exec_1_1_mem_static.html">  627</a></span>&#160;<span class="keyword">class </span>r_exec_dll <a class="code" href="classr__exec_1_1_mem_static.html">MemStatic</a> :</div>
+<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;  <span class="keyword">public</span> <a class="code" href="classr__exec_1_1___mem.html">_Mem</a> {</div>
+<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;  <a class="code" href="classcore_1_1_critical_section.html">CriticalSection</a> objectsCS_; <span class="comment">// protects last_oid_ and objects_.</span></div>
+<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;  uint32 last_oid_;</div>
+<div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;  <span class="keywordtype">void</span> bind(<a class="code" href="classr__exec_1_1_view.html">View</a> *view); <span class="comment">// assigns an oid, stores view-&gt;object in objects if needed.</span></div>
+<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;  <span class="keywordtype">void</span> set_last_oid(int32 oid);</div>
+<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;  <a class="code" href="classr__exec_1_1_mem_static.html">MemStatic</a>();</div>
+<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160;  <span class="keyword">virtual</span> ~<a class="code" href="classr__exec_1_1_mem_static.html">MemStatic</a>();</div>
+<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160; </div>
+<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;  <span class="keywordtype">void</span> delete_object(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *<span class="keywordtype">object</span>); <span class="comment">// erase the object from objects if needed.</span></div>
+<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;  <span class="comment">// return an image containing valid objects, or all objects if include_invalidated.</span></div>
+<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;  <a class="code" href="classr__comp_1_1_image.html">r_comp::Image</a> *get_objects(<span class="keywordtype">bool</span> include_invalidated = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;};</div>
+<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160; </div>
+<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;<span class="comment">// _Mem that does not store objects.</span></div>
+<div class="line"><a name="l00645"></a><span class="lineno"><a class="line" href="classr__exec_1_1_mem_volatile.html">  645</a></span>&#160;<span class="keyword">class </span>r_exec_dll <a class="code" href="classr__exec_1_1_mem_volatile.html">MemVolatile</a> :</div>
+<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;  <span class="keyword">public</span> <a class="code" href="classr__exec_1_1___mem.html">_Mem</a> {</div>
+<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160;  <span class="keyword">volatile</span> int32 last_oid_;</div>
+<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;  uint32 get_oid();</div>
+<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;  <span class="keywordtype">void</span> bind(<a class="code" href="classr__exec_1_1_view.html">View</a> *view); <span class="comment">// assigns an oid (atomic operation).</span></div>
+<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;  <span class="keywordtype">void</span> set_last_oid(int32 oid);</div>
+<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;  <a class="code" href="classr__exec_1_1_mem_volatile.html">MemVolatile</a>();</div>
+<div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160;  <span class="keyword">virtual</span> ~<a class="code" href="classr__exec_1_1_mem_volatile.html">MemVolatile</a>();</div>
+<div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160; </div>
+<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160;  <span class="keywordtype">void</span> delete_object(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *<span class="keywordtype">object</span>) {}</div>
+<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160; </div>
+<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160;  <a class="code" href="classr__comp_1_1_image.html">r_comp::Image</a> *get_objects(<span class="keywordtype">bool</span> include_invalidated = <span class="keyword">false</span>) { <span class="keywordflow">return</span> NULL; }</div>
+<div class="line"><a name="l00660"></a><span class="lineno">  660</span>&#160;};</div>
+<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160; </div>
+<div class="line"><a name="l00669"></a><span class="lineno"><a class="line" href="classr__exec_1_1_mem_exec.html">  669</a></span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">class</span> O, <span class="keyword">class</span> S&gt; <span class="keyword">class </span><a class="code" href="classr__exec_1_1_mem_exec.html">MemExec</a> :</div>
+<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;  <span class="keyword">public</span> S {</div>
+<div class="line"><a name="l00671"></a><span class="lineno">  671</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160;  <a class="code" href="classr__exec_1_1_mem_exec.html">MemExec</a>();</div>
+<div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160;  <span class="keyword">virtual</span> ~<a class="code" href="classr__exec_1_1_mem_exec.html">MemExec</a>();</div>
+<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160; </div>
+<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;  <span class="comment">// Called at load time.</span></div>
+<div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *build_object(<a class="code" href="classr__code_1_1_sys_object.html">r_code::SysObject</a> *source) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160; </div>
+<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;  <span class="comment">// Called at runtime.</span></div>
+<div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *_build_object(<a class="code" href="classr__code_1_1_atom.html">Atom</a> head) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *build_object(<a class="code" href="classr__code_1_1_atom.html">Atom</a> head) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160; </div>
+<div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160;  <span class="comment">// Executive device functions ////////////////////////////////////////////////////////</span></div>
+<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160; </div>
+<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *check_existence(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *<span class="keywordtype">object</span>);</div>
+<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160; </div>
+<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;  <span class="comment">// Called by the communication device (I/O).</span></div>
+<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;  <span class="keywordtype">void</span> inject(O *<span class="keywordtype">object</span>, <a class="code" href="classr__exec_1_1_view.html">View</a> *view);</div>
+<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;};</div>
+<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160; </div>
+<div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;}</div>
+<div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160; </div>
+<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;<span class="preprocessor">#include &quot;mem.tpl.cpp&quot;</span></div>
+<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160; </div>
+<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclassr__exec_1_1_mem_static_html"><div class="ttname"><a href="classr__exec_1_1_mem_static.html">r_exec::MemStatic</a></div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00626">mem.h:627</a></div></div>
+<div class="ttc" id="aclassr__exec_1_1_mem_static_html"><div class="ttname"><a href="classr__exec_1_1_mem_static.html">r_exec::MemStatic</a></div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00627">mem.h:628</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___mem_html_ad993ec2226df73eaa657ab5fca241f80"><div class="ttname"><a href="classr__exec_1_1___mem.html#ad993ec2226df73eaa657ab5fca241f80">r_exec::_Mem::inject_marker_value_from_io_device</a></div><div class="ttdeci">View * inject_marker_value_from_io_device(r_code::Code *obj, r_code::Code *prop, Atom val, Timestamp after, Timestamp before, View::SyncMode sync_mode)</div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00352">mem.h:352</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___mem_html_a7158e90dd52f20b6300f897897bfeb18"><div class="ttname"><a href="classr__exec_1_1___mem.html#a7158e90dd52f20b6300f897897bfeb18">r_exec::_Mem::inject_marker_value_from_io_device</a></div><div class="ttdeci">View * inject_marker_value_from_io_device(r_code::Code *obj, r_code::Code *prop, r_code::Code *val, Timestamp after, Timestamp before, r_code::Code *group)</div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00457">mem.h:457</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___mem_html_a3d9f7bf9026ea758ec318e58c62f3340"><div class="ttname"><a href="classr__exec_1_1___mem.html#a3d9f7bf9026ea758ec318e58c62f3340">r_exec::_Mem::inject_marker_value_from_io_device</a></div><div class="ttdeci">View * inject_marker_value_from_io_device(r_code::Code *obj, r_code::Code *prop, r_code::Code *val, Timestamp after, Timestamp before)</div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00478">mem.h:478</a></div></div>
@@ -560,17 +560,17 @@ $(function() {
 <div class="ttc" id="aclassr__exec_1_1___mem_html_a74d4a9b9b9e674d661fbecab12f74330"><div class="ttname"><a href="classr__exec_1_1___mem.html#a74d4a9b9b9e674d661fbecab12f74330">r_exec::_Mem::inject_marker_value_from_io_device</a></div><div class="ttdeci">View * inject_marker_value_from_io_device(r_code::Code *obj, r_code::Code *prop, Atom val, Timestamp after, Timestamp before, r_code::Code *group)</div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00373">mem.h:373</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_view_html"><div class="ttname"><a href="classr__exec_1_1_view.html">r_exec::View</a></div><div class="ttdef"><b>Definition:</b> <a href="view_8h_source.html#l00101">view.h:102</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_group_html"><div class="ttname"><a href="classr__exec_1_1_group.html">r_exec::Group</a></div><div class="ttdef"><b>Definition:</b> <a href="group_8h_source.html#l00105">group.h:107</a></div></div>
-<div class="ttc" id="aclassr__exec_1_1___mem_html_ae514511d34345fe72a226d4f9a019cf7"><div class="ttname"><a href="classr__exec_1_1___mem.html#ae514511d34345fe72a226d4f9a019cf7">r_exec::_Mem::set_default_runtime_output_stream</a></div><div class="ttdeci">void set_default_runtime_output_stream(std::ostream *default_runtime_output_stream)</div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00611">mem.h:611</a></div></div>
+<div class="ttc" id="aclassr__exec_1_1___mem_html_ae514511d34345fe72a226d4f9a019cf7"><div class="ttname"><a href="classr__exec_1_1___mem.html#ae514511d34345fe72a226d4f9a019cf7">r_exec::_Mem::set_default_runtime_output_stream</a></div><div class="ttdeci">void set_default_runtime_output_stream(std::ostream *default_runtime_output_stream)</div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00612">mem.h:612</a></div></div>
 <div class="ttc" id="aclassr__comp_1_1_image_html"><div class="ttname"><a href="classr__comp_1_1_image.html">r_comp::Image</a></div><div class="ttdef"><b>Definition:</b> <a href="segments_8h_source.html#l00176">segments.h:176</a></div></div>
 <div class="ttc" id="aclasscore_1_1_semaphore_html"><div class="ttname"><a href="classcore_1_1_semaphore.html">core::Semaphore</a></div><div class="ttdef"><b>Definition:</b> <a href="submodules_2_core_library_2_core_library_2utils_8h_source.html#l00209">submodules/CoreLibrary/CoreLibrary/utils.h:209</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_mem_html"><div class="ttname"><a href="classr__code_1_1_mem.html">r_code::Mem</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00390">r_code/object.h:390</a></div></div>
-<div class="ttc" id="aclassr__exec_1_1_mem_volatile_html"><div class="ttname"><a href="classr__exec_1_1_mem_volatile.html">r_exec::MemVolatile</a></div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00644">mem.h:645</a></div></div>
+<div class="ttc" id="aclassr__exec_1_1_mem_volatile_html"><div class="ttname"><a href="classr__exec_1_1_mem_volatile.html">r_exec::MemVolatile</a></div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00645">mem.h:646</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_controller_html"><div class="ttname"><a href="classr__exec_1_1_controller.html">r_exec::Controller</a></div><div class="ttdef"><b>Definition:</b> <a href="overlay_8h_source.html#l00136">overlay.h:137</a></div></div>
 <div class="ttc" id="aclassr__code_1_1list_html"><div class="ttname"><a href="classr__code_1_1list.html">r_code::list</a></div><div class="ttdef"><b>Definition:</b> <a href="list_8h_source.html#l00099">list.h:99</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___mem_html_a3d651bc4f13bbb695eefec6dfcfc116f"><div class="ttname"><a href="classr__exec_1_1___mem.html#a3d651bc4f13bbb695eefec6dfcfc116f">r_exec::_Mem::inject_marker_value_from_io_device</a></div><div class="ttdeci">View * inject_marker_value_from_io_device(r_code::Code *obj, r_code::Code *prop, r_code::Code *val, Timestamp after, Timestamp before, View::SyncMode sync_mode)</div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00435">mem.h:435</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___mem_html"><div class="ttname"><a href="classr__exec_1_1___mem.html">r_exec::_Mem</a></div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00115">mem.h:116</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_time_job_1_1_compare_html"><div class="ttname"><a href="classr__exec_1_1_time_job_1_1_compare.html">r_exec::TimeJob::Compare</a></div><div class="ttdef"><b>Definition:</b> <a href="time__job_8h_source.html#l00108">time_job.h:108</a></div></div>
-<div class="ttc" id="aclassr__exec_1_1_mem_exec_html"><div class="ttname"><a href="classr__exec_1_1_mem_exec.html">r_exec::MemExec</a></div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00668">mem.h:669</a></div></div>
+<div class="ttc" id="aclassr__exec_1_1_mem_exec_html"><div class="ttname"><a href="classr__exec_1_1_mem_exec.html">r_exec::MemExec</a></div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00669">mem.h:670</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_reduction_core_html"><div class="ttname"><a href="classr__exec_1_1_reduction_core.html">r_exec::ReductionCore</a></div><div class="ttdef"><b>Definition:</b> <a href="reduction__core_8h_source.html#l00104">reduction_core.h:105</a></div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

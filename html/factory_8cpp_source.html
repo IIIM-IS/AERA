@@ -798,212 +798,211 @@ $(function() {
 <div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;  code(SIM_SOLUTION_BEFORE) = Atom::IPointer(SIM_ARITY + 4);</div>
 <div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;  code(SIM_ARITY) = Atom::Float(psln_thr);</div>
 <div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160; </div>
-<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;  <span class="comment">// The time horizon is stored as a timestamp, but it is actually a duration.</span></div>
-<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;  Utils::SetTimestamp&lt;Code&gt;(<span class="keyword">this</span>, SIM_THZ, Timestamp(thz));</div>
-<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;  Utils::SetTimestamp&lt;Code&gt;(<span class="keyword">this</span>, SIM_SOLUTION_BEFORE, solution_before);</div>
-<div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160;}</div>
-<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160; </div>
-<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;<span class="keywordtype">bool</span> Sim::invalidate() {</div>
-<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160; </div>
-<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;  <span class="keywordflow">if</span> (LObject::is_invalidated())</div>
-<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;  <span class="keywordflow">if</span> (<a class="code" href="classr__exec_1_1_sim.html#a2966f430d20d1104b60f9c9ca397ed75">get_f_super_goal</a>()-&gt;is_invalidated())</div>
-<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160; </div>
-<div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;  <span class="keywordflow">return</span> LObject::invalidate();</div>
-<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;}</div>
-<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160; </div>
-<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;<span class="keywordtype">bool</span> Sim::is_invalidated() {</div>
-<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160; </div>
-<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;  <span class="keywordflow">if</span> (LObject::is_invalidated())</div>
-<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;  <span class="keywordflow">if</span> (<a class="code" href="classr__exec_1_1_sim.html#a2966f430d20d1104b60f9c9ca397ed75">get_f_super_goal</a>()-&gt;is_invalidated()) {</div>
-<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160; </div>
-<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;    invalidate();</div>
-<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;  }</div>
-<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;}</div>
-<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160; </div>
-<div class="line"><a name="l00770"></a><span class="lineno"><a class="line" href="classr__exec_1_1_sim.html#a5e6b501b076ce5c3383aec7c3461e21b">  770</a></span>&#160;<a class="code" href="classr__exec_1_1_sim.html">Sim</a>* <a class="code" href="classr__exec_1_1_sim.html#a5e6b501b076ce5c3383aec7c3461e21b">Sim::get_root_sim</a>()</div>
-<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;{</div>
-<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;  <a class="code" href="classr__exec_1_1_sim.html">Sim</a>* result = <span class="keyword">this</span>;</div>
-<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;  <span class="keywordflow">while</span> (result) {</div>
-<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;    <span class="keywordflow">if</span> (result-&gt;get_mode() == SIM_ROOT)</div>
-<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;      <span class="keywordflow">return</span> result;</div>
-<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160; </div>
-<div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160;    result = result-&gt;<a class="code" href="classr__exec_1_1_sim.html#a2966f430d20d1104b60f9c9ca397ed75">get_f_super_goal</a>()-&gt;get_goal()-&gt;<a class="code" href="classr__exec_1_1_goal.html#a929bea301488088d0ed96cbae25e2ef9">get_sim</a>();</div>
-<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;  }</div>
-<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160; </div>
-<div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;  <span class="comment">// A goal had a NULL Sim object. This shouldn&#39;t happen.</span></div>
-<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;  <span class="keywordflow">return</span> NULL;</div>
-<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;}</div>
-<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160; </div>
-<div class="line"><a name="l00784"></a><span class="lineno"><a class="line" href="classr__exec_1_1_sim.html#a85f1cb7d598460a89d02b70dc162275c">  784</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classr__exec_1_1_sim.html#a85f1cb7d598460a89d02b70dc162275c">Sim::register_goal_target</a>(<a class="code" href="classr__exec_1_1___fact.html">_Fact</a>* f_obj) {</div>
-<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;  <a class="code" href="classr__exec_1_1_sim.html">Sim</a>* rootSim = <a class="code" href="classr__exec_1_1_sim.html#a5e6b501b076ce5c3383aec7c3461e21b">get_root_sim</a>();</div>
-<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;  <span class="keywordflow">if</span> (!rootSim)</div>
-<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;    <span class="comment">// We don&#39;t expect this. Return true so that f_obj is injected as a goal anyway.</span></div>
-<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160; </div>
-<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160;  uint16 opcode = f_obj-&gt;code(0).asOpcode();</div>
-<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;  <a class="code" href="classr__code_1_1_code.html">Code</a>* obj = f_obj-&gt;get_reference(0);</div>
-<div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160;  <span class="comment">// Debug: Do we need a critical section for this?</span></div>
-<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; rootSim-&gt;goalTargets_.size(); ++i) {</div>
-<div class="line"><a name="l00794"></a><span class="lineno">  794</span>&#160;    <a class="code" href="classr__exec_1_1___fact.html">_Fact</a>* goalTarget = rootSim-&gt;goalTargets_[i];</div>
-<div class="line"><a name="l00795"></a><span class="lineno">  795</span>&#160;    <span class="comment">// TODO: Actually match timings. For now, ignore timings and just check the fact opcode and match the object.</span></div>
-<div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160;    <span class="keywordflow">if</span> (opcode == goalTarget-&gt;code(0).asOpcode() &amp;&amp; <a class="code" href="classr__exec_1_1___fact.html#aff9d3fb0e136652d4e9125454c8e8ecf">_Fact::MatchObject</a>(obj, goalTarget-&gt;get_reference(0), <span class="keyword">true</span>))</div>
-<div class="line"><a name="l00797"></a><span class="lineno">  797</span>&#160;      <span class="comment">// Already registered.</span></div>
-<div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160;  }</div>
-<div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160; </div>
-<div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160;  rootSim-&gt;goalTargets_.push_back(f_obj);</div>
-<div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160;}</div>
-<div class="line"><a name="l00804"></a><span class="lineno">  804</span>&#160; </div>
-<div class="line"><a name="l00805"></a><span class="lineno"><a class="line" href="classr__exec_1_1_sim_1_1_defeasible_promoted_fact.html#ac463c71c32cbf32d5c8adffad307bfe0">  805</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classr__exec_1_1_sim_1_1_defeasible_promoted_fact.html#ac463c71c32cbf32d5c8adffad307bfe0">Sim::DefeasiblePromotedFact::has_original_fact</a>(<span class="keyword">const</span> <a class="code" href="classr__code_1_1list.html">r_code::list&lt;DefeasiblePromotedFact&gt;</a>&amp; <a class="code" href="classr__code_1_1list.html">list</a>, <span class="keyword">const</span> <a class="code" href="classr__exec_1_1___fact.html">_Fact</a>* original_fact) {</div>
-<div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160;  <span class="keywordflow">for</span> (<span class="keyword">auto</span> d = <a class="code" href="classr__code_1_1list.html">list</a>.begin(); d != <a class="code" href="classr__code_1_1list.html">list</a>.end(); ++d) {</div>
-<div class="line"><a name="l00807"></a><span class="lineno">  807</span>&#160;    <span class="keywordflow">if</span> (original_fact == d-&gt;original_fact_)</div>
-<div class="line"><a name="l00808"></a><span class="lineno">  808</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00809"></a><span class="lineno">  809</span>&#160;  }</div>
-<div class="line"><a name="l00810"></a><span class="lineno">  810</span>&#160; </div>
-<div class="line"><a name="l00811"></a><span class="lineno">  811</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00812"></a><span class="lineno">  812</span>&#160;}</div>
+<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;  Utils::SetDuration&lt;Code&gt;(<span class="keyword">this</span>, SIM_THZ, thz);</div>
+<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;  Utils::SetTimestamp&lt;Code&gt;(<span class="keyword">this</span>, SIM_SOLUTION_BEFORE, solution_before);</div>
+<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;}</div>
+<div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160; </div>
+<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;<span class="keywordtype">bool</span> Sim::invalidate() {</div>
+<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160; </div>
+<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;  <span class="keywordflow">if</span> (LObject::is_invalidated())</div>
+<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;  <span class="keywordflow">if</span> (<a class="code" href="classr__exec_1_1_sim.html#a2966f430d20d1104b60f9c9ca397ed75">get_f_super_goal</a>()-&gt;is_invalidated())</div>
+<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160; </div>
+<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;  <span class="keywordflow">return</span> LObject::invalidate();</div>
+<div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;}</div>
+<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160; </div>
+<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;<span class="keywordtype">bool</span> Sim::is_invalidated() {</div>
+<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160; </div>
+<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;  <span class="keywordflow">if</span> (LObject::is_invalidated())</div>
+<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;  <span class="keywordflow">if</span> (<a class="code" href="classr__exec_1_1_sim.html#a2966f430d20d1104b60f9c9ca397ed75">get_f_super_goal</a>()-&gt;is_invalidated()) {</div>
+<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160; </div>
+<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;    invalidate();</div>
+<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;  }</div>
+<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;}</div>
+<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160; </div>
+<div class="line"><a name="l00769"></a><span class="lineno"><a class="line" href="classr__exec_1_1_sim.html#a5e6b501b076ce5c3383aec7c3461e21b">  769</a></span>&#160;<a class="code" href="classr__exec_1_1_sim.html">Sim</a>* <a class="code" href="classr__exec_1_1_sim.html#a5e6b501b076ce5c3383aec7c3461e21b">Sim::get_root_sim</a>()</div>
+<div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160;{</div>
+<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;  <a class="code" href="classr__exec_1_1_sim.html">Sim</a>* result = <span class="keyword">this</span>;</div>
+<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;  <span class="keywordflow">while</span> (result) {</div>
+<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;    <span class="keywordflow">if</span> (result-&gt;get_mode() == SIM_ROOT)</div>
+<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;      <span class="keywordflow">return</span> result;</div>
+<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160; </div>
+<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160;    result = result-&gt;<a class="code" href="classr__exec_1_1_sim.html#a2966f430d20d1104b60f9c9ca397ed75">get_f_super_goal</a>()-&gt;get_goal()-&gt;<a class="code" href="classr__exec_1_1_goal.html#a929bea301488088d0ed96cbae25e2ef9">get_sim</a>();</div>
+<div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160;  }</div>
+<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160; </div>
+<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;  <span class="comment">// A goal had a NULL Sim object. This shouldn&#39;t happen.</span></div>
+<div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;  <span class="keywordflow">return</span> NULL;</div>
+<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;}</div>
+<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160; </div>
+<div class="line"><a name="l00783"></a><span class="lineno"><a class="line" href="classr__exec_1_1_sim.html#a85f1cb7d598460a89d02b70dc162275c">  783</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classr__exec_1_1_sim.html#a85f1cb7d598460a89d02b70dc162275c">Sim::register_goal_target</a>(<a class="code" href="classr__exec_1_1___fact.html">_Fact</a>* f_obj) {</div>
+<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;  <a class="code" href="classr__exec_1_1_sim.html">Sim</a>* rootSim = <a class="code" href="classr__exec_1_1_sim.html#a5e6b501b076ce5c3383aec7c3461e21b">get_root_sim</a>();</div>
+<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;  <span class="keywordflow">if</span> (!rootSim)</div>
+<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;    <span class="comment">// We don&#39;t expect this. Return true so that f_obj is injected as a goal anyway.</span></div>
+<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160; </div>
+<div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160;  uint16 opcode = f_obj-&gt;code(0).asOpcode();</div>
+<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160;  <a class="code" href="classr__code_1_1_code.html">Code</a>* obj = f_obj-&gt;get_reference(0);</div>
+<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;  <span class="comment">// Debug: Do we need a critical section for this?</span></div>
+<div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; rootSim-&gt;goalTargets_.size(); ++i) {</div>
+<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160;    <a class="code" href="classr__exec_1_1___fact.html">_Fact</a>* goalTarget = rootSim-&gt;goalTargets_[i];</div>
+<div class="line"><a name="l00794"></a><span class="lineno">  794</span>&#160;    <span class="comment">// TODO: Actually match timings. For now, ignore timings and just check the fact opcode and match the object.</span></div>
+<div class="line"><a name="l00795"></a><span class="lineno">  795</span>&#160;    <span class="keywordflow">if</span> (opcode == goalTarget-&gt;code(0).asOpcode() &amp;&amp; <a class="code" href="classr__exec_1_1___fact.html#aff9d3fb0e136652d4e9125454c8e8ecf">_Fact::MatchObject</a>(obj, goalTarget-&gt;get_reference(0), <span class="keyword">true</span>))</div>
+<div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160;      <span class="comment">// Already registered.</span></div>
+<div class="line"><a name="l00797"></a><span class="lineno">  797</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160;  }</div>
+<div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160; </div>
+<div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160;  rootSim-&gt;goalTargets_.push_back(f_obj);</div>
+<div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160;}</div>
+<div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160; </div>
+<div class="line"><a name="l00804"></a><span class="lineno"><a class="line" href="classr__exec_1_1_sim_1_1_defeasible_promoted_fact.html#ac463c71c32cbf32d5c8adffad307bfe0">  804</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classr__exec_1_1_sim_1_1_defeasible_promoted_fact.html#ac463c71c32cbf32d5c8adffad307bfe0">Sim::DefeasiblePromotedFact::has_original_fact</a>(<span class="keyword">const</span> <a class="code" href="classr__code_1_1list.html">r_code::list&lt;DefeasiblePromotedFact&gt;</a>&amp; <a class="code" href="classr__code_1_1list.html">list</a>, <span class="keyword">const</span> <a class="code" href="classr__exec_1_1___fact.html">_Fact</a>* original_fact) {</div>
+<div class="line"><a name="l00805"></a><span class="lineno">  805</span>&#160;  <span class="keywordflow">for</span> (<span class="keyword">auto</span> d = <a class="code" href="classr__code_1_1list.html">list</a>.begin(); d != <a class="code" href="classr__code_1_1list.html">list</a>.end(); ++d) {</div>
+<div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160;    <span class="keywordflow">if</span> (original_fact == d-&gt;original_fact_)</div>
+<div class="line"><a name="l00807"></a><span class="lineno">  807</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00808"></a><span class="lineno">  808</span>&#160;  }</div>
+<div class="line"><a name="l00809"></a><span class="lineno">  809</span>&#160; </div>
+<div class="line"><a name="l00810"></a><span class="lineno">  810</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00811"></a><span class="lineno">  811</span>&#160;}</div>
+<div class="line"><a name="l00812"></a><span class="lineno">  812</span>&#160; </div>
 <div class="line"><a name="l00813"></a><span class="lineno">  813</span>&#160; </div>
-<div class="line"><a name="l00814"></a><span class="lineno">  814</span>&#160; </div>
-<div class="line"><a name="l00816"></a><span class="lineno">  816</span>&#160; </div>
-<div class="line"><a name="l00817"></a><span class="lineno">  817</span>&#160;MkRdx::MkRdx() : <a class="code" href="classr__exec_1_1_l_object.html">LObject</a>(), bindings_(NULL) {</div>
-<div class="line"><a name="l00818"></a><span class="lineno">  818</span>&#160;}</div>
-<div class="line"><a name="l00819"></a><span class="lineno">  819</span>&#160; </div>
-<div class="line"><a name="l00820"></a><span class="lineno">  820</span>&#160;MkRdx::MkRdx(<a class="code" href="classr__code_1_1_sys_object.html">SysObject</a> *source) : <a class="code" href="classr__exec_1_1_l_object.html">LObject</a>(source), bindings_(NULL) {</div>
-<div class="line"><a name="l00821"></a><span class="lineno">  821</span>&#160;}</div>
-<div class="line"><a name="l00822"></a><span class="lineno">  822</span>&#160; </div>
-<div class="line"><a name="l00823"></a><span class="lineno">  823</span>&#160;MkRdx::MkRdx(<a class="code" href="classr__code_1_1_code.html">Code</a> *imdl_fact, <a class="code" href="classr__code_1_1_code.html">Code</a> *input, <a class="code" href="classr__code_1_1_code.html">Code</a> *output, float32 psln_thr, BindingMap *binding_map) : LObject(), bindings_(binding_map) {</div>
-<div class="line"><a name="l00824"></a><span class="lineno">  824</span>&#160; </div>
-<div class="line"><a name="l00825"></a><span class="lineno">  825</span>&#160;  uint16 extent_index = MK_RDX_ARITY + 1;</div>
-<div class="line"><a name="l00826"></a><span class="lineno">  826</span>&#160;  code(0) = Atom::Marker(Opcodes::MkRdx, MK_RDX_ARITY);</div>
-<div class="line"><a name="l00827"></a><span class="lineno">  827</span>&#160;  code(MK_RDX_CODE) = Atom::RPointer(0); <span class="comment">// code.</span></div>
-<div class="line"><a name="l00828"></a><span class="lineno">  828</span>&#160;  add_reference(imdl_fact);</div>
-<div class="line"><a name="l00829"></a><span class="lineno">  829</span>&#160;  code(MK_RDX_INPUTS) = Atom::IPointer(extent_index); <span class="comment">// inputs.</span></div>
-<div class="line"><a name="l00830"></a><span class="lineno">  830</span>&#160;  code(MK_RDX_ARITY) = Atom::Float(psln_thr);</div>
-<div class="line"><a name="l00831"></a><span class="lineno">  831</span>&#160;  code(extent_index++) = Atom::Set(1); <span class="comment">// set of one input.</span></div>
-<div class="line"><a name="l00832"></a><span class="lineno">  832</span>&#160;  code(extent_index++) = Atom::RPointer(1);</div>
-<div class="line"><a name="l00833"></a><span class="lineno">  833</span>&#160;  add_reference(input);</div>
-<div class="line"><a name="l00834"></a><span class="lineno">  834</span>&#160;  code(MK_RDX_PRODS) = Atom::IPointer(extent_index); <span class="comment">// set of one production.</span></div>
-<div class="line"><a name="l00835"></a><span class="lineno">  835</span>&#160;  code(extent_index++) = Atom::Set(1);</div>
-<div class="line"><a name="l00836"></a><span class="lineno">  836</span>&#160;  code(extent_index++) = Atom::RPointer(2);</div>
-<div class="line"><a name="l00837"></a><span class="lineno">  837</span>&#160;  add_reference(output);</div>
-<div class="line"><a name="l00838"></a><span class="lineno">  838</span>&#160;}</div>
-<div class="line"><a name="l00839"></a><span class="lineno">  839</span>&#160; </div>
-<div class="line"><a name="l00840"></a><span class="lineno">  840</span>&#160;MkRdx::MkRdx(<a class="code" href="classr__code_1_1_code.html">Code</a> *imdl_fact, <a class="code" href="classr__code_1_1_code.html">Code</a> *inpu1, <a class="code" href="classr__code_1_1_code.html">Code</a> *input2, <a class="code" href="classr__code_1_1_code.html">Code</a> *output, float32 psln_thr, BindingMap *binding_map) : LObject(), bindings_(binding_map) {</div>
-<div class="line"><a name="l00841"></a><span class="lineno">  841</span>&#160; </div>
-<div class="line"><a name="l00842"></a><span class="lineno">  842</span>&#160;  uint16 extent_index = MK_RDX_ARITY + 1;</div>
-<div class="line"><a name="l00843"></a><span class="lineno">  843</span>&#160;  code(0) = Atom::Marker(Opcodes::MkRdx, MK_RDX_ARITY);</div>
-<div class="line"><a name="l00844"></a><span class="lineno">  844</span>&#160;  code(MK_RDX_CODE) = Atom::RPointer(0); <span class="comment">// code.</span></div>
-<div class="line"><a name="l00845"></a><span class="lineno">  845</span>&#160;  add_reference(imdl_fact);</div>
-<div class="line"><a name="l00846"></a><span class="lineno">  846</span>&#160;  code(MK_RDX_INPUTS) = Atom::IPointer(extent_index); <span class="comment">// inputs.</span></div>
-<div class="line"><a name="l00847"></a><span class="lineno">  847</span>&#160;  code(MK_RDX_ARITY) = Atom::Float(psln_thr);</div>
-<div class="line"><a name="l00848"></a><span class="lineno">  848</span>&#160;  code(extent_index++) = Atom::Set(2); <span class="comment">// set of two inputs.</span></div>
-<div class="line"><a name="l00849"></a><span class="lineno">  849</span>&#160;  code(extent_index++) = Atom::RPointer(1);</div>
-<div class="line"><a name="l00850"></a><span class="lineno">  850</span>&#160;  add_reference(inpu1);</div>
-<div class="line"><a name="l00851"></a><span class="lineno">  851</span>&#160;  code(extent_index++) = Atom::RPointer(2);</div>
-<div class="line"><a name="l00852"></a><span class="lineno">  852</span>&#160;  add_reference(input2);</div>
-<div class="line"><a name="l00853"></a><span class="lineno">  853</span>&#160;  code(MK_RDX_PRODS) = Atom::IPointer(extent_index); <span class="comment">// set of one production.</span></div>
-<div class="line"><a name="l00854"></a><span class="lineno">  854</span>&#160;  code(extent_index++) = Atom::Set(1);</div>
-<div class="line"><a name="l00855"></a><span class="lineno">  855</span>&#160;  code(extent_index++) = Atom::RPointer(3);</div>
-<div class="line"><a name="l00856"></a><span class="lineno">  856</span>&#160;  add_reference(output);</div>
-<div class="line"><a name="l00857"></a><span class="lineno">  857</span>&#160;}</div>
-<div class="line"><a name="l00858"></a><span class="lineno">  858</span>&#160; </div>
-<div class="line"><a name="l00860"></a><span class="lineno">  860</span>&#160; </div>
-<div class="line"><a name="l00861"></a><span class="lineno">  861</span>&#160;Success::Success() : LObject() {</div>
-<div class="line"><a name="l00862"></a><span class="lineno">  862</span>&#160;}</div>
-<div class="line"><a name="l00863"></a><span class="lineno">  863</span>&#160; </div>
-<div class="line"><a name="l00864"></a><span class="lineno">  864</span>&#160;Success::Success(_Fact *<span class="keywordtype">object</span>, _Fact *evidence, float32 psln_thr) : LObject() {</div>
-<div class="line"><a name="l00865"></a><span class="lineno">  865</span>&#160; </div>
-<div class="line"><a name="l00866"></a><span class="lineno">  866</span>&#160;  code(0) = Atom::Object(Opcodes::Success, SUCCESS_ARITY);</div>
-<div class="line"><a name="l00867"></a><span class="lineno">  867</span>&#160;  code(SUCCESS_OBJ) = Atom::RPointer(0);</div>
-<div class="line"><a name="l00868"></a><span class="lineno">  868</span>&#160;  <span class="keywordflow">if</span> (evidence)</div>
-<div class="line"><a name="l00869"></a><span class="lineno">  869</span>&#160;    code(SUCCESS_EVD) = Atom::RPointer(1);</div>
-<div class="line"><a name="l00870"></a><span class="lineno">  870</span>&#160;  <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00871"></a><span class="lineno">  871</span>&#160;    code(SUCCESS_EVD) = Atom::Nil();</div>
-<div class="line"><a name="l00872"></a><span class="lineno">  872</span>&#160;  code(SUCCESS_ARITY) = Atom::Float(psln_thr);</div>
-<div class="line"><a name="l00873"></a><span class="lineno">  873</span>&#160;  add_reference(<span class="keywordtype">object</span>);</div>
-<div class="line"><a name="l00874"></a><span class="lineno">  874</span>&#160;  <span class="keywordflow">if</span> (evidence)</div>
-<div class="line"><a name="l00875"></a><span class="lineno">  875</span>&#160;    add_reference(evidence);</div>
-<div class="line"><a name="l00876"></a><span class="lineno">  876</span>&#160;}</div>
-<div class="line"><a name="l00877"></a><span class="lineno">  877</span>&#160; </div>
-<div class="line"><a name="l00879"></a><span class="lineno">  879</span>&#160; </div>
-<div class="line"><a name="l00880"></a><span class="lineno">  880</span>&#160;Perf::Perf() : LObject() {</div>
-<div class="line"><a name="l00881"></a><span class="lineno">  881</span>&#160;}</div>
-<div class="line"><a name="l00882"></a><span class="lineno">  882</span>&#160; </div>
-<div class="line"><a name="l00883"></a><span class="lineno">  883</span>&#160;Perf::Perf(microseconds reduction_job_avg_latency, microseconds d_reduction_job_avg_latency, microseconds time_job_avg_latency, microseconds d_time_job_avg_latency) : LObject() {</div>
-<div class="line"><a name="l00884"></a><span class="lineno">  884</span>&#160; </div>
-<div class="line"><a name="l00885"></a><span class="lineno">  885</span>&#160;  code(0) = Atom::Object(Opcodes::Perf, PERF_ARITY);</div>
-<div class="line"><a name="l00886"></a><span class="lineno">  886</span>&#160;  code(PERF_RDX_LTCY) = Atom::Float(reduction_job_avg_latency.count());</div>
-<div class="line"><a name="l00887"></a><span class="lineno">  887</span>&#160;  code(PERF_D_RDX_LTCY) = Atom::Float(d_reduction_job_avg_latency.count());</div>
-<div class="line"><a name="l00888"></a><span class="lineno">  888</span>&#160;  code(PERF_TIME_LTCY) = Atom::Float(time_job_avg_latency.count());</div>
-<div class="line"><a name="l00889"></a><span class="lineno">  889</span>&#160;  code(PERF_D_TIME_LTCY) = Atom::Float(d_time_job_avg_latency.count());</div>
-<div class="line"><a name="l00890"></a><span class="lineno">  890</span>&#160;  code(PERF_ARITY) = Atom::Float(1);</div>
-<div class="line"><a name="l00891"></a><span class="lineno">  891</span>&#160;}</div>
-<div class="line"><a name="l00892"></a><span class="lineno">  892</span>&#160; </div>
-<div class="line"><a name="l00894"></a><span class="lineno">  894</span>&#160; </div>
-<div class="line"><a name="l00895"></a><span class="lineno">  895</span>&#160;ICST::ICST() : LObject() {</div>
-<div class="line"><a name="l00896"></a><span class="lineno">  896</span>&#160;}</div>
-<div class="line"><a name="l00897"></a><span class="lineno">  897</span>&#160; </div>
-<div class="line"><a name="l00898"></a><span class="lineno">  898</span>&#160;ICST::ICST(<a class="code" href="classr__code_1_1_sys_object.html">SysObject</a> *source) : LObject(source) {</div>
-<div class="line"><a name="l00899"></a><span class="lineno">  899</span>&#160;}</div>
-<div class="line"><a name="l00900"></a><span class="lineno">  900</span>&#160; </div>
-<div class="line"><a name="l00901"></a><span class="lineno">  901</span>&#160;<span class="keywordtype">bool</span> ICST::is_invalidated() {</div>
-<div class="line"><a name="l00902"></a><span class="lineno">  902</span>&#160; </div>
-<div class="line"><a name="l00903"></a><span class="lineno">  903</span>&#160;  <span class="keywordflow">if</span> (LObject::is_invalidated()) {</div>
-<div class="line"><a name="l00904"></a><span class="lineno">  904</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>; }</div>
-<div class="line"><a name="l00905"></a><span class="lineno">  905</span>&#160;  <span class="keywordflow">for</span> (uint32 i = 0; i &lt; components_.size(); ++i) {</div>
-<div class="line"><a name="l00906"></a><span class="lineno">  906</span>&#160; </div>
-<div class="line"><a name="l00907"></a><span class="lineno">  907</span>&#160;    <span class="keywordflow">if</span> (components_[i]-&gt;is_invalidated()) {</div>
-<div class="line"><a name="l00908"></a><span class="lineno">  908</span>&#160; </div>
-<div class="line"><a name="l00909"></a><span class="lineno">  909</span>&#160;      invalidate();</div>
-<div class="line"><a name="l00910"></a><span class="lineno">  910</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00911"></a><span class="lineno">  911</span>&#160;    }</div>
-<div class="line"><a name="l00912"></a><span class="lineno">  912</span>&#160;  }</div>
-<div class="line"><a name="l00913"></a><span class="lineno">  913</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00914"></a><span class="lineno">  914</span>&#160;}</div>
-<div class="line"><a name="l00915"></a><span class="lineno">  915</span>&#160; </div>
-<div class="line"><a name="l00916"></a><span class="lineno">  916</span>&#160;<span class="keywordtype">bool</span> ICST::contains(_Fact *component, uint16 &amp;component_index)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00917"></a><span class="lineno">  917</span>&#160; </div>
-<div class="line"><a name="l00918"></a><span class="lineno">  918</span>&#160;  <span class="keywordflow">for</span> (uint32 i = 0; i &lt; components_.size(); ++i) {</div>
-<div class="line"><a name="l00919"></a><span class="lineno">  919</span>&#160; </div>
-<div class="line"><a name="l00920"></a><span class="lineno">  920</span>&#160;    <span class="keywordflow">if</span> (components_[i] == component) {</div>
-<div class="line"><a name="l00921"></a><span class="lineno">  921</span>&#160; </div>
-<div class="line"><a name="l00922"></a><span class="lineno">  922</span>&#160;      component_index = i;</div>
-<div class="line"><a name="l00923"></a><span class="lineno">  923</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00924"></a><span class="lineno">  924</span>&#160;    }</div>
-<div class="line"><a name="l00925"></a><span class="lineno">  925</span>&#160;  }</div>
-<div class="line"><a name="l00926"></a><span class="lineno">  926</span>&#160; </div>
-<div class="line"><a name="l00927"></a><span class="lineno">  927</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00815"></a><span class="lineno">  815</span>&#160; </div>
+<div class="line"><a name="l00816"></a><span class="lineno">  816</span>&#160;MkRdx::MkRdx() : <a class="code" href="classr__exec_1_1_l_object.html">LObject</a>(), bindings_(NULL) {</div>
+<div class="line"><a name="l00817"></a><span class="lineno">  817</span>&#160;}</div>
+<div class="line"><a name="l00818"></a><span class="lineno">  818</span>&#160; </div>
+<div class="line"><a name="l00819"></a><span class="lineno">  819</span>&#160;MkRdx::MkRdx(<a class="code" href="classr__code_1_1_sys_object.html">SysObject</a> *source) : <a class="code" href="classr__exec_1_1_l_object.html">LObject</a>(source), bindings_(NULL) {</div>
+<div class="line"><a name="l00820"></a><span class="lineno">  820</span>&#160;}</div>
+<div class="line"><a name="l00821"></a><span class="lineno">  821</span>&#160; </div>
+<div class="line"><a name="l00822"></a><span class="lineno">  822</span>&#160;MkRdx::MkRdx(<a class="code" href="classr__code_1_1_code.html">Code</a> *imdl_fact, <a class="code" href="classr__code_1_1_code.html">Code</a> *input, <a class="code" href="classr__code_1_1_code.html">Code</a> *output, float32 psln_thr, BindingMap *binding_map) : LObject(), bindings_(binding_map) {</div>
+<div class="line"><a name="l00823"></a><span class="lineno">  823</span>&#160; </div>
+<div class="line"><a name="l00824"></a><span class="lineno">  824</span>&#160;  uint16 extent_index = MK_RDX_ARITY + 1;</div>
+<div class="line"><a name="l00825"></a><span class="lineno">  825</span>&#160;  code(0) = Atom::Marker(Opcodes::MkRdx, MK_RDX_ARITY);</div>
+<div class="line"><a name="l00826"></a><span class="lineno">  826</span>&#160;  code(MK_RDX_CODE) = Atom::RPointer(0); <span class="comment">// code.</span></div>
+<div class="line"><a name="l00827"></a><span class="lineno">  827</span>&#160;  add_reference(imdl_fact);</div>
+<div class="line"><a name="l00828"></a><span class="lineno">  828</span>&#160;  code(MK_RDX_INPUTS) = Atom::IPointer(extent_index); <span class="comment">// inputs.</span></div>
+<div class="line"><a name="l00829"></a><span class="lineno">  829</span>&#160;  code(MK_RDX_ARITY) = Atom::Float(psln_thr);</div>
+<div class="line"><a name="l00830"></a><span class="lineno">  830</span>&#160;  code(extent_index++) = Atom::Set(1); <span class="comment">// set of one input.</span></div>
+<div class="line"><a name="l00831"></a><span class="lineno">  831</span>&#160;  code(extent_index++) = Atom::RPointer(1);</div>
+<div class="line"><a name="l00832"></a><span class="lineno">  832</span>&#160;  add_reference(input);</div>
+<div class="line"><a name="l00833"></a><span class="lineno">  833</span>&#160;  code(MK_RDX_PRODS) = Atom::IPointer(extent_index); <span class="comment">// set of one production.</span></div>
+<div class="line"><a name="l00834"></a><span class="lineno">  834</span>&#160;  code(extent_index++) = Atom::Set(1);</div>
+<div class="line"><a name="l00835"></a><span class="lineno">  835</span>&#160;  code(extent_index++) = Atom::RPointer(2);</div>
+<div class="line"><a name="l00836"></a><span class="lineno">  836</span>&#160;  add_reference(output);</div>
+<div class="line"><a name="l00837"></a><span class="lineno">  837</span>&#160;}</div>
+<div class="line"><a name="l00838"></a><span class="lineno">  838</span>&#160; </div>
+<div class="line"><a name="l00839"></a><span class="lineno">  839</span>&#160;MkRdx::MkRdx(<a class="code" href="classr__code_1_1_code.html">Code</a> *imdl_fact, <a class="code" href="classr__code_1_1_code.html">Code</a> *inpu1, <a class="code" href="classr__code_1_1_code.html">Code</a> *input2, <a class="code" href="classr__code_1_1_code.html">Code</a> *output, float32 psln_thr, BindingMap *binding_map) : LObject(), bindings_(binding_map) {</div>
+<div class="line"><a name="l00840"></a><span class="lineno">  840</span>&#160; </div>
+<div class="line"><a name="l00841"></a><span class="lineno">  841</span>&#160;  uint16 extent_index = MK_RDX_ARITY + 1;</div>
+<div class="line"><a name="l00842"></a><span class="lineno">  842</span>&#160;  code(0) = Atom::Marker(Opcodes::MkRdx, MK_RDX_ARITY);</div>
+<div class="line"><a name="l00843"></a><span class="lineno">  843</span>&#160;  code(MK_RDX_CODE) = Atom::RPointer(0); <span class="comment">// code.</span></div>
+<div class="line"><a name="l00844"></a><span class="lineno">  844</span>&#160;  add_reference(imdl_fact);</div>
+<div class="line"><a name="l00845"></a><span class="lineno">  845</span>&#160;  code(MK_RDX_INPUTS) = Atom::IPointer(extent_index); <span class="comment">// inputs.</span></div>
+<div class="line"><a name="l00846"></a><span class="lineno">  846</span>&#160;  code(MK_RDX_ARITY) = Atom::Float(psln_thr);</div>
+<div class="line"><a name="l00847"></a><span class="lineno">  847</span>&#160;  code(extent_index++) = Atom::Set(2); <span class="comment">// set of two inputs.</span></div>
+<div class="line"><a name="l00848"></a><span class="lineno">  848</span>&#160;  code(extent_index++) = Atom::RPointer(1);</div>
+<div class="line"><a name="l00849"></a><span class="lineno">  849</span>&#160;  add_reference(inpu1);</div>
+<div class="line"><a name="l00850"></a><span class="lineno">  850</span>&#160;  code(extent_index++) = Atom::RPointer(2);</div>
+<div class="line"><a name="l00851"></a><span class="lineno">  851</span>&#160;  add_reference(input2);</div>
+<div class="line"><a name="l00852"></a><span class="lineno">  852</span>&#160;  code(MK_RDX_PRODS) = Atom::IPointer(extent_index); <span class="comment">// set of one production.</span></div>
+<div class="line"><a name="l00853"></a><span class="lineno">  853</span>&#160;  code(extent_index++) = Atom::Set(1);</div>
+<div class="line"><a name="l00854"></a><span class="lineno">  854</span>&#160;  code(extent_index++) = Atom::RPointer(3);</div>
+<div class="line"><a name="l00855"></a><span class="lineno">  855</span>&#160;  add_reference(output);</div>
+<div class="line"><a name="l00856"></a><span class="lineno">  856</span>&#160;}</div>
+<div class="line"><a name="l00857"></a><span class="lineno">  857</span>&#160; </div>
+<div class="line"><a name="l00859"></a><span class="lineno">  859</span>&#160; </div>
+<div class="line"><a name="l00860"></a><span class="lineno">  860</span>&#160;Success::Success() : LObject() {</div>
+<div class="line"><a name="l00861"></a><span class="lineno">  861</span>&#160;}</div>
+<div class="line"><a name="l00862"></a><span class="lineno">  862</span>&#160; </div>
+<div class="line"><a name="l00863"></a><span class="lineno">  863</span>&#160;Success::Success(_Fact *<span class="keywordtype">object</span>, _Fact *evidence, float32 psln_thr) : LObject() {</div>
+<div class="line"><a name="l00864"></a><span class="lineno">  864</span>&#160; </div>
+<div class="line"><a name="l00865"></a><span class="lineno">  865</span>&#160;  code(0) = Atom::Object(Opcodes::Success, SUCCESS_ARITY);</div>
+<div class="line"><a name="l00866"></a><span class="lineno">  866</span>&#160;  code(SUCCESS_OBJ) = Atom::RPointer(0);</div>
+<div class="line"><a name="l00867"></a><span class="lineno">  867</span>&#160;  <span class="keywordflow">if</span> (evidence)</div>
+<div class="line"><a name="l00868"></a><span class="lineno">  868</span>&#160;    code(SUCCESS_EVD) = Atom::RPointer(1);</div>
+<div class="line"><a name="l00869"></a><span class="lineno">  869</span>&#160;  <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00870"></a><span class="lineno">  870</span>&#160;    code(SUCCESS_EVD) = Atom::Nil();</div>
+<div class="line"><a name="l00871"></a><span class="lineno">  871</span>&#160;  code(SUCCESS_ARITY) = Atom::Float(psln_thr);</div>
+<div class="line"><a name="l00872"></a><span class="lineno">  872</span>&#160;  add_reference(<span class="keywordtype">object</span>);</div>
+<div class="line"><a name="l00873"></a><span class="lineno">  873</span>&#160;  <span class="keywordflow">if</span> (evidence)</div>
+<div class="line"><a name="l00874"></a><span class="lineno">  874</span>&#160;    add_reference(evidence);</div>
+<div class="line"><a name="l00875"></a><span class="lineno">  875</span>&#160;}</div>
+<div class="line"><a name="l00876"></a><span class="lineno">  876</span>&#160; </div>
+<div class="line"><a name="l00878"></a><span class="lineno">  878</span>&#160; </div>
+<div class="line"><a name="l00879"></a><span class="lineno">  879</span>&#160;Perf::Perf() : LObject() {</div>
+<div class="line"><a name="l00880"></a><span class="lineno">  880</span>&#160;}</div>
+<div class="line"><a name="l00881"></a><span class="lineno">  881</span>&#160; </div>
+<div class="line"><a name="l00882"></a><span class="lineno">  882</span>&#160;Perf::Perf(microseconds reduction_job_avg_latency, microseconds d_reduction_job_avg_latency, microseconds time_job_avg_latency, microseconds d_time_job_avg_latency) : LObject() {</div>
+<div class="line"><a name="l00883"></a><span class="lineno">  883</span>&#160; </div>
+<div class="line"><a name="l00884"></a><span class="lineno">  884</span>&#160;  code(0) = Atom::Object(Opcodes::Perf, PERF_ARITY);</div>
+<div class="line"><a name="l00885"></a><span class="lineno">  885</span>&#160;  code(PERF_RDX_LTCY) = Atom::Float(reduction_job_avg_latency.count());</div>
+<div class="line"><a name="l00886"></a><span class="lineno">  886</span>&#160;  code(PERF_D_RDX_LTCY) = Atom::Float(d_reduction_job_avg_latency.count());</div>
+<div class="line"><a name="l00887"></a><span class="lineno">  887</span>&#160;  code(PERF_TIME_LTCY) = Atom::Float(time_job_avg_latency.count());</div>
+<div class="line"><a name="l00888"></a><span class="lineno">  888</span>&#160;  code(PERF_D_TIME_LTCY) = Atom::Float(d_time_job_avg_latency.count());</div>
+<div class="line"><a name="l00889"></a><span class="lineno">  889</span>&#160;  code(PERF_ARITY) = Atom::Float(1);</div>
+<div class="line"><a name="l00890"></a><span class="lineno">  890</span>&#160;}</div>
+<div class="line"><a name="l00891"></a><span class="lineno">  891</span>&#160; </div>
+<div class="line"><a name="l00893"></a><span class="lineno">  893</span>&#160; </div>
+<div class="line"><a name="l00894"></a><span class="lineno">  894</span>&#160;ICST::ICST() : LObject() {</div>
+<div class="line"><a name="l00895"></a><span class="lineno">  895</span>&#160;}</div>
+<div class="line"><a name="l00896"></a><span class="lineno">  896</span>&#160; </div>
+<div class="line"><a name="l00897"></a><span class="lineno">  897</span>&#160;ICST::ICST(<a class="code" href="classr__code_1_1_sys_object.html">SysObject</a> *source) : LObject(source) {</div>
+<div class="line"><a name="l00898"></a><span class="lineno">  898</span>&#160;}</div>
+<div class="line"><a name="l00899"></a><span class="lineno">  899</span>&#160; </div>
+<div class="line"><a name="l00900"></a><span class="lineno">  900</span>&#160;<span class="keywordtype">bool</span> ICST::is_invalidated() {</div>
+<div class="line"><a name="l00901"></a><span class="lineno">  901</span>&#160; </div>
+<div class="line"><a name="l00902"></a><span class="lineno">  902</span>&#160;  <span class="keywordflow">if</span> (LObject::is_invalidated()) {</div>
+<div class="line"><a name="l00903"></a><span class="lineno">  903</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>; }</div>
+<div class="line"><a name="l00904"></a><span class="lineno">  904</span>&#160;  <span class="keywordflow">for</span> (uint32 i = 0; i &lt; components_.size(); ++i) {</div>
+<div class="line"><a name="l00905"></a><span class="lineno">  905</span>&#160; </div>
+<div class="line"><a name="l00906"></a><span class="lineno">  906</span>&#160;    <span class="keywordflow">if</span> (components_[i]-&gt;is_invalidated()) {</div>
+<div class="line"><a name="l00907"></a><span class="lineno">  907</span>&#160; </div>
+<div class="line"><a name="l00908"></a><span class="lineno">  908</span>&#160;      invalidate();</div>
+<div class="line"><a name="l00909"></a><span class="lineno">  909</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00910"></a><span class="lineno">  910</span>&#160;    }</div>
+<div class="line"><a name="l00911"></a><span class="lineno">  911</span>&#160;  }</div>
+<div class="line"><a name="l00912"></a><span class="lineno">  912</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00913"></a><span class="lineno">  913</span>&#160;}</div>
+<div class="line"><a name="l00914"></a><span class="lineno">  914</span>&#160; </div>
+<div class="line"><a name="l00915"></a><span class="lineno">  915</span>&#160;<span class="keywordtype">bool</span> ICST::contains(_Fact *component, uint16 &amp;component_index)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00916"></a><span class="lineno">  916</span>&#160; </div>
+<div class="line"><a name="l00917"></a><span class="lineno">  917</span>&#160;  <span class="keywordflow">for</span> (uint32 i = 0; i &lt; components_.size(); ++i) {</div>
+<div class="line"><a name="l00918"></a><span class="lineno">  918</span>&#160; </div>
+<div class="line"><a name="l00919"></a><span class="lineno">  919</span>&#160;    <span class="keywordflow">if</span> (components_[i] == component) {</div>
+<div class="line"><a name="l00920"></a><span class="lineno">  920</span>&#160; </div>
+<div class="line"><a name="l00921"></a><span class="lineno">  921</span>&#160;      component_index = i;</div>
+<div class="line"><a name="l00922"></a><span class="lineno">  922</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00923"></a><span class="lineno">  923</span>&#160;    }</div>
+<div class="line"><a name="l00924"></a><span class="lineno">  924</span>&#160;  }</div>
+<div class="line"><a name="l00925"></a><span class="lineno">  925</span>&#160; </div>
+<div class="line"><a name="l00926"></a><span class="lineno">  926</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00927"></a><span class="lineno">  927</span>&#160;}</div>
 <div class="line"><a name="l00928"></a><span class="lineno">  928</span>&#160;}</div>
-<div class="line"><a name="l00929"></a><span class="lineno">  929</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassr__exec_1_1_pred_html_afb5c88afa89a1ef3e42444c3c96ea06e"><div class="ttname"><a href="classr__exec_1_1_pred.html#afb5c88afa89a1ef3e42444c3c96ea06e">r_exec::Pred::get_simulation</a></div><div class="ttdeci">Sim * get_simulation(uint16 i) const</div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00451">factory.h:451</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_sim_html_a2966f430d20d1104b60f9c9ca397ed75"><div class="ttname"><a href="classr__exec_1_1_sim.html#a2966f430d20d1104b60f9c9ca397ed75">r_exec::Sim::get_f_super_goal</a></div><div class="ttdeci">Fact * get_f_super_goal() const</div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00249">factory.h:249</a></div></div>
-<div class="ttc" id="aclassr__exec_1_1_goal_html_a929bea301488088d0ed96cbae25e2ef9"><div class="ttname"><a href="classr__exec_1_1_goal.html#a929bea301488088d0ed96cbae25e2ef9">r_exec::Goal::get_sim</a></div><div class="ttdeci">Sim * get_sim() const</div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00506">factory.h:506</a></div></div>
+<div class="ttc" id="aclassr__exec_1_1_goal_html_a929bea301488088d0ed96cbae25e2ef9"><div class="ttname"><a href="classr__exec_1_1_goal.html#a929bea301488088d0ed96cbae25e2ef9">r_exec::Goal::get_sim</a></div><div class="ttdeci">Sim * get_sim() const</div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00530">factory.h:530</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_atom_html"><div class="ttname"><a href="classr__code_1_1_atom.html">r_code::Atom</a></div><div class="ttdef"><b>Definition:</b> <a href="atom_8h_source.html#l00104">atom.h:104</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_sim_html"><div class="ttname"><a href="classr__exec_1_1_sim.html">r_exec::Sim</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00230">factory.h:231</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___fact_html"><div class="ttname"><a href="classr__exec_1_1___fact.html">r_exec::_Fact</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00154">factory.h:155</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_sys_object_html"><div class="ttname"><a href="classr__code_1_1_sys_object.html">r_code::SysObject</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00135">r_code/object.h:136</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_l_object_html"><div class="ttname"><a href="classr__exec_1_1_l_object.html">r_exec::LObject</a></div><div class="ttdef"><b>Definition:</b> <a href="r__exec_2object_8h_source.html#l00194">r_exec/object.h:195</a></div></div>
 <div class="ttc" id="aclasscore_1_1_p_html"><div class="ttname"><a href="classcore_1_1_p.html">core::P</a></div><div class="ttdef"><b>Definition:</b> <a href="base_8h_source.html#l00102">base.h:102</a></div></div>
-<div class="ttc" id="aclassr__exec_1_1_sim_html_a85f1cb7d598460a89d02b70dc162275c"><div class="ttname"><a href="classr__exec_1_1_sim.html#a85f1cb7d598460a89d02b70dc162275c">r_exec::Sim::register_goal_target</a></div><div class="ttdeci">bool register_goal_target(_Fact *f_obj)</div><div class="ttdef"><b>Definition:</b> <a href="factory_8cpp_source.html#l00784">factory.cpp:784</a></div></div>
+<div class="ttc" id="aclassr__exec_1_1_sim_html_a85f1cb7d598460a89d02b70dc162275c"><div class="ttname"><a href="classr__exec_1_1_sim.html#a85f1cb7d598460a89d02b70dc162275c">r_exec::Sim::register_goal_target</a></div><div class="ttdeci">bool register_goal_target(_Fact *f_obj)</div><div class="ttdef"><b>Definition:</b> <a href="factory_8cpp_source.html#l00783">factory.cpp:783</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_code_html"><div class="ttname"><a href="classr__code_1_1_code.html">r_code::Code</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00223">r_code/object.h:224</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___fact_html_aff9d3fb0e136652d4e9125454c8e8ecf"><div class="ttname"><a href="classr__exec_1_1___fact.html#aff9d3fb0e136652d4e9125454c8e8ecf">r_exec::_Fact::MatchObject</a></div><div class="ttdeci">static bool MatchObject(const r_code::Code *lhs, const r_code::Code *rhs, bool same_binding_state=false)</div><div class="ttdef"><b>Definition:</b> <a href="factory_8cpp_source.html#l00364">factory.cpp:364</a></div></div>
-<div class="ttc" id="aclassr__exec_1_1_sim_1_1_defeasible_promoted_fact_html_ac463c71c32cbf32d5c8adffad307bfe0"><div class="ttname"><a href="classr__exec_1_1_sim_1_1_defeasible_promoted_fact.html#ac463c71c32cbf32d5c8adffad307bfe0">r_exec::Sim::DefeasiblePromotedFact::has_original_fact</a></div><div class="ttdeci">static bool has_original_fact(const r_code::list&lt; DefeasiblePromotedFact &gt; &amp;list, const _Fact *original_fact)</div><div class="ttdef"><b>Definition:</b> <a href="factory_8cpp_source.html#l00805">factory.cpp:805</a></div></div>
+<div class="ttc" id="aclassr__exec_1_1_sim_1_1_defeasible_promoted_fact_html_ac463c71c32cbf32d5c8adffad307bfe0"><div class="ttname"><a href="classr__exec_1_1_sim_1_1_defeasible_promoted_fact.html#ac463c71c32cbf32d5c8adffad307bfe0">r_exec::Sim::DefeasiblePromotedFact::has_original_fact</a></div><div class="ttdeci">static bool has_original_fact(const r_code::list&lt; DefeasiblePromotedFact &gt; &amp;list, const _Fact *original_fact)</div><div class="ttdef"><b>Definition:</b> <a href="factory_8cpp_source.html#l00804">factory.cpp:804</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_pred_html_af9f9d1f8f21adf412b4e25bf00f9c9e3"><div class="ttname"><a href="classr__exec_1_1_pred.html#af9f9d1f8f21adf412b4e25bf00f9c9e3">r_exec::Pred::get_simulations_size</a></div><div class="ttdeci">uint16 get_simulations_size() const</div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00441">factory.h:441</a></div></div>
-<div class="ttc" id="aclassr__exec_1_1_sim_html_a5e6b501b076ce5c3383aec7c3461e21b"><div class="ttname"><a href="classr__exec_1_1_sim.html#a5e6b501b076ce5c3383aec7c3461e21b">r_exec::Sim::get_root_sim</a></div><div class="ttdeci">Sim * get_root_sim()</div><div class="ttdef"><b>Definition:</b> <a href="factory_8cpp_source.html#l00770">factory.cpp:770</a></div></div>
+<div class="ttc" id="aclassr__exec_1_1_sim_html_a5e6b501b076ce5c3383aec7c3461e21b"><div class="ttname"><a href="classr__exec_1_1_sim.html#a5e6b501b076ce5c3383aec7c3461e21b">r_exec::Sim::get_root_sim</a></div><div class="ttdeci">Sim * get_root_sim()</div><div class="ttdef"><b>Definition:</b> <a href="factory_8cpp_source.html#l00769">factory.cpp:769</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_pred_html"><div class="ttname"><a href="classr__exec_1_1_pred.html">r_exec::Pred</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00376">factory.h:377</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_pred_html_ad8ffb4d8ce2660aa833c0731f85c93e0"><div class="ttname"><a href="classr__exec_1_1_pred.html#ad8ffb4d8ce2660aa833c0731f85c93e0">r_exec::Pred::has_simulation</a></div><div class="ttdeci">bool has_simulation(Sim *sim) const</div><div class="ttdef"><b>Definition:</b> <a href="factory_8cpp_source.html#l00636">factory.cpp:636</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_mem_html"><div class="ttname"><a href="classr__code_1_1_mem.html">r_code::Mem</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00390">r_code/object.h:390</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_controller_html"><div class="ttname"><a href="classr__exec_1_1_controller.html">r_exec::Controller</a></div><div class="ttdef"><b>Definition:</b> <a href="overlay_8h_source.html#l00136">overlay.h:137</a></div></div>
 <div class="ttc" id="aclassr__code_1_1list_html"><div class="ttname"><a href="classr__code_1_1list.html">r_code::list</a></div><div class="ttdef"><b>Definition:</b> <a href="list_8h_source.html#l00099">list.h:99</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_pred_html_a4a63f6a4a5fd83c5593414fd58a61bfa"><div class="ttname"><a href="classr__exec_1_1_pred.html#a4a63f6a4a5fd83c5593414fd58a61bfa">r_exec::Pred::is_invalidated</a></div><div class="ttdeci">bool is_invalidated()</div><div class="ttdef"><b>Definition:</b> <a href="factory_8cpp_source.html#l00574">factory.cpp:574</a></div></div>
-<div class="ttc" id="aclassr__exec_1_1_goal_html_ab96bd2dd433993bfe73d413e3ac362a7"><div class="ttname"><a href="classr__exec_1_1_goal.html#ab96bd2dd433993bfe73d413e3ac362a7">r_exec::Goal::has_sim</a></div><div class="ttdeci">bool has_sim() const</div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00499">factory.h:499</a></div></div>
+<div class="ttc" id="aclassr__exec_1_1_goal_html_ab96bd2dd433993bfe73d413e3ac362a7"><div class="ttname"><a href="classr__exec_1_1_goal.html#ab96bd2dd433993bfe73d413e3ac362a7">r_exec::Goal::has_sim</a></div><div class="ttdeci">bool has_sim() const</div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00523">factory.h:523</a></div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

@@ -188,7 +188,7 @@ $(function() {
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;  mdl-&gt;code(extent_index) = Atom::Operator(opcode, 2); <span class="comment">// l:(opcode r offset)</span></div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;  mdl-&gt;code(++extent_index) = Atom::VLPointer(r);</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;  mdl-&gt;code(++extent_index) = Atom::IPointer(extent_index + 1);</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;  Utils::SetTimestampStruct(mdl, ++extent_index, Timestamp(offset));</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;  Utils::SetDurationStruct(mdl, ++extent_index, offset);</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;  extent_index += 2;</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;}</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
@@ -271,7 +271,7 @@ $(function() {
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;  mdl-&gt;code(++extent_index) = Atom::Operator(Opcodes::Mul, 2);</div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;  mdl-&gt;code(++extent_index) = Atom::VLPointer(speed_value);</div>
 <div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;  mdl-&gt;code(++extent_index) = Atom::IPointer(extent_index + 1);</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;  Utils::SetTimestampStruct(mdl, ++extent_index, Timestamp(period_));</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;  Utils::SetDurationStruct(mdl, ++extent_index, period_);</div>
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;  extent_index += 2;</div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; </div>
 <div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;  write_index = extent_index;</div>
@@ -293,7 +293,7 @@ $(function() {
 <div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;  mdl-&gt;code(++extent_index) = Atom::Operator(Opcodes::Sub, 2);</div>
 <div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;  mdl-&gt;code(++extent_index) = Atom::VLPointer(q1);</div>
 <div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;  mdl-&gt;code(++extent_index) = Atom::VLPointer(q0);</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;  Utils::SetTimestampStruct(mdl, ++extent_index, Timestamp(period_));</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;  Utils::SetDurationStruct(mdl, ++extent_index, period_);</div>
 <div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;  extent_index += 2;</div>
 <div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
 <div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;  write_index = extent_index;</div>

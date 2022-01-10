@@ -360,13 +360,12 @@ $(function() {
 <div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    host-&gt;get_c_sln() &gt; host-&gt;get_c_sln_thr()) { <span class="comment">// c-salient group.</span></div>
 <div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160; </div>
 <div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    host-&gt;leave();</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    <span class="comment">// The time scope is stored as a timestamp, but it is actually a duration.</span></div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;    TimeJob *next_job = <span class="keyword">new</span> AntiPGMSignalingJob((<a class="code" href="classr__exec_1_1_view.html">r_exec::View</a>*)view_, Now() + Utils::GetTimestamp&lt;Code&gt;(get_object(), IPGM_TSC).time_since_epoch());</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    _Mem::Get()-&gt;push_time_job(next_job);</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;  } <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;    host-&gt;leave();</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    TimeJob *next_job = <span class="keyword">new</span> AntiPGMSignalingJob((<a class="code" href="classr__exec_1_1_view.html">r_exec::View</a>*)view_, Now() + Utils::GetDuration&lt;Code&gt;(get_object(), IPGM_TSC));</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;    _Mem::Get()-&gt;push_time_job(next_job);</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;  } <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;    host-&gt;leave();</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;}</div>
 <div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;}</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassr__code_1_1___view_html"><div class="ttname"><a href="classr__code_1_1___view.html">r_code::_View</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00163">r_code/object.h:164</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_view_html"><div class="ttname"><a href="classr__exec_1_1_view.html">r_exec::View</a></div><div class="ttdef"><b>Definition:</b> <a href="view_8h_source.html#l00101">view.h:102</a></div></div>

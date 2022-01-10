@@ -270,7 +270,7 @@ $(function() {
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;  }</div>
 <div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;}</div>
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160; </div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="keywordtype">void</span> decompile(<a class="code" href="classr__comp_1_1_decompiler.html">Decompiler</a> &amp;decompiler, <a class="code" href="classr__comp_1_1_image.html">r_comp::Image</a> *image, Timestamp::duration time_offset, <span class="keywordtype">bool</span> ignore_named_objects) {</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="keywordtype">void</span> decompile(<a class="code" href="classr__comp_1_1_decompiler.html">Decompiler</a> &amp;decompiler, <a class="code" href="classr__comp_1_1_image.html">r_comp::Image</a> *image, Timestamp time_reference, <span class="keywordtype">bool</span> ignore_named_objects) {</div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160; </div>
 <div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;<span class="preprocessor">#ifdef DECOMPILE_ONE_BY_ONE</span></div>
 <div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;  uint32 object_count = decompiler.<a class="code" href="classr__comp_1_1_decompiler.html#a6e076c05e8d033c3313372e0f0a3f15a">decompile_references</a>(image);</div>
@@ -287,22 +287,22 @@ $(function() {
 <div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;      <span class="keywordflow">continue</span>;</div>
 <div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;    }</div>
 <div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    std::ostringstream decompiled_code;</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;    decompiler.<a class="code" href="classr__comp_1_1_decompiler.html#a6940d4714ed8d80eb4672354c785335b">decompile_object</a>(index, &amp;decompiled_code, time_offset);</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;    std::cout &lt;&lt; <span class="stringliteral">&quot;\n\n&gt; DECOMPILATION. TimeReference &quot;</span> &lt;&lt; Time::ToString_seconds(time_offset) &lt;&lt; <span class="stringliteral">&quot;\n\n&quot;</span> &lt;&lt;</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;    decompiler.<a class="code" href="classr__comp_1_1_decompiler.html#a286d584fa8c7f5b97af5c2d2f0382002">decompile_object</a>(index, &amp;decompiled_code, time_offset);</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;    std::cout &lt;&lt; <span class="stringliteral">&quot;\n\n&gt; DECOMPILATION. TimeReference &quot;</span> &lt;&lt; Time::ToString_seconds(time_reference) &lt;&lt; <span class="stringliteral">&quot;\n\n&quot;</span> &lt;&lt;</div>
 <div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;      decompiled_code.str() &lt;&lt; std::endl;</div>
 <div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;  }</div>
 <div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;<span class="preprocessor">#else</span></div>
 <div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;  std::ostringstream decompiled_code;</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;  uint32 object_count = decompiler.decompile(image, &amp;decompiled_code, time_offset, ignore_named_objects);</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;  uint32 object_count = decompiler.decompile(image, &amp;decompiled_code, time_reference, ignore_named_objects);</div>
 <div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;  <span class="comment">//uint32 object_count=image-&gt;code_segment_.objects.size();</span></div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;  std::cout &lt;&lt; <span class="stringliteral">&quot;\n\n&gt; DECOMPILATION. TimeReference &quot;</span> &lt;&lt; Time::ToString_seconds(time_offset) &lt;&lt; <span class="stringliteral">&quot;\n\n&quot;</span> &lt;&lt; </div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;  std::cout &lt;&lt; <span class="stringliteral">&quot;\n\n&gt; DECOMPILATION. TimeReference &quot;</span> &lt;&lt; Utils::ToString_s_ms_us(time_reference, Timestamp(seconds(0))) &lt;&lt; <span class="stringliteral">&quot;\n\n&quot;</span> &lt;&lt;</div>
 <div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    decompiled_code.str() &lt;&lt; std::endl;</div>
 <div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;  std::cout &lt;&lt; <span class="stringliteral">&quot;&gt; image taken at: &quot;</span> &lt;&lt; Time::ToString_year(image-&gt;timestamp_) &lt;&lt; std::endl;</div>
 <div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;  std::cout &lt;&lt; <span class="stringliteral">&quot;&gt; &quot;</span> &lt;&lt; object_count &lt;&lt; <span class="stringliteral">&quot; objects\n&quot;</span>;</div>
 <div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;}</div>
 <div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160; </div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="keywordtype">void</span> write_to_file(<a class="code" href="classr__comp_1_1_image.html">r_comp::Image</a> *image, std::string &amp;image_path, <a class="code" href="classr__comp_1_1_decompiler.html">Decompiler</a> *decompiler, Timestamp::duration time_offset) {</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="keywordtype">void</span> write_to_file(<a class="code" href="classr__comp_1_1_image.html">r_comp::Image</a> *image, std::string &amp;image_path, <a class="code" href="classr__comp_1_1_decompiler.html">Decompiler</a> *decompiler, Timestamp time_reference) {</div>
 <div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160; </div>
 <div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;  ofstream output(image_path.c_str(), ios::binary | ios::out);</div>
 <div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;  <a class="code" href="classr__code_1_1_image.html">r_code::Image&lt;r_code::ImageImpl&gt;</a> *serialized_image = image-&gt;serialize&lt;<a class="code" href="classr__code_1_1_image.html">r_code::Image&lt;r_code::ImageImpl&gt;</a> &gt;();</div>
@@ -323,7 +323,7 @@ $(function() {
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    <a class="code" href="classr__comp_1_1_image.html">r_comp::Image</a> *temp_image = <span class="keyword">new</span> <a class="code" href="classr__comp_1_1_image.html">r_comp::Image</a>();</div>
 <div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;    temp_image-&gt;load(read_image);</div>
 <div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160; </div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    decompile(*decompiler, temp_image, time_offset, <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    decompile(*decompiler, temp_image, time_reference, <span class="keyword">false</span>);</div>
 <div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    <span class="keyword">delete</span> temp_image;</div>
 <div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160; </div>
 <div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    <span class="keyword">delete</span> read_image;</div>
@@ -485,7 +485,7 @@ $(function() {
 <div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;      image-&gt;object_names_.symbols_ = r_exec::Seed.object_names_.symbols_;</div>
 <div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160; </div>
 <div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;      <span class="keywordflow">if</span> (settings.write_objects_)</div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;        write_to_file(image, settings.objects_path_, settings.test_objects_ ? &amp;decompiler : NULL, starting_time.time_since_epoch());</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;        write_to_file(image, settings.objects_path_, settings.test_objects_ ? &amp;decompiler : NULL, starting_time);</div>
 <div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160; </div>
 <div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;      <span class="keywordflow">if</span> (settings.decompile_objects_ &amp;&amp; (!settings.write_objects_ || !settings.test_objects_)) {</div>
 <div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160; </div>
@@ -495,12 +495,12 @@ $(function() {
 <div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;          outfile.open(settings.decompilation_file_path_.c_str(), std::ios_base::trunc);</div>
 <div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;          std::streambuf *coutbuf = std::cout.rdbuf(outfile.rdbuf());</div>
 <div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160; </div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;          decompile(decompiler, image, starting_time.time_since_epoch(), settings.ignore_named_objects_);</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;          decompile(decompiler, image, starting_time, settings.ignore_named_objects_);</div>
 <div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160; </div>
 <div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;          std::cout.rdbuf(coutbuf);</div>
 <div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;          outfile.close();</div>
 <div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;        } <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;          decompile(decompiler, image, starting_time.time_since_epoch(), settings.ignore_named_objects_);</div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;          decompile(decompiler, image, starting_time, settings.ignore_named_objects_);</div>
 <div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;      }</div>
 <div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;      <span class="keyword">delete</span> image;</div>
 <div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;    }</div>
@@ -513,7 +513,7 @@ $(function() {
 <div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;      image-&gt;object_names_.symbols_ = r_exec::Seed.object_names_.symbols_;</div>
 <div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160; </div>
 <div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;      <span class="keywordflow">if</span> (settings.write_models_)</div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;        write_to_file(image, settings.models_path_, settings.test_models_ ? &amp;decompiler : NULL, starting_time.time_since_epoch());</div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;        write_to_file(image, settings.models_path_, settings.test_models_ ? &amp;decompiler : NULL, starting_time);</div>
 <div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160; </div>
 <div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;      <span class="keywordflow">if</span> (settings.decompile_models_ &amp;&amp; (!settings.write_models_ || !settings.test_models_)) {</div>
 <div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160; </div>
@@ -523,12 +523,12 @@ $(function() {
 <div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;          outfile.open(argv[2], std::ios_base::trunc);</div>
 <div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;          std::streambuf *coutbuf = std::cout.rdbuf(outfile.rdbuf());</div>
 <div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160; </div>
-<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;          decompile(decompiler, image, starting_time.time_since_epoch(), settings.ignore_named_models_);</div>
+<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;          decompile(decompiler, image, starting_time, settings.ignore_named_models_);</div>
 <div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160; </div>
 <div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;          std::cout.rdbuf(coutbuf);</div>
 <div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;          outfile.close();</div>
 <div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;        } <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;          decompile(decompiler, image, starting_time.time_since_epoch(), settings.ignore_named_models_);</div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;          decompile(decompiler, image, starting_time, settings.ignore_named_models_);</div>
 <div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;      }</div>
 <div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;      <span class="keyword">delete</span> image;</div>
 <div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;    }</div>
@@ -542,17 +542,17 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassr__code_1_1resized__vector_html"><div class="ttname"><a href="classr__code_1_1resized__vector.html">r_code::resized_vector</a></div><div class="ttdef"><b>Definition:</b> <a href="resized__vector_8h_source.html#l00098">resized_vector.h:99</a></div></div>
 <div class="ttc" id="aclass_test_mem_html"><div class="ttname"><a href="class_test_mem.html">TestMem</a></div><div class="ttdef"><b>Definition:</b> <a href="test__mem_8h_source.html#l00098">test_mem.h:99</a></div></div>
-<div class="ttc" id="aclassr__comp_1_1_decompiler_html_a6940d4714ed8d80eb4672354c785335b"><div class="ttname"><a href="classr__comp_1_1_decompiler.html#a6940d4714ed8d80eb4672354c785335b">r_comp::Decompiler::decompile_object</a></div><div class="ttdeci">void decompile_object(uint16 object_index, std::ostringstream *stream, Timestamp::duration time_offset, bool include_oid=true, bool include_label=true, bool include_views=true)</div><div class="ttdef"><b>Definition:</b> <a href="decompiler_8cpp_source.html#l00314">decompiler.cpp:314</a></div></div>
 <div class="ttc" id="aclass_settings_html"><div class="ttname"><a href="class_settings.html">Settings</a></div><div class="ttdef"><b>Definition:</b> <a href="settings_8h_source.html#l00091">settings.h:91</a></div></div>
 <div class="ttc" id="aclasstcp__io__device_1_1_tcp_io_device_html"><div class="ttname"><a href="classtcp__io__device_1_1_tcp_io_device.html">tcp_io_device::TcpIoDevice</a></div><div class="ttdef"><b>Definition:</b> <a href="tcp__io__device_8h_source.html#l00107">tcp_io_device.h:108</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_l_object_html"><div class="ttname"><a href="classr__exec_1_1_l_object.html">r_exec::LObject</a></div><div class="ttdef"><b>Definition:</b> <a href="r__exec_2object_8h_source.html#l00194">r_exec/object.h:195</a></div></div>
-<div class="ttc" id="aclassr__exec_1_1___mem_html_a18f76fa5c87c8ff58b1ff618cc278f29"><div class="ttname"><a href="classr__exec_1_1___mem.html#a18f76fa5c87c8ff58b1ff618cc278f29">r_exec::_Mem::run_in_diagnostic_time</a></div><div class="ttdeci">void run_in_diagnostic_time(std::chrono::milliseconds run_time)</div><div class="ttdef"><b>Definition:</b> <a href="mem_8cpp_source.html#l00530">mem.cpp:530</a></div></div>
+<div class="ttc" id="aclassr__exec_1_1___mem_html_a18f76fa5c87c8ff58b1ff618cc278f29"><div class="ttname"><a href="classr__exec_1_1___mem.html#a18f76fa5c87c8ff58b1ff618cc278f29">r_exec::_Mem::run_in_diagnostic_time</a></div><div class="ttdeci">void run_in_diagnostic_time(std::chrono::milliseconds run_time)</div><div class="ttdef"><b>Definition:</b> <a href="mem_8cpp_source.html#l00529">mem.cpp:529</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_code_html"><div class="ttname"><a href="classr__code_1_1_code.html">r_code::Code</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00223">r_code/object.h:224</a></div></div>
-<div class="ttc" id="aclassr__comp_1_1_decompiler_html_a6e076c05e8d033c3313372e0f0a3f15a"><div class="ttname"><a href="classr__comp_1_1_decompiler.html#a6e076c05e8d033c3313372e0f0a3f15a">r_comp::Decompiler::decompile_references</a></div><div class="ttdeci">uint32 decompile_references(r_comp::Image *image, std::unordered_map&lt; uint16, std::string &gt; *object_names=NULL)</div><div class="ttdef"><b>Definition:</b> <a href="decompiler_8cpp_source.html#l00225">decompiler.cpp:225</a></div></div>
+<div class="ttc" id="aclassr__comp_1_1_decompiler_html_a286d584fa8c7f5b97af5c2d2f0382002"><div class="ttname"><a href="classr__comp_1_1_decompiler.html#a286d584fa8c7f5b97af5c2d2f0382002">r_comp::Decompiler::decompile_object</a></div><div class="ttdeci">void decompile_object(uint16 object_index, std::ostringstream *stream, Timestamp time_reference, bool include_oid=true, bool include_label=true, bool include_views=true)</div><div class="ttdef"><b>Definition:</b> <a href="decompiler_8cpp_source.html#l00312">decompiler.cpp:312</a></div></div>
+<div class="ttc" id="aclassr__comp_1_1_decompiler_html_a6e076c05e8d033c3313372e0f0a3f15a"><div class="ttname"><a href="classr__comp_1_1_decompiler.html#a6e076c05e8d033c3313372e0f0a3f15a">r_comp::Decompiler::decompile_references</a></div><div class="ttdeci">uint32 decompile_references(r_comp::Image *image, std::unordered_map&lt; uint16, std::string &gt; *object_names=NULL)</div><div class="ttdef"><b>Definition:</b> <a href="decompiler_8cpp_source.html#l00223">decompiler.cpp:223</a></div></div>
 <div class="ttc" id="aclassr__comp_1_1_decompiler_html"><div class="ttname"><a href="classr__comp_1_1_decompiler.html">r_comp::Decompiler</a></div><div class="ttdef"><b>Definition:</b> <a href="decompiler_8h_source.html#l00098">decompiler.h:98</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_view_html"><div class="ttname"><a href="classr__exec_1_1_view.html">r_exec::View</a></div><div class="ttdef"><b>Definition:</b> <a href="view_8h_source.html#l00101">view.h:102</a></div></div>
-<div class="ttc" id="aclassr__exec_1_1___mem_html_a221ba4b0642afa50539d02c7a1a490ec"><div class="ttname"><a href="classr__exec_1_1___mem.html#a221ba4b0642afa50539d02c7a1a490ec">r_exec::_Mem::inject</a></div><div class="ttdeci">void inject(View *view, bool is_from_io_device=false)</div><div class="ttdef"><b>Definition:</b> <a href="mem_8cpp_source.html#l00858">mem.cpp:858</a></div></div>
-<div class="ttc" id="aclassr__exec_1_1___mem_html_ae514511d34345fe72a226d4f9a019cf7"><div class="ttname"><a href="classr__exec_1_1___mem.html#ae514511d34345fe72a226d4f9a019cf7">r_exec::_Mem::set_default_runtime_output_stream</a></div><div class="ttdeci">void set_default_runtime_output_stream(std::ostream *default_runtime_output_stream)</div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00611">mem.h:611</a></div></div>
+<div class="ttc" id="aclassr__exec_1_1___mem_html_a221ba4b0642afa50539d02c7a1a490ec"><div class="ttname"><a href="classr__exec_1_1___mem.html#a221ba4b0642afa50539d02c7a1a490ec">r_exec::_Mem::inject</a></div><div class="ttdeci">void inject(View *view, bool is_from_io_device=false)</div><div class="ttdef"><b>Definition:</b> <a href="mem_8cpp_source.html#l00857">mem.cpp:857</a></div></div>
+<div class="ttc" id="aclassr__exec_1_1___mem_html_ae514511d34345fe72a226d4f9a019cf7"><div class="ttname"><a href="classr__exec_1_1___mem.html#ae514511d34345fe72a226d4f9a019cf7">r_exec::_Mem::set_default_runtime_output_stream</a></div><div class="ttdeci">void set_default_runtime_output_stream(std::ostream *default_runtime_output_stream)</div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00612">mem.h:612</a></div></div>
 <div class="ttc" id="aclassr__comp_1_1_image_html"><div class="ttname"><a href="classr__comp_1_1_image.html">r_comp::Image</a></div><div class="ttdef"><b>Definition:</b> <a href="segments_8h_source.html#l00176">segments.h:176</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_image_html"><div class="ttname"><a href="classr__code_1_1_image.html">r_code::Image</a></div><div class="ttdef"><b>Definition:</b> <a href="image_8h_source.html#l00148">image.h:149</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_fact_html"><div class="ttname"><a href="classr__exec_1_1_fact.html">r_exec::Fact</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00342">factory.h:343</a></div></div>

@@ -398,9 +398,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_cmd_</b></td></tr>
 <tr class="memitem:a7965443870e3f8ec74b1f4baa0595598 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a7965443870e3f8ec74b1f4baa0595598"></a>
 std::unordered_map&lt; <a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt;, <a class="el" href="classr__exec_1_1_requirements_pair.html">RequirementsPair</a>, <a class="el" href="classr__code_1_1_p_hash.html">r_code::PHash</a>&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>active_requirements_</b></td></tr>
 <tr class="separator:a7965443870e3f8ec74b1f4baa0595598 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b982d6a856beb85d0a2d4b78945ff28 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a3b982d6a856beb85d0a2d4b78945ff28"></a>
-<a class="el" href="classr__exec_1_1_critical_section_list.html">CriticalSectionList</a>&lt; <a class="el" href="classr__exec_1_1_m_d_l_controller_1_1_defeasible_weak_requirement.html">DefeasibleWeakRequirement</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>defeasible_weak_requirements_</b></td></tr>
-<tr class="separator:a3b982d6a856beb85d0a2d4b78945ff28 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classr__exec_1_1_h_l_p_controller"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classr__exec_1_1_h_l_p_controller')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classr__exec_1_1_h_l_p_controller.html">r_exec::HLPController</a></td></tr>
 <tr class="memitem:ac2d14f0eb281f994f4eb1bc49549e18c inherit pro_attribs_classr__exec_1_1_h_l_p_controller"><td class="memItemLeft" align="right" valign="top"><a id="ac2d14f0eb281f994f4eb1bc49549e18c"></a>
 <a class="el" href="classr__exec_1_1_critical_section_list.html">CriticalSectionList</a>&lt; <a class="el" href="classr__exec_1_1_h_l_p_controller_1_1_evidence_entry.html">EvidenceEntry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>evidences_</b></td></tr>
@@ -461,7 +458,7 @@ static const uint32&#160;</td><td class="memItemRight" valign="bottom"><b>RHSCon
 <p>Drives are not monitored (since they are not produced by models): they are injected periodically by user-defined pgms. Drives are not observable: they cannot be predicted to succeed or fail. RHS is a drive; the model is an axiom: no rating and lives in the primary group only. The model does not predict. There is exactly one top-level model for each drive: hence no simulation during backward chaining. Top-level models cannot have requirements.</p>
 <p>Backward chaining: inputs are drives. If LHS is in the fact cache, stop. If LHS is in the prediction cache, spawn a g-monitor (will be ready to catch a counter-prediction, invalidate the goal and trigger the re-issuing of a new goal). Else commit to the sub-goal; this will trigger the simulation of sub-sub-goals; N.B.: commands are not simulated, commands with unbound values are not injected. </p>
 
-<p class="definition">Definition at line <a class="el" href="mdl__controller_8h_source.html#l00399">399</a> of file <a class="el" href="mdl__controller_8h_source.html">mdl_controller.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mdl__controller_8h_source.html#l00374">374</a> of file <a class="el" href="mdl__controller_8h_source.html">mdl_controller.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="aa4da85cb6f153351ee4626b6d43ea665"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa4da85cb6f153351ee4626b6d43ea665">&#9670;&nbsp;</a></span>store_requirement()</h2>
@@ -506,7 +503,7 @@ static const uint32&#160;</td><td class="memItemRight" valign="bottom"><b>RHSCon
 
 <p>Implements <a class="el" href="classr__exec_1_1_m_d_l_controller.html#a39fa785fcf5660bbe3a2192a963047af">r_exec::MDLController</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="mdl__controller_8cpp_source.html#l01298">1298</a> of file <a class="el" href="mdl__controller_8cpp_source.html">mdl_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mdl__controller_8cpp_source.html#l01307">1307</a> of file <a class="el" href="mdl__controller_8cpp_source.html">mdl_controller.cpp</a>.</p>
 
 </div>
 </div>

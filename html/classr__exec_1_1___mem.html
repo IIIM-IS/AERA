@@ -334,8 +334,8 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>pack_fact</b> 
 <tr class="memitem:a4b2c6516aa8721c0ca1ca068a67e5a6f"><td class="memItemLeft" align="right" valign="top"><a id="a4b2c6516aa8721c0ca1ca068a67e5a6f"></a>
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>pack_fact_object</b> (<a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *fact_object, <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *hlp, uint16 &amp;write_index, std::vector&lt; <a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> &gt; &gt; *references)</td></tr>
 <tr class="separator:a4b2c6516aa8721c0ca1ca068a67e5a6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf56af297f8a1e23158b691fcbcf89ae"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1___mem.html#abf56af297f8a1e23158b691fcbcf89ae">init_timings</a> (Timestamp now, const <a class="el" href="classr__code_1_1list.html">r_code::list</a>&lt; <a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> &gt;&gt; &amp;objects)</td></tr>
-<tr class="separator:abf56af297f8a1e23158b691fcbcf89ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5afe3a31e1e2877cbd6a62b1bae2572c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1___mem.html#a5afe3a31e1e2877cbd6a62b1bae2572c">init_timestamps</a> (Timestamp time_reference, const <a class="el" href="classr__code_1_1list.html">r_code::list</a>&lt; <a class="el" href="classcore_1_1_p.html">P</a>&lt; <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> &gt;&gt; &amp;objects)</td></tr>
+<tr class="separator:a5afe3a31e1e2877cbd6a62b1bae2572c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44a98df03cc6b7789af91b12b68b2697"><td class="memItemLeft" align="right" valign="top">static std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1___mem.html#a44a98df03cc6b7789af91b12b68b2697">Output</a> (TraceLevel l)</td></tr>
 <tr class="separator:a44a98df03cc6b7789af91b12b68b2697"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_static_methods_classr__code_1_1_mem"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_classr__code_1_1_mem')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="classr__code_1_1_mem.html">r_code::Mem</a></td></tr>
@@ -571,7 +571,7 @@ static <a class="el" href="classr__code_1_1_mem.html">Mem</a> *&#160;</td><td cl
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The given command if it is executed as-is, or a new command object of the command that is actually executed. The program controller will make a fact from the command and inject it as the efferent copy. However, if the command is not executed, then return NULL and the program controller will put an anti-fact of the command in the mk.rdx reduction. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="mem_8cpp_source.html#l00734">734</a> of file <a class="el" href="mem_8cpp_source.html">mem.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mem_8cpp_source.html#l00733">733</a> of file <a class="el" href="mem_8cpp_source.html">mem.cpp</a>.</p>
 
 </div>
 </div>
@@ -603,8 +603,8 @@ static <a class="el" href="classr__code_1_1_mem.html">Mem</a> *&#160;</td><td cl
 
 </div>
 </div>
-<a id="abf56af297f8a1e23158b691fcbcf89ae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abf56af297f8a1e23158b691fcbcf89ae">&#9670;&nbsp;</a></span>init_timings()</h2>
+<a id="a5afe3a31e1e2877cbd6a62b1bae2572c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5afe3a31e1e2877cbd6a62b1bae2572c">&#9670;&nbsp;</a></span>init_timestamps()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -613,10 +613,10 @@ static <a class="el" href="classr__code_1_1_mem.html">Mem</a> *&#160;</td><td cl
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void r_exec::_Mem::init_timings </td>
+          <td class="memname">void r_exec::_Mem::init_timestamps </td>
           <td>(</td>
           <td class="paramtype">Timestamp&#160;</td>
-          <td class="paramname"><em>now</em>, </td>
+          <td class="paramname"><em>time_reference</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -636,15 +636,15 @@ static <a class="el" href="classr__code_1_1_mem.html">Mem</a> *&#160;</td><td cl
   </tr>
 </table>
 </div><div class="memdoc">
-<p>This is called on starting the executive to adjust the timestamps of all the initial user-supplied facts by adding now. Therefore, if a the initial fact is defined with a timestamp of 100us, it is changed to now + 100us. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>This is called on starting the executive to adjust all user-defined objects by adding time_reference to any time stamp (fact timings as well as other time stamps). Therefore, if the object is defined with a time stamp of 100ms, it is changed to time_reference + 100ms. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">now</td><td>The value to add to the timestamps of all the initial facts. </td></tr>
-    <tr><td class="paramname">objects</td><td>he list of objects to search for facts. </td></tr>
+    <tr><td class="paramname">time_reference</td><td>The value to add to the time stamps of all objects. </td></tr>
+    <tr><td class="paramname">objects</td><td>The list of objects to search for time stamps. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="mem_8cpp_source.html#l00396">396</a> of file <a class="el" href="mem_8cpp_source.html">mem.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mem_8cpp_source.html#l00434">434</a> of file <a class="el" href="mem_8cpp_source.html">mem.cpp</a>.</p>
 
 </div>
 </div>
@@ -681,7 +681,7 @@ static <a class="el" href="classr__code_1_1_mem.html">Mem</a> *&#160;</td><td cl
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="mem_8cpp_source.html#l00858">858</a> of file <a class="el" href="mem_8cpp_source.html">mem.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mem_8cpp_source.html#l00857">857</a> of file <a class="el" href="mem_8cpp_source.html">mem.cpp</a>.</p>
 
 </div>
 </div>
@@ -800,7 +800,7 @@ static <a class="el" href="classr__code_1_1_mem.html">Mem</a> *&#160;</td><td cl
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The created <a class="el" href="classr__exec_1_1_view.html">View</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="mem_8cpp_source.html#l00843">843</a> of file <a class="el" href="mem_8cpp_source.html">mem.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mem_8cpp_source.html#l00842">842</a> of file <a class="el" href="mem_8cpp_source.html">mem.cpp</a>.</p>
 
 </div>
 </div>
@@ -826,7 +826,7 @@ static <a class="el" href="classr__code_1_1_mem.html">Mem</a> *&#160;</td><td cl
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="mem_8cpp_source.html#l00790">790</a> of file <a class="el" href="mem_8cpp_source.html">mem.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mem_8cpp_source.html#l00789">789</a> of file <a class="el" href="mem_8cpp_source.html">mem.cpp</a>.</p>
 
 </div>
 </div>
@@ -1114,7 +1114,7 @@ static <a class="el" href="classr__code_1_1_mem.html">Mem</a> *&#160;</td><td cl
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The created <a class="el" href="classr__exec_1_1_view.html">View</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="mem_8cpp_source.html#l00800">800</a> of file <a class="el" href="mem_8cpp_source.html">mem.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mem_8cpp_source.html#l00799">799</a> of file <a class="el" href="mem_8cpp_source.html">mem.cpp</a>.</p>
 
 </div>
 </div>
@@ -1402,7 +1402,7 @@ static <a class="el" href="classr__code_1_1_mem.html">Mem</a> *&#160;</td><td cl
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The created <a class="el" href="classr__exec_1_1_view.html">View</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="mem_8cpp_source.html#l00821">821</a> of file <a class="el" href="mem_8cpp_source.html">mem.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mem_8cpp_source.html#l00820">820</a> of file <a class="el" href="mem_8cpp_source.html">mem.cpp</a>.</p>
 
 </div>
 </div>
@@ -1429,7 +1429,7 @@ static <a class="el" href="classr__code_1_1_mem.html">Mem</a> *&#160;</td><td cl
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the object matches an axiom. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="mem_8cpp_source.html#l01281">1281</a> of file <a class="el" href="mem_8cpp_source.html">mem.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mem_8cpp_source.html#l01280">1280</a> of file <a class="el" href="mem_8cpp_source.html">mem.cpp</a>.</p>
 
 </div>
 </div>
@@ -1490,7 +1490,7 @@ static <a class="el" href="classr__code_1_1_mem.html">Mem</a> *&#160;</td><td cl
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="mem_8cpp_source.html#l00530">530</a> of file <a class="el" href="mem_8cpp_source.html">mem.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mem_8cpp_source.html#l00529">529</a> of file <a class="el" href="mem_8cpp_source.html">mem.cpp</a>.</p>
 
 </div>
 </div>
@@ -1524,7 +1524,7 @@ static <a class="el" href="classr__code_1_1_mem.html">Mem</a> *&#160;</td><td cl
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="mem_8h_source.html#l00611">611</a> of file <a class="el" href="mem_8h_source.html">mem.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mem_8h_source.html#l00612">612</a> of file <a class="el" href="mem_8h_source.html">mem.h</a>.</p>
 
 </div>
 </div>
