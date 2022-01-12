@@ -43,7 +43,7 @@ m_run_0:(mdl
 
 ; This program runs once to set the initial position_y at 0, and velocity_y at 0.0001.
 ; The initial position_y is a fact at some time from now until now plus the sampling_period.
-; The initial velocity_y is a fact at any time from now until MAX_TIME.
+; The initial velocity_y is a fact at any time from now until the far future.
 start:(pgm |[] |[] |[] []
    (prb [1 "print" "starting..." |[]])
    (inj []
@@ -59,7 +59,7 @@ start:(pgm |[] |[] |[] []
       |[]
    )
    (inj []
-      (fact s now MAX_TIME 1 1)
+      (fact s now GIGASEC 1 1)
       [SYNC_HOLD now 1 forever stdin nil]
    )
 1) |[]
