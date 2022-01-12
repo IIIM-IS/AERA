@@ -57,7 +57,7 @@ pgm3:(pgm |[] |[] |[] []
       |[]
    )
    (inj []
-      (|fact a now MAX_TIME 1 1)
+      (|fact a now GIGASEC 1 1)
       [SYNC_HOLD now 1 forever stdin nil]
    )
    (inj []
@@ -94,7 +94,7 @@ pgm4:(pgm |[] |[] |[] []
       |[]
    )
    (inj []
-      (fact p now MAX_TIME 1 1)
+      (fact p now GIGASEC 1 1)
       [SYNC_HOLD now 1 forever stdin nil]
    )
 1) |[]
@@ -117,7 +117,7 @@ pgm6:(pgm |[] |[] |[] []
       |[]
    )
    (inj []
-      (|fact p now MAX_TIME 1 1)
+      (|fact p now GIGASEC 1 1)
       [SYNC_HOLD now 1 1 stdin nil]
    )
 1) |[]
