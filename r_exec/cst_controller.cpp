@@ -136,7 +136,7 @@ bool CSTOverlay::can_match(Timestamp now) const { // to reach inputs until a giv
 _Fact* CSTOverlay::inject_production(View* input) {
 
   Fact *f_icst = ((CSTController *)controller_)->get_f_icst(bindings_, &axiom_inputs_, &non_axiom_inputs_);
-  auto now = Now();//f_icst->get_reference(0)->trace();
+  auto now = Now();
   string inputs_info;
   for (uint32 i = 0; i < axiom_inputs_.size(); ++i)
     inputs_info += " " + to_string(axiom_inputs_[i]->get_oid());

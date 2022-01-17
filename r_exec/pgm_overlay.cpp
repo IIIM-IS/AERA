@@ -168,7 +168,6 @@ bool InputLessPGMOverlay::evaluate(uint16 index) {
 }
 
 void InputLessPGMOverlay::patch_tpl_args() { // no rollback on that part of the code.
-    //get_object()->trace();
   uint16 tpl_arg_set_index = code_[PGM_TPL_ARGS].asIndex(); // index to the set of all tpl patterns.
   uint16 arg_count = code_[tpl_arg_set_index].getAtomCount();
   uint16 ipgm_arg_set_index = get_object()->code(IPGM_ARGS).asIndex(); // index to the set of all ipgm tpl args.
@@ -180,7 +179,6 @@ void InputLessPGMOverlay::patch_tpl_args() { // no rollback on that part of the 
     patch_tpl_code(pgm_code_index, get_object()->code(ipgm_arg_set_index + i).asIndex());
     skel_iptr = Atom::IPGMPointer(ipgm_arg_set_index + i); // patch the pgm code with ptrs to the tpl args' actual location in the ipgm code.
   }
-  //Atom::Trace(code, get_object()->get_reference(0)->code_size());
 }
 
 void InputLessPGMOverlay::patch_tpl_code(uint16 pgm_code_index, uint16 ipgm_code_index) { // patch recursively : in pgm_code[index] with IPGM_PTRs until ::.
@@ -223,7 +221,6 @@ bool InputLessPGMOverlay::inject_productions() {
     }
     prods = prods.dereference();
   }
-  //prods.trace();
   uint16 production_count = prods.get_children_count();
   uint16 cmd_count = 0; // cmds to the executive (excl. mod/set) and external devices.
   for (uint16 i = 1; i <= production_count; ++i) {
@@ -234,7 +231,7 @@ bool InputLessPGMOverlay::inject_productions() {
       rollback();
       productions_.clear();
       return false;
-    }//cmd.trace();
+    }
     IPGMContext function = cmd.get_child_deref(1);
 
     // layout of a command:
@@ -262,16 +259,12 @@ bool InputLessPGMOverlay::inject_productions() {
         IPGMContext arg1 = args.get_child(1);
         uint16 index = arg1.getIndex();
         arg1 = arg1.dereference();
-        // arg1.trace();
         if (arg1.is_reference())
           productions_.push_back(arg1.get_object());
         else {
 
           object = _Mem::Get()->build_object(arg1[0]);
-          // arg1.trace();
           arg1.copy(object, 0);
-          // arg1.trace();
-          // object->trace();
           productions_.push_back(_Mem::Get()->check_existence(object));
         }
         patch_code(index, Atom::ProductionPointer(productions_.size() - 1));
@@ -317,9 +310,7 @@ bool InputLessPGMOverlay::inject_productions() {
 
         IPGMContext arg1 = args.get_child(1);
         arg1.dereference_once();
-        //arg1.trace();
         Code *object = args.get_child_deref(1).get_object();
-        //object->trace();
         IPGMContext _view = args.get_child_deref(2);
         if (_view[0].getAtomCount() != 0) { // regular view (i.e. not |[]).
 

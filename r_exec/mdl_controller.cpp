@@ -527,8 +527,6 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(const HLPBindingMap *b
         if ((*e).evidence_->get_pred()->has_simulation(sim)) {
 
           _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
-          //_f_imdl->get_reference(0)->trace();
-          //f_imdl->get_reference(0)->trace();
           HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
           // Temporarily make f_imdl wr_enabled match the one from _f_imdl so that any difference is ignored.
           f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(
@@ -618,8 +616,6 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(const HLPBindingMap *b
         if ((*e).is_too_old(now)) // garbage collection.
           e = simulated_requirements_.positive_evidences_.erase(e);
         else {
-          //(*e).f->get_reference(0)->trace();
-          //f->get_reference(0)->trace();
           if ((*e).evidence_->get_pred()->has_simulation(sim)) {
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
@@ -680,8 +676,6 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
         if ((*e).evidence_->get_pred()->has_simulation(prediction_sim)) {
 
           _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
-          //_f_imdl->get_reference(0)->trace();
-          //f_imdl->get_reference(0)->trace();
           HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
           TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
           // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
@@ -771,8 +765,6 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
         if ((*e).is_too_old(now)) // garbage collection.
           e = simulated_requirements_.positive_evidences_.erase(e);
         else {
-          //(*e).f->get_reference(0)->trace();
-          //f->get_reference(0)->trace();
           if ((*e).evidence_->get_pred()->has_simulation(prediction_sim)) {
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
@@ -854,8 +846,6 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
       else {
 
         _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
-        //_f_imdl->get_reference(0)->trace();
-        //f_imdl->get_reference(0)->trace();
         HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
         if (_original.match_fwd_strict(_f_imdl, f_imdl)) { // tpl args will be valuated in bm, but not in f_imdl yet.
 #ifdef WITH_DETAIL_OID
@@ -1024,8 +1014,6 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
       else {
 
         _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
-        //_f_imdl->get_reference(0)->trace();
-        //f_imdl->get_reference(0)->trace();
         HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
         TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
         // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
@@ -1104,8 +1092,6 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
         if ((*e).is_too_old(now)) // garbage collection.
           e = requirements_.positive_evidences_.erase(e);
         else {
-          //(*e).f->get_reference(0)->trace();
-          //f->get_reference(0)->trace();
           _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
           HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
           TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
@@ -2745,7 +2731,6 @@ void SecondaryMDLController::reduce_batch(Fact *f_p_f_imdl, MDLController *contr
 
 void SecondaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground) { // predicitons are not injected: they are silently produced for rating purposes.
 
-    //rhs->trace();rhs->get_reference(0)->trace();bindings_->trace();
   _Fact *bound_rhs = (_Fact *)bm->bind_pattern(rhs_); // fact or |fact.
   Pred *_prediction = new Pred(bound_rhs, 1);
   auto now = Now();
