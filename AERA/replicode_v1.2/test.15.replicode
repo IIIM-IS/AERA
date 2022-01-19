@@ -5,6 +5,8 @@
 ;to check: a pgm that catches the "beep".
 ;use of dcy_auto to restart decay automatically after dcy_prd expires.
 
+x:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
 target_grp:(grp
 1; upr
 0.9; sln_thr
@@ -48,7 +50,7 @@ hb:(pgm
 |[]
 []
    (inj []
-      (Ping "beep" 1)
+      (mk.val x spoken "beep" 1)
       [SYNC_ONCE now 1 forever target_grp nil]
    )
 1; propagation saliency threshold
@@ -62,10 +64,10 @@ ihb:(ipgm hb |[] RUN_ALWAYS 200ms VOLATILE SILENT 1)
 monitor:(pgm
 |[]
 []
-   (ptn (Ping "beep" ::) |[])
+   (ptn (mk.val x spoken "beep" ::) |[])
 |[]
 []
-   (inj [(Ping "caught beep" 1) [SYNC_ONCE now 1 forever target_grp nil]])
+   (inj [(mk.val x spoken "caught beep" 1) [SYNC_ONCE now 1 forever target_grp nil]])
 1
 )
 |[]
