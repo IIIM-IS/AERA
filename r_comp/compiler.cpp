@@ -561,6 +561,7 @@ bool Compiler::symbol_expr(std::string &s) {
     case '(':
     case '[':
     case ']':
+    case '\"':
     case '.':
       if (s == "mk") {
 
