@@ -4,6 +4,9 @@ Interim change since AERA Diagnostic Mode v0.1
 Changes
 * Change the Replicode syntax to add durations, distinct from time stamps https://github.com/IIIM-IS/AERA/issues/138
 
+Bug fixes
+* Replicode syntax: Allow ':' in a string. https://github.com/IIIM-IS/AERA/pull/207
+
 AERA Diagnostic Mode v0.1 (2021-11-19)
 -------------------------------------
 
