@@ -776,7 +776,24 @@ Simulator
 * Generality
   * DONE. Review/merge pull request to implement separating timestamp and duration in issue #138. https://github.com/IIIM-IS/AERA/pull/206
 
+2022-01-21
+* DONE. Review/merge pull request to allow ':' in a string https://github.com/IIIM-IS/AERA/pull/207
+* Activation and saliency
+  * DONE. ball.external: Why are some activation values -1.57772e-30 and -nan? These are less that 0, so is it not active?
+    ANSWER: There are different types of View. The View on an icst doesn't use the activation, so it is not initialized.
+    View(sync, ijt, sln, res, host, origin, object) // regular view
+  * DONE. ball.external: Why are some activation values 1 as expected? (Different initialization code?)
+    ANSWER: Yes, different View constructor.
+    View(sync, ijt, sln, res, host, origin, object, act); // pgm/mdl view
+  * DONE. Make autofocus inject facts and efferent commands into a test group "peripheral1". Are learned models injected there too?
+    ANSWER: Yes. Need to add a View from auto_focus to peripheral1. But makes more models (don't know why).
+  * DONE. Study test.15.replicode: What is it supposed to show?
+    ANSWER: Modified to test saliency thresholds and propagation.
+  * DONE Make issue: low_sln_thr sends notifications every frame, not just when it "becomes" below. https://github.com/IIIM-IS/AERA/issues/208
+
 next meeting
+* Pong
+  * Add a fovea with explicit attention control.
 * Generality
   * Make issue to propose numbers with ranges. Maybe more general: Range of numbers, range of durations, range of timestamps, combos?
 
