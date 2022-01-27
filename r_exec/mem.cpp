@@ -1263,6 +1263,22 @@ void _Mem::pack_fact_object(Code *fact_object, Code *hlp, uint16 &write_index, v
   }
 }
 
+Code* _Mem::find_object(vector<Code*> *objects, const char* name) {
+  // Find the object OID.
+  uint32 oid = Seed.object_names_.findSymbol(name);
+  if (oid == UNDEFINED_OID)
+    return NULL;
+
+  // Find the object. (Imitate the code in _Mem::load.)
+  for (uint32 i = 0; i < objects->size(); ++i) {
+    Code *object = (*objects)[i];
+    if (object->get_oid() == oid)
+      return object;
+  }
+
+  return NULL;
+}
+
 Code *_Mem::clone(Code *original) const { // shallow copy; oid not copied.
 
   Code *_clone = build_object(original->code(0));

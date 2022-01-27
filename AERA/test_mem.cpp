@@ -147,36 +147,19 @@ template<class O, class S> bool TestMem<O, S>::load
   move_y_minus_opcode_ = r_exec::GetOpcode("move_y_minus");
 
   // Find the objects we need.
-  position_property_ = findObject(objects, "position");
-  position_y_property_ = findObject(objects, "position_y");
-  velocity_y_property_ = findObject(objects, "velocity_y");
-  force_y_property_ = findObject(objects, "force_y");
-  theta_y_property_ = findObject(objects, "theta_y");
-  omega_y_property_ = findObject(objects, "omega_y");
-  primary_group_ = findObject(objects, "primary");
+  position_property_ = find_object(objects, "position");
+  position_y_property_ = find_object(objects, "position_y");
+  velocity_y_property_ = find_object(objects, "velocity_y");
+  force_y_property_ = find_object(objects, "force_y");
+  theta_y_property_ = find_object(objects, "theta_y");
+  omega_y_property_ = find_object(objects, "omega_y");
+  primary_group_ = find_object(objects, "primary");
 
   // Find the entities we need.
   for (int i = 0; i <= 9; ++i)
-    yEnt_[i] = findObject(objects, ("y" + to_string(i)).c_str());
+    yEnt_[i] = find_object(objects, ("y" + to_string(i)).c_str());
 
   return true;
-}
-
-template<class O, class S> Code*
-TestMem<O, S>::findObject(vector<Code*> *objects, const char* name) {
-  // Find the object OID.
-  uint32 oid = r_exec::Seed.object_names_.findSymbol(name);
-  if (oid == UNDEFINED_OID)
-    return NULL;
-
-  // Find the object. (Imitate the code in _Mem::load.)
-  for (uint32 i = 0; i < objects->size(); ++i) {
-    Code *object = (*objects)[i];
-    if (object->get_oid() == oid)
-      return object;
-  }
-
-  return NULL;
 }
 
 template<class O, class S> Code* TestMem<O, S>::eject(Code *command) {

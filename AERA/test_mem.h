@@ -127,15 +127,6 @@ protected:
   class _Thread : public Thread {
   };
 
-  /**
-   * Find the object in r_exec::Seed and objects with the given name.
-   * \param objects The objects array from load().
-   * \param name The name of the symbol.
-   * \return The object, or NULL if not found.
-   */
-  static r_code::Code* findObject(
-    std::vector<r_code::Code *> *objects, const char* name);
-
   void on_time_tick();
 
   /**

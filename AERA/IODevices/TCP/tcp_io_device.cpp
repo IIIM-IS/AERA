@@ -185,14 +185,14 @@ namespace tcp_io_device {
     // Load entities
     cout << "> Loading entities:" << endl;
     for (auto it = entities_.begin(); it != entities_.end(); ++it) {
-      it->second = findObject(objects, &((it->first)[0]));
+      it->second = find_object(objects, &((it->first)[0]));
       cout << it->first << ":\t" << it->second->get_oid() << endl;
     }
 
     // Load objects
     cout << "> Loading objects:" << endl;
     for (auto it = objects_.begin(); it != objects_.end(); ++it) {
-      it->second = findObject(objects, &((it->first)[0]));
+      it->second = find_object(objects, &((it->first)[0]));
       cout << it->first << ":\t" << it->second->get_oid() << endl;
     }
 
@@ -348,24 +348,6 @@ namespace tcp_io_device {
     }
     }
     return msg;
-  }
-
-  template<class O, class S>
-  r_code::Code* TcpIoDevice<O, S>::findObject(vector<r_code::Code*>* objects, const char* name)
-  {
-    // Find the object OID.
-    uint32 oid = r_exec::Seed.object_names_.findSymbol(name);
-    if (oid == UNDEFINED_OID)
-      return NULL;
-
-    // Find the object. (Imitate the code in _Mem::load.)
-    for (uint32 i = 0; i < objects->size(); ++i) {
-      Code* object = (*objects)[i];
-      if (object->get_oid() == oid)
-        return object;
-    }
-
-    return NULL;
   }
 
   template<class O, class S>

@@ -580,6 +580,15 @@ public:
   static void pack_fact(r_code::Code *fact, r_code::Code *hlp, uint16 &write_index, std::vector<P<r_code::Code> > *references);
   static void pack_fact_object(r_code::Code *fact_object, r_code::Code *hlp, uint16 &write_index, std::vector<P<r_code::Code> > *references);
 
+  /**
+   * Find the object in r_exec::Seed and objects with the given name.
+   * \param objects The objects array from load().
+   * \param name The name of the symbol.
+   * \return The object, or NULL if not found.
+   */
+  static r_code::Code* find_object(
+    std::vector<r_code::Code *> *objects, const char* name);
+
   r_code::Code *clone(r_code::Code *original) const; // shallow copy.
 
   // External device I/O ////////////////////////////////////////////////////////////////
