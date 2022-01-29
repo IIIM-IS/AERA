@@ -239,7 +239,7 @@ void CSTOverlay::update(HLPBindingMap *map, _Fact *input, bool is_axiom) {
   } else
     last_cfd = input->get_cfd();
 
-  if (lowest_cfd_ > last_cfd)
+  if (last_cfd < lowest_cfd_)
     lowest_cfd_ = last_cfd;
 }
 
