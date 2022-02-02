@@ -169,6 +169,7 @@
 
 ; initial groups.
 
+!def (std_grp _upr _sln_thr _act_thr _vis_thr _ntf_grps) (grp _upr _sln_thr _act_thr _vis_thr 1 0 1 0 0 1 0 0 1 1 1 1 0 0 0 0 0 0 1 0 1 1 0 1 0 0 _ntf_grps 1); c-salient and c-active.
 root:(std_grp 0 0 0 0 [nil]) [[SYNC_ONCE now 0 forever nil nil COV_OFF 0]]
 
 primary:(std_grp 2 0 0.4 0 |[]) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]; ensure primary.upr=stdin.upr.
