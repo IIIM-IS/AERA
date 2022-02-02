@@ -229,7 +229,6 @@ pgm_before_drive:(pgm |[]
    (ptn (fact (mk.val e1 emulator_state [Attached_obj: Pos_h: Pos_c: Pos_s:] :) After: Before: ::) |[])
 []
    (< After (+ this.vw.ijt DRIVE_START))
-   (<> Attached_obj nil)
 []
    ; All state variables keep the same value.
    (inj []
