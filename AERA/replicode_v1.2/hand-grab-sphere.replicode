@@ -177,7 +177,7 @@ start:(pgm |[] |[] |[] []
       |[]
    )
    (inj []
-      (fact h_position_pH0 after:(now) (+ after sampling_period) 1 1)
+      (fact h_position_pH0 After:(now) (+ After sampling_period) 1 1)
       [SYNC_PERIODIC now 1 1 stdin nil]
    )
 
@@ -186,7 +186,7 @@ start:(pgm |[] |[] |[] []
       |[]
    )
    (inj []
-      (fact c_position_pH0 after (+ after sampling_period) 1 1)
+      (fact c_position_pH0 After (+ After sampling_period) 1 1)
       [SYNC_PERIODIC now 1 1 stdin nil]
    )
 
@@ -195,7 +195,7 @@ start:(pgm |[] |[] |[] []
       |[]
    )
    (inj []
-      (fact s_position_pS0 after (+ after sampling_period) 1 1)
+      (fact s_position_pS0 After (+ After sampling_period) 1 1)
       [SYNC_PERIODIC now 1 1 stdin nil]
    )
 
@@ -204,7 +204,7 @@ start:(pgm |[] |[] |[] []
       |[]
    )
    (inj []
-      (fact h_attached_c after (+ after sampling_period) 1 1)
+      (fact h_attached_c After (+ After sampling_period) 1 1)
       [SYNC_PERIODIC now 1 1 stdin nil]
    )
 1) |[]
@@ -221,23 +221,23 @@ m_drive:(mdl |[] []
 pgm_inject_drive:(pgm |[]
 []
    ; This fact repeats periodically. We use it as a "heartbeat".
-   (ptn (fact (mk.val h essence hand :) after: before: ::) |[])
+   (ptn (fact (mk.val h essence hand :) After: Before: ::) |[])
 []
-   (>= after (+ this.vw.ijt DRIVE_START))
+   (>= After (+ this.vw.ijt DRIVE_START))
 []
    (inj []
       ; The end of the time interval will be used in m_drive as the end of the goal interval.
-      f_run:(fact run after (+ before 500ms) 1 1)
+      f_run:(fact run After (+ Before 500ms) 1 1)
       |[]
    )
    (inj []
-      g:(goal f_run self nil 1)
+      G:(goal f_run self nil 1)
       |[]
    )
    (inj []
       ; Delay a little to allow predictions for this sampling period before injecting the drive.
-      (fact g t0:(+ after 10ms) t0 1 1)
-      [SYNC_ONCE t0 1 forever primary nil]
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
    )
    (prb [1 "print" "injected drive" |[]])
 1) |[]
@@ -248,9 +248,9 @@ pgm_inject_drive:(pgm |[]
 pgm_before_drive:(pgm |[]
 []
    (ptn (fact (mk.val h attached [Attached_obj:] :) After: Before: ::) |[])
-   (ptn (fact (mk.val h position pos_h: :) After_h: Before_h: ::) |[])
-   (ptn (fact (mk.val c position pos_c: :) After_c: Before_c: ::) |[])
-   (ptn (fact (mk.val s position pos_s: :) After_s: Before_s: ::) |[])
+   (ptn (fact (mk.val h position Pos_h: :) After_h: Before_h: ::) |[])
+   (ptn (fact (mk.val c position Pos_c: :) After_c: Before_c: ::) |[])
+   (ptn (fact (mk.val s position Pos_s: :) After_s: Before_s: ::) |[])
 []
    (< After (+ this.vw.ijt DRIVE_START))
    (< After_h Before)
@@ -269,7 +269,7 @@ pgm_before_drive:(pgm |[]
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
    (inj []
-      Next_pos_h:(mk.val h position pos_h 1); h keeps the same position.
+      Next_pos_h:(mk.val h position Pos_h 1); h keeps the same position.
       |[]
    )
    (inj []
@@ -277,7 +277,7 @@ pgm_before_drive:(pgm |[]
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
    (inj []
-      Next_pos_c:(mk.val c position pos_c 1); c keeps the same position.
+      Next_pos_c:(mk.val c position Pos_c 1); c keeps the same position.
       |[]
    )
    (inj []
@@ -285,7 +285,7 @@ pgm_before_drive:(pgm |[]
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
    (inj []
-      Next_pos_s:(mk.val s position pos_s 1); s keeps the same position.
+      Next_pos_s:(mk.val s position Pos_s 1); s keeps the same position.
       |[]
    )
    (inj []
@@ -300,9 +300,9 @@ pgm_cmd_move_h_attached_c:(pgm |[]
 []
    (ptn (fact G:(goal (fact (cmd move [h DeltaP_in:] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
    (ptn (fact (mk.val h attached [Attached_obj:] :) After: Before: ::) |[])
-   (ptn (fact (mk.val h position pos_h: :) After_h: Before_h: ::) |[])
-   (ptn (fact (mk.val c position pos_c: :) After_c: Before_c: ::) |[])
-   (ptn (fact (mk.val s position pos_s: :) After_s: Before_s: ::) |[])
+   (ptn (fact (mk.val h position Pos_h: :) After_h: Before_h: ::) |[])
+   (ptn (fact (mk.val c position Pos_c: :) After_c: Before_c: ::) |[])
+   (ptn (fact (mk.val s position Pos_s: :) After_s: Before_s: ::) |[])
 []
    (= Attached_obj c)
    (= (is_sim G) false)
@@ -333,7 +333,7 @@ pgm_cmd_move_h_attached_c:(pgm |[]
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
    (inj []
-      Next_pos_h:(mk.val h position Next_pos_h_value:(+ pos_h DeltaP) 1); Move h by DeltaP.
+      Next_pos_h:(mk.val h position Next_pos_h_value:(+ Pos_h DeltaP) 1); Move h by DeltaP.
       |[]
    )
    (inj []
@@ -349,7 +349,7 @@ pgm_cmd_move_h_attached_c:(pgm |[]
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
    (inj []
-      Next_pos_s:(mk.val s position pos_s 1); s keeps the same position.
+      Next_pos_s:(mk.val s position Pos_s 1); s keeps the same position.
       |[]
    )
    (inj []
@@ -365,9 +365,9 @@ pgm_cmd_move_h_attached_s:(pgm |[]
 []
    (ptn (fact G:(goal (fact (cmd move [h DeltaP_in:] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
    (ptn (fact (mk.val h attached [Attached_obj:] :) After: Before: ::) |[])
-   (ptn (fact (mk.val h position pos_h: :) After_h: Before_h: ::) |[])
-   (ptn (fact (mk.val c position pos_c: :) After_c: Before_c: ::) |[])
-   (ptn (fact (mk.val s position pos_s: :) After_s: Before_s: ::) |[])
+   (ptn (fact (mk.val h position Pos_h: :) After_h: Before_h: ::) |[])
+   (ptn (fact (mk.val c position Pos_c: :) After_c: Before_c: ::) |[])
+   (ptn (fact (mk.val s position Pos_s: :) After_s: Before_s: ::) |[])
 []
    (= Attached_obj s)
    (= (is_sim G) false)
@@ -398,7 +398,7 @@ pgm_cmd_move_h_attached_s:(pgm |[]
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
    (inj []
-      Next_pos_h:(mk.val h position Next_pos_h_value:(+ pos_h DeltaP) 1); Move h by DeltaP.
+      Next_pos_h:(mk.val h position Next_pos_h_value:(+ Pos_h DeltaP) 1); Move h by DeltaP.
       |[]
    )
    (inj []
@@ -406,7 +406,7 @@ pgm_cmd_move_h_attached_s:(pgm |[]
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
    (inj []
-      Next_pos_c:(mk.val c position pos_c 1); c keeps the same position.
+      Next_pos_c:(mk.val c position Pos_c 1); c keeps the same position.
       |[]
    )
    (inj []
@@ -431,9 +431,9 @@ pgm_cmd_move_h_not_attached:(pgm |[]
 []
    (ptn (fact G:(goal (fact (cmd move [h DeltaP_in:] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
    (ptn (fact (mk.val h attached |[] :) After: Before: ::) |[])
-   (ptn (fact (mk.val h position pos_h: :) After_h: Before_h: ::) |[])
-   (ptn (fact (mk.val c position pos_c: :) After_c: Before_c: ::) |[])
-   (ptn (fact (mk.val s position pos_s: :) After_s: Before_s: ::) |[])
+   (ptn (fact (mk.val h position Pos_h: :) After_h: Before_h: ::) |[])
+   (ptn (fact (mk.val c position Pos_c: :) After_c: Before_c: ::) |[])
+   (ptn (fact (mk.val s position Pos_s: :) After_s: Before_s: ::) |[])
 []
    (= (is_sim G) false)
    (< Cmd_after Before)
@@ -463,7 +463,7 @@ pgm_cmd_move_h_not_attached:(pgm |[]
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
    (inj []
-      Next_pos_h:(mk.val h position (+ pos_h DeltaP) 1); Move h by DeltaP.
+      Next_pos_h:(mk.val h position (+ Pos_h DeltaP) 1); Move h by DeltaP.
       |[]
    )
    (inj []
@@ -471,7 +471,7 @@ pgm_cmd_move_h_not_attached:(pgm |[]
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
    (inj []
-      Next_pos_c:(mk.val c position pos_c 1); c keeps the same position.
+      Next_pos_c:(mk.val c position Pos_c 1); c keeps the same position.
       |[]
    )
    (inj []
@@ -479,7 +479,7 @@ pgm_cmd_move_h_not_attached:(pgm |[]
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
    (inj []
-      Next_pos_s:(mk.val s position pos_s 1); s keeps the same position.
+      Next_pos_s:(mk.val s position Pos_s 1); s keeps the same position.
       |[]
    )
    (inj []
@@ -495,9 +495,9 @@ pgm_cmd_release_h:(pgm |[]
 []
    (ptn (fact G:(goal (fact Command:(cmd release [h] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
    (ptn (fact (mk.val h attached [Attached_obj:] :) After: Before: ::) |[])
-   (ptn (fact (mk.val h position pos_h: :) After_h: Before_h: ::) |[])
-   (ptn (fact (mk.val c position pos_c: :) After_c: Before_c: ::) |[])
-   (ptn (fact (mk.val s position pos_s: :) After_s: Before_s: ::) |[])
+   (ptn (fact (mk.val h position Pos_h: :) After_h: Before_h: ::) |[])
+   (ptn (fact (mk.val c position Pos_c: :) After_c: Before_c: ::) |[])
+   (ptn (fact (mk.val s position Pos_s: :) After_s: Before_s: ::) |[])
 []
    (= (is_sim G) false)
    (< Cmd_after Before)
@@ -523,7 +523,7 @@ pgm_cmd_release_h:(pgm |[]
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
    (inj []
-      Next_pos_h:(mk.val h position pos_h 1); h keeps the same position.
+      Next_pos_h:(mk.val h position Pos_h 1); h keeps the same position.
       |[]
    )
    (inj []
@@ -531,7 +531,7 @@ pgm_cmd_release_h:(pgm |[]
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
    (inj []
-      Next_pos_c:(mk.val c position pos_c 1); c keeps the same position.
+      Next_pos_c:(mk.val c position Pos_c 1); c keeps the same position.
       |[]
    )
    (inj []
@@ -539,7 +539,7 @@ pgm_cmd_release_h:(pgm |[]
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
    (inj []
-      Next_pos_s:(mk.val s position pos_s 1); s keeps the same position.
+      Next_pos_s:(mk.val s position Pos_s 1); s keeps the same position.
       |[]
    )
    (inj []
@@ -555,11 +555,11 @@ pgm_cmd_grab_h:(pgm |[]
 []
    (ptn (fact G:(goal (fact Command:(cmd grab [h] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
    (ptn (fact (mk.val h attached |[] :) After: Before: ::) |[])
-   (ptn (fact (mk.val h position pos_h: :) After_h: Before_h: ::) |[])
-   (ptn (fact (mk.val c position pos_c: :) After_c: Before_c: ::) |[])
-   (ptn (fact (mk.val s position pos_s: :) After_s: Before_s: ::) |[])
+   (ptn (fact (mk.val h position Pos_h: :) After_h: Before_h: ::) |[])
+   (ptn (fact (mk.val c position Pos_c: :) After_c: Before_c: ::) |[])
+   (ptn (fact (mk.val s position Pos_s: :) After_s: Before_s: ::) |[])
 []
-   (= pos_h pos_s); For h to grab s, they must be at the same position.
+   (= Pos_h Pos_s); For h to grab s, they must be at the same position.
    (= (is_sim G) false)
    (< Cmd_after Before)
    (> Cmd_before After)
@@ -584,7 +584,7 @@ pgm_cmd_grab_h:(pgm |[]
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
    (inj []
-      Next_pos_h:(mk.val h position pos_h 1); h keeps the same position.
+      Next_pos_h:(mk.val h position Pos_h 1); h keeps the same position.
       |[]
    )
    (inj []
@@ -592,7 +592,7 @@ pgm_cmd_grab_h:(pgm |[]
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
    (inj []
-      Next_pos_c:(mk.val c position pos_c 1); c keeps the same position.
+      Next_pos_c:(mk.val c position Pos_c 1); c keeps the same position.
       |[]
    )
    (inj []
@@ -600,7 +600,7 @@ pgm_cmd_grab_h:(pgm |[]
       [SYNC_PERIODIC (+ After sampling_period) 1 1 stdin nil]
    )
    (inj []
-      Next_pos_s:(mk.val s position pos_s 1); s keeps the same position.
+      Next_pos_s:(mk.val s position Pos_s 1); s keeps the same position.
       |[]
    )
    (inj []
