@@ -142,6 +142,8 @@
     <ClCompile Include="IODevices\TCP\Proto\tcp_data_message.pb.cc" />
     <ClCompile Include="IODevices\TCP\tcp_connection.cpp" />
     <ClCompile Include="IODevices\TCP\tcp_io_device.cpp" />
+    <ClCompile Include="IODevices\video_screen\video_screen.cpp" />
+    <ClCompile Include="IODevices\video_screen\video_screen_io_device.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="test_mem.cpp" />
   </ItemGroup>
@@ -150,6 +152,8 @@
     <ClInclude Include="IODevices\TCP\Proto\utils.h" />
     <ClInclude Include="IODevices\TCP\tcp_connection.h" />
     <ClInclude Include="IODevices\TCP\tcp_io_device.h" />
+    <ClInclude Include="IODevices\video_screen\video_screen.h" />
+    <ClInclude Include="IODevices\video_screen\video_screen_io_device.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="test_mem.h" />
   </ItemGroup>

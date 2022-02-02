@@ -85,6 +85,7 @@
 
 #include "decompiler.h"
 #include "IODevices\TCP\tcp_io_device.h"
+#include "IODevices\video_screen\video_screen_io_device.h"
 #include "test_mem.h"
 #include "init.h"
 #include "image_impl.h"
@@ -334,6 +335,12 @@ int32 main(int argc, char **argv) {
         delete mem;
         return err;
       }
+    }
+    else if (settings.io_device_.compare("video_screen") == 0) {
+      if (settings.get_objects_)
+        mem = new video_screen::VideoScreenIoDevice<r_exec::LObject, r_exec::MemStatic>();
+      else
+        mem = new video_screen::VideoScreenIoDevice<r_exec::LObject, r_exec::MemVolatile>();
     }
 
     if (runtime_output_stream.is_open())
