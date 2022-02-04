@@ -791,15 +791,25 @@ Simulator
     ANSWER: Modified to test saliency thresholds and propagation.
   * DONE Make issue: low_sln_thr sends notifications every frame, not just when it "becomes" below. https://github.com/IIIM-IS/AERA/issues/208
 
-next meeting
+2022-02-04
+* DONE. Review/merge pull request to move definition of std_grp to std.replicode https://github.com/IIIM-IS/AERA/pull/212
+* DONE. Review bug: Wrong variable binding in program pattern with nested lists https://github.com/IIIM-IS/AERA/issues/211
+* DONE. Discuss: abduce_imdl doesn't use parameter "opposite".
 * Pong
-  * Add a fovea with explicit attention control.
-* Generality
-  * Make issue to propose numbers with ranges. Maybe more general: Range of numbers, range of durations, range of timestamps, combos?
+  * DONE. Add a fovea with move eye command.
+* hand-grab-sphere
+  DONE. Simplify seed code with emulator state (20% smaller).
+
+next meeting
+* hand-grab-sphere
+  Put emulator state in emulator group. Make primary visible in emulator group.
 
 TODO
+* Generality
+  * Make issue to propose numbers with ranges. Maybe more general: Range of numbers, range of durations, range of timestamps, combos?
 * PTPX: Learned cst may only have icsts. But using a cst for later model-building requires a non-icst fact. Should icst->contains be recursive? (Need limit.) Or always include a fact in new_cst?
-* pong.test
+* Pong
+  * Add explicit attention control.
   * Add paddle. Make goal for the ball to be at a position which requires moving the paddle to bounce it.
   * Remove cst_ball_position, etc. and learn them.
   * Learn the exception "bounce" model.
