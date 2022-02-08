@@ -26,6 +26,21 @@ s_is_a_hand:(mk.val s essence hand 1) |[]
 ; (mk.val e1 emulator_state [Attached_obj Pos_h Pos_c Pos_s])
 e1:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
 emulator_state:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+; Inject the emulator state into the emulator group.
+emulator:(std_grp 2 0 0 0 |[]) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]
+
+; This program runs in the primary group to re-inject any (fact (goal (fact (cmd ::)))) into emulator.
+pgm_inject_in_emulator_group:(pgm |[]
+[]
+   (ptn f_G:(fact G:(goal (fact Command:(cmd ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
+[]
+   ; Only re-inject non-simulation goals.
+   (= (is_sim G) false)
+[]
+   (inj [f_G [SYNC_ONCE (now) 1 1 emulator nil]])
+1) |[]
+(ipgm pgm_inject_in_emulator_group |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
 
 ; Hand H has position P.
 S0:(cst |[]
@@ -187,8 +202,7 @@ start:(pgm |[] |[] |[] []
    )
    (inj []
       (fact State After:(now) (+ After sampling_period) 1 1)
-      ; Always inject the emulator state directly into primary, so we bypass auto focus.
-      [SYNC_PERIODIC now 1 1 primary nil]
+      [SYNC_PERIODIC now 1 1 emulator nil]
    )
 1) |[]
 (ipgm start |[] RUN_ONCE sampling_period VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
@@ -831,12 +845,12 @@ pgm_cmd_move_h_attached_c:(pgm |[]
    )
    (inj []
       (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
-      [SYNC_PERIODIC (+ After sampling_period) 1 1 primary nil]
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
    )
    (prb [1 "print" "pgm_cmd_move_h_attached_c from command:" [Command]])
 1) |[]
 (ipgm pgm_cmd_move_h_attached_c |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
-   [SYNC_ONCE now 0 forever primary nil 1]
+   [SYNC_ONCE now 0 forever emulator nil 1]
 
 pgm_cmd_move_h_attached_s:(pgm |[]
 []
@@ -864,13 +878,13 @@ pgm_cmd_move_h_attached_s:(pgm |[]
    )
    (inj []
       (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
-      [SYNC_PERIODIC (+ After sampling_period) 1 1 primary nil]
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
    )
    (prb [1 "print" "pgm_cmd_move_h_attached_s from command:" [Command]])
    (prb [1 "print" "pgm_cmd_move_h_attached_s new s position:" [Next_state]])
 1) |[]
 (ipgm pgm_cmd_move_h_attached_s |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
-   [SYNC_ONCE now 0 forever primary nil 1]
+   [SYNC_ONCE now 0 forever emulator nil 1]
 
 pgm_cmd_move_h_not_attached:(pgm |[]
 []
@@ -897,12 +911,12 @@ pgm_cmd_move_h_not_attached:(pgm |[]
    )
    (inj []
       (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
-      [SYNC_PERIODIC (+ After sampling_period) 1 1 primary nil]
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
    )
    (prb [1 "print" "pgm_cmd_move_h_not_attached from command:" [Command]])
 1) |[]
 (ipgm pgm_cmd_move_h_not_attached |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
-   [SYNC_ONCE now 0 forever primary nil 1]
+   [SYNC_ONCE now 0 forever emulator nil 1]
 
 pgm_cmd_release_h:(pgm |[]
 []
@@ -926,12 +940,12 @@ pgm_cmd_release_h:(pgm |[]
    )
    (inj []
       (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
-      [SYNC_PERIODIC (+ After sampling_period) 1 1 primary nil]
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
    )
    (prb [1 "print" "pgm_cmd_release_h from command:" [Command]])
 1) |[]
 (ipgm pgm_cmd_release_h |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
-   [SYNC_ONCE now 0 forever primary nil 1]
+   [SYNC_ONCE now 0 forever emulator nil 1]
 
 pgm_cmd_release_h_not_attached:(pgm |[]
 []
@@ -955,12 +969,12 @@ pgm_cmd_release_h_not_attached:(pgm |[]
    )
    (inj []
       (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
-      [SYNC_PERIODIC (+ After sampling_period) 1 1 primary nil]
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
    )
    (prb [1 "print" "pgm_cmd_release_h_not_attached from command:" [Command]])
 1) |[]
 (ipgm pgm_cmd_release_h_not_attached |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
-   [SYNC_ONCE now 0 forever primary nil 1]
+   [SYNC_ONCE now 0 forever emulator nil 1]
 
 ; A special case during babbling to push c away from s so they can be grabbed.
 pgm_cmd_release_push_c:(pgm |[]
@@ -985,12 +999,12 @@ pgm_cmd_release_push_c:(pgm |[]
    )
    (inj []
       (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
-      [SYNC_PERIODIC (+ After sampling_period) 1 1 primary nil]
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
    )
    (prb [1 "print" "pgm_cmd_release_push_c from command:" [Command]])
 1) |[]
 (ipgm pgm_cmd_release_push_c |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
-   [SYNC_ONCE now 0 forever primary nil 1]
+   [SYNC_ONCE now 0 forever emulator nil 1]
 
 pgm_cmd_grab_h_s:(pgm |[]
 []
@@ -1015,12 +1029,12 @@ pgm_cmd_grab_h_s:(pgm |[]
    )
    (inj []
       (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
-      [SYNC_PERIODIC (+ After sampling_period) 1 1 primary nil]
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
    )
    (prb [1 "print" "pgm_cmd_grab_h_s from command:" [f_G]])
 1) |[]
 (ipgm pgm_cmd_grab_h_s |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
-   [SYNC_ONCE now 0 forever primary nil 1]
+   [SYNC_ONCE now 0 forever emulator nil 1]
 
 pgm_cmd_grab_h_c:(pgm |[]
 []
@@ -1045,12 +1059,12 @@ pgm_cmd_grab_h_c:(pgm |[]
    )
    (inj []
       (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
-      [SYNC_PERIODIC (+ After sampling_period) 1 1 primary nil]
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
    )
    (prb [1 "print" "pgm_cmd_grab_h_c from command:" [Command]])
 1) |[]
 (ipgm pgm_cmd_grab_h_c |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
-   [SYNC_ONCE now 0 forever primary nil 1]
+   [SYNC_ONCE now 0 forever emulator nil 1]
 
 pgm_cmd_grab_h_fail:(pgm |[]
 []
@@ -1075,12 +1089,12 @@ pgm_cmd_grab_h_fail:(pgm |[]
    )
    (inj []
       (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
-      [SYNC_PERIODIC (+ After sampling_period) 1 1 primary nil]
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
    )
    (prb [1 "print" "pgm_cmd_grab_h_fail from command:" [Command]])
 1) |[]
 (ipgm pgm_cmd_grab_h_fail |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
-   [SYNC_ONCE now 0 forever primary nil 1]
+   [SYNC_ONCE now 0 forever emulator nil 1]
 
 ; Match the emulator state and inject individual mk.val at the same time for each of
 ; the state variables as needed.
@@ -1124,7 +1138,7 @@ pgm_inject_mk_vals_attached:(pgm |[]
    )
 1) |[]
 (ipgm pgm_inject_mk_vals_attached |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
-   [SYNC_ONCE now 0 forever primary nil 1]
+   [SYNC_ONCE now 0 forever emulator nil 1]
 
 ; The same as pgm_inject_mk_vals_attached for the case when not attached.
 pgm_inject_mk_vals_not_attached:(pgm |[]
@@ -1166,4 +1180,4 @@ pgm_inject_mk_vals_not_attached:(pgm |[]
    )
 1) |[]
 (ipgm pgm_inject_mk_vals_not_attached |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
-   [SYNC_ONCE now 0 forever primary nil 1]
+   [SYNC_ONCE now 0 forever emulator nil 1]
