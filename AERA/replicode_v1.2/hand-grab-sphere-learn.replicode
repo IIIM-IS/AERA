@@ -32,7 +32,7 @@ emulator:(std_grp 2 0 0 0 |[]) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]
 ; This program runs in the primary group to re-inject any (fact (goal (fact (cmd ::)))) into emulator.
 pgm_inject_in_emulator_group:(pgm |[]
 []
-   (ptn f_G:(fact G:(goal (fact Command:(cmd ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
+   (ptn f_G:(fact G:(goal (fact (cmd ::) ::) ::) ::) |[])
 []
    ; Only re-inject non-simulation goals.
    (= (is_sim G) false)
