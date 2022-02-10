@@ -800,9 +800,17 @@ Simulator
 * hand-grab-sphere
   DONE. Simplify seed code with emulator state (20% smaller).
 
+2022-02-10
+* hand-grab-sphere
+  * DONE. Put emulator state in emulator group.
+    * DONE. Review issue for can't make a group visible in another group at runtime https://github.com/IIIM-IS/AERA/issues/213 .
+    * DONE. Review program to explicitly re-inject from primary to emulator group.
+  * Demonstrate injection of mandatory solution to prevent drive failure.
+    * DONE. Discuss: Simulation with requirements on drive model in Figure 11 not working.
+
 next meeting
 * hand-grab-sphere
-  Put emulator state in emulator group. Make primary visible in emulator group.
+  * Demonstrate injection of mandatory solution to prevent drive failure.
 
 TODO
 * Generality
