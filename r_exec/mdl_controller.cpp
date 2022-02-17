@@ -1846,7 +1846,12 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
       sub_sim = new Sim(opposite ? SIM_MANDATORY : SIM_OPTIONAL, sim_thz, super_goal, opposite, sim->root_, 1, this, confidence, now + sim_thz);
       break;
     case SIM_OPTIONAL:
+      sub_sim = new Sim(opposite ? SIM_MANDATORY : SIM_OPTIONAL, sim_thz, super_goal, opposite, sim->root_, 1, this, sim->get_solution_cfd(), sim->get_solution_before());
+      break;
     case SIM_MANDATORY:
+      if (opposite)
+        // Already switched due to an opposite match. We don't yet support switching again.
+        return;
       sub_sim = new Sim(sim->get_mode(), sim_thz, super_goal, opposite, sim->root_, 1, this, sim->get_solution_cfd(), sim->get_solution_before());
       break;
     }
