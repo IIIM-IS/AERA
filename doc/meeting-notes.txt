@@ -808,9 +808,16 @@ Simulator
   * Demonstrate injection of mandatory solution to prevent drive failure.
     * DONE. Discuss: Simulation with requirements on drive model in Figure 11 not working.
 
-next meeting
+2022-02-17
 * hand-grab-sphere
-  * Demonstrate injection of mandatory solution to prevent drive failure.
+  * DONE. Demonstrate injection of mandatory solution to prevent drive failure.
+  * DONE. Review/merge pull request to switch to SIM_MANDATORY not at the sim root https://github.com/IIIM-IS/AERA/pull/214
+
+next meeting
+* Generality
+  * Confirm that if a model has an anti-requirement which disables a predicting a variable, that CTPX will create a new model to predict the variable in this case.
+* Visualizer
+  * Show changes to the strength of a model.
 
 TODO
 * Generality
