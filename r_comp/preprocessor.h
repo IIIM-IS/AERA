@@ -173,7 +173,7 @@ public:
 
   RepliCondition(const std::string &name, bool reversed);
   ~RepliCondition();
-  bool reverse();
+  void reverse();
   bool isActive(std::unordered_map<std::string, RepliMacro*> &repliMacros, std::unordered_map<std::string, int32> &counters);
 };
 

@@ -1049,10 +1049,9 @@ RepliCondition::RepliCondition(const std::string &name, bool reversed) {
 RepliCondition::~RepliCondition() {
 }
 
-bool RepliCondition::reverse() {
+void RepliCondition::reverse() {
 
   reversed_ = !reversed_;
-  return true;
 }
 
 bool RepliCondition::isActive(unordered_map<std::string, RepliMacro *> &repliMacros, unordered_map<std::string, int32> &counters) {
