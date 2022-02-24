@@ -814,7 +814,7 @@ pgm_babbleB_11:(pgm |[]
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
-   (prb [1 "print" "injected (cmd move [h 2])" |[]])
+   (prb [1 "print" "injected (cmd move [h 20])" |[]])
 1) |[]
 (ipgm pgm_babbleB_11 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
