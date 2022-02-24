@@ -813,11 +813,18 @@ Simulator
   * DONE. Demonstrate injection of mandatory solution to prevent drive failure.
   * DONE. Review/merge pull request to switch to SIM_MANDATORY not at the sim root https://github.com/IIIM-IS/AERA/pull/214
 
-next meeting
-* Generality
-  * Confirm that if a model has an anti-requirement which disables a predicting a variable, that CTPX will create a new model to predict the variable in this case.
+2022-02-24
 * Visualizer
-  * Show changes to the strength of a model.
+  * DONE. Show changes to the strength of a model.
+    This was already done. "Strength" is really a boolean "strong" - The AERA code changes it from 0 to 1.
+* Generality
+  * DONE. Confirm that if a model has an anti-requirement which disables a predicting a variable, that CTPX will create a new model to predict the variable in this case.
+    Relates to GTPX.
+
+next meeting
+* hand-grab-sphere
+    Demonstrate CTPX when main prediction is disabled, where grab failure results in holding and "e" of type "error".
+    Make AERA take actions to test candidate PTPX models (instead of explicit babbling).
 
 TODO
 * Generality
