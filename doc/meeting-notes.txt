@@ -821,10 +821,19 @@ Simulator
   * DONE. Confirm that if a model has an anti-requirement which disables a predicting a variable, that CTPX will create a new model to predict the variable in this case.
     Relates to GTPX.
 
+2022-03-03
+* hand-grab-sphere
+   * DONE. Try CTPX when main prediction is disabled, where grab failure results in holding an "e" of type "error".
+   * Make AERA take actions to test candidate PTPX models (instead of explicit babbling).
+     * Looking at recognizing conflicting requirement and anti-requirements.
+
 next meeting
 * hand-grab-sphere
-    Demonstrate CTPX when main prediction is disabled, where grab failure results in holding and "e" of type "error".
-    Make AERA take actions to test candidate PTPX models (instead of explicit babbling).
+   * Make AERA take actions to test candidate PTPX models (instead of explicit babbling).
+     * Update retrieve_imdl_fwd, etc. to use DefeasibleValidity to check for strong requirements against candidate weak requirements (to get full coverage).
+* Generality
+  * Make a list of modes in which a prediction can fail, what the system needs to be able to explain the failure, how the failure modes are layered, and how AERA addresses each one.
+    - At which level can a system create an explanation to explain how any other system creates an explanation.
 
 TODO
 * Generality
