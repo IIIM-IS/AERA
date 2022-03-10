@@ -827,13 +827,26 @@ Simulator
    * Make AERA take actions to test candidate PTPX models (instead of explicit babbling).
      * Looking at recognizing conflicting requirement and anti-requirements.
 
+2022-03-10
+* hand-grab-sphere
+     * DONE. Make pull request to use strong_bm when matching weak requirements.
+* Generality
+  * Make a list of modes in which a prediction can fail, what the system needs to be able to explain the failure, how the failure modes are layered, and how AERA addresses each one.
+    "Causal models that explain failures, if particular models fail to predict, by investigating the potential causes of the failures." - openaera.org
+    * Discuss: PTPX "Explain prediction failure" and GTPX "Explain goal achievement". Why not "Explain goal failure"? Maybe "Predict goal success" and that failure invokes PTPX?
+    * Discuss: PTPX can find exceptions and make anti-requirement. (fact sphere_and_cube_same_position) -> (|fact (imdl grab)). If failure is due to missing preconditions,
+      can PTPX find and add more? E.g.: (|fact power_light_on) -> (|fact (imdl grab)). Requires searching memory of past success or waiting for future success.
+    * Discuss: "Measurement error" means the model is good but the conflicting "evidence" is wrong. Need to explain inference errors leading to the wrong measurement.
+      Likewise, "Setup error" means the model and result measurement are good but the system was not actually in the prerequisite state used for the prediction. Need to explain and correct.
+
 next meeting
 * hand-grab-sphere
    * Make AERA take actions to test candidate PTPX models (instead of explicit babbling).
-     * Update retrieve_imdl_fwd, etc. to use DefeasibleValidity to check for strong requirements against candidate weak requirements (to get full coverage).
+     * Review/merge pull request to use strong_bm when matching weak requirements. https://github.com/IIIM-IS/AERA/pull/215
+     * Still need to allow multiple strong requirements in retrieve_imdl.
 * Generality
   * Make a list of modes in which a prediction can fail, what the system needs to be able to explain the failure, how the failure modes are layered, and how AERA addresses each one.
-    - At which level can a system create an explanation to explain how any other system creates an explanation.
+    * Confirm backward chaining with (|fact power_light_on) -> (|fact (imdl grab)).
 
 TODO
 * Generality
@@ -895,11 +908,11 @@ Y _ _ _ Rating of strong requirement models
 _ _ _ _ Testing and re-activation of strong requirement models in the secondary group
 _ _ _ _ Goal actions to test conflicting weak and strong requirements
 _ _ _ _ Simulated anti-goal from opposite match of drive (and starting of new simulation from anti-goal)
-_ _ _ _ Simulated prediction of anti-imdl from strong requirement model (to prevent model prediction)
+Y _ _ _ Simulated prediction of anti-imdl from strong requirement model (to prevent model prediction)
 _ _ _ _ Simulated prediction of anti-fact from model (how does this make the simulation proceed?)
 _ _ _ _ Conflict resolution of conflicting predictions (fact and anti-fact)
 _ _ _ _ Simulated anti-goal of cmd from model with anti-matched RHS
 _ _ _ _ Simulated anti-goal requirement imdl from model with anti-matched RHS
 _ _ _ _ Simulated anti-goal icst from requirement model with anti-matched RHS
 _ _ _ _ Simulated anti-goal facts/icsts from anti-fact icst
-_ _ _ _ Commiting to mandatory solutions
+Y _ _ _ Commiting to mandatory solutions
