@@ -839,14 +839,24 @@ Simulator
     * Discuss: "Measurement error" means the model is good but the conflicting "evidence" is wrong. Need to explain inference errors leading to the wrong measurement.
       Likewise, "Setup error" means the model and result measurement are good but the system was not actually in the prerequisite state used for the prediction. Need to explain and correct.
 
+2022-03-17
+* Generality
+  * Make a list of modes in which a prediction can fail, what the system needs to be able to explain the failure, how the failure modes are layered, and how AERA addresses each one.
+    * DONE. Review draft presentation "Explaining prediction failure".
+  * DONE. Confirm backward chaining with (|fact power_light_on) -> (|fact (imdl grab)).
+    (mdl |[] []
+       (|fact (mk.val H: powered true :) T0: T1: : :)
+       (|fact (imdl M2 [H: C: T0: T1:] [T1_RHS: T3:] : :) T0: T1: : :)
+
 next meeting
 * hand-grab-sphere
    * Make AERA take actions to test candidate PTPX models (instead of explicit babbling).
      * Review/merge pull request to use strong_bm when matching weak requirements. https://github.com/IIIM-IS/AERA/pull/215
+     * Still need more general way for strong requirement to disable a weak requirement
      * Still need to allow multiple strong requirements in retrieve_imdl.
 * Generality
   * Make a list of modes in which a prediction can fail, what the system needs to be able to explain the failure, how the failure modes are layered, and how AERA addresses each one.
-    * Confirm backward chaining with (|fact power_light_on) -> (|fact (imdl grab)).
+    * Still need "how the failure modes are layered" and "how AERA addresses each one"
 
 TODO
 * Generality
