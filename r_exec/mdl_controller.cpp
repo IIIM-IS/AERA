@@ -584,6 +584,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(const HLPBindingMap *b
       float32 negative_cfd = 0;
       requirements_.CS_.enter();
       auto now = Now();
+      _Fact* strong_requirement_ground = NULL;
       HLPBindingMap strong_bm;
       r_code::list<RequirementEntry>::const_iterator e;
       for (e = simulated_requirements_.negative_evidences_.begin(); e != simulated_requirements_.negative_evidences_.end();) {
@@ -603,6 +604,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(const HLPBindingMap *b
               r = STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
               // We will update bm below.
               strong_bm = _original;
+              strong_requirement_ground = (*e).evidence_;
               break;
             }
           }
@@ -911,6 +913,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
       float32 negative_cfd = 0;
       auto now = Now();
 
+      _Fact* strong_requirement_ground = NULL;
       r_code::list<RequirementEntry>::const_iterator e;
       for (e = requirements_.negative_evidences_.begin(); e != requirements_.negative_evidences_.end();) {
 
@@ -928,6 +931,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
 
               negative_cfd = (*e).confidence_;
               r = STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
+              strong_requirement_ground = (*e).evidence_;
             }
 
             r_p.strong_requirements_.controllers.insert((*e).controller_);
@@ -1070,6 +1074,7 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
       float32 negative_cfd = 0;
       requirements_.CS_.enter();
       auto now = Now();
+      _Fact* strong_requirement_ground = NULL;
       r_code::list<RequirementEntry>::const_iterator e;
       for (e = requirements_.negative_evidences_.begin(); e != requirements_.negative_evidences_.end();) {
 
@@ -1085,6 +1090,7 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
 
             negative_cfd = (*e).confidence_;
             r = STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
+            strong_requirement_ground = (*e).evidence_;
             break;
           }
           ++e;
