@@ -952,40 +952,44 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
           wr_enabled = true;
         }
         return r;
-      } else for (e = requirements_.positive_evidences_.begin(); e != requirements_.positive_evidences_.end();) {
+      }
+      else {
+        for (e = requirements_.positive_evidences_.begin(); e != requirements_.positive_evidences_.end();) {
 
-        if ((*e).is_too_old(now)) // garbage collection.
-          e = requirements_.positive_evidences_.erase(e);
-        else if ((*e).is_out_of_range(now))
-          ++e;
-        else {
+          if ((*e).is_too_old(now)) // garbage collection.
+            e = requirements_.positive_evidences_.erase(e);
+          else if ((*e).is_out_of_range(now))
+            ++e;
+          else {
 
-          _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
-          HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
-          if (_original.match_fwd_strict(_f_imdl, f_imdl)) {
+            _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
+            HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
+            if (_original.match_fwd_strict(_f_imdl, f_imdl)) {
 
-            if (r != WEAK_REQUIREMENT_ENABLED && (*e).chaining_was_allowed_) { // first siginificant match.
+              if (r != WEAK_REQUIREMENT_ENABLED && (*e).chaining_was_allowed_) { // first siginificant match.
 
-              if ((*e).confidence_ > negative_cfd) {
+                if ((*e).confidence_ > negative_cfd) {
 
-                r = WEAK_REQUIREMENT_ENABLED;
-                ground = (*e).evidence_;
-                wr_enabled = true;
-              } else {
+                  r = WEAK_REQUIREMENT_ENABLED;
+                  ground = (*e).evidence_;
+                  wr_enabled = true;
+                } else {
 
-                r = STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
-                wr_enabled = false;
+                  r = STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
+                  wr_enabled = false;
+                }
+                bm->load(&_original);
               }
-              bm->load(&_original);
-            }
 
-            r_p.weak_requirements_.controllers.insert((*e).controller_);
-            r_p.weak_requirements_.f_imdl = _f_imdl;
-            r_p.weak_requirements_.chaining_was_allowed = (*e).chaining_was_allowed_;
+              r_p.weak_requirements_.controllers.insert((*e).controller_);
+              r_p.weak_requirements_.f_imdl = _f_imdl;
+              r_p.weak_requirements_.chaining_was_allowed = (*e).chaining_was_allowed_;
+            }
+            ++e;
           }
-          ++e;
         }
       }
+
       requirements_.CS_.leave();
       return r;
     }
