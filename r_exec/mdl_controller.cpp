@@ -1579,9 +1579,15 @@ void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *c
           // Use logic similar to retrieve_simulated_imdl_bwd.
           TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
           if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE &&
-              f_imdl->get_cfd() >= (*e).confidence_)
+              f_imdl->get_cfd() >= (*e).confidence_) {
             // The strong requirement disables the weak.
             (*e).evidence_->get_pred()->get_defeasible_consequence()->invalidate();
+#ifdef WITH_DETAIL_OID
+            OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << get_object()->get_oid() << ": fact (" <<
+              to_string((*e).evidence_->get_detail_oid()) << ") pred fact imdl, simulated pred disabled by fact (" <<
+              to_string(f_p_f_imdl->get_detail_oid()) << ") pred |fact imdl");
+#endif
+          }
         }
       }
       requirements_.CS_.leave();
