@@ -1558,6 +1558,36 @@ void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *c
       _store_requirement(&simulated_requirements_.negative_evidences_, e);
   }
 
+  // Check here if this new strong requirement disables a weak requirement which may have been used.
+  if (!f_imdl->is_fact() && is_simulation && f_p_f_imdl->get_pred()->get_simulations_size() == 1) {
+    uint32 wr_count;
+    uint32 sr_count;
+    uint32 r_count = get_requirement_count(wr_count, sr_count);
+    if (wr_count > 0 && sr_count > 0) {
+      auto sim = f_p_f_imdl->get_pred()->get_simulation((uint16)0);
+
+      requirements_.CS_.enter();
+      for (auto e = simulated_requirements_.positive_evidences_.begin();
+           e != simulated_requirements_.positive_evidences_.end(); ++e) {
+        // We only care about a weak requirement where its defeasible consequence has been used.
+        // The weak requirement sim must be the same as the strong requirement.
+        if ((*e).evidence_->get_pred()->has_defeasible_consequence() &&
+            (*e).evidence_->get_pred()->has_simulation(sim)) {
+          _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
+          HLPBindingMap _original(bindings_);
+          _original.reset_fwd_timings(f_imdl);
+          // Use logic similar to retrieve_simulated_imdl_bwd.
+          TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
+          if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE &&
+              f_imdl->get_cfd() >= (*e).confidence_)
+            // The strong requirement disables the weak.
+            (*e).evidence_->get_pred()->get_defeasible_consequence()->invalidate();
+        }
+      }
+      requirements_.CS_.leave();
+    }
+  }
+
   // In case of a positive non-simulated requirement or any simulated requirement (positive or negative),
   // tell monitors they can check for chaining again. Even a simulated negative (strong) requirement may cause
   // check_simulated_imdl to take some action (such as to invalidate a defeasible prediction).
