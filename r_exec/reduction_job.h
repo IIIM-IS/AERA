@@ -99,7 +99,7 @@ public:
   Timestamp ijt_; // time of injection of the job in the pipe.
   virtual bool update(Timestamp now) = 0; // return false to shutdown the reduction core.
   virtual void debug() {}
-  uint32 get_job_id() { return job_id_; }
+  uint32 get_job_id() const { return job_id_; }
 private:
   static uint32 job_count_;
   int job_id_;

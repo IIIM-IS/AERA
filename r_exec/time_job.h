@@ -100,7 +100,7 @@ public:
   virtual bool update(Timestamp &next_target) = 0; // next_target: absolute deadline; 0 means no more waiting; return false to shutdown the time core.
   virtual bool is_alive() const;
   virtual void report(std::chrono::microseconds lag) const;
-  uint32 get_job_id() { return job_id_; }
+  uint32 get_job_id() const { return job_id_; }
 
   /**
    * Compare P<TimeJob> based only on target_time_.
