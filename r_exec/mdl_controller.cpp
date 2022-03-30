@@ -1594,10 +1594,8 @@ void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *c
     }
   }
 
-  // In case of a positive non-simulated requirement or any simulated requirement (positive or negative),
-  // tell monitors they can check for chaining again. Even a simulated negative (strong) requirement may cause
-  // check_simulated_imdl to take some action (such as to invalidate a defeasible prediction).
-  if (f_imdl->is_fact() || is_simulation) {
+  // In case of a positive requirement, tell monitors they can check for chaining again, which may fire a model.
+  if (f_imdl->is_fact()) {
     r_code::list<P<_GMonitor> >::const_iterator m;
     g_monitorsCS_.enter();
     for (m = r_monitors_.begin(); m != r_monitors_.end();) { // signal r-monitors.
