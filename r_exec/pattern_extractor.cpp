@@ -248,7 +248,7 @@ void _TPX::_find_f_icst(_Fact *component, vector<FindFIcstResult>& results, bool
   }
 
   vector<P<_Fact> >::const_iterator f_icst;
-  for (f_icst = icsts_.begin(); f_icst != icsts_.end(); ++f_icst) {
+  for (f_icst = f_icsts_.begin(); f_icst != f_icsts_.end(); ++f_icst) {
 
     ICST *icst = (ICST *)(*f_icst)->get_reference(0);
     uint16 component_index;
@@ -344,7 +344,7 @@ _Fact *_TPX::make_f_icst(_Fact *component, uint16 &component_index, P<Code> &new
   P<HLPBindingMap> bm = new HLPBindingMap();
   new_cst = build_cst(components, bm, component);
   _Fact *f_icst = bm->build_f_ihlp(new_cst, Opcodes::ICst, false);
-  icsts_.push_back(f_icst); // the f_icst can be reused in subsequent model building attempts.
+  f_icsts_.push_back(f_icst); // the f_icst can be reused in subsequent model building attempts.
   return f_icst;
 }
 
