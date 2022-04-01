@@ -615,7 +615,7 @@ public:
 
   bool is_invalidated();
 
-  bool contains(_Fact *component, uint16 &component_index) const;
+  bool contains(const _Fact *component, uint16 &component_index) const;
 
   P<BindingMap> bindings_;
   std::vector<P<_Fact> > components_; // the inputs that triggered the building of the icst.

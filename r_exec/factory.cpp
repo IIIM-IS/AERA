@@ -912,7 +912,7 @@ bool ICST::is_invalidated() {
   return false;
 }
 
-bool ICST::contains(_Fact *component, uint16 &component_index) const {
+bool ICST::contains(const _Fact *component, uint16 &component_index) const {
 
   for (uint32 i = 0; i < components_.size(); ++i) {
 
