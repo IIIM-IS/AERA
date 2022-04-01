@@ -229,30 +229,34 @@ void _TPX::filter_icst_components(ICST *icst, uint32 icst_index, vector<Componen
   delete[] found;
 }
 
+bool _TPX::find_f_icst_component(_Fact* fact, const _Fact *component, uint16 &component_index) {
+  Code *candidate = fact->get_reference(0);
+  if (candidate->code(0).asOpcode() == Opcodes::ICst) {
+    ICST *icst = (ICST *)candidate;
+    if (icst->contains(component, component_index))
+      return true;
+  }
+
+  return false;
+}
+
 void _TPX::_find_f_icst(_Fact *component, vector<FindFIcstResult>& results, bool find_multiple) {
 
   r_code::list<Input>::const_iterator i;
   for (i = inputs_.begin(); i != inputs_.end(); ++i) {
-
-    Code *candidate = i->input_->get_reference(0);
-    if (candidate->code(0).asOpcode() == Opcodes::ICst) {
-
-      ICST *icst = (ICST *)candidate;
-      uint16 component_index;
-      if (icst->contains(component, component_index)) {
-        results.push_back(FindFIcstResult(i->input_, component_index));
-        if (!find_multiple)
-          return;
-      }
+    uint16 component_index;
+    if (find_f_icst_component(i->input_, component, component_index)) {
+      results.push_back(FindFIcstResult(i->input_, component_index));
+      if (!find_multiple)
+        return;
     }
   }
 
   vector<P<_Fact> >::const_iterator f_icst;
   for (f_icst = f_icsts_.begin(); f_icst != f_icsts_.end(); ++f_icst) {
 
-    ICST *icst = (ICST *)(*f_icst)->get_reference(0);
     uint16 component_index;
-    if (icst->contains(component, component_index)) {
+    if (find_f_icst_component(*f_icst, component, component_index)) {
       results.push_back(FindFIcstResult(*f_icst, component_index));
       if (!find_multiple)
         return;

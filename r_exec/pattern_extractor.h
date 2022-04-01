@@ -208,6 +208,16 @@ protected:
   void filter_icst_components(ICST *icst, uint32 icst_index, std::vector<Component> &components);
 
   /**
+   * If the fact is a (fact (icst ...)) then search the icst for the component.
+   * \param fact The fact to search for the component. If fact->get_reference(0) is not an icst, then return false.
+   * \param component The component to search for by being the same object (not matching).
+   * \param component_index If the component is found, set component_index to the index of the component in the icst
+   * in found_f_icst.
+   * \return true if the component is found, where component_index has been set.
+   */
+  static bool find_f_icst_component(_Fact* fact, const _Fact *component, uint16 &component_index);
+
+  /**
    * Find an f_icst for the component by looking in inputs_ and f_icsts_.
    * \param component The cst component to search for.
    * \param results Call this with an empty vector<FindFIcstResult>. If no f_icst is found, then this is empty. Otherwise an
