@@ -208,12 +208,15 @@ protected:
   void filter_icst_components(ICST *icst, uint32 icst_index, std::vector<Component> &components);
 
   /**
-   * If the fact is a (fact (icst ...)) then search the icst for the component.
+   * If the fact is a (fact (icst ...)) then search the icst for the component. If not found, then
+   * recursively search all members which are (fact (icst ...)).
    * \param fact The fact to search for the component. If fact->get_reference(0) is not an icst, then return NULL.
    * \param component The component to search for by being the same object (not matching).
+   * \param max_depth (optional) The maximum recursion depth for when this calls itself to search members.
+   * If this is zero, then don't recurse. If omitted, use a default.
    * \return The Code pattern in the unpacked cst that matches the component, if found. NULL if not found.
    */
-  static _Fact* find_f_icst_component(_Fact* fact, const _Fact* component);
+  static _Fact* find_f_icst_component(_Fact* fact, const _Fact* component, int max_depth = 3);
 
   /**
    * Find an f_icst for the component by looking in inputs_ and f_icsts_.

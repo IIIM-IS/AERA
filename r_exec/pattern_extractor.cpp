@@ -229,7 +229,7 @@ void _TPX::filter_icst_components(ICST *icst, uint32 icst_index, vector<Componen
   delete[] found;
 }
 
-_Fact* _TPX::find_f_icst_component(_Fact* fact, const _Fact *component) {
+_Fact* _TPX::find_f_icst_component(_Fact* fact, const _Fact *component, int max_depth) {
   Code* candidate = fact->get_reference(0);
   if (candidate->code(0).asOpcode() == Opcodes::ICst) {
     ICST* icst = (ICST*)candidate;
@@ -239,6 +239,16 @@ _Fact* _TPX::find_f_icst_component(_Fact* fact, const _Fact *component) {
       // The cst is packed, retrieve the pattern from the unpacked code.
       Code* unpacked_cst = cst->get_reference(cst->references_size() - CST_HIDDEN_REFS);
       return (_Fact*)unpacked_cst->get_reference(component_index);
+    }
+
+    if (max_depth > 0) {
+      // The component was not found, so recurse to search each member.
+      for (uint32 i = 0; i < icst->components_.size(); ++i) {
+        // This will check if the component is an icst.
+        _Fact* result = find_f_icst_component(icst->components_[i], component, max_depth - 1);
+        if (result)
+          return result;
+      }
     }
   }
 
