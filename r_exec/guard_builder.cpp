@@ -95,7 +95,7 @@ GuardBuilder::GuardBuilder() : _Object() {
 GuardBuilder::~GuardBuilder() {
 }
 
-void GuardBuilder::build(Code *mdl, _Fact *premise, _Fact *cause, uint16 &write_index) const {
+void GuardBuilder::build(Code *mdl, _Fact *premise_pattern, _Fact *cause_pattern, uint16 &write_index) const {
 
   mdl->code(MDL_FWD_GUARDS) = Atom::IPointer(++write_index);
   mdl->code(write_index) = Atom::Set(0);
@@ -148,7 +148,7 @@ void TimingGuardBuilder::_build(Code *mdl, uint16 t0, uint16 t1, uint16 &write_i
   write_index = extent_index;
 }
 
-void TimingGuardBuilder::build(Code *mdl, _Fact *premise, _Fact *cause, uint16 &write_index) const {
+void TimingGuardBuilder::build(Code *mdl, _Fact *premise_pattern, _Fact *cause_pattern, uint16 &write_index) const {
 
   uint16 t0;
   uint16 t1;
