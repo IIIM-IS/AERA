@@ -859,12 +859,21 @@ Simulator
   * DONE. Fix bug for simulation item placement error https://github.com/IIIM-IS/AERA_Visualizer/issues/34
 * DONE. Review/merge pull request for store_requirement to not signal for strong requirement https://github.com/IIIM-IS/AERA/pull/217
 
+2022-04-07
+* hand-grab-sphere
+  * DONE. Review/merge pull request to recursively search an existing icst for a matching member. https://github.com/IIIM-IS/AERA/pull/218
+* Generality
+  * Assumptions
+    * Eric's Summer School example of seeing a new student https://youtu.be/UnhTiVhSfqo?t=6710
+    * assume() does nothing if (is_requirement() || is_reuse() || is_cmd()). Currently, this is all of our examples.  
+
 next meeting
 * hand-grab-sphere
-  * Make pull request for second PTPX re-use the composite state from the first.
   * Make AERA take actions to test candidate PTPX models (instead of explicit babbling).
     * Still need to allow multiple strong requirements in retrieve_imdl.
 * Generality
+  * Assumptions
+    * Make an example which injects an assumption and (wrongly) uses it for prediction failure. Try checking in PredictionMonitor.
   * Make a list of modes in which a prediction can fail, what the system needs to be able to explain the failure, how the failure modes are layered, and how AERA addresses each one.
     * Still need "how the failure modes are layered" and "how AERA addresses each one"
 
