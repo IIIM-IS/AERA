@@ -1826,7 +1826,7 @@ void PrimaryMDLController::reduce(r_exec::View *input) { // no lock.
 
       a = assumptions_.erase(a);
       assumptionsCS_.leave();
-      break;
+      return;
     } else
       ++a;
   }
