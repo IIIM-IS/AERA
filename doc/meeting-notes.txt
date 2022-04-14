@@ -867,15 +867,22 @@ Simulator
     * Eric's Summer School example of seeing a new student https://youtu.be/UnhTiVhSfqo?t=6710
     * assume() does nothing if (is_requirement() || is_reuse() || is_cmd()). Currently, this is all of our examples.  
 
+2022-04-14
+* Assumptions
+  * DONE. Review/merge pull request for assume_lhs to call EvaluateFWDTimings https://github.com/IIIM-IS/AERA/pull/219
+  * DONE. Review/merge pull request for reduce to ignore an input if it is an assumption https://github.com/IIIM-IS/AERA/pull/220
+
 next meeting
+* Assumptions
+  * Make an example which injects an assumption and (wrongly) uses it for prediction failure. Try checking in PredictionMonitor.
+    * After pull request 220, an assumption will not match a LHS of the same model. To test, add a different model whose LHS is the assumption.
+    * An assumption is used for abduction into the past. Therefore need to use a requirement from a previous frame (not implemented).
+* Generality
+  * Make a list of modes in which a prediction can fail, what the system needs to be able to explain the failure, how the failure modes are layered, and how AERA addresses each one.
+    * Still need "how the failure modes are layered" and "how AERA addresses each one"
 * hand-grab-sphere
   * Make AERA take actions to test candidate PTPX models (instead of explicit babbling).
     * Still need to allow multiple strong requirements in retrieve_imdl.
-* Generality
-  * Assumptions
-    * Make an example which injects an assumption and (wrongly) uses it for prediction failure. Try checking in PredictionMonitor.
-  * Make a list of modes in which a prediction can fail, what the system needs to be able to explain the failure, how the failure modes are layered, and how AERA addresses each one.
-    * Still need "how the failure modes are layered" and "how AERA addresses each one"
 
 TODO
 * Generality
