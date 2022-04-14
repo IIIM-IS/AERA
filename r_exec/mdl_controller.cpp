@@ -2632,6 +2632,11 @@ void PrimaryMDLController::assume(_Fact *input) {
 
 void PrimaryMDLController::assume_lhs(HLPBindingMap *bm, bool opposite, _Fact *input, float32 confidence) { // produce an assumption and inject in primary; no rdx.
 
+  // retrieve_imdl_bwd needs the forward timings so evaluate them from the backward guards. We can't call
+  // evaluate_bwd_guards here because some variables from the requirement need to be bound by retrieve_imdl_bwd.
+  if (!HLPOverlay::EvaluateFWDTimings(this, bm))
+    return;
+
   P<Fact> f_imdl = get_f_ihlp(bm, false);
   Fact *ground;
   switch (retrieve_imdl_bwd(bm, f_imdl, ground)) {
