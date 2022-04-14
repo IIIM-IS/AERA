@@ -113,7 +113,7 @@ protected:
    */
   bool evaluate(uint16 index);
 
-  bool check_fwd_timings();
+  bool evaluate_fwd_timings();
 
   bool scan_bwd_guards();
   bool scan_location(uint16 index);
@@ -124,7 +124,15 @@ protected:
   HLPOverlay(Controller *c, HLPBindingMap *bindings);
 public:
   static bool EvaluateBWDGuards(Controller *c, HLPBindingMap *bindings); // updates the bindings.
-  static bool CheckFWDTimings(Controller *c, HLPBindingMap *bindings); // updates the bindings.
+
+  /**
+   * Find the backward guards which assign the forward timings and evaluate them.
+   * \param c The model controller with the code for the backward guards.
+   * \param bindings Update the binding map forward timings.
+   * \return True if evaluted, false if no backward guards assign the forward timings or if can't evaluate.
+   */
+  static bool EvaluateFWDTimings(Controller *c, HLPBindingMap *bindings);
+
   static bool ScanBWDGuards(Controller *c, HLPBindingMap *bindings); // does not update the bindings.
 
   HLPOverlay(Controller *c, const HLPBindingMap *bindings, bool load_code);

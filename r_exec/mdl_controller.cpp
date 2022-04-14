@@ -2705,7 +2705,9 @@ bool PrimaryMDLController::abduction_allowed(HLPBindingMap *bm) { // true if fwd
 
   if (!bm)
     return false;
-  if (!HLPOverlay::CheckFWDTimings(this, bm))
+  if (!HLPOverlay::EvaluateFWDTimings(this, bm))
+    return false;
+  if (bm->get_fwd_before() <= Now())
     return false;
   if (!HLPOverlay::ScanBWDGuards(this, bm))
     return false;
