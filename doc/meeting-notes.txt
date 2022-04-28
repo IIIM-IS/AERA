@@ -872,14 +872,16 @@ Simulator
   * DONE. Review/merge pull request for assume_lhs to call EvaluateFWDTimings https://github.com/IIIM-IS/AERA/pull/219
   * DONE. Review/merge pull request for reduce to ignore an input if it is an assumption https://github.com/IIIM-IS/AERA/pull/220
 
-next meeting
+2022-04-28
 * Assumptions
   * Make an example which injects an assumption and (wrongly) uses it for prediction failure. Try checking in PredictionMonitor.
-    * After pull request 220, an assumption will not match a LHS of the same model. To test, add a different model whose LHS is the assumption.
+    * DONE. After pull request 220, test if an assumption isn't be used to make a possibly conflicting prediction.
+
+next meeting
+* Discuss how to show LHS of reuse model https://github.com/IIIM-IS/AERA_Visualizer/issues/38
+* Assumptions
+    * Make pull request to revert commit that added enable_assumptions flag https://github.com/IIIM-IS/AERA/commit/cab4eaf2aa107e0d27cc65c0a12e2b54f93bccc4
     * An assumption is used for abduction into the past. Therefore need to use a requirement from a previous frame (not implemented).
-* Generality
-  * Make a list of modes in which a prediction can fail, what the system needs to be able to explain the failure, how the failure modes are layered, and how AERA addresses each one.
-    * Still need "how the failure modes are layered" and "how AERA addresses each one"
 * hand-grab-sphere
   * Make AERA take actions to test candidate PTPX models (instead of explicit babbling).
     * Still need to allow multiple strong requirements in retrieve_imdl.
