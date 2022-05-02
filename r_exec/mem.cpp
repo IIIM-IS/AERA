@@ -118,7 +118,6 @@ _Mem::_Mem() : r_code::Mem(),
   goal_pred_success_res_(1000),
   keep_invalidated_objects_(false),
   probe_level_(2),
-  enable_assumptions_(true),
   reduction_cores_(0),
   time_cores_(0),
   reduction_job_count_(0),
@@ -166,7 +165,6 @@ void _Mem::init(microseconds base_period,
   uint32 goal_pred_success_res,
   uint32 probe_level,
   uint32 traces,
-  bool enable_assumptions,
   bool keep_invalidated_objects) {
 
   base_period_ = base_period;
@@ -195,7 +193,6 @@ void _Mem::init(microseconds base_period,
   goal_pred_success_res_ = goal_pred_success_res;
 
   probe_level_ = probe_level;
-  enable_assumptions_ = enable_assumptions;
   keep_invalidated_objects_ = keep_invalidated_objects;
 
   reduction_job_count_ = time_job_count_ = 0;

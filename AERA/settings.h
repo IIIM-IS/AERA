@@ -137,7 +137,6 @@ public:
   //Run.
   core::uint32 run_time_;
   core::uint32 probe_level_;
-  bool enable_assumptions_;
   bool get_models_;
   bool decompile_models_;
   bool ignore_named_models_;
@@ -290,11 +289,9 @@ public:
 
       const char *run_time = run.getAttribute("run_time");
       const char *probe_level = run.getAttribute("probe_level");
-      const char *enable_assumptions = run.getAttribute("enable_assumptions");
 
       run_time_ = atoi(run_time);
       probe_level_ = atoi(probe_level);
-      enable_assumptions_ = (strcmp(enable_assumptions, "yes") == 0);
 
       core::XMLNode models = run.getChildNode("Models");
       if (!!models) {

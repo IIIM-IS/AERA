@@ -148,7 +148,6 @@ protected:
 
   // Parameters::Run.
   uint32 probe_level_;
-  bool enable_assumptions_;
 
   PipeNN<P<_ReductionJob>, 1024> *reduction_job_queue_;
   PipeNN<P<TimeJob>, 1024> *time_job_queue_;
@@ -232,7 +231,6 @@ public:
     uint32 goal_pred_success_res,
     uint32 probe_level,
     uint32 traces,
-    bool enable_assumptions,
     bool keep_invalidated_objects);
 
   /**
@@ -241,7 +239,6 @@ public:
    */
   std::chrono::microseconds get_sampling_period() const { return 2 * base_period_; }
   uint64 get_probe_level() const { return probe_level_; }
-  bool get_enable_assumptions() const { return enable_assumptions_; }
   uint32 get_reduction_core_count() const { return reduction_core_count_; }
   uint32 get_time_core_count() const { return time_core_count_; }
   float32 get_mdl_inertia_sr_thr() const { return mdl_inertia_sr_thr_; }

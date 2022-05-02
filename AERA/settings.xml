@@ -47,7 +47,7 @@
       test_objects="no"
     />
   </Debug>
-  <Run run_time="1000" probe_level="2" enable_assumptions="no">
+  <Run run_time="1000" probe_level="2">
     <Models
       get_models="yes"
       decompile_models="yes"
@@ -106,7 +106,6 @@ Debug
 Run
   run_time: in ms.
   probe_level: any probe set to a level >= this level will not be executed. 0 means no probe will be executed.
-  enable_assumptions: yes or no to enable injecting assumptions.
   Models
     same as for Debug/Objects.
 -->
