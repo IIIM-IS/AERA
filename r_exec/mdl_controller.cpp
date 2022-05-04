@@ -1768,7 +1768,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
     OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << get_object()->get_oid() << ": fact " <<
       input->get_oid() << " pred -> fact " << production->get_oid() << " simulated pred" << ground_info);
 
-    if (is_cmd()) {
+    if (is_cmd() || is_reuse()) {
       // Inject the predicted imdl, in case other models are reusing this model.
       Fact *f_pred_f_imdl = new Fact(new Pred(f_imdl, prediction, 1), now, now, 1, 1);
       if (!HLPController::inject_prediction(f_pred_f_imdl, confidence))
