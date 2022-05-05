@@ -877,14 +877,19 @@ Simulator
   * Make an example which injects an assumption and (wrongly) uses it for prediction failure. Try checking in PredictionMonitor.
     * DONE. After pull request 220, test if an assumption isn't be used to make a possibly conflicting prediction.
 
+2022-05-05
+* DONE. Review/merge pull request to inject a simulated imdl from reuse model. https://github.com/IIIM-IS/AERA/pull/223
+* DONE. Discuss how to show LHS of reuse model https://github.com/IIIM-IS/AERA_Visualizer/issues/38
+* DONE. Discuss issue for how old requirements are removed even though they are needed to make an assumption. https://github.com/IIIM-IS/AERA/issues/222
+
 next meeting
-* Discuss how to show LHS of reuse model https://github.com/IIIM-IS/AERA_Visualizer/issues/38
 * Assumptions
-    * Make pull request to revert commit that added enable_assumptions flag https://github.com/IIIM-IS/AERA/commit/cab4eaf2aa107e0d27cc65c0a12e2b54f93bccc4
-    * An assumption is used for abduction into the past. Therefore need to use a requirement from a previous frame (not implemented).
+    * DONE. Make pull request to remove unneeded enable_assumptions flag https://github.com/IIIM-IS/AERA/pull/221
 * hand-grab-sphere
   * Make AERA take actions to test candidate PTPX models (instead of explicit babbling).
     * Still need to allow multiple strong requirements in retrieve_imdl.
+* CLCC paper
+  * Make Replicode example of Figure 8.
 
 TODO
 * Generality
