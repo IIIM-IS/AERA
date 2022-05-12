@@ -2597,9 +2597,6 @@ void PrimaryMDLController::rate_model(bool success) {
 
 void PrimaryMDLController::assume(_Fact *input) {
 
-  if (!_Mem::Get()->get_enable_assumptions())
-    // Assumptions are disabled in the global settings.
-    return;
   if (is_requirement() || is_reuse() || is_cmd())
     return;
 

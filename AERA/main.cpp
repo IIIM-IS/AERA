@@ -370,7 +370,6 @@ int32 main(int argc, char **argv) {
       settings.goal_pred_success_resilience_,
       settings.probe_level_,
       settings.trace_levels_,
-      settings.enable_assumptions_,
       settings.keep_invalidated_objects_);
 
     uint32 stdin_oid;
