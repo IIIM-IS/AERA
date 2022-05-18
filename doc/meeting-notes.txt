@@ -882,14 +882,22 @@ Simulator
 * DONE. Discuss how to show LHS of reuse model https://github.com/IIIM-IS/AERA_Visualizer/issues/38
 * DONE. Discuss issue for how old requirements are removed even though they are needed to make an assumption. https://github.com/IIIM-IS/AERA/issues/222
 
-next meeting
+2022-05-12
 * Assumptions
-    * DONE. Make pull request to remove unneeded enable_assumptions flag https://github.com/IIIM-IS/AERA/pull/221
+  * DONE. Make pull request to remove unneeded enable_assumptions flag https://github.com/IIIM-IS/AERA/pull/221
+* Make Replicode example of CLCC paper Figure 8.
+  * M0 and M7 are frame rules!
+    "Structure f2 (M7) predicts the invariance of an object X being attached to another H, unless an anti-evidence can be predicted."
+
+next meeting
+* Make Replicode example of CLCC paper Figure 8.
+  * C4: Presumably W0 and W1 are spoken at different times, but cst is same time.
+* Simple example for CKCC paper.
 * hand-grab-sphere
+  * DONE. Switch "attached" to "holding" for H holding X.
+  * Try frame rule approach from CLCC paper.
   * Make AERA take actions to test candidate PTPX models (instead of explicit babbling).
     * Still need to allow multiple strong requirements in retrieve_imdl.
-* CLCC paper
-  * Make Replicode example of Figure 8.
 
 TODO
 * Generality
