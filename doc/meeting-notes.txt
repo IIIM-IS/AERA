@@ -889,13 +889,18 @@ Simulator
   * M0 and M7 are frame rules!
     "Structure f2 (M7) predicts the invariance of an object X being attached to another H, unless an anti-evidence can be predicted."
 
-next meeting
-* Make Replicode example of CLCC paper Figure 8.
-  * C4: Presumably W0 and W1 are spoken at different times, but cst is same time.
-* Simple example for CKCC paper.
+2022-05-18
 * hand-grab-sphere
   * DONE. Switch "attached" to "holding" for H holding X.
-  * Try frame rule approach from CLCC paper.
+  * DONE. Try frame rule approach from CLCC paper.
+    * Result: Loops forever as expected.
+
+next meeting
+* Simple example for CKCC paper.
+* Make Replicode example of CLCC paper Figure 8.
+  * C4: Presumably W0 and W1 are spoken at different times, but cst is same time.
+    * Try using prerequisite or words already said with model for saying the next word.
+* hand-grab-sphere
   * Make AERA take actions to test candidate PTPX models (instead of explicit babbling).
     * Still need to allow multiple strong requirements in retrieve_imdl.
 
