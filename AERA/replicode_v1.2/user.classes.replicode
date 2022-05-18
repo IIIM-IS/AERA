@@ -68,6 +68,7 @@ omega_z:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 
 
 attachment:(ont 1) [[SYNC_ONCE now 0 forever root nil]]; usage: (mk.val self_right_hand attachment a_thing 1)
+holding:(ont 1) [[SYNC_ONCE now 0 forever root nil]]; usage: (mk.val hand holding [a_thing] 1) or (mk.val hand holding |[] 1)
 spoken:(ont 1) [[SYNC_ONCE now 0 forever root nil]]; usage: (mk.val an_actor spoken a_sentence 1)
 pointed_at:(ont 1) [[SYNC_ONCE now 0 forever root nil]]; usage: (mk.val an_actor pointed_at a_location 1)
 looked_at:(ont 1) [[SYNC_ONCE now 0 forever root nil]]; usage: (mk.val an_actor looked_at a_location 1)
