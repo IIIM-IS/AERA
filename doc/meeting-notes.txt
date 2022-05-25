@@ -896,10 +896,12 @@ Simulator
     * Result: Loops forever as expected.
 
 next meeting
+* PullPushTest3: Requirement fact923 is used in frame 1700ms to simulate grab. Why isn't fact1403 used again in frame 1800ms?
 * Simple example for CKCC paper.
 * Make Replicode example of CLCC paper Figure 8.
   * C4: Presumably W0 and W1 are spoken at different times, but cst is same time.
-    * Try using prerequisite or words already said with model for saying the next word.
+    * DONE: Test imdl as member of cst.
+    * Try using prerequisite for words already said with model for saying the next word.
 * hand-grab-sphere
   * Make AERA take actions to test candidate PTPX models (instead of explicit babbling).
     * Still need to allow multiple strong requirements in retrieve_imdl.
