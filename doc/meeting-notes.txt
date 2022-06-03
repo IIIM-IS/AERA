@@ -896,17 +896,18 @@ Simulator
     * Result: Loops forever as expected.
 
 next meeting
-* PullPushTest3: Requirement fact923 is used in frame 1700ms to simulate grab. Why isn't fact1403 used again in frame 1800ms?
-* Simple example for CKCC paper.
+* Show "prediction disabled" for non-simulated anti-requirements  https://github.com/IIIM-IS/AERA_Visualizer/issues/40
 * Make Replicode example of CLCC paper Figure 8.
-  * C4: Presumably W0 and W1 are spoken at different times, but cst is same time.
-    * DONE: Test imdl as member of cst.
-    * Try using prerequisite for words already said with model for saying the next word.
+  * Try using prerequisite for words already said with model for saying the next word.
+    * Should have one speak command per frame.
+    * Make pull request to add a requirement monitor when abducing goal imdl from a requirement LHS or a cst.
+    * Why do exposed args in icst S_speak_move have 5 wildcards, not 4?
 * hand-grab-sphere
   * Make AERA take actions to test candidate PTPX models (instead of explicit babbling).
     * Still need to allow multiple strong requirements in retrieve_imdl.
 
 TODO
+* Simple example for CKCC paper.
 * Generality
   * Make issue to propose numbers with ranges. Maybe more general: Range of numbers, range of durations, range of timestamps, combos?
 * PTPX: Learned cst may only have icsts. But using a cst for later model-building requires a non-icst fact. Should icst->contains be recursive? (Need limit.) Or always include a fact in new_cst?
