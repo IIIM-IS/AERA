@@ -152,7 +152,7 @@ M4:(mdl [H: C: T0: T1:]
 M5:(mdl |[]
 []
    (fact (icst S2 |[] [H: P: C: X:] : :) T0: T1: : :); X is also exposed from S2.
-   (fact (imdl M4 [H: C: T0: T1:] [T1_RHS: T3:] : :) T0: T1: : :); T2 is not exposed from M2. T1_RHS is also exposed.
+   (fact (imdl M4 [H: C: T0: T1:] [T1_RHS: T3:] : :) T0: T1: : :); T2 is not exposed from M4. T1_RHS is also exposed.
 |[]
 |[]
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
