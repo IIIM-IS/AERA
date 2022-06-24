@@ -895,14 +895,18 @@ Simulator
   * DONE. Try frame rule approach from CLCC paper.
     * Result: Loops forever as expected.
 
+2022-06-23
+* Prepare Interim AERA release diagnostic_mode_v0_2.
+  * DONE. Review/merge pull request for copyright 2022 https://github.com/IIIM-IS/AERA/pull/225
+
 next meeting
-* Show "prediction disabled" for non-simulated anti-requirements  https://github.com/IIIM-IS/AERA_Visualizer/issues/40
-* Make Replicode example of CLCC paper Figure 8.
-  * Try using prerequisite for words already said with model for saying the next word.
-    * Should have one speak command per frame.
-    * Make pull request to add a requirement monitor when abducing goal imdl from a requirement LHS or a cst.
-    * Why do exposed args in icst S_speak_move have 5 wildcards, not 4?
+* Prepare Interim AERA release diagnostic_mode_v0_2.
+  * DONE. Move "one-off" contributors below the "general" contributors.
+  * Review/merge pull request to add a requirement monitor when abducing goal imdl from a cst. https://github.com/IIIM-IS/AERA/pull/226
+  * Show "prediction disabled" for non-simulated anti-requirements  https://github.com/IIIM-IS/AERA_Visualizer/issues/40
+* Make Replicode example of CLCC paper Figure 8, simplified to hand-grab-sphere.
 * hand-grab-sphere
+  * Represent sphere position without direct I/O input.
   * Make AERA take actions to test candidate PTPX models (instead of explicit babbling).
     * Still need to allow multiple strong requirements in retrieve_imdl.
 
@@ -912,7 +916,6 @@ TODO
   * Make issue to propose numbers with ranges. Maybe more general: Range of numbers, range of durations, range of timestamps, combos?
 * PTPX: Learned cst may only have icsts. But using a cst for later model-building requires a non-icst fact. Should icst->contains be recursive? (Need limit.) Or always include a fact in new_cst?
 * Pong
-  * Add explicit attention control.
   * Add paddle. Make goal for the ball to be at a position which requires moving the paddle to bounce it.
   * Remove cst_ball_position, etc. and learn them.
   * Learn the exception "bounce" model.
