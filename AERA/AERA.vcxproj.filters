@@ -31,14 +31,14 @@
     <ClInclude Include="IODevices\TCP\tcp_io_device.h">
       <Filter>IODevices\TCP</Filter>
     </ClInclude>
-    <ClInclude Include="IODevices\TCP\Proto\utils.h">
-      <Filter>IODevices\TCP</Filter>
-    </ClInclude>
     <ClInclude Include="IODevices\video_screen\video_screen.h">
       <Filter>IODevices\video_screen</Filter>
     </ClInclude>
     <ClInclude Include="IODevices\video_screen\video_screen_io_device.h">
       <Filter>IODevices\video_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="IODevices\TCP\Proto\utils.h">
+      <Filter>IODevices\TCP\Proto</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
