@@ -5,9 +5,9 @@
 //_/_/ 
 //_/_/ Copyright (c) 2018-2022 Jeff Thompson
 //_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ Copyright (c) 2018 Jacqueline Clare Mallett
 //_/_/ Copyright (c) 2018 Thor Tomasarson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
