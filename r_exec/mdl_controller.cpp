@@ -1936,7 +1936,8 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
     Fact *strong_requirement_ground;
     P<HLPBindingMap> save_bm = new HLPBindingMap(bm);
     P<Code> save_imdl = f_imdl->get_reference(0);
-    switch (retrieve_imdl_bwd(bm, f_imdl, ground, strong_requirement_ground)) {
+    ChainingStatus c_s = retrieve_imdl_bwd(bm, f_imdl, ground, strong_requirement_ground);
+    switch (c_s) {
     case WEAK_REQUIREMENT_ENABLED:
       f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(true);
     case NO_REQUIREMENT:
@@ -1965,7 +1966,8 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
       // need a flag to check for a requirement from any Sim with the same root (not the exact same forward-chaining Sim).
       Fact *sim_ground;
       Fact *sim_strong_requirement_ground;
-      switch (retrieve_simulated_imdl_bwd(bm, f_imdl, sim, sim_ground, sim_strong_requirement_ground)) {
+      ChainingStatus sim_c_s = retrieve_simulated_imdl_bwd(bm, f_imdl, sim, sim_ground, sim_strong_requirement_ground);
+      switch (sim_c_s) {
       case WEAK_REQUIREMENT_ENABLED:
         f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(true);
       case NO_REQUIREMENT:
@@ -1975,6 +1977,15 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
           abduce_simulated_lhs(bm, super_goal, f_imdl, opposite, confidence, sub_sim, sim_ground);
         break;
       default: // WEAK_REQUIREMENT_DISABLED, STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT or STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
+#ifdef WITH_DETAIL_OID
+        if (c_s == STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT && sim_c_s == WEAK_REQUIREMENT_DISABLED)
+          // The call to retrieve_imdl_bwd shows that a non-simulated strong requirement disabled a non-simulated weak requrement.
+          // (There may be other combinations of c_s and sim_c_s which apply, but we're sure about this one.)
+          OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << get_object()->get_oid() << ": fact (" <<
+            to_string(ground->get_detail_oid()) << ") pred fact imdl, from goal req " << super_goal->get_oid() <<
+            ", pred disabled by fact (" << to_string(strong_requirement_ground->get_detail_oid()) <<
+            ") pred |fact imdl");
+#endif
         sub_sim->is_requirement_ = true;
         if (sub_sim->get_mode() == SIM_ROOT)
           abduce_imdl(bm, super_goal, f_imdl, opposite, confidence, sub_sim);
