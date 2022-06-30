@@ -2283,7 +2283,7 @@ _Fact* PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super
 
 void PrimaryMDLController::abduce_simulated_imdl(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim) { // goal is f->g->f->object or f->g->|f->object; called concurrently by redcue() and _GMonitor::update().
 
-  if (!sim->register_goal_target(f_imdl))
+  if (!sim->is_requirement_ && !sim->register_goal_target(f_imdl))
     // We are already simulating from this goal, so abort to avoid loops.
     return;
 
