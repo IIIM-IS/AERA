@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2021 Jeff Thompson
-//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2022 Jeff Thompson
+//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -109,7 +109,7 @@ private:
   r_comp::Metadata *metadata_;
   r_comp::Image *image_;
 
-  std::chrono::microseconds time_offset_; // 0 means no offset.
+  Timestamp time_reference_;
 
   std::unordered_map<uint16, std::string> variable_names_; // in the form vxxx where xxx is an integer representing the order of referencing of the variable/label in the code.
   uint16 last_variable_id_;
@@ -122,9 +122,9 @@ private:
 
   void write_indent(uint16 i);
   void write_expression_head(uint16 read_index); // decodes the leading atom of an expression.
-  void write_expression_tail(uint16 read_index, bool apply_time_offset, bool vertical = false); // decodes the elements of an expression following the head.
-  void write_set(uint16 read_index, bool apply_time_offset, uint16 write_as_view_index = 0);
-  void write_any(uint16 read_index, bool &after_tail_wildcard, bool apply_time_offset, uint16 write_as_view_index = 0); // decodes any element in an expression or a set.
+  void write_expression_tail(uint16 read_index); // decodes the elements of an expression following the head.
+  void write_set(uint16 read_index, uint16 write_as_view_index = 0);
+  void write_any(uint16 read_index, bool &after_tail_wildcard, uint16 write_as_view_index = 0); // decodes any element in an expression or a set.
 
   typedef void (Decompiler::*Renderer)(uint16);
   r_code::resized_vector<Renderer> renderers_; // indexed by opcodes; when not there, write_expression() is used.
@@ -140,7 +140,6 @@ private:
   void write_fact(uint16 read_index);
   void write_hlp(uint16 read_index);
   void write_ihlp(uint16 read_index);
-  void write_sim(uint16 read_index);
   void write_view(uint16 read_index, uint16 arity);
 
   bool partial_decompilation_; // used when decompiling on-the-fly.
@@ -154,11 +153,11 @@ public:
   void init(r_comp::Metadata *metadata);
   uint32 decompile(r_comp::Image *image,
     std::ostringstream *stream,
-    Timestamp::duration time_offset,
+    Timestamp time_reference,
     bool ignore_named_objects); // decompiles the whole image; returns the number of objects.
   uint32 decompile(r_comp::Image *image,
     std::ostringstream *stream,
-    Timestamp::duration time_offset,
+    Timestamp time_reference,
     std::vector<r_code::SysObject *> &imported_objects,
     bool include_oid = true, bool include_label = true, bool include_views = true); // idem, ignores named objects if in the imported object list.
 
@@ -177,16 +176,16 @@ public:
    * Decompile a single object.
    * \param object_index The position of the object in image_->code_segment_.objects_.
    * \param stream The output stream.
-   * \param time_offset The time since the start of the run for showing relative times.
+   * \param time_reference The timestamp of the start of the run for showing relative times.
    * \param include_oid (optional) If true, prepend with the OID (and detail OID if enabled). If omitted, include the OID.
    * \param include_label (optional) If true, prepend the label and ':'. If omitted, include the label.
    * \param include_views (optional) If true, include the set of view, or |[] if there are not views. If omitted, include the views.
    */
   void decompile_object(
-    uint16 object_index, std::ostringstream *stream, Timestamp::duration time_offset, bool include_oid = true, 
+    uint16 object_index, std::ostringstream *stream, Timestamp time_reference, bool include_oid = true, 
     bool include_label = true, bool include_views = true);
 
-  void decompile_object(const std::string object_name, std::ostringstream *stream, Timestamp::duration time_offset); // decompiles a single object given its name: use this function to follow references.
+  void decompile_object(const std::string object_name, std::ostringstream *stream, Timestamp time_reference); // decompiles a single object given its name: use this function to follow references.
 };
 }
 

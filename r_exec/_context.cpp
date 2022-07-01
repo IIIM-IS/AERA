@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2021 Jeff Thompson
-//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2022 Jeff Thompson
+//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -84,6 +84,7 @@
 
 #include "_context.h"
 
+using namespace std::chrono;
 using namespace r_code;
 
 namespace r_exec {
@@ -99,6 +100,13 @@ void _Context::setTimestampResult(Timestamp t) const { // patch code with a VALU
   overlay_->values_.as_std()->resize(overlay_->values_.size() + 3);
   uint16 value_index = overlay_->values_.size() - 3;
   Utils::SetTimestamp(&overlay_->values_[value_index], t);
+}
+
+void _Context::setDurationResult(microseconds d) const { // patch code with a VALUE_PTR
+  overlay_->patch_code(index_, Atom::ValuePointer(overlay_->values_.size()));
+  overlay_->values_.as_std()->resize(overlay_->values_.size() + 3);
+  uint16 value_index = overlay_->values_.size() - 3;
+  Utils::SetDuration(&overlay_->values_[value_index], d);
 }
 
 void _Context::setCompoundResultHead(Atom a) const { // patch code with a VALUE_PTR.

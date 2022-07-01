@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2021 Jeff Thompson
-//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2022 Jeff Thompson
+//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -113,9 +113,10 @@ public:
   public:
     uint8 members_to_go_;
     uint8 timestamp_data_;
+    uint8 duration_data_;
     uint8 string_data_;
     uint8 char_count_;
-    uint64 timestamp_high_;
+    uint64 int64_high_;
 
     TraceContext();
     void write_indents(std::ostream& out);
@@ -159,7 +160,8 @@ public:
     INSTANTIATED_ANTI_PROGRAM = 0xCC,
     COMPOSITE_STATE = 0xCD,
     MODEL = 0xCE,
-    NULL_PROGRAM = 0xCF
+    NULL_PROGRAM = 0xCF,
+    DURATION = 0xD0
   }Type;
 
   // encoders
@@ -203,6 +205,7 @@ public:
   static Atom UndefinedString();
   static Atom Timestamp();
   static Atom UndefinedTimestamp();
+  static Atom Duration();
   static Atom InstantiatedProgram(uint16 opcode, uint8 arity);
   static Atom Group(uint16 opcode, uint8 arity);
   static Atom InstantiatedCPPProgram(uint16 opcode, uint8 arity);

@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2021 Jeff Thompson
-//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2022 Jeff Thompson
+//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -232,15 +232,15 @@ class r_exec_dll Sim :
 public:
   Sim(Sim *s); // is_requirement=false (not copied).
   // For SIM_MANDATORY or SIM_OPTIONAL, provide solution_controller, solution_cfd and solution_before. Otherwise, defaults for SIM_ROOT.
-  Sim(SimMode mode, std::chrono::microseconds thz, Fact *super_goal, bool opposite, Controller *root, float32 psln_thr, Controller *solution_controller = NULL, float32 solution_cfd = 0, Timestamp solution_before = Timestamp(std::chrono::seconds(0)));
+  // For SIM_ROOT, solution_before is unused so use Utils::GetTimeReference() which is 0s:0ms:0us in the decompiled output.
+  Sim(SimMode mode, std::chrono::microseconds thz, Fact *super_goal, bool opposite, Controller *root, float32 psln_thr, Controller *solution_controller = NULL, float32 solution_cfd = 0, Timestamp solution_before = r_code::Utils::GetTimeReference());
   bool invalidate();
   bool is_invalidated();
   // If SIM_MANDATORY or SIM_OPTIONAL: qualifies a sub-goal of the branch's root.
   SimMode get_mode() const { return (SimMode)(int)code(SIM_MODE).asFloat(); }
   // simulation time allowance (this is not the goal deadline); 0 indicates no time for simulation.
   std::chrono::microseconds get_thz() const {
-    // The time horizon is stored as a timestamp, but it is actually a duration.
-    return std::chrono::duration_cast<std::chrono::microseconds>(r_code::Utils::GetTimestamp<Code>(this, SIM_THZ).time_since_epoch());
+    return r_code::Utils::GetDuration<Code>(this, SIM_THZ);
   }
 
   /**
@@ -277,7 +277,7 @@ public:
 
   /**
    * If f_obj does not match any of the goal targets stored in the root Sim object, then store it in the root Sim object
-   * for future checks and return true. (In this case, you should inject it as a goal.) Othewise if the goal target was already
+   * for future checks and return true. (In this case, you should inject it as a goal.) Otherwise if the goal target was already
    * registered then return false, meaning that it does not need to be made into a goal again.
    * \param f_obj The (fact of the) object, such as (fact (mk_val ...)).
    * \return True if f_obj has been registered and should be injected as a goal, false if it is already registered and should not
@@ -329,8 +329,8 @@ public:
   // (For a critical section, expect to use defeasible_promoted_facts_.CS_ .)
   r_code::list<P<_Fact> > defeating_facts_;
 
-  // A list of pairs of controller and (fact (cmd ::)) to check if a command has already been signalled in this sim by the controller.
-  std::vector<std::pair<Controller*, P<_Fact> > > already_signalled_;
+  // A list of (fact (pred (fact (cmd ::)))) to check if a command has already been signalled in this sim.
+  std::vector<P<_Fact> > already_signalled_;
 
 private:
   std::vector<P<_Fact> > goalTargets_;
@@ -468,7 +468,31 @@ public:
    */
   bool has_simulation(Sim* sim) const;
 
+  /**
+   * Check if this Pred has a defeasible consequence.
+   * \return True if this has a defeasible consequence.
+   */
+  bool has_defeasible_consequence() const { return !!defeasible_consequence_; }
+
+  /**
+   * Get this Pred's defeasible consequence, creating one if it doesn't already exist. If you don't want to
+   * create a defeasible consequence , check has_defeasible_consequence() first.
+   * \return This Pred's defeasible_consequence_.
+   */
+  DefeasibleValidity* get_defeasible_consequence() {
+    if (!defeasible_consequence_)
+      defeasible_consequence_ = new DefeasibleValidity();
+    return defeasible_consequence_;
+  }
+
 private:
+  /**
+   * defeasible_consequence_ is a unique DefeasibleValidity for this Pred which is attached to predicted consequences so
+   * that they can be invalidated if this Pred is defeated. (However, invalidating the DefeasibleValidity does not
+   * invalidate this Pred.)
+   */
+  P<DefeasibleValidity> defeasible_consequence_;
+
   void construct(_Fact *target, const std::vector<P<Sim> >& simulations, float32 psln_thr);
 };
 
@@ -591,7 +615,7 @@ public:
 
   bool is_invalidated();
 
-  bool contains(_Fact *component, uint16 &component_index) const;
+  bool contains(const _Fact *component, uint16 &component_index) const;
 
   P<BindingMap> bindings_;
   std::vector<P<_Fact> > components_; // the inputs that triggered the building of the icst.

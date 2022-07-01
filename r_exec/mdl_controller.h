@@ -3,10 +3,10 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2021 Jeff Thompson
-//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Jeff Thompson
+//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ Copyright (c) 2018 Thor Tomasarson
-//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -235,31 +235,6 @@ protected:
   CriticalSection active_requirementsCS_;
   std::unordered_map<P<_Fact>, RequirementsPair, r_code::PHash<_Fact> > active_requirements_; // Key: P<_Fact>: f1 as in f0->pred->f1->imdl; Value:requirements having allowed the production of prediction.
 
-  /**
-   * A DefeasibleWeakRequirement holds the weak requirement which is the ground for a defeasible
-   * prediction, and the DefeasibleValidity which is attached to the prediction and is invalidated if a
-   * strong requirement later defeats the weak requirement.
-   */
-  class DefeasibleWeakRequirement {
-  public:
-    DefeasibleWeakRequirement()
-      : weak_requirement_(NULL), defeasible_validity_(NULL)
-    {}
-
-    /**
-     * Create a DefeasibleWeakRequirement with the given values
-     * \param weak_requirement The weak requirement which is the ground for the defeasible prediction.
-     * \param defeasible_validity The DefeasibleValidity object that is attached to the defeasible prediction.
-     */
-    DefeasibleWeakRequirement(_Fact* weak_requirement, DefeasibleValidity* defeasible_validity)
-      : weak_requirement_(weak_requirement), defeasible_validity_(defeasible_validity)
-    {}
-
-    P<_Fact> weak_requirement_;
-    P<DefeasibleValidity> defeasible_validity_;
-  };
-  CriticalSectionList<DefeasibleWeakRequirement> defeasible_weak_requirements_;
-
   template<class C> void reduce_cache(Fact *f_p_f_imdl, MDLController *controller) { // fwd; controller is the controller of the requirement which produced f_p_f_imdl.
 
     BatchReductionJob<C, Fact, MDLController> *j = new BatchReductionJob<C, Fact, MDLController>((C *)this, f_p_f_imdl, controller);
@@ -314,7 +289,7 @@ public:
    */
   virtual void store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed) = 0;
   ChainingStatus retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl, RequirementsPair &r_p, Fact *&ground, MDLController *req_controller, bool &wr_enabled); // checks the requirement instances during fwd; r_p: all wrs in first, all srs in second.
-  ChainingStatus retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl, Fact *&ground); // checks the requirement instances during bwd; ground is set to the best weak requirement if chaining allowed, NULL otherwise.
+  ChainingStatus retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl, Fact *&ground, Fact *&strong_requirement_ground); // checks the requirement instances during bwd; ground is set to the best weak requirement if chaining allowed, NULL otherwise.
   ChainingStatus retrieve_simulated_imdl_fwd(const HLPBindingMap *bm, Fact *f_imdl, Sim* sim, std::vector<BindingResult>& results);
   ChainingStatus retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl, Sim* prediction_sim, Fact *&ground, Fact *&strong_requirement_ground);
 

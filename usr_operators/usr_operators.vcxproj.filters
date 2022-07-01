@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="auto_focus_callback.cpp" />
+    <ClCompile Include="usr_operators.cpp" />
+    <ClCompile Include="Callbacks\callbacks.cpp">
+      <Filter>Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="Operators\operators.cpp">
+      <Filter>Operators</Filter>
+    </ClCompile>
+    <ClCompile Include="TestProgram\test_program.cpp">
+      <Filter>TestProgram</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="auto_focus_callback.h" />
+    <ClInclude Include="types.h" />
+    <ClInclude Include="usr_operators.h" />
+    <ClInclude Include="Callbacks\callbacks.h">
+      <Filter>Callbacks</Filter>
+    </ClInclude>
+    <ClInclude Include="Operators\operators.h">
+      <Filter>Operators</Filter>
+    </ClInclude>
+    <ClInclude Include="TestProgram\test_program.h">
+      <Filter>TestProgram</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Callbacks">
+      <UniqueIdentifier>{11812d2b-2e9d-4fd1-aab1-1e4f47142cfb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Operators">
+      <UniqueIdentifier>{afc03c05-c8df-4c8f-a25e-c47bf0e9e399}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestProgram">
+      <UniqueIdentifier>{22da0718-bbc4-4081-981d-753db2a38600}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

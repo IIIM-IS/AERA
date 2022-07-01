@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2021 Jeff Thompson
-//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2022 Jeff Thompson
+//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -639,13 +639,12 @@ void Group::update(Timestamp planned_time) {
 
       switch (new_controllers_[i]->get_object()->code(0).getDescriptor()) {
       case Atom::INSTANTIATED_ANTI_PROGRAM: { // inject signaling jobs for |ipgm (tsc).
-        // The time scope is stored as a timestamp, but it is actually a duration.
-        P<TimeJob> j = new AntiPGMSignalingJob((r_exec::View *)new_controllers_[i]->get_view(), now + Utils::GetTimestamp<Code>(new_controllers_[i]->get_object(), IPGM_TSC).time_since_epoch());
+        P<TimeJob> j = new AntiPGMSignalingJob((r_exec::View *)new_controllers_[i]->get_view(), now + Utils::GetDuration<Code>(new_controllers_[i]->get_object(), IPGM_TSC));
         _Mem::Get()->push_time_job(j);
         break;
       }case Atom::INSTANTIATED_INPUT_LESS_PROGRAM: { // inject a signaling job for an input-less pgm.
 
-        P<TimeJob> j = new InputLessPGMSignalingJob((r_exec::View *)new_controllers_[i]->get_view(), now + Utils::GetTimestamp<Code>(new_controllers_[i]->get_object(), IPGM_TSC).time_since_epoch());
+        P<TimeJob> j = new InputLessPGMSignalingJob((r_exec::View *)new_controllers_[i]->get_view(), now + Utils::GetDuration<Code>(new_controllers_[i]->get_object(), IPGM_TSC));
         _Mem::Get()->push_time_job(j);
         break;
       }
@@ -945,8 +944,7 @@ void Group::inject(View *view) { // the view can hold anything but groups and no
       std::multiset<P<View>, _View::Less>::const_iterator v;
       for (v = newly_salient_views_.begin(); v != newly_salient_views_.end(); ++v)
         c->_take_input(*v); // view will be copied.
-      // The time scope is stored as a timestamp, but it is actually a duration.
-      _Mem::Get()->push_time_job(new AntiPGMSignalingJob(view, now + Utils::GetTimestamp<Code>(c->get_object(), IPGM_TSC).time_since_epoch()));
+      _Mem::Get()->push_time_job(new AntiPGMSignalingJob(view, now + Utils::GetDuration<Code>(c->get_object(), IPGM_TSC)));
     }
     break;
   }case Atom::INSTANTIATED_INPUT_LESS_PROGRAM: {
@@ -956,7 +954,7 @@ void Group::inject(View *view) { // the view can hold anything but groups and no
     if (is_active_pgm(view)) {
 
       c->gain_activation();
-      _Mem::Get()->push_time_job(new InputLessPGMSignalingJob(view, now + Utils::GetTimestamp<Code>(view->object_, IPGM_TSC).time_since_epoch()));
+      _Mem::Get()->push_time_job(new InputLessPGMSignalingJob(view, now + Utils::GetDuration<Code>(view->object_, IPGM_TSC)));
     }
     break;
   }case Atom::MARKER: // the marker has already been added to the mks of its references.

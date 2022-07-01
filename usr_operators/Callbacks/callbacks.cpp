@@ -3,10 +3,10 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2021 Jeff Thompson
-//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Jeff Thompson
+//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ Copyright (c) 2018 Thor Tomasarson
-//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -96,7 +96,7 @@ using namespace r_code;
 bool print(microseconds relative_time, bool suspended, const char *msg, uint8 object_count, Code **objects) { // return true to resume the executive (applies when called from a suspend call, i.e. suspended==true).
 
   ostringstream out;
-  out << Time::ToString_seconds(relative_time) << ": " << msg << std::endl;
+  out << Utils::ToString_s_ms_us(Timestamp(relative_time), Timestamp(seconds(0))) << ": " << msg << std::endl;
   for (uint8 i = 0; i < object_count; ++i)
     objects[i]->trace(out);
 

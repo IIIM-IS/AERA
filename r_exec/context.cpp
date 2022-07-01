@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2021 Jeff Thompson
-//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2022 Jeff Thompson
+//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -95,8 +95,6 @@ using namespace r_code;
 namespace r_exec {
 
 bool IPGMContext::operator ==(const IPGMContext &c) const {
-  //c.trace();
-  //this->trace();
   IPGMContext lhs = dereference();
   IPGMContext rhs = c.dereference();
 
@@ -344,13 +342,16 @@ void IPGMContext::copy_structure_to_value_array(bool prefix, uint16 write_index,
       for (uint16 i = 1; i <= atom_count; ++i)
         overlay_->values_[write_index++] = code_[index_ + i];
       break;
+    case Atom::DURATION:
+      for (uint16 i = 1; i <= atom_count; ++i)
+        overlay_->values_[write_index++] = code_[index_ + i];
+      break;
     case Atom::C_PTR:
       if (!dereference_cptr) {
 
         copy_member_to_value_array(1, prefix, write_index++, extent_index, false);
         for (uint16 i = 2; i <= atom_count; ++i)
           overlay_->values_[write_index++] = code_[index_ + i];
-        //Atom::Trace(&overlay_->values[0],overlay_->values.size());
         break;
       } // else, dereference the c_ptr.
     default:
@@ -556,7 +557,6 @@ build_productions:
   for (uint16 i = 1; i <= production_count; ++i) {
 
     IPGMContext prod = productions.get_child(i);
-    //prod.trace();
     prod.evaluate();
     prod.copy_to_value_array(production_index);
     production_indices.push_back(production_index);
@@ -605,7 +605,6 @@ void reduce(const IPGMContext &context, const IPGMContext &input_set, const IPGM
 }
 
 bool IPGMContext::Red(const IPGMContext &context) {
-  //context.trace();
   IPGMContext input_set = context.get_child_deref(1);
   if (!input_set.evaluate_no_dereference())
     return false;
@@ -643,7 +642,6 @@ bool IPGMContext::Red(const IPGMContext &context) {
     context.setCompoundResultHead(Atom::Set(production_indices.size()));
     for (uint16 i = 0; i < production_indices.size(); ++i) // fill the set with iptrs to productions: the latter are copied in the value array.
       context.addCompoundResultPart(Atom::IPointer(production_indices[i]));
-    //(*context).trace();
     return true;
   }
 failure:

@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2021 Jeff Thompson
-//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2022 Jeff Thompson
+//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -136,7 +136,7 @@ bool CSTOverlay::can_match(Timestamp now) const { // to reach inputs until a giv
 _Fact* CSTOverlay::inject_production(View* input) {
 
   Fact *f_icst = ((CSTController *)controller_)->get_f_icst(bindings_, &axiom_inputs_, &non_axiom_inputs_);
-  auto now = Now();//f_icst->get_reference(0)->trace();
+  auto now = Now();
   string inputs_info;
   for (uint32 i = 0; i < axiom_inputs_.size(); ++i)
     inputs_info += " " + to_string(axiom_inputs_[i]->get_oid());
@@ -239,7 +239,7 @@ void CSTOverlay::update(HLPBindingMap *map, _Fact *input, bool is_axiom) {
   } else
     last_cfd = input->get_cfd();
 
-  if (lowest_cfd_ > last_cfd)
+  if (last_cfd < lowest_cfd_)
     lowest_cfd_ = last_cfd;
 }
 

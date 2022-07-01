@@ -13,7 +13,7 @@ pgm0:(pgm |[] |[] |[] []
       |[]
    )
    (inj []
-      (|fact a now MAX_TIME 1 1)
+      (|fact a now GIGASEC 1 1)
       [SYNC_HOLD now 1 forever stdin nil]
    )
    (inj []
@@ -42,7 +42,7 @@ pgm1:(pgm |[] |[] |[] []
       |[]
    )
    (inj []
-      (fact c now (+ now 10000us) 1 1)
+      (fact c now (+ now 10ms) 1 1)
       [SYNC_ONCE now 1 1 stdin nil]
    )
    (inj []
@@ -50,9 +50,9 @@ pgm1:(pgm |[] |[] |[] []
       |[]
    )
    (inj []
-      (fact p now MAX_TIME 1 1)
+      (fact p now GIGASEC 1 1)
       [SYNC_HOLD now 1 1 stdin nil]
    )
 1) |[]
 
-ipgm1:(ipgm pgm1 |[] RUN_ONCE 160000us VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 2 stdin nil 1]]
+ipgm1:(ipgm pgm1 |[] RUN_ONCE 160ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 2 stdin nil 1]]

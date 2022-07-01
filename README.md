@@ -48,14 +48,20 @@ This is a list of unintuitive issues with using AERA, to help new users.
 * If not debugging the code, then in Visual Studio run in the "Release" configuration so that it runs faster.
 * Math operations on two floating point numbers produce a floating point number, as expected. And addition
   and subtraction of two time values produces a time value, as expected. But the result of operations with
-  mixed types is not obvious. Below 'nb' is a floating-point number and 'us' is a 64-bit timestamp in microseconds.
-  - (+ nb us) -> us
-  - (+ us nb) -> us
-  - (- nb us) not allowed
+  mixed types is not obvious. Below 'nb' is a floating-point number and 'ts' is a 64-bit timestamp in microseconds
+  and 'us' is a 64-bit duration in microseconds.
+  - (+ us ts) or (+ ts us) or (+ nb ts) or (+ ts nb) -> ts (interpret nb as microseconds duration)
+  - (+ nb us) or (+ us nb) or (+ us us) -> us (interpret nb as microseconds duration)
+  - (+ ts ts) not allowed
+  - (- ts ts) -> us
+  - (- ts nb) or (- ts us) -> ts (interpret nb as microseconds duration)
   - (- us nb) -> us
+  - (- nb ts) or (- us ts) or (- nb us) not allowed
   - (* nb us) -> nb
   - (* us nb) -> us ... different than (* nb us)!
   - (* us us) -> nb ... counter-intuitive
+  - (* nb ts) or (* ts nb) or (* us ts) or (* ts us) or (* ts ts) not allowed
   - (/ nb us) -> nb
   - (/ us nb) -> us
   - (/ us us) -> nb
+  - (/ nb ts) or (/ ts nb) or (/ us ts) or (/ ts us) or (/ ts ts) not allowed

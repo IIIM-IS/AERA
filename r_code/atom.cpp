@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2021 Jeff Thompson
-//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2022 Jeff Thompson
+//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -96,6 +96,7 @@ namespace r_code {
 Atom::TraceContext::TraceContext() {
   members_to_go_ = 0;
   timestamp_data_ = 0;
+  duration_data_ = 0;
   string_data_ = 0;
   char_count_ = 0;
 }
@@ -111,11 +112,26 @@ void Atom::trace(TraceContext& context, std::ostream& out) const {
 
     if (context.timestamp_data_ == 1)
       // Save for the next step.
-      context.timestamp_high_ = atom_;
+      context.int64_high_ = atom_;
     else {
       // Imitate Utils::GetTimestamp.
-      auto timestamp = core::Timestamp(microseconds(context.timestamp_high_ << 32 | atom_));
+      auto timestamp = core::Timestamp(microseconds(context.int64_high_ << 32 | atom_));
       out << " " << Utils::RelativeTime(timestamp);
+    }
+    return;
+  }
+  if (context.duration_data_) {
+    // Output the duration value now. Otherwise, it could be interpreted as an op code, etc.
+    --context.duration_data_;
+    out << atom_;
+
+    if (context.duration_data_ == 1)
+      // Save for the next step.
+      context.int64_high_ = atom_;
+    else {
+      // Imitate Utils::GetDuration.
+      auto duration = microseconds(context.int64_high_ << 32 | atom_);
+      out << " " << Utils::ToString_us(duration);
     }
     return;
   }
@@ -150,7 +166,8 @@ void Atom::trace(TraceContext& context, std::ostream& out) const {
   case MARKER: out << "mk: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.members_to_go_ = getAtomCount(); return;
   case OPERATOR: out << "op: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.members_to_go_ = getAtomCount(); return;
   case STRING: out << "st: " << std::dec << (uint16)getAtomCount(); context.members_to_go_ = context.string_data_ = getAtomCount(); context.char_count_ = (atom_ & 0x000000FF); return;
-  case TIMESTAMP: out << "us"; context.members_to_go_ = context.timestamp_data_ = 2; return;
+  case TIMESTAMP: out << "ts"; context.members_to_go_ = context.timestamp_data_ = 2; return;
+  case DURATION: out << "us"; context.members_to_go_ = context.duration_data_ = 2; return;
   case GROUP: out << "grp: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.members_to_go_ = getAtomCount(); return;
   case INSTANTIATED_PROGRAM:
   case INSTANTIATED_ANTI_PROGRAM:

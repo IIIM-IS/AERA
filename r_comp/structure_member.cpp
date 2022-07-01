@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2021 Jeff Thompson
-//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2022 Jeff Thompson
+//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -102,6 +102,7 @@ StructureMember::StructureMember(_Read r,
   if (read_ == &Compiler::read_any) type_ = ANY;
   else if (read_ == &Compiler::read_number) type_ = NUMBER;
   else if (read_ == &Compiler::read_timestamp) type_ = TIMESTAMP;
+  else if (read_ == &Compiler::read_duration) type_ = DURATION;
   else if (read_ == &Compiler::read_boolean) type_ = BOOLEAN;
   else if (read_ == &Compiler::read_string) type_ = STRING;
   else if (read_ == &Compiler::read_node) type_ = NODE_ID;
@@ -145,6 +146,8 @@ void StructureMember::write(word32 *storage) const {
     storage[0] = R_NUMBER;
   else if (read_ == &Compiler::read_timestamp)
     storage[0] = R_TIMESTAMP;
+  else if (read_ == &Compiler::read_duration)
+    storage[0] = R_DURATION;
   else if (read_ == &Compiler::read_boolean)
     storage[0] = R_BOOLEAN;
   else if (read_ == &Compiler::read_string)
@@ -175,6 +178,7 @@ void StructureMember::read(word32 *storage) {
   case R_ANY: read_ = &Compiler::read_any; break;
   case R_NUMBER: read_ = &Compiler::read_number; break;
   case R_TIMESTAMP: read_ = &Compiler::read_timestamp; break;
+  case R_DURATION: read_ = &Compiler::read_duration; break;
   case R_BOOLEAN: read_ = &Compiler::read_boolean; break;
   case R_STRING: read_ = &Compiler::read_string; break;
   case R_NODE: read_ = &Compiler::read_node; break;

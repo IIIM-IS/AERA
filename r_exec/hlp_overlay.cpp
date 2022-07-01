@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2021 Jeff Thompson
-//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2022 Jeff Thompson
+//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -97,10 +97,10 @@ bool HLPOverlay::EvaluateBWDGuards(Controller *c, HLPBindingMap *bindings) {
   return o.evaluate_bwd_guards();
 }
 
-bool HLPOverlay::CheckFWDTimings(Controller *c, HLPBindingMap *bindings) {
+bool HLPOverlay::EvaluateFWDTimings(Controller *c, HLPBindingMap *bindings) {
 
   HLPOverlay o(c, bindings);
-  return o.check_fwd_timings();
+  return o.evaluate_fwd_timings();
 }
 
 bool HLPOverlay::ScanBWDGuards(Controller *c, HLPBindingMap *bindings) {
@@ -163,7 +163,7 @@ bool HLPOverlay::evaluate(uint16 index) {
   return c.evaluate();
 }
 
-bool HLPOverlay::check_fwd_timings() {
+bool HLPOverlay::evaluate_fwd_timings() {
 
   int16 fwd_after_guard_index = -1;
   int16 fwd_before_guard_index = -1;
@@ -210,8 +210,6 @@ bool HLPOverlay::check_fwd_timings() {
       return false;
 #endif
   }
-  if (bindings_->get_fwd_before() <= Now())
-    return false;
 
   if (!bindings_->has_fwd_after()) {
     // We need to evaluate forward after.

@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2021 Jeff Thompson
-//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2022 Jeff Thompson
+//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -292,8 +292,7 @@ void AntiPGMController::push_new_signaling_job() {
     host->get_c_sln() > host->get_c_sln_thr()) { // c-salient group.
 
     host->leave();
-    // The time scope is stored as a timestamp, but it is actually a duration.
-    TimeJob *next_job = new AntiPGMSignalingJob((r_exec::View*)view_, Now() + Utils::GetTimestamp<Code>(get_object(), IPGM_TSC).time_since_epoch());
+    TimeJob *next_job = new AntiPGMSignalingJob((r_exec::View*)view_, Now() + Utils::GetDuration<Code>(get_object(), IPGM_TSC));
     _Mem::Get()->push_time_job(next_job);
   } else
     host->leave();

@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2021 Jeff Thompson
-//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2022 Jeff Thompson
+//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -173,6 +173,10 @@ private:
         for (uint16 i = 1; i <= atom_count; ++i)
           destination->code(write_index++) = (*this)[i];
         break;
+      case Atom::DURATION: // copy members as is (no dereference).
+        for (uint16 i = 1; i <= atom_count; ++i)
+          destination->code(write_index++) = (*this)[i];
+        break;
       default:
         if (is_cmd_with_cptr()) {
 
@@ -299,6 +303,7 @@ private:
     case Atom::SET:
     case Atom::S_SET:
     case Atom::TIMESTAMP:
+    case Atom::DURATION:
     case Atom::STRING:
       destination->code(write_index) = Atom::IPointer(extent_index);
       if (pgm_index > 0 && index_ > pgm_index && data_ == STEM)

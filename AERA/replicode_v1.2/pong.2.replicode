@@ -18,7 +18,7 @@ b:(ent 1)
 ball:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 b_is_a_ball:(mk.val b essence ball 1) |[]
 ; Even though (fact b_is_a_ball ::) is not used in this file, the pattern extractor needs it.
-f_b_is_a_ball:(fact b_is_a_ball 0us MAX_TIME 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+f_b_is_a_ball:(fact b_is_a_ball 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; Top-level model ;;
@@ -43,7 +43,7 @@ m_run_0:(mdl
 
 ; This program runs once to set the initial position_y at 0, and velocity_y at 0.0001.
 ; The initial position_y is a fact at some time from now until now plus the sampling_period.
-; The initial velocity_y is a fact at any time from now until MAX_TIME.
+; The initial velocity_y is a fact at any time from now until the far future.
 start:(pgm |[] |[] |[] []
    (prb [1 "print" "starting..." |[]])
    (inj []
@@ -59,7 +59,7 @@ start:(pgm |[] |[] |[] []
       |[]
    )
    (inj []
-      (fact s now MAX_TIME 1 1)
+      (fact s now GIGASEC 1 1)
       [SYNC_HOLD now 1 forever stdin nil]
    )
 1) |[]
@@ -91,7 +91,7 @@ ipgm0:(ipgm
 pgm0;       the code
 |[];        instantiation values
 RUN_ALWAYS; boolean RUN_ALWAYS/ONCE
-20000us;   time scope
+20ms;   time scope
 VOLATILE;
 NOTIFY;     notify flag
 1) [[SYNC_ONCE now 0 forever stdin nil 1]]

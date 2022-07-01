@@ -3,10 +3,10 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2021 Jeff Thompson
-//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Jeff Thompson
+//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ Copyright (c) 2018 Throstur Thorarensen
-//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -1049,10 +1049,9 @@ RepliCondition::RepliCondition(const std::string &name, bool reversed) {
 RepliCondition::~RepliCondition() {
 }
 
-bool RepliCondition::reverse() {
+void RepliCondition::reverse() {
 
   reversed_ = !reversed_;
-  return true;
 }
 
 bool RepliCondition::isActive(unordered_map<std::string, RepliMacro *> &repliMacros, unordered_map<std::string, int32> &counters) {
@@ -1221,8 +1220,10 @@ void Preprocessor::getMember(vector<StructureMember> &members, RepliStruct *m, s
       members.push_back(StructureMember(&Compiler::read_any, name));
     else if (type == "nb")
       members.push_back(StructureMember(&Compiler::read_number, name));
-    else if (type == "us")
+    else if (type == "ts")
       members.push_back(StructureMember(&Compiler::read_timestamp, name));
+    else if (type == "us")
+      members.push_back(StructureMember(&Compiler::read_duration, name));
     else if (type == "bl")
       members.push_back(StructureMember(&Compiler::read_boolean, name));
     else if (type == "st")
@@ -1286,8 +1287,10 @@ ReturnType Preprocessor::getReturnType(RepliStruct *s) {
 
   if (s->tail_ == ":nb")
     return NUMBER;
-  else if (s->tail_ == ":us")
+  else if (s->tail_ == ":ts")
     return TIMESTAMP;
+  else if (s->tail_ == ":us")
+    return DURATION;
   else if (s->tail_ == ":bl")
     return BOOLEAN;
   else if (s->tail_ == ":st")

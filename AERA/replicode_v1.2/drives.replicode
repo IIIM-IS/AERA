@@ -3,7 +3,7 @@
 
 init_run_pgm:(pgm |[] |[] |[] []
    (inj []
-      f_run:(fact run t0:(+ now 50000us) (+ t0 sampling_period) 1 1)
+      f_run:(fact run t0:(+ now 50ms) (+ t0 sampling_period) 1 1)
       |[]
    )
    (inj []
@@ -17,7 +17,7 @@ init_run_pgm:(pgm |[] |[] |[] []
    (prb [1 "print" "init_run_pgm" |[]])
 1) |[]
 
-init_run_ipgm:(ipgm init_run_pgm |[] RUN_ONCE 50000us VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 drives nil 1]]
+init_run_ipgm:(ipgm init_run_pgm |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 drives nil 1]]
 
 success_run_pgm:(pgm |[] []
    s:(ptn (fact (success (fact (goal (fact run after: before: ::) ::) ::) ::) ::) |[])

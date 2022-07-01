@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2021 Jeff Thompson
-//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2022 Jeff Thompson
+//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -159,7 +159,7 @@ std::string Decompiler::get_object_name(uint16 index) {
 void Decompiler::init(r_comp::Metadata *metadata) {
 
   metadata_ = metadata;
-  time_offset_ = microseconds(0);
+  time_reference_ = Timestamp(seconds(0));
 
   partial_decompilation_ = false;
   ignore_named_objects_ = false;
@@ -188,26 +188,24 @@ void Decompiler::init(r_comp::Metadata *metadata) {
       renderers_[i] = &Decompiler::write_hlp;
     else if (class_name == "icst" || class_name == "imdl")
       renderers_[i] = &Decompiler::write_ihlp;
-    else if (class_name == "sim")
-      renderers_[i] = &Decompiler::write_sim;
     else
       renderers_[i] = &Decompiler::write_expression;
   }
 }
 
-uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, Timestamp::duration time_offset, bool ignore_named_objects) {
+uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, Timestamp time_reference, bool ignore_named_objects) {
 
   ignore_named_objects_ = ignore_named_objects;
 
   uint32 object_count = decompile_references(image);
 
   for (uint16 i = 0; i < image->code_segment_.objects_.size(); ++i)
-    decompile_object(i, stream, time_offset);
+    decompile_object(i, stream, time_reference);
 
   return object_count;
 }
 
-uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, Timestamp::duration time_offset, vector<SysObject *> &imported_objects,
+uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, Timestamp time_reference, vector<SysObject *> &imported_objects,
   bool include_oid, bool include_label, bool include_views) {
 
   partial_decompilation_ = true;
@@ -217,7 +215,7 @@ uint32 Decompiler::decompile(r_comp::Image *image, std::ostringstream *stream, T
   uint32 object_count = decompile_references(image);
 
   for (uint16 i = 0; i < image->code_segment_.objects_.size(); ++i)
-    decompile_object(i, stream, time_offset, include_oid, include_label, include_views);
+    decompile_object(i, stream, time_reference, include_oid, include_label, include_views);
 
   return object_count;
 }
@@ -312,7 +310,7 @@ uint32 Decompiler::decompile_references(r_comp::Image *image, unordered_map<uint
 }
 
 void Decompiler::decompile_object(
-  uint16 object_index, std::ostringstream *stream, Timestamp::duration time_offset, bool include_oid,
+  uint16 object_index, std::ostringstream *stream, Timestamp time_reference, bool include_oid,
   bool include_label, bool include_views) {
 
   if (!out_stream_)
@@ -323,7 +321,7 @@ void Decompiler::decompile_object(
     out_stream_ = new OutStream(stream);
   }
 
-  time_offset_ = duration_cast<microseconds>(time_offset);
+  time_reference_ = time_reference;
 
   variable_names_.clear();
   last_variable_id_ = 0;
@@ -401,9 +399,9 @@ void Decompiler::decompile_object(
   write_indent(0);
 }
 
-void Decompiler::decompile_object(const std::string object_name, std::ostringstream *stream, Timestamp::duration time_offset) {
+void Decompiler::decompile_object(const std::string object_name, std::ostringstream *stream, Timestamp time_reference) {
 
-  decompile_object(object_indices_[object_name], stream, time_offset);
+  decompile_object(object_indices_[object_name], stream, time_reference);
 }
 
 void Decompiler::write_indent(uint16 i) {
@@ -447,7 +445,7 @@ void Decompiler::write_expression_head(uint16 read_index) {
   }
 }
 
-void Decompiler::write_expression_tail(uint16 read_index, bool apply_time_offset, bool vertical) { // read_index points initially to the head.
+void Decompiler::write_expression_tail(uint16 read_index) { // read_index points initially to the head.
 
   uint16 arity = current_object_->code_[read_index].getAtomCount();
   bool after_tail_wildcard = false;
@@ -455,7 +453,7 @@ void Decompiler::write_expression_tail(uint16 read_index, bool apply_time_offset
   for (uint16 i = 0; i < arity; ++i) {
 
     if (after_tail_wildcard)
-      write_any(++read_index, after_tail_wildcard, apply_time_offset);
+      write_any(++read_index, after_tail_wildcard);
     else {
 
       if (closing_set_) {
@@ -465,13 +463,10 @@ void Decompiler::write_expression_tail(uint16 read_index, bool apply_time_offset
           write_indent(indents_);
         else
           *out_stream_ << ' ';
-      } else if (!vertical)
+      } else
         *out_stream_ << ' ';
 
-      write_any(++read_index, after_tail_wildcard, apply_time_offset);
-
-      if (!closing_set_ && vertical)
-        *out_stream_ << NEWLINE;
+      write_any(++read_index, after_tail_wildcard);
     }
   }
 }
@@ -485,7 +480,7 @@ void Decompiler::write_expression(uint16 read_index) {
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
-  write_expression_tail(read_index, true);
+  write_expression_tail(read_index);
   if (closing_set_) {
 
     closing_set_ = false;
@@ -503,7 +498,7 @@ void Decompiler::write_group(uint16 read_index) {
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
-  write_expression_tail(read_index, false);
+  write_expression_tail(read_index);
   if (closing_set_) {
 
     closing_set_ = false;
@@ -521,7 +516,7 @@ void Decompiler::write_marker(uint16 read_index) {
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
-  write_expression_tail(read_index, false);
+  write_expression_tail(read_index);
   if (closing_set_) {
 
     closing_set_ = false;
@@ -539,7 +534,7 @@ void Decompiler::write_pgm(uint16 read_index) {
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
-  write_expression_tail(read_index, true);
+  write_expression_tail(read_index);
   if (closing_set_) {
 
     closing_set_ = false;
@@ -558,7 +553,7 @@ void Decompiler::write_ipgm(uint16 read_index) {
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
-  write_expression_tail(read_index, false);
+  write_expression_tail(read_index);
   if (closing_set_) {
 
     closing_set_ = false;
@@ -585,7 +580,7 @@ void Decompiler::write_hlp(uint16 read_index) {
   for (uint16 i = 0; i < arity; ++i) {
 
     if (after_tail_wildcard)
-      write_any(++read_index, after_tail_wildcard, false);
+      write_any(++read_index, after_tail_wildcard);
     else {
 
       if (closing_set_) {
@@ -602,7 +597,7 @@ void Decompiler::write_hlp(uint16 read_index) {
       if (i == 0 || i == 4)
         // Write the set of template arguments and set of output groups horizontally.
         horizontal_set_ = true;
-      write_any(++read_index, after_tail_wildcard, false);
+      write_any(++read_index, after_tail_wildcard);
       hlp_postfix_ = true;
       horizontal_set_ = save_horizontal_set;
 
@@ -631,7 +626,7 @@ void Decompiler::write_ihlp(uint16 read_index) {
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
-  write_expression_tail(read_index, true);
+  write_expression_tail(read_index);
   if (closing_set_) {
 
     closing_set_ = false;
@@ -651,7 +646,6 @@ void Decompiler::write_icmd(uint16 read_index) {
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
-  //write_expression_tail(read_index,true);
 
   uint16 write_as_view_index = 0;
   if (current_object_->code_[read_index + 1].asOpcode() == metadata_->classes_.find("_inj")->second.atom_.asOpcode()) {
@@ -666,7 +660,7 @@ void Decompiler::write_icmd(uint16 read_index) {
   for (uint16 i = 0; i < arity; ++i) {
 
     if (after_tail_wildcard)
-      write_any(++read_index, after_tail_wildcard, true);
+      write_any(++read_index, after_tail_wildcard);
     else {
 
       if (closing_set_) {
@@ -676,7 +670,7 @@ void Decompiler::write_icmd(uint16 read_index) {
       } else
         *out_stream_ << ' ';
 
-      write_any(++read_index, after_tail_wildcard, true, write_as_view_index);
+      write_any(++read_index, after_tail_wildcard, write_as_view_index);
     }
   }
 
@@ -699,7 +693,7 @@ void Decompiler::write_cmd(uint16 read_index) {
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
-  write_expression_tail(read_index, false);
+  write_expression_tail(read_index);
   if (closing_set_) {
 
     closing_set_ = false;
@@ -721,7 +715,7 @@ void Decompiler::write_fact(uint16 read_index) {
   }
   out_stream_->push('(', read_index);
   write_expression_head(read_index);
-  write_expression_tail(read_index, true);
+  write_expression_tail(read_index);
   if (closing_set_) {
 
     closing_set_ = false;
@@ -744,64 +738,14 @@ void Decompiler::write_view(uint16 read_index, uint16 arity) {
   *out_stream_ << "[";
   for (uint16 j = 1; j <= arity; ++j) {
 
-    write_any(read_index + j, after_tail_wildcard, true);
+    write_any(read_index + j, after_tail_wildcard);
     if (j < arity)
       *out_stream_ << " ";
   }
   *out_stream_ << "]";
 }
 
-void Decompiler::write_sim(uint16 read_index) {
-  // Imitate write_expression, except set apply_time_offset false for the time horizon.
-
-  if (closing_set_) {
-
-    closing_set_ = false;
-    write_indent(indents_);
-  }
-  out_stream_->push('(', read_index);
-  write_expression_head(read_index);
-
-  // Imitate write_expression_tail, except set apply_time_offset false for the time horizon.
-  bool vertical = false;
-  uint16 arity = current_object_->code_[read_index].getAtomCount();
-  bool after_tail_wildcard = false;
-
-  for (uint16 i = 0; i < arity; ++i) {
-    // Don't use the time offset for the time horizon.
-    bool apply_time_offset = (i != (SIM_THZ - 1));
-
-    if (after_tail_wildcard)
-      write_any(++read_index, after_tail_wildcard, apply_time_offset);
-    else {
-
-      if (closing_set_) {
-
-        closing_set_ = false;
-        if (!horizontal_set_)
-          write_indent(indents_);
-        else
-          *out_stream_ << ' ';
-      }
-      else if (!vertical)
-        *out_stream_ << ' ';
-
-      write_any(++read_index, after_tail_wildcard, apply_time_offset);
-
-      if (!closing_set_ && vertical)
-        *out_stream_ << NEWLINE;
-    }
-  }
-
-  if (closing_set_) {
-
-    closing_set_ = false;
-    write_indent(indents_);
-  }
-  *out_stream_ << ')';
-}
-
-void Decompiler::write_set(uint16 read_index, bool apply_time_offset, uint16 write_as_view_index) { // read_index points to a set atom.
+void Decompiler::write_set(uint16 read_index, uint16 write_as_view_index) { // read_index points to a set atom.
 
   uint16 arity = current_object_->code_[read_index].getAtomCount();
   bool after_tail_wildcard = false;
@@ -809,7 +753,7 @@ void Decompiler::write_set(uint16 read_index, bool apply_time_offset, uint16 wri
   if (arity == 1) { // write [element]
 
     out_stream_->push('[', read_index);
-    write_any(++read_index, after_tail_wildcard, apply_time_offset);
+    write_any(++read_index, after_tail_wildcard);
     *out_stream_ << ']';
   } else if (write_as_view_index > 0 && write_as_view_index == read_index)
     write_view(read_index, arity);
@@ -821,9 +765,9 @@ void Decompiler::write_set(uint16 read_index, bool apply_time_offset, uint16 wri
       if (i > 0)
         *out_stream_ << ' ';
       if (after_tail_wildcard)
-        write_any(++read_index, after_tail_wildcard, apply_time_offset);
+        write_any(++read_index, after_tail_wildcard);
       else
-        write_any(++read_index, after_tail_wildcard, apply_time_offset, write_as_view_index);
+        write_any(++read_index, after_tail_wildcard, write_as_view_index);
     }
     *out_stream_ << ']';
     closing_set_ = true;
@@ -834,11 +778,11 @@ void Decompiler::write_set(uint16 read_index, bool apply_time_offset, uint16 wri
     for (uint16 i = 0; i < arity; ++i) {
 
       if (after_tail_wildcard)
-        write_any(++read_index, after_tail_wildcard, apply_time_offset);
+        write_any(++read_index, after_tail_wildcard);
       else {
 
         write_indent(indents_);
-        write_any(++read_index, after_tail_wildcard, apply_time_offset, write_as_view_index);
+        write_any(++read_index, after_tail_wildcard, write_as_view_index);
       }
     }
     closing_set_ = true;
@@ -846,7 +790,7 @@ void Decompiler::write_set(uint16 read_index, bool apply_time_offset, uint16 wri
   }
 }
 
-void Decompiler::write_any(uint16 read_index, bool &after_tail_wildcard, bool apply_time_offset, uint16 write_as_view_index) { // after_tail_wildcard meant to avoid printing ':' after "::".
+void Decompiler::write_any(uint16 read_index, bool &after_tail_wildcard, uint16 write_as_view_index) { // after_tail_wildcard meant to avoid printing ':' after "::".
 
   Atom a = current_object_->code_[read_index];
 
@@ -915,29 +859,25 @@ void Decompiler::write_any(uint16 read_index, bool &after_tail_wildcard, bool ap
       if (atom.readsAsNil())
         out_stream_->push("|[]", read_index);
       else
-        write_set(index, apply_time_offset, write_as_view_index);
+        write_set(index, write_as_view_index);
       break;
     case Atom::STRING:
       if (atom.readsAsNil())
         out_stream_->push("|st", read_index);
       else {
 
-        Atom first = current_object_->code_[index + 1];
         std::string s = Utils::GetString(&current_object_->code_[index]);
         *out_stream_ << '\"' << s << '\"';
       }
       break;
     case Atom::TIMESTAMP:
       if (atom.readsAsNil())
-        out_stream_->push("|us", read_index);
-      else {
-
-        Atom first = current_object_->code_[index + 1];
-        auto ts = Utils::GetMicrosecondsSinceEpoch(&current_object_->code_[index]);
-        if (!in_hlp_ && ts.count() > 0 && apply_time_offset)
-          ts -= time_offset_;
-        out_stream_->push(Time::ToString_seconds(ts), read_index);
-      }
+        out_stream_->push("|ts", read_index);
+      else
+        out_stream_->push(Utils::ToString_s_ms_us(Utils::GetTimestamp(&current_object_->code_[index]), time_reference_), read_index);
+      break;
+    case Atom::DURATION:
+      out_stream_->push(Utils::ToString_us(Utils::GetDuration(&current_object_->code_[index])), read_index);
       break;
     case Atom::C_PTR: {
 

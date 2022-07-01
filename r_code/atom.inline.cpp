@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2021 Jeff Thompson
-//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2022 Jeff Thompson
+//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -290,6 +290,10 @@ inline Atom Atom::UndefinedTimestamp() {
   return Atom(0xC7FFFFFF);
 }
 
+inline Atom Atom::Duration() {
+  return Atom(DURATION << 24);
+}
+
 inline Atom Atom::InstantiatedProgram(uint16 opcode, uint8 arity) {
 
   return Atom((INSTANTIATED_PROGRAM << 24) + ((opcode & 0x0FFF) << 8) + arity);
@@ -481,6 +485,7 @@ inline uint8 Atom::getAtomCount() const {
   case S_SET: return atom_ & 0x000000FF;
   case STRING: return (atom_ & 0x0000FF00) >> 8;
   case TIMESTAMP: return 2;
+  case DURATION: return 2;
   default:
     return 0;
   }

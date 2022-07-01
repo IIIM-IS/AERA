@@ -3,10 +3,10 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2021 Jeff Thompson
-//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Jeff Thompson
+//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ Copyright (c) 2021 Leonard Eberding
-//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -192,17 +192,6 @@ namespace tcp_io_device {
     Timestamp lastCommandTime_;
 
     bool started_;
-
-
-    /**
-     * Find the object in r_exec::Seed and objects with the given name.
-     * \param objects The objects array from load().
-     * \param name The name of the symbol.
-     * \return The object, or NULL if not found.
-     */
-    static r_code::Code* findObject(
-      std::vector<r_code::Code*>* objects, const char* name);
-
 
     /**
     * If not running in diagnostic time, start the timeTickThread_.

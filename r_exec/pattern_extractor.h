@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2021 Jeff Thompson
-//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2022 Jeff Thompson
+//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -190,56 +190,67 @@ protected:
    */
   class FindFIcstResult {
   public:
-    FindFIcstResult(_Fact* f_icst, uint16 component_index)
+    FindFIcstResult(_Fact* f_icst, _Fact* component_pattern)
     {
       this->f_icst = f_icst;
-      this->component_index = component_index;
+      this->component_pattern = component_pattern;
     }
 
     P<_Fact> f_icst;
-    uint16 component_index;
+    _Fact* component_pattern;
   };
 
   r_code::list<Input> inputs_; // time-controlled buffer (inputs older than tpx_time_horizon from now are discarded).
   std::vector<P<r_code::Code> > mdls_; // new mdls.
   std::vector<P<r_code::Code> > csts_; // new csts.
-  std::vector<P<_Fact> > icsts_; // new icsts.
+  std::vector<P<_Fact> > f_icsts_; // facts of new icsts.
 
   void filter_icst_components(ICST *icst, uint32 icst_index, std::vector<Component> &components);
 
   /**
-   * Find an f_icst for the component by looking in inputs_ and icsts_.
+   * If the fact is a (fact (icst ...)) then search the icst for the component. If not found, then
+   * recursively search all members which are (fact (icst ...)).
+   * \param fact The fact to search for the component. If fact->get_reference(0) is not an icst, then return NULL.
+   * \param component The component to search for by being the same object (not matching).
+   * \param max_depth (optional) The maximum recursion depth for when this calls itself to search members.
+   * If this is zero, then don't recurse. If omitted, use a default.
+   * \return The Code pattern in the unpacked cst that matches the component, if found. NULL if not found.
+   */
+  static _Fact* find_f_icst_component(_Fact* fact, const _Fact* component, int max_depth = 3);
+
+  /**
+   * Find an f_icst for the component by looking in inputs_ and f_icsts_.
    * \param component The cst component to search for.
    * \param results Call this with an empty vector<FindFIcstResult>. If no f_icst is found, then this is empty. Otherwise an
-   * entry has the found f_icst and the index in the f_icst of the component that matches the given component.
-   * \param find_multiple If true then add an entry to results for each f_icst found in  inputs_ and icsts_ . If false, then
+   * entry has the found f_icst and the Code pattern in the unpacked cst that matches the given component.
+   * \param find_multiple If true then add an entry to results for each f_icst found in  inputs_ and f_icsts_ . If false, then
    * results has at most one entry.
    */
   void _find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results, bool find_multiple);
 
   /**
-   * Find an f_icst for the component by looking in inputs_ and icsts_.
+   * Find an f_icst for the component by looking in inputs_ and f_icsts_.
    * \param component The cst component to search for.
    * \param results Call this with an empty vector<FindFIcstResult>. If no f_icst is found, then this is empty. Otherwise an
-   * entry has the found f_icst and the index in the f_icst of the component that matches the given component.
-   * \param find_multiple (optional) If true then add an entry to results for each f_icst found in  inputs_ and icsts_ .
+   * entry has the found f_icst and the Code pattern in the unpacked cst that matches the given component.
+   * \param find_multiple (optional) If true then add an entry to results for each f_icst found in  inputs_ and f_icsts_ .
    * If omitted or false, then results has at most one entry.
    */
   void find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results, bool find_multiple = false);
 
   /**
-   * Find an f_icst for the component by looking in inputs_ and icsts_, or if not found then try to make one with a new cst.
+   * Find an f_icst for the component by looking in inputs_ and f_icsts_, or if not found then try to make one with a new cst.
    * \param component The cst component to search for.
    * \param results Call this with an empty vector<FindFIcstResult>. If no f_icst is found, then this is empty. Otherwise an
-   * entry has the found f_icst and the index in the f_icst of the component that matches the given component.
+   * entry has the found f_icst and the Code pattern in the unpacked cst that matches the given component.
    * \param new_cst If no existing f_icst is found, then this sets new_cst to a new cst and results has one entry with the
    * new f_icst.
-   * \param find_multiple (optional) If true then add an entry to results for each f_icst found in  inputs_ and icsts_ .
+   * \param find_multiple (optional) If true then add an entry to results for each f_icst found in  inputs_ and f_icsts_ .
    * If omitted or false, then results has at most one entry.
    */
   void find_f_icst(_Fact *component, std::vector<FindFIcstResult>& results, P<r_code::Code> &new_cst, bool find_multiple = false);
 
-  _Fact *make_f_icst(_Fact *component, uint16 &component_index, P<r_code::Code> &new_cst);
+  _Fact *make_f_icst(_Fact *component, _Fact*& component_pattern, P<r_code::Code> &new_cst);
   r_code::Code *build_cst(const std::vector<Component> &components, BindingMap *bm, _Fact *main_component);
 
   r_code::Code *build_mdl_head(HLPBindingMap *bm, uint16 tpl_arg_count, _Fact *lhs, _Fact *rhs, uint16 &write_index, bool allow_shared_timing_vars = true);

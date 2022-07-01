@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2021 Jeff Thompson
-//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2022 Jeff Thompson
+//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -99,7 +99,7 @@ public:
   Timestamp ijt_; // time of injection of the job in the pipe.
   virtual bool update(Timestamp now) = 0; // return false to shutdown the reduction core.
   virtual void debug() {}
-  uint32 get_job_id() { return job_id_; }
+  uint32 get_job_id() const { return job_id_; }
 private:
   static uint32 job_count_;
   int job_id_;

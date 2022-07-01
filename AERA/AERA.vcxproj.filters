@@ -12,6 +12,12 @@
     <ClCompile Include="IODevices\TCP\tcp_io_device.cpp">
       <Filter>IODevices\TCP</Filter>
     </ClCompile>
+    <ClCompile Include="IODevices\video_screen\video_screen.cpp">
+      <Filter>IODevices\video_screen</Filter>
+    </ClCompile>
+    <ClCompile Include="IODevices\video_screen\video_screen_io_device.cpp">
+      <Filter>IODevices\video_screen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="settings.h" />
@@ -25,8 +31,14 @@
     <ClInclude Include="IODevices\TCP\tcp_io_device.h">
       <Filter>IODevices\TCP</Filter>
     </ClInclude>
+    <ClInclude Include="IODevices\video_screen\video_screen.h">
+      <Filter>IODevices\video_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="IODevices\video_screen\video_screen_io_device.h">
+      <Filter>IODevices\video_screen</Filter>
+    </ClInclude>
     <ClInclude Include="IODevices\TCP\Proto\utils.h">
-      <Filter>IODevices\TCP</Filter>
+      <Filter>IODevices\TCP\Proto</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -53,6 +65,9 @@
     </Filter>
     <Filter Include="IODevices\TCP\Proto">
       <UniqueIdentifier>{9646f737-c173-4b58-8ce6-35bd5232eb55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IODevices\video_screen">
+      <UniqueIdentifier>{8da07ab6-5d70-4e7d-93e5-af3962f08372}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -270,6 +285,9 @@
       <Filter>IODevices\TCP\Proto</Filter>
     </None>
     <None Include="replicode_v1.2\hand-grab-sphere-learn.replicode">
+      <Filter>replicode_v1.2</Filter>
+    </None>
+    <None Include="replicode_v1.2\test.15.replicode">
       <Filter>replicode_v1.2</Filter>
     </None>
   </ItemGroup>

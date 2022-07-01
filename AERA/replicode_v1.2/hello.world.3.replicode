@@ -5,10 +5,10 @@
 
 pgm3:(pgm |[] |[] |[] []
    (inj []
-      (ins pgm3 |[] RUN_ONCE 50000us VOLATILE SILENT)
+      (ins pgm3 |[] RUN_ONCE 50ms VOLATILE SILENT)
       [SYNC_ONCE now 0 forever stdin nil 1]
    )
    (prb [1 "print" "hello world 3" |[]])
 1) |[]
 
-ipgm3:(ipgm pgm3 |[] RUN_ONCE 50000us VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+ipgm3:(ipgm pgm3 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]

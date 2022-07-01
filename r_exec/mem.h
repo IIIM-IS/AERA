@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2021 Jeff Thompson
-//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2022 Jeff Thompson
+//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -148,7 +148,6 @@ protected:
 
   // Parameters::Run.
   uint32 probe_level_;
-  bool enable_assumptions_;
 
   PipeNN<P<_ReductionJob>, 1024> *reduction_job_queue_;
   PipeNN<P<TimeJob>, 1024> *time_job_queue_;
@@ -232,7 +231,6 @@ public:
     uint32 goal_pred_success_res,
     uint32 probe_level,
     uint32 traces,
-    bool enable_assumptions,
     bool keep_invalidated_objects);
 
   /**
@@ -241,7 +239,6 @@ public:
    */
   std::chrono::microseconds get_sampling_period() const { return 2 * base_period_; }
   uint64 get_probe_level() const { return probe_level_; }
-  bool get_enable_assumptions() const { return enable_assumptions_; }
   uint32 get_reduction_core_count() const { return reduction_core_count_; }
   uint32 get_time_core_count() const { return time_core_count_; }
   float32 get_mdl_inertia_sr_thr() const { return mdl_inertia_sr_thr_; }
@@ -580,6 +577,15 @@ public:
   static void pack_fact(r_code::Code *fact, r_code::Code *hlp, uint16 &write_index, std::vector<P<r_code::Code> > *references);
   static void pack_fact_object(r_code::Code *fact_object, r_code::Code *hlp, uint16 &write_index, std::vector<P<r_code::Code> > *references);
 
+  /**
+   * Find the object in r_exec::Seed and objects with the given name.
+   * \param objects The objects array from load().
+   * \param name The name of the symbol.
+   * \return The object, or NULL if not found.
+   */
+  static r_code::Code* find_object(
+    std::vector<r_code::Code *> *objects, const char* name);
+
   r_code::Code *clone(r_code::Code *original) const; // shallow copy.
 
   // External device I/O ////////////////////////////////////////////////////////////////
@@ -594,13 +600,14 @@ public:
   bool matches_axiom(r_code::Code* obj);
 
   /**
-   * This is called on starting the executive to adjust the timestamps of all the initial
-   * user-supplied facts by adding now. Therefore, if a the initial fact is defined with a
-   * timestamp of 100us, it is changed to now + 100us.
-   * \param now The value to add to the timestamps of all the initial facts.
-   * \param objects he list of objects to search for facts.
+   * This is called on starting the executive to adjust all user-defined objects by
+   * adding time_reference to any time stamp (fact timings as well as other time stamps).
+   * Therefore, if the object is defined with a time stamp of 100ms, it is changed to
+   * time_reference + 100ms.
+   * \param time_reference The value to add to the time stamps of all objects.
+   * \param objects The list of objects to search for time stamps.
    */
-  static void init_timings(Timestamp now, const r_code::list<P<r_code::Code>>& objects);
+  static void init_timestamps(Timestamp time_reference, const r_code::list<P<r_code::Code>>& objects);
 
   //std::vector<uint64> timings_report; // debug facility.
 

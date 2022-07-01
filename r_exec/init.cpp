@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2021 Jeff Thompson
-//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2022 Jeff Thompson
+//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -177,7 +177,7 @@ thread_ret TDecompiler::Decompile(void *args) {
   image->object_names_.symbols_ = r_exec::Seed.object_names_.symbols_;
 
   std::ostringstream decompiled_code;
-  decompiler.decompile(image, &decompiled_code, duration_cast<microseconds>(Utils::GetTimeReference().time_since_epoch()), imported_objects);
+  decompiler.decompile(image, &decompiled_code, Utils::GetTimeReference(), imported_objects);
 
   if (_this->ostream_id_ == 0) {
 

@@ -3,7 +3,7 @@
 ; utilities.
 !class (_obj :~ psln_thr:nb)
 !class (_grp (_obj {upr:nb sln_thr:nb act_thr:nb vis_thr:nb c_sln:nb c_sln_thr:nb c_act:nb c_act_thr:nb dcy_per:nb dcy_tgt:nb dcy_prd:nb dcy_auto:nb sln_chg_thr:nb sln_chg_prd:nb act_chg_thr:nb act_chg_prd:nb avg_sln:nb high_sln:nb low_sln:nb avg_act:nb high_act:nb low_act:nb high_sln_thr:nb low_sln_thr:nb sln_ntf_prd:nb high_act_thr:nb low_act_thr:nb act_ntf_prd:nb ntf_new:nb low_res_thr:nb ntf_grps:[::grp] :~}))
-!class (_fact (_obj {obj: after:us before:us cfd:nb :~}))
+!class (_fact (_obj {obj: after:ts before:ts cfd:nb :~}))
 !class (val (_obj val:))
 !class (val_hld val:)
 
@@ -12,9 +12,9 @@
 !class (ont (_obj nil))
 !class (dev (_obj nil))
 !class (nod (_obj id:nid))
-!class (view[] sync:nb ijt:us sln:nb res:nb grp:grp org:)
-!class (grp_view[] sync:nb ijt:us sln:nb res:nb grp:grp org: cov:bl vis:nb)
-!class (pgm_view[] sync:nb ijt:us sln:nb res:nb grp:grp org: act:nb)
+!class (view[] sync:nb ijt:ts sln:nb res:nb grp:grp org:)
+!class (grp_view[] sync:nb ijt:ts sln:nb res:nb grp:grp org: cov:bl vis:nb)
+!class (pgm_view[] sync:nb ijt:ts sln:nb res:nb grp:grp org: act:nb)
 !class (ptn skel:xpr guards:[::xpr])
 !class (|ptn skel:xpr guards:[::xpr])
 !class (pgm (_obj {tpl:[::ptn] inputs:[] guards:[::xpr] prods:}))
@@ -38,7 +38,7 @@
 !class (mk.new (_obj obj:))
 
 ; simulator
-!class (sim (_obj {mode:nb thz:us f_super_goal: opposite:bl root_model:mdl solution_model:mdl solution_cfd:nb solution_before:us}))
+!class (sim (_obj {mode:nb thz:us f_super_goal: opposite:bl root_model:mdl solution_model:mdl solution_cfd:nb solution_before:ts}))
 ; values for sim mode
 !def SIM_ROOT 0
 !def SIM_OPTIONAL 1
@@ -62,7 +62,7 @@
 !class (perf (_obj {rj_ltcy:nb d_rj_ltcy:nb tj_ltcy:nb d_tj_ltcy:nb})); latencies and derivatives in us encoded as floats.
 
 ; mapping operator opcodes -> r-atoms.
-!op (_now):us
+!op (_now):ts
 !op (rnd :nb):nb
 !op (equ : :):
 !op (neq : :):
@@ -159,10 +159,17 @@
 
 ; system internal constants.
 !def MAX_TIME 922337203685477580us; See Utils_MaxTime
-
+; EPOCH is used to convert between time stamp and duration.
+; To convert a duration to a time stamp, use: (+ duration EPOCH)
+; To convert a time stamp to a duration, use: (- timestamp EPOCH)
+!def EPOCH 0s:0ms:0us
+; A gigasecond is about 31 years. This is to use as a time stamp which is way in
+; the future. In the seed code, the system adds this to the session start time.
+!def GIGASEC 1000000000s:0ms:0us
 
 ; initial groups.
 
+!def (std_grp _upr _sln_thr _act_thr _vis_thr _ntf_grps) (grp _upr _sln_thr _act_thr _vis_thr 1 0 1 0 0 1 0 0 1 1 1 1 0 0 0 0 0 0 1 0 1 1 0 1 0 0 _ntf_grps 1); c-salient and c-active.
 root:(std_grp 0 0 0 0 [nil]) [[SYNC_ONCE now 0 forever nil nil COV_OFF 0]]
 
 primary:(std_grp 2 0 0.4 0 |[]) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]; ensure primary.upr=stdin.upr.

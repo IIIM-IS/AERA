@@ -744,15 +744,182 @@ Simulator
   * DONE. Make dev from master (AERA and AERA_Visualizer). Close the experimental branch.
   * DONE! Make AERA and AERA_Visualizer public.
 
-next meeting
+2021-11-25
 * pong
-  * Match timings between strong and weak requirements.
+  * OK. Merge pull request to not let old strong requirement disable a weak requirement. https://github.com/IIIM-IS/AERA/pull/202
+  * DONE. Make stable over long simulations. (Still need more pull requests.)
+
+2021-12-07
+* pong
+  * DONE. Make pull request for stability over long simulations with duplicate commands. https://github.com/IIIM-IS/AERA/pull/203
+  * DONE. Replace vec3 with separate X and Y. icst as top goal. (Still need more pull requests.)
+
+2021-12-10
+* pong
+  * DONE. Review/merge pull request for stability over long simulations with duplicate commands. https://github.com/IIIM-IS/AERA/pull/203
+
+2021-12-16
+* pong
+  * DONE. Make pull request to keep only one copy of identical simulated LHS commands https://github.com/IIIM-IS/AERA/pull/204
+* Generality
+  * DONE. Investigate separating int from float in Replicode.
+    Not convinced it's needed. Integers are small. Opcode for number is special: First bit is 0.
+  * DONE. Update issue to propose separating timestamp and duration. https://github.com/IIIM-IS/AERA/issues/138
+
+2021-12-30
+* pong
+  * DONE. Review/merge pull request to keep only one copy of identical simulated LHS commands https://github.com/IIIM-IS/AERA/pull/204
+* Generality
+  * DONE. Review/merge pull request to support duration in issue #138. https://github.com/IIIM-IS/AERA/pull/205
+
+2022-01-06
+* Generality
+  * DONE. Review/merge pull request to implement separating timestamp and duration in issue #138. https://github.com/IIIM-IS/AERA/pull/206
+
+2022-01-21
+* DONE. Review/merge pull request to allow ':' in a string https://github.com/IIIM-IS/AERA/pull/207
+* Activation and saliency
+  * DONE. ball.external: Why are some activation values -1.57772e-30 and -nan? These are less that 0, so is it not active?
+    ANSWER: There are different types of View. The View on an icst doesn't use the activation, so it is not initialized.
+    View(sync, ijt, sln, res, host, origin, object) // regular view
+  * DONE. ball.external: Why are some activation values 1 as expected? (Different initialization code?)
+    ANSWER: Yes, different View constructor.
+    View(sync, ijt, sln, res, host, origin, object, act); // pgm/mdl view
+  * DONE. Make autofocus inject facts and efferent commands into a test group "peripheral1". Are learned models injected there too?
+    ANSWER: Yes. Need to add a View from auto_focus to peripheral1. But makes more models (don't know why).
+  * DONE. Study test.15.replicode: What is it supposed to show?
+    ANSWER: Modified to test saliency thresholds and propagation.
+  * DONE Make issue: low_sln_thr sends notifications every frame, not just when it "becomes" below. https://github.com/IIIM-IS/AERA/issues/208
+
+2022-02-04
+* DONE. Review/merge pull request to move definition of std_grp to std.replicode https://github.com/IIIM-IS/AERA/pull/212
+* DONE. Review bug: Wrong variable binding in program pattern with nested lists https://github.com/IIIM-IS/AERA/issues/211
+* DONE. Discuss: abduce_imdl doesn't use parameter "opposite".
+* Pong
+  * DONE. Add a fovea with move eye command.
+* hand-grab-sphere
+  DONE. Simplify seed code with emulator state (20% smaller).
+
+2022-02-10
+* hand-grab-sphere
+  * DONE. Put emulator state in emulator group.
+    * DONE. Review issue for can't make a group visible in another group at runtime https://github.com/IIIM-IS/AERA/issues/213 .
+    * DONE. Review program to explicitly re-inject from primary to emulator group.
+  * Demonstrate injection of mandatory solution to prevent drive failure.
+    * DONE. Discuss: Simulation with requirements on drive model in Figure 11 not working.
+
+2022-02-17
+* hand-grab-sphere
+  * DONE. Demonstrate injection of mandatory solution to prevent drive failure.
+  * DONE. Review/merge pull request to switch to SIM_MANDATORY not at the sim root https://github.com/IIIM-IS/AERA/pull/214
+
+2022-02-24
+* Visualizer
+  * DONE. Show changes to the strength of a model.
+    This was already done. "Strength" is really a boolean "strong" - The AERA code changes it from 0 to 1.
+* Generality
+  * DONE. Confirm that if a model has an anti-requirement which disables a predicting a variable, that CTPX will create a new model to predict the variable in this case.
+    Relates to GTPX.
+
+2022-03-03
+* hand-grab-sphere
+   * DONE. Try CTPX when main prediction is disabled, where grab failure results in holding an "e" of type "error".
+   * Make AERA take actions to test candidate PTPX models (instead of explicit babbling).
+     * Looking at recognizing conflicting requirement and anti-requirements.
+
+2022-03-10
+* hand-grab-sphere
+     * DONE. Make pull request to use strong_bm when matching weak requirements.
+* Generality
+  * Make a list of modes in which a prediction can fail, what the system needs to be able to explain the failure, how the failure modes are layered, and how AERA addresses each one.
+    "Causal models that explain failures, if particular models fail to predict, by investigating the potential causes of the failures." - openaera.org
+    * Discuss: PTPX "Explain prediction failure" and GTPX "Explain goal achievement". Why not "Explain goal failure"? Maybe "Predict goal success" and that failure invokes PTPX?
+    * Discuss: PTPX can find exceptions and make anti-requirement. (fact sphere_and_cube_same_position) -> (|fact (imdl grab)). If failure is due to missing preconditions,
+      can PTPX find and add more? E.g.: (|fact power_light_on) -> (|fact (imdl grab)). Requires searching memory of past success or waiting for future success.
+    * Discuss: "Measurement error" means the model is good but the conflicting "evidence" is wrong. Need to explain inference errors leading to the wrong measurement.
+      Likewise, "Setup error" means the model and result measurement are good but the system was not actually in the prerequisite state used for the prediction. Need to explain and correct.
+
+2022-03-17
+* Generality
+  * Make a list of modes in which a prediction can fail, what the system needs to be able to explain the failure, how the failure modes are layered, and how AERA addresses each one.
+    * DONE. Review draft presentation "Explaining prediction failure".
+  * DONE. Confirm backward chaining with (|fact power_light_on) -> (|fact (imdl grab)).
+    (mdl |[] []
+       (|fact (mk.val H: powered true :) T0: T1: : :)
+       (|fact (imdl M2 [H: C: T0: T1:] [T1_RHS: T3:] : :) T0: T1: : :)
+
+2022-03-25
+* hand-grab-sphere
+   * Make AERA take actions to test candidate PTPX models (instead of explicit babbling).
+     * DONE. Review/merge pull request to make sure the strong requirement matches the weak requirement. https://github.com/IIIM-IS/AERA/pull/215
+     * DONE. Review/merge pull request for general way for strong requirement to disable a weak requirement. https://github.com/IIIM-IS/AERA/pull/216
+
+2022-04-01
+* AERA Visualizer
+  * DONE. Fix bug for simulation item placement error https://github.com/IIIM-IS/AERA_Visualizer/issues/34
+* DONE. Review/merge pull request for store_requirement to not signal for strong requirement https://github.com/IIIM-IS/AERA/pull/217
+
+2022-04-07
+* hand-grab-sphere
+  * DONE. Review/merge pull request to recursively search an existing icst for a matching member. https://github.com/IIIM-IS/AERA/pull/218
+* Generality
+  * Assumptions
+    * Eric's Summer School example of seeing a new student https://youtu.be/UnhTiVhSfqo?t=6710
+    * assume() does nothing if (is_requirement() || is_reuse() || is_cmd()). Currently, this is all of our examples.  
+
+2022-04-14
+* Assumptions
+  * DONE. Review/merge pull request for assume_lhs to call EvaluateFWDTimings https://github.com/IIIM-IS/AERA/pull/219
+  * DONE. Review/merge pull request for reduce to ignore an input if it is an assumption https://github.com/IIIM-IS/AERA/pull/220
+
+2022-04-28
+* Assumptions
+  * Make an example which injects an assumption and (wrongly) uses it for prediction failure. Try checking in PredictionMonitor.
+    * DONE. After pull request 220, test if an assumption isn't be used to make a possibly conflicting prediction.
+
+2022-05-05
+* DONE. Review/merge pull request to inject a simulated imdl from reuse model. https://github.com/IIIM-IS/AERA/pull/223
+* DONE. Discuss how to show LHS of reuse model https://github.com/IIIM-IS/AERA_Visualizer/issues/38
+* DONE. Discuss issue for how old requirements are removed even though they are needed to make an assumption. https://github.com/IIIM-IS/AERA/issues/222
+
+2022-05-12
+* Assumptions
+  * DONE. Make pull request to remove unneeded enable_assumptions flag https://github.com/IIIM-IS/AERA/pull/221
+* Make Replicode example of CLCC paper Figure 8.
+  * M0 and M7 are frame rules!
+    "Structure f2 (M7) predicts the invariance of an object X being attached to another H, unless an anti-evidence can be predicted."
+
+2022-05-18
+* hand-grab-sphere
+  * DONE. Switch "attached" to "holding" for H holding X.
+  * DONE. Try frame rule approach from CLCC paper.
+    * Result: Loops forever as expected.
+
+2022-06-23
+* Prepare interim AERA release diagnostic_mode_v0_2.
+  * DONE. Review/merge pull request for copyright 2022 https://github.com/IIIM-IS/AERA/pull/225
+
+2022-06-30
+* Prepare interim AERA release diagnostic_mode_v0_2.
+  * DONE. Move "one-off" contributors below the "general" contributors.
+  * DONE. Show "prediction disabled" for non-simulated anti-requirements  https://github.com/IIIM-IS/AERA_Visualizer/issues/40
+  * DONE. Review/merge pull request to add a requirement monitor when abducing goal imdl from a cst. https://github.com/IIIM-IS/AERA/pull/226
+
+next meeting
+* Make interim AERA release diagnostic_mode_v0_2.
+* Make Replicode example of CLCC paper Figure 8, simplified to hand-grab-sphere.
+* hand-grab-sphere
+  * Represent sphere position without direct I/O input.
+  * Make AERA take actions to test candidate PTPX models (instead of explicit babbling).
+    * Still need to allow multiple strong requirements in retrieve_imdl.
 
 TODO
+* Simple example for CKCC paper.
+* Generality
+  * Make issue to propose numbers with ranges. Maybe more general: Range of numbers, range of durations, range of timestamps, combos?
 * PTPX: Learned cst may only have icsts. But using a cst for later model-building requires a non-icst fact. Should icst->contains be recursive? (Need limit.) Or always include a fact in new_cst?
-* pong.test
+* Pong
   * Add paddle. Make goal for the ball to be at a position which requires moving the paddle to bounce it.
-  * mdl_122: Needed to put velocity in the cmd. Need a model builder to get it from the velocity fact.
   * Remove cst_ball_position, etc. and learn them.
   * Learn the exception "bounce" model.
 * Make hand-grab-sphere example learn the models.
@@ -806,11 +973,11 @@ Y _ _ _ Rating of strong requirement models
 _ _ _ _ Testing and re-activation of strong requirement models in the secondary group
 _ _ _ _ Goal actions to test conflicting weak and strong requirements
 _ _ _ _ Simulated anti-goal from opposite match of drive (and starting of new simulation from anti-goal)
-_ _ _ _ Simulated prediction of anti-imdl from strong requirement model (to prevent model prediction)
+Y _ _ _ Simulated prediction of anti-imdl from strong requirement model (to prevent model prediction)
 _ _ _ _ Simulated prediction of anti-fact from model (how does this make the simulation proceed?)
 _ _ _ _ Conflict resolution of conflicting predictions (fact and anti-fact)
 _ _ _ _ Simulated anti-goal of cmd from model with anti-matched RHS
 _ _ _ _ Simulated anti-goal requirement imdl from model with anti-matched RHS
 _ _ _ _ Simulated anti-goal icst from requirement model with anti-matched RHS
 _ _ _ _ Simulated anti-goal facts/icsts from anti-fact icst
-_ _ _ _ Commiting to mandatory solutions
+Y _ _ _ Commiting to mandatory solutions
