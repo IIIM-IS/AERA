@@ -905,9 +905,12 @@ Simulator
   * DONE. Show "prediction disabled" for non-simulated anti-requirements  https://github.com/IIIM-IS/AERA_Visualizer/issues/40
   * DONE. Review/merge pull request to add a requirement monitor when abducing goal imdl from a cst. https://github.com/IIIM-IS/AERA/pull/226
 
+2022-07-21
+* DONE. Make interim AERA release diagnostic_mode_v0_2.
+* DONE. Make Replicode example of CLCC paper Figure 8, simplified to hand-grab-sphere.
+
 next meeting
-* Make interim AERA release diagnostic_mode_v0_2.
-* Make Replicode example of CLCC paper Figure 8, simplified to hand-grab-sphere.
+* Add prerequisite states to CLCC paper Figure 8 to match those in hand-grab-sphere.
 * hand-grab-sphere
   * Represent sphere position without direct I/O input.
   * Make AERA take actions to test candidate PTPX models (instead of explicit babbling).
