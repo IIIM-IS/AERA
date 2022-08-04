@@ -306,8 +306,12 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
         // The actual input fact matches (positive or negative) a defeasible promoted fact, so invalidated it.
         predictionSimulation->defeating_facts_.push_back(input_object);
         d->defeasible_validity_->invalidate();
+        string defeasible_validity_info;
+#ifdef WITH_DETAIL_OID
+        defeasible_validity_info = " with DefeasibleValidity(" + to_string(d->defeasible_validity_->get_detail_oid()) + ")";
+#endif
         OUTPUT_LINE(CST_OUT, Utils::RelativeTime(now) << " promoted simulated fact " << d->promoted_fact_->get_oid() <<
-          " defeated by fact " << input->object_->get_oid());
+          defeasible_validity_info << " defeated by fact " << input->object_->get_oid());
         // We don't need this entry any more.
         d = predictionSimulation->defeasible_promoted_facts_.list_.erase(d);
       }
