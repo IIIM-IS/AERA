@@ -87,40 +87,6 @@ S3:(cst |[]
 |[]
 [stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
-;; One hand H is at a position P and another thing C is at the same position and the hand is not holding anything.
-;S1:(cst |[]
-;[]
-;   (fact (icst S0 |[] [H: P:] : :) T0: T1: : :)
-;   (fact (icst S3 |[] [C: X: P:] : :) T0: T1: : :); X is also exposed from S3.
-;   (fact (mk.val H: holding |[] :) T0: T1: : :); Change anti-fact to fact of holding |[].
-;|[]
-;|[]
-;[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
-;
-;; When the hand H is asked to grab whatever, then H will be holding it.
-;M2:(mdl [H: C: T0: T1:]
-;[]
-;   (fact (cmd grab [H:] :) T2: T1_cmd: : :); Change T1 to T1_cmd.
-;   (fact (mk.val H: holding [C:] :) T1_RHS: T3: : :); Change T1 to T1_RHS.
-;[]
-;   T1_RHS:(+ T0 100ms); Copy from M0.
-;   T3:(+ T1 100ms);     Copy from M0.
-;[]
-;   T2:(- T1_RHS 80ms);  Copy from M0.
-;   T1_cmd:(- T3 100ms); Copy from M0.
-;   T0:(- T1_RHS 100ms); Copy from M0.
-;   T1:(- T3 100ms);     Copy from M0.
-;[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
-;
-;; M2 will work (hand H will be holding something) if it is at the same position as hand H and H is not already holding anything.
-;M3:(mdl |[]
-;[]
-;   (fact (icst S1 |[] [H: P: C: X:] : :) T0: T1: : :); X is also exposed from S1.
-;   (fact (imdl M2 [H: C: T0: T1:] [T1_RHS: T3:] : :) T0: T1: : :); T2 is not exposed from M2. T1_RHS is also exposed.
-;|[]
-;|[]
-;[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
-
 ; Hand H and object C are at the same position P and H is already holding C.
 S2:(cst |[]
 []
@@ -132,30 +98,6 @@ S2:(cst |[]
 []
    (<> C nil); Make sure the object C is not nil.
 [stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
-
-;; When my hand H is holding a thing C and I release my hand, it is not holding anymore.
-;M4:(mdl [H: C: T0: T1:]
-;[]
-;   (fact (cmd release [H:] :) T2: T1_cmd: : :); Change T1 to T1_cmd.
-;   (fact (mk.val H: holding |[] :) T1_RHS: T3: : :); Change T1 to T1_RHS. Change anti-fact to fact of holding |[].
-;[]
-;   T1_RHS:(+ T0 100ms); Copy from M0.
-;   T3:(+ T1 100ms);     Copy from M0.
-;[]
-;   T2:(- T1_RHS 80ms);  Copy from M0.
-;   T1_cmd:(- T3 100ms); Copy from M0.
-;   T0:(- T1_RHS 100ms); Copy from M0.
-;   T1:(- T3 100ms);     Copy from M0.
-;[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
-;
-;; M4 will work (hand H will not be holding some C) if it is at the same position as hand H and H is already holding it.
-;M5:(mdl |[]
-;[]
-;   (fact (icst S2 |[] [H: P: C: X:] : :) T0: T1: : :); X is also exposed from S2.
-;   (fact (imdl M4 [H: C: T0: T1:] [T1_RHS: T3:] : :) T0: T1: : :); T2 is not exposed from M4. T1_RHS is also exposed.
-;|[]
-;|[]
-;[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; When model M0 fires the prediction of the next position P1 of hand H, something C will also be at the same position P1.
 M6:(mdl [H: C: P0: T0: T1:]
@@ -188,7 +130,7 @@ M7:(mdl |[]
 !def pS1 15
 
 ; Execute babble pass A commands.
-!def DRIVE_PASS1_START 800ms
+!def DRIVE_PASS1_START 1300ms
 !def DRIVE_PASS1_END (+ DRIVE_PASS1_START 400ms)
 ; Execute babble pass B commands.
 !def DRIVE_PASS2_START (+ DRIVE_PASS1_END 1000ms)
@@ -196,7 +138,7 @@ M7:(mdl |[]
 ; Initial conditions.
 start:(pgm |[] |[] |[] []
    (inj []
-      State:(mk.val e1 emulator_state [nil pS0 5 pS0] 1)
+      State:(mk.val e1 emulator_state [nil 20 10 5] 1)
       |[]
    )
    (inj []
@@ -222,7 +164,8 @@ pgm_babbleA_1:(pgm |[]
    (>= After (+ this.vw.ijt 100ms))
 []
    (inj []
-      Command:(cmd grab [h] 1)
+      ; Move where initial and final positions have no objects so that they are not correlated.
+      Command:(cmd move [h -5] 1)
       |[]
    )
    (inj []
@@ -238,7 +181,7 @@ pgm_babbleA_1:(pgm |[]
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
-   (prb [1 "print" "injected (cmd grab [h])" |[]])
+   (prb [1 "print" "injected (cmd move [h -5])" |[]])
 1) |[]
 (ipgm pgm_babbleA_1 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
@@ -251,7 +194,8 @@ pgm_babbleA_2:(pgm |[]
    (>= After (+ this.vw.ijt 200ms))
 []
    (inj []
-      Command:(cmd release [h] 1)
+      ; Now move to the sphere.
+      Command:(cmd move [h -10] 1)
       |[]
    )
    (inj []
@@ -267,7 +211,7 @@ pgm_babbleA_2:(pgm |[]
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
-   (prb [1 "print" "injected (cmd release [h])" |[]])
+   (prb [1 "print" "injected (cmd move [h -10])" |[]])
 1) |[]
 (ipgm pgm_babbleA_2 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
@@ -280,35 +224,7 @@ pgm_babbleA_3:(pgm |[]
    (>= After (+ this.vw.ijt 300ms))
 []
    (inj []
-      Command:(cmd move [h 5] 1)
-      |[]
-   )
-   (inj []
-      f_Command:(fact Command After Before 1 1)
-      |[]
-   )
-   (inj []
-      G:(goal f_Command self nil 1)
-      |[]
-   )
-   (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
-      (fact G T0:(+ After 10ms) T0 1 1)
-      [SYNC_ONCE T0 1 forever primary nil]
-   )
-   (prb [1 "print" "injected (cmd move [h 5])" |[]])
-1) |[]
-(ipgm pgm_babbleA_3 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
-   [SYNC_ONCE now 0 forever primary nil 1]
-
-pgm_babbleA_4:(pgm |[]
-[]
-   ; This fact repeats periodically. We use it as a "heartbeat".
-   (ptn (fact (mk.val h essence hand :) After: Before: ::) |[])
-[]
-   (>= After (+ this.vw.ijt 400ms))
-[]
-   (inj []
+      ; Grab the sphere.
       Command:(cmd grab [h] 1)
       |[]
    )
@@ -327,17 +243,18 @@ pgm_babbleA_4:(pgm |[]
    )
    (prb [1 "print" "injected (cmd grab [h])" |[]])
 1) |[]
-(ipgm pgm_babbleA_4 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_babbleA_3 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-pgm_babbleA_5:(pgm |[]
+pgm_babbleA_4:(pgm |[]
 []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) After: Before: ::) |[])
 []
-   (>= After (+ this.vw.ijt 500ms))
+   (>= After (+ this.vw.ijt 400ms))
 []
    (inj []
+      ; Release the sphere to learn the release model and the "holding" cst.
       Command:(cmd release [h] 1)
       |[]
    )
@@ -356,17 +273,18 @@ pgm_babbleA_5:(pgm |[]
    )
    (prb [1 "print" "injected (cmd release [h])" |[]])
 1) |[]
-(ipgm pgm_babbleA_5 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_babbleA_4 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-pgm_babbleA_6:(pgm |[]
+pgm_babbleA_5:(pgm |[]
 []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) After: Before: ::) |[])
 []
-   (>= After (+ this.vw.ijt 600ms))
+   (>= After (+ this.vw.ijt 500ms))
 []
    (inj []
+      ; Grab the sphere again so we can move while holding it.
       Command:(cmd grab [h] 1)
       |[]
    )
@@ -385,18 +303,19 @@ pgm_babbleA_6:(pgm |[]
    )
    (prb [1 "print" "injected (cmd grab [h])" |[]])
 1) |[]
-(ipgm pgm_babbleA_6 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_babbleA_5 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-pgm_babbleA_7:(pgm |[]
+pgm_babbleA_6:(pgm |[]
 []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) After: Before: ::) |[])
 []
-   (>= After (+ this.vw.ijt 700ms))
+   (>= After (+ this.vw.ijt 600ms))
 []
    (inj []
-      Command:(cmd move [h 20] 1)
+      ; Move while holding the sphere to learn the re-use model.
+      Command:(cmd move [h -5] 1)
       |[]
    )
    (inj []
@@ -412,9 +331,189 @@ pgm_babbleA_7:(pgm |[]
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
-   (prb [1 "print" "injected (cmd move [h 20])" |[]])
+   (prb [1 "print" "injected (cmd move [h -5])" |[]])
+1) |[]
+(ipgm pgm_babbleA_6 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_7:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) After: Before: ::) |[])
+[]
+   (>= After (+ this.vw.ijt 700ms))
+[]
+   (inj []
+      ; Release the sphere in the initial position for the task.
+      Command:(cmd release [h] 1)
+      |[]
+   )
+   (inj []
+      f_Command:(fact Command After Before 1 1)
+      |[]
+   )
+   (inj []
+      G:(goal f_Command self nil 1)
+      |[]
+   )
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd release [h])" |[]])
 1) |[]
 (ipgm pgm_babbleA_7 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_8:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) After: Before: ::) |[])
+[]
+   (>= After (+ this.vw.ijt 800ms))
+[]
+   (inj []
+      ; Move to the cube.
+      Command:(cmd move [h 10] 1)
+      |[]
+   )
+   (inj []
+      f_Command:(fact Command After Before 1 1)
+      |[]
+   )
+   (inj []
+      G:(goal f_Command self nil 1)
+      |[]
+   )
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd move [h 10])" |[]])
+1) |[]
+(ipgm pgm_babbleA_8 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_9:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) After: Before: ::) |[])
+[]
+   (>= After (+ this.vw.ijt 900ms))
+[]
+   (inj []
+      ; Grab the cube.
+      Command:(cmd grab [h] 1)
+      |[]
+   )
+   (inj []
+      f_Command:(fact Command After Before 1 1)
+      |[]
+   )
+   (inj []
+      G:(goal f_Command self nil 1)
+      |[]
+   )
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd grab [h])" |[]])
+1) |[]
+(ipgm pgm_babbleA_9 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_10:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) After: Before: ::) |[])
+[]
+   (>= After (+ this.vw.ijt 1000ms))
+[]
+   (inj []
+      ; Release the cube.
+      Command:(cmd release [h] 1)
+      |[]
+   )
+   (inj []
+      f_Command:(fact Command After Before 1 1)
+      |[]
+   )
+   (inj []
+      G:(goal f_Command self nil 1)
+      |[]
+   )
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd release [h])" |[]])
+1) |[]
+(ipgm pgm_babbleA_10 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_11:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) After: Before: ::) |[])
+[]
+   (>= After (+ this.vw.ijt 1100ms))
+[]
+   (inj []
+      ; Grab the cube again so we can move it.
+      Command:(cmd grab [h] 1)
+      |[]
+   )
+   (inj []
+      f_Command:(fact Command After Before 1 1)
+      |[]
+   )
+   (inj []
+      G:(goal f_Command self nil 1)
+      |[]
+   )
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd grab [h])" |[]])
+1) |[]
+(ipgm pgm_babbleA_11 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_12:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) After: Before: ::) |[])
+[]
+   (>= After (+ this.vw.ijt 1200ms))
+[]
+   (inj []
+      ; Move while holding the cube to the initial position for the task and to learn the re-use model.
+      Command:(cmd move [h 15] 1)
+      |[]
+   )
+   (inj []
+      f_Command:(fact Command After Before 1 1)
+      |[]
+   )
+   (inj []
+      G:(goal f_Command self nil 1)
+      |[]
+   )
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd move [h 15])" |[]])
+1) |[]
+(ipgm pgm_babbleA_12 |[] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
 pgm_inject_drive_pass1:(pgm |[]
