@@ -62,7 +62,7 @@ C2:(cst |[]
 ; Object X has essence hand and is at the same position P as cube Y,
 ; and X is not holding anything.
 ; (Figure 8 doesn't have this, but the extra state of holding nothing is needed for M6.)
-C2_empty:(cst |[]
+C9:(cst |[]
 []
    (fact (icst C2 |[] [X: P: Y:] : :) T0: T1: : :)
    (fact (mk.val X: holding |[] :) T0: T1: : :)
@@ -73,7 +73,7 @@ C2_empty:(cst |[]
 ; Object X has essence hand and is at the same position P as cube Y,
 ; and X is holding Y.
 ; (Figure 8 doesn't have this, but the extra state of holding Y is needed for M10 and M20.)
-C2_holding:(cst |[]
+C10:(cst |[]
 []
    (fact (icst C2 |[] [X: P: Y:] : :) T0: T1: : :)
    (fact (mk.val X: holding [Y:] :) T0: T1: : :)
@@ -129,7 +129,7 @@ M6:(mdl [X: H: T0: T1:]
 ; and H is not holding anything.
 (mdl |[]
 []
-   (fact (icst C2_empty |[] [H: P: X:] : :) T0: T1: : :)
+   (fact (icst C9 |[] [H: P: X:] : :) T0: T1: : :)
    (fact (imdl M6 [X: H: T0: T1:] [T2: T3:] : :) T0: T1: : :)
 |[]
 |[]
@@ -153,10 +153,10 @@ M10:(mdl [H: X: T0: T1:]
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; When hand H is holding some X and the hand moves to position P1, then X will also be at P1.
-; (Figure 8 uses "iM7 (X H)" instead of "H holding X" in C2_holding.)
+; (Figure 8 uses "iM7 (X H)" instead of "H holding X" in C10.)
 (mdl |[]
 []
-   (fact (icst C2_holding |[] [H: P: X:] : :) T0: T1: : :)
+   (fact (icst C10 |[] [H: P: X:] : :) T0: T1: : :)
    (fact (imdl M10 [H: X: T0: T1:] [P0: T0_M0: T1_M0: DP: P1: T2: T3:] : :) T0: T1: : :)
 |[]
 |[]
@@ -181,7 +181,7 @@ M20:(mdl [H: X: T0: T1:]
 ; M20 will work (release will cause hand H not holding something) if it is at the same position as hand H and H is already holding it.
 (mdl |[]
 []
-   (fact (icst C2_holding |[] [H: P: X:] : :) T0: T1: : :)
+   (fact (icst C10 |[] [H: P: X:] : :) T0: T1: : :)
    (fact (imdl M20 [H: X: T0: T1:] [T2: T3:] : :) T0: T1: : :)
 |[]
 |[]
