@@ -86,6 +86,7 @@
 #include "reduction_job.h"
 #include "mem.h"
 #include "model_base.h"
+#include "mdl_controller.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -703,7 +704,13 @@ void PTPX::reduce(r_exec::View *input) {
   auto analysis_starting_time = Now();
 
   // input->object is the prediction failure: ignore and consider |f->imdl instead.
-  _Fact *consequent = new Fact((Fact *)f_imdl_);
+  Fact* f_imdl = (Fact *)f_imdl_;
+  Timestamp f_imdl_after = f_imdl->get_after();
+  Timestamp f_imdl_before = f_imdl->get_before();
+  // Use the timestamps in the template parameters, similar to PrimaryMDLController::abduce_imdl.
+  // This is to make it symmetric with the timestamp in the forward chaining requirement.
+  MDLController::get_imdl_template_timings(f_imdl->get_reference(0), f_imdl_after, f_imdl_before);
+  P<_Fact> consequent = new Fact(f_imdl->get_reference(0), f_imdl_after, f_imdl_before, f_imdl->get_cfd(), f_imdl->get_psln_thr());
   consequent->set_opposite();
 
   P<BindingMap> end_bm = new BindingMap();
