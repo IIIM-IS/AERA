@@ -909,11 +909,22 @@ Simulator
 * DONE. Make interim AERA release diagnostic_mode_v0_2.
 * DONE. Make Replicode example of CLCC paper Figure 8, simplified to hand-grab-sphere.
 
-next meeting
-* Add prerequisite states to CLCC paper Figure 8 to match those in hand-grab-sphere.
+2022-08-04
+* DONE. Add prerequisite states to CLCC paper Figure 8 to match those in hand-grab-sphere.
+
+2022-08-18
+* DONE. Visualizer: Option to show all inputs in the commited simulation branch.
 * hand-grab-sphere
+  * DONE. Rename the actions after PTPX from "babbling" to "experimenting".
+
+next meeting
+* hand-grab-sphere
+  * Learn re-use model.
+    * DONE. Make pull request to fix the imdl timing problem in PR #166 https://github.com/IIIM-IS/AERA/pull/227
+    * DONE. Make pull request for CTPX to use the default guard builder for a re-use model https://github.com/IIIM-IS/AERA/pull/228
+    * Fix defeated prediction from re-use model.
   * Represent sphere position without direct I/O input.
-  * Make AERA take actions to test candidate PTPX models (instead of explicit babbling).
+  * Make AERA take experimenting actions to test candidate PTPX models (instead of explicit babbling).
     * Still need to allow multiple strong requirements in retrieve_imdl.
 
 TODO
