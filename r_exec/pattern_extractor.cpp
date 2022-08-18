@@ -429,8 +429,22 @@ Code *_TPX::build_mdl_head(HLPBindingMap *bm, uint16 tpl_arg_count, _Fact *lhs, 
 
   Code *mdl = _Mem::Get()->build_object(Atom::Model(Opcodes::Mdl, MDL_ARITY));
 
-  mdl->add_reference(bm->abstract_object(lhs, false, allow_shared_timing_vars ? 0 : -1)); // reference lhs.
-  mdl->add_reference(bm->abstract_object(rhs, false, allow_shared_timing_vars ? 0 : -1)); // reference rhs.
+  Code* abstract_lhs = bm->abstract_object(lhs, false, allow_shared_timing_vars ? 0 : -1);
+  mdl->add_reference(abstract_lhs); // reference lhs.
+
+  int rhs_first_search_index = (allow_shared_timing_vars ? 0 : -1);
+  if (abstract_lhs->get_reference(0)->code(0).asOpcode() == Opcodes::IMdl) {
+    Code* imdl = abstract_lhs->get_reference(0);
+    // This is a reuse model. When matching the timings of the RHS fact, first try the last two
+    // exposed args which came from the RHS timings of the imdl being reused.
+    auto exposed_args_index = imdl->code(I_HLP_EXPOSED_ARGS).asIndex();
+    auto exposed_args_count = imdl->code(exposed_args_index).getAtomCount();
+    auto exposed_after_index = exposed_args_index + (exposed_args_count - 1);
+    if (exposed_args_count >= 2 &&
+        imdl->code(exposed_after_index).getDescriptor() == Atom::VL_PTR)
+      rhs_first_search_index = imdl->code(exposed_after_index).asIndex();
+  }
+  mdl->add_reference(bm->abstract_object(rhs, false, rhs_first_search_index)); // reference rhs.
 
   write_index = MDL_ARITY;
 
@@ -924,7 +938,8 @@ void CTPX::reduce(r_exec::View *input) {
     if (Utils::Synchronous(cause.input_->get_after(), target_->get_after())) // cause in sync with the premise: ignore.
       continue;
 
-    if (need_guard) {
+    // If the LHS cause is an imdl, assume that the default guard builder will be sufficient.
+    if (need_guard && cause.input_->get_reference(0)->code(0).asOpcode() != Opcodes::IMdl) {
 
       if ((guard_builder = find_guard_builder(cause.input_, consequent, period)) == NULL)
         continue;
@@ -951,11 +966,16 @@ GuardBuilder *CTPX::get_default_guard_builder(_Fact *cause, _Fact *consequent, m
 
   Code *cause_payload = cause->get_reference(0);
   uint16 opcode = cause_payload->code(0).asOpcode();
-  if (opcode == Opcodes::Cmd) {
+  if (opcode == Opcodes::Cmd || opcode == Opcodes::IMdl) {
 
     auto offset = duration_cast<microseconds>(consequent->get_after() - cause->get_after());
     auto cmd_duration = duration_cast<microseconds>(cause->get_before() - cause->get_after());
-    return new NoArgCmdGuardBuilder(period, offset, cmd_duration);
+    auto add_imdl_template_timings = false;
+    Timestamp after, before;
+    if (opcode == Opcodes::IMdl && MDLController::get_imdl_template_timings(cause_payload, after, before))
+      // The imdl has template timings, so we want the backward guards to assign them.
+      add_imdl_template_timings = true;
+    return new NoArgCmdGuardBuilder(period, offset, cmd_duration, add_imdl_template_timings);
   }
 
   return new TimingGuardBuilder(period);
