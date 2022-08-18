@@ -550,7 +550,10 @@ void GTPX::reduce(r_exec::View *input) { // input->object: f->success.
 
   _Fact *consequent = (_Fact *)input->object_->get_reference(0)->get_reference(1);
   P<BindingMap> consequent_bm = new BindingMap();
-  _Fact *abstracted_consequent = (_Fact *)consequent_bm->abstract_object(consequent, false);
+  {
+    // Call abstract_object only to update the binding map.
+    P<Code> unused = consequent_bm->abstract_object(consequent, false);
+  }
 
   for (uint32 i = 0; i < predictions_.size(); ++i) { // check if some models have successfully predicted the target: if so, abort.
 
@@ -703,7 +706,10 @@ void PTPX::reduce(r_exec::View *input) {
   consequent->set_opposite();
 
   P<BindingMap> end_bm = new BindingMap();
-  P<_Fact> abstract_input = (_Fact *)end_bm->abstract_object(consequent, false);
+  {
+    // Call abstract_object only to update the binding map.
+    P<Code> unused = end_bm->abstract_object(consequent, false);
+  }
   r_code::list<Input>::const_iterator i;
   for (i = inputs_.begin(); i != inputs_.end();) { // filter out inputs irrelevant for the prediction.
 
@@ -855,7 +861,10 @@ void CTPX::reduce(r_exec::View *input) {
   _Fact *consequent = (_Fact *)input->object_; // counter-evidence for the premise.
 
   P<BindingMap> end_bm = new BindingMap();
-  P<_Fact> abstract_input = (_Fact *)end_bm->abstract_object(consequent, false);
+  {
+    // Call abstract_object only to update the binding map.
+    P<Code> unused = end_bm->abstract_object(consequent, false);
+  }
   r_code::list<Input>::const_iterator i;
   for (i = inputs_.begin(); i != inputs_.end();) {
 
@@ -865,7 +874,10 @@ void CTPX::reduce(r_exec::View *input) {
       ICST *icst = (ICST*)i->input_->get_reference(0);
       for (uint32 j = 0; j < icst->components_.size(); ++j) {
         P<BindingMap> component_bm = new BindingMap();
-        P<_Fact> unused = (_Fact *)component_bm->abstract_object(icst->components_[j], false);
+        {
+          // Call abstract_object only to update the binding map.
+          P<Code> unused = component_bm->abstract_object(icst->components_[j], false);
+        }
         if (!(target_bindings_->intersect(component_bm) || end_bm->intersect(component_bm))) {
           icstIsOK = false;
           break;
