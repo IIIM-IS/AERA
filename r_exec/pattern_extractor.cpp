@@ -702,7 +702,8 @@ void PTPX::reduce(r_exec::View *input) {
 
   auto analysis_starting_time = Now();
 
-  _Fact *consequent = new Fact((Fact *)f_imdl_); // input->object is the prediction failure: ignore and consider |f->imdl instead.
+  // input->object is the prediction failure: ignore and consider |f->imdl instead.
+  _Fact *consequent = new Fact((Fact *)f_imdl_);
   consequent->set_opposite();
 
   P<BindingMap> end_bm = new BindingMap();
