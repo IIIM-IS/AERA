@@ -429,8 +429,8 @@ Code *_TPX::build_mdl_head(HLPBindingMap *bm, uint16 tpl_arg_count, _Fact *lhs, 
 
   Code *mdl = _Mem::Get()->build_object(Atom::Model(Opcodes::Mdl, MDL_ARITY));
 
-  mdl->add_reference(bm->abstract_object(lhs, false, allow_shared_timing_vars)); // reference lhs.
-  mdl->add_reference(bm->abstract_object(rhs, false, allow_shared_timing_vars)); // reference rhs.
+  mdl->add_reference(bm->abstract_object(lhs, false, allow_shared_timing_vars ? 0 : -1)); // reference lhs.
+  mdl->add_reference(bm->abstract_object(rhs, false, allow_shared_timing_vars ? 0 : -1)); // reference rhs.
 
   write_index = MDL_ARITY;
 
