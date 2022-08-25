@@ -917,12 +917,14 @@ Simulator
 * hand-grab-sphere
   * DONE. Rename the actions after PTPX from "babbling" to "experimenting".
 
-next meeting
+2022-08-25
 * hand-grab-sphere
   * Learn re-use model.
-    * DONE. Make pull request to fix the imdl timing problem in PR #166 https://github.com/IIIM-IS/AERA/pull/227
-    * DONE. Make pull request for CTPX to use the default guard builder for a re-use model https://github.com/IIIM-IS/AERA/pull/228
-    * Fix defeated prediction from re-use model.
+    * DONE. Merge request to fix the imdl timing problem in PR #166 https://github.com/IIIM-IS/AERA/pull/227
+    * DONE. Merge request for CTPX to use the default guard builder for a re-use model https://github.com/IIIM-IS/AERA/pull/228
+
+next meeting
+* hand-grab-sphere
   * Represent sphere position without direct I/O input.
   * Make AERA take experimenting actions to test candidate PTPX models (instead of explicit babbling).
     * Still need to allow multiple strong requirements in retrieve_imdl.
