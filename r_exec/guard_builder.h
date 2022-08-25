@@ -136,10 +136,17 @@ class NoArgCmdGuardBuilder :
 protected:
   std::chrono::microseconds offset_;
   std::chrono::microseconds cmd_duration_;
+  bool add_imdl_template_timings_;
 
   void _build(r_code::Code *mdl, uint16 q0, uint16 t0, uint16 t1, uint16 &write_index) const;
 public:
-  NoArgCmdGuardBuilder(std::chrono::microseconds period, std::chrono::microseconds offset, std::chrono::microseconds cmd_duration);
+  /**
+   * \param (optional) add_imdl_template_timings If true, assume that the lhs is an imdl and add
+   * backward guards similar to those added for t0 and t1, but assign the imdl template timings.
+   * If ommitted, use false.
+   */
+  NoArgCmdGuardBuilder(std::chrono::microseconds period, std::chrono::microseconds offset, std::chrono::microseconds cmd_duration,
+    bool add_imdl_template_timings = false);
   ~NoArgCmdGuardBuilder();
 
   void build(r_code::Code *mdl, _Fact *premise_pattern, _Fact *cause_pattern, uint16 &write_index) const override;
