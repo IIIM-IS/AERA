@@ -509,6 +509,8 @@ void Decompiler::write_group(uint16 read_index) {
 
 void Decompiler::write_marker(uint16 read_index) {
 
+  if (!in_hlp_)
+    horizontal_set_ = true;
   if (closing_set_) {
 
     closing_set_ = false;
@@ -523,6 +525,8 @@ void Decompiler::write_marker(uint16 read_index) {
     write_indent(indents_);
   }
   *out_stream_ << ')';
+  if (!in_hlp_)
+    horizontal_set_ = false;
 }
 
 void Decompiler::write_pgm(uint16 read_index) {
