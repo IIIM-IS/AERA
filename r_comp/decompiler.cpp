@@ -586,7 +586,11 @@ void Decompiler::write_hlp(uint16 read_index) {
       if (closing_set_) {
 
         closing_set_ = false;
-        write_indent(indents_);
+        if (i == 1)
+          // Put the [] on the end of the same line.
+          *out_stream_ << ' ';
+        else
+          write_indent(indents_);
       }
 
       if (!(i == 0 || i == 1))
@@ -602,7 +606,7 @@ void Decompiler::write_hlp(uint16 read_index) {
       horizontal_set_ = save_horizontal_set;
 
       if (!closing_set_)
-        *out_stream_ << NEWLINE;
+        *out_stream_ << (i == 0 || i >= 4 ? ' ' : NEWLINE);
     }
   }
 
