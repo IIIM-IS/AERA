@@ -119,8 +119,8 @@ public:
   void reset(); // remove rags that are objects.
 
   uint32 getIndent(std::istream *stream);
-  int32 parse(std::istream *stream, const std::string& filePath, uint32 &curIndent, uint32 &prevIndent, int32 paramExpect = 0);
-  bool parseDirective(std::istream *stream, const std::string& filePath, uint32 &curIndent, uint32 &prevIndent);
+  int32 parse(std::istream *stream, const std::string& file_path, uint32 &cur_indent, uint32 &prev_indent, int32 param_expect = 0);
+  bool parseDirective(std::istream *stream, const std::string& file_path, uint32 &cur_indent, uint32 &prev_indent);
   int32 process();
 
   RepliStruct *findAtom(const std::string &name);
@@ -139,10 +139,10 @@ public:
    * for equivalent file paths.So, for example, "Test/file.replicode" will match with
    * "/work/AERA/Test/file.replicode" and "Test/../Test/file.replicode" if they all
    * refer to the same file.
-   * \param filePath The file path to check.
+   * \param file_path The file path to check.
    * \return True if an equivalend file path is already loaded, otherwise false.
    */
-  static bool isFileLoaded(const std::string& filePath);
+  static bool isFileLoaded(const std::string& file_path);
 
   RepliStruct *clone() const;
   std::string print() const;
@@ -163,7 +163,7 @@ public:
   ~RepliMacro();
 
   uint32 argCount();
-  RepliStruct *expandMacro(RepliStruct *oldStruct);
+  RepliStruct *expandMacro(RepliStruct *old_struct);
 };
 
 class RepliCondition {
@@ -174,7 +174,7 @@ public:
   RepliCondition(const std::string &name, bool reversed);
   ~RepliCondition();
   void reverse();
-  bool isActive(std::unordered_map<std::string, RepliMacro*> &repliMacros, std::unordered_map<std::string, int32> &counters);
+  bool isActive(std::unordered_map<std::string, RepliMacro*> &repli_macros, std::unordered_map<std::string, int32> &counters);
 };
 
 class dll_export Preprocessor {
