@@ -172,6 +172,8 @@ void Decompiler::init(r_comp::Metadata *metadata) {
     size_t p = class_name.find("mk.");
     if (p != std::string::npos)
       renderers_[i] = &Decompiler::write_marker;
+    else if (class_name == "pred")
+      renderers_[i] = &Decompiler::write_marker;
     else if (class_name == "grp")
       renderers_[i] = &Decompiler::write_group;
     else if (class_name == "ipgm" || class_name == "icpp_pgm")
