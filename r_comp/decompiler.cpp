@@ -867,7 +867,8 @@ void Decompiler::write_any(uint16 read_index, bool &after_tail_wildcard, uint16 
     case Atom::SET:
     case Atom::S_SET:
       if (atom.readsAsNil())
-        out_stream_->push("|[]", read_index);
+        // In a horizontal set (where characters follow), we can write an empty set as [] .
+        out_stream_->push(horizontal_set_ ? "[]" : "|[]", read_index);
       else
         write_set(index, write_as_view_index);
       break;
