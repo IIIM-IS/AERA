@@ -866,7 +866,9 @@ void Group::inject_hlps(vector<View *> &views) {
 #ifdef WITH_DETAIL_OID
       controllerInfo = ", MDLController(" + to_string(c->get_detail_oid()) + ")";
 #endif
-      OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " -> mdl " << (*view)->object_->get_oid() << controllerInfo);
+      OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " -> mdl " << (*view)->object_->get_oid() <<
+        " strength:" << (*view)->object_->code(MDL_STRENGTH).asFloat() << " cnt:" << 
+        (*view)->object_->code(MDL_CNT).asFloat() << " sr:" << (*view)->object_->code(MDL_SR).asFloat() << controllerInfo);
       break;
     }
     }
