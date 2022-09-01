@@ -2412,7 +2412,9 @@ bool Compiler::read_nil(uint16 write_index, uint16 &extent_index, bool write) {
 bool Compiler::read_nil_set(uint16 write_index, uint16 &extent_index, bool write) {
 
   std::streampos i = in_stream_->tellg();
-  if (match_symbol("|[]", false)) {
+  if (match_symbol("|[]", false) ||
+      // Treat [] as an empty set if it is not at the end of a line.
+      (match_symbol("[]", false) && in_stream_->peek() >= 32)) {
 
     if (write) {
 
