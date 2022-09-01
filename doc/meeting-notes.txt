@@ -920,14 +920,21 @@ Simulator
 2022-08-25
 * hand-grab-sphere
   * Learn re-use model.
-    * DONE. Merge request to fix the imdl timing problem in PR #166 https://github.com/IIIM-IS/AERA/pull/227
-    * DONE. Merge request for CTPX to use the default guard builder for a re-use model https://github.com/IIIM-IS/AERA/pull/228
+    * DONE. Merge pull request to fix the imdl timing problem in PR #166 https://github.com/IIIM-IS/AERA/pull/227
+    * DONE. Merge pull request for CTPX to use the default guard builder for a re-use model https://github.com/IIIM-IS/AERA/pull/228
+
+2022-09-01
+* DONE. Make pull request to allow [] for empty set not at the end of a line (replace |[]) https://github.com/IIIM-IS/AERA/pull/229
+  (Update AERA_Visualizer submodule.)
+* hand-grab-sphere
+  * Make AERA take experimenting actions to test candidate PTPX models (instead of explicit babbling).
+    * DONE. Demonstrate output of reason for failure to achieve explicit goal.
 
 next meeting
 * hand-grab-sphere
-  * Represent sphere position without direct I/O input.
   * Make AERA take experimenting actions to test candidate PTPX models (instead of explicit babbling).
     * Still need to allow multiple strong requirements in retrieve_imdl.
+  * Represent sphere position without direct I/O input.
 
 TODO
 * Simple example for CKCC paper.
