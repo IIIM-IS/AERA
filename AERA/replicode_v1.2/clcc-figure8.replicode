@@ -22,27 +22,25 @@ red_c_is_a_cube:(mk.val red_c essence cube 1) |[]
 e1:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
 emulator_state:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 ; Inject the emulator state into the emulator group.
-emulator:(std_grp 2 0 0 0 |[]) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]
+emulator:(std_grp 2 0 0 0 []) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]
 
 ; This program runs in the primary group to re-inject any (fact (goal (fact (cmd ::)))) into emulator.
-pgm_inject_in_emulator_group:(pgm |[]
-[]
-   (ptn f_G:(fact G:(goal (fact (cmd ::) ::) ::) ::) |[])
+pgm_inject_in_emulator_group:(pgm [] []
+   (ptn f_G:(fact G:(goal (fact (cmd ::) ::) ::) ::) [])
 []
    ; Only re-inject non-simulation goals.
    (= (is_sim G) false)
 []
    (inj [f_G [SYNC_ONCE (now) 1 1 emulator nil]])
 1) |[]
-(ipgm pgm_inject_in_emulator_group |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_inject_in_emulator_group [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
 ; Object X has essence S and has position P.
 ; (Figure 8 uses "is" instead of "essence" where it "is" a shape S.)
 ; (Figure 8 uses "bel" for "belong" which is for pointing and is omitted for this use case.)
 ; (We add position which is needed in C0 for model M3 as used in Figure 8.)
-C0:(cst |[]
-[]
+C0:(cst [] []
    (fact (mk.val X: essence S: :) T0: T1: : :)
    (fact (mk.val X: position P: :) T0: T1: : :)
 |[]
@@ -51,10 +49,9 @@ C0:(cst |[]
 
 ; Object X has essence hand and is at the same position P as cube Y.
 ; (Figure 8 uses C0 and C1, but we use C0 twice where there are explicitly a hand and cube.)
-C2:(cst |[]
-[]
-   (fact (icst C0 |[] [X: hand P:] : :) T0: T1: : :)
-   (fact (icst C0 |[] [Y: cube P:] : :) T0: T1: : :)
+C2:(cst [] []
+   (fact (icst C0 [] [X: hand P:] : :) T0: T1: : :)
+   (fact (icst C0 [] [Y: cube P:] : :) T0: T1: : :)
 |[]
 |[]
 [stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
@@ -62,10 +59,9 @@ C2:(cst |[]
 ; Object X has essence hand and is at the same position P as cube Y,
 ; and X is not holding anything.
 ; (Figure 8 doesn't have this, but the extra state of holding nothing is needed for M6.)
-C9:(cst |[]
-[]
-   (fact (icst C2 |[] [X: P: Y:] : :) T0: T1: : :)
-   (fact (mk.val X: holding |[] :) T0: T1: : :)
+C9:(cst [] []
+   (fact (icst C2 [] [X: P: Y:] : :) T0: T1: : :)
+   (fact (mk.val X: holding [] :) T0: T1: : :)
 |[]
 |[]
 [stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
@@ -73,9 +69,8 @@ C9:(cst |[]
 ; Object X has essence hand and is at the same position P as cube Y,
 ; and X is holding Y.
 ; (Figure 8 doesn't have this, but the extra state of holding Y is needed for M10 and M20.)
-C10:(cst |[]
-[]
-   (fact (icst C2 |[] [X: P: Y:] : :) T0: T1: : :)
+C10:(cst [] []
+   (fact (icst C2 [] [X: P: Y:] : :) T0: T1: : :)
    (fact (mk.val X: holding [Y:] :) T0: T1: : :)
 |[]
 |[]
@@ -83,8 +78,7 @@ C10:(cst |[]
 
 ; After the move command for hand H, H has position P1.
 ; (Figure 8 uses "pos" instead of "position".)
-M3:(mdl [H: P0: T0: T1:]
-[]
+M3:(mdl [H: P0: T0: T1:] []
    (fact (cmd move [H: DP:] :) T0_cmd: T1_cmd: : :)
    (fact (mk.val H: position P1: :) T2: T3: : :)
 []
@@ -101,9 +95,8 @@ M3:(mdl [H: P0: T0: T1:]
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; M3 will work (move will cause hand H to have position P1) if H has position P0.
-(mdl |[]
-[]
-   (fact (icst C0 |[] [H: hand P0:] : :) T0: T1: : :)
+(mdl [] []
+   (fact (icst C0 [] [H: hand P0:] : :) T0: T1: : :)
    (fact (imdl M3 [H: P0: T0: T1:] [DP: P1: T2: T3:] : :) T0: T1: : :)
 |[]
 |[]
@@ -111,8 +104,7 @@ M3:(mdl [H: P0: T0: T1:]
 
 ; After the grab command for hand H, H is holding object X.
 ; (Figure 8 uses "X att H" instead of "H holding X".)
-M6:(mdl [X: H: T0: T1:]
-[]
+M6:(mdl [X: H: T0: T1:] []
    (fact (cmd grab [H:] :) T0_cmd: T1_cmd: : :)
    (fact (mk.val H: holding [X:] :) T2: T3: : :)
 []
@@ -127,17 +119,15 @@ M6:(mdl [X: H: T0: T1:]
 
 ; M6 will work (grab will cause hand H holding something X) if H and X are at the same position P,
 ; and H is not holding anything.
-(mdl |[]
-[]
-   (fact (icst C9 |[] [H: P: X:] : :) T0: T1: : :)
+(mdl [] []
+   (fact (icst C9 [] [H: P: X:] : :) T0: T1: : :)
    (fact (imdl M6 [X: H: T0: T1:] [T2: T3:] : :) T0: T1: : :)
 |[]
 |[]
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; When model M3 fires the prediction of the next position P1 of hand H, something X will also be at the same position P1.
-M10:(mdl [H: X: T0: T1:]
-[]
+M10:(mdl [H: X: T0: T1:] []
    (fact (imdl M3 [H: P0: T0_M3: T1_M3:] [DP: P1: T2: T3:] : :) T0_cmd: T1_cmd: : :)
    (fact (mk.val X: position P1: :) T2: T3: : :)
 []
@@ -154,20 +144,18 @@ M10:(mdl [H: X: T0: T1:]
 
 ; When hand H is holding some X and the hand moves to position P1, then X will also be at P1.
 ; (Figure 8 uses "iM7 (X H)" instead of "H holding X" in C10.)
-(mdl |[]
-[]
-   (fact (icst C10 |[] [H: P: X:] : :) T0: T1: : :)
+(mdl [] []
+   (fact (icst C10 [] [H: P: X:] : :) T0: T1: : :)
    (fact (imdl M10 [H: X: T0: T1:] [P0: T0_M0: T1_M0: DP: P1: T2: T3:] : :) T0: T1: : :)
 |[]
 |[]
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; After the release command for hand H, H is not holding anything.
-; (Figure 8 uses "|(X att H)" instead of "H holding |[]".)
-M20:(mdl [H: X: T0: T1:]
-[]
+; (Figure 8 uses "|(X att H)" instead of "H holding []".)
+M20:(mdl [H: X: T0: T1:] []
    (fact (cmd release [H:] :) T0_cmd: T1_cmd: : :)
-   (fact (mk.val H: holding |[] :) T2: T3: : :)
+   (fact (mk.val H: holding [] :) T2: T3: : :)
 []
    T2:(+ T0 100ms)
    T3:(+ T1 100ms)
@@ -179,9 +167,8 @@ M20:(mdl [H: X: T0: T1:]
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; M20 will work (release will cause hand H not holding something) if it is at the same position as hand H and H is already holding it.
-(mdl |[]
-[]
-   (fact (icst C10 |[] [H: P: X:] : :) T0: T1: : :)
+(mdl [] []
+   (fact (icst C10 [] [H: P: X:] : :) T0: T1: : :)
    (fact (imdl M20 [H: X: T0: T1:] [T2: T3:] : :) T0: T1: : :)
 |[]
 |[]
@@ -190,7 +177,7 @@ M20:(mdl [H: X: T0: T1:]
 !def DRIVE_START 300ms
 
 ; Initial conditions.
-start:(pgm |[] |[] |[] []
+start:(pgm [] [] [] []
    (inj []
       State:(mk.val e1 emulator_state [blue_c 25 25 0] 1)
       |[]
@@ -200,9 +187,9 @@ start:(pgm |[] |[] |[] []
       [SYNC_PERIODIC now 1 1 emulator nil]
    )
 1) |[]
-(ipgm start |[] RUN_ONCE sampling_period VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+(ipgm start [] RUN_ONCE sampling_period VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
 
-m_drive:(mdl |[] []
+m_drive:(mdl [] []
    ; The goal target timings are the same as the drive timings.
    (fact (mk.val red_c position 15 1) T0: T1: 1 1)
    (fact run T0: T1: ::)
@@ -210,10 +197,9 @@ m_drive:(mdl |[] []
 |[]
 [stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
-pgm_inject_drive:(pgm |[]
-[]
+pgm_inject_drive:(pgm [] []
    ; This fact repeats periodically. We use it as a "heartbeat".
-   (ptn (fact (mk.val h essence hand :) After: Before: ::) |[])
+   (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
 []
    (>= After (+ this.vw.ijt DRIVE_START))
 []
@@ -231,15 +217,14 @@ pgm_inject_drive:(pgm |[]
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
-   (prb [1 "print" "injected drive" |[]])
+   (prb [1 "print" "injected drive" []])
 1) |[]
-(ipgm pgm_inject_drive |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_inject_drive [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
 ; Before DRIVE_START, just re-inject the same values.
-pgm_before_drive:(pgm |[]
-[]
-   (ptn (fact (mk.val e1 emulator_state [Holding_obj: Pos_h: Pos_blue_c: Pos_red_c:] :) After: Before: ::) |[])
+pgm_before_drive:(pgm [] []
+   (ptn (fact (mk.val e1 emulator_state [Holding_obj: Pos_h: Pos_blue_c: Pos_red_c:] :) After: Before: ::) [])
 []
    (< After (+ this.vw.ijt DRIVE_START))
 []
@@ -253,13 +238,12 @@ pgm_before_drive:(pgm |[]
       [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
    )
 1) |[]
-(ipgm pgm_before_drive |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_before_drive [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever emulator nil 1]
 
-pgm_cmd_move_h_holding_blue_c:(pgm |[]
-[]
-   (ptn (fact G:(goal (fact (cmd move [h DeltaP_in:] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
-   (ptn (fact (mk.val e1 emulator_state [Holding_obj: Pos_h: Pos_blue_c: Pos_red_c:] :) After: Before: ::) |[])
+pgm_cmd_move_h_holding_blue_c:(pgm [] []
+   (ptn (fact G:(goal (fact (cmd move [h DeltaP_in:] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact (mk.val e1 emulator_state [Holding_obj: Pos_h: Pos_blue_c: Pos_red_c:] :) After: Before: ::) [])
 []
    (= Holding_obj blue_c)
    (= (is_sim G) false)
@@ -286,13 +270,12 @@ pgm_cmd_move_h_holding_blue_c:(pgm |[]
    )
    (prb [1 "print" "pgm_cmd_move_h_holding_c from command:" [Command]])
 1) |[]
-(ipgm pgm_cmd_move_h_holding_blue_c |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_cmd_move_h_holding_blue_c [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever emulator nil 1]
 
-pgm_cmd_move_h_holding_red_c:(pgm |[]
-[]
-   (ptn (fact G:(goal (fact (cmd move [h DeltaP_in:] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
-   (ptn (fact (mk.val e1 emulator_state [Holding_obj: Pos_h: Pos_blue_c: Pos_red_c:] :) After: Before: ::) |[])
+pgm_cmd_move_h_holding_red_c:(pgm [] []
+   (ptn (fact G:(goal (fact (cmd move [h DeltaP_in:] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact (mk.val e1 emulator_state [Holding_obj: Pos_h: Pos_blue_c: Pos_red_c:] :) After: Before: ::) [])
 []
    (= Holding_obj red_c)
    (= (is_sim G) false)
@@ -320,13 +303,12 @@ pgm_cmd_move_h_holding_red_c:(pgm |[]
    (prb [1 "print" "pgm_cmd_move_h_holding_s from command:" [Command]])
    (prb [1 "print" "pgm_cmd_move_h_holding_s new red_c position:" [Next_state]])
 1) |[]
-(ipgm pgm_cmd_move_h_holding_red_c |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_cmd_move_h_holding_red_c [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever emulator nil 1]
 
-pgm_cmd_move_h_not_holding:(pgm |[]
-[]
-   (ptn (fact G:(goal (fact (cmd move [h DeltaP_in:] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
-   (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Pos_blue_c: Pos_red_c:] :) After: Before: ::) |[])
+pgm_cmd_move_h_not_holding:(pgm [] []
+   (ptn (fact G:(goal (fact (cmd move [h DeltaP_in:] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Pos_blue_c: Pos_red_c:] :) After: Before: ::) [])
 []
    (= (is_sim G) false)
    (< Cmd_after Before)
@@ -352,13 +334,12 @@ pgm_cmd_move_h_not_holding:(pgm |[]
    )
    (prb [1 "print" "pgm_cmd_move_h_not_holding from command:" [Command]])
 1) |[]
-(ipgm pgm_cmd_move_h_not_holding |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_cmd_move_h_not_holding [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever emulator nil 1]
 
-pgm_cmd_release_h:(pgm |[]
-[]
-   (ptn (fact G:(goal (fact Command:(cmd release [h] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
-   (ptn (fact (mk.val e1 emulator_state [Holding_obj: Pos_h: Pos_blue_c: Pos_red_c:] :) After: Before: ::) |[])
+pgm_cmd_release_h:(pgm [] []
+   (ptn (fact G:(goal (fact Command:(cmd release [h] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact (mk.val e1 emulator_state [Holding_obj: Pos_h: Pos_blue_c: Pos_red_c:] :) After: Before: ::) [])
 []
    (= (is_sim G) false)
    (<> Holding_obj nil)
@@ -381,13 +362,12 @@ pgm_cmd_release_h:(pgm |[]
    )
    (prb [1 "print" "pgm_cmd_release_h from command:" [Command]])
 1) |[]
-(ipgm pgm_cmd_release_h |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_cmd_release_h [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever emulator nil 1]
 
-pgm_cmd_grab_h:(pgm |[]
-[]
-   (ptn (fact G:(goal (fact Command:(cmd grab [h] ::) Cmd_after: Cmd_before: ::) ::) ::) |[])
-   (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Pos_blue_c: Pos_red_c:] :) After: Before: ::) |[])
+pgm_cmd_grab_h:(pgm [] []
+   (ptn (fact G:(goal (fact Command:(cmd grab [h] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Pos_blue_c: Pos_red_c:] :) After: Before: ::) [])
 []
    (= Pos_h Pos_red_c); For h to grab red_c, they must be at the same position.
    (= (is_sim G) false)
@@ -410,14 +390,13 @@ pgm_cmd_grab_h:(pgm |[]
    )
    (prb [1 "print" "pgm_cmd_grab_h from command:" [Command]])
 1) |[]
-(ipgm pgm_cmd_grab_h |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_cmd_grab_h [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever emulator nil 1]
 
 ; Match the emulator state and inject individual mk.val at the same time for each of
 ; the state variables as needed.
-pgm_inject_mk_vals_holding:(pgm |[]
-[]
-   (ptn (fact (mk.val e1 emulator_state [Holding_obj: Pos_h: Pos_blue_c: Pos_red_c:] :) After: Before: ::) |[])
+pgm_inject_mk_vals_holding:(pgm [] []
+   (ptn (fact (mk.val e1 emulator_state [Holding_obj: Pos_h: Pos_blue_c: Pos_red_c:] :) After: Before: ::) [])
 []
    (<> Holding_obj nil)
 []
@@ -454,17 +433,16 @@ pgm_inject_mk_vals_holding:(pgm |[]
       [SYNC_PERIODIC After 1 1 stdin nil]
    )
 1) |[]
-(ipgm pgm_inject_mk_vals_holding |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_inject_mk_vals_holding [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever emulator nil 1]
 
 ; The same as pgm_inject_mk_vals_holding for the case when not holding.
-pgm_inject_mk_vals_not_holding:(pgm |[]
-[]
-   (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Pos_blue_c: Pos_red_c:] :) After: Before: ::) |[])
+pgm_inject_mk_vals_not_holding:(pgm [] []
+   (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Pos_blue_c: Pos_red_c:] :) After: Before: ::) [])
 |[]
 []
    (inj []
-      Val_holding:(mk.val h holding |[] 1)
+      Val_holding:(mk.val h holding [] 1)
       |[]
    )
    (inj []
@@ -496,5 +474,5 @@ pgm_inject_mk_vals_not_holding:(pgm |[]
       [SYNC_PERIODIC After 1 1 stdin nil]
    )
 1) |[]
-(ipgm pgm_inject_mk_vals_not_holding |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_inject_mk_vals_not_holding [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever emulator nil 1]
