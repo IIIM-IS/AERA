@@ -13,8 +13,8 @@ Prerequisites
 Following are the detailed steps for each platform to install the prerequisites.
 
 ## Windows
-To install Visual Studio 2019, download and install Visual Studio Community Edition from
-https://visualstudio.microsoft.com/vs/community .
+To install Visual Studio, download and install Visual Studio Community Edition 2019 from
+https://visualstudio.microsoft.com/vs/older-downloads .
 In the installer, under "Desktop development with C++", check "Windows 10 SDK (10.0.17134.0)" and
   "MSVC v141 - VS 2017 C++ build tools".
 
