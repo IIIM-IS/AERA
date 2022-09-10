@@ -8,6 +8,8 @@
 !class (Ping (_obj {object:}))
 !class (Pong (_obj {object:}))
 
+!class (promote (_obj {obj: prop:}))
+
 ; device functions.
 
 !dfn (ready :); arg0: a string identifying the external environment to start, arg1: an object.
