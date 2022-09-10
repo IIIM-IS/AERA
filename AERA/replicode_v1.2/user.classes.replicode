@@ -9,6 +9,7 @@
 !class (Pong (_obj {object:}))
 
 !class (promote (_obj {obj: prop:}))
+!class (enabled (_obj {obj:}))
 
 ; device functions.
 
