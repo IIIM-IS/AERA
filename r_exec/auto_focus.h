@@ -171,7 +171,6 @@ private:
     } else
       return new T(this, target, pattern, bm, f_imdl);
   }
-  void rate(_Fact *target, bool success, TPXMap &map, RatingMap &ratings);
 public:
   AutoFocusController(r_code::_View *view);
   ~AutoFocusController();
