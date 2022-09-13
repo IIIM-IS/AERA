@@ -326,7 +326,13 @@ public:
   Atom *get_value_code(uint16 id);
   uint16 get_value_code_size(uint16 id);
 
-  bool intersect(BindingMap *bm) const;
+  /**
+   * Check if any value in bm matches any value in this BindingMap
+   * \param bm The other BindingMap with values to check.
+   * \return True if any two values match.
+   */
+  bool intersect(const BindingMap *bm) const;
+
   bool is_fully_specified() const;
 
   Atom *get_code(uint16 i) const { return map_[i]->get_code(); }

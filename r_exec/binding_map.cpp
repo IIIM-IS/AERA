@@ -860,7 +860,7 @@ bool BindingMap::scan_variable(uint16 id) const {
   return (map_[id]->get_code() != NULL);
 }
 
-bool BindingMap::intersect(BindingMap *bm) const {
+bool BindingMap::intersect(const BindingMap *bm) const {
 
   for (uint32 i = 0; i < map_.size();) {
 
