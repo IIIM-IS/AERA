@@ -913,8 +913,12 @@ void CTPX::reduce(r_exec::View *input) {
         ++i;
       continue;
     }
-    if (!(target_bindings_->intersect(i->bindings_) || end_bm->intersect(i->bindings_)) || // discard inputs that do not share values with the target or consequent.
-      i->input_->get_after() >= consequent->get_after()) // discard inputs not younger than the consequent.
+
+    if (i->input_->get_after() >= consequent->get_after())
+      // Discard inputs not younger than the consequent.
+      i = inputs_.erase(i);
+    else if (!(target_bindings_->intersect(i->bindings_) || end_bm->intersect(i->bindings_)))
+      // Discard inputs that do not share values with the target or consequent.
       i = inputs_.erase(i);
     else
       ++i;
