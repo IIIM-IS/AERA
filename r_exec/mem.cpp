@@ -1057,7 +1057,7 @@ void _Mem::unpack_hlp(Code *hlp) { // produces a new object (featuring a set of 
   uint16 invalid_zone_length = valid_point - invalid_point;
   for (uint16 i = valid_point; i < hlp->code_size(); ++i) { // shift the valid code upward; adjust i-ptrs.
 
-    Atom h_atom = hlp->code(i);
+    Atom h_atom = unpacked_hlp->code(i);
     switch (h_atom.getDescriptor()) {
     case Atom::I_PTR:
       unpacked_hlp->code(i - invalid_zone_length) = Atom::IPointer(h_atom.asIndex() - invalid_zone_length);
