@@ -930,11 +930,18 @@ Simulator
   * Make AERA take experimenting actions to test candidate PTPX models (instead of explicit babbling).
     * DONE. Demonstrate output of reason for failure to achieve explicit goal.
 
+2022-09-29
+* DONE. Demonstrate not recreating the same deleted model.
+* DONE. Merge pull request to fix bug in unpack_hlp https://github.com/IIIM-IS/AERA/pull/230
+* DONE. Merge pull request to monitor goals even if a prediction was made https://github.com/IIIM-IS/AERA/pull/231
+
 next meeting
 * hand-grab-sphere
-  * Make AERA take experimenting actions to test candidate PTPX models (instead of explicit babbling).
+  * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
+  * Try adding a mk.rdx for making a new model.
     * Still need to allow multiple strong requirements in retrieve_imdl.
   * Represent sphere position without direct I/O input.
+* Update CC paper Figure 8 replicode to match the submitted paper.
 
 TODO
 * Simple example for CKCC paper.
