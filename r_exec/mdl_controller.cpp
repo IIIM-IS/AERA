@@ -1879,7 +1879,8 @@ void PrimaryMDLController::reduce(r_exec::View *input) { // no lock.
     bool matched_g_monitor = false;
     if (!match)
       matched_p_monitor = monitor_predictions((_Fact*)input->object_);
-    if (!match && !matched_p_monitor)
+    if (!matched_p_monitor)
+      // Monitor goals even if PrimaryMDLOverlay reduce sets match true, but not if a PMonitor matches.
       matched_g_monitor = monitor_goals((_Fact*)input->object_);
     if (!match && !matched_p_monitor && !matched_g_monitor)
       assume((_Fact *)input->object_);
