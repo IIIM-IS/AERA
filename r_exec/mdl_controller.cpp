@@ -1875,8 +1875,15 @@ void PrimaryMDLController::reduce(r_exec::View *input) { // no lock.
 
     PrimaryMDLOverlay o(this, bindings_);
     bool match = o.reduce((_Fact *)input->object_, NULL, NULL);
-    if (!match && !monitor_predictions((_Fact *)input->object_) && !monitor_goals((_Fact *)input->object_))
+    bool matched_p_monitor = false;
+    bool matched_g_monitor = false;
+    if (!match)
+      matched_p_monitor = monitor_predictions((_Fact*)input->object_);
+    if (!match && !matched_p_monitor)
+      matched_g_monitor = monitor_goals((_Fact*)input->object_);
+    if (!match && !matched_p_monitor && !matched_g_monitor)
       assume((_Fact *)input->object_);
+
     check_last_match_time(match);
   }
 }
