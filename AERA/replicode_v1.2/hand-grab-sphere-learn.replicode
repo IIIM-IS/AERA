@@ -759,6 +759,31 @@ pgm_cmd_grab_h_fail:(pgm [] []
 (ipgm pgm_cmd_grab_h_fail [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever emulator nil 1]
 
+pgm_cmd_grab_h_already_holding:(pgm [] []
+   (ptn (fact G:(goal F_G:(fact Command:(cmd grab [h] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact (mk.val e1 emulator_state [Holding_obj: Pos_h: Pos_c: Pos_s:] :) After: Before: ::) [])
+[]
+   (= (is_sim G) false)
+   (<> Holding_obj nil)
+   (< Cmd_after Before)
+   (> Cmd_before After)
+[]
+   ; Inject the fact that the command was executed.
+   (inj []
+      (fact Command (+ After 20ms) Before 1 1)
+      [SYNC_ONCE After 1 1 stdin nil]
+   )
+   ; Still holding.
+   (inj [Next_state:(mk.val e1 emulator_state [Holding_obj Pos_h Pos_c Pos_s] 1) []])
+   (inj []
+      (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
+   )
+   (prb [1 "print" "pgm_cmd_grab_h_s from command:" [F_G]])
+1) |[]
+(ipgm pgm_cmd_grab_h_already_holding [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever emulator nil 1]
+
 ; Match the emulator state and inject individual mk.val at the same time for each of
 ; the state variables as needed.
 pgm_inject_mk_vals_holding:(pgm [] []
