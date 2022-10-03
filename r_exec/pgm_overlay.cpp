@@ -608,7 +608,8 @@ Code *PGMOverlay::dereference_in_ptr(Atom a) {
   }
 }
 
-void PGMOverlay::patch_input_code(uint16 pgm_code_index, uint16 input_index, uint16 input_code_index, int16 parent_index) { // patch recursively : in pgm_code[pgm_code_index] with (D_)IN_OBJ_PTRs until ::.
+// Patch recursively : in pgm_code[pgm_code_index] with (D_)IN_OBJ_PTRs until ::.
+void PGMOverlay::patch_input_code(uint16 pgm_code_index, uint16 input_index, uint16 input_code_index, int16 parent_index) {
 
   uint16 atom_count = code_[pgm_code_index].getAtomCount();
 
@@ -625,7 +626,8 @@ void PGMOverlay::patch_input_code(uint16 pgm_code_index, uint16 input_index, uin
 
     uint16 patch_index = pgm_code_index + j;
     switch (code_[patch_index].getDescriptor()) {
-    case Atom::T_WILDCARD: // leave as is and stop patching.
+    case Atom::T_WILDCARD:
+      // Leave as is and stop patching.
       return;
     case Atom::WILDCARD:
       if (parent_index < 0)
@@ -634,7 +636,8 @@ void PGMOverlay::patch_input_code(uint16 pgm_code_index, uint16 input_index, uin
         code_[patch_index] = Atom::DInObjPointer(parent_index, input_code_index + j);
       patch_indices_.push_back(patch_index);
       break;
-    case Atom::I_PTR: { // sub-structure: go one level deeper in the pattern.
+    case Atom::I_PTR: {
+      // Sub-structure: go one level deeper in the pattern.
       uint16 indirection = code_[patch_index].asIndex(); // save the indirection before patching.
 
       if (parent_index < 0)
@@ -642,18 +645,23 @@ void PGMOverlay::patch_input_code(uint16 pgm_code_index, uint16 input_index, uin
       else
         code_[patch_index] = Atom::DInObjPointer(parent_index, input_code_index + j);
       patch_indices_.push_back(patch_index);
-      switch (dereference_in_ptr(head)->code(j).getDescriptor()) { // caution: the pattern points to sub-structures using iptrs. However, the input object may have a rptr instead of an iptr: we have to disambiguate.
-      case Atom::I_PTR: // dereference and recurse.
+      switch (dereference_in_ptr(head)->code(j).getDescriptor()) {
+        // Caution: the pattern points to sub-structures using iptrs. However, the input object may have a rptr instead of an iptr: we have to disambiguate.
+      case Atom::I_PTR:
+        // Dereference and recurse.
         patch_input_code(indirection, input_index, dereference_in_ptr(head)->code(j).asIndex(), parent_index);
         break;
-      case Atom::R_PTR: // do not dereference and recurse.
+      case Atom::R_PTR:
+        // Do not dereference and recurse.
         patch_input_code(indirection, input_index, 0, patch_index);
         break;
-      default: // shall never happen.
+      default:
+        // Shall never happen.
         break;
       }
       break;
-    }default: // leave as is.
+    }default:
+      // Leave as is.
       break;
     }
   }
