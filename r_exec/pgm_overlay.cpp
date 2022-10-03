@@ -645,11 +645,11 @@ void PGMOverlay::patch_input_code(uint16 pgm_code_index, uint16 input_index, uin
       else
         code_[patch_index] = Atom::DInObjPointer(parent_index, input_code_index + j);
       patch_indices_.push_back(patch_index);
-      switch (dereference_in_ptr(head)->code(j).getDescriptor()) {
+      switch (dereference_in_ptr(head)->code(input_code_index + j).getDescriptor()) {
         // Caution: the pattern points to sub-structures using iptrs. However, the input object may have a rptr instead of an iptr: we have to disambiguate.
       case Atom::I_PTR:
         // Dereference and recurse.
-        patch_input_code(indirection, input_index, dereference_in_ptr(head)->code(j).asIndex(), parent_index);
+        patch_input_code(indirection, input_index, dereference_in_ptr(head)->code(input_code_index + j).asIndex(), parent_index);
         break;
       case Atom::R_PTR:
         // Do not dereference and recurse.
