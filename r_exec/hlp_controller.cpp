@@ -298,6 +298,16 @@ bool HLPController::is_orphan() {
   return false;
 }
 
+void HLPController::inject_notification_into_out_groups(Code* origin, Code* marker) const {
+  uint16 out_group_count = get_out_group_count();
+  for (uint16 i = 0; i < out_group_count; ++i) {
+
+    Group* out_group = (Group*)get_out_group(i);
+    View* view = new NotificationView(origin, out_group, marker);
+    _Mem::Get()->inject_notification(view, true);
+  }
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 HLPController::EvidenceEntry::EvidenceEntry() : evidence_(NULL) {

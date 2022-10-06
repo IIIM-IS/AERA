@@ -1234,14 +1234,7 @@ void PMDLController::inject_goal(HLPBindingMap *bm, Fact *goal, Fact *f_imdl) co
   _Mem::Get()->inject(view);
 
   MkRdx *mk_rdx = new MkRdx(f_imdl, goal->get_goal()->get_super_goal(), goal, 1, bm);
-
-  uint16 out_group_count = get_rdx_out_group_count();
-  for (uint16 i = 0; i < out_group_count; ++i) {
-
-    Group *out_group = (Group *)get_out_group(i);
-    View *view = new NotificationView(primary_grp, out_group, mk_rdx);
-    _Mem::Get()->inject_notification(view, true);
-  }
+  inject_notification_into_out_groups(primary_grp, mk_rdx);
 
   OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl "
     << f_imdl->get_reference(0)->get_reference(0)->get_oid() << " abduce -> mk.rdx " << mk_rdx->get_oid());
@@ -1681,12 +1674,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
       return;
     // In the Pred constructor, we already copied the simulations from prediction.
     Code* mk_rdx = new MkRdx(f_imdl, (Code *)input, production, 1, bm);
-    uint16 out_group_count = get_rdx_out_group_count();
-    for (uint16 i = 0; i < out_group_count; ++i) {
-      Group *out_group = (Group *)get_out_group(i);
-      View *view = new NotificationView(get_host(), out_group, mk_rdx);
-      _Mem::Get()->inject_notification(view, true);
-    }
+    inject_notification_into_out_groups(get_host(), mk_rdx);
     OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << get_object()->get_oid() << " predict imdl -> mk.rdx " << mk_rdx->get_oid());
 
     PrimaryMDLController *c = (PrimaryMDLController *)controllers_[RHSController]; // rhs controller: in the same view.
@@ -1798,16 +1786,8 @@ bool PrimaryMDLController::inject_prediction(Fact *prediction, Fact *f_imdl, flo
     view = new View(View::SYNC_ONCE, now, 1, 1, primary_host, primary_host, f_imdl); // SYNC_ONCE,res=resilience.
     _Mem::Get()->inject(view);
 
-    if (mk_rdx) {
-
-      uint16 out_group_count = get_out_group_count();
-      for (uint16 i = 0; i < out_group_count; ++i) {
-
-        Group *out_group = (Group *)get_out_group(i);
-        View *view = new NotificationView(primary_host, out_group, mk_rdx);
-        _Mem::Get()->inject_notification(view, true);
-      }
-    }
+    if (mk_rdx)
+      inject_notification_into_out_groups(primary_host, mk_rdx);
     return true;
   } else
     return false;

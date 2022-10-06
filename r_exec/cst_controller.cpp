@@ -680,17 +680,9 @@ void CSTController::inject_goal(HLPBindingMap *bm,
   OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " cst " << get_object()->get_oid() << ": fact " <<
     f_super_goal->get_oid() << " super_goal -> fact " << sub_goal_f->get_oid() << " simulated goal");
 
-  if (sim->get_mode() == SIM_ROOT) { // no rdx for SIM_OPTIONAL or SIM_MANDATORY.
-
-    MkRdx *mk_rdx = new MkRdx(f_icst, f_super_goal, sub_goal, 1, bm);
-    uint16 out_group_count = get_out_group_count();
-    for (uint16 i = 0; i < out_group_count; ++i) {
-
-      Group *out_group = (Group *)get_out_group(i);
-      View *view = new NotificationView(group, out_group, mk_rdx);
-      _Mem::Get()->inject_notification(view, true);
-    }
-  }
+  // no rdx for SIM_OPTIONAL or SIM_MANDATORY.
+  if (sim->get_mode() == SIM_ROOT)
+    inject_notification_into_out_groups(group, new MkRdx(f_icst, f_super_goal, sub_goal, 1, bm));
 }
 
 Fact *CSTController::get_f_ihlp(HLPBindingMap *bindings, bool wr_enabled) const {

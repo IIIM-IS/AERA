@@ -177,6 +177,13 @@ protected:
   MatchResult check_evidences(_Fact *target, _Fact *&evidence); // evidence with the match (positive or negative), get_absentee(target) otherwise.
   MatchResult check_predicted_evidences(_Fact *target, _Fact *&evidence); // evidence with the match (positive or negative), NULL otherwise.
 
+  /**
+   * For each output group, make a NotificationView and inject into the group.
+   * \param marker The origin for the NotificationView.
+   * \param marker The marker for the NotificationView.
+   */
+  void inject_notification_into_out_groups(r_code::Code* origin, r_code::Code* marker) const;
+
   bool has_tpl_args_;
   uint32 ref_count_; // used to detect _Object::refCount_ dropping down to 1 for hlp with tpl args.
   bool is_orphan(); // true when there are tpl args and no requirements: the controller cannot execute anymore.
