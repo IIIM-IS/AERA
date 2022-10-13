@@ -925,7 +925,6 @@ Simulator
 
 2022-09-01
 * DONE. Make pull request to allow [] for empty set not at the end of a line (replace |[]) https://github.com/IIIM-IS/AERA/pull/229
-  (Update AERA_Visualizer submodule.)
 * hand-grab-sphere
   * Make AERA take experimenting actions to test candidate PTPX models (instead of explicit babbling).
     * DONE. Demonstrate output of reason for failure to achieve explicit goal.
@@ -935,13 +934,15 @@ Simulator
 * DONE. Merge pull request to fix bug in unpack_hlp https://github.com/IIIM-IS/AERA/pull/230
 * DONE. Merge pull request to monitor goals even if a prediction was made https://github.com/IIIM-IS/AERA/pull/231
 
+2022-10-13
+* DONE: Merge pull request to fix bug for program deep-structure pattern matching https://github.com/IIIM-IS/AERA/pull/232
+* DONE. Merge pull request to inject mk.new for created models https://github.com/IIIM-IS/AERA/pull/233
+
 next meeting
 * hand-grab-sphere
   * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
-  * Try adding a mk.rdx for making a new model.
     * Still need to allow multiple strong requirements in retrieve_imdl.
   * Represent sphere position without direct I/O input.
-* Update CC paper Figure 8 replicode to match the submitted paper.
 
 TODO
 * Simple example for CKCC paper.
