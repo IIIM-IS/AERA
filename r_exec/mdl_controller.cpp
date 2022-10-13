@@ -1526,6 +1526,7 @@ void TopLevelMDLController::register_req_outcome(Fact *f_pred, bool success, boo
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 PrimaryMDLController::PrimaryMDLController(_View *view) : PMDLController(view) {
+  inject_notification_into_out_groups(get_host(), new MkNew(_Mem::Get(), get_core_object()));
 }
 
 void PrimaryMDLController::set_secondary(SecondaryMDLController *secondary) {
