@@ -308,7 +308,7 @@ namespace tcp_io_device {
 
     uint16 args_set_index = cmd->code(CMD_ARGS).asIndex();
 
-    std::cout << "Eject cmd: " << cmd_identifier << ", enitiy: " << entity << ", Value: " << cmd->code(args_set_index + 2).asFloat() << std::endl;
+    std::cout << "Eject cmd: " << cmd_identifier << ", entity: " << entity << ", Value: " << cmd->code(args_set_index + 2).asFloat() << std::endl;
 
 
     // @todo: Only a single value implemented. For multiple values (dim != [1]) this needs to be extended.
