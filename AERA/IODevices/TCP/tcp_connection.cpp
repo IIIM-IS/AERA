@@ -276,7 +276,7 @@ namespace tcp_io_device {
     for (int i = msg_length_buf_size_ - 1; i >= 0; --i)
     {
       msg_len <<= 8;
-      msg_len |= (unsigned char)tcp_msg_len_recv_buf_[i];
+      msg_len |= (unsigned char)tcp_msg_len_recv_buf[i];
     }
 
     // Reset read bytes and total read bytes to 0
