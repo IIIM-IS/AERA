@@ -148,7 +148,7 @@ namespace tcp_io_device {
     }
 
 
-    std::cout << "> INFO: Accepting client socket" << std::endl;
+    std::cout << "> INFO: Waiting to accept client socket on port " << port << std::endl;
     // Accept a client socket
     tcp_client_socket_ = ::accept(listen_socket, NULL, NULL);
     if (tcp_client_socket_ == INVALID_SOCKET) {
