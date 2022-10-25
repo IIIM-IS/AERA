@@ -132,10 +132,7 @@ namespace tcp_io_device {
       if (queue_.empty()) {
         return NULL;
       }
-      //std::cout << name_ << ": Message available, dequeueing" << std::endl;
-      std::cout << queue_.size() << std::endl;
       std::unique_ptr<TCPMessage> val = std::move(queue_.front());
-      //std::cout << name_ << ": Dequed message of type " << val->messagetype() << std::endl;
       queue_.pop();
       return val;
     }
