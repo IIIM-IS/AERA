@@ -307,7 +307,7 @@ namespace tcp_io_device {
       return NULL;
     }
 
-    delete buf;
+    delete[] buf;
 
     return msg;
   }
