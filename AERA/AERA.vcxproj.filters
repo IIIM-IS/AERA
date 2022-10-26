@@ -293,5 +293,8 @@
     <None Include="replicode_v1.2\clcc-figure8.replicode">
       <Filter>replicode_v1.2</Filter>
     </None>
+    <None Include="replicode_v1.2\hand-grab-sphere-learn.external.replicode">
+      <Filter>replicode_v1.2</Filter>
+    </None>
   </ItemGroup>
 </Project>

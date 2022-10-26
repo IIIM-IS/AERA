@@ -233,6 +233,7 @@
     <None Include="replicode_v1.2\ball.goal.external.replicode" />
     <None Include="replicode_v1.2\clcc-figure8.replicode" />
     <None Include="replicode_v1.2\drives.replicode" />
+    <None Include="replicode_v1.2\hand-grab-sphere-learn.external.replicode" />
     <None Include="replicode_v1.2\hand-grab-sphere-learn.replicode" />
     <None Include="replicode_v1.2\hand-grab-sphere.replicode" />
     <None Include="replicode_v1.2\helgi.replicode" />
