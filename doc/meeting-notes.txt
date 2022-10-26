@@ -939,6 +939,18 @@ Simulator
 * DONE. Merge pull request to inject mk.new for created models https://github.com/IIIM-IS/AERA/pull/233
 
 next meeting
+* Webots TODO
+  * Get c and s position from the environment
+  * Get holding (s, c, []) from the environment
+  * Continue physics while waiting for command  [Jeff]
+  * Remove difference between AERA 100ms and Webots in 1000 ms [defer]
+  * Use setup command for automatic discovery of AERA objects and commands
+  * Re-use communication code from AERA (using Webots Makefile)
+  * Get command efferent copy from Webots (move limit to +/- 20) [Maybe in the setup message. Need more discussion]
+  * Fix bug: Not finishing when AERA is in Debug configuration. (Timeout?) [defer until making Webots keep simulating while waiting for command]
+  * Reset the TCP connection when resetting the Webots simulation
+  * Use protobuf (need to compile into Webots) [Leonard]
+  * Put Webots project in Github
 * hand-grab-sphere
   * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
     * Still need to allow multiple strong requirements in retrieve_imdl.
