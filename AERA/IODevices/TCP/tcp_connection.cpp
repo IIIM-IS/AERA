@@ -249,6 +249,7 @@ namespace tcp_io_device {
 
     // First read the length of the message to expect (8 byte uint64_t)
     std::string tcp_msg_len_recv_buf;
+    tcp_msg_len_recv_buf.reserve(msg_length_buf_size_);
     // To ensure split message is read correctly
     while (len_res < msg_length_buf_size_) {
       received_bytes = recv(tcp_client_socket_, &(tcp_msg_len_recv_buf[len_res]), msg_length_buf_size_ - len_res, 0);
