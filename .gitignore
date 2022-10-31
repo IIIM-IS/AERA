@@ -27,3 +27,8 @@
 /AERA/runtime_out.txt
 /AERA/decompiled_objects.txt
 /AERA/cart.out
+
+# Webots files
+*.exe
+*.o
+*.d
