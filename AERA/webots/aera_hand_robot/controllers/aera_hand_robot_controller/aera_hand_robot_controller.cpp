@@ -202,7 +202,7 @@ static unique_ptr<TCPMessage> receiveMessage(int fd)
 // Check if new data is on the TCP connection to receive.
 static bool receiveIsReady(int fd) {
   // Imitate TCPConnection::tcpBackgroundHandler.
-  timeval tv{ 0, 10000 };
+  timeval tv{ 0, 0 };
   int rc = 0;
   FD_SET tcp_client_fd_set;
   FD_ZERO(&tcp_client_fd_set);
