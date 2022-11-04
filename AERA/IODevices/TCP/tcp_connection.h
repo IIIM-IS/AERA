@@ -198,6 +198,12 @@ namespace tcp_io_device {
     */
     bool isRunning() { return state_ == RUNNING; }
 
+    /**
+    * Check the socket if there is incoming data ready. This does not block.
+    * \param fd The socket file descriptor.
+    * \return 1 if data is ready, 0 if no data is ready, -1 for error.
+    */
+    static int receiveIsReady(SOCKET fd);
 
   protected:
 
@@ -212,7 +218,6 @@ namespace tcp_io_device {
 
     std::shared_ptr<std::thread> tcp_background_thread_;
 
-    FD_SET tcp_client_fd_set_;
     SOCKET tcp_client_socket_;
 
     uint64_t msg_buf_size_;
