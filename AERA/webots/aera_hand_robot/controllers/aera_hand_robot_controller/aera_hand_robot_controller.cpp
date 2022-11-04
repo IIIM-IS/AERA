@@ -40,7 +40,8 @@ split(const string& input, char separator)
 static SOCKET open_socket(const char* host, int port) {
   struct sockaddr_in address;
   struct hostent *server;
-  int fd, rc;
+  SOCKET fd;
+  int rc;
 
 #ifdef _WIN32
   // Initialize the socket API.
@@ -48,15 +49,15 @@ static SOCKET open_socket(const char* host, int port) {
   rc = WSAStartup(MAKEWORD(1, 1), &info); /* Winsock 1.1 */
   if (rc != 0) {
     cout << "ERROR: Cannot initialize Winsock" << endl;
-    return -1;
+    return INVALID_SOCKET;
   }
 #endif
 
   // Create the socket.
   fd = socket(AF_INET, SOCK_STREAM, 0);
-  if (fd == -1) {
+  if (fd == INVALID_SOCKET) {
     cout << "ERROR: Cannot create socket" << endl;
-    return -1;
+    return INVALID_SOCKET;
   }
 
   // Fill in the socket address.
@@ -74,7 +75,7 @@ static SOCKET open_socket(const char* host, int port) {
 #else
     close(fd);
 #endif
-    return -1;
+    return INVALID_SOCKET;
   }
   
   // Connect to the server.
@@ -123,7 +124,7 @@ static int sendMessage(SOCKET fd, const unique_ptr<TCPMessage>& msg)
 }
 
 // Imitate TCPConnection::receiveMessage.
-static unique_ptr<TCPMessage> receiveMessage(int fd)
+static unique_ptr<TCPMessage> receiveMessage(SOCKET fd)
 {
   // Number of bytes received
   int received_bytes = 0;
@@ -186,7 +187,6 @@ static unique_ptr<TCPMessage> receiveMessage(int fd)
   unique_ptr<TCPMessage> msg = make_unique<TCPMessage>();
 #ifdef DEBUG_STRING_MESSAGE
   *msg = string(buf, msg_len);
-  cout << "Debug received \"" << *msg << "\"" << endl;
 #else
   if (!msg->ParseFromArray(buf, msg_len)) {
     cout << "ERROR: Parsing Message from String failed" << endl;
@@ -200,8 +200,8 @@ static unique_ptr<TCPMessage> receiveMessage(int fd)
 }
 
 // Check if new data is on the TCP connection to receive.
-static bool receiveIsReady(int fd) {
-  // Imitate TCPConnection::tcpBackgroundHandler.
+// Return 0 for no, 1 for yes, -1 for error.
+static int receiveIsReady(SOCKET fd) {
   timeval tv{ 0, 0 };
   int rc = 0;
   FD_SET tcp_client_fd_set;
@@ -210,22 +210,20 @@ static bool receiveIsReady(int fd) {
   rc = ::select(fd + 1, &tcp_client_fd_set, NULL, NULL, &tv);
   if (rc == 0) {
     // No messages on the socket.
-    return false;
+    return 0;
   }
   else if (rc == SOCKET_ERROR) {
-    // Something went wrong when receiving the message, break the handler, end the thread.
-    cout << "select() == SOCKET_ERROR error" << endl;
-    return false;
+    return -1;
   }
   
-  return true;
+  return 1;
 }
 
 // The arguments of the main function can be specified by the
 // "controllerArgs" field of the Robot node
 int main(int argc, char **argv) {
-  int aera_fd = open_socket("127.0.0.1", 8080);
-  if (aera_fd == -1)
+  SOCKET aera_fd = open_socket("127.0.0.1", 8080);
+  if (aera_fd == INVALID_SOCKET)
     // Already printed the error.
     return -1;
 
@@ -275,7 +273,8 @@ int main(int argc, char **argv) {
   double debug_next_s_position = 5;
   string debug_next_holding = "[]";
 
-  int aera_us = -100; 
+  int aera_us = -100;
+  int receive_deadline = MAXINT;
   string command;
   double target_h_position = 0;
   int command_time = -1;
@@ -341,34 +340,53 @@ int main(int argc, char **argv) {
         sendMessage(aera_fd, std::move(msg));
       }
       
-      if (aera_us >= 100000) {
-        // Wait for a command.
-        while (!receiveIsReady(aera_fd)) {}
-        auto in_msg = receiveMessage(aera_fd);
-        if (!in_msg)
-          // Already printed the error.
-          break;
+      if (aera_us >= 100000)
+        receive_deadline = aera_us + 65000;
+    }
+    
+    if (aera_us >= receive_deadline) {
+      // We haven't received the command yet, so wait for it.
+      while (receiveIsReady(aera_fd) == 0) {}
+      receive_deadline = MAXINT;
+    }
 
-        command = "";
-        vector<string> fields = split(*in_msg, ' ');
-        if (fields.size() == 2 && (fields[0] == "grab" || fields[0] == "release") && fields[1] == "h") {
-          command = fields[0];
-        }
-        else if (fields.size() == 3 && fields[0] == "move" && fields[1] == "h") {
-          command = fields[0];
-          double delta = std::stof(fields[2]);
-          if (delta > 20)
-            delta = 20;
-          else if (delta < -20)
-            delta = -20;
-          target_h_position = h_position + delta;
-        }
-        else
-          cout << "ERROR: Unrecognized command " << *in_msg << endl;
+    int ready = receiveIsReady(aera_fd);
+    if (ready < 0) {
+      cout << "select() == SOCKET_ERROR error" << endl;
+      break;
+    }
+    if (command == "" && ready == 1) {
+      receive_deadline = MAXINT;
+
+      auto in_msg = receiveMessage(aera_fd);
+      cout << "Debug: " << aera_us << " received \"" << *in_msg << "\"" << endl;
+      if (!in_msg)
+        // Already printed the error.
+        break;
+
+      vector<string> fields = split(*in_msg, ' ');
+      if (fields.size() == 2 && (fields[0] == "grab" || fields[0] == "release") && fields[1] == "h") {
+        command = fields[0];
+      }
+      else if (fields.size() == 3 && fields[0] == "move" && fields[1] == "h") {
+        command = fields[0];
+        double delta = std::stof(fields[2]);
+        if (delta > 20)
+          delta = 20;
+        else if (delta < -20)
+          delta = -20;
+        target_h_position = h_position + delta;
+      }
+      else
+        cout << "ERROR: Unrecognized command " << *in_msg << endl;
           
-        if (command != "")
-          // TODO: Get the command time from the message.
-          command_time = aera_us + 65000;
+      if (command != "") {
+        // TODO: Get the command time from the message.
+        int frame_start_us = (aera_us / 100000) * 100000;
+        command_time = frame_start_us + 65000;
+        if (command_time < aera_us)
+          // We don't expect this.
+          command_time = aera_us;
       }
     }
 
@@ -432,8 +450,10 @@ int main(int argc, char **argv) {
         command = "move_arm_up";
         command_time = command_time + 4900;
       }
-      else if (command == "move_arm_up")
+      else if (command == "move_arm_up") {
         joint_2->setPosition(arm_up);
+        command = "";
+      }
       else if (command == "release") {
         if (aera_us == 1500*1000 + 65000) {
           // Special case: Drop the cube in the same position as the sphere.
@@ -455,6 +475,7 @@ int main(int argc, char **argv) {
       else if (command == "move") {
         // Do the inverse calculation of h_position;
         joint_1->setPosition((target_h_position + position_offset) * position_factor);
+        command = "";
       }
     }
   };
