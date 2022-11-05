@@ -195,7 +195,7 @@ class r_exec_dll LObject :
   public Object<r_code::LocalObject, LObject> {
 public:
   static bool RequiresPacking() { return false; }
-  static LObject *Pack(r_code::Code *object, r_code::Mem *mem) { return (LObject *)object; } // object is always a LObject (local operation).
+  static LObject *Pack(r_code::Code *object, r_code::Mem* /* mem */) { return (LObject*)object; } // object is always a LObject (local operation).
   LObject(r_code::Mem *mem = NULL) : Object<r_code::LocalObject, LObject>(mem) {}
   LObject(r_code::SysObject *source) : Object<r_code::LocalObject, LObject>() {
 

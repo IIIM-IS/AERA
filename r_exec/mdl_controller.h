@@ -381,7 +381,7 @@ private:
 
   void register_drive_outcome(Fact *goal, bool success) const;
 
-  void check_last_match_time(bool match) {}
+  void check_last_match_time(bool /* match */) {}
 public:
   TopLevelMDLController(r_code::_View *view);
 

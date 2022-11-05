@@ -87,7 +87,7 @@ namespace r_exec {
 template<class C, class U> Object<C, U>::Object() : C(), hash_value_(0), invalidated_(0) {
 }
 
-template<class C, class U> Object<C, U>::Object(r_code::Mem *mem) : C(), hash_value_(0), invalidated_(0) {
+template<class C, class U> Object<C, U>::Object(r_code::Mem* /* mem */) : C(), hash_value_(0), invalidated_(0) {
 
   set_oid(UNDEFINED_OID);
 }

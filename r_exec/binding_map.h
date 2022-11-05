@@ -109,14 +109,14 @@ public:
   virtual r_code::Code *get_object() = 0;
   virtual uint16 get_code_size() = 0;
 
-  virtual bool intersect(const Value *v) const { return false; }
-  virtual bool _intersect(const AtomValue *v) const { return false; }
-  virtual bool _intersect(const StructureValue *v) const { return false; }
-  virtual bool _intersect(const ObjectValue *v) const { return false; }
+  virtual bool intersect(const Value* /* v */) const { return false; }
+  virtual bool _intersect(const AtomValue* /* v */) const { return false; }
+  virtual bool _intersect(const StructureValue* /* v */) const { return false; }
+  virtual bool _intersect(const ObjectValue* /* v */) const { return false; }
 
-  virtual bool contains(const Atom a) const { return false; }
-  virtual bool contains(const Atom *s) const { return false; }
-  virtual bool contains(const r_code::Code *o) const { return false; }
+  virtual bool contains(const Atom /* a */) const { return false; }
+  virtual bool contains(const Atom* /* s */) const { return false; }
+  virtual bool contains(const r_code::Code* /* o */) const { return false; }
 
   /**
    * Return the trace of the value as a string by creating a temporary Code

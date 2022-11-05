@@ -152,7 +152,7 @@ public:
   /**
    * If prediction->is_simulation(), then this is for a simulation.
    */
-  virtual bool signal(Pred* prediction) { return false; }
+  virtual bool signal(Pred* /* prediction */) { return false; }
 };
 
 /**

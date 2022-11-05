@@ -275,10 +275,10 @@ public:
   Code() : storage_index_(null_storage_index) { markers_.reserve(CodeMarkersInitialSize); }
   virtual ~Code() {}
 
-  virtual void mod(uint16 member_index, float32 value) {};
-  virtual void set(uint16 member_index, float32 value) {};
-  virtual _View *get_view(Code *group, bool lock) { return NULL; }
-  virtual void add_reference(Code *object) const {} // called only on local objects.
+  virtual void mod(uint16 /* member_index */, float32 /* value */) {};
+  virtual void set(uint16 /* member_index */, float32 /* value */) {};
+  virtual _View *get_view(Code* /* group */, bool /* lock */) { return NULL; }
+  virtual void add_reference(Code* /* object */) const {} // called only on local objects.
   void remove_marker(Code *m) {
 
     acq_markers();

@@ -747,9 +747,9 @@ protected:
 public:
   virtual ~MemVolatile();
 
-  void delete_object(r_code::Code *object) {}
+  void delete_object(r_code::Code* /* object */) {}
 
-  r_comp::Image *get_objects(bool include_invalidated = false) { return NULL; }
+  r_comp::Image *get_objects(bool /* include_invalidated */) { return NULL; }
 };
 
 /** O is the class of the objects held by the rMem (except groups and notifications):

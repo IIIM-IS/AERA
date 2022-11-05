@@ -145,7 +145,7 @@ protected:
 
   CriticalSection reductionCS_;
 
-  virtual void take_input(r_exec::View *input) {}
+  virtual void take_input(r_exec::View* /* input */) {}
   template<class C> void __take_input(r_exec::View *input) { // utility: to be called by sub-classes.
 
     ReductionJob<C> *j = new ReductionJob<C>(input, (C *)this);
@@ -181,7 +181,7 @@ public:
 
   void set_view(View *view);
 
-  void debug(View *input) {}
+  void debug(View* /* input */) {}
 };
 
 class _Context;

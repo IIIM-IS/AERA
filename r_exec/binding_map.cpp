@@ -116,7 +116,7 @@ Value *UnboundValue::copy(BindingMap *map) const {
   return new UnboundValue(map, index_);
 }
 
-void UnboundValue::valuate(Code *destination, uint16 write_index, uint16 &extent_index) const {
+void UnboundValue::valuate(Code *destination, uint16 write_index, uint16& /* extent_index */) const {
 
   destination->code(write_index) = Atom::VLPointer(index_);
 }
@@ -166,7 +166,7 @@ Value *AtomValue::copy(BindingMap *map) const {
   return new AtomValue(map, atom_);
 }
 
-void AtomValue::valuate(Code *destination, uint16 write_index, uint16 &extent_index) const {
+void AtomValue::valuate(Code *destination, uint16 write_index, uint16& /* extent_index */) const {
 
   destination->code(write_index) = atom_;
 }
@@ -324,7 +324,7 @@ Value *ObjectValue::copy(BindingMap *map) const {
   return new ObjectValue(map, object_);
 }
 
-void ObjectValue::valuate(Code *destination, uint16 write_index, uint16 &extent_index) const {
+void ObjectValue::valuate(Code *destination, uint16 write_index, uint16& /* extent_index */) const {
 
   destination->code(write_index) = Atom::RPointer(destination->references_size());
   destination->add_reference(object_);

@@ -266,7 +266,7 @@ protected:
 public:
   virtual ~_TPX();
 
-  void debug(View *input) {};
+  void debug(View* /* input */) {};
 };
 
 // Pattern extractor targeted at goal successes.
