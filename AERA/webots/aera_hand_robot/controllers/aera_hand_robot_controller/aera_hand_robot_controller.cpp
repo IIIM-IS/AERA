@@ -219,6 +219,17 @@ static int receiveIsReady(SOCKET fd) {
   return 1;
 }
 
+const double position_offset = -15.0;
+const double position_factor = 0.1;
+const double bin_size = 5;
+
+// Get the quantized "position" from the angle around the robot.
+static get_position(double angle) {
+  double position = angle / position_factor - position_offset;
+  // Quantize.
+  return floor((position + bin_size/2) / bin_size) * bin_size;
+}
+
 // The arguments of the main function can be specified by the
 // "controllerArgs" field of the Robot node
 int main(int argc, char **argv) {
@@ -238,8 +249,6 @@ int main(int argc, char **argv) {
   const double arm_down = 0.8;
   const double jaw_open = 0.01;
   const double jaw_closed = -0.0019;
-  const double position_offset = -15.0;
-  const double position_factor = 0.1;
 
   Motor* joint_1 = robot->getMotor("joint_1");
   // Decrease the PID gain from 10 so that we keep a grip on the object.
@@ -308,11 +317,8 @@ int main(int argc, char **argv) {
       debug_next_c_position = 5;
     }
 
-    double h_position = joint_1_sensor->getValue() / position_factor - position_offset;
-    // Quantize.
-    const double bin_size = 2.5;
-    h_position = floor((h_position + bin_size/2) / bin_size) * bin_size;
-
+    double h_position = get_position(joint_1_sensor->getValue());
+    
     if (aera_us % 100000 == 0) {
       // Send the current state.
       {
