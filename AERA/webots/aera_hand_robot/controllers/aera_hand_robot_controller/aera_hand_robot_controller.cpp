@@ -18,11 +18,6 @@
 using namespace std;
 using namespace webots;
 
-// Object at 0: (-0.3, -0.025, 0.01), {0, 0, 1, 1.50014}
-// Object at 5: (-0.257, -0.161, 0.01), {0, 0, -1, 1.00257}
-// Object at 10: (-0.154177, -0.264699, 0.01), {0, 0, -1, 0.50559}
-// Object at 25: {0.246, -0.1775, 0.01}, {0, 0, 1, 0.999859}
-
 typedef string TCPMessage;
 
 static vector<string>
@@ -241,6 +236,11 @@ int main(int argc, char **argv) {
   Supervisor* robot = new Supervisor();
   Node* sphere = robot->getFromDef("sphere");
   Node* cube = robot->getFromDef("cube");
+  // Separately, set ned to the Node so we can get its translation, etc.
+  Node* ned = robot->getFromDef("Ned");
+  // We don't expect the robot to move, so get its position now.
+  double ned_x = ned->getField("translation")->getSFVec3f()[0];
+  double ned_y = ned->getField("translation")->getSFVec3f()[1];
 
   // Expect timeStep to be 1 ms.
   int timeStep = (int)robot->getBasicTimeStep();
@@ -278,8 +278,6 @@ int main(int argc, char **argv) {
   joint_base_to_jaw_1->setPosition(jaw_open);
   joint_base_to_jaw_2->setPosition(jaw_open);
 
-  double debug_next_c_position = 10;
-  double debug_next_s_position = 5;
   string debug_next_holding = "[]";
 
   int aera_us = -100;
@@ -313,38 +311,28 @@ int main(int argc, char **argv) {
       sphere->getField("translation")->setSFVec3f((const double[]){-0.3, -0.025, 0.01});
       cube->getField("rotation")->setSFRotation((const double[]){0, 0, -1, 1.00257});
       cube->getField("translation")->setSFVec3f((const double[]){-0.257, -0.161, 0.01});
-      debug_next_s_position = 0;
-      debug_next_c_position = 5;
     }
 
     double h_position = get_position(joint_1_sensor->getValue());
     
     if (aera_us % 100000 == 0) {
+      const double* c_translation = cube->getField("translation")->getSFVec3f();
+      double c_offset_x = c_translation[0] - ned_x;
+      double c_offset_y = c_translation[1] - ned_y;
+      double c_position = get_position(atan2(c_offset_x, -c_offset_y));
+
+      const double* s_translation = sphere->getField("translation")->getSFVec3f();
+      double s_offset_x = s_translation[0] - ned_x;
+      double s_offset_y = s_translation[1] - ned_y;
+      double s_position = get_position(atan2(s_offset_x, -s_offset_y));
+
       // Send the current state.
-      {
-        unique_ptr<TCPMessage> msg = make_unique<TCPMessage>(to_string(aera_us) + " h position " +
-          to_string(h_position));
-        sendMessage(aera_fd, std::move(msg));
-      }
-      {
-        unique_ptr<TCPMessage> msg = make_unique<TCPMessage>(to_string(aera_us) + " c position " +
-          to_string(debug_next_c_position));
-        sendMessage(aera_fd, std::move(msg));
-      }
-      {
-        unique_ptr<TCPMessage> msg = make_unique<TCPMessage>(to_string(aera_us) + " s position " +
-          to_string(debug_next_s_position));
-        sendMessage(aera_fd, std::move(msg));
-      }
-      {
-        unique_ptr<TCPMessage> msg = make_unique<TCPMessage>(to_string(aera_us) + " h holding " +
-          debug_next_holding);
-        sendMessage(aera_fd, std::move(msg));
-      }
-      {
-        unique_ptr<TCPMessage> msg = make_unique<TCPMessage>(to_string(aera_us) + " end_values");
-        sendMessage(aera_fd, std::move(msg));
-      }
+      unique_ptr<TCPMessage> msg = make_unique<TCPMessage>(
+        "h position " + to_string(h_position) +
+        "\nc position " + to_string(c_position) +
+        "\ns position " + to_string(s_position) +
+        "\nh holding " + debug_next_holding);
+      sendMessage(aera_fd, std::move(msg));
       
       if (aera_us >= 100000)
         receive_deadline = aera_us + 65000;
@@ -402,8 +390,6 @@ int main(int argc, char **argv) {
       debug_next_holding = "[]";
     if (aera_us == 500*1000 + 65000)
       debug_next_holding = "s";
-    if (aera_us == 600*1000 + 65000)
-      debug_next_s_position = target_h_position;
     if (aera_us == 700*1000 + 65000)
       debug_next_holding = "[]";
     if (aera_us == 900*1000 + 65000)
@@ -412,12 +398,6 @@ int main(int argc, char **argv) {
       debug_next_holding = "[]";
     if (aera_us == 1100*1000 + 65000)
       debug_next_holding = "c";
-    if (aera_us == 1200*1000 + 65000)
-      debug_next_c_position = target_h_position;
-    if (aera_us == 1300*1000 + 65000)
-      debug_next_c_position = target_h_position;
-    if (aera_us == 1400*1000 + 65000)
-      debug_next_c_position = target_h_position;
     if (aera_us == 1500*1000 + 65000)
       debug_next_holding = "[]";
     if (aera_us == 1800*1000 + 65000)
@@ -434,14 +414,10 @@ int main(int argc, char **argv) {
       debug_next_holding = "[]";
     if (aera_us == 2500*1000 + 65000)
       debug_next_holding = "c";
-    if (aera_us == 2600*1000 + 65000)
-      debug_next_c_position = target_h_position;
     if (aera_us == 2700*1000 + 65000)
       debug_next_holding = "[]";
     if (aera_us == 3000*1000 + 65000)
       debug_next_holding = "s";
-    if (aera_us == 3100*1000 + 65000)
-      debug_next_s_position = target_h_position;
       
     if (command_time == aera_us) {
       // Execute the command.
