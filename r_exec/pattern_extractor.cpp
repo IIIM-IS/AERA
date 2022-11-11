@@ -1038,6 +1038,45 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
         }
       }
     }
+    else if (opcode == Opcodes::IMdl) {
+      // Form 1
+      float32 q0 = target_->get_reference(0)->code(MK_VAL_VALUE).asFloat();
+      float32 q1 = consequent->get_reference(0)->code(MK_VAL_VALUE).asFloat();
+
+      // Form 1A
+      float32 searched_for = q1 - q0;
+      Code* imdl = cause->get_reference(0);
+      uint16 imdl_exposed_args_index = imdl->code(I_HLP_EXPOSED_ARGS).asIndex();
+      uint16 imdl_exposed_args_count = imdl->code(imdl_exposed_args_index).getAtomCount();
+
+      for (uint16 i = 1; i <= imdl_exposed_args_count; ++i) {
+
+        Atom s = imdl->code(imdl_exposed_args_index + i);
+        if (!s.isFloat())
+          continue;
+        float32 _s = s.asFloat();
+        if (Utils::Equal(_s, searched_for)) {
+          auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target_, FACT_AFTER));
+          return new ACGuardBuilder(period, period - offset, imdl_exposed_args_index + i);
+        }
+      }
+
+      if (q0 != 0) {
+        // Form 1B
+        searched_for = q1 / q0;
+        for (uint16 i = imdl_exposed_args_index + 1; i <= imdl_exposed_args_count; ++i) {
+
+          Atom s = imdl->code(i);
+          if (!s.isFloat())
+            continue;
+          float32 _s = s.asFloat();
+          if (Utils::Equal(_s, searched_for)) {
+            auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target_, FACT_AFTER));
+            return new MCGuardBuilder(period, period - offset, i);
+          }
+        }
+      }
+    }
   } else if (opcode == Opcodes::MkVal) {
     // Forms 2 and 3
     Atom s = cause_payload->code(MK_VAL_VALUE);
