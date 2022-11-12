@@ -222,30 +222,11 @@ namespace tcp_io_device {
       }
 
       string identifier = Utils::GetString(&command->code(command->code(args_set_index + 1).asIndex()));
-      for (auto it = entities_.begin(); it != entities_.end(); ++it) {
-        if (it->first.compare(identifier) != 0) {
-          continue;
-        }
-
-        if (!(command->code_size() >= 3 && command->code(args_set_index + 2).getDescriptor() == Atom::R_PTR &&
-          command->references_size() > command->code(args_set_index + 2).asIndex())) {
-          cout << "> WARNING: Cannot get the object for ready " << identifier << endl;
-          return NULL;
-        }
-
-        Code* obj = command->get_reference(command->code(args_set_index + 2).asIndex());
-        if (!started_) {
-          it->second = obj;
-          startTimeTickThread();
-        }
-        else if (it->second != obj) {
-          // For now, don't allow tracking multiple objects.
-          return NULL;
-        }
-        return command;
+      if (!started_) {
+        cout << "I/O device is ready for " << identifier << endl;
+        startTimeTickThread();
       }
-      // None of the entities available have the same name as the one ejected by AERA
-      return NULL;
+      return command;
     }
     // Not ready command, therefore go through all commands and find the appropriate one
     for (auto cmd = commands_.begin(); cmd != commands_.end(); ++cmd) {
