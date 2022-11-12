@@ -294,22 +294,18 @@ int main(int argc, char **argv) {
       
     cout << "While waiting for the start command, received unexpected \"" << *in_msg << "\"" << endl;
   }
+  
+  // Set the initial position.
+  string command = "move";
+  double target_h_position = 20;
+  int command_time = 0;
 
   int aera_us = -100;
   int receive_deadline = MAXINT;
-  string command;
-  double target_h_position = 0;
-  int command_time = -1;
   while (robot->step(timeStep) != -1) {
     // aera_time moves at 1/10 the simulation speed.
     aera_us += timeStep * 100;
 
-    if (aera_us == 0) {
-      // Set initial condition. 
-      command = "move";
-      command_time = aera_us;
-      target_h_position = 20;
-    }
     if (aera_us == 1700*1000 + 65000) {
       // After grab failure, release and reset the positions of the sphere and cube.
       joint_1->setPosition((0 + position_offset) * position_factor);
