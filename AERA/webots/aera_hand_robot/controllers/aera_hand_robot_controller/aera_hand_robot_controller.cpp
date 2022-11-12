@@ -20,6 +20,7 @@ using namespace webots;
 
 typedef string TCPMessage;
 
+#ifdef DEBUG_STRING_MESSAGE
 static vector<string>
 split(const string& input, char separator)
 {
@@ -31,6 +32,7 @@ split(const string& input, char separator)
 
   return result;
 }
+#endif
 
 static SOCKET open_socket(const char* host, int port) {
   struct sockaddr_in address;
@@ -280,6 +282,19 @@ int main(int argc, char **argv) {
 
   string debug_next_holding = "[]";
 
+  // Send the setup command.
+  unique_ptr<TCPMessage> msg = make_unique<TCPMessage>("setup");
+  sendMessage(aera_fd, std::move(msg));
+  // Wait for "start"
+  while (true) {
+    while (receiveIsReady(aera_fd) == 0) {}
+    auto in_msg = receiveMessage(aera_fd);
+    if (*in_msg == "start")
+      break;
+      
+    cout << "While waiting for the start command, received unexpected \"" << *in_msg << "\"" << endl;
+  }
+
   int aera_us = -100;
   int receive_deadline = MAXINT;
   string command;
@@ -294,10 +309,6 @@ int main(int argc, char **argv) {
       command = "move";
       command_time = aera_us;
       target_h_position = 20;
-      
-      // Send the setup command.
-      unique_ptr<TCPMessage> msg = make_unique<TCPMessage>("setup");
-      sendMessage(aera_fd, std::move(msg));
     }
     if (aera_us == 1700*1000 + 65000) {
       // After grab failure, release and reset the positions of the sphere and cube.
@@ -315,7 +326,8 @@ int main(int argc, char **argv) {
 
     double h_position = get_position(joint_1_sensor->getValue());
     
-    if (aera_us % 100000 == 0) {
+    // Don't send the state at time 0, but wait for the initial position.
+    if (aera_us > 0 && aera_us % 100000 == 0) {
       const double* c_translation = cube->getField("translation")->getSFVec3f();
       double c_offset_x = c_translation[0] - ned_x;
       double c_offset_y = c_translation[1] - ned_y;
@@ -333,9 +345,7 @@ int main(int argc, char **argv) {
         "\ns position " + to_string(s_position) +
         "\nh holding " + debug_next_holding);
       sendMessage(aera_fd, std::move(msg));
-      
-      if (aera_us >= 100000)
-        receive_deadline = aera_us + 65000;
+      receive_deadline = aera_us + 65000;
     }
     
     if (aera_us >= receive_deadline) {
@@ -353,7 +363,6 @@ int main(int argc, char **argv) {
       receive_deadline = MAXINT;
 
       auto in_msg = receiveMessage(aera_fd);
-      cout << "Debug: " << aera_us << " received \"" << *in_msg << "\"" << endl;
       if (!in_msg)
         // Already printed the error.
         break;
@@ -460,7 +469,7 @@ int main(int argc, char **argv) {
         command = "";
       }
     }
-  };
+  }
 
   // Enter here exit cleanup code.
 
