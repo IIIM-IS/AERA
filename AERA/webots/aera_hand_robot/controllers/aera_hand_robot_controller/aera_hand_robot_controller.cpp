@@ -280,8 +280,6 @@ int main(int argc, char **argv) {
   joint_base_to_jaw_1->setPosition(jaw_open);
   joint_base_to_jaw_2->setPosition(jaw_open);
 
-  string debug_next_holding = "[]";
-
   // Send the setup command.
   unique_ptr<TCPMessage> msg = make_unique<TCPMessage>("setup");
   sendMessage(aera_fd, std::move(msg));
@@ -334,12 +332,22 @@ int main(int argc, char **argv) {
       double s_offset_y = s_translation[1] - ned_y;
       double s_position = get_position(atan2(s_offset_x, -s_offset_y));
 
+      string holding = "[]";
+      if (fabs(joint_base_to_jaw_1_sensor->getValue() - jaw_closed) < 0.0005 &&
+          fabs(joint_base_to_jaw_2_sensor->getValue() - jaw_closed)) {
+        // The gripper is in the closed position. Check if an object is at the hand position with elevated Z.
+        if (c_position == h_position && c_translation[2] > 0.0103)
+          holding = "c";
+        if (s_position == h_position && s_translation[2] > 0.0103)
+          holding = "s";
+      }
+
       // Send the current state.
       unique_ptr<TCPMessage> msg = make_unique<TCPMessage>(
         "h position " + to_string(h_position) +
         "\nc position " + to_string(c_position) +
         "\ns position " + to_string(s_position) +
-        "\nh holding " + debug_next_holding);
+        "\nh holding " + holding);
       sendMessage(aera_fd, std::move(msg));
       receive_deadline = aera_us + 65000;
     }
@@ -388,41 +396,6 @@ int main(int argc, char **argv) {
           command_time = aera_us;
       }
     }
-
-    if (aera_us == 300*1000 + 65000)
-      debug_next_holding = "s";
-    if (aera_us == 400*1000 + 65000)
-      debug_next_holding = "[]";
-    if (aera_us == 500*1000 + 65000)
-      debug_next_holding = "s";
-    if (aera_us == 700*1000 + 65000)
-      debug_next_holding = "[]";
-    if (aera_us == 900*1000 + 65000)
-      debug_next_holding = "c";
-    if (aera_us == 1000*1000 + 65000)
-      debug_next_holding = "[]";
-    if (aera_us == 1100*1000 + 65000)
-      debug_next_holding = "c";
-    if (aera_us == 1500*1000 + 65000)
-      debug_next_holding = "[]";
-    if (aera_us == 1800*1000 + 65000)
-      debug_next_holding = "s";
-    if (aera_us == 1900*1000 + 65000)
-      debug_next_holding = "[]";
-    if (aera_us == 2000*1000 + 65000)
-      debug_next_holding = "s";
-    if (aera_us == 2100*1000 + 65000)
-      debug_next_holding = "[]";
-    if (aera_us == 2300*1000 + 65000)
-      debug_next_holding = "c";
-    if (aera_us == 2400*1000 + 65000)
-      debug_next_holding = "[]";
-    if (aera_us == 2500*1000 + 65000)
-      debug_next_holding = "c";
-    if (aera_us == 2700*1000 + 65000)
-      debug_next_holding = "[]";
-    if (aera_us == 3000*1000 + 65000)
-      debug_next_holding = "s";
       
     if (command_time == aera_us) {
       // Execute the command.
