@@ -51,7 +51,7 @@ S3:(cst [] []
 start:(pgm [] [] [] []
    (cmd ready ["hand-grab-sphere"] 1)
 1) |[]
-(ipgm start [] RUN_ONCE sampling_period VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+(ipgm start [] RUN_ONCE 0s VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
 
 m_drive:(mdl [] []
    ; The goal target timings are the same as the drive timings.
