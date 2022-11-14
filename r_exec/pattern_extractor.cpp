@@ -887,6 +887,25 @@ void CTPX::reduce(r_exec::View *input) {
     // Call abstract_object only to update the binding map.
     P<Code> unused = end_bm->abstract_object(consequent, false);
   }
+
+  bool have_delta = false;
+  BindingMap bm_with_delta;
+  if (target_->get_reference(0)->code(0).asOpcode() == Opcodes::MkVal) {
+    // This is the same as the searched_for delta in find_guard_builder.
+    float32 delta = consequent->get_reference(0)->code(MK_VAL_VALUE).asFloat() -
+      target_->get_reference(0)->code(MK_VAL_VALUE).asFloat();
+    if (delta != 0) {
+      have_delta = true;
+      P<Code> delta_code(new LObject());
+      delta_code->code(0) = Atom::Float(delta);
+      bm_with_delta.init(delta_code, 0);
+    }
+  }
+
+  // Add an imdl to this set if the loop would discard it for not sharing values with
+  // the target or consequent, but it does share delta. 
+  set<_Fact*> only_intersects_delta_imdls;
+
   r_code::list<Input>::const_iterator i;
   for (i = inputs_.begin(); i != inputs_.end();) {
 
@@ -917,9 +936,17 @@ void CTPX::reduce(r_exec::View *input) {
     if (i->input_->get_after() >= consequent->get_after())
       // Discard inputs not younger than the consequent.
       i = inputs_.erase(i);
-    else if (!(target_bindings_->intersect(i->bindings_) || end_bm->intersect(i->bindings_)))
+    else if (!(target_bindings_->intersect(i->bindings_) || end_bm->intersect(i->bindings_))) {
       // Discard inputs that do not share values with the target or consequent.
-      i = inputs_.erase(i);
+      // However, allow an imdl which has the delta value.
+      if (have_delta && i->input_->get_reference(0)->code(0).asOpcode() == Opcodes::IMdl &&
+          bm_with_delta.intersect(i->bindings_)) {
+        only_intersects_delta_imdls.insert(i->input_);
+        ++i;
+      }
+      else
+        i = inputs_.erase(i);
+    }
     else
       ++i;
   }
@@ -950,7 +977,9 @@ void CTPX::reduce(r_exec::View *input) {
       continue;
 
     // If the LHS cause is an imdl, assume that the default guard builder will be sufficient.
-    if (need_guard && cause.input_->get_reference(0)->code(0).asOpcode() != Opcodes::IMdl) {
+    // However, if the cause is an imdl where a value is delta (see above), call find_guard_builder.
+    if (need_guard && (cause.input_->get_reference(0)->code(0).asOpcode() != Opcodes::IMdl ||
+          only_intersects_delta_imdls.find(cause.input_) != only_intersects_delta_imdls.end())) {
 
       if ((guard_builder = find_guard_builder(cause.input_, consequent, period)) == NULL)
         continue;
