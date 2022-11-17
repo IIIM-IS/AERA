@@ -948,20 +948,24 @@ Simulator
   * DONE. Fix bug: Not finishing when AERA is in Debug configuration [Jeff]
   * DONE. Does AERA need to send the "start" command to Webots? Yes. Make ready command just accept/log a string.
 
+2022-11-17
+* Webots
+  * DONE. Get holding (s, c, []) from the environment [Jeff]
+  * DONE. Use protobuf (need to compile into Webots) [Leonard]
+
 next meeting
 * Webots
-  * Get holding (s, c, []) from the environment [Jeff]
   * Remove difference between AERA 100ms and Webots 1000 ms [defer]
   * Use setup command for automatic discovery of AERA objects and commands
-  * Re-use communication code from AERA (using Webots Makefile)
   * Get command efferent copy from Webots (move limit to +/- 20) [Maybe in the setup message. Need more discussion]
+  * Let AERA send "reset" message to reset the environment. (Use after grab fails.)
   * Reset the TCP connection when resetting the Webots simulation
-  * Use protobuf (need to compile into Webots) [Leonard]
-  * Put Webots project in Github. (Decide how general the Webots code should be.)
+  * Put code in IIIM-IS/AERA_Webots [Leonard]
+  * Make Visual Studio run protoc in AERA and AERA_Webots [Leonard to try]
 * hand-grab-sphere
+  * Represent sphere position without direct I/O input.
   * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
     * Still need to allow multiple strong requirements in retrieve_imdl.
-  * Represent sphere position without direct I/O input.
 
 TODO
 * Simple example for CKCC paper.
