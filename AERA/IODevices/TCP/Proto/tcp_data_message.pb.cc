@@ -16,246 +16,199 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
-extern PROTOBUF_INTERNAL_EXPORT_tcp_5fdata_5fmessage_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_CommandDescription_tcp_5fdata_5fmessage_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_tcp_5fdata_5fmessage_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_DataMessage_tcp_5fdata_5fmessage_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_tcp_5fdata_5fmessage_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_ProtoVariable_tcp_5fdata_5fmessage_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_tcp_5fdata_5fmessage_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<4> scc_info_SetupMessage_tcp_5fdata_5fmessage_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_tcp_5fdata_5fmessage_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_SetupMessage_CommandsEntry_DoNotUse_tcp_5fdata_5fmessage_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_tcp_5fdata_5fmessage_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_SetupMessage_EntitiesEntry_DoNotUse_tcp_5fdata_5fmessage_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_tcp_5fdata_5fmessage_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_SetupMessage_ObjectsEntry_DoNotUse_tcp_5fdata_5fmessage_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_tcp_5fdata_5fmessage_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_StartMessage_tcp_5fdata_5fmessage_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_tcp_5fdata_5fmessage_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_StopMessage_tcp_5fdata_5fmessage_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_tcp_5fdata_5fmessage_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_VariableDescription_tcp_5fdata_5fmessage_2eproto;
+
+PROTOBUF_PRAGMA_INIT_SEG
+
+namespace _pb = ::PROTOBUF_NAMESPACE_ID;
+namespace _pbi = _pb::internal;
+
 namespace tcp_io_device {
-class TCPMessageDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<TCPMessage> _instance;
-} _TCPMessage_default_instance_;
-class StartMessageDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<StartMessage> _instance;
-} _StartMessage_default_instance_;
-class StopMessageDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<StopMessage> _instance;
-} _StopMessage_default_instance_;
-class SetupMessage_EntitiesEntry_DoNotUseDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<SetupMessage_EntitiesEntry_DoNotUse> _instance;
-} _SetupMessage_EntitiesEntry_DoNotUse_default_instance_;
-class SetupMessage_ObjectsEntry_DoNotUseDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<SetupMessage_ObjectsEntry_DoNotUse> _instance;
-} _SetupMessage_ObjectsEntry_DoNotUse_default_instance_;
-class SetupMessage_CommandsEntry_DoNotUseDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<SetupMessage_CommandsEntry_DoNotUse> _instance;
-} _SetupMessage_CommandsEntry_DoNotUse_default_instance_;
-class SetupMessageDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<SetupMessage> _instance;
-} _SetupMessage_default_instance_;
-class CommandDescriptionDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<CommandDescription> _instance;
-} _CommandDescription_default_instance_;
-class DataMessageDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<DataMessage> _instance;
-} _DataMessage_default_instance_;
-class VariableDescriptionDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<VariableDescription> _instance;
-} _VariableDescription_default_instance_;
-class ProtoVariableDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<ProtoVariable> _instance;
-} _ProtoVariable_default_instance_;
+PROTOBUF_CONSTEXPR TCPMessage::TCPMessage(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.timestamp_)*/uint64_t{0u}
+  , /*decltype(_impl_.messagetype_)*/0
+  , /*decltype(_impl_.message_)*/{}
+  , /*decltype(_impl_._cached_size_)*/{}
+  , /*decltype(_impl_._oneof_case_)*/{}} {}
+struct TCPMessageDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR TCPMessageDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~TCPMessageDefaultTypeInternal() {}
+  union {
+    TCPMessage _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TCPMessageDefaultTypeInternal _TCPMessage_default_instance_;
+PROTOBUF_CONSTEXPR StartMessage::StartMessage(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.diagnosticmode_)*/false
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct StartMessageDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR StartMessageDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~StartMessageDefaultTypeInternal() {}
+  union {
+    StartMessage _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 StartMessageDefaultTypeInternal _StartMessage_default_instance_;
+PROTOBUF_CONSTEXPR StopMessage::StopMessage(
+    ::_pbi::ConstantInitialized) {}
+struct StopMessageDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR StopMessageDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~StopMessageDefaultTypeInternal() {}
+  union {
+    StopMessage _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 StopMessageDefaultTypeInternal _StopMessage_default_instance_;
+PROTOBUF_CONSTEXPR SetupMessage_EntitiesEntry_DoNotUse::SetupMessage_EntitiesEntry_DoNotUse(
+    ::_pbi::ConstantInitialized) {}
+struct SetupMessage_EntitiesEntry_DoNotUseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR SetupMessage_EntitiesEntry_DoNotUseDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~SetupMessage_EntitiesEntry_DoNotUseDefaultTypeInternal() {}
+  union {
+    SetupMessage_EntitiesEntry_DoNotUse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SetupMessage_EntitiesEntry_DoNotUseDefaultTypeInternal _SetupMessage_EntitiesEntry_DoNotUse_default_instance_;
+PROTOBUF_CONSTEXPR SetupMessage_ObjectsEntry_DoNotUse::SetupMessage_ObjectsEntry_DoNotUse(
+    ::_pbi::ConstantInitialized) {}
+struct SetupMessage_ObjectsEntry_DoNotUseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR SetupMessage_ObjectsEntry_DoNotUseDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~SetupMessage_ObjectsEntry_DoNotUseDefaultTypeInternal() {}
+  union {
+    SetupMessage_ObjectsEntry_DoNotUse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SetupMessage_ObjectsEntry_DoNotUseDefaultTypeInternal _SetupMessage_ObjectsEntry_DoNotUse_default_instance_;
+PROTOBUF_CONSTEXPR SetupMessage_CommandsEntry_DoNotUse::SetupMessage_CommandsEntry_DoNotUse(
+    ::_pbi::ConstantInitialized) {}
+struct SetupMessage_CommandsEntry_DoNotUseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR SetupMessage_CommandsEntry_DoNotUseDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~SetupMessage_CommandsEntry_DoNotUseDefaultTypeInternal() {}
+  union {
+    SetupMessage_CommandsEntry_DoNotUse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SetupMessage_CommandsEntry_DoNotUseDefaultTypeInternal _SetupMessage_CommandsEntry_DoNotUse_default_instance_;
+PROTOBUF_CONSTEXPR SetupMessage::SetupMessage(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.entities_)*/{::_pbi::ConstantInitialized()}
+  , /*decltype(_impl_.objects_)*/{::_pbi::ConstantInitialized()}
+  , /*decltype(_impl_.commands_)*/{::_pbi::ConstantInitialized()}
+  , /*decltype(_impl_.commanddescriptions_)*/{}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct SetupMessageDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR SetupMessageDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~SetupMessageDefaultTypeInternal() {}
+  union {
+    SetupMessage _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SetupMessageDefaultTypeInternal _SetupMessage_default_instance_;
+PROTOBUF_CONSTEXPR CommandDescription::CommandDescription(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.name_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.description_)*/nullptr
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct CommandDescriptionDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR CommandDescriptionDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~CommandDescriptionDefaultTypeInternal() {}
+  union {
+    CommandDescription _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CommandDescriptionDefaultTypeInternal _CommandDescription_default_instance_;
+PROTOBUF_CONSTEXPR DataMessage::DataMessage(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.variables_)*/{}
+  , /*decltype(_impl_.timespan_)*/uint64_t{0u}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct DataMessageDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DataMessageDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~DataMessageDefaultTypeInternal() {}
+  union {
+    DataMessage _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DataMessageDefaultTypeInternal _DataMessage_default_instance_;
+PROTOBUF_CONSTEXPR VariableDescription::VariableDescription(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.dimensions_)*/{}
+  , /*decltype(_impl_._dimensions_cached_byte_size_)*/{0}
+  , /*decltype(_impl_.entityid_)*/0
+  , /*decltype(_impl_.id_)*/0
+  , /*decltype(_impl_.datatype_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct VariableDescriptionDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR VariableDescriptionDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~VariableDescriptionDefaultTypeInternal() {}
+  union {
+    VariableDescription _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 VariableDescriptionDefaultTypeInternal _VariableDescription_default_instance_;
+PROTOBUF_CONSTEXPR ProtoVariable::ProtoVariable(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.data_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.metadata_)*/nullptr
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct ProtoVariableDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ProtoVariableDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ProtoVariableDefaultTypeInternal() {}
+  union {
+    ProtoVariable _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ProtoVariableDefaultTypeInternal _ProtoVariable_default_instance_;
 }  // namespace tcp_io_device
-static void InitDefaultsscc_info_CommandDescription_tcp_5fdata_5fmessage_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
+static ::_pb::Metadata file_level_metadata_tcp_5fdata_5fmessage_2eproto[11];
+static const ::_pb::EnumDescriptor* file_level_enum_descriptors_tcp_5fdata_5fmessage_2eproto[2];
+static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_tcp_5fdata_5fmessage_2eproto = nullptr;
 
-  {
-    void* ptr = &::tcp_io_device::_CommandDescription_default_instance_;
-    new (ptr) ::tcp_io_device::CommandDescription();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_CommandDescription_tcp_5fdata_5fmessage_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_CommandDescription_tcp_5fdata_5fmessage_2eproto}, {
-      &scc_info_VariableDescription_tcp_5fdata_5fmessage_2eproto.base,}};
-
-static void InitDefaultsscc_info_DataMessage_tcp_5fdata_5fmessage_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::tcp_io_device::_DataMessage_default_instance_;
-    new (ptr) ::tcp_io_device::DataMessage();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_DataMessage_tcp_5fdata_5fmessage_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_DataMessage_tcp_5fdata_5fmessage_2eproto}, {
-      &scc_info_ProtoVariable_tcp_5fdata_5fmessage_2eproto.base,}};
-
-static void InitDefaultsscc_info_ProtoVariable_tcp_5fdata_5fmessage_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::tcp_io_device::_ProtoVariable_default_instance_;
-    new (ptr) ::tcp_io_device::ProtoVariable();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_ProtoVariable_tcp_5fdata_5fmessage_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_ProtoVariable_tcp_5fdata_5fmessage_2eproto}, {
-      &scc_info_VariableDescription_tcp_5fdata_5fmessage_2eproto.base,}};
-
-static void InitDefaultsscc_info_SetupMessage_tcp_5fdata_5fmessage_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::tcp_io_device::_SetupMessage_default_instance_;
-    new (ptr) ::tcp_io_device::SetupMessage();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<4> scc_info_SetupMessage_tcp_5fdata_5fmessage_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 4, 0, InitDefaultsscc_info_SetupMessage_tcp_5fdata_5fmessage_2eproto}, {
-      &scc_info_SetupMessage_EntitiesEntry_DoNotUse_tcp_5fdata_5fmessage_2eproto.base,
-      &scc_info_SetupMessage_ObjectsEntry_DoNotUse_tcp_5fdata_5fmessage_2eproto.base,
-      &scc_info_SetupMessage_CommandsEntry_DoNotUse_tcp_5fdata_5fmessage_2eproto.base,
-      &scc_info_CommandDescription_tcp_5fdata_5fmessage_2eproto.base,}};
-
-static void InitDefaultsscc_info_SetupMessage_CommandsEntry_DoNotUse_tcp_5fdata_5fmessage_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::tcp_io_device::_SetupMessage_CommandsEntry_DoNotUse_default_instance_;
-    new (ptr) ::tcp_io_device::SetupMessage_CommandsEntry_DoNotUse();
-  }
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_SetupMessage_CommandsEntry_DoNotUse_tcp_5fdata_5fmessage_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_SetupMessage_CommandsEntry_DoNotUse_tcp_5fdata_5fmessage_2eproto}, {}};
-
-static void InitDefaultsscc_info_SetupMessage_EntitiesEntry_DoNotUse_tcp_5fdata_5fmessage_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::tcp_io_device::_SetupMessage_EntitiesEntry_DoNotUse_default_instance_;
-    new (ptr) ::tcp_io_device::SetupMessage_EntitiesEntry_DoNotUse();
-  }
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_SetupMessage_EntitiesEntry_DoNotUse_tcp_5fdata_5fmessage_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_SetupMessage_EntitiesEntry_DoNotUse_tcp_5fdata_5fmessage_2eproto}, {}};
-
-static void InitDefaultsscc_info_SetupMessage_ObjectsEntry_DoNotUse_tcp_5fdata_5fmessage_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::tcp_io_device::_SetupMessage_ObjectsEntry_DoNotUse_default_instance_;
-    new (ptr) ::tcp_io_device::SetupMessage_ObjectsEntry_DoNotUse();
-  }
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_SetupMessage_ObjectsEntry_DoNotUse_tcp_5fdata_5fmessage_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_SetupMessage_ObjectsEntry_DoNotUse_tcp_5fdata_5fmessage_2eproto}, {}};
-
-static void InitDefaultsscc_info_StartMessage_tcp_5fdata_5fmessage_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::tcp_io_device::_StartMessage_default_instance_;
-    new (ptr) ::tcp_io_device::StartMessage();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_StartMessage_tcp_5fdata_5fmessage_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_StartMessage_tcp_5fdata_5fmessage_2eproto}, {}};
-
-static void InitDefaultsscc_info_StopMessage_tcp_5fdata_5fmessage_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::tcp_io_device::_StopMessage_default_instance_;
-    new (ptr) ::tcp_io_device::StopMessage();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_StopMessage_tcp_5fdata_5fmessage_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_StopMessage_tcp_5fdata_5fmessage_2eproto}, {}};
-
-static void InitDefaultsscc_info_TCPMessage_tcp_5fdata_5fmessage_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::tcp_io_device::_TCPMessage_default_instance_;
-    new (ptr) ::tcp_io_device::TCPMessage();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<4> scc_info_TCPMessage_tcp_5fdata_5fmessage_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 4, 0, InitDefaultsscc_info_TCPMessage_tcp_5fdata_5fmessage_2eproto}, {
-      &scc_info_SetupMessage_tcp_5fdata_5fmessage_2eproto.base,
-      &scc_info_DataMessage_tcp_5fdata_5fmessage_2eproto.base,
-      &scc_info_StartMessage_tcp_5fdata_5fmessage_2eproto.base,
-      &scc_info_StopMessage_tcp_5fdata_5fmessage_2eproto.base,}};
-
-static void InitDefaultsscc_info_VariableDescription_tcp_5fdata_5fmessage_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::tcp_io_device::_VariableDescription_default_instance_;
-    new (ptr) ::tcp_io_device::VariableDescription();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_VariableDescription_tcp_5fdata_5fmessage_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_VariableDescription_tcp_5fdata_5fmessage_2eproto}, {}};
-
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_tcp_5fdata_5fmessage_2eproto[11];
-static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_tcp_5fdata_5fmessage_2eproto[2];
-static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_tcp_5fdata_5fmessage_2eproto = nullptr;
-
-const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_tcp_5fdata_5fmessage_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+const uint32_t TableStruct_tcp_5fdata_5fmessage_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::tcp_io_device::TCPMessage, _internal_metadata_),
   ~0u,  // no _extensions_
-  PROTOBUF_FIELD_OFFSET(::tcp_io_device::TCPMessage, _oneof_case_[0]),
+  PROTOBUF_FIELD_OFFSET(::tcp_io_device::TCPMessage, _impl_._oneof_case_[0]),
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::tcp_io_device::TCPMessage, messagetype_),
-  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
-  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
-  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
-  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
-  PROTOBUF_FIELD_OFFSET(::tcp_io_device::TCPMessage, timestamp_),
-  PROTOBUF_FIELD_OFFSET(::tcp_io_device::TCPMessage, message_),
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::tcp_io_device::TCPMessage, _impl_.messagetype_),
+  ::_pbi::kInvalidFieldOffsetTag,
+  ::_pbi::kInvalidFieldOffsetTag,
+  ::_pbi::kInvalidFieldOffsetTag,
+  ::_pbi::kInvalidFieldOffsetTag,
+  PROTOBUF_FIELD_OFFSET(::tcp_io_device::TCPMessage, _impl_.timestamp_),
+  PROTOBUF_FIELD_OFFSET(::tcp_io_device::TCPMessage, _impl_.message_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::tcp_io_device::StartMessage, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::tcp_io_device::StartMessage, diagnosticmode_),
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::tcp_io_device::StartMessage, _impl_.diagnosticmode_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::tcp_io_device::StopMessage, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::tcp_io_device::SetupMessage_EntitiesEntry_DoNotUse, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::tcp_io_device::SetupMessage_EntitiesEntry_DoNotUse, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::tcp_io_device::SetupMessage_EntitiesEntry_DoNotUse, key_),
   PROTOBUF_FIELD_OFFSET(::tcp_io_device::SetupMessage_EntitiesEntry_DoNotUse, value_),
   0,
@@ -265,6 +218,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_tcp_5fdata_5fmessage_2eproto::
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::tcp_io_device::SetupMessage_ObjectsEntry_DoNotUse, key_),
   PROTOBUF_FIELD_OFFSET(::tcp_io_device::SetupMessage_ObjectsEntry_DoNotUse, value_),
   0,
@@ -274,6 +228,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_tcp_5fdata_5fmessage_2eproto::
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::tcp_io_device::SetupMessage_CommandsEntry_DoNotUse, key_),
   PROTOBUF_FIELD_OFFSET(::tcp_io_device::SetupMessage_CommandsEntry_DoNotUse, value_),
   0,
@@ -283,67 +238,72 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_tcp_5fdata_5fmessage_2eproto::
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::tcp_io_device::SetupMessage, entities_),
-  PROTOBUF_FIELD_OFFSET(::tcp_io_device::SetupMessage, objects_),
-  PROTOBUF_FIELD_OFFSET(::tcp_io_device::SetupMessage, commands_),
-  PROTOBUF_FIELD_OFFSET(::tcp_io_device::SetupMessage, commanddescriptions_),
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::tcp_io_device::SetupMessage, _impl_.entities_),
+  PROTOBUF_FIELD_OFFSET(::tcp_io_device::SetupMessage, _impl_.objects_),
+  PROTOBUF_FIELD_OFFSET(::tcp_io_device::SetupMessage, _impl_.commands_),
+  PROTOBUF_FIELD_OFFSET(::tcp_io_device::SetupMessage, _impl_.commanddescriptions_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::tcp_io_device::CommandDescription, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::tcp_io_device::CommandDescription, description_),
-  PROTOBUF_FIELD_OFFSET(::tcp_io_device::CommandDescription, name_),
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::tcp_io_device::CommandDescription, _impl_.description_),
+  PROTOBUF_FIELD_OFFSET(::tcp_io_device::CommandDescription, _impl_.name_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::tcp_io_device::DataMessage, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::tcp_io_device::DataMessage, variables_),
-  PROTOBUF_FIELD_OFFSET(::tcp_io_device::DataMessage, timespan_),
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::tcp_io_device::DataMessage, _impl_.variables_),
+  PROTOBUF_FIELD_OFFSET(::tcp_io_device::DataMessage, _impl_.timespan_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::tcp_io_device::VariableDescription, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::tcp_io_device::VariableDescription, entityid_),
-  PROTOBUF_FIELD_OFFSET(::tcp_io_device::VariableDescription, id_),
-  PROTOBUF_FIELD_OFFSET(::tcp_io_device::VariableDescription, datatype_),
-  PROTOBUF_FIELD_OFFSET(::tcp_io_device::VariableDescription, dimensions_),
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::tcp_io_device::VariableDescription, _impl_.entityid_),
+  PROTOBUF_FIELD_OFFSET(::tcp_io_device::VariableDescription, _impl_.id_),
+  PROTOBUF_FIELD_OFFSET(::tcp_io_device::VariableDescription, _impl_.datatype_),
+  PROTOBUF_FIELD_OFFSET(::tcp_io_device::VariableDescription, _impl_.dimensions_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::tcp_io_device::ProtoVariable, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::tcp_io_device::ProtoVariable, metadata_),
-  PROTOBUF_FIELD_OFFSET(::tcp_io_device::ProtoVariable, data_),
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::tcp_io_device::ProtoVariable, _impl_.metadata_),
+  PROTOBUF_FIELD_OFFSET(::tcp_io_device::ProtoVariable, _impl_.data_),
 };
-static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, -1, sizeof(::tcp_io_device::TCPMessage)},
-  { 12, -1, sizeof(::tcp_io_device::StartMessage)},
-  { 18, -1, sizeof(::tcp_io_device::StopMessage)},
-  { 23, 30, sizeof(::tcp_io_device::SetupMessage_EntitiesEntry_DoNotUse)},
-  { 32, 39, sizeof(::tcp_io_device::SetupMessage_ObjectsEntry_DoNotUse)},
-  { 41, 48, sizeof(::tcp_io_device::SetupMessage_CommandsEntry_DoNotUse)},
-  { 50, -1, sizeof(::tcp_io_device::SetupMessage)},
-  { 59, -1, sizeof(::tcp_io_device::CommandDescription)},
-  { 66, -1, sizeof(::tcp_io_device::DataMessage)},
-  { 73, -1, sizeof(::tcp_io_device::VariableDescription)},
-  { 82, -1, sizeof(::tcp_io_device::ProtoVariable)},
+static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+  { 0, -1, -1, sizeof(::tcp_io_device::TCPMessage)},
+  { 13, -1, -1, sizeof(::tcp_io_device::StartMessage)},
+  { 20, -1, -1, sizeof(::tcp_io_device::StopMessage)},
+  { 26, 34, -1, sizeof(::tcp_io_device::SetupMessage_EntitiesEntry_DoNotUse)},
+  { 36, 44, -1, sizeof(::tcp_io_device::SetupMessage_ObjectsEntry_DoNotUse)},
+  { 46, 54, -1, sizeof(::tcp_io_device::SetupMessage_CommandsEntry_DoNotUse)},
+  { 56, -1, -1, sizeof(::tcp_io_device::SetupMessage)},
+  { 66, -1, -1, sizeof(::tcp_io_device::CommandDescription)},
+  { 74, -1, -1, sizeof(::tcp_io_device::DataMessage)},
+  { 82, -1, -1, sizeof(::tcp_io_device::VariableDescription)},
+  { 92, -1, -1, sizeof(::tcp_io_device::ProtoVariable)},
 };
 
-static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::tcp_io_device::_TCPMessage_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::tcp_io_device::_StartMessage_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::tcp_io_device::_StopMessage_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::tcp_io_device::_SetupMessage_EntitiesEntry_DoNotUse_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::tcp_io_device::_SetupMessage_ObjectsEntry_DoNotUse_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::tcp_io_device::_SetupMessage_CommandsEntry_DoNotUse_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::tcp_io_device::_SetupMessage_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::tcp_io_device::_CommandDescription_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::tcp_io_device::_DataMessage_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::tcp_io_device::_VariableDescription_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::tcp_io_device::_ProtoVariable_default_instance_),
+static const ::_pb::Message* const file_default_instances[] = {
+  &::tcp_io_device::_TCPMessage_default_instance_._instance,
+  &::tcp_io_device::_StartMessage_default_instance_._instance,
+  &::tcp_io_device::_StopMessage_default_instance_._instance,
+  &::tcp_io_device::_SetupMessage_EntitiesEntry_DoNotUse_default_instance_._instance,
+  &::tcp_io_device::_SetupMessage_ObjectsEntry_DoNotUse_default_instance_._instance,
+  &::tcp_io_device::_SetupMessage_CommandsEntry_DoNotUse_default_instance_._instance,
+  &::tcp_io_device::_SetupMessage_default_instance_._instance,
+  &::tcp_io_device::_CommandDescription_default_instance_._instance,
+  &::tcp_io_device::_DataMessage_default_instance_._instance,
+  &::tcp_io_device::_VariableDescription_default_instance_._instance,
+  &::tcp_io_device::_ProtoVariable_default_instance_._instance,
 };
 
 const char descriptor_table_protodef_tcp_5fdata_5fmessage_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -380,33 +340,23 @@ const char descriptor_table_protodef_tcp_5fdata_5fmessage_2eproto[] PROTOBUF_SEC
   "T64\020\003\022\010\n\004BOOL\020\014\022\n\n\006STRING\020\r\022\t\n\005BYTES\020\016\"S"
   "\n\rProtoVariable\0224\n\010metaData\030\001 \001(\0132\".tcp_"
   "io_device.VariableDescription\022\014\n\004data\030\002 "
-  "\001(\014B\003\370\001\001b\006proto3"
+  "\001(\014b\006proto3"
   ;
-static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_tcp_5fdata_5fmessage_2eproto_deps[1] = {
+static ::_pbi::once_flag descriptor_table_tcp_5fdata_5fmessage_2eproto_once;
+const ::_pbi::DescriptorTable descriptor_table_tcp_5fdata_5fmessage_2eproto = {
+    false, false, 1331, descriptor_table_protodef_tcp_5fdata_5fmessage_2eproto,
+    "tcp_data_message.proto",
+    &descriptor_table_tcp_5fdata_5fmessage_2eproto_once, nullptr, 0, 11,
+    schemas, file_default_instances, TableStruct_tcp_5fdata_5fmessage_2eproto::offsets,
+    file_level_metadata_tcp_5fdata_5fmessage_2eproto, file_level_enum_descriptors_tcp_5fdata_5fmessage_2eproto,
+    file_level_service_descriptors_tcp_5fdata_5fmessage_2eproto,
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_tcp_5fdata_5fmessage_2eproto_sccs[11] = {
-  &scc_info_CommandDescription_tcp_5fdata_5fmessage_2eproto.base,
-  &scc_info_DataMessage_tcp_5fdata_5fmessage_2eproto.base,
-  &scc_info_ProtoVariable_tcp_5fdata_5fmessage_2eproto.base,
-  &scc_info_SetupMessage_tcp_5fdata_5fmessage_2eproto.base,
-  &scc_info_SetupMessage_CommandsEntry_DoNotUse_tcp_5fdata_5fmessage_2eproto.base,
-  &scc_info_SetupMessage_EntitiesEntry_DoNotUse_tcp_5fdata_5fmessage_2eproto.base,
-  &scc_info_SetupMessage_ObjectsEntry_DoNotUse_tcp_5fdata_5fmessage_2eproto.base,
-  &scc_info_StartMessage_tcp_5fdata_5fmessage_2eproto.base,
-  &scc_info_StopMessage_tcp_5fdata_5fmessage_2eproto.base,
-  &scc_info_TCPMessage_tcp_5fdata_5fmessage_2eproto.base,
-  &scc_info_VariableDescription_tcp_5fdata_5fmessage_2eproto.base,
-};
-static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_tcp_5fdata_5fmessage_2eproto_once;
-const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_tcp_5fdata_5fmessage_2eproto = {
-  false, false, descriptor_table_protodef_tcp_5fdata_5fmessage_2eproto, "tcp_data_message.proto", 1336,
-  &descriptor_table_tcp_5fdata_5fmessage_2eproto_once, descriptor_table_tcp_5fdata_5fmessage_2eproto_sccs, descriptor_table_tcp_5fdata_5fmessage_2eproto_deps, 11, 0,
-  schemas, file_default_instances, TableStruct_tcp_5fdata_5fmessage_2eproto::offsets,
-  file_level_metadata_tcp_5fdata_5fmessage_2eproto, 11, file_level_enum_descriptors_tcp_5fdata_5fmessage_2eproto, file_level_service_descriptors_tcp_5fdata_5fmessage_2eproto,
-};
+PROTOBUF_ATTRIBUTE_WEAK const ::_pbi::DescriptorTable* descriptor_table_tcp_5fdata_5fmessage_2eproto_getter() {
+  return &descriptor_table_tcp_5fdata_5fmessage_2eproto;
+}
 
 // Force running AddDescriptors() at dynamic initialization time.
-static bool dynamic_init_dummy_tcp_5fdata_5fmessage_2eproto = (static_cast<void>(::PROTOBUF_NAMESPACE_ID::internal::AddDescriptors(&descriptor_table_tcp_5fdata_5fmessage_2eproto)), true);
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY2 static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_tcp_5fdata_5fmessage_2eproto(&descriptor_table_tcp_5fdata_5fmessage_2eproto);
 namespace tcp_io_device {
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* TCPMessage_Type_descriptor() {
   ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_tcp_5fdata_5fmessage_2eproto);
@@ -424,7 +374,7 @@ bool TCPMessage_Type_IsValid(int value) {
   }
 }
 
-#if (__cplusplus < 201703) && (!defined(_MSC_VER) || _MSC_VER >= 1900)
+#if (__cplusplus < 201703) && (!defined(_MSC_VER) || (_MSC_VER >= 1900 && _MSC_VER < 1912))
 constexpr TCPMessage_Type TCPMessage::SETUP;
 constexpr TCPMessage_Type TCPMessage::DATA;
 constexpr TCPMessage_Type TCPMessage::START;
@@ -432,7 +382,7 @@ constexpr TCPMessage_Type TCPMessage::STOP;
 constexpr TCPMessage_Type TCPMessage::Type_MIN;
 constexpr TCPMessage_Type TCPMessage::Type_MAX;
 constexpr int TCPMessage::Type_ARRAYSIZE;
-#endif  // (__cplusplus < 201703) && (!defined(_MSC_VER) || _MSC_VER >= 1900)
+#endif  // (__cplusplus < 201703) && (!defined(_MSC_VER) || (_MSC_VER >= 1900 && _MSC_VER < 1912))
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* VariableDescription_DataType_descriptor() {
   ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_tcp_5fdata_5fmessage_2eproto);
   return file_level_enum_descriptors_tcp_5fdata_5fmessage_2eproto[1];
@@ -450,7 +400,7 @@ bool VariableDescription_DataType_IsValid(int value) {
   }
 }
 
-#if (__cplusplus < 201703) && (!defined(_MSC_VER) || _MSC_VER >= 1900)
+#if (__cplusplus < 201703) && (!defined(_MSC_VER) || (_MSC_VER >= 1900 && _MSC_VER < 1912))
 constexpr VariableDescription_DataType VariableDescription::DOUBLE;
 constexpr VariableDescription_DataType VariableDescription::INT64;
 constexpr VariableDescription_DataType VariableDescription::BOOL;
@@ -459,7 +409,7 @@ constexpr VariableDescription_DataType VariableDescription::BYTES;
 constexpr VariableDescription_DataType VariableDescription::DataType_MIN;
 constexpr VariableDescription_DataType VariableDescription::DataType_MAX;
 constexpr int VariableDescription::DataType_ARRAYSIZE;
-#endif  // (__cplusplus < 201703) && (!defined(_MSC_VER) || _MSC_VER >= 1900)
+#endif  // (__cplusplus < 201703) && (!defined(_MSC_VER) || (_MSC_VER >= 1900 && _MSC_VER < 1912))
 
 // ===================================================================
 
@@ -473,108 +423,120 @@ class TCPMessage::_Internal {
 
 const ::tcp_io_device::SetupMessage&
 TCPMessage::_Internal::setupmessage(const TCPMessage* msg) {
-  return *msg->message_.setupmessage_;
+  return *msg->_impl_.message_.setupmessage_;
 }
 const ::tcp_io_device::DataMessage&
 TCPMessage::_Internal::datamessage(const TCPMessage* msg) {
-  return *msg->message_.datamessage_;
+  return *msg->_impl_.message_.datamessage_;
 }
 const ::tcp_io_device::StartMessage&
 TCPMessage::_Internal::startmessage(const TCPMessage* msg) {
-  return *msg->message_.startmessage_;
+  return *msg->_impl_.message_.startmessage_;
 }
 const ::tcp_io_device::StopMessage&
 TCPMessage::_Internal::stopmessage(const TCPMessage* msg) {
-  return *msg->message_.stopmessage_;
+  return *msg->_impl_.message_.stopmessage_;
 }
 void TCPMessage::set_allocated_setupmessage(::tcp_io_device::SetupMessage* setupmessage) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   clear_message();
   if (setupmessage) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(setupmessage);
+      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(setupmessage);
     if (message_arena != submessage_arena) {
       setupmessage = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, setupmessage, submessage_arena);
     }
     set_has_setupmessage();
-    message_.setupmessage_ = setupmessage;
+    _impl_.message_.setupmessage_ = setupmessage;
   }
   // @@protoc_insertion_point(field_set_allocated:tcp_io_device.TCPMessage.setupMessage)
 }
 void TCPMessage::set_allocated_datamessage(::tcp_io_device::DataMessage* datamessage) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   clear_message();
   if (datamessage) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(datamessage);
+      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(datamessage);
     if (message_arena != submessage_arena) {
       datamessage = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, datamessage, submessage_arena);
     }
     set_has_datamessage();
-    message_.datamessage_ = datamessage;
+    _impl_.message_.datamessage_ = datamessage;
   }
   // @@protoc_insertion_point(field_set_allocated:tcp_io_device.TCPMessage.dataMessage)
 }
 void TCPMessage::set_allocated_startmessage(::tcp_io_device::StartMessage* startmessage) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   clear_message();
   if (startmessage) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(startmessage);
+      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(startmessage);
     if (message_arena != submessage_arena) {
       startmessage = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, startmessage, submessage_arena);
     }
     set_has_startmessage();
-    message_.startmessage_ = startmessage;
+    _impl_.message_.startmessage_ = startmessage;
   }
   // @@protoc_insertion_point(field_set_allocated:tcp_io_device.TCPMessage.startMessage)
 }
 void TCPMessage::set_allocated_stopmessage(::tcp_io_device::StopMessage* stopmessage) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   clear_message();
   if (stopmessage) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(stopmessage);
+      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(stopmessage);
     if (message_arena != submessage_arena) {
       stopmessage = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, stopmessage, submessage_arena);
     }
     set_has_stopmessage();
-    message_.stopmessage_ = stopmessage;
+    _impl_.message_.stopmessage_ = stopmessage;
   }
   // @@protoc_insertion_point(field_set_allocated:tcp_io_device.TCPMessage.stopMessage)
 }
-TCPMessage::TCPMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
-  SharedCtor();
-  RegisterArenaDtor(arena);
+TCPMessage::TCPMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
   // @@protoc_insertion_point(arena_constructor:tcp_io_device.TCPMessage)
 }
 TCPMessage::TCPMessage(const TCPMessage& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
+  TCPMessage* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.timestamp_){}
+    , decltype(_impl_.messagetype_){}
+    , decltype(_impl_.message_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+    , /*decltype(_impl_._oneof_case_)*/{}};
+
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::memcpy(&messagetype_, &from.messagetype_,
-    static_cast<size_t>(reinterpret_cast<char*>(&timestamp_) -
-    reinterpret_cast<char*>(&messagetype_)) + sizeof(timestamp_));
+  ::memcpy(&_impl_.timestamp_, &from._impl_.timestamp_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.messagetype_) -
+    reinterpret_cast<char*>(&_impl_.timestamp_)) + sizeof(_impl_.messagetype_));
   clear_has_message();
   switch (from.message_case()) {
     case kSetupMessage: {
-      _internal_mutable_setupmessage()->::tcp_io_device::SetupMessage::MergeFrom(from._internal_setupmessage());
+      _this->_internal_mutable_setupmessage()->::tcp_io_device::SetupMessage::MergeFrom(
+          from._internal_setupmessage());
       break;
     }
     case kDataMessage: {
-      _internal_mutable_datamessage()->::tcp_io_device::DataMessage::MergeFrom(from._internal_datamessage());
+      _this->_internal_mutable_datamessage()->::tcp_io_device::DataMessage::MergeFrom(
+          from._internal_datamessage());
       break;
     }
     case kStartMessage: {
-      _internal_mutable_startmessage()->::tcp_io_device::StartMessage::MergeFrom(from._internal_startmessage());
+      _this->_internal_mutable_startmessage()->::tcp_io_device::StartMessage::MergeFrom(
+          from._internal_startmessage());
       break;
     }
     case kStopMessage: {
-      _internal_mutable_stopmessage()->::tcp_io_device::StopMessage::MergeFrom(from._internal_stopmessage());
+      _this->_internal_mutable_stopmessage()->::tcp_io_device::StopMessage::MergeFrom(
+          from._internal_stopmessage());
       break;
     }
     case MESSAGE_NOT_SET: {
@@ -584,67 +546,64 @@ TCPMessage::TCPMessage(const TCPMessage& from)
   // @@protoc_insertion_point(copy_constructor:tcp_io_device.TCPMessage)
 }
 
-void TCPMessage::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_TCPMessage_tcp_5fdata_5fmessage_2eproto.base);
-  ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
-      reinterpret_cast<char*>(&messagetype_) - reinterpret_cast<char*>(this)),
-      0, static_cast<size_t>(reinterpret_cast<char*>(&timestamp_) -
-      reinterpret_cast<char*>(&messagetype_)) + sizeof(timestamp_));
+inline void TCPMessage::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.timestamp_){uint64_t{0u}}
+    , decltype(_impl_.messagetype_){0}
+    , decltype(_impl_.message_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+    , /*decltype(_impl_._oneof_case_)*/{}
+  };
   clear_has_message();
 }
 
 TCPMessage::~TCPMessage() {
   // @@protoc_insertion_point(destructor:tcp_io_device.TCPMessage)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
   SharedDtor();
-  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-void TCPMessage::SharedDtor() {
-  GOOGLE_DCHECK(GetArena() == nullptr);
+inline void TCPMessage::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   if (has_message()) {
     clear_message();
   }
 }
 
-void TCPMessage::ArenaDtor(void* object) {
-  TCPMessage* _this = reinterpret_cast< TCPMessage* >(object);
-  (void)_this;
-}
-void TCPMessage::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
-}
 void TCPMessage::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
+  _impl_._cached_size_.Set(size);
 }
-const TCPMessage& TCPMessage::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_TCPMessage_tcp_5fdata_5fmessage_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void TCPMessage::clear_message() {
 // @@protoc_insertion_point(one_of_clear_start:tcp_io_device.TCPMessage)
   switch (message_case()) {
     case kSetupMessage: {
-      if (GetArena() == nullptr) {
-        delete message_.setupmessage_;
+      if (GetArenaForAllocation() == nullptr) {
+        delete _impl_.message_.setupmessage_;
       }
       break;
     }
     case kDataMessage: {
-      if (GetArena() == nullptr) {
-        delete message_.datamessage_;
+      if (GetArenaForAllocation() == nullptr) {
+        delete _impl_.message_.datamessage_;
       }
       break;
     }
     case kStartMessage: {
-      if (GetArena() == nullptr) {
-        delete message_.startmessage_;
+      if (GetArenaForAllocation() == nullptr) {
+        delete _impl_.message_.startmessage_;
       }
       break;
     }
     case kStopMessage: {
-      if (GetArena() == nullptr) {
-        delete message_.stopmessage_;
+      if (GetArenaForAllocation() == nullptr) {
+        delete _impl_.message_.stopmessage_;
       }
       break;
     }
@@ -652,148 +611,150 @@ void TCPMessage::clear_message() {
       break;
     }
   }
-  _oneof_case_[0] = MESSAGE_NOT_SET;
+  _impl_._oneof_case_[0] = MESSAGE_NOT_SET;
 }
 
 
 void TCPMessage::Clear() {
 // @@protoc_insertion_point(message_clear_start:tcp_io_device.TCPMessage)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  ::memset(&messagetype_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&timestamp_) -
-      reinterpret_cast<char*>(&messagetype_)) + sizeof(timestamp_));
+  ::memset(&_impl_.timestamp_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.messagetype_) -
+      reinterpret_cast<char*>(&_impl_.timestamp_)) + sizeof(_impl_.messagetype_));
   clear_message();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* TCPMessage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* TCPMessage::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
-    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    CHK_(ptr);
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
       // .tcp_io_device.TCPMessage.Type messageType = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
-          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
           _internal_set_messagetype(static_cast<::tcp_io_device::TCPMessage_Type>(val));
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // .tcp_io_device.SetupMessage setupMessage = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
           ptr = ctx->ParseMessage(_internal_mutable_setupmessage(), ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // .tcp_io_device.DataMessage dataMessage = 3;
       case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
           ptr = ctx->ParseMessage(_internal_mutable_datamessage(), ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // .tcp_io_device.StartMessage startMessage = 4;
       case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
           ptr = ctx->ParseMessage(_internal_mutable_startmessage(), ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // .tcp_io_device.StopMessage stopMessage = 5;
       case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
           ptr = ctx->ParseMessage(_internal_mutable_stopmessage(), ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // uint64 timestamp = 6;
       case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 48)) {
-          timestamp_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
+          _impl_.timestamp_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
-      default: {
-      handle_unusual:
-        if ((tag & 7) == 4 || tag == 0) {
-          ctx->SetLastTag(tag);
-          goto success;
-        }
-        ptr = UnknownFieldParse(tag,
-            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-            ptr, ctx);
-        CHK_(ptr != nullptr);
-        continue;
-      }
+      default:
+        goto handle_unusual;
     }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
   }  // while
-success:
+message_done:
   return ptr;
 failure:
   ptr = nullptr;
-  goto success;
+  goto message_done;
 #undef CHK_
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* TCPMessage::_InternalSerialize(
-    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+uint8_t* TCPMessage::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:tcp_io_device.TCPMessage)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   // .tcp_io_device.TCPMessage.Type messageType = 1;
-  if (this->messagetype() != 0) {
+  if (this->_internal_messagetype() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
       1, this->_internal_messagetype(), target);
   }
 
   // .tcp_io_device.SetupMessage setupMessage = 2;
   if (_internal_has_setupmessage()) {
-    target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        2, _Internal::setupmessage(this), target, stream);
+      InternalWriteMessage(2, _Internal::setupmessage(this),
+        _Internal::setupmessage(this).GetCachedSize(), target, stream);
   }
 
   // .tcp_io_device.DataMessage dataMessage = 3;
   if (_internal_has_datamessage()) {
-    target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        3, _Internal::datamessage(this), target, stream);
+      InternalWriteMessage(3, _Internal::datamessage(this),
+        _Internal::datamessage(this).GetCachedSize(), target, stream);
   }
 
   // .tcp_io_device.StartMessage startMessage = 4;
   if (_internal_has_startmessage()) {
-    target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        4, _Internal::startmessage(this), target, stream);
+      InternalWriteMessage(4, _Internal::startmessage(this),
+        _Internal::startmessage(this).GetCachedSize(), target, stream);
   }
 
   // .tcp_io_device.StopMessage stopMessage = 5;
   if (_internal_has_stopmessage()) {
-    target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        5, _Internal::stopmessage(this), target, stream);
+      InternalWriteMessage(5, _Internal::stopmessage(this),
+        _Internal::stopmessage(this).GetCachedSize(), target, stream);
   }
 
   // uint64 timestamp = 6;
-  if (this->timestamp() != 0) {
+  if (this->_internal_timestamp() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64ToArray(6, this->_internal_timestamp(), target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(6, this->_internal_timestamp(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:tcp_io_device.TCPMessage)
@@ -804,21 +765,19 @@ size_t TCPMessage::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:tcp_io_device.TCPMessage)
   size_t total_size = 0;
 
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // .tcp_io_device.TCPMessage.Type messageType = 1;
-  if (this->messagetype() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_messagetype());
+  // uint64 timestamp = 6;
+  if (this->_internal_timestamp() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_timestamp());
   }
 
-  // uint64 timestamp = 6;
-  if (this->timestamp() != 0) {
+  // .tcp_io_device.TCPMessage.Type messageType = 1;
+  if (this->_internal_messagetype() != 0) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt64Size(
-        this->_internal_timestamp());
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_messagetype());
   }
 
   switch (message_case()) {
@@ -826,99 +785,84 @@ size_t TCPMessage::ByteSizeLong() const {
     case kSetupMessage: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *message_.setupmessage_);
+          *_impl_.message_.setupmessage_);
       break;
     }
     // .tcp_io_device.DataMessage dataMessage = 3;
     case kDataMessage: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *message_.datamessage_);
+          *_impl_.message_.datamessage_);
       break;
     }
     // .tcp_io_device.StartMessage startMessage = 4;
     case kStartMessage: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *message_.startmessage_);
+          *_impl_.message_.startmessage_);
       break;
     }
     // .tcp_io_device.StopMessage stopMessage = 5;
     case kStopMessage: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *message_.stopmessage_);
+          *_impl_.message_.stopmessage_);
       break;
     }
     case MESSAGE_NOT_SET: {
       break;
     }
   }
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
-        _internal_metadata_, total_size, &_cached_size_);
-  }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-void TCPMessage::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:tcp_io_device.TCPMessage)
-  GOOGLE_DCHECK_NE(&from, this);
-  const TCPMessage* source =
-      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<TCPMessage>(
-          &from);
-  if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:tcp_io_device.TCPMessage)
-    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:tcp_io_device.TCPMessage)
-    MergeFrom(*source);
-  }
-}
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData TCPMessage::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    TCPMessage::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*TCPMessage::GetClassData() const { return &_class_data_; }
 
-void TCPMessage::MergeFrom(const TCPMessage& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:tcp_io_device.TCPMessage)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+
+void TCPMessage::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<TCPMessage*>(&to_msg);
+  auto& from = static_cast<const TCPMessage&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:tcp_io_device.TCPMessage)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.messagetype() != 0) {
-    _internal_set_messagetype(from._internal_messagetype());
+  if (from._internal_timestamp() != 0) {
+    _this->_internal_set_timestamp(from._internal_timestamp());
   }
-  if (from.timestamp() != 0) {
-    _internal_set_timestamp(from._internal_timestamp());
+  if (from._internal_messagetype() != 0) {
+    _this->_internal_set_messagetype(from._internal_messagetype());
   }
   switch (from.message_case()) {
     case kSetupMessage: {
-      _internal_mutable_setupmessage()->::tcp_io_device::SetupMessage::MergeFrom(from._internal_setupmessage());
+      _this->_internal_mutable_setupmessage()->::tcp_io_device::SetupMessage::MergeFrom(
+          from._internal_setupmessage());
       break;
     }
     case kDataMessage: {
-      _internal_mutable_datamessage()->::tcp_io_device::DataMessage::MergeFrom(from._internal_datamessage());
+      _this->_internal_mutable_datamessage()->::tcp_io_device::DataMessage::MergeFrom(
+          from._internal_datamessage());
       break;
     }
     case kStartMessage: {
-      _internal_mutable_startmessage()->::tcp_io_device::StartMessage::MergeFrom(from._internal_startmessage());
+      _this->_internal_mutable_startmessage()->::tcp_io_device::StartMessage::MergeFrom(
+          from._internal_startmessage());
       break;
     }
     case kStopMessage: {
-      _internal_mutable_stopmessage()->::tcp_io_device::StopMessage::MergeFrom(from._internal_stopmessage());
+      _this->_internal_mutable_stopmessage()->::tcp_io_device::StopMessage::MergeFrom(
+          from._internal_stopmessage());
       break;
     }
     case MESSAGE_NOT_SET: {
       break;
     }
   }
-}
-
-void TCPMessage::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:tcp_io_device.TCPMessage)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void TCPMessage::CopyFrom(const TCPMessage& from) {
@@ -934,21 +878,22 @@ bool TCPMessage::IsInitialized() const {
 
 void TCPMessage::InternalSwap(TCPMessage* other) {
   using std::swap;
-  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(TCPMessage, timestamp_)
-      + sizeof(TCPMessage::timestamp_)
-      - PROTOBUF_FIELD_OFFSET(TCPMessage, messagetype_)>(
-          reinterpret_cast<char*>(&messagetype_),
-          reinterpret_cast<char*>(&other->messagetype_));
-  swap(message_, other->message_);
-  swap(_oneof_case_[0], other->_oneof_case_[0]);
+      PROTOBUF_FIELD_OFFSET(TCPMessage, _impl_.messagetype_)
+      + sizeof(TCPMessage::_impl_.messagetype_)
+      - PROTOBUF_FIELD_OFFSET(TCPMessage, _impl_.timestamp_)>(
+          reinterpret_cast<char*>(&_impl_.timestamp_),
+          reinterpret_cast<char*>(&other->_impl_.timestamp_));
+  swap(_impl_.message_, other->_impl_.message_);
+  swap(_impl_._oneof_case_[0], other->_impl_._oneof_case_[0]);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata TCPMessage::GetMetadata() const {
-  return GetMetadataStatic();
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_tcp_5fdata_5fmessage_2eproto_getter, &descriptor_table_tcp_5fdata_5fmessage_2eproto_once,
+      file_level_metadata_tcp_5fdata_5fmessage_2eproto[0]);
 }
-
 
 // ===================================================================
 
@@ -956,108 +901,112 @@ class StartMessage::_Internal {
  public:
 };
 
-StartMessage::StartMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
-  SharedCtor();
-  RegisterArenaDtor(arena);
+StartMessage::StartMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
   // @@protoc_insertion_point(arena_constructor:tcp_io_device.StartMessage)
 }
 StartMessage::StartMessage(const StartMessage& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
+  StartMessage* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.diagnosticmode_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  diagnosticmode_ = from.diagnosticmode_;
+  _this->_impl_.diagnosticmode_ = from._impl_.diagnosticmode_;
   // @@protoc_insertion_point(copy_constructor:tcp_io_device.StartMessage)
 }
 
-void StartMessage::SharedCtor() {
-  diagnosticmode_ = false;
+inline void StartMessage::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.diagnosticmode_){false}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
 }
 
 StartMessage::~StartMessage() {
   // @@protoc_insertion_point(destructor:tcp_io_device.StartMessage)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
   SharedDtor();
-  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-void StartMessage::SharedDtor() {
-  GOOGLE_DCHECK(GetArena() == nullptr);
+inline void StartMessage::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
 }
 
-void StartMessage::ArenaDtor(void* object) {
-  StartMessage* _this = reinterpret_cast< StartMessage* >(object);
-  (void)_this;
-}
-void StartMessage::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
-}
 void StartMessage::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
+  _impl_._cached_size_.Set(size);
 }
-const StartMessage& StartMessage::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_StartMessage_tcp_5fdata_5fmessage_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void StartMessage::Clear() {
 // @@protoc_insertion_point(message_clear_start:tcp_io_device.StartMessage)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  diagnosticmode_ = false;
+  _impl_.diagnosticmode_ = false;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* StartMessage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* StartMessage::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
-    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    CHK_(ptr);
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
       // bool diagnosticMode = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
-          diagnosticmode_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.diagnosticmode_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
-      default: {
-      handle_unusual:
-        if ((tag & 7) == 4 || tag == 0) {
-          ctx->SetLastTag(tag);
-          goto success;
-        }
-        ptr = UnknownFieldParse(tag,
-            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-            ptr, ctx);
-        CHK_(ptr != nullptr);
-        continue;
-      }
+      default:
+        goto handle_unusual;
     }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
   }  // while
-success:
+message_done:
   return ptr;
 failure:
   ptr = nullptr;
-  goto success;
+  goto message_done;
 #undef CHK_
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* StartMessage::_InternalSerialize(
-    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+uint8_t* StartMessage::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:tcp_io_device.StartMessage)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   // bool diagnosticMode = 1;
-  if (this->diagnosticmode() != 0) {
+  if (this->_internal_diagnosticmode() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(1, this->_internal_diagnosticmode(), target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(1, this->_internal_diagnosticmode(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:tcp_io_device.StartMessage)
@@ -1068,56 +1017,37 @@ size_t StartMessage::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:tcp_io_device.StartMessage)
   size_t total_size = 0;
 
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   // bool diagnosticMode = 1;
-  if (this->diagnosticmode() != 0) {
+  if (this->_internal_diagnosticmode() != 0) {
     total_size += 1 + 1;
   }
 
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
-        _internal_metadata_, total_size, &_cached_size_);
-  }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-void StartMessage::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:tcp_io_device.StartMessage)
-  GOOGLE_DCHECK_NE(&from, this);
-  const StartMessage* source =
-      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<StartMessage>(
-          &from);
-  if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:tcp_io_device.StartMessage)
-    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:tcp_io_device.StartMessage)
-    MergeFrom(*source);
-  }
-}
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData StartMessage::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    StartMessage::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*StartMessage::GetClassData() const { return &_class_data_; }
 
-void StartMessage::MergeFrom(const StartMessage& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:tcp_io_device.StartMessage)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+
+void StartMessage::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<StartMessage*>(&to_msg);
+  auto& from = static_cast<const StartMessage&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:tcp_io_device.StartMessage)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.diagnosticmode() != 0) {
-    _internal_set_diagnosticmode(from._internal_diagnosticmode());
+  if (from._internal_diagnosticmode() != 0) {
+    _this->_internal_set_diagnosticmode(from._internal_diagnosticmode());
   }
-}
-
-void StartMessage::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:tcp_io_device.StartMessage)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void StartMessage::CopyFrom(const StartMessage& from) {
@@ -1133,14 +1063,15 @@ bool StartMessage::IsInitialized() const {
 
 void StartMessage::InternalSwap(StartMessage* other) {
   using std::swap;
-  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
-  swap(diagnosticmode_, other->diagnosticmode_);
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_.diagnosticmode_, other->_impl_.diagnosticmode_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata StartMessage::GetMetadata() const {
-  return GetMetadataStatic();
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_tcp_5fdata_5fmessage_2eproto_getter, &descriptor_table_tcp_5fdata_5fmessage_2eproto_once,
+      file_level_metadata_tcp_5fdata_5fmessage_2eproto[1]);
 }
-
 
 // ===================================================================
 
@@ -1148,161 +1079,39 @@ class StopMessage::_Internal {
  public:
 };
 
-StopMessage::StopMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
-  SharedCtor();
-  RegisterArenaDtor(arena);
+StopMessage::StopMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase(arena, is_message_owned) {
   // @@protoc_insertion_point(arena_constructor:tcp_io_device.StopMessage)
 }
 StopMessage::StopMessage(const StopMessage& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase() {
+  StopMessage* const _this = this; (void)_this;
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   // @@protoc_insertion_point(copy_constructor:tcp_io_device.StopMessage)
 }
 
-void StopMessage::SharedCtor() {
-}
-
-StopMessage::~StopMessage() {
-  // @@protoc_insertion_point(destructor:tcp_io_device.StopMessage)
-  SharedDtor();
-  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
-}
-
-void StopMessage::SharedDtor() {
-  GOOGLE_DCHECK(GetArena() == nullptr);
-}
-
-void StopMessage::ArenaDtor(void* object) {
-  StopMessage* _this = reinterpret_cast< StopMessage* >(object);
-  (void)_this;
-}
-void StopMessage::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
-}
-void StopMessage::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
-}
-const StopMessage& StopMessage::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_StopMessage_tcp_5fdata_5fmessage_2eproto.base);
-  return *internal_default_instance();
-}
 
 
-void StopMessage::Clear() {
-// @@protoc_insertion_point(message_clear_start:tcp_io_device.StopMessage)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
 
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
-}
 
-const char* StopMessage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  while (!ctx->Done(&ptr)) {
-    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    CHK_(ptr);
-        if ((tag & 7) == 4 || tag == 0) {
-          ctx->SetLastTag(tag);
-          goto success;
-        }
-        ptr = UnknownFieldParse(tag,
-            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-            ptr, ctx);
-        CHK_(ptr != nullptr);
-        continue;
-  }  // while
-success:
-  return ptr;
-failure:
-  ptr = nullptr;
-  goto success;
-#undef CHK_
-}
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData StopMessage::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl,
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl,
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*StopMessage::GetClassData() const { return &_class_data_; }
 
-::PROTOBUF_NAMESPACE_ID::uint8* StopMessage::_InternalSerialize(
-    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:tcp_io_device.StopMessage)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
 
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:tcp_io_device.StopMessage)
-  return target;
-}
 
-size_t StopMessage::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:tcp_io_device.StopMessage)
-  size_t total_size = 0;
 
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
 
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
-        _internal_metadata_, total_size, &_cached_size_);
-  }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
-}
 
-void StopMessage::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:tcp_io_device.StopMessage)
-  GOOGLE_DCHECK_NE(&from, this);
-  const StopMessage* source =
-      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<StopMessage>(
-          &from);
-  if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:tcp_io_device.StopMessage)
-    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:tcp_io_device.StopMessage)
-    MergeFrom(*source);
-  }
-}
-
-void StopMessage::MergeFrom(const StopMessage& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:tcp_io_device.StopMessage)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-}
-
-void StopMessage::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:tcp_io_device.StopMessage)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-void StopMessage::CopyFrom(const StopMessage& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:tcp_io_device.StopMessage)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool StopMessage::IsInitialized() const {
-  return true;
-}
-
-void StopMessage::InternalSwap(StopMessage* other) {
-  using std::swap;
-  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
-}
 
 ::PROTOBUF_NAMESPACE_ID::Metadata StopMessage::GetMetadata() const {
-  return GetMetadataStatic();
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_tcp_5fdata_5fmessage_2eproto_getter, &descriptor_table_tcp_5fdata_5fmessage_2eproto_once,
+      file_level_metadata_tcp_5fdata_5fmessage_2eproto[2]);
 }
-
 
 // ===================================================================
 
@@ -1313,13 +1122,10 @@ void SetupMessage_EntitiesEntry_DoNotUse::MergeFrom(const SetupMessage_EntitiesE
   MergeFromInternal(other);
 }
 ::PROTOBUF_NAMESPACE_ID::Metadata SetupMessage_EntitiesEntry_DoNotUse::GetMetadata() const {
-  return GetMetadataStatic();
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_tcp_5fdata_5fmessage_2eproto_getter, &descriptor_table_tcp_5fdata_5fmessage_2eproto_once,
+      file_level_metadata_tcp_5fdata_5fmessage_2eproto[3]);
 }
-void SetupMessage_EntitiesEntry_DoNotUse::MergeFrom(
-    const ::PROTOBUF_NAMESPACE_ID::Message& other) {
-  ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom(other);
-}
-
 
 // ===================================================================
 
@@ -1330,13 +1136,10 @@ void SetupMessage_ObjectsEntry_DoNotUse::MergeFrom(const SetupMessage_ObjectsEnt
   MergeFromInternal(other);
 }
 ::PROTOBUF_NAMESPACE_ID::Metadata SetupMessage_ObjectsEntry_DoNotUse::GetMetadata() const {
-  return GetMetadataStatic();
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_tcp_5fdata_5fmessage_2eproto_getter, &descriptor_table_tcp_5fdata_5fmessage_2eproto_once,
+      file_level_metadata_tcp_5fdata_5fmessage_2eproto[4]);
 }
-void SetupMessage_ObjectsEntry_DoNotUse::MergeFrom(
-    const ::PROTOBUF_NAMESPACE_ID::Message& other) {
-  ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom(other);
-}
-
 
 // ===================================================================
 
@@ -1347,13 +1150,10 @@ void SetupMessage_CommandsEntry_DoNotUse::MergeFrom(const SetupMessage_CommandsE
   MergeFromInternal(other);
 }
 ::PROTOBUF_NAMESPACE_ID::Metadata SetupMessage_CommandsEntry_DoNotUse::GetMetadata() const {
-  return GetMetadataStatic();
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_tcp_5fdata_5fmessage_2eproto_getter, &descriptor_table_tcp_5fdata_5fmessage_2eproto_once,
+      file_level_metadata_tcp_5fdata_5fmessage_2eproto[5]);
 }
-void SetupMessage_CommandsEntry_DoNotUse::MergeFrom(
-    const ::PROTOBUF_NAMESPACE_ID::Message& other) {
-  ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom(other);
-}
-
 
 // ===================================================================
 
@@ -1361,114 +1161,137 @@ class SetupMessage::_Internal {
  public:
 };
 
-SetupMessage::SetupMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena),
-  entities_(arena),
-  objects_(arena),
-  commands_(arena),
-  commanddescriptions_(arena) {
-  SharedCtor();
-  RegisterArenaDtor(arena);
+SetupMessage::SetupMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  if (arena != nullptr && !is_message_owned) {
+    arena->OwnCustomDestructor(this, &SetupMessage::ArenaDtor);
+  }
   // @@protoc_insertion_point(arena_constructor:tcp_io_device.SetupMessage)
 }
 SetupMessage::SetupMessage(const SetupMessage& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message(),
-      commanddescriptions_(from.commanddescriptions_) {
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  SetupMessage* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      /*decltype(_impl_.entities_)*/{}
+    , /*decltype(_impl_.objects_)*/{}
+    , /*decltype(_impl_.commands_)*/{}
+    , decltype(_impl_.commanddescriptions_){from._impl_.commanddescriptions_}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  entities_.MergeFrom(from.entities_);
-  objects_.MergeFrom(from.objects_);
-  commands_.MergeFrom(from.commands_);
+  _this->_impl_.entities_.MergeFrom(from._impl_.entities_);
+  _this->_impl_.objects_.MergeFrom(from._impl_.objects_);
+  _this->_impl_.commands_.MergeFrom(from._impl_.commands_);
   // @@protoc_insertion_point(copy_constructor:tcp_io_device.SetupMessage)
 }
 
-void SetupMessage::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_SetupMessage_tcp_5fdata_5fmessage_2eproto.base);
+inline void SetupMessage::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      /*decltype(_impl_.entities_)*/{::_pbi::ArenaInitialized(), arena}
+    , /*decltype(_impl_.objects_)*/{::_pbi::ArenaInitialized(), arena}
+    , /*decltype(_impl_.commands_)*/{::_pbi::ArenaInitialized(), arena}
+    , decltype(_impl_.commanddescriptions_){arena}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
 }
 
 SetupMessage::~SetupMessage() {
   // @@protoc_insertion_point(destructor:tcp_io_device.SetupMessage)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    ArenaDtor(this);
+    return;
+  }
   SharedDtor();
-  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-void SetupMessage::SharedDtor() {
-  GOOGLE_DCHECK(GetArena() == nullptr);
+inline void SetupMessage::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.entities_.Destruct();
+  _impl_.entities_.~MapField();
+  _impl_.objects_.Destruct();
+  _impl_.objects_.~MapField();
+  _impl_.commands_.Destruct();
+  _impl_.commands_.~MapField();
+  _impl_.commanddescriptions_.~RepeatedPtrField();
 }
 
 void SetupMessage::ArenaDtor(void* object) {
   SetupMessage* _this = reinterpret_cast< SetupMessage* >(object);
-  (void)_this;
-}
-void SetupMessage::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+  _this->_impl_.entities_.Destruct();
+  _this->_impl_.objects_.Destruct();
+  _this->_impl_.commands_.Destruct();
 }
 void SetupMessage::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
+  _impl_._cached_size_.Set(size);
 }
-const SetupMessage& SetupMessage::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_SetupMessage_tcp_5fdata_5fmessage_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void SetupMessage::Clear() {
 // @@protoc_insertion_point(message_clear_start:tcp_io_device.SetupMessage)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  entities_.Clear();
-  objects_.Clear();
-  commands_.Clear();
-  commanddescriptions_.Clear();
+  _impl_.entities_.Clear();
+  _impl_.objects_.Clear();
+  _impl_.commands_.Clear();
+  _impl_.commanddescriptions_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* SetupMessage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* SetupMessage::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
-    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    CHK_(ptr);
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
       // map<string, int32> entities = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr -= 1;
           do {
             ptr += 1;
-            ptr = ctx->ParseMessage(&entities_, ptr);
+            ptr = ctx->ParseMessage(&_impl_.entities_, ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // map<string, int32> objects = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
           ptr -= 1;
           do {
             ptr += 1;
-            ptr = ctx->ParseMessage(&objects_, ptr);
+            ptr = ctx->ParseMessage(&_impl_.objects_, ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // map<string, int32> commands = 3;
       case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
           ptr -= 1;
           do {
             ptr += 1;
-            ptr = ctx->ParseMessage(&commands_, ptr);
+            ptr = ctx->ParseMessage(&_impl_.commands_, ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<26>(ptr));
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // repeated .tcp_io_device.CommandDescription commandDescriptions = 4;
       case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
           ptr -= 1;
           do {
             ptr += 1;
@@ -1476,169 +1299,126 @@ const char* SetupMessage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_I
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<34>(ptr));
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
-      default: {
-      handle_unusual:
-        if ((tag & 7) == 4 || tag == 0) {
-          ctx->SetLastTag(tag);
-          goto success;
-        }
-        ptr = UnknownFieldParse(tag,
-            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-            ptr, ctx);
-        CHK_(ptr != nullptr);
-        continue;
-      }
+      default:
+        goto handle_unusual;
     }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
   }  // while
-success:
+message_done:
   return ptr;
 failure:
   ptr = nullptr;
-  goto success;
+  goto message_done;
 #undef CHK_
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* SetupMessage::_InternalSerialize(
-    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+uint8_t* SetupMessage::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:tcp_io_device.SetupMessage)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   // map<string, int32> entities = 1;
   if (!this->_internal_entities().empty()) {
-    typedef ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::PROTOBUF_NAMESPACE_ID::int32 >::const_pointer
-        ConstPtr;
-    typedef ConstPtr SortItem;
-    typedef ::PROTOBUF_NAMESPACE_ID::internal::CompareByDerefFirst<SortItem> Less;
-    struct Utf8Check {
-      static void Check(ConstPtr p) {
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-          p->first.data(), static_cast<int>(p->first.length()),
-          ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-          "tcp_io_device.SetupMessage.EntitiesEntry.key");
-      }
+    using MapType = ::_pb::Map<std::string, int32_t>;
+    using WireHelper = SetupMessage_EntitiesEntry_DoNotUse::Funcs;
+    const auto& map_field = this->_internal_entities();
+    auto check_utf8 = [](const MapType::value_type& entry) {
+      (void)entry;
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+        entry.first.data(), static_cast<int>(entry.first.length()),
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+        "tcp_io_device.SetupMessage.EntitiesEntry.key");
     };
 
-    if (stream->IsSerializationDeterministic() &&
-        this->_internal_entities().size() > 1) {
-      ::std::unique_ptr<SortItem[]> items(
-          new SortItem[this->_internal_entities().size()]);
-      typedef ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::PROTOBUF_NAMESPACE_ID::int32 >::size_type size_type;
-      size_type n = 0;
-      for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::PROTOBUF_NAMESPACE_ID::int32 >::const_iterator
-          it = this->_internal_entities().begin();
-          it != this->_internal_entities().end(); ++it, ++n) {
-        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
-      }
-      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
-      for (size_type i = 0; i < n; i++) {
-        target = SetupMessage_EntitiesEntry_DoNotUse::Funcs::InternalSerialize(1, items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second, target, stream);
-        Utf8Check::Check(&(*items[static_cast<ptrdiff_t>(i)]));
+    if (stream->IsSerializationDeterministic() && map_field.size() > 1) {
+      for (const auto& entry : ::_pbi::MapSorterPtr<MapType>(map_field)) {
+        target = WireHelper::InternalSerialize(1, entry.first, entry.second, target, stream);
+        check_utf8(entry);
       }
     } else {
-      for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::PROTOBUF_NAMESPACE_ID::int32 >::const_iterator
-          it = this->_internal_entities().begin();
-          it != this->_internal_entities().end(); ++it) {
-        target = SetupMessage_EntitiesEntry_DoNotUse::Funcs::InternalSerialize(1, it->first, it->second, target, stream);
-        Utf8Check::Check(&(*it));
+      for (const auto& entry : map_field) {
+        target = WireHelper::InternalSerialize(1, entry.first, entry.second, target, stream);
+        check_utf8(entry);
       }
     }
   }
 
   // map<string, int32> objects = 2;
   if (!this->_internal_objects().empty()) {
-    typedef ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::PROTOBUF_NAMESPACE_ID::int32 >::const_pointer
-        ConstPtr;
-    typedef ConstPtr SortItem;
-    typedef ::PROTOBUF_NAMESPACE_ID::internal::CompareByDerefFirst<SortItem> Less;
-    struct Utf8Check {
-      static void Check(ConstPtr p) {
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-          p->first.data(), static_cast<int>(p->first.length()),
-          ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-          "tcp_io_device.SetupMessage.ObjectsEntry.key");
-      }
+    using MapType = ::_pb::Map<std::string, int32_t>;
+    using WireHelper = SetupMessage_ObjectsEntry_DoNotUse::Funcs;
+    const auto& map_field = this->_internal_objects();
+    auto check_utf8 = [](const MapType::value_type& entry) {
+      (void)entry;
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+        entry.first.data(), static_cast<int>(entry.first.length()),
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+        "tcp_io_device.SetupMessage.ObjectsEntry.key");
     };
 
-    if (stream->IsSerializationDeterministic() &&
-        this->_internal_objects().size() > 1) {
-      ::std::unique_ptr<SortItem[]> items(
-          new SortItem[this->_internal_objects().size()]);
-      typedef ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::PROTOBUF_NAMESPACE_ID::int32 >::size_type size_type;
-      size_type n = 0;
-      for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::PROTOBUF_NAMESPACE_ID::int32 >::const_iterator
-          it = this->_internal_objects().begin();
-          it != this->_internal_objects().end(); ++it, ++n) {
-        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
-      }
-      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
-      for (size_type i = 0; i < n; i++) {
-        target = SetupMessage_ObjectsEntry_DoNotUse::Funcs::InternalSerialize(2, items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second, target, stream);
-        Utf8Check::Check(&(*items[static_cast<ptrdiff_t>(i)]));
+    if (stream->IsSerializationDeterministic() && map_field.size() > 1) {
+      for (const auto& entry : ::_pbi::MapSorterPtr<MapType>(map_field)) {
+        target = WireHelper::InternalSerialize(2, entry.first, entry.second, target, stream);
+        check_utf8(entry);
       }
     } else {
-      for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::PROTOBUF_NAMESPACE_ID::int32 >::const_iterator
-          it = this->_internal_objects().begin();
-          it != this->_internal_objects().end(); ++it) {
-        target = SetupMessage_ObjectsEntry_DoNotUse::Funcs::InternalSerialize(2, it->first, it->second, target, stream);
-        Utf8Check::Check(&(*it));
+      for (const auto& entry : map_field) {
+        target = WireHelper::InternalSerialize(2, entry.first, entry.second, target, stream);
+        check_utf8(entry);
       }
     }
   }
 
   // map<string, int32> commands = 3;
   if (!this->_internal_commands().empty()) {
-    typedef ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::PROTOBUF_NAMESPACE_ID::int32 >::const_pointer
-        ConstPtr;
-    typedef ConstPtr SortItem;
-    typedef ::PROTOBUF_NAMESPACE_ID::internal::CompareByDerefFirst<SortItem> Less;
-    struct Utf8Check {
-      static void Check(ConstPtr p) {
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-          p->first.data(), static_cast<int>(p->first.length()),
-          ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-          "tcp_io_device.SetupMessage.CommandsEntry.key");
-      }
+    using MapType = ::_pb::Map<std::string, int32_t>;
+    using WireHelper = SetupMessage_CommandsEntry_DoNotUse::Funcs;
+    const auto& map_field = this->_internal_commands();
+    auto check_utf8 = [](const MapType::value_type& entry) {
+      (void)entry;
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+        entry.first.data(), static_cast<int>(entry.first.length()),
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+        "tcp_io_device.SetupMessage.CommandsEntry.key");
     };
 
-    if (stream->IsSerializationDeterministic() &&
-        this->_internal_commands().size() > 1) {
-      ::std::unique_ptr<SortItem[]> items(
-          new SortItem[this->_internal_commands().size()]);
-      typedef ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::PROTOBUF_NAMESPACE_ID::int32 >::size_type size_type;
-      size_type n = 0;
-      for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::PROTOBUF_NAMESPACE_ID::int32 >::const_iterator
-          it = this->_internal_commands().begin();
-          it != this->_internal_commands().end(); ++it, ++n) {
-        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
-      }
-      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
-      for (size_type i = 0; i < n; i++) {
-        target = SetupMessage_CommandsEntry_DoNotUse::Funcs::InternalSerialize(3, items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second, target, stream);
-        Utf8Check::Check(&(*items[static_cast<ptrdiff_t>(i)]));
+    if (stream->IsSerializationDeterministic() && map_field.size() > 1) {
+      for (const auto& entry : ::_pbi::MapSorterPtr<MapType>(map_field)) {
+        target = WireHelper::InternalSerialize(3, entry.first, entry.second, target, stream);
+        check_utf8(entry);
       }
     } else {
-      for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::PROTOBUF_NAMESPACE_ID::int32 >::const_iterator
-          it = this->_internal_commands().begin();
-          it != this->_internal_commands().end(); ++it) {
-        target = SetupMessage_CommandsEntry_DoNotUse::Funcs::InternalSerialize(3, it->first, it->second, target, stream);
-        Utf8Check::Check(&(*it));
+      for (const auto& entry : map_field) {
+        target = WireHelper::InternalSerialize(3, entry.first, entry.second, target, stream);
+        check_utf8(entry);
       }
     }
   }
 
   // repeated .tcp_io_device.CommandDescription commandDescriptions = 4;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->_internal_commanddescriptions_size()); i < n; i++) {
-    target = stream->EnsureSpace(target);
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_commanddescriptions_size()); i < n; i++) {
+    const auto& repfield = this->_internal_commanddescriptions(i);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(4, this->_internal_commanddescriptions(i), target, stream);
+        InternalWriteMessage(4, repfield, repfield.GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:tcp_io_device.SetupMessage)
@@ -1649,14 +1429,14 @@ size_t SetupMessage::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:tcp_io_device.SetupMessage)
   size_t total_size = 0;
 
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   // map<string, int32> entities = 1;
   total_size += 1 *
       ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->_internal_entities_size());
-  for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::PROTOBUF_NAMESPACE_ID::int32 >::const_iterator
+  for (::PROTOBUF_NAMESPACE_ID::Map< std::string, int32_t >::const_iterator
       it = this->_internal_entities().begin();
       it != this->_internal_entities().end(); ++it) {
     total_size += SetupMessage_EntitiesEntry_DoNotUse::Funcs::ByteSizeLong(it->first, it->second);
@@ -1665,7 +1445,7 @@ size_t SetupMessage::ByteSizeLong() const {
   // map<string, int32> objects = 2;
   total_size += 1 *
       ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->_internal_objects_size());
-  for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::PROTOBUF_NAMESPACE_ID::int32 >::const_iterator
+  for (::PROTOBUF_NAMESPACE_ID::Map< std::string, int32_t >::const_iterator
       it = this->_internal_objects().begin();
       it != this->_internal_objects().end(); ++it) {
     total_size += SetupMessage_ObjectsEntry_DoNotUse::Funcs::ByteSizeLong(it->first, it->second);
@@ -1674,7 +1454,7 @@ size_t SetupMessage::ByteSizeLong() const {
   // map<string, int32> commands = 3;
   total_size += 1 *
       ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->_internal_commands_size());
-  for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::PROTOBUF_NAMESPACE_ID::int32 >::const_iterator
+  for (::PROTOBUF_NAMESPACE_ID::Map< std::string, int32_t >::const_iterator
       it = this->_internal_commands().begin();
       it != this->_internal_commands().end(); ++it) {
     total_size += SetupMessage_CommandsEntry_DoNotUse::Funcs::ByteSizeLong(it->first, it->second);
@@ -1682,53 +1462,34 @@ size_t SetupMessage::ByteSizeLong() const {
 
   // repeated .tcp_io_device.CommandDescription commandDescriptions = 4;
   total_size += 1UL * this->_internal_commanddescriptions_size();
-  for (const auto& msg : this->commanddescriptions_) {
+  for (const auto& msg : this->_impl_.commanddescriptions_) {
     total_size +=
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
 
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
-        _internal_metadata_, total_size, &_cached_size_);
-  }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-void SetupMessage::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:tcp_io_device.SetupMessage)
-  GOOGLE_DCHECK_NE(&from, this);
-  const SetupMessage* source =
-      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<SetupMessage>(
-          &from);
-  if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:tcp_io_device.SetupMessage)
-    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:tcp_io_device.SetupMessage)
-    MergeFrom(*source);
-  }
-}
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData SetupMessage::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    SetupMessage::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*SetupMessage::GetClassData() const { return &_class_data_; }
 
-void SetupMessage::MergeFrom(const SetupMessage& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:tcp_io_device.SetupMessage)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+
+void SetupMessage::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<SetupMessage*>(&to_msg);
+  auto& from = static_cast<const SetupMessage&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:tcp_io_device.SetupMessage)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  entities_.MergeFrom(from.entities_);
-  objects_.MergeFrom(from.objects_);
-  commands_.MergeFrom(from.commands_);
-  commanddescriptions_.MergeFrom(from.commanddescriptions_);
-}
-
-void SetupMessage::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:tcp_io_device.SetupMessage)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
+  _this->_impl_.entities_.MergeFrom(from._impl_.entities_);
+  _this->_impl_.objects_.MergeFrom(from._impl_.objects_);
+  _this->_impl_.commands_.MergeFrom(from._impl_.commands_);
+  _this->_impl_.commanddescriptions_.MergeFrom(from._impl_.commanddescriptions_);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void SetupMessage::CopyFrom(const SetupMessage& from) {
@@ -1744,17 +1505,18 @@ bool SetupMessage::IsInitialized() const {
 
 void SetupMessage::InternalSwap(SetupMessage* other) {
   using std::swap;
-  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
-  entities_.Swap(&other->entities_);
-  objects_.Swap(&other->objects_);
-  commands_.Swap(&other->commands_);
-  commanddescriptions_.InternalSwap(&other->commanddescriptions_);
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.entities_.InternalSwap(&other->_impl_.entities_);
+  _impl_.objects_.InternalSwap(&other->_impl_.objects_);
+  _impl_.commands_.InternalSwap(&other->_impl_.commands_);
+  _impl_.commanddescriptions_.InternalSwap(&other->_impl_.commanddescriptions_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata SetupMessage::GetMetadata() const {
-  return GetMetadataStatic();
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_tcp_5fdata_5fmessage_2eproto_getter, &descriptor_table_tcp_5fdata_5fmessage_2eproto_once,
+      file_level_metadata_tcp_5fdata_5fmessage_2eproto[6]);
 }
-
 
 // ===================================================================
 
@@ -1765,138 +1527,147 @@ class CommandDescription::_Internal {
 
 const ::tcp_io_device::VariableDescription&
 CommandDescription::_Internal::description(const CommandDescription* msg) {
-  return *msg->description_;
+  return *msg->_impl_.description_;
 }
-CommandDescription::CommandDescription(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
-  SharedCtor();
-  RegisterArenaDtor(arena);
+CommandDescription::CommandDescription(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
   // @@protoc_insertion_point(arena_constructor:tcp_io_device.CommandDescription)
 }
 CommandDescription::CommandDescription(const CommandDescription& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
+  CommandDescription* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.name_){}
+    , decltype(_impl_.description_){nullptr}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _impl_.name_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.name_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_name().empty()) {
-    name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_name(), 
-      GetArena());
+    _this->_impl_.name_.Set(from._internal_name(), 
+      _this->GetArenaForAllocation());
   }
   if (from._internal_has_description()) {
-    description_ = new ::tcp_io_device::VariableDescription(*from.description_);
-  } else {
-    description_ = nullptr;
+    _this->_impl_.description_ = new ::tcp_io_device::VariableDescription(*from._impl_.description_);
   }
   // @@protoc_insertion_point(copy_constructor:tcp_io_device.CommandDescription)
 }
 
-void CommandDescription::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_CommandDescription_tcp_5fdata_5fmessage_2eproto.base);
-  name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  description_ = nullptr;
+inline void CommandDescription::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.name_){}
+    , decltype(_impl_.description_){nullptr}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.name_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.name_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
 CommandDescription::~CommandDescription() {
   // @@protoc_insertion_point(destructor:tcp_io_device.CommandDescription)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
   SharedDtor();
-  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-void CommandDescription::SharedDtor() {
-  GOOGLE_DCHECK(GetArena() == nullptr);
-  name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  if (this != internal_default_instance()) delete description_;
+inline void CommandDescription::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.name_.Destroy();
+  if (this != internal_default_instance()) delete _impl_.description_;
 }
 
-void CommandDescription::ArenaDtor(void* object) {
-  CommandDescription* _this = reinterpret_cast< CommandDescription* >(object);
-  (void)_this;
-}
-void CommandDescription::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
-}
 void CommandDescription::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
+  _impl_._cached_size_.Set(size);
 }
-const CommandDescription& CommandDescription::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_CommandDescription_tcp_5fdata_5fmessage_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void CommandDescription::Clear() {
 // @@protoc_insertion_point(message_clear_start:tcp_io_device.CommandDescription)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  name_.ClearToEmpty();
-  if (GetArena() == nullptr && description_ != nullptr) {
-    delete description_;
+  _impl_.name_.ClearToEmpty();
+  if (GetArenaForAllocation() == nullptr && _impl_.description_ != nullptr) {
+    delete _impl_.description_;
   }
-  description_ = nullptr;
+  _impl_.description_ = nullptr;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* CommandDescription::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* CommandDescription::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
-    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    CHK_(ptr);
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
       // .tcp_io_device.VariableDescription description = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr = ctx->ParseMessage(_internal_mutable_description(), ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // string name = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
           auto str = _internal_mutable_name();
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "tcp_io_device.CommandDescription.name"));
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
-        } else goto handle_unusual;
+          CHK_(::_pbi::VerifyUTF8(str, "tcp_io_device.CommandDescription.name"));
+        } else
+          goto handle_unusual;
         continue;
-      default: {
-      handle_unusual:
-        if ((tag & 7) == 4 || tag == 0) {
-          ctx->SetLastTag(tag);
-          goto success;
-        }
-        ptr = UnknownFieldParse(tag,
-            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-            ptr, ctx);
-        CHK_(ptr != nullptr);
-        continue;
-      }
+      default:
+        goto handle_unusual;
     }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
   }  // while
-success:
+message_done:
   return ptr;
 failure:
   ptr = nullptr;
-  goto success;
+  goto message_done;
 #undef CHK_
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* CommandDescription::_InternalSerialize(
-    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+uint8_t* CommandDescription::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:tcp_io_device.CommandDescription)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   // .tcp_io_device.VariableDescription description = 1;
-  if (this->has_description()) {
-    target = stream->EnsureSpace(target);
+  if (this->_internal_has_description()) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        1, _Internal::description(this), target, stream);
+      InternalWriteMessage(1, _Internal::description(this),
+        _Internal::description(this).GetCachedSize(), target, stream);
   }
 
   // string name = 2;
-  if (this->name().size() > 0) {
+  if (!this->_internal_name().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_name().data(), static_cast<int>(this->_internal_name().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
@@ -1906,7 +1677,7 @@ failure:
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:tcp_io_device.CommandDescription)
@@ -1917,68 +1688,50 @@ size_t CommandDescription::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:tcp_io_device.CommandDescription)
   size_t total_size = 0;
 
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   // string name = 2;
-  if (this->name().size() > 0) {
+  if (!this->_internal_name().empty()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_name());
   }
 
   // .tcp_io_device.VariableDescription description = 1;
-  if (this->has_description()) {
+  if (this->_internal_has_description()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *description_);
+        *_impl_.description_);
   }
 
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
-        _internal_metadata_, total_size, &_cached_size_);
-  }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-void CommandDescription::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:tcp_io_device.CommandDescription)
-  GOOGLE_DCHECK_NE(&from, this);
-  const CommandDescription* source =
-      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<CommandDescription>(
-          &from);
-  if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:tcp_io_device.CommandDescription)
-    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:tcp_io_device.CommandDescription)
-    MergeFrom(*source);
-  }
-}
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData CommandDescription::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    CommandDescription::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*CommandDescription::GetClassData() const { return &_class_data_; }
 
-void CommandDescription::MergeFrom(const CommandDescription& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:tcp_io_device.CommandDescription)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+
+void CommandDescription::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<CommandDescription*>(&to_msg);
+  auto& from = static_cast<const CommandDescription&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:tcp_io_device.CommandDescription)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.name().size() > 0) {
-    _internal_set_name(from._internal_name());
+  if (!from._internal_name().empty()) {
+    _this->_internal_set_name(from._internal_name());
   }
-  if (from.has_description()) {
-    _internal_mutable_description()->::tcp_io_device::VariableDescription::MergeFrom(from._internal_description());
+  if (from._internal_has_description()) {
+    _this->_internal_mutable_description()->::tcp_io_device::VariableDescription::MergeFrom(
+        from._internal_description());
   }
-}
-
-void CommandDescription::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:tcp_io_device.CommandDescription)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void CommandDescription::CopyFrom(const CommandDescription& from) {
@@ -1994,15 +1747,21 @@ bool CommandDescription::IsInitialized() const {
 
 void CommandDescription::InternalSwap(CommandDescription* other) {
   using std::swap;
-  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
-  name_.Swap(&other->name_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
-  swap(description_, other->description_);
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.name_, lhs_arena,
+      &other->_impl_.name_, rhs_arena
+  );
+  swap(_impl_.description_, other->_impl_.description_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata CommandDescription::GetMetadata() const {
-  return GetMetadataStatic();
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_tcp_5fdata_5fmessage_2eproto_getter, &descriptor_table_tcp_5fdata_5fmessage_2eproto_once,
+      file_level_metadata_tcp_5fdata_5fmessage_2eproto[7]);
 }
-
 
 // ===================================================================
 
@@ -2010,72 +1769,74 @@ class DataMessage::_Internal {
  public:
 };
 
-DataMessage::DataMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena),
-  variables_(arena) {
-  SharedCtor();
-  RegisterArenaDtor(arena);
+DataMessage::DataMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
   // @@protoc_insertion_point(arena_constructor:tcp_io_device.DataMessage)
 }
 DataMessage::DataMessage(const DataMessage& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message(),
-      variables_(from.variables_) {
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  DataMessage* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.variables_){from._impl_.variables_}
+    , decltype(_impl_.timespan_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  timespan_ = from.timespan_;
+  _this->_impl_.timespan_ = from._impl_.timespan_;
   // @@protoc_insertion_point(copy_constructor:tcp_io_device.DataMessage)
 }
 
-void DataMessage::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_DataMessage_tcp_5fdata_5fmessage_2eproto.base);
-  timespan_ = PROTOBUF_ULONGLONG(0);
+inline void DataMessage::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.variables_){arena}
+    , decltype(_impl_.timespan_){uint64_t{0u}}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
 }
 
 DataMessage::~DataMessage() {
   // @@protoc_insertion_point(destructor:tcp_io_device.DataMessage)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
   SharedDtor();
-  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-void DataMessage::SharedDtor() {
-  GOOGLE_DCHECK(GetArena() == nullptr);
+inline void DataMessage::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.variables_.~RepeatedPtrField();
 }
 
-void DataMessage::ArenaDtor(void* object) {
-  DataMessage* _this = reinterpret_cast< DataMessage* >(object);
-  (void)_this;
-}
-void DataMessage::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
-}
 void DataMessage::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
+  _impl_._cached_size_.Set(size);
 }
-const DataMessage& DataMessage::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_DataMessage_tcp_5fdata_5fmessage_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void DataMessage::Clear() {
 // @@protoc_insertion_point(message_clear_start:tcp_io_device.DataMessage)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  variables_.Clear();
-  timespan_ = PROTOBUF_ULONGLONG(0);
+  _impl_.variables_.Clear();
+  _impl_.timespan_ = uint64_t{0u};
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* DataMessage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* DataMessage::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
-    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    CHK_(ptr);
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
       // repeated .tcp_io_device.ProtoVariable variables = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr -= 1;
           do {
             ptr += 1;
@@ -2083,59 +1844,62 @@ const char* DataMessage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // uint64 timeSpan = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
-          timespan_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.timespan_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
-      default: {
-      handle_unusual:
-        if ((tag & 7) == 4 || tag == 0) {
-          ctx->SetLastTag(tag);
-          goto success;
-        }
-        ptr = UnknownFieldParse(tag,
-            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-            ptr, ctx);
-        CHK_(ptr != nullptr);
-        continue;
-      }
+      default:
+        goto handle_unusual;
     }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
   }  // while
-success:
+message_done:
   return ptr;
 failure:
   ptr = nullptr;
-  goto success;
+  goto message_done;
 #undef CHK_
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* DataMessage::_InternalSerialize(
-    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+uint8_t* DataMessage::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:tcp_io_device.DataMessage)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   // repeated .tcp_io_device.ProtoVariable variables = 1;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->_internal_variables_size()); i < n; i++) {
-    target = stream->EnsureSpace(target);
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_variables_size()); i < n; i++) {
+    const auto& repfield = this->_internal_variables(i);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(1, this->_internal_variables(i), target, stream);
+        InternalWriteMessage(1, repfield, repfield.GetCachedSize(), target, stream);
   }
 
   // uint64 timeSpan = 2;
-  if (this->timespan() != 0) {
+  if (this->_internal_timespan() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64ToArray(2, this->_internal_timespan(), target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(2, this->_internal_timespan(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:tcp_io_device.DataMessage)
@@ -2146,66 +1910,45 @@ size_t DataMessage::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:tcp_io_device.DataMessage)
   size_t total_size = 0;
 
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   // repeated .tcp_io_device.ProtoVariable variables = 1;
   total_size += 1UL * this->_internal_variables_size();
-  for (const auto& msg : this->variables_) {
+  for (const auto& msg : this->_impl_.variables_) {
     total_size +=
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
 
   // uint64 timeSpan = 2;
-  if (this->timespan() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt64Size(
-        this->_internal_timespan());
+  if (this->_internal_timespan() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_timespan());
   }
 
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
-        _internal_metadata_, total_size, &_cached_size_);
-  }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-void DataMessage::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:tcp_io_device.DataMessage)
-  GOOGLE_DCHECK_NE(&from, this);
-  const DataMessage* source =
-      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<DataMessage>(
-          &from);
-  if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:tcp_io_device.DataMessage)
-    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:tcp_io_device.DataMessage)
-    MergeFrom(*source);
-  }
-}
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData DataMessage::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    DataMessage::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*DataMessage::GetClassData() const { return &_class_data_; }
 
-void DataMessage::MergeFrom(const DataMessage& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:tcp_io_device.DataMessage)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+
+void DataMessage::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<DataMessage*>(&to_msg);
+  auto& from = static_cast<const DataMessage&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:tcp_io_device.DataMessage)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  variables_.MergeFrom(from.variables_);
-  if (from.timespan() != 0) {
-    _internal_set_timespan(from._internal_timespan());
+  _this->_impl_.variables_.MergeFrom(from._impl_.variables_);
+  if (from._internal_timespan() != 0) {
+    _this->_internal_set_timespan(from._internal_timespan());
   }
-}
-
-void DataMessage::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:tcp_io_device.DataMessage)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void DataMessage::CopyFrom(const DataMessage& from) {
@@ -2221,15 +1964,16 @@ bool DataMessage::IsInitialized() const {
 
 void DataMessage::InternalSwap(DataMessage* other) {
   using std::swap;
-  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
-  variables_.InternalSwap(&other->variables_);
-  swap(timespan_, other->timespan_);
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.variables_.InternalSwap(&other->_impl_.variables_);
+  swap(_impl_.timespan_, other->_impl_.timespan_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata DataMessage::GetMetadata() const {
-  return GetMetadataStatic();
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_tcp_5fdata_5fmessage_2eproto_getter, &descriptor_table_tcp_5fdata_5fmessage_2eproto_once,
+      file_level_metadata_tcp_5fdata_5fmessage_2eproto[8]);
 }
-
 
 // ===================================================================
 
@@ -2237,157 +1981,168 @@ class VariableDescription::_Internal {
  public:
 };
 
-VariableDescription::VariableDescription(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena),
-  dimensions_(arena) {
-  SharedCtor();
-  RegisterArenaDtor(arena);
+VariableDescription::VariableDescription(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
   // @@protoc_insertion_point(arena_constructor:tcp_io_device.VariableDescription)
 }
 VariableDescription::VariableDescription(const VariableDescription& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message(),
-      dimensions_(from.dimensions_) {
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  VariableDescription* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.dimensions_){from._impl_.dimensions_}
+    , /*decltype(_impl_._dimensions_cached_byte_size_)*/{0}
+    , decltype(_impl_.entityid_){}
+    , decltype(_impl_.id_){}
+    , decltype(_impl_.datatype_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::memcpy(&entityid_, &from.entityid_,
-    static_cast<size_t>(reinterpret_cast<char*>(&datatype_) -
-    reinterpret_cast<char*>(&entityid_)) + sizeof(datatype_));
+  ::memcpy(&_impl_.entityid_, &from._impl_.entityid_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.datatype_) -
+    reinterpret_cast<char*>(&_impl_.entityid_)) + sizeof(_impl_.datatype_));
   // @@protoc_insertion_point(copy_constructor:tcp_io_device.VariableDescription)
 }
 
-void VariableDescription::SharedCtor() {
-  ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
-      reinterpret_cast<char*>(&entityid_) - reinterpret_cast<char*>(this)),
-      0, static_cast<size_t>(reinterpret_cast<char*>(&datatype_) -
-      reinterpret_cast<char*>(&entityid_)) + sizeof(datatype_));
+inline void VariableDescription::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.dimensions_){arena}
+    , /*decltype(_impl_._dimensions_cached_byte_size_)*/{0}
+    , decltype(_impl_.entityid_){0}
+    , decltype(_impl_.id_){0}
+    , decltype(_impl_.datatype_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
 }
 
 VariableDescription::~VariableDescription() {
   // @@protoc_insertion_point(destructor:tcp_io_device.VariableDescription)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
   SharedDtor();
-  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-void VariableDescription::SharedDtor() {
-  GOOGLE_DCHECK(GetArena() == nullptr);
+inline void VariableDescription::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.dimensions_.~RepeatedField();
 }
 
-void VariableDescription::ArenaDtor(void* object) {
-  VariableDescription* _this = reinterpret_cast< VariableDescription* >(object);
-  (void)_this;
-}
-void VariableDescription::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
-}
 void VariableDescription::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
+  _impl_._cached_size_.Set(size);
 }
-const VariableDescription& VariableDescription::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_VariableDescription_tcp_5fdata_5fmessage_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void VariableDescription::Clear() {
 // @@protoc_insertion_point(message_clear_start:tcp_io_device.VariableDescription)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  dimensions_.Clear();
-  ::memset(&entityid_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&datatype_) -
-      reinterpret_cast<char*>(&entityid_)) + sizeof(datatype_));
+  _impl_.dimensions_.Clear();
+  ::memset(&_impl_.entityid_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.datatype_) -
+      reinterpret_cast<char*>(&_impl_.entityid_)) + sizeof(_impl_.datatype_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* VariableDescription::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* VariableDescription::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
-    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    CHK_(ptr);
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
       // int32 entityID = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
-          entityid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.entityid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // int32 ID = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
-          id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // .tcp_io_device.VariableDescription.DataType dataType = 3;
       case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
-          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
           _internal_set_datatype(static_cast<::tcp_io_device::VariableDescription_DataType>(val));
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // repeated uint64 dimensions = 4;
       case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedUInt64Parser(_internal_mutable_dimensions(), ptr, ctx);
           CHK_(ptr);
-        } else if (static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32) {
+        } else if (static_cast<uint8_t>(tag) == 32) {
           _internal_add_dimensions(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr));
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
-      default: {
-      handle_unusual:
-        if ((tag & 7) == 4 || tag == 0) {
-          ctx->SetLastTag(tag);
-          goto success;
-        }
-        ptr = UnknownFieldParse(tag,
-            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-            ptr, ctx);
-        CHK_(ptr != nullptr);
-        continue;
-      }
+      default:
+        goto handle_unusual;
     }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
   }  // while
-success:
+message_done:
   return ptr;
 failure:
   ptr = nullptr;
-  goto success;
+  goto message_done;
 #undef CHK_
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* VariableDescription::_InternalSerialize(
-    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+uint8_t* VariableDescription::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:tcp_io_device.VariableDescription)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   // int32 entityID = 1;
-  if (this->entityid() != 0) {
+  if (this->_internal_entityid() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_entityid(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_entityid(), target);
   }
 
   // int32 ID = 2;
-  if (this->id() != 0) {
+  if (this->_internal_id() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_id(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(2, this->_internal_id(), target);
   }
 
   // .tcp_io_device.VariableDescription.DataType dataType = 3;
-  if (this->datatype() != 0) {
+  if (this->_internal_datatype() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
       3, this->_internal_datatype(), target);
   }
 
   // repeated uint64 dimensions = 4;
   {
-    int byte_size = _dimensions_cached_byte_size_.load(std::memory_order_relaxed);
+    int byte_size = _impl_._dimensions_cached_byte_size_.load(std::memory_order_relaxed);
     if (byte_size > 0) {
       target = stream->WriteUInt64Packed(
           4, _internal_dimensions(), byte_size, target);
@@ -2395,7 +2150,7 @@ failure:
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:tcp_io_device.VariableDescription)
@@ -2406,93 +2161,69 @@ size_t VariableDescription::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:tcp_io_device.VariableDescription)
   size_t total_size = 0;
 
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   // repeated uint64 dimensions = 4;
   {
-    size_t data_size = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      UInt64Size(this->dimensions_);
+    size_t data_size = ::_pbi::WireFormatLite::
+      UInt64Size(this->_impl_.dimensions_);
     if (data_size > 0) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-            static_cast<::PROTOBUF_NAMESPACE_ID::int32>(data_size));
+        ::_pbi::WireFormatLite::Int32Size(static_cast<int32_t>(data_size));
     }
-    int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(data_size);
-    _dimensions_cached_byte_size_.store(cached_size,
+    int cached_size = ::_pbi::ToCachedSize(data_size);
+    _impl_._dimensions_cached_byte_size_.store(cached_size,
                                     std::memory_order_relaxed);
     total_size += data_size;
   }
 
   // int32 entityID = 1;
-  if (this->entityid() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_entityid());
+  if (this->_internal_entityid() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_entityid());
   }
 
   // int32 ID = 2;
-  if (this->id() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_id());
+  if (this->_internal_id() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_id());
   }
 
   // .tcp_io_device.VariableDescription.DataType dataType = 3;
-  if (this->datatype() != 0) {
+  if (this->_internal_datatype() != 0) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_datatype());
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_datatype());
   }
 
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
-        _internal_metadata_, total_size, &_cached_size_);
-  }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-void VariableDescription::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:tcp_io_device.VariableDescription)
-  GOOGLE_DCHECK_NE(&from, this);
-  const VariableDescription* source =
-      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<VariableDescription>(
-          &from);
-  if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:tcp_io_device.VariableDescription)
-    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:tcp_io_device.VariableDescription)
-    MergeFrom(*source);
-  }
-}
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData VariableDescription::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    VariableDescription::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*VariableDescription::GetClassData() const { return &_class_data_; }
 
-void VariableDescription::MergeFrom(const VariableDescription& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:tcp_io_device.VariableDescription)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+
+void VariableDescription::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<VariableDescription*>(&to_msg);
+  auto& from = static_cast<const VariableDescription&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:tcp_io_device.VariableDescription)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  dimensions_.MergeFrom(from.dimensions_);
-  if (from.entityid() != 0) {
-    _internal_set_entityid(from._internal_entityid());
+  _this->_impl_.dimensions_.MergeFrom(from._impl_.dimensions_);
+  if (from._internal_entityid() != 0) {
+    _this->_internal_set_entityid(from._internal_entityid());
   }
-  if (from.id() != 0) {
-    _internal_set_id(from._internal_id());
+  if (from._internal_id() != 0) {
+    _this->_internal_set_id(from._internal_id());
   }
-  if (from.datatype() != 0) {
-    _internal_set_datatype(from._internal_datatype());
+  if (from._internal_datatype() != 0) {
+    _this->_internal_set_datatype(from._internal_datatype());
   }
-}
-
-void VariableDescription::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:tcp_io_device.VariableDescription)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void VariableDescription::CopyFrom(const VariableDescription& from) {
@@ -2508,20 +2239,21 @@ bool VariableDescription::IsInitialized() const {
 
 void VariableDescription::InternalSwap(VariableDescription* other) {
   using std::swap;
-  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
-  dimensions_.InternalSwap(&other->dimensions_);
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.dimensions_.InternalSwap(&other->_impl_.dimensions_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(VariableDescription, datatype_)
-      + sizeof(VariableDescription::datatype_)
-      - PROTOBUF_FIELD_OFFSET(VariableDescription, entityid_)>(
-          reinterpret_cast<char*>(&entityid_),
-          reinterpret_cast<char*>(&other->entityid_));
+      PROTOBUF_FIELD_OFFSET(VariableDescription, _impl_.datatype_)
+      + sizeof(VariableDescription::_impl_.datatype_)
+      - PROTOBUF_FIELD_OFFSET(VariableDescription, _impl_.entityid_)>(
+          reinterpret_cast<char*>(&_impl_.entityid_),
+          reinterpret_cast<char*>(&other->_impl_.entityid_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata VariableDescription::GetMetadata() const {
-  return GetMetadataStatic();
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_tcp_5fdata_5fmessage_2eproto_getter, &descriptor_table_tcp_5fdata_5fmessage_2eproto_once,
+      file_level_metadata_tcp_5fdata_5fmessage_2eproto[9]);
 }
-
 
 // ===================================================================
 
@@ -2532,143 +2264,152 @@ class ProtoVariable::_Internal {
 
 const ::tcp_io_device::VariableDescription&
 ProtoVariable::_Internal::metadata(const ProtoVariable* msg) {
-  return *msg->metadata_;
+  return *msg->_impl_.metadata_;
 }
-ProtoVariable::ProtoVariable(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
-  SharedCtor();
-  RegisterArenaDtor(arena);
+ProtoVariable::ProtoVariable(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
   // @@protoc_insertion_point(arena_constructor:tcp_io_device.ProtoVariable)
 }
 ProtoVariable::ProtoVariable(const ProtoVariable& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
+  ProtoVariable* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.data_){}
+    , decltype(_impl_.metadata_){nullptr}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  data_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _impl_.data_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.data_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_data().empty()) {
-    data_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_data(), 
-      GetArena());
+    _this->_impl_.data_.Set(from._internal_data(), 
+      _this->GetArenaForAllocation());
   }
   if (from._internal_has_metadata()) {
-    metadata_ = new ::tcp_io_device::VariableDescription(*from.metadata_);
-  } else {
-    metadata_ = nullptr;
+    _this->_impl_.metadata_ = new ::tcp_io_device::VariableDescription(*from._impl_.metadata_);
   }
   // @@protoc_insertion_point(copy_constructor:tcp_io_device.ProtoVariable)
 }
 
-void ProtoVariable::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_ProtoVariable_tcp_5fdata_5fmessage_2eproto.base);
-  data_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  metadata_ = nullptr;
+inline void ProtoVariable::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.data_){}
+    , decltype(_impl_.metadata_){nullptr}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.data_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.data_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
 ProtoVariable::~ProtoVariable() {
   // @@protoc_insertion_point(destructor:tcp_io_device.ProtoVariable)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
   SharedDtor();
-  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-void ProtoVariable::SharedDtor() {
-  GOOGLE_DCHECK(GetArena() == nullptr);
-  data_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  if (this != internal_default_instance()) delete metadata_;
+inline void ProtoVariable::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.data_.Destroy();
+  if (this != internal_default_instance()) delete _impl_.metadata_;
 }
 
-void ProtoVariable::ArenaDtor(void* object) {
-  ProtoVariable* _this = reinterpret_cast< ProtoVariable* >(object);
-  (void)_this;
-}
-void ProtoVariable::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
-}
 void ProtoVariable::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
+  _impl_._cached_size_.Set(size);
 }
-const ProtoVariable& ProtoVariable::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_ProtoVariable_tcp_5fdata_5fmessage_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void ProtoVariable::Clear() {
 // @@protoc_insertion_point(message_clear_start:tcp_io_device.ProtoVariable)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  data_.ClearToEmpty();
-  if (GetArena() == nullptr && metadata_ != nullptr) {
-    delete metadata_;
+  _impl_.data_.ClearToEmpty();
+  if (GetArenaForAllocation() == nullptr && _impl_.metadata_ != nullptr) {
+    delete _impl_.metadata_;
   }
-  metadata_ = nullptr;
+  _impl_.metadata_ = nullptr;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* ProtoVariable::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* ProtoVariable::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
-    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    CHK_(ptr);
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
       // .tcp_io_device.VariableDescription metaData = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr = ctx->ParseMessage(_internal_mutable_metadata(), ptr);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
       // bytes data = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
           auto str = _internal_mutable_data();
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
-        } else goto handle_unusual;
+        } else
+          goto handle_unusual;
         continue;
-      default: {
-      handle_unusual:
-        if ((tag & 7) == 4 || tag == 0) {
-          ctx->SetLastTag(tag);
-          goto success;
-        }
-        ptr = UnknownFieldParse(tag,
-            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-            ptr, ctx);
-        CHK_(ptr != nullptr);
-        continue;
-      }
+      default:
+        goto handle_unusual;
     }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
   }  // while
-success:
+message_done:
   return ptr;
 failure:
   ptr = nullptr;
-  goto success;
+  goto message_done;
 #undef CHK_
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* ProtoVariable::_InternalSerialize(
-    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+uint8_t* ProtoVariable::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:tcp_io_device.ProtoVariable)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   // .tcp_io_device.VariableDescription metaData = 1;
-  if (this->has_metadata()) {
-    target = stream->EnsureSpace(target);
+  if (this->_internal_has_metadata()) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        1, _Internal::metadata(this), target, stream);
+      InternalWriteMessage(1, _Internal::metadata(this),
+        _Internal::metadata(this).GetCachedSize(), target, stream);
   }
 
   // bytes data = 2;
-  if (this->data().size() > 0) {
+  if (!this->_internal_data().empty()) {
     target = stream->WriteBytesMaybeAliased(
         2, this->_internal_data(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:tcp_io_device.ProtoVariable)
@@ -2679,68 +2420,50 @@ size_t ProtoVariable::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:tcp_io_device.ProtoVariable)
   size_t total_size = 0;
 
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   // bytes data = 2;
-  if (this->data().size() > 0) {
+  if (!this->_internal_data().empty()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
         this->_internal_data());
   }
 
   // .tcp_io_device.VariableDescription metaData = 1;
-  if (this->has_metadata()) {
+  if (this->_internal_has_metadata()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *metadata_);
+        *_impl_.metadata_);
   }
 
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
-        _internal_metadata_, total_size, &_cached_size_);
-  }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-void ProtoVariable::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:tcp_io_device.ProtoVariable)
-  GOOGLE_DCHECK_NE(&from, this);
-  const ProtoVariable* source =
-      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<ProtoVariable>(
-          &from);
-  if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:tcp_io_device.ProtoVariable)
-    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:tcp_io_device.ProtoVariable)
-    MergeFrom(*source);
-  }
-}
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ProtoVariable::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    ProtoVariable::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ProtoVariable::GetClassData() const { return &_class_data_; }
 
-void ProtoVariable::MergeFrom(const ProtoVariable& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:tcp_io_device.ProtoVariable)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+
+void ProtoVariable::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<ProtoVariable*>(&to_msg);
+  auto& from = static_cast<const ProtoVariable&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:tcp_io_device.ProtoVariable)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.data().size() > 0) {
-    _internal_set_data(from._internal_data());
+  if (!from._internal_data().empty()) {
+    _this->_internal_set_data(from._internal_data());
   }
-  if (from.has_metadata()) {
-    _internal_mutable_metadata()->::tcp_io_device::VariableDescription::MergeFrom(from._internal_metadata());
+  if (from._internal_has_metadata()) {
+    _this->_internal_mutable_metadata()->::tcp_io_device::VariableDescription::MergeFrom(
+        from._internal_metadata());
   }
-}
-
-void ProtoVariable::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:tcp_io_device.ProtoVariable)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void ProtoVariable::CopyFrom(const ProtoVariable& from) {
@@ -2756,50 +2479,67 @@ bool ProtoVariable::IsInitialized() const {
 
 void ProtoVariable::InternalSwap(ProtoVariable* other) {
   using std::swap;
-  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
-  data_.Swap(&other->data_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
-  swap(metadata_, other->metadata_);
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.data_, lhs_arena,
+      &other->_impl_.data_, rhs_arena
+  );
+  swap(_impl_.metadata_, other->_impl_.metadata_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata ProtoVariable::GetMetadata() const {
-  return GetMetadataStatic();
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_tcp_5fdata_5fmessage_2eproto_getter, &descriptor_table_tcp_5fdata_5fmessage_2eproto_once,
+      file_level_metadata_tcp_5fdata_5fmessage_2eproto[10]);
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace tcp_io_device
 PROTOBUF_NAMESPACE_OPEN
-template<> PROTOBUF_NOINLINE ::tcp_io_device::TCPMessage* Arena::CreateMaybeMessage< ::tcp_io_device::TCPMessage >(Arena* arena) {
+template<> PROTOBUF_NOINLINE ::tcp_io_device::TCPMessage*
+Arena::CreateMaybeMessage< ::tcp_io_device::TCPMessage >(Arena* arena) {
   return Arena::CreateMessageInternal< ::tcp_io_device::TCPMessage >(arena);
 }
-template<> PROTOBUF_NOINLINE ::tcp_io_device::StartMessage* Arena::CreateMaybeMessage< ::tcp_io_device::StartMessage >(Arena* arena) {
+template<> PROTOBUF_NOINLINE ::tcp_io_device::StartMessage*
+Arena::CreateMaybeMessage< ::tcp_io_device::StartMessage >(Arena* arena) {
   return Arena::CreateMessageInternal< ::tcp_io_device::StartMessage >(arena);
 }
-template<> PROTOBUF_NOINLINE ::tcp_io_device::StopMessage* Arena::CreateMaybeMessage< ::tcp_io_device::StopMessage >(Arena* arena) {
+template<> PROTOBUF_NOINLINE ::tcp_io_device::StopMessage*
+Arena::CreateMaybeMessage< ::tcp_io_device::StopMessage >(Arena* arena) {
   return Arena::CreateMessageInternal< ::tcp_io_device::StopMessage >(arena);
 }
-template<> PROTOBUF_NOINLINE ::tcp_io_device::SetupMessage_EntitiesEntry_DoNotUse* Arena::CreateMaybeMessage< ::tcp_io_device::SetupMessage_EntitiesEntry_DoNotUse >(Arena* arena) {
+template<> PROTOBUF_NOINLINE ::tcp_io_device::SetupMessage_EntitiesEntry_DoNotUse*
+Arena::CreateMaybeMessage< ::tcp_io_device::SetupMessage_EntitiesEntry_DoNotUse >(Arena* arena) {
   return Arena::CreateMessageInternal< ::tcp_io_device::SetupMessage_EntitiesEntry_DoNotUse >(arena);
 }
-template<> PROTOBUF_NOINLINE ::tcp_io_device::SetupMessage_ObjectsEntry_DoNotUse* Arena::CreateMaybeMessage< ::tcp_io_device::SetupMessage_ObjectsEntry_DoNotUse >(Arena* arena) {
+template<> PROTOBUF_NOINLINE ::tcp_io_device::SetupMessage_ObjectsEntry_DoNotUse*
+Arena::CreateMaybeMessage< ::tcp_io_device::SetupMessage_ObjectsEntry_DoNotUse >(Arena* arena) {
   return Arena::CreateMessageInternal< ::tcp_io_device::SetupMessage_ObjectsEntry_DoNotUse >(arena);
 }
-template<> PROTOBUF_NOINLINE ::tcp_io_device::SetupMessage_CommandsEntry_DoNotUse* Arena::CreateMaybeMessage< ::tcp_io_device::SetupMessage_CommandsEntry_DoNotUse >(Arena* arena) {
+template<> PROTOBUF_NOINLINE ::tcp_io_device::SetupMessage_CommandsEntry_DoNotUse*
+Arena::CreateMaybeMessage< ::tcp_io_device::SetupMessage_CommandsEntry_DoNotUse >(Arena* arena) {
   return Arena::CreateMessageInternal< ::tcp_io_device::SetupMessage_CommandsEntry_DoNotUse >(arena);
 }
-template<> PROTOBUF_NOINLINE ::tcp_io_device::SetupMessage* Arena::CreateMaybeMessage< ::tcp_io_device::SetupMessage >(Arena* arena) {
+template<> PROTOBUF_NOINLINE ::tcp_io_device::SetupMessage*
+Arena::CreateMaybeMessage< ::tcp_io_device::SetupMessage >(Arena* arena) {
   return Arena::CreateMessageInternal< ::tcp_io_device::SetupMessage >(arena);
 }
-template<> PROTOBUF_NOINLINE ::tcp_io_device::CommandDescription* Arena::CreateMaybeMessage< ::tcp_io_device::CommandDescription >(Arena* arena) {
+template<> PROTOBUF_NOINLINE ::tcp_io_device::CommandDescription*
+Arena::CreateMaybeMessage< ::tcp_io_device::CommandDescription >(Arena* arena) {
   return Arena::CreateMessageInternal< ::tcp_io_device::CommandDescription >(arena);
 }
-template<> PROTOBUF_NOINLINE ::tcp_io_device::DataMessage* Arena::CreateMaybeMessage< ::tcp_io_device::DataMessage >(Arena* arena) {
+template<> PROTOBUF_NOINLINE ::tcp_io_device::DataMessage*
+Arena::CreateMaybeMessage< ::tcp_io_device::DataMessage >(Arena* arena) {
   return Arena::CreateMessageInternal< ::tcp_io_device::DataMessage >(arena);
 }
-template<> PROTOBUF_NOINLINE ::tcp_io_device::VariableDescription* Arena::CreateMaybeMessage< ::tcp_io_device::VariableDescription >(Arena* arena) {
+template<> PROTOBUF_NOINLINE ::tcp_io_device::VariableDescription*
+Arena::CreateMaybeMessage< ::tcp_io_device::VariableDescription >(Arena* arena) {
   return Arena::CreateMessageInternal< ::tcp_io_device::VariableDescription >(arena);
 }
-template<> PROTOBUF_NOINLINE ::tcp_io_device::ProtoVariable* Arena::CreateMaybeMessage< ::tcp_io_device::ProtoVariable >(Arena* arena) {
+template<> PROTOBUF_NOINLINE ::tcp_io_device::ProtoVariable*
+Arena::CreateMaybeMessage< ::tcp_io_device::ProtoVariable >(Arena* arena) {
   return Arena::CreateMessageInternal< ::tcp_io_device::ProtoVariable >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
