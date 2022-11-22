@@ -3,7 +3,7 @@
 This project implements AERA (Auto-catalytic Endogenous Reflective Architecture) using the Replicode
 programming language.
 
-This README file documents general information about AERA.
+For an overview, please visit https://openaera.org . This README file documents general information about the AERA code.
 
 See the file [INSTALL.md](https://github.com/IIIM-IS/AERA/blob/master/INSTALL.md) for build and install instructions.
 
