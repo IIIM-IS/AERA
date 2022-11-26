@@ -159,7 +159,7 @@ M6:(mdl [H: C: P0: T0: T1:] []
    T0:(- T1_RHS 100ms);     Copy from M0.
    T1:(- T3 100ms);         Copy from M0.
    T0_M0:(- T1_RHS 100ms);  Duplicate T0.
-   T1_M0:(- T3 100ms);      Duplicate T0.
+   T1_M0:(- T3 100ms);      Duplicate T1.
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; When hand H is holding some C and the hand moves to position P1, then C will also be at P1.
