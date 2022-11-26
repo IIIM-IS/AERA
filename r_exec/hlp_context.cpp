@@ -155,6 +155,9 @@ bool HLPContext::evaluate_no_dereference() const {
 
       ((HLPOverlay *)overlay_)->bindings_->bind_variable(code_, code_[index_].asAssignmentIndex(), code_[index_].asIndex(), &overlay_->values_[0]);
       return true;
+    } else if (((HLPOverlay*)overlay_)->bindings_->scan_variable(code_[index_].asAssignmentIndex())) {
+      // The assignment expression could not be evaluated, but the assignment variable is already bound.
+      return true;
     } else
       return false;
   }case Atom::OPERATOR: {
