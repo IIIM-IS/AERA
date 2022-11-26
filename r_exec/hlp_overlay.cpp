@@ -105,7 +105,7 @@ bool HLPOverlay::EvaluateFWDTimings(Controller *c, HLPBindingMap *bindings) {
 
 bool HLPOverlay::ScanBWDGuards(Controller *c, HLPBindingMap *bindings) {
 
-  HLPOverlay o(c, bindings);
+  const HLPOverlay o(c, bindings);
   return o.scan_bwd_guards();
 }
 
@@ -223,7 +223,7 @@ bool HLPOverlay::evaluate_fwd_timings() {
   return true;
 }
 
-bool HLPOverlay::scan_bwd_guards() {
+bool HLPOverlay::scan_bwd_guards() const {
 
   uint16 guard_set_index = code_[HLP_BWD_GUARDS].asIndex();
   uint16 guard_count = code_[guard_set_index].getAtomCount();
@@ -245,7 +245,7 @@ bool HLPOverlay::scan_bwd_guards() {
   return true;
 }
 
-bool HLPOverlay::scan_location(uint16 index) {
+bool HLPOverlay::scan_location(uint16 index) const {
 
   Atom a = code_[index];
   switch (a.getDescriptor()) {
@@ -272,7 +272,7 @@ bool HLPOverlay::scan_location(uint16 index) {
   }
 }
 
-bool HLPOverlay::scan_variable(uint16 index) { // check if the variable can be bound.
+bool HLPOverlay::scan_variable(uint16 index) const { // check if the variable can be bound.
 
   uint16 guard_set_index = code_[HLP_BWD_GUARDS].asIndex();
   uint16 guard_count = code_[guard_set_index].getAtomCount();
