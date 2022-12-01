@@ -237,7 +237,8 @@ bool HLPOverlay::scan_bwd_guards() const {
         return false;
       break;
     case Atom::ASSIGN_PTR:
-      if (!scan_location(a.asIndex()))
+      // If scan_location fails, then succeed if the assignment variable is already bound.
+      if (!scan_location(a.asIndex()) && !bindings_->scan_variable(a.asAssignmentIndex()))
         return false;
       break;
     }
