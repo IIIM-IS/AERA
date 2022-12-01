@@ -953,6 +953,10 @@ Simulator
   * DONE. Get holding (s, c, []) from the environment [Jeff]
   * DONE. Use protobuf (need to compile into Webots) [Leonard]
 
+2022-12-01
+* DONE. Fix bug to rename "Visulizer" https://github.com/IIIM-IS/AERA_Visualizer/issues/30
+* DONE. Review/merge pull request for don't fail evaluation if assignment guard is already bound. https://github.com/IIIM-IS/AERA/pull/236
+
 next meeting
 * Webots
   * Remove difference between AERA 100ms and Webots 1000 ms [defer]
