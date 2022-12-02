@@ -722,16 +722,16 @@ class r_exec_dll MemStatic :
 private:
   CriticalSection objectsCS_; // protects last_oid_ and objects_.
   uint32 last_oid_;
-  void bind(View *view); // assigns an oid, stores view->object in objects if needed.
-  void set_last_oid(int32 oid);
+  void bind(View *view) override; // assigns an oid, stores view->object in objects if needed.
+  void set_last_oid(int32 oid) override;
 protected:
   MemStatic();
 public:
   virtual ~MemStatic();
 
-  void delete_object(r_code::Code *object); // erase the object from objects if needed.
+  void delete_object(r_code::Code *object) override; // erase the object from objects if needed.
   // return an image containing valid objects, or all objects if include_invalidated.
-  r_comp::Image *get_objects(bool include_invalidated = false);
+  r_comp::Image *get_objects(bool include_invalidated = false) override;
 };
 
 // _Mem that does not store objects.
@@ -740,16 +740,16 @@ class r_exec_dll MemVolatile :
 private:
   volatile int32 last_oid_;
   uint32 get_oid();
-  void bind(View *view); // assigns an oid (atomic operation).
-  void set_last_oid(int32 oid);
+  void bind(View *view) override; // assigns an oid (atomic operation).
+  void set_last_oid(int32 oid) override;
 protected:
   MemVolatile();
 public:
   virtual ~MemVolatile();
 
-  void delete_object(r_code::Code* /* object */) {}
+  void delete_object(r_code::Code* /* object */) override {}
 
-  r_comp::Image *get_objects(bool /* include_invalidated */) { return NULL; }
+  r_comp::Image *get_objects(bool /* include_invalidated */) override { return NULL; }
 };
 
 /** O is the class of the objects held by the rMem (except groups and notifications):
@@ -766,15 +766,15 @@ public:
   virtual ~MemExec();
 
   // Called at load time.
-  r_code::Code *build_object(r_code::SysObject *source) const;
+  r_code::Code *build_object(r_code::SysObject *source) const override;
 
   // Called at runtime.
-  r_code::Code *_build_object(Atom head) const;
-  r_code::Code *build_object(Atom head) const;
+  r_code::Code *_build_object(Atom head) const override;
+  r_code::Code *build_object(Atom head) const override;
 
   // Executive device functions ////////////////////////////////////////////////////////
 
-  r_code::Code *check_existence(r_code::Code *object);
+  r_code::Code *check_existence(r_code::Code *object) override;
 
   // Called by the communication device (I/O).
   void inject(O *object, View *view);

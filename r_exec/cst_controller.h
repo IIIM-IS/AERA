@@ -206,16 +206,16 @@ private:
     float32 confidence,
     r_code::Code *group) const;
 
-  void kill_views();
-  void check_last_match_time(bool match); // kill if no match after primary_thz;
+  void kill_views() override;
+  void check_last_match_time(bool match) override; // kill if no match after primary_thz;
 public:
   CSTController(r_code::_View *view);
   ~CSTController();
 
-  void take_input(r_exec::View *input);
+  void take_input(r_exec::View *input) override;
   void reduce(r_exec::View *input);
 
-  Fact *get_f_ihlp(HLPBindingMap *bindings, bool wr_enabled) const;
+  Fact *get_f_ihlp(HLPBindingMap *bindings, bool wr_enabled) const override;
   Fact *get_f_icst(HLPBindingMap *bindings, std::vector<P<_Fact> > *axiom_inputs, std::vector<P<_Fact> > *non_axiom_inputs) const;
 
   void inject_icst(Fact *production, float32 confidence, std::chrono::microseconds time_to_live) const; // here, resilience=time to live, in us.

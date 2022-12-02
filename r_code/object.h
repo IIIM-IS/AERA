@@ -121,10 +121,10 @@ public:
   SysView();
   SysView(_View *source);
 
-  void write(word32 *data);
-  void read(word32 *data);
+  void write(word32 *data) override;
+  void read(word32 *data) override;
   uint32 get_size() const;
-  void trace(std::ostream& out);
+  void trace(std::ostream& out) override;
 #ifdef WITH_DETAIL_OID
   int detail_oid_;
 #endif
@@ -149,10 +149,10 @@ public:
   SysObject(Code *source);
   ~SysObject();
 
-  void write(word32 *data);
-  void read(word32 *data);
+  void write(word32 *data) override;
+  void read(word32 *data) override;
   uint32 get_size();
-  void trace(std::ostream& out);
+  void trace(std::ostream& out) override;
   void trace();
 };
 
@@ -361,30 +361,30 @@ public:
   }
   virtual ~LocalObject() {}
 
-  _View *build_view(SysView *source) {
+  _View *build_view(SysView *source) override {
 
     return Code::build_view<_View>(source);
   }
 
-  uint32 get_oid() const { return oid_; }
-  void set_oid(uint32 oid) { oid_ = oid; }
+  uint32 get_oid() const override { return oid_; }
+  void set_oid(uint32 oid) override { oid_ = oid; }
 
-  Atom &code(uint16 i) { return code_[i]; }
-  Atom &code(uint16 i) const { return (*code_.as_std())[i]; }
-  uint16 code_size() const {
+  Atom &code(uint16 i) override { return code_[i]; }
+  Atom &code(uint16 i) const override { return (*code_.as_std())[i]; }
+  uint16 code_size() const override {
     // There can't be more than 65536 code bytes. Explicitly cast to the return type.
     return (uint16)code_.size();
   }
-  void resize_code(uint16 new_size) { code_.as_std()->resize(new_size); }
-  void set_reference(uint16 i, Code *object) { references_[i] = object; }
-  Code *get_reference(uint16 i) const { return (*references_.as_std())[i]; }
-  uint16 references_size() const {
+  void resize_code(uint16 new_size) override { code_.as_std()->resize(new_size); }
+  void set_reference(uint16 i, Code *object) override { references_[i] = object; }
+  Code *get_reference(uint16 i) const override { return (*references_.as_std())[i]; }
+  uint16 references_size() const override {
     // There can't be more than 65536 references. Explicitly cast to the return type.
     return (uint16)references_.size();
   }
-  void clear_references() { references_.as_std()->clear(); }
-  void set_references(std::vector<P<Code> > &new_references) { (*references_.as_std()) = new_references; }
-  void add_reference(Code *object) const { references_.as_std()->push_back(object); }
+  void clear_references() override { references_.as_std()->clear(); }
+  void set_references(std::vector<P<Code> > &new_references) override { (*references_.as_std()) = new_references; }
+  void add_reference(Code *object) const override { references_.as_std()->push_back(object); }
 };
 
 class dll_export Mem {

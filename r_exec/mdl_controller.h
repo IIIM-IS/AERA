@@ -133,7 +133,7 @@ public:
   PrimaryMDLOverlay(Controller *c, const HLPBindingMap *bindngs);
   ~PrimaryMDLOverlay();
 
-  bool reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *req_controller);
+  bool reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *req_controller) override;
 };
 
 class SecondaryMDLOverlay :
@@ -142,7 +142,7 @@ public:
   SecondaryMDLOverlay(Controller *c, const HLPBindingMap *bindngs);
   ~SecondaryMDLOverlay();
 
-  bool reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *req_controller);
+  bool reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *req_controller) override;
 };
 
 class MDLController;
@@ -280,7 +280,7 @@ public:
 
   _Fact *get_lhs() const { return lhs_; }
   _Fact *get_rhs() const { return rhs_; }
-  Fact *get_f_ihlp(HLPBindingMap *bindings, bool wr_enabled) const {
+  Fact *get_f_ihlp(HLPBindingMap *bindings, bool wr_enabled) const override {
     return bindings->build_f_ihlp(get_object(), Opcodes::IMdl, wr_enabled);
   }
 
@@ -374,27 +374,27 @@ public:
 class TopLevelMDLController :
   public PMDLController {
 private:
-  uint32 get_rdx_out_group_count() const { return get_out_group_count() - 1; } // so that rdx are not injected in the drives host.
+  uint32 get_rdx_out_group_count() const override { return get_out_group_count() - 1; } // so that rdx are not injected in the drives host.
 
   void abduce(HLPBindingMap *bm, Fact *super_goal, float32 confidence);
   void abduce_lhs(HLPBindingMap *bm, Fact *super_goal, _Fact *sub_goal_target, Fact *f_imdl, _Fact *evidence);
 
   void register_drive_outcome(Fact *goal, bool success) const;
 
-  void check_last_match_time(bool /* match */) {}
+  void check_last_match_time(bool /* match */) override {}
 public:
   TopLevelMDLController(r_code::_View *view);
 
-  void take_input(r_exec::View *input);
+  void take_input(r_exec::View *input) override;
   void reduce(r_exec::View *input);
 
-  void store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed); // never called.
+  void store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed) override; // never called.
 
-  void predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground);
-  void register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures);
-  void register_goal_outcome(Fact *goal, bool success, _Fact *evidence) const;
-  void register_simulated_goal_outcome(Fact *goal, bool success, _Fact *evidence) const;
-  void register_req_outcome(Fact *f_pred, bool success, bool rate_failures);
+  void predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground) override;
+  void register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures) override;
+  void register_goal_outcome(Fact *goal, bool success, _Fact *evidence) const override;
+  void register_simulated_goal_outcome(Fact *goal, bool success, _Fact *evidence) const override;
+  void register_req_outcome(Fact *f_pred, bool success, bool rate_failures) override;
 };
 
 class SecondaryMDLController;
@@ -429,8 +429,8 @@ private:
   r_code::list<P<r_code::Code> > assumptions_; // produced by the model; garbage collection at reduce() time..
 
   void rate_model(bool success);
-  void kill_views(); // force res in both primary/secondary to 0.
-  void check_last_match_time(bool match); // activate secondary controller if no match after primary_thz;
+  void kill_views() override; // force res in both primary/secondary to 0.
+  void check_last_match_time(bool match) override; // activate secondary controller if no match after primary_thz;
 
   void abduce_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim, Fact *ground, bool set_before);
   void abduce_imdl(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence, Sim *sim);
@@ -457,20 +457,20 @@ public:
 
   void set_secondary(SecondaryMDLController *secondary);
 
-  void take_input(r_exec::View *input);
+  void take_input(r_exec::View *input) override;
   void reduce(r_exec::View *input);
   void reduce_batch(Fact *f_p_f_imdl, MDLController *controller);
 
-  void store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed);
+  void store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed) override;
 
-  void predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground);
+  void predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground) override;
   bool inject_prediction(Fact *prediction, Fact *f_imdl, float32 confidence, Timestamp::duration time_to_live, r_code::Code *mk_rdx) const; // here, resilience=time to live, in us; returns true if the prediction has actually been injected.
 
-  void register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures);
-  void register_req_outcome(Fact *f_pred, bool success, bool rate_failures);
+  void register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures) override;
+  void register_req_outcome(Fact *f_pred, bool success, bool rate_failures) override;
 
-  void register_goal_outcome(Fact *goal, bool success, _Fact *evidence) const;
-  void register_simulated_goal_outcome(Fact *goal, bool success, _Fact *evidence) const;
+  void register_goal_outcome(Fact *goal, bool success, _Fact *evidence) const override;
+  void register_simulated_goal_outcome(Fact *goal, bool success, _Fact *evidence) const override;
 
   bool check_imdl(Fact *goal, HLPBindingMap *bm);
 
@@ -525,22 +525,22 @@ private:
   CriticalSection last_match_timeCS_;
 
   void rate_model(); // record successes only.
-  void kill_views(); // force res in both primary/secondary to 0.
-  void check_last_match_time(bool match); // kill if no match after secondary_thz;
+  void kill_views() override; // force res in both primary/secondary to 0.
+  void check_last_match_time(bool match) override; // kill if no match after secondary_thz;
 public:
   SecondaryMDLController(r_code::_View *view);
 
   void set_primary(PrimaryMDLController *primary);
 
-  void take_input(r_exec::View *input);
+  void take_input(r_exec::View *input) override;
   void reduce(r_exec::View *input);
   void reduce_batch(Fact *f_p_f_imdl, MDLController *controller);
 
-  void store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed);
+  void store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed) override;
 
-  void predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground);
-  void register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures);
-  void register_req_outcome(Fact *f_pred, bool success, bool rate_failures);
+  void predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground) override;
+  void register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures) override;
+  void register_req_outcome(Fact *f_pred, bool success, bool rate_failures) override;
 };
 }
 

@@ -332,15 +332,15 @@ public:
   IPGMContext(r_code::Code *object, Data data) : _Context(&object->code(0), index_, NULL, data), object_(object), view_(NULL) {}
 
   // _Context implementation.
-  _Context *clone() { return new IPGMContext(*this); }
+  _Context *clone() override { return new IPGMContext(*this); }
 
-  bool equal(const _Context *c) const { return *this == *(IPGMContext *)c; }
+  bool equal(const _Context *c) const override { return *this == *(IPGMContext *)c; }
 
-  Atom &get_atom(uint16 i) const { return this->operator [](i); }
+  Atom &get_atom(uint16 i) const override { return this->operator [](i); }
 
-  uint16 get_object_code_size() const { return object_->code_size(); }
+  uint16 get_object_code_size() const override { return object_->code_size(); }
 
-  uint16 get_children_count() const {
+  uint16 get_children_count() const override {
 
     uint16 c;
     switch (data_) {
@@ -362,7 +362,7 @@ public:
   /**
    * Call get_child and return a new allocated copy of the child. The caller is responsible to delete it.
    */
-  _Context *get_child_new(uint16 index) const {
+  _Context *get_child_new(uint16 index) const override {
 
     IPGMContext *_c = new IPGMContext(get_child(index));
     return _c;
@@ -371,7 +371,7 @@ public:
   /**
    * Dereference this and return a new allocated copy. The caller is responsible to delete it.
    */
-  _Context *dereference_new() const {
+  _Context *dereference_new() const override {
 
     IPGMContext *_c = new IPGMContext(dereference());
     return _c;

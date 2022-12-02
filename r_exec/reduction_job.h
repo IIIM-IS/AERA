@@ -111,7 +111,7 @@ public:
   P<View> input_;
   P<_P> processor_;
   ReductionJob(View *input, _P *processor) : _ReductionJob(), input_(input), processor_(processor) {}
-  bool update(Timestamp now) {
+  bool update(Timestamp now) override {
 
     _Mem::Get()->register_reduction_job_latency(now - ijt_);
 #ifdef WITH_DETAIL_OID
@@ -122,7 +122,7 @@ public:
     processor_->reduce(input_);
     return true;
   }
-  void debug() {
+  void debug() override {
 
     processor_->debug(input_);
   }
@@ -135,7 +135,7 @@ public:
   P<T> trigger_; // the event that triggered the job.
   P<C> controller_; // the controller that produced the job.
   BatchReductionJob(_P *processor, T *trigger, C *controller) : _ReductionJob(), processor_(processor), trigger_(trigger), controller_(controller) {}
-  bool update(Timestamp now) {
+  bool update(Timestamp now) override {
 
     _Mem::Get()->register_reduction_job_latency(now - ijt_);
 #ifdef WITH_DETAIL_OID
@@ -151,7 +151,7 @@ public:
 class r_exec_dll ShutdownReductionCore :
   public _ReductionJob {
 public:
-  bool update(Timestamp now);
+  bool update(Timestamp now) override;
 };
 
 class r_exec_dll AsyncInjectionJob :
@@ -159,7 +159,7 @@ class r_exec_dll AsyncInjectionJob :
 public:
   P<View> input_;
   AsyncInjectionJob(View *input) : _ReductionJob(), input_(input) {}
-  bool update(Timestamp now);
+  bool update(Timestamp now) override;
 };
 }
 

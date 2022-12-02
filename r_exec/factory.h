@@ -172,7 +172,7 @@ public:
    */
   static bool MatchObject(const r_code::Code *lhs, const r_code::Code *rhs, bool same_binding_state = false);
 
-  virtual bool is_invalidated();
+  bool is_invalidated() override;
 
   bool is_fact() const { return (code(0).asOpcode() == Opcodes::Fact); }
   bool is_anti_fact() const { return (code(0).asOpcode() == Opcodes::AntiFact); }
@@ -234,8 +234,8 @@ public:
   // For SIM_MANDATORY or SIM_OPTIONAL, provide solution_controller, solution_cfd and solution_before. Otherwise, defaults for SIM_ROOT.
   // For SIM_ROOT, solution_before is unused so use Utils::GetTimeReference() which is 0s:0ms:0us in the decompiled output.
   Sim(SimMode mode, std::chrono::microseconds thz, Fact *super_goal, bool opposite, Controller *root, float32 psln_thr, Controller *solution_controller = NULL, float32 solution_cfd = 0, Timestamp solution_before = r_code::Utils::GetTimeReference());
-  bool invalidate();
-  bool is_invalidated();
+  bool invalidate() override;
+  bool is_invalidated() override;
   // If SIM_MANDATORY or SIM_OPTIONAL: qualifies a sub-goal of the branch's root.
   SimMode get_mode() const { return (SimMode)(int)code(SIM_MODE).asFloat(); }
   // simulation time allowance (this is not the goal deadline); 0 indicates no time for simulation.
@@ -421,7 +421,7 @@ public:
    * call invalidate() and return true.
    * \return true if this is invalidated.
    */
-  bool is_invalidated();
+  bool is_invalidated() override;
   bool grounds_invalidated(_Fact *evidence);
 
   _Fact *get_target() const { return (_Fact *)get_reference(0); }
@@ -503,8 +503,8 @@ public:
   Goal(r_code::SysObject *source);
   Goal(_Fact *target, r_code::Code *actor, Sim* sim, float32 psln_thr);
 
-  bool invalidate();
-  bool is_invalidated();
+  bool invalidate() override;
+  bool is_invalidated() override;
   bool ground_invalidated(_Fact *evidence);
 
   bool is_requirement() const;
@@ -613,7 +613,7 @@ public:
   ICST();
   ICST(r_code::SysObject *source);
 
-  bool is_invalidated();
+  bool is_invalidated() override;
 
   bool contains(const _Fact *component, uint16 &component_index) const;
 

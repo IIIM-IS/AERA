@@ -112,9 +112,9 @@ protected:
 public:
   virtual ~ASTController();
 
-  r_code::Code *get_core_object() const { return get_object(); }
+  r_code::Code *get_core_object() const override { return get_object(); }
 
-  void take_input(r_exec::View *input);
+  void take_input(r_exec::View *input) override;
   void reduce(View *input);
 };
 

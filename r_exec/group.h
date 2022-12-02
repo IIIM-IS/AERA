@@ -224,7 +224,7 @@ public:
     public ModSet {
   public:
     Mod(uint32 oid, uint16 member_index, float32 value) : ModSet(oid, member_index, value) {}
-    void execute(Group *g) const {
+    void execute(Group *g) const override {
 
       View *v = g->get_view(oid_);
       if (v)
@@ -236,7 +236,7 @@ public:
     public ModSet {
   public:
     Set(uint32 oid, uint16 member_index, float32 value) : ModSet(oid, member_index, value) {}
-    void execute(Group *g) const {
+    void execute(Group *g) const override {
 
       View *v = g->get_view(oid_);
       if (v)
@@ -251,7 +251,7 @@ public:
   Group(r_code::SysObject *source);
   virtual ~Group();
 
-  bool invalidate(); // removes all views of itself and of any other object.
+  bool invalidate() override; // removes all views of itself and of any other object.
 
   bool all_views_cond(uint8 &selector, std::unordered_map<uint32, P<View> >::const_iterator &it, std::unordered_map<uint32, P<View> >::const_iterator &end) {
     while (it == end) {
@@ -429,8 +429,8 @@ public:
   // Target upr, spr, c_sln, c_act, sln_thr, act_thr, vis_thr, c_sln_thr, c_act_thr, sln_chg_thr,
   // sln_chg_prd, act_chg_thr, act_chg_prd, high_sln_thr, low_sln_thr, sln_ntf_prd, high_act_thr, low_act_thr, act_ntf_prd, low_res_thr, res_ntf_prd, ntf_new,
   // dcy_per, dcy-tgt, dcy_prd.
-  void mod(uint16 member_index, float32 value);
-  void set(uint16 member_index, float32 value);
+  void mod(uint16 member_index, float32 value) override;
+  void set(uint16 member_index, float32 value) override;
 
   void reset_stats(); // called at the begining of an update.
   void update_stats(); // at the end of an update; may produce notifcations.

@@ -104,7 +104,7 @@ public:
     bool rate_failures);
   ~PMonitor();
 
-  bool reduce(_Fact *input);
+  bool reduce(_Fact *input) override;
   void update(Timestamp &next_target);
 };
 }

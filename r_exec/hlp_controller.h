@@ -198,9 +198,9 @@ protected:
 public:
   virtual ~HLPController();
 
-  void invalidate();
+  void invalidate() override;
 
-  r_code::Code *get_core_object() const { return get_object(); } // cst or mdl.
+  r_code::Code *get_core_object() const override { return get_object(); } // cst or mdl.
   r_code::Code *get_unpacked_object() const { // the unpacked version of the core object.
 
     r_code::Code *core_object = get_core_object();

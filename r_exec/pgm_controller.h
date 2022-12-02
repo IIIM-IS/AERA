@@ -98,7 +98,7 @@ protected:
   _PGMController(r_code::_View *ipgm_view);
   virtual ~_PGMController();
 public:
-  r_code::Code *get_core_object() const { return get_object()->get_reference(0); }
+  r_code::Code *get_core_object() const override { return get_object()->get_reference(0); }
 };
 
 // TimeCores holding InputLessPGMSignalingJob trigger the injection of the productions.
@@ -119,7 +119,7 @@ public:
   PGMController(r_code::_View *ipgm_view);
   virtual ~PGMController();
 
-  void take_input(r_exec::View *input);
+  void take_input(r_exec::View *input) override;
   void reduce(r_exec::View *input);
 
   void notify_reduction();
@@ -137,7 +137,7 @@ public:
   AntiPGMController(r_code::_View *ipgm_view);
   ~AntiPGMController();
 
-  void take_input(r_exec::View *input);
+  void take_input(r_exec::View *input) override;
   void reduce(r_exec::View *input);
   void signal_anti_pgm();
 

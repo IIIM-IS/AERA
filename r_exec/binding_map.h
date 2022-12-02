@@ -145,12 +145,12 @@ public:
   UnboundValue(BindingMap *map, uint8 index);
   ~UnboundValue();
 
-  Value *copy(BindingMap *map) const;
-  void valuate(r_code::Code *destination, uint16 write_index, uint16 &extent_index) const;
-  bool match(const r_code::Code *object, uint16 index);
-  Atom *get_code();
-  r_code::Code *get_object();
-  uint16 get_code_size();
+  Value *copy(BindingMap *map) const override;
+  void valuate(r_code::Code *destination, uint16 write_index, uint16 &extent_index) const override;
+  bool match(const r_code::Code *object, uint16 index) override;
+  Atom *get_code() override;
+  r_code::Code *get_object() override;
+  uint16 get_code_size() override;
 };
 
 class r_exec_dll AtomValue :
@@ -160,17 +160,17 @@ private:
 public:
   AtomValue(BindingMap *map, Atom atom);
 
-  Value *copy(BindingMap *map) const;
-  void valuate(r_code::Code *destination, uint16 write_index, uint16 &extent_index) const;
-  bool match(const r_code::Code *object, uint16 index);
-  Atom *get_code();
-  r_code::Code *get_object();
-  uint16 get_code_size();
+  Value *copy(BindingMap *map) const override;
+  void valuate(r_code::Code *destination, uint16 write_index, uint16 &extent_index) const override;
+  bool match(const r_code::Code *object, uint16 index) override;
+  Atom *get_code() override;
+  r_code::Code *get_object() override;
+  uint16 get_code_size() override;
 
-  bool intersect(const Value *v) const;
-  bool _intersect(const AtomValue *v) const;
+  bool intersect(const Value *v) const override;
+  bool _intersect(const AtomValue *v) const override;
 
-  bool contains(const Atom a) const;
+  bool contains(const Atom a) const override;
 };
 
 class r_exec_dll StructureValue :
@@ -184,17 +184,17 @@ public:
   StructureValue(BindingMap *map, Timestamp time);
   StructureValue(BindingMap *map, std::chrono::microseconds duration);
 
-  Value *copy(BindingMap *map) const;
-  void valuate(r_code::Code *destination, uint16 write_index, uint16 &extent_index) const;
-  bool match(const r_code::Code *object, uint16 index);
-  Atom *get_code();
-  r_code::Code *get_object();
-  uint16 get_code_size();
+  Value *copy(BindingMap *map) const override;
+  void valuate(r_code::Code *destination, uint16 write_index, uint16 &extent_index) const override;
+  bool match(const r_code::Code *object, uint16 index) override;
+  Atom *get_code() override;
+  r_code::Code *get_object() override;
+  uint16 get_code_size() override;
 
-  bool intersect(const Value *v) const;
-  bool _intersect(const StructureValue *v) const;
+  bool intersect(const Value *v) const override;
+  bool _intersect(const StructureValue *v) const override;
 
-  bool contains(const Atom *s) const;
+  bool contains(const Atom *s) const override;
 };
 
 class r_exec_dll ObjectValue :
@@ -204,17 +204,17 @@ private:
 public:
   ObjectValue(BindingMap *map, r_code::Code *object);
 
-  Value *copy(BindingMap *map) const;
-  void valuate(r_code::Code *destination, uint16 write_index, uint16 &extent_index) const;
-  bool match(const r_code::Code *object, uint16 index);
-  Atom *get_code();
-  r_code::Code *get_object();
-  uint16 get_code_size();
+  Value *copy(BindingMap *map) const override;
+  void valuate(r_code::Code *destination, uint16 write_index, uint16 &extent_index) const override;
+  bool match(const r_code::Code *object, uint16 index) override;
+  Atom *get_code() override;
+  r_code::Code *get_object() override;
+  uint16 get_code_size() override;
 
-  bool intersect(const Value *v) const;
-  bool _intersect(const ObjectValue *v) const;
+  bool intersect(const Value *v) const override;
+  bool _intersect(const ObjectValue *v) const override;
 
-  bool contains(const r_code::Code *o) const;
+  bool contains(const r_code::Code *o) const override;
 };
 
 typedef enum {
@@ -360,7 +360,7 @@ public:
 
   HLPBindingMap& operator =(const HLPBindingMap &source);
   void load(const HLPBindingMap *source);
-  void clear();
+  void clear() override;
 
   void init_from_hlp(const r_code::Code *hlp);
   void init_from_f_ihlp(const _Fact *f_ihlp);

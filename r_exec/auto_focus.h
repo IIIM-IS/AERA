@@ -175,9 +175,9 @@ public:
   AutoFocusController(r_code::_View *view);
   ~AutoFocusController();
 
-  r_code::Code *get_core_object() const;
+  r_code::Code *get_core_object() const override;
 
-  void take_input(r_exec::View *input);
+  void take_input(r_exec::View *input) override;
   void reduce(r_exec::View *input);
 
   View *inject_input(View *input); // inject a filtered input into the output groups starting from 0; return the view injected in the primary group.

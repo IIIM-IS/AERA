@@ -133,28 +133,28 @@ protected:
 public:
   virtual ~Object(); // un-registers from the rMem's object_register.
 
-  r_code::_View *build_view(r_code::SysView *source) {
+  r_code::_View *build_view(r_code::SysView *source) override {
 
     return Code::build_view<r_exec::View>(source);
   }
 
-  virtual bool is_invalidated();
-  virtual bool invalidate(); // return false when was not invalidated, true otherwise.
+  bool is_invalidated() override;
+  bool invalidate() override; // return false when was not invalidated, true otherwise.
 
   void compute_hash_value();
 
-  float32 get_psln_thr();
+  float32 get_psln_thr() override;
 
-  void acq_views() { viewsCS_.enter(); }
-  void rel_views() { viewsCS_.leave(); }
-  void acq_markers() { markersCS_.enter(); }
-  void rel_markers() { markersCS_.leave(); }
+  void acq_views() override { viewsCS_.enter(); }
+  void rel_views() override { viewsCS_.leave(); }
+  void acq_markers() override { markersCS_.enter(); }
+  void rel_markers() override { markersCS_.leave(); }
 
   // Target psln_thr only.
-  void set(uint16 member_index, float32 value);
-  void mod(uint16 member_index, float32 value);
+  void set(uint16 member_index, float32 value) override;
+  void mod(uint16 member_index, float32 value) override;
 
-  View *get_view(r_code::Code *group, bool lock); // returns the found view if any, NULL otherwise.
+  View *get_view(r_code::Code *group, bool lock) override; // returns the found view if any, NULL otherwise.
 
   class Hash {
   public:

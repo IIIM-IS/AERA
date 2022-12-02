@@ -213,7 +213,7 @@ class r_exec_dll NotificationView :
 public:
   NotificationView(r_code::Code *origin, r_code::Code *destination, r_code::Code *marker); // res=1, sln=1.
 
-  bool is_notification() const;
+  bool is_notification() const override;
 };
 }
 

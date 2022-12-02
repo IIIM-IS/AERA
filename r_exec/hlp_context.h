@@ -136,15 +136,15 @@ public:
   bool evaluate_no_dereference() const;
 
   // _Context implementation.
-  _Context *clone() { return new HLPContext(*this); }
+  _Context *clone() override { return new HLPContext(*this); }
 
-  bool equal(const _Context *c) const { return *this == *(HLPContext *)c; }
+  bool equal(const _Context *c) const override { return *this == *(HLPContext *)c; }
 
-  Atom &get_atom(uint16 i) const { return this->operator [](i); }
+  Atom &get_atom(uint16 i) const override { return this->operator [](i); }
 
-  uint16 get_object_code_size() const;
+  uint16 get_object_code_size() const override;
 
-  uint16 get_children_count() const {
+  uint16 get_children_count() const override {
 
     return code_[index_].getAtomCount();
   }
@@ -152,7 +152,7 @@ public:
   /**
    * Call get_child and return a new allocated copy of the child. The caller is responsible to delete it.
    */
-  _Context *get_child_new(uint16 index) const {
+  _Context *get_child_new(uint16 index) const override {
 
     HLPContext *_c = new HLPContext(get_child(index));
     return _c;
@@ -161,7 +161,7 @@ public:
   /**
    * Dereference this and return a new allocated copy. The caller is responsible to delete it.
    */
-  _Context *dereference_new() const {
+  _Context *dereference_new() const override {
 
     HLPContext *_c = new HLPContext(dereference());
     return _c;
