@@ -332,7 +332,9 @@ void NoArgCmdGuardBuilder::build(Code *mdl, _Fact *premise_pattern, _Fact *cause
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-CmdGuardBuilder::CmdGuardBuilder(microseconds period, microseconds offset, uint16 cmd_arg_index) : TimingGuardBuilder(period), offset_(offset), cmd_arg_index_(cmd_arg_index) {
+CmdGuardBuilder::CmdGuardBuilder(microseconds period, microseconds offset, uint16 cmd_arg_index,
+  bool add_imdl_template_timings)
+  : TimingGuardBuilder(period), offset_(offset), cmd_arg_index_(cmd_arg_index), add_imdl_template_timings_(add_imdl_template_timings) {
 }
 
 CmdGuardBuilder::~CmdGuardBuilder() {
@@ -366,9 +368,24 @@ void CmdGuardBuilder::_build(Code *mdl, uint16 fwd_opcode, uint16 bwd_opcode, ui
 
   write_index = extent_index;
   mdl->code(MDL_BWD_GUARDS) = Atom::IPointer(++write_index);
-  mdl->code(write_index) = Atom::Set(5);
 
-  extent_index = write_index + 5;
+  if (add_imdl_template_timings_) {
+    // We have already made sure the timings exist using MDLController::get_imdl_template_timings.
+    auto imdl = lhs->get_reference(0);
+    auto template_set_index = imdl->code(I_HLP_TPL_ARGS).asIndex();
+    auto template_set_count = imdl->code(template_set_index).getAtomCount();
+    uint16 template_t0 = imdl->code(template_set_index + (template_set_count - 1)).asIndex();
+    uint16 template_t1 = imdl->code(template_set_index + template_set_count).asIndex();
+
+    mdl->code(write_index) = Atom::Set(7);
+    extent_index = write_index + 7;
+    write_guard(mdl, template_t0, t2, Opcodes::Sub, period_, write_index, extent_index);
+    write_guard(mdl, template_t1, t3, Opcodes::Sub, period_, write_index, extent_index);
+  }
+  else {
+    mdl->code(write_index) = Atom::Set(5);
+    extent_index = write_index + 5;
+  }
 
   write_guard(mdl, t0, t2, Opcodes::Sub, period_, write_index, extent_index);
   write_guard(mdl, t1, t3, Opcodes::Sub, period_, write_index, extent_index);
@@ -421,7 +438,9 @@ void MCGuardBuilder::build(Code *mdl, _Fact *premise_pattern, _Fact *cause_patte
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-ACGuardBuilder::ACGuardBuilder(microseconds period, microseconds offset, uint16 cmd_arg_index) : CmdGuardBuilder(period, offset, cmd_arg_index) {
+ACGuardBuilder::ACGuardBuilder(microseconds period, microseconds offset, uint16 cmd_arg_index,
+  bool add_imdl_template_timings)
+  : CmdGuardBuilder(period, offset, cmd_arg_index, add_imdl_template_timings) {
 }
 
 ACGuardBuilder::~ACGuardBuilder() {

@@ -1031,6 +1031,8 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
 
   Code *cause_payload = cause->get_reference(0);
   uint16 opcode = cause_payload->code(0).asOpcode();
+  auto add_imdl_template_timings = false;
+  Timestamp after, before;
   if (opcode == Opcodes::Cmd) {
     // Form 1
     float32 q0 = target_->get_reference(0)->code(MK_VAL_VALUE).asFloat();
@@ -1048,7 +1050,7 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
       float32 _s = s.asFloat();
       if (Utils::Equal(_s, searched_for)) {
         auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target_, FACT_AFTER));
-        return new ACGuardBuilder(period, period - offset, cmd_arg_set_index + i);
+        return new ACGuardBuilder(period, period - offset, cmd_arg_set_index + i, add_imdl_template_timings);
       }
     }
 
@@ -1069,7 +1071,7 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
     }
   }
 
-  else if (opcode == Opcodes::IMdl) {
+  else if (opcode == Opcodes::IMdl && MDLController::get_imdl_template_timings(cause_payload, after, before)) {
     // Form 1
     float32 q0 = target_->get_reference(0)->code(MK_VAL_VALUE).asFloat();
     float32 q1 = consequent->get_reference(0)->code(MK_VAL_VALUE).asFloat();
@@ -1088,7 +1090,8 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
       float32 _s = s.asFloat();
       if (Utils::Equal(_s, searched_for)) {
         auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target_, FACT_AFTER));
-        return new ACGuardBuilder(period, period - offset, imdl_exposed_args_index + i);
+        add_imdl_template_timings = true;
+        return new ACGuardBuilder(period, period - offset, imdl_exposed_args_index + i, add_imdl_template_timings);
       }
     }
 
