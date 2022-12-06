@@ -109,7 +109,7 @@ inline Atom Atom::UndefinedFloat() {
 
 inline Atom Atom::Nil() {
 
-  return Atom(NIL << 24);
+  return Atom((uint32)(NIL << 24));
 }
 
 inline Atom Atom::Boolean(bool value) {
@@ -129,7 +129,7 @@ inline Atom Atom::Wildcard(uint16 opcode) {
 
 inline Atom Atom::TailWildcard() {
 
-  return Atom(T_WILDCARD << 24);
+  return Atom((uint32)(T_WILDCARD << 24));
 }
 
 inline Atom Atom::IPointer(uint16 index) {
@@ -189,22 +189,22 @@ inline Atom Atom::CodeVLPointer(uint16 index, uint16 cast_opcode) {
 
 inline Atom Atom::This() {
 
-  return Atom(THIS << 24);
+  return Atom((uint32)(THIS << 24));
 }
 
 inline Atom Atom::View() {
 
-  return Atom(VIEW << 24);
+  return Atom((uint32)(VIEW << 24));
 }
 
 inline Atom Atom::Mks() {
 
-  return Atom(MKS << 24);
+  return Atom((uint32)(MKS << 24));
 }
 
 inline Atom Atom::Vws() {
 
-  return Atom(VWS << 24);
+  return Atom((uint32)(VWS << 24));
 }
 
 inline Atom Atom::SSet(uint16 opcode, uint8 element_count) {
@@ -282,7 +282,7 @@ inline Atom Atom::UndefinedString() {
 
 inline Atom Atom::Timestamp() {
 
-  return Atom(TIMESTAMP << 24);
+  return Atom((uint32)(TIMESTAMP << 24));
 }
 
 inline Atom Atom::UndefinedTimestamp() {
@@ -291,7 +291,7 @@ inline Atom Atom::UndefinedTimestamp() {
 }
 
 inline Atom Atom::Duration() {
-  return Atom(DURATION << 24);
+  return Atom((uint32)(DURATION << 24));
 }
 
 inline Atom Atom::InstantiatedProgram(uint16 opcode, uint8 arity) {
