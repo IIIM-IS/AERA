@@ -146,7 +146,7 @@ private:
   static const uint32 CacheInitialSize = 128;
   static const uint32 CrossBufferInitialSize = 1024;
 
-  r_code::time_buffer<CInput, CInput::IsInvalidated> cache_; // contains all inputs we don't no yet if they are relevant or not; thz==sampling period.
+  r_code::time_buffer<CInput, CInput::IsInvalidated> cache_; // contains all inputs we don't know yet if they are relevant or not; thz==sampling period.
   r_code::time_buffer<Input, Input::IsInvalidated> cross_buffer_; // contains all relevant inputs.
 
   void notify(_Fact *target, View *input, TPXMap &map);
