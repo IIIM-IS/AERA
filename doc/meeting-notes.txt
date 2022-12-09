@@ -957,7 +957,17 @@ Simulator
 * DONE. Fix bug to rename "Visulizer" https://github.com/IIIM-IS/AERA_Visualizer/issues/30
 * DONE. Review/merge pull request for don't fail evaluation if assignment guard is already bound. https://github.com/IIIM-IS/AERA/pull/236
 
+2022-12-09
+* DONE. Use C++ override keyword https://github.com/IIIM-IS/AERA/issues/189
+* DONE. Review Chloe's pull request for Zoom To button https://github.com/IIIM-IS/AERA_Visualizer/pull/43
+
 next meeting
+* Review Arash's pull request for reuse models in CTPX https://github.com/IIIM-IS/AERA/pull/238
+* hand-grab-sphere
+  * Represent sphere position without direct I/O input.
+  * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
+    * Still need to allow multiple strong requirements in retrieve_imdl.
+    * A pgm to match a learned model and inject commands which use it?
 * Webots
   * Remove difference between AERA 100ms and Webots 1000 ms [defer]
   * Use setup command for automatic discovery of AERA objects and commands
@@ -966,34 +976,23 @@ next meeting
   * Reset the TCP connection when resetting the Webots simulation
   * Put code in IIIM-IS/AERA_Webots [Leonard]
   * Make Visual Studio run protoc in AERA and AERA_Webots [Leonard to try]
-* hand-grab-sphere
-  * Represent sphere position without direct I/O input.
-  * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
-    * Still need to allow multiple strong requirements in retrieve_imdl.
 
 TODO
-* Simple example for CKCC paper.
-* Generality
-  * Make issue to propose numbers with ranges. Maybe more general: Range of numbers, range of durations, range of timestamps, combos?
+* Change (success) to refer to the prediction mk.rdx instead of the prediction. (Affects other code.)
 * PTPX: Learned cst may only have icsts. But using a cst for later model-building requires a non-icst fact. Should icst->contains be recursive? (Need limit.) Or always include a fact in new_cst?
 * Pong
   * Add paddle. Make goal for the ball to be at a position which requires moving the paddle to bounce it.
   * Remove cst_ball_position, etc. and learn them.
   * Learn the exception "bounce" model.
-* Make hand-grab-sphere example learn the models.
-  * A pgm to match a learned model and inject a new model which uses it.
 * Try commenting out PTPX::reduce:666 if (i->input_ == Opcodes::Cmd)
 * Try pass_through==false. Do CTPX and PTPX still work?
-* When a failed model is in the secondary group and the pattern extractor learns a model from new inputs, does it check if it's the same as the failed model?
 * For an anti-goal can AERA check if it doesn't violate any "current" drive? Need a list of "current" drives?
 * Make a mk.rdx for (fact (pred (fact (imdl ...)))). (May affect other code that expects the other kind of prediction.)
-* Change (success) to refer to the prediction mk.rdx instead of the prediction. (Affects other code.)
 * Visualizer: Option to position simulation objects by predicted time vs. created time.
 * Visualizer: Add an item for prediction reduction, initially hidden.
 * Visualizer: Show the time job queue sorted by time.
 * If min_sim_time_horizon > 0, how is the behavior different?
 * In babbling, issue a goal for a position, an "unrelated" move command, and move the position there. Is GTPX invoked?
-* Treat move commands at the same time step as impulses and have them accumulate?
 * Issue #2: Try to reproduce.
 * Issue #25: Reproduce running in real-time, and see if it happens in diagnostic time.
 
