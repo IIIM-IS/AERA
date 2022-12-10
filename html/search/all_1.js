@@ -1,7 +1,7 @@
 var searchData=
 [
   ['abduce_5fno_5fsimulation_14',['abduce_no_simulation',['../classr__exec_1_1_primary_m_d_l_controller.html#a148f4ca816efb3c1a9ddbb008345f7f2',1,'r_exec::PrimaryMDLController']]],
-  ['abstract_5ffact_15',['abstract_fact',['../classr__exec_1_1_binding_map.html#a0eedb3fe137ffa6fafdda0af147b978c',1,'r_exec::BindingMap']]],
+  ['abstract_5ffact_15',['abstract_fact',['../classr__exec_1_1_binding_map.html#ab7af234cc1e49e733cc63531b84e5020',1,'r_exec::BindingMap']]],
   ['acguardbuilder_16',['ACGuardBuilder',['../classr__exec_1_1_a_c_guard_builder.html',1,'r_exec']]],
   ['add_5fobjects_17',['add_objects',['../classr__comp_1_1_image.html#a783edad562cc9cf2100e37c7b6dca7fa',1,'r_comp::Image']]],
   ['aguardbuilder_18',['AGuardBuilder',['../classr__exec_1_1_a_guard_builder.html',1,'r_exec']]],
@@ -19,5 +19,6 @@ var searchData=
   ['atomvalue_30',['AtomValue',['../classr__exec_1_1_atom_value.html',1,'r_exec']]],
   ['autofocuscontroller_31',['AutoFocusController',['../classr__exec_1_1_auto_focus_controller.html',1,'r_exec']]],
   ['aera_32',['AERA',['../index.html',1,'']]],
-  ['aera_33',['AERA',['../md_submodules__a_e_r_a__i_n_s_t_a_l_l.html',1,'']]]
+  ['aera_20diagnostic_20mode_20v0_2e2_20_282022_2d07_2d01_29_33',['AERA Diagnostic Mode v0.2 (2022-07-01)',['../md_submodules__a_e_r_a__c_h_a_n_g_e_l_o_g.html',1,'']]],
+  ['aera_34',['AERA',['../md_submodules__a_e_r_a__i_n_s_t_a_l_l.html',1,'']]]
 ];

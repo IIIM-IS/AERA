@@ -74,9 +74,9 @@ $(function() {
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//_/_/ AERA</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//_/_/ Autocatalytic Endogenous Reflective Architecture</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//_/_/ </span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Jeff Thompson</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Jeff Thompson</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//_/_/ http://www.iiim.is</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//_/_/ </span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//_/_/ Copyright (c) 2010-2012 Eric Nivel</span></div>
@@ -188,7 +188,7 @@ $(function() {
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;  <span class="keyword">virtual</span> ~<a class="code" href="classr__exec_1_1_input_less_p_g_m_overlay.html">InputLessPGMOverlay</a>();</div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> reset(); <span class="comment">// reset to original state (pristine copy of the pgm code and empty value set).</span></div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;  <span class="keywordtype">void</span> reset() <span class="keyword">override</span>; <span class="comment">// reset to original state (pristine copy of the pgm code and empty value set).</span></div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;  <span class="keywordtype">bool</span> inject_productions(); <span class="comment">// return true upon successful evaluation; no existence check in simulation mode.</span></div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;};</div>
@@ -220,9 +220,9 @@ $(function() {
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;  MatchResult __match(<a class="code" href="classr__exec_1_1_view.html">r_exec::View</a> *input, uint16 pattern_index);</div>
 <div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160; </div>
 <div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *dereference_in_ptr(<a class="code" href="classr__code_1_1_atom.html">Atom</a> a);</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;  <span class="keywordtype">void</span> patch_input_code(uint16 pgm_code_index, uint16 input_index, uint16 input_code_index, int16 parent_index = -1);</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;  <span class="keywordtype">void</span> patch_input_code(uint16 pgm_code_index, uint16 input_index, uint16 input_code_index, int16 parent_index = -1) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160; </div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *get_mk_rdx(uint16 &amp;extent_index) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *get_mk_rdx(uint16 &amp;extent_index) <span class="keyword">const override</span>;</div>
 <div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160; </div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;  <span class="keywordtype">void</span> init();</div>
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
@@ -231,7 +231,7 @@ $(function() {
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;  <span class="keyword">virtual</span> ~<a class="code" href="classr__exec_1_1_p_g_m_overlay.html">PGMOverlay</a>();</div>
 <div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160; </div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;  <span class="keywordtype">void</span> reset() {</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;  <span class="keywordtype">void</span> reset()<span class="keyword"> override </span>{</div>
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    InputLessPGMOverlay::reset();</div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    patch_indices_.clear();</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    input_views_.clear();</div>
@@ -239,14 +239,14 @@ $(function() {
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    init();</div>
 <div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;  }</div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160; </div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classr__exec_1_1_overlay.html">Overlay</a> *reduce(<a class="code" href="classr__exec_1_1_view.html">r_exec::View</a> *input); <span class="comment">// called upon the processing of a reduction job.</span></div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;  <a class="code" href="classr__exec_1_1_overlay.html">Overlay</a> *reduce(<a class="code" href="classr__exec_1_1_view.html">r_exec::View</a> *input) <span class="keyword">override</span>; <span class="comment">// called upon the processing of a reduction job.</span></div>
 <div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160; </div>
 <div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *getInputObject(uint16 i) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;  <a class="code" href="classr__code_1_1___view.html">r_code::_View</a> *getInputView(uint16 i) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;  Timestamp get_birth_time()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> birth_time_; }</div>
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160; </div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;  <span class="keywordtype">bool</span> is_invalidated();</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;  <span class="keywordtype">bool</span> is_invalidated() <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;};</div>
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160; </div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="comment">// Several ReductionCores can attempt to reduce the same overlay simultaneously (each with a different input).</span></div>
@@ -262,7 +262,7 @@ $(function() {
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;  ~<a class="code" href="classr__exec_1_1_anti_p_g_m_overlay.html">AntiPGMOverlay</a>();</div>
 <div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160; </div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;  <a class="code" href="classr__exec_1_1_overlay.html">Overlay</a> *reduce(<a class="code" href="classr__exec_1_1_view.html">r_exec::View</a> *input); <span class="comment">// called upon the processing of a reduction job.</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;  <a class="code" href="classr__exec_1_1_overlay.html">Overlay</a> *reduce(<a class="code" href="classr__exec_1_1_view.html">r_exec::View</a> *input) <span class="keyword">override</span>; <span class="comment">// called upon the processing of a reduction job.</span></div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;};</div>
 <div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;}</div>
 <div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160; </div>

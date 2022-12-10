@@ -74,9 +74,9 @@ $(function() {
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//_/_/ AERA</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//_/_/ Autocatalytic Endogenous Reflective Architecture</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//_/_/ </span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Jeff Thompson</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Jeff Thompson</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//_/_/ http://www.iiim.is</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//_/_/ </span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//_/_/ Copyright (c) 2010-2012 Eric Nivel</span></div>
@@ -295,7 +295,7 @@ $(function() {
 <div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;    <span class="keyword">public</span> <a class="code" href="classr__exec_1_1_group_1_1_mod_set.html">ModSet</a> {</div>
 <div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;  <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    <a class="code" href="classr__exec_1_1_group_1_1_mod.html">Mod</a>(uint32 oid, uint16 member_index, float32 value) : <a class="code" href="classr__exec_1_1_group_1_1_mod_set.html">ModSet</a>(oid, member_index, value) {}</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    <span class="keywordtype">void</span> execute(<a class="code" href="classr__exec_1_1_group.html">Group</a> *g)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    <span class="keywordtype">void</span> execute(<a class="code" href="classr__exec_1_1_group.html">Group</a> *g)<span class="keyword"> const override </span>{</div>
 <div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160; </div>
 <div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;      <a class="code" href="classr__exec_1_1_view.html">View</a> *v = g-&gt;get_view(oid_);</div>
 <div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;      <span class="keywordflow">if</span> (v)</div>
@@ -307,7 +307,7 @@ $(function() {
 <div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    <span class="keyword">public</span> <a class="code" href="classr__exec_1_1_group_1_1_mod_set.html">ModSet</a> {</div>
 <div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;  <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    <a class="code" href="classr__exec_1_1_group_1_1_set.html">Set</a>(uint32 oid, uint16 member_index, float32 value) : <a class="code" href="classr__exec_1_1_group_1_1_mod_set.html">ModSet</a>(oid, member_index, value) {}</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    <span class="keywordtype">void</span> execute(<a class="code" href="classr__exec_1_1_group.html">Group</a> *g)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    <span class="keywordtype">void</span> execute(<a class="code" href="classr__exec_1_1_group.html">Group</a> *g)<span class="keyword"> const override </span>{</div>
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160; </div>
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;      <a class="code" href="classr__exec_1_1_view.html">View</a> *v = g-&gt;get_view(oid_);</div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;      <span class="keywordflow">if</span> (v)</div>
@@ -322,7 +322,7 @@ $(function() {
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;  <a class="code" href="classr__exec_1_1_group.html">Group</a>(<a class="code" href="classr__code_1_1_sys_object.html">r_code::SysObject</a> *source);</div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;  <span class="keyword">virtual</span> ~<a class="code" href="classr__exec_1_1_group.html">Group</a>();</div>
 <div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160; </div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;  <span class="keywordtype">bool</span> invalidate(); <span class="comment">// removes all views of itself and of any other object.</span></div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;  <span class="keywordtype">bool</span> invalidate() <span class="keyword">override</span>; <span class="comment">// removes all views of itself and of any other object.</span></div>
 <div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160; </div>
 <div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;  <span class="keywordtype">bool</span> all_views_cond(uint8 &amp;selector, std::unordered_map&lt;uint32, <a class="code" href="classcore_1_1_p.html">P&lt;View&gt;</a> &gt;::const_iterator &amp;it, std::unordered_map&lt;uint32, <a class="code" href="classcore_1_1_p.html">P&lt;View&gt;</a> &gt;::const_iterator &amp;end) {</div>
 <div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    <span class="keywordflow">while</span> (it == end) {</div>
@@ -500,8 +500,8 @@ $(function() {
 <div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;  <span class="comment">// Target upr, spr, c_sln, c_act, sln_thr, act_thr, vis_thr, c_sln_thr, c_act_thr, sln_chg_thr,</span></div>
 <div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;  <span class="comment">// sln_chg_prd, act_chg_thr, act_chg_prd, high_sln_thr, low_sln_thr, sln_ntf_prd, high_act_thr, low_act_thr, act_ntf_prd, low_res_thr, res_ntf_prd, ntf_new,</span></div>
 <div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;  <span class="comment">// dcy_per, dcy-tgt, dcy_prd.</span></div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;  <span class="keywordtype">void</span> mod(uint16 member_index, float32 value);</div>
-<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;  <span class="keywordtype">void</span> set(uint16 member_index, float32 value);</div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;  <span class="keywordtype">void</span> mod(uint16 member_index, float32 value) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;  <span class="keywordtype">void</span> set(uint16 member_index, float32 value) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160; </div>
 <div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;  <span class="keywordtype">void</span> reset_stats(); <span class="comment">// called at the begining of an update.</span></div>
 <div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;  <span class="keywordtype">void</span> update_stats(); <span class="comment">// at the end of an update; may produce notifcations.</span></div>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.18"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>AERA: Interim change since AERA Diagnostic Mode v0.1</title>
+<title>AERA: AERA Diagnostic Mode v0.2 (2022-07-01)</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -62,11 +62,22 @@ $(function() {
 </div><!-- top -->
 <div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title">Interim change since AERA Diagnostic Mode v0.1 </div>  </div>
+<div class="title">AERA Diagnostic Mode v0.2 (2022-07-01) </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>Changes</p><ul>
-<li>Change the Replicode syntax to add durations, distinct from time stamps <a href="https://github.com/IIIM-IS/AERA/issues/138">https://github.com/IIIM-IS/AERA/issues/138</a></li>
+<div class="textblock"><p>A release optimized to run in "diagnostic time" which is now the default in settings.xml . This is a maintentance release from Diagnostic Mode v0.1 .</p>
+<p>Bug fixes</p><ul>
+<li>Replicode syntax: Allow ':' in a string. <a href="https://github.com/IIIM-IS/AERA/pull/207">https://github.com/IIIM-IS/AERA/pull/207</a></li>
+<li>Fix bug abducing a goal imdl from a cst. <a href="https://github.com/IIIM-IS/AERA/pull/226">https://github.com/IIIM-IS/AERA/pull/226</a></li>
+<li>Fix bug in assume_lhs so that we can enable assumptions. <a href="https://github.com/IIIM-IS/AERA/pull/219">https://github.com/IIIM-IS/AERA/pull/219</a></li>
+<li>Allow switching to SIM_MANDATORY not at the sim root <a href="https://github.com/IIIM-IS/AERA/pull/214">https://github.com/IIIM-IS/AERA/pull/214</a></li>
+<li>Other bug fixes. See <a href="https://github.com/IIIM-IS/AERA/pulls?q=is%3Apr+is%3Aclosed+label%3Abug">https://github.com/IIIM-IS/AERA/pulls?q=is%3Apr+is%3Aclosed+label%3Abug</a></li>
+</ul>
+<p>Changes</p><ul>
+<li>BREAKING. Change the Replicode syntax to add durations, distinct from time stamps <a href="https://github.com/IIIM-IS/AERA/issues/138">https://github.com/IIIM-IS/AERA/issues/138</a></li>
+<li>Move definition of std_grp to std.replicode <a href="https://github.com/IIIM-IS/AERA/pull/212">https://github.com/IIIM-IS/AERA/pull/212</a></li>
+<li>Remove unused support for enable_assumptions in settings.xml <a href="https://github.com/IIIM-IS/AERA/pull/221">https://github.com/IIIM-IS/AERA/pull/221</a></li>
+<li>Other enhancements. Please see <a href="https://github.com/IIIM-IS/AERA/blob/master/doc/meeting-notes.txt">https://github.com/IIIM-IS/AERA/blob/master/doc/meeting-notes.txt</a></li>
 </ul>
 <h1><a class="anchor" id="autotoc_md9"></a>
 AERA Diagnostic Mode v0.1 (2021-11-19)</h1>
@@ -74,7 +85,7 @@ AERA Diagnostic Mode v0.1 (2021-11-19)</h1>
 <ul>
 <li>Added example hand-grab-sphere.replicode where all models are coded in the seed.</li>
 <li>Added example hand-grab-sphere-learn.replicode which learns the grab and release models, as well as the anti-requirement model where grab fails if the sphere and cube are at the same position.</li>
-<li>Make other bug fixes and enhancements. Please see <a href="https://github.com/IIIM-IS/AERA/blob/master/doc/meeting-notes.txt">https://github.com/IIIM-IS/AERA/blob/master/doc/meeting-notes.txt</a></li>
+<li>Other bug fixes and enhancements. Please see <a href="https://github.com/IIIM-IS/AERA/blob/master/doc/meeting-notes.txt">https://github.com/IIIM-IS/AERA/blob/master/doc/meeting-notes.txt</a></li>
 </ul>
 <h1><a class="anchor" id="autotoc_md10"></a>
 replicode-syntax-v1.2 (2020-06-19)</h1>

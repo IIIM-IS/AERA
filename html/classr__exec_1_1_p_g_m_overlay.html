@@ -91,12 +91,12 @@ Inheritance diagram for r_exec::PGMOverlay:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3c452137b82ad413c6ceb3e9ecf02ac2"><td class="memItemLeft" align="right" valign="top"><a id="a3c452137b82ad413c6ceb3e9ecf02ac2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>reset</b> ()</td></tr>
-<tr class="separator:a3c452137b82ad413c6ceb3e9ecf02ac2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a78527ef0137cef6b37ee023ad96b7b95"><td class="memItemLeft" align="right" valign="top"><a id="a78527ef0137cef6b37ee023ad96b7b95"></a>
-virtual <a class="el" href="classr__exec_1_1_overlay.html">Overlay</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>reduce</b> (<a class="el" href="classr__exec_1_1_view.html">r_exec::View</a> *input)</td></tr>
-<tr class="separator:a78527ef0137cef6b37ee023ad96b7b95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d834081ab1eddd84c3601548a676f5a"><td class="memItemLeft" align="right" valign="top"><a id="a5d834081ab1eddd84c3601548a676f5a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>reset</b> () override</td></tr>
+<tr class="separator:a5d834081ab1eddd84c3601548a676f5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62c5db6a638fb16509fbf277a13ba2de"><td class="memItemLeft" align="right" valign="top"><a id="a62c5db6a638fb16509fbf277a13ba2de"></a>
+<a class="el" href="classr__exec_1_1_overlay.html">Overlay</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>reduce</b> (<a class="el" href="classr__exec_1_1_view.html">r_exec::View</a> *input) override</td></tr>
+<tr class="separator:a62c5db6a638fb16509fbf277a13ba2de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a76770e62d140a81df40cbc8da7773ace"><td class="memItemLeft" align="right" valign="top"><a id="a76770e62d140a81df40cbc8da7773ace"></a>
 <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getInputObject</b> (uint16 i) const</td></tr>
 <tr class="separator:a76770e62d140a81df40cbc8da7773ace"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -106,9 +106,9 @@ virtual <a class="el" href="classr__exec_1_1_overlay.html">Overlay</a> *&#160;</
 <tr class="memitem:a29710152693189510a0e3a93f2257b1f"><td class="memItemLeft" align="right" valign="top"><a id="a29710152693189510a0e3a93f2257b1f"></a>
 Timestamp&#160;</td><td class="memItemRight" valign="bottom"><b>get_birth_time</b> () const</td></tr>
 <tr class="separator:a29710152693189510a0e3a93f2257b1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf3162c4efcf98ed456dbf2c43ebf296"><td class="memItemLeft" align="right" valign="top"><a id="abf3162c4efcf98ed456dbf2c43ebf296"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_invalidated</b> ()</td></tr>
-<tr class="separator:abf3162c4efcf98ed456dbf2c43ebf296"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48c12416bc664e58d3e735c6938708e1"><td class="memItemLeft" align="right" valign="top"><a id="a48c12416bc664e58d3e735c6938708e1"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_invalidated</b> () override</td></tr>
+<tr class="separator:a48c12416bc664e58d3e735c6938708e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classr__exec_1_1_input_less_p_g_m_overlay"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classr__exec_1_1_input_less_p_g_m_overlay')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classr__exec_1_1_input_less_p_g_m_overlay.html">r_exec::InputLessPGMOverlay</a></td></tr>
 <tr class="memitem:ac3a89a84c127792a1a7c2496b24b9917 inherit pub_methods_classr__exec_1_1_input_less_p_g_m_overlay"><td class="memItemLeft" align="right" valign="top"><a id="ac3a89a84c127792a1a7c2496b24b9917"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>inject_productions</b> ()</td></tr>
@@ -158,12 +158,12 @@ MatchResult&#160;</td><td class="memItemRight" valign="bottom"><b>_match</b> (<a
 <tr class="memitem:a730fb262cc8924e3cb3dbf2eb94102b6"><td class="memItemLeft" align="right" valign="top"><a id="a730fb262cc8924e3cb3dbf2eb94102b6"></a>
 <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>dereference_in_ptr</b> (<a class="el" href="classr__code_1_1_atom.html">Atom</a> a)</td></tr>
 <tr class="separator:a730fb262cc8924e3cb3dbf2eb94102b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af429708b487cedff912b30d0d1704116"><td class="memItemLeft" align="right" valign="top"><a id="af429708b487cedff912b30d0d1704116"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>patch_input_code</b> (uint16 pgm_code_index, uint16 input_index, uint16 input_code_index, int16 parent_index=-1)</td></tr>
-<tr class="separator:af429708b487cedff912b30d0d1704116"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a489be1bc994b1210b4ad3ebe7f461118"><td class="memItemLeft" align="right" valign="top"><a id="a489be1bc994b1210b4ad3ebe7f461118"></a>
-virtual <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>get_mk_rdx</b> (uint16 &amp;extent_index) const</td></tr>
-<tr class="separator:a489be1bc994b1210b4ad3ebe7f461118"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ce331b2cd14933285ce53c2bd65d315"><td class="memItemLeft" align="right" valign="top"><a id="a6ce331b2cd14933285ce53c2bd65d315"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>patch_input_code</b> (uint16 pgm_code_index, uint16 input_index, uint16 input_code_index, int16 parent_index=-1) override</td></tr>
+<tr class="separator:a6ce331b2cd14933285ce53c2bd65d315"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a926be3aed8be465f50e627e6b6f99227"><td class="memItemLeft" align="right" valign="top"><a id="a926be3aed8be465f50e627e6b6f99227"></a>
+<a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>get_mk_rdx</b> (uint16 &amp;extent_index) const override</td></tr>
+<tr class="separator:a926be3aed8be465f50e627e6b6f99227"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade3d308d311350b2240c671ffcaa4243"><td class="memItemLeft" align="right" valign="top"><a id="ade3d308d311350b2240c671ffcaa4243"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> ()</td></tr>
 <tr class="separator:ade3d308d311350b2240c671ffcaa4243"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -298,7 +298,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>IPGMContext</b></td>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>SUCCESS upon a successful match, IMPOSSIBLE if the input is not of the right class, FAILURE otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pgm__overlay_8cpp_source.html#l00756">756</a> of file <a class="el" href="pgm__overlay_8cpp_source.html">pgm_overlay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pgm__overlay_8cpp_source.html#l00755">755</a> of file <a class="el" href="pgm__overlay_8cpp_source.html">pgm_overlay.cpp</a>.</p>
 
 </div>
 </div>

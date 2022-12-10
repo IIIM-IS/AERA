@@ -74,9 +74,9 @@ $(function() {
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//_/_/ AERA</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//_/_/ Autocatalytic Endogenous Reflective Architecture</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//_/_/ </span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Jeff Thompson</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Jeff Thompson</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//_/_/ http://www.iiim.is</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//_/_/ </span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//_/_/ Copyright (c) 2010-2012 Eric Nivel</span></div>
@@ -237,7 +237,7 @@ $(function() {
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">bool</span> MatchObject(<span class="keyword">const</span> <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *lhs, <span class="keyword">const</span> <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *rhs, <span class="keywordtype">bool</span> same_binding_state = <span class="keyword">false</span>);</div>
 <div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160; </div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> is_invalidated();</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;  <span class="keywordtype">bool</span> is_invalidated() <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160; </div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;  <span class="keywordtype">bool</span> is_fact()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (code(0).asOpcode() == Opcodes::Fact); }</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;  <span class="keywordtype">bool</span> is_anti_fact()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (code(0).asOpcode() == Opcodes::AntiFact); }</div>
@@ -299,8 +299,8 @@ $(function() {
 <div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;  <span class="comment">// For SIM_MANDATORY or SIM_OPTIONAL, provide solution_controller, solution_cfd and solution_before. Otherwise, defaults for SIM_ROOT.</span></div>
 <div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;  <span class="comment">// For SIM_ROOT, solution_before is unused so use Utils::GetTimeReference() which is 0s:0ms:0us in the decompiled output.</span></div>
 <div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;  <a class="code" href="classr__exec_1_1_sim.html">Sim</a>(SimMode mode, std::chrono::microseconds thz, <a class="code" href="classr__exec_1_1_fact.html">Fact</a> *super_goal, <span class="keywordtype">bool</span> opposite, <a class="code" href="classr__exec_1_1_controller.html">Controller</a> *root, float32 psln_thr, <a class="code" href="classr__exec_1_1_controller.html">Controller</a> *solution_controller = NULL, float32 solution_cfd = 0, Timestamp solution_before = r_code::Utils::GetTimeReference());</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;  <span class="keywordtype">bool</span> invalidate();</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;  <span class="keywordtype">bool</span> is_invalidated();</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;  <span class="keywordtype">bool</span> invalidate() <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;  <span class="keywordtype">bool</span> is_invalidated() <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;  <span class="comment">// If SIM_MANDATORY or SIM_OPTIONAL: qualifies a sub-goal of the branch&#39;s root.</span></div>
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;  SimMode get_mode()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (SimMode)(int)code(SIM_MODE).asFloat(); }</div>
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;  <span class="comment">// simulation time allowance (this is not the goal deadline); 0 indicates no time for simulation.</span></div>
@@ -411,7 +411,7 @@ $(function() {
 <div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;  }</div>
 <div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;  <a class="code" href="classr__exec_1_1_pred.html">Pred</a>(<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *target, <span class="keyword">const</span> <a class="code" href="classr__exec_1_1_pred.html">Pred</a>* simulations_source, float32 psln_thr);</div>
 <div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160; </div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;  <span class="keywordtype">bool</span> is_invalidated();</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;  <span class="keywordtype">bool</span> is_invalidated() <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;  <span class="keywordtype">bool</span> grounds_invalidated(<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *evidence);</div>
 <div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160; </div>
 <div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;  <a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *get_target()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *)get_reference(0); }</div>
@@ -460,8 +460,8 @@ $(function() {
 <div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;  <a class="code" href="classr__exec_1_1_goal.html">Goal</a>(<a class="code" href="classr__code_1_1_sys_object.html">r_code::SysObject</a> *source);</div>
 <div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;  <a class="code" href="classr__exec_1_1_goal.html">Goal</a>(<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *target, <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *actor, <a class="code" href="classr__exec_1_1_sim.html">Sim</a>* sim, float32 psln_thr);</div>
 <div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160; </div>
-<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;  <span class="keywordtype">bool</span> invalidate();</div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;  <span class="keywordtype">bool</span> is_invalidated();</div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;  <span class="keywordtype">bool</span> invalidate() <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;  <span class="keywordtype">bool</span> is_invalidated() <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;  <span class="keywordtype">bool</span> ground_invalidated(<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *evidence);</div>
 <div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160; </div>
 <div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;  <span class="keywordtype">bool</span> is_requirement() <span class="keyword">const</span>;</div>
@@ -539,9 +539,9 @@ $(function() {
 <div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;  <a class="code" href="classr__exec_1_1_i_c_s_t.html">ICST</a>();</div>
 <div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;  <a class="code" href="classr__exec_1_1_i_c_s_t.html">ICST</a>(<a class="code" href="classr__code_1_1_sys_object.html">r_code::SysObject</a> *source);</div>
 <div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160; </div>
-<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;  <span class="keywordtype">bool</span> is_invalidated();</div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;  <span class="keywordtype">bool</span> is_invalidated() <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160; </div>
-<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;  <span class="keywordtype">bool</span> contains(<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *component, uint16 &amp;component_index) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;  <span class="keywordtype">bool</span> contains(<span class="keyword">const</span> <a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *component, uint16 &amp;component_index) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160; </div>
 <div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;  <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> bindings_;</div>
 <div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160;  std::vector&lt;P&lt;_Fact&gt; &gt; components_; <span class="comment">// the inputs that triggered the building of the icst.</span></div>

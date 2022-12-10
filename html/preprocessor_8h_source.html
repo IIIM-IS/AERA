@@ -74,9 +74,9 @@ $(function() {
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//_/_/ AERA</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//_/_/ Autocatalytic Endogenous Reflective Architecture</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//_/_/ </span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Jeff Thompson</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Jeff Thompson</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//_/_/ http://www.iiim.is</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//_/_/ </span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//_/_/ Copyright (c) 2010-2012 Eric Nivel</span></div>
@@ -190,15 +190,15 @@ $(function() {
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;  <span class="keywordtype">void</span> reset(); <span class="comment">// remove rags that are objects.</span></div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;  uint32 getIndent(std::istream *stream);</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;  int32 parse(std::istream *stream, <span class="keyword">const</span> std::string&amp; filePath, uint32 &amp;curIndent, uint32 &amp;prevIndent, int32 paramExpect = 0);</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;  <span class="keywordtype">bool</span> parseDirective(std::istream *stream, <span class="keyword">const</span> std::string&amp; filePath, uint32 &amp;curIndent, uint32 &amp;prevIndent);</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;  int32 parse(std::istream *stream, <span class="keyword">const</span> std::string&amp; file_path, uint32 &amp;cur_indent, uint32 &amp;prev_indent, int32 param_expect = 0);</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;  <span class="keywordtype">bool</span> parseDirective(std::istream *stream, <span class="keyword">const</span> std::string&amp; file_path, uint32 &amp;cur_indent, uint32 &amp;prev_indent);</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;  int32 process();</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;  <a class="code" href="classr__comp_1_1_repli_struct.html">RepliStruct</a> *findAtom(<span class="keyword">const</span> std::string &amp;name);</div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;  <a class="code" href="classr__comp_1_1_repli_struct.html">RepliStruct</a> *<a class="code" href="classr__comp_1_1_repli_struct.html#aef34dbb7c33ec168baf79b4c770a255b">loadReplicodeFile</a>(<span class="keyword">const</span> std::string &amp;filename);</div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160; </div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classr__comp_1_1_repli_struct.html#aa1721512ac8d8673043fbaa49187d266">isFileLoaded</a>(<span class="keyword">const</span> std::string&amp; filePath);</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classr__comp_1_1_repli_struct.html#a871f724c5b29369f91a40eb2bb524af6">isFileLoaded</a>(<span class="keyword">const</span> std::string&amp; file_path);</div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160; </div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;  <a class="code" href="classr__comp_1_1_repli_struct.html">RepliStruct</a> *clone() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;  std::string print() <span class="keyword">const</span>;</div>
@@ -219,7 +219,7 @@ $(function() {
 <div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;  ~<a class="code" href="classr__comp_1_1_repli_macro.html">RepliMacro</a>();</div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;  uint32 argCount();</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;  <a class="code" href="classr__comp_1_1_repli_struct.html">RepliStruct</a> *expandMacro(<a class="code" href="classr__comp_1_1_repli_struct.html">RepliStruct</a> *oldStruct);</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;  <a class="code" href="classr__comp_1_1_repli_struct.html">RepliStruct</a> *expandMacro(<a class="code" href="classr__comp_1_1_repli_struct.html">RepliStruct</a> *old_struct);</div>
 <div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;};</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
 <div class="line"><a name="l00169"></a><span class="lineno"><a class="line" href="classr__comp_1_1_repli_condition.html">  169</a></span>&#160;<span class="keyword">class </span><a class="code" href="classr__comp_1_1_repli_condition.html">RepliCondition</a> {</div>
@@ -229,8 +229,8 @@ $(function() {
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160; </div>
 <div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;  <a class="code" href="classr__comp_1_1_repli_condition.html">RepliCondition</a>(<span class="keyword">const</span> std::string &amp;name, <span class="keywordtype">bool</span> reversed);</div>
 <div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;  ~<a class="code" href="classr__comp_1_1_repli_condition.html">RepliCondition</a>();</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;  <span class="keywordtype">bool</span> reverse();</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;  <span class="keywordtype">bool</span> isActive(std::unordered_map&lt;std::string, RepliMacro*&gt; &amp;repliMacros, std::unordered_map&lt;std::string, int32&gt; &amp;counters);</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;  <span class="keywordtype">void</span> reverse();</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;  <span class="keywordtype">bool</span> isActive(std::unordered_map&lt;std::string, RepliMacro*&gt; &amp;repli_macros, std::unordered_map&lt;std::string, int32&gt; &amp;counters);</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;};</div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160; </div>
 <div class="line"><a name="l00180"></a><span class="lineno"><a class="line" href="classr__comp_1_1_preprocessor.html">  180</a></span>&#160;<span class="keyword">class </span>dll_export <a class="code" href="classr__comp_1_1_preprocessor.html">Preprocessor</a> {</div>
@@ -269,8 +269,8 @@ $(function() {
 <div class="ttc" id="aclassr__comp_1_1_preprocessor_html"><div class="ttname"><a href="classr__comp_1_1_preprocessor.html">r_comp::Preprocessor</a></div><div class="ttdef"><b>Definition:</b> <a href="preprocessor_8h_source.html#l00180">preprocessor.h:180</a></div></div>
 <div class="ttc" id="aclassr__comp_1_1_repli_macro_html"><div class="ttname"><a href="classr__comp_1_1_repli_macro.html">r_comp::RepliMacro</a></div><div class="ttdef"><b>Definition:</b> <a href="preprocessor_8h_source.html#l00155">preprocessor.h:155</a></div></div>
 <div class="ttc" id="aclassr__comp_1_1_repli_struct_html_aef34dbb7c33ec168baf79b4c770a255b"><div class="ttname"><a href="classr__comp_1_1_repli_struct.html#aef34dbb7c33ec168baf79b4c770a255b">r_comp::RepliStruct::loadReplicodeFile</a></div><div class="ttdeci">RepliStruct * loadReplicodeFile(const std::string &amp;filename)</div><div class="ttdef"><b>Definition:</b> <a href="preprocessor_8cpp_source.html#l00783">preprocessor.cpp:783</a></div></div>
+<div class="ttc" id="aclassr__comp_1_1_repli_struct_html_a871f724c5b29369f91a40eb2bb524af6"><div class="ttname"><a href="classr__comp_1_1_repli_struct.html#a871f724c5b29369f91a40eb2bb524af6">r_comp::RepliStruct::isFileLoaded</a></div><div class="ttdeci">static bool isFileLoaded(const std::string &amp;file_path)</div><div class="ttdef"><b>Definition:</b> <a href="preprocessor_8cpp_source.html#l00811">preprocessor.cpp:811</a></div></div>
 <div class="ttc" id="aclassr__comp_1_1_repli_condition_html"><div class="ttname"><a href="classr__comp_1_1_repli_condition.html">r_comp::RepliCondition</a></div><div class="ttdef"><b>Definition:</b> <a href="preprocessor_8h_source.html#l00169">preprocessor.h:169</a></div></div>
-<div class="ttc" id="aclassr__comp_1_1_repli_struct_html_aa1721512ac8d8673043fbaa49187d266"><div class="ttname"><a href="classr__comp_1_1_repli_struct.html#aa1721512ac8d8673043fbaa49187d266">r_comp::RepliStruct::isFileLoaded</a></div><div class="ttdeci">static bool isFileLoaded(const std::string &amp;filePath)</div><div class="ttdef"><b>Definition:</b> <a href="preprocessor_8cpp_source.html#l00811">preprocessor.cpp:811</a></div></div>
 <div class="ttc" id="aclassr__comp_1_1_metadata_html"><div class="ttname"><a href="classr__comp_1_1_metadata.html">r_comp::Metadata</a></div><div class="ttdef"><b>Definition:</b> <a href="segments_8h_source.html#l00109">segments.h:109</a></div></div>
 <div class="ttc" id="aclassr__comp_1_1_repli_struct_html"><div class="ttname"><a href="classr__comp_1_1_repli_struct.html">r_comp::RepliStruct</a></div><div class="ttdef"><b>Definition:</b> <a href="preprocessor_8h_source.html#l00097">preprocessor.h:97</a></div></div>
 <!-- start footer part -->

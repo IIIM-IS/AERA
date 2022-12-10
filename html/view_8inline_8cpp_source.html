@@ -74,9 +74,9 @@ $(function() {
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//_/_/ AERA</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//_/_/ Autocatalytic Endogenous Reflective Architecture</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//_/_/ </span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Jeff Thompson</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Jeff Thompson</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//_/_/ http://www.iiim.is</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//_/_/ </span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//_/_/ Copyright (c) 2010-2012 Eric Nivel</span></div>
@@ -218,11 +218,11 @@ $(function() {
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;  code_[VIEW_OID].atom_ = GetOID();</div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;  reset_ctrl_values();</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;  code(VIEW_SYNC) = Atom::Float(sync);</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;  code(VIEW_SYNC) = Atom::Float((float32)sync);</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;  code(VIEW_IJT) = Atom::IPointer(code(VIEW_OPCODE).getAtomCount() + 1);</div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;  r_code::Utils::SetTimestamp&lt;View&gt;(<span class="keyword">this</span>, VIEW_IJT, ijt);</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;  code(VIEW_SLN) = Atom::Float(sln);</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;  code(VIEW_RES) = res &lt; 0 ? Atom::PlusInfinity() : Atom::Float(res);</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;  code(VIEW_RES) = res &lt; 0 ? Atom::PlusInfinity() : Atom::Float((float32)res);</div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;  code(VIEW_HOST) = Atom::RPointer(0);</div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;  code(VIEW_ORG) = origin ? Atom::RPointer(1) : Atom::Nil();</div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>

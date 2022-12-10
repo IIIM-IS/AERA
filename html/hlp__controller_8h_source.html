@@ -74,9 +74,9 @@ $(function() {
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//_/_/ AERA</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//_/_/ Autocatalytic Endogenous Reflective Architecture</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//_/_/ </span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Jeff Thompson</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Jeff Thompson</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//_/_/ http://www.iiim.is</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//_/_/ </span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//_/_/ Copyright (c) 2010-2012 Eric Nivel</span></div>
@@ -239,51 +239,53 @@ $(function() {
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;  MatchResult check_evidences(_Fact *target, _Fact *&amp;evidence); <span class="comment">// evidence with the match (positive or negative), get_absentee(target) otherwise.</span></div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;  MatchResult check_predicted_evidences(_Fact *target, _Fact *&amp;evidence); <span class="comment">// evidence with the match (positive or negative), NULL otherwise.</span></div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160; </div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;  <span class="keywordtype">bool</span> has_tpl_args_;</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;  uint32 ref_count_; <span class="comment">// used to detect _Object::refCount_ dropping down to 1 for hlp with tpl args.</span></div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;  <span class="keywordtype">bool</span> is_orphan(); <span class="comment">// true when there are tpl args and no requirements: the controller cannot execute anymore.</span></div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160; </div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;  std::vector&lt;P&lt;HLPController&gt; &gt; controllers_; <span class="comment">// all controllers for models/states instantiated in the patterns; case of models: [0]==lhs, [1]==rhs.</span></div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;  Timestamp last_match_time_; <span class="comment">// last time a match occurred (fwd), regardless of its outcome.</span></div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;  <span class="keywordtype">bool</span> become_invalidated(); <span class="comment">// true if one controller is invalidated or if all controllers pointing to this are invalidated.</span></div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> kill_views() {}</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> check_last_match_time(<span class="keywordtype">bool</span> match) = 0;</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160; </div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;  HLPController(<a class="code" href="classr__code_1_1___view.html">r_code::_View</a> *view);</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;  <span class="keyword">virtual</span> ~HLPController();</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160; </div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;  <span class="keywordtype">void</span> invalidate();</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160; </div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *get_core_object()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> get_object(); } <span class="comment">// cst or mdl.</span></div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *get_unpacked_object()<span class="keyword"> const </span>{ <span class="comment">// the unpacked version of the core object.</span></div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160; </div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *core_object = get_core_object();</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;    <span class="keywordflow">return</span> core_object-&gt;get_reference(core_object-&gt;references_size() - MDL_HIDDEN_REFS);</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;  }</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classr__exec_1_1_h_l_p_controller.html#a92537d8cd5f64c5ab18e926e26d20961">inject_notification_into_out_groups</a>(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* origin, <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* marker) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160; </div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;  <span class="keywordtype">bool</span> has_tpl_args_;</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;  uint32 ref_count_; <span class="comment">// used to detect _Object::refCount_ dropping down to 1 for hlp with tpl args.</span></div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;  <span class="keywordtype">bool</span> is_orphan(); <span class="comment">// true when there are tpl args and no requirements: the controller cannot execute anymore.</span></div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;  std::vector&lt;P&lt;HLPController&gt; &gt; controllers_; <span class="comment">// all controllers for models/states instantiated in the patterns; case of models: [0]==lhs, [1]==rhs.</span></div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;  Timestamp last_match_time_; <span class="comment">// last time a match occurred (fwd), regardless of its outcome.</span></div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;  <span class="keywordtype">bool</span> become_invalidated(); <span class="comment">// true if one controller is invalidated or if all controllers pointing to this are invalidated.</span></div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> kill_views() {}</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> check_last_match_time(<span class="keywordtype">bool</span> match) = 0;</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160; </div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;  HLPController(<a class="code" href="classr__code_1_1___view.html">r_code::_View</a> *view);</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;  <span class="keyword">virtual</span> ~HLPController();</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160; </div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;  <span class="keywordtype">void</span> invalidate() <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160; </div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;  <span class="keywordtype">void</span> add_requirement(<span class="keywordtype">bool</span> strong);</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;  <span class="keywordtype">void</span> remove_requirement(<span class="keywordtype">bool</span> strong);</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *get_core_object()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> get_object(); } <span class="comment">// cst or mdl.</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *get_unpacked_object()<span class="keyword"> const </span>{ <span class="comment">// the unpacked version of the core object.</span></div>
 <div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160; </div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;  uint32 get_requirement_count(uint32 &amp;weak_requirement_count, uint32 &amp;strong_requirement_count);</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;  uint32 get_requirement_count();</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160; </div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;  <span class="keywordtype">void</span> store_evidence(_Fact *evidence) { _store_evidence&lt;EvidenceEntry&gt;(&amp;evidences_, evidence); }</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;  <span class="keywordtype">void</span> store_predicted_evidence(_Fact *evidence) { _store_evidence &lt;PredictedEvidenceEntry&gt;(&amp;predicted_evidences_, evidence); }</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160; </div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;  <span class="keyword">virtual</span> Fact *get_f_ihlp(HLPBindingMap *bindings, <span class="keywordtype">bool</span> wr_enabled) <span class="keyword">const</span> = 0;</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160; </div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;  uint16 get_out_group_count() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *get_out_group(uint16 i) <span class="keyword">const</span>; <span class="comment">// i starts at 1.</span></div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;  Group *get_host()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (Group *)get_view()-&gt;get_host(); }</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;  <span class="keywordtype">bool</span> has_tpl_args()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> has_tpl_args_; }</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *core_object = get_core_object();</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    <span class="keywordflow">return</span> core_object-&gt;get_reference(core_object-&gt;references_size() - MDL_HIDDEN_REFS);</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;  }</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160; </div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;  <span class="keywordtype">void</span> add_requirement(<span class="keywordtype">bool</span> strong);</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;  <span class="keywordtype">void</span> remove_requirement(<span class="keywordtype">bool</span> strong);</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160; </div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;  uint32 get_requirement_count(uint32 &amp;weak_requirement_count, uint32 &amp;strong_requirement_count);</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;  uint32 get_requirement_count();</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160; </div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;  <span class="keywordtype">void</span> store_evidence(_Fact *evidence) { _store_evidence&lt;EvidenceEntry&gt;(&amp;evidences_, evidence); }</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;  <span class="keywordtype">void</span> store_predicted_evidence(_Fact *evidence) { _store_evidence &lt;PredictedEvidenceEntry&gt;(&amp;predicted_evidences_, evidence); }</div>
 <div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160; </div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;  <span class="keywordtype">bool</span> inject_prediction(Fact *prediction, float32 confidence) <span class="keyword">const</span>; <span class="comment">// for simulated predictions.</span></div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;};</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;}</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160; </div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160; </div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;  <span class="keyword">virtual</span> Fact *get_f_ihlp(HLPBindingMap *bindings, <span class="keywordtype">bool</span> wr_enabled) <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160; </div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;  uint16 get_out_group_count() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *get_out_group(uint16 i) <span class="keyword">const</span>; <span class="comment">// i starts at 1.</span></div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;  Group *get_host()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (Group *)get_view()-&gt;get_host(); }</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;  <span class="keywordtype">bool</span> has_tpl_args()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> has_tpl_args_; }</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160; </div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;  <span class="keywordtype">bool</span> inject_prediction(Fact *prediction, float32 confidence) <span class="keyword">const</span>; <span class="comment">// for simulated predictions.</span></div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;};</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;}</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160; </div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassr__code_1_1list_1_1const__iterator_html"><div class="ttname"><a href="classr__code_1_1list_1_1const__iterator.html">r_code::list::const_iterator</a></div><div class="ttdef"><b>Definition:</b> <a href="list_8h_source.html#l00265">list.h:266</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_h_l_p_controller_html_a879d2ae14cc6c8dde1936e7b3f7d3b48"><div class="ttname"><a href="classr__exec_1_1_h_l_p_controller.html#a879d2ae14cc6c8dde1936e7b3f7d3b48">r_exec::HLPController::evaluate_bwd_guards</a></div><div class="ttdeci">bool evaluate_bwd_guards(HLPBindingMap *bm, bool narrow_fwd_timings=false)</div><div class="ttdef"><b>Definition:</b> <a href="hlp__controller_8cpp_source.html#l00168">hlp_controller.cpp:168</a></div></div>
@@ -294,6 +296,7 @@ $(function() {
 <div class="ttc" id="aclassr__exec_1_1_h_l_p_controller_html"><div class="ttname"><a href="classr__exec_1_1_h_l_p_controller.html">r_exec::HLPController</a></div><div class="ttdef"><b>Definition:</b> <a href="hlp__controller_8h_source.html#l00104">hlp_controller.h:105</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_h_l_p_controller_1_1_evidence_entry_html"><div class="ttname"><a href="classr__exec_1_1_h_l_p_controller_1_1_evidence_entry.html">r_exec::HLPController::EvidenceEntry</a></div><div class="ttdef"><b>Definition:</b> <a href="hlp__controller_8h_source.html#l00111">hlp_controller.h:111</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_o_controller_html"><div class="ttname"><a href="classr__exec_1_1_o_controller.html">r_exec::OController</a></div><div class="ttdef"><b>Definition:</b> <a href="overlay_8h_source.html#l00239">overlay.h:240</a></div></div>
+<div class="ttc" id="aclassr__exec_1_1_h_l_p_controller_html_a92537d8cd5f64c5ab18e926e26d20961"><div class="ttname"><a href="classr__exec_1_1_h_l_p_controller.html#a92537d8cd5f64c5ab18e926e26d20961">r_exec::HLPController::inject_notification_into_out_groups</a></div><div class="ttdeci">void inject_notification_into_out_groups(r_code::Code *origin, r_code::Code *marker) const</div><div class="ttdef"><b>Definition:</b> <a href="hlp__controller_8cpp_source.html#l00301">hlp_controller.cpp:301</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_h_l_p_controller_1_1_predicted_evidence_entry_html"><div class="ttname"><a href="classr__exec_1_1_h_l_p_controller_1_1_predicted_evidence_entry.html">r_exec::HLPController::PredictedEvidenceEntry</a></div><div class="ttdef"><b>Definition:</b> <a href="hlp__controller_8h_source.html#l00132">hlp_controller.h:133</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_critical_section_list_html"><div class="ttname"><a href="classr__exec_1_1_critical_section_list.html">r_exec::CriticalSectionList</a></div><div class="ttdef"><b>Definition:</b> <a href="overlay_8h_source.html#l00249">overlay.h:249</a></div></div>
 <!-- start footer part -->

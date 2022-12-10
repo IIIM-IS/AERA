@@ -74,9 +74,9 @@ $(function() {
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//_/_/ AERA</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//_/_/ Autocatalytic Endogenous Reflective Architecture</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//_/_/ </span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Jeff Thompson</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Jeff Thompson</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//_/_/ http://www.iiim.is</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//_/_/ </span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//_/_/ Copyright (c) 2010-2012 Eric Nivel</span></div>
@@ -192,10 +192,10 @@ $(function() {
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;  <a class="code" href="classr__code_1_1_sys_view.html">SysView</a>();</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;  <a class="code" href="classr__code_1_1_sys_view.html">SysView</a>(<a class="code" href="classr__code_1_1___view.html">_View</a> *source);</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;  <span class="keywordtype">void</span> write(word32 *data);</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;  <span class="keywordtype">void</span> read(word32 *data);</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;  <span class="keywordtype">void</span> write(word32 *data) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;  <span class="keywordtype">void</span> read(word32 *data) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;  uint32 get_size() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;  <span class="keywordtype">void</span> trace(std::ostream&amp; out);</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;  <span class="keywordtype">void</span> trace(std::ostream&amp; out) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="preprocessor">#ifdef WITH_DETAIL_OID</span></div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;  <span class="keywordtype">int</span> detail_oid_;</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="preprocessor">#endif</span></div>
@@ -220,10 +220,10 @@ $(function() {
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;  <a class="code" href="classr__code_1_1_sys_object.html">SysObject</a>(<a class="code" href="classr__code_1_1_code.html">Code</a> *source);</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;  ~<a class="code" href="classr__code_1_1_sys_object.html">SysObject</a>();</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160; </div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;  <span class="keywordtype">void</span> write(word32 *data);</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;  <span class="keywordtype">void</span> read(word32 *data);</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;  <span class="keywordtype">void</span> write(word32 *data) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;  <span class="keywordtype">void</span> read(word32 *data) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;  uint32 get_size();</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;  <span class="keywordtype">void</span> trace(std::ostream&amp; out);</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;  <span class="keywordtype">void</span> trace(std::ostream&amp; out) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;  <span class="keywordtype">void</span> trace();</div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;};</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160; </div>
@@ -346,10 +346,10 @@ $(function() {
 <div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;  <a class="code" href="classr__code_1_1_code.html">Code</a>() : storage_index_(null_storage_index) { markers_.reserve(CodeMarkersInitialSize); }</div>
 <div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;  <span class="keyword">virtual</span> ~<a class="code" href="classr__code_1_1_code.html">Code</a>() {}</div>
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160; </div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> mod(uint16 member_index, float32 value) {};</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> set(uint16 member_index, float32 value) {};</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classr__code_1_1___view.html">_View</a> *get_view(<a class="code" href="classr__code_1_1_code.html">Code</a> *group, <span class="keywordtype">bool</span> lock) { <span class="keywordflow">return</span> NULL; }</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> add_reference(<a class="code" href="classr__code_1_1_code.html">Code</a> *<span class="keywordtype">object</span>)<span class="keyword"> const </span>{} <span class="comment">// called only on local objects.</span></div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> mod(uint16 <span class="comment">/* member_index */</span>, float32 <span class="comment">/* value */</span>) {};</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> set(uint16 <span class="comment">/* member_index */</span>, float32 <span class="comment">/* value */</span>) {};</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classr__code_1_1___view.html">_View</a> *get_view(<a class="code" href="classr__code_1_1_code.html">Code</a>* <span class="comment">/* group */</span>, <span class="keywordtype">bool</span> <span class="comment">/* lock */</span>) { <span class="keywordflow">return</span> NULL; }</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> add_reference(<a class="code" href="classr__code_1_1_code.html">Code</a>* <span class="comment">/* object */</span>)<span class="keyword"> const </span>{} <span class="comment">// called only on local objects.</span></div>
 <div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;  <span class="keywordtype">void</span> remove_marker(<a class="code" href="classr__code_1_1_code.html">Code</a> *m) {</div>
 <div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160; </div>
 <div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    acq_markers();</div>
@@ -420,30 +420,30 @@ $(function() {
 <div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;  }</div>
 <div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;  <span class="keyword">virtual</span> ~<a class="code" href="classr__code_1_1_local_object.html">LocalObject</a>() {}</div>
 <div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160; </div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;  <a class="code" href="classr__code_1_1___view.html">_View</a> *build_view(<a class="code" href="classr__code_1_1_sys_view.html">SysView</a> *source) {</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;  <a class="code" href="classr__code_1_1___view.html">_View</a> *build_view(<a class="code" href="classr__code_1_1_sys_view.html">SysView</a> *source)<span class="keyword"> override </span>{</div>
 <div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160; </div>
 <div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;    <span class="keywordflow">return</span> Code::build_view&lt;_View&gt;(source);</div>
 <div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;  }</div>
 <div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160; </div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;  uint32 get_oid()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> oid_; }</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;  <span class="keywordtype">void</span> set_oid(uint32 oid) { oid_ = oid; }</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;  uint32 get_oid()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> oid_; }</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;  <span class="keywordtype">void</span> set_oid(uint32 oid)<span class="keyword"> override </span>{ oid_ = oid; }</div>
 <div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160; </div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;  <a class="code" href="classr__code_1_1_atom.html">Atom</a> &amp;code(uint16 i) { <span class="keywordflow">return</span> code_[i]; }</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;  <a class="code" href="classr__code_1_1_atom.html">Atom</a> &amp;code(uint16 i)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (*code_.as_std())[i]; }</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;  uint16 code_size()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;  <a class="code" href="classr__code_1_1_atom.html">Atom</a> &amp;code(uint16 i)<span class="keyword"> override </span>{ <span class="keywordflow">return</span> code_[i]; }</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;  <a class="code" href="classr__code_1_1_atom.html">Atom</a> &amp;code(uint16 i)<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> (*code_.as_std())[i]; }</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;  uint16 code_size()<span class="keyword"> const override </span>{</div>
 <div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;    <span class="comment">// There can&#39;t be more than 65536 code bytes. Explicitly cast to the return type.</span></div>
 <div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;    <span class="keywordflow">return</span> (uint16)code_.size();</div>
 <div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;  }</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;  <span class="keywordtype">void</span> resize_code(uint16 new_size) { code_.as_std()-&gt;resize(new_size); }</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;  <span class="keywordtype">void</span> set_reference(uint16 i, <a class="code" href="classr__code_1_1_code.html">Code</a> *<span class="keywordtype">object</span>) { references_[i] = object; }</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;  <a class="code" href="classr__code_1_1_code.html">Code</a> *get_reference(uint16 i)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (*references_.as_std())[i]; }</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;  uint16 references_size()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;  <span class="keywordtype">void</span> resize_code(uint16 new_size)<span class="keyword"> override </span>{ code_.as_std()-&gt;resize(new_size); }</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;  <span class="keywordtype">void</span> set_reference(uint16 i, <a class="code" href="classr__code_1_1_code.html">Code</a> *<span class="keywordtype">object</span>)<span class="keyword"> override </span>{ references_[i] = object; }</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;  <a class="code" href="classr__code_1_1_code.html">Code</a> *get_reference(uint16 i)<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> (*references_.as_std())[i]; }</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;  uint16 references_size()<span class="keyword"> const override </span>{</div>
 <div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;    <span class="comment">// There can&#39;t be more than 65536 references. Explicitly cast to the return type.</span></div>
 <div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;    <span class="keywordflow">return</span> (uint16)references_.size();</div>
 <div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;  }</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;  <span class="keywordtype">void</span> clear_references() { references_.as_std()-&gt;clear(); }</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;  <span class="keywordtype">void</span> set_references(std::vector&lt;<a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> &gt; &amp;new_references) { (*references_.as_std()) = new_references; }</div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;  <span class="keywordtype">void</span> add_reference(<a class="code" href="classr__code_1_1_code.html">Code</a> *<span class="keywordtype">object</span>)<span class="keyword"> const </span>{ references_.as_std()-&gt;push_back(<span class="keywordtype">object</span>); }</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;  <span class="keywordtype">void</span> clear_references()<span class="keyword"> override </span>{ references_.as_std()-&gt;clear(); }</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;  <span class="keywordtype">void</span> set_references(std::vector&lt;<a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> &gt; &amp;new_references)<span class="keyword"> override </span>{ (*references_.as_std()) = new_references; }</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;  <span class="keywordtype">void</span> add_reference(<a class="code" href="classr__code_1_1_code.html">Code</a> *<span class="keywordtype">object</span>)<span class="keyword"> const override </span>{ references_.as_std()-&gt;push_back(<span class="keywordtype">object</span>); }</div>
 <div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;};</div>
 <div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160; </div>
 <div class="line"><a name="l00390"></a><span class="lineno"><a class="line" href="classr__code_1_1_mem.html">  390</a></span>&#160;<span class="keyword">class </span>dll_export <a class="code" href="classr__code_1_1_mem.html">Mem</a> {</div>

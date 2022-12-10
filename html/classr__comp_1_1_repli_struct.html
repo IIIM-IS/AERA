@@ -104,12 +104,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>reset</b> ()</td></tr
 <tr class="memitem:a07452a0b32ae01f8b6854f5e8b0c1f77"><td class="memItemLeft" align="right" valign="top"><a id="a07452a0b32ae01f8b6854f5e8b0c1f77"></a>
 uint32&#160;</td><td class="memItemRight" valign="bottom"><b>getIndent</b> (std::istream *stream)</td></tr>
 <tr class="separator:a07452a0b32ae01f8b6854f5e8b0c1f77"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4feca3f5f83d0a8b51bfab103451f9bf"><td class="memItemLeft" align="right" valign="top"><a id="a4feca3f5f83d0a8b51bfab103451f9bf"></a>
-int32&#160;</td><td class="memItemRight" valign="bottom"><b>parse</b> (std::istream *stream, const std::string &amp;filePath, uint32 &amp;curIndent, uint32 &amp;prevIndent, int32 paramExpect=0)</td></tr>
-<tr class="separator:a4feca3f5f83d0a8b51bfab103451f9bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac15e6f5223c320cd7dcc6e1b8918ab06"><td class="memItemLeft" align="right" valign="top"><a id="ac15e6f5223c320cd7dcc6e1b8918ab06"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseDirective</b> (std::istream *stream, const std::string &amp;filePath, uint32 &amp;curIndent, uint32 &amp;prevIndent)</td></tr>
-<tr class="separator:ac15e6f5223c320cd7dcc6e1b8918ab06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a590ea125cfa28bd52056351528ab1155"><td class="memItemLeft" align="right" valign="top"><a id="a590ea125cfa28bd52056351528ab1155"></a>
+int32&#160;</td><td class="memItemRight" valign="bottom"><b>parse</b> (std::istream *stream, const std::string &amp;file_path, uint32 &amp;cur_indent, uint32 &amp;prev_indent, int32 param_expect=0)</td></tr>
+<tr class="separator:a590ea125cfa28bd52056351528ab1155"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae3eafbb1dca8ec8dd086ec83d359288"><td class="memItemLeft" align="right" valign="top"><a id="aae3eafbb1dca8ec8dd086ec83d359288"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseDirective</b> (std::istream *stream, const std::string &amp;file_path, uint32 &amp;cur_indent, uint32 &amp;prev_indent)</td></tr>
+<tr class="separator:aae3eafbb1dca8ec8dd086ec83d359288"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae74891fc4409a85096099c2d69f0b917"><td class="memItemLeft" align="right" valign="top"><a id="ae74891fc4409a85096099c2d69f0b917"></a>
 int32&#160;</td><td class="memItemRight" valign="bottom"><b>process</b> ()</td></tr>
 <tr class="separator:ae74891fc4409a85096099c2d69f0b917"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -130,8 +130,8 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>printError</b>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:aa1721512ac8d8673043fbaa49187d266"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__comp_1_1_repli_struct.html#aa1721512ac8d8673043fbaa49187d266">isFileLoaded</a> (const std::string &amp;filePath)</td></tr>
-<tr class="separator:aa1721512ac8d8673043fbaa49187d266"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a871f724c5b29369f91a40eb2bb524af6"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__comp_1_1_repli_struct.html#a871f724c5b29369f91a40eb2bb524af6">isFileLoaded</a> (const std::string &amp;file_path)</td></tr>
+<tr class="separator:a871f724c5b29369f91a40eb2bb524af6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -194,8 +194,8 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <div class="textblock">
 <p class="definition">Definition at line <a class="el" href="preprocessor_8h_source.html#l00097">97</a> of file <a class="el" href="preprocessor_8h_source.html">preprocessor.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="aa1721512ac8d8673043fbaa49187d266"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa1721512ac8d8673043fbaa49187d266">&#9670;&nbsp;</a></span>isFileLoaded()</h2>
+<a id="a871f724c5b29369f91a40eb2bb524af6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a871f724c5b29369f91a40eb2bb524af6">&#9670;&nbsp;</a></span>isFileLoaded()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -207,7 +207,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
           <td class="memname">bool r_comp::RepliStruct::isFileLoaded </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>filePath</em></td><td>)</td>
+          <td class="paramname"><em>file_path</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -219,7 +219,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div><div class="memdoc">
 <p>Search RepliStruct::LoadedFilePaths_ to check if the filePath is already loaded. This checks for equivalent file paths.So, for example, "Test/file.replicode" will match with "/work/AERA/Test/file.replicode" and "Test/../Test/file.replicode" if they all refer to the same file. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">filePath</td><td>The file path to check. </td></tr>
+    <tr><td class="paramname">file_path</td><td>The file path to check. </td></tr>
   </table>
   </dd>
 </dl>

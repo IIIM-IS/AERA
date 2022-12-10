@@ -90,14 +90,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a10194a5b79d295b3838af180f8c113bc"><td class="memItemLeft" align="right" valign="top"><a id="a10194a5b79d295b3838af180f8c113bc"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>SRMonitor</b> (<a class="el" href="classr__exec_1_1_primary_m_d_l_controller.html">PrimaryMDLController</a> *controller, <a class="el" href="classr__exec_1_1_binding_map.html">BindingMap</a> *bindings, Timestamp sim_thz_timestamp, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *goal, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *f_imdl)</td></tr>
 <tr class="separator:a10194a5b79d295b3838af180f8c113bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a273428615e06d0c3cd856fa062a8fa1f"><td class="memItemLeft" align="right" valign="top"><a id="a273428615e06d0c3cd856fa062a8fa1f"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>reduce</b> (<a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *input)</td></tr>
-<tr class="separator:a273428615e06d0c3cd856fa062a8fa1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a672a5fa2c7e3072e306e615f48e90343"><td class="memItemLeft" align="right" valign="top"><a id="a672a5fa2c7e3072e306e615f48e90343"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>reduce</b> (<a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *input) override</td></tr>
+<tr class="separator:a672a5fa2c7e3072e306e615f48e90343"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af619ef699997d660cf639d92d8a5bcbe"><td class="memItemLeft" align="right" valign="top"><a id="af619ef699997d660cf639d92d8a5bcbe"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> (Timestamp &amp;next_target)</td></tr>
 <tr class="separator:af619ef699997d660cf639d92d8a5bcbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adcd4f275347cfbeac6ceb5417f9ff482"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1_s_r_monitor.html#adcd4f275347cfbeac6ceb5417f9ff482">signal</a> (<a class="el" href="classr__exec_1_1_pred.html">Pred</a> *prediction)</td></tr>
-<tr class="separator:adcd4f275347cfbeac6ceb5417f9ff482"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6327edfa65637f98ec3e3927b8f90b3f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1_s_r_monitor.html#a6327edfa65637f98ec3e3927b8f90b3f">signal</a> (<a class="el" href="classr__exec_1_1_pred.html">Pred</a> *prediction) override</td></tr>
+<tr class="separator:a6327edfa65637f98ec3e3927b8f90b3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classr__exec_1_1_s_g_monitor"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classr__exec_1_1_s_g_monitor')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classr__exec_1_1_s_g_monitor.html">r_exec::SGMonitor</a></td></tr>
 <tr class="memitem:ad8150562a920abdbc3d845829ef58161 inherit pub_methods_classr__exec_1_1_s_g_monitor"><td class="memItemLeft" align="right" valign="top"><a id="ad8150562a920abdbc3d845829ef58161"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>SGMonitor</b> (<a class="el" href="classr__exec_1_1_primary_m_d_l_controller.html">PrimaryMDLController</a> *controller, <a class="el" href="classr__exec_1_1_binding_map.html">BindingMap</a> *bindings, Timestamp sim_thz_timestamp, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *goal, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *f_imdl)</td></tr>
@@ -188,8 +188,8 @@ int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</
 <div class="textblock">
 <p class="definition">Definition at line <a class="el" href="g__monitor_8h_source.html#l00249">249</a> of file <a class="el" href="g__monitor_8h_source.html">g_monitor.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="adcd4f275347cfbeac6ceb5417f9ff482"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adcd4f275347cfbeac6ceb5417f9ff482">&#9670;&nbsp;</a></span>signal()</h2>
+<a id="a6327edfa65637f98ec3e3927b8f90b3f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6327edfa65637f98ec3e3927b8f90b3f">&#9670;&nbsp;</a></span>signal()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -201,19 +201,19 @@ int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</
           <td class="memname">bool r_exec::SRMonitor::signal </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classr__exec_1_1_pred.html">Pred</a> *&#160;</td>
-          <td class="paramname"><em>prediction</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 <p>If prediction-&gt;is_simulation(), then this is for a simulation. </p>
 
-<p>Reimplemented from <a class="el" href="classr__exec_1_1___g_monitor.html#aa0251ca529180717d997d25274fc0fb5">r_exec::_GMonitor</a>.</p>
+<p>Reimplemented from <a class="el" href="classr__exec_1_1___g_monitor.html#a646b61cd3f2f9166bb819d27390f09d6">r_exec::_GMonitor</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="g__monitor_8cpp_source.html#l00584">584</a> of file <a class="el" href="g__monitor_8cpp_source.html">g_monitor.cpp</a>.</p>
 

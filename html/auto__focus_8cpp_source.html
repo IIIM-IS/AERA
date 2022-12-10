@@ -74,10 +74,10 @@ $(function() {
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//_/_/ AERA</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//_/_/ Autocatalytic Endogenous Reflective Architecture</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//_/_/ </span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Jeff Thompson</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018 Jacqueline Clare Mallett</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Jeff Thompson</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018 Jacqueline Clare Mallett</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//_/_/ http://www.iiim.is</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//_/_/ </span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">//_/_/ Copyright (c) 2010-2012 Eric Nivel</span></div>
@@ -362,171 +362,151 @@ $(function() {
 <div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    m-&gt;second-&gt;take_input(input, abstract_input, bm);</div>
 <div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;}</div>
 <div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160; </div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;<span class="keyword">inline</span> <span class="keywordtype">void</span> AutoFocusController::rate(_Fact *target, <span class="keywordtype">bool</span> success, TPXMap &amp;map, RatingMap &amp;ratings) {</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;  <span class="comment">/*</span></div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;<span class="comment">          TPXMap::iterator m=map.find(target);</span></div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;<span class="comment">          if(m!=map.end()){ // shall always be the case.</span></div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;<span class="comment">              _Fact *pattern=m-&gt;second-&gt;get_pattern();</span></div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;<span class="comment">              RatingMap::iterator r=ratings.find(pattern);</span></div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;<span class="comment">              if(r!=ratings.end()){ // shall always be the case.</span></div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;<span class="comment">                  r-&gt;second.add_evidence(success);</span></div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;<span class="comment">                  if(Rating::DeltaSuccessRate(r-&gt;second.delta_success_rate)) // target for which we don&#39;t see much improvement over time.</span></div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;<span class="comment">                      m-&gt;second=new TPX(m-&gt;second);</span></div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;<span class="comment">              }</span></div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;<span class="comment">          }*/</span></div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;}</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160; </div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;<span class="keywordtype">void</span> AutoFocusController::take_input(<a class="code" href="classr__exec_1_1_view.html">r_exec::View</a> *input) {</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160; </div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;  <span class="keywordflow">if</span> (is_invalidated())</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;  <span class="keywordflow">if</span> (input-&gt;object_-&gt;code(0).asOpcode() == Opcodes::Fact ||</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;    input-&gt;object_-&gt;code(0).asOpcode() == Opcodes::AntiFact ||</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    input-&gt;object_-&gt;code(0).asOpcode() == Opcodes::MkRdx) <span class="comment">// discard everything but facts, |facts and mk.rdx.</span></div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    Controller::__take_input&lt;AutoFocusController&gt;(input);</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;}</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160; </div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;<span class="keywordtype">void</span> AutoFocusController::reduce(<a class="code" href="classr__exec_1_1_view.html">r_exec::View</a> *input) {</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160; </div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;  <a class="code" href="classr__code_1_1_code.html">Code</a> *input_object = input-&gt;object_;</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;  uint16 opcode = input_object-&gt;code(0).asOpcode();</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160; </div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;  reductionCS_.enter();</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160; </div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;  <span class="keywordflow">if</span> (opcode == Opcodes::MkRdx) {</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160; </div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;    Fact *f_ihlp = (Fact *)input_object-&gt;get_reference(MK_RDX_IHLP_REF);</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    BindingMap *bm = ((MkRdx *)input_object)-&gt;bindings_;</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;    <span class="keywordflow">if</span> (f_ihlp-&gt;get_reference(0)-&gt;code(0).asOpcode() == Opcodes::IMdl) { <span class="comment">// handle new goals/predictions as new targets.</span></div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160; </div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;      <a class="code" href="classr__code_1_1_code.html">Code</a> *mdl = f_ihlp-&gt;get_reference(0)-&gt;get_reference(0);</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;      <a class="code" href="classr__code_1_1_code.html">Code</a> *unpacked_mdl = mdl-&gt;get_reference(mdl-&gt;references_size() - MDL_HIDDEN_REFS);</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;      uint16 obj_set_index = unpacked_mdl-&gt;code(MDL_OBJS).asIndex();</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160; </div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;      <span class="comment">// Get the first production in the set of productions.</span></div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;      uint16 production_set_index = input_object-&gt;code(MK_RDX_PRODS).asIndex();</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;      uint16 production_reference_index = input_object-&gt;code(production_set_index + 1).asIndex();</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;      <a class="code" href="classr__code_1_1_code.html">Code</a> *production = input_object-&gt;get_reference(production_reference_index);</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160; </div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;      _Fact *pattern;</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;      TPX *tpx;</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;      Goal *goal = ((_Fact *)production)-&gt;get_goal();</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;      <span class="keywordflow">if</span> (goal != NULL) { <span class="comment">// build a tpx to find models like M:[A -&gt; B] where B is the goal target.</span></div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;<span class="keywordtype">void</span> AutoFocusController::take_input(<a class="code" href="classr__exec_1_1_view.html">r_exec::View</a> *input) {</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160; </div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;  <span class="keywordflow">if</span> (is_invalidated())</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;  <span class="keywordflow">if</span> (input-&gt;object_-&gt;code(0).asOpcode() == Opcodes::Fact ||</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;    input-&gt;object_-&gt;code(0).asOpcode() == Opcodes::AntiFact ||</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;    input-&gt;object_-&gt;code(0).asOpcode() == Opcodes::MkRdx) <span class="comment">// discard everything but facts, |facts and mk.rdx.</span></div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    Controller::__take_input&lt;AutoFocusController&gt;(input);</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;}</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160; </div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;<span class="keywordtype">void</span> AutoFocusController::reduce(<a class="code" href="classr__exec_1_1_view.html">r_exec::View</a> *input) {</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160; </div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;  <a class="code" href="classr__code_1_1_code.html">Code</a> *input_object = input-&gt;object_;</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;  uint16 opcode = input_object-&gt;code(0).asOpcode();</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160; </div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;  reductionCS_.enter();</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160; </div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;  <span class="keywordflow">if</span> (opcode == Opcodes::MkRdx) {</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160; </div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    Fact *f_ihlp = (Fact *)input_object-&gt;get_reference(MK_RDX_IHLP_REF);</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;    BindingMap *bm = ((MkRdx *)input_object)-&gt;bindings_;</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;    <span class="keywordflow">if</span> (f_ihlp-&gt;get_reference(0)-&gt;code(0).asOpcode() == Opcodes::IMdl) { <span class="comment">// handle new goals/predictions as new targets.</span></div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160; </div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;      <a class="code" href="classr__code_1_1_code.html">Code</a> *mdl = f_ihlp-&gt;get_reference(0)-&gt;get_reference(0);</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;      <a class="code" href="classr__code_1_1_code.html">Code</a> *unpacked_mdl = mdl-&gt;get_reference(mdl-&gt;references_size() - MDL_HIDDEN_REFS);</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;      uint16 obj_set_index = unpacked_mdl-&gt;code(MDL_OBJS).asIndex();</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160; </div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;      <span class="comment">// Get the first production in the set of productions.</span></div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;      uint16 production_set_index = input_object-&gt;code(MK_RDX_PRODS).asIndex();</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;      uint16 production_reference_index = input_object-&gt;code(production_set_index + 1).asIndex();</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;      <a class="code" href="classr__code_1_1_code.html">Code</a> *production = input_object-&gt;get_reference(production_reference_index);</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160; </div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;      _Fact *pattern;</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;      TPX *tpx;</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;      Goal *goal = ((_Fact *)production)-&gt;get_goal();</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;      <span class="keywordflow">if</span> (goal != NULL) { <span class="comment">// build a tpx to find models like M:[A -&gt; B] where B is the goal target.</span></div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160; </div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        pattern = (_Fact *)unpacked_mdl-&gt;get_reference(unpacked_mdl-&gt;code(obj_set_index + 1).asIndex()); <span class="comment">// lhs.</span></div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        tpx = build_tpx&lt;GTPX&gt;((_Fact *)production, pattern, bm, goal_ratings_, f_ihlp, f_ihlp-&gt;get_reference(0)-&gt;code(I_HLP_WEAK_REQUIREMENT_ENABLED).asBoolean());</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        goals_.insert(std::make_pair((_Fact *)production, tpx));</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;      } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160; </div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        Pred *pred = ((_Fact *)production)-&gt;get_pred();</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;        <span class="keywordflow">if</span> (pred != NULL) { <span class="comment">// build a tpx to find models like M:[A -&gt; |imdl M0] where M0 is the model that produced the prediction.</span></div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160; </div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;          pattern = (_Fact *)unpacked_mdl-&gt;get_reference(unpacked_mdl-&gt;code(obj_set_index + 2).asIndex()); <span class="comment">// rhs.</span></div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;          tpx = build_tpx&lt;PTPX&gt;((_Fact *)production, pattern, bm, prediction_ratings_, f_ihlp, f_ihlp-&gt;get_reference(0)-&gt;code(I_HLP_WEAK_REQUIREMENT_ENABLED).asBoolean());</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;          predictions_.insert(std::make_pair((_Fact *)production, tpx));</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        }</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;      }</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;    }</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;  } <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160; </div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;        pattern = (_Fact *)unpacked_mdl-&gt;get_reference(unpacked_mdl-&gt;code(obj_set_index + 1).asIndex()); <span class="comment">// lhs.</span></div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;        tpx = build_tpx&lt;GTPX&gt;((_Fact *)production, pattern, bm, goal_ratings_, f_ihlp, f_ihlp-&gt;get_reference(0)-&gt;code(I_HLP_WEAK_REQUIREMENT_ENABLED).asBoolean());</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;        <span class="comment">// jm goals.insert(std::pair&lt;P&lt;Code&gt;,P&lt;TPX&gt; &gt;((_Fact *)production,tpx));</span></div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;        goals_.insert(std::make_pair((_Fact *)production, tpx));</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;      } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160; </div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;        Pred *pred = ((_Fact *)production)-&gt;get_pred();</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;        <span class="keywordflow">if</span> (pred != NULL) { <span class="comment">// build a tpx to find models like M:[A -&gt; |imdl M0] where M0 is the model that produced the prediction.</span></div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160; </div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;          pattern = (_Fact *)unpacked_mdl-&gt;get_reference(unpacked_mdl-&gt;code(obj_set_index + 2).asIndex()); <span class="comment">// rhs.</span></div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;          tpx = build_tpx&lt;PTPX&gt;((_Fact *)production, pattern, bm, prediction_ratings_, f_ihlp, f_ihlp-&gt;get_reference(0)-&gt;code(I_HLP_WEAK_REQUIREMENT_ENABLED).asBoolean());</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;          <span class="comment">//predictions.insert(std::pair&lt;P&lt;Code&gt;,P&lt;TPX&gt; &gt;((_Fact *)production,tpx));</span></div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;          predictions_.insert(std::make_pair((_Fact *)production, tpx));</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;        }</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;      }</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    }</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;  } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160; </div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;    <span class="keywordtype">bool</span> success = (opcode == Opcodes::Fact);</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;    <span class="keywordflow">if</span> (success || opcode == Opcodes::AntiFact) { <span class="comment">// discard everything but facts.</span></div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160; </div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;      <a class="code" href="classr__code_1_1_code.html">Code</a> *payload = input_object-&gt;get_reference(0);</div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;      uint16 opcode = payload-&gt;code(0).asOpcode();</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;      <span class="keywordflow">if</span> (opcode == Opcodes::Success) { <span class="comment">// input_object is f-&gt;success-&gt;payload, where payload is f-&gt;g or f-&gt;p; trim down the target list, rate targets, signal tpx.</span></div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160; </div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;        _Fact *target = (_Fact *)payload-&gt;get_reference(0);</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;        Goal *goal = target-&gt;get_goal();</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;        <span class="keywordflow">if</span> (goal != NULL) {</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160; </div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;          <span class="comment">//rate(target,success,goals,goal_ratings);</span></div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;          notify(target, input, goals_);</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;        } <span class="keywordflow">else</span> { <span class="comment">// prediction.</span></div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160; </div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;            <span class="comment">//rate(target,success,predictions,prediction_ratings);</span></div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;          notify(target, input, predictions_);</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;          <span class="keywordflow">if</span> (success) <span class="comment">// a mdl has correctly predicted a GTPX&#39;s target: the GTPX shall not produce anything: we need to pass the prediction to all GTPX.</span></div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;            dispatch_pred_success((_Fact *)target-&gt;get_pred()-&gt;get_reference(0), goals_);</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;        }</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;      } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (opcode == Opcodes::Perf)</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;        inject_input(input, 2); <span class="comment">// inject in all output groups but the primary and secondary.</span></div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;      <span class="keywordflow">else</span> { <span class="comment">// filter according to targets: inject (once) when possible and pass to TPX if any.</span></div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160; </div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;        <span class="keywordflow">if</span> (pass_through_) {</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160; </div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;          View* primary_view = NULL;</div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;          <span class="keywordflow">if</span> (opcode != Opcodes::ICst) <span class="comment">// don&#39;t inject again (since it comes from inside).</span></div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;            primary_view = inject_input(input);</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160; </div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;          <span class="keywordflow">if</span> (ptpx_on_) {</div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;            <span class="comment">// The PTPX may need the input. Save it in cross_buffer_ up to tpx_time_horizon.</span></div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;            <span class="keywordflow">if</span> (opcode == Opcodes::ICst) {</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;              <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> bm = ((ICST *)payload)-&gt;bindings_;</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;              _Fact *abstract_f_ihlp = bm-&gt;abstract_f_ihlp((_Fact *)input_object);</div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;              cross_buffer_.push_back(Input(input, abstract_f_ihlp, bm));</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;            }</div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;            <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;              <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> bm = <span class="keyword">new</span> BindingMap();</div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;              <a class="code" href="classcore_1_1_p.html">P&lt;_Fact&gt;</a> abstract_input = (_Fact *)bm-&gt;abstract_object(input_object, <span class="keyword">false</span>);</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;              cross_buffer_.push_back(Input(primary_view, abstract_input, bm));</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;            }</div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;          }</div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;    <span class="keywordtype">bool</span> success = (opcode == Opcodes::Fact);</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    <span class="keywordflow">if</span> (success || opcode == Opcodes::AntiFact) { <span class="comment">// discard everything but facts.</span></div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160; </div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;      <a class="code" href="classr__code_1_1_code.html">Code</a> *payload = input_object-&gt;get_reference(0);</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;      uint16 opcode = payload-&gt;code(0).asOpcode();</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;      <span class="keywordflow">if</span> (opcode == Opcodes::Success) { <span class="comment">// input_object is f-&gt;success-&gt;payload, where payload is f-&gt;g or f-&gt;p; trim down the target list, rate targets, signal tpx.</span></div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160; </div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;        _Fact *target = (_Fact *)payload-&gt;get_reference(0);</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;        Goal *goal = target-&gt;get_goal();</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        <span class="keywordflow">if</span> (goal != NULL) {</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160; </div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;          notify(target, input, goals_);</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;        } <span class="keywordflow">else</span> { <span class="comment">// prediction.</span></div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160; </div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;          notify(target, input, predictions_);</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;          <span class="keywordflow">if</span> (success) <span class="comment">// a mdl has correctly predicted a GTPX&#39;s target: the GTPX shall not produce anything: we need to pass the prediction to all GTPX.</span></div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;            dispatch_pred_success((_Fact *)target-&gt;get_pred()-&gt;get_reference(0), goals_);</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;        }</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;      } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (opcode == Opcodes::Perf)</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;        inject_input(input, 2); <span class="comment">// inject in all output groups but the primary and secondary.</span></div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;      <span class="keywordflow">else</span> { <span class="comment">// filter according to targets: inject (once) when possible and pass to TPX if any.</span></div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160; </div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;        <span class="keywordflow">if</span> (pass_through_) {</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160; </div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;          View* primary_view = NULL;</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;          <span class="keywordflow">if</span> (opcode != Opcodes::ICst) <span class="comment">// don&#39;t inject again (since it comes from inside).</span></div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;            primary_view = inject_input(input);</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160; </div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;          <span class="keywordflow">if</span> (ptpx_on_) {</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;            <span class="comment">// The PTPX may need the input. Save it in cross_buffer_ up to tpx_time_horizon.</span></div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;            <span class="keywordflow">if</span> (opcode == Opcodes::ICst) {</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;              <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> bm = ((ICST *)payload)-&gt;bindings_;</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;              _Fact *abstract_f_ihlp = bm-&gt;abstract_f_ihlp((_Fact *)input_object);</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;              cross_buffer_.push_back(Input(input, abstract_f_ihlp, bm));</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;            }</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;            <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;              <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> bm = <span class="keyword">new</span> BindingMap();</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;              <a class="code" href="classcore_1_1_p.html">P&lt;_Fact&gt;</a> abstract_input = (_Fact *)bm-&gt;abstract_object(input_object, <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;              cross_buffer_.push_back(Input(primary_view, abstract_input, bm));</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;            }</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;          }</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160; </div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;          <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> bm = <span class="keyword">new</span> BindingMap();</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;          <span class="keywordflow">if</span> (opcode == Opcodes::ICst) { <span class="comment">// dispatch but don&#39;t inject again (since it comes from inside).</span></div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160; </div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;            bm = ((ICST *)payload)-&gt;bindings_;</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;            _Fact *abstract_f_ihlp = bm-&gt;abstract_f_ihlp((_Fact *)input_object);</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;            dispatch_no_inject(input, abstract_f_ihlp, bm, goals_);</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;            dispatch_no_inject(input, abstract_f_ihlp, bm, predictions_);</div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;            cross_buffer_.push_back(Input(input, abstract_f_ihlp, bm));</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;          } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160; </div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;            <a class="code" href="classcore_1_1_p.html">P&lt;_Fact&gt;</a> abstract_input = (_Fact *)bm-&gt;abstract_object(input_object, <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;            <span class="keywordtype">bool</span> injected = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;            dispatch(input, abstract_input, bm, injected, goals_);</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;            dispatch(input, abstract_input, bm, injected, predictions_);</div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;          }</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;        }</div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;      }</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;    }</div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;  }</div>
 <div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160; </div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;          <a class="code" href="classcore_1_1_p.html">P&lt;BindingMap&gt;</a> bm = <span class="keyword">new</span> BindingMap();</div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;          <span class="keywordflow">if</span> (opcode == Opcodes::ICst) { <span class="comment">// dispatch but don&#39;t inject again (since it comes from inside).</span></div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;  reductionCS_.leave();</div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;}</div>
 <div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160; </div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;            bm = ((ICST *)payload)-&gt;bindings_;</div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;            _Fact *abstract_f_ihlp = bm-&gt;abstract_f_ihlp((_Fact *)input_object);</div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;            dispatch_no_inject(input, abstract_f_ihlp, bm, goals_);</div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;            dispatch_no_inject(input, abstract_f_ihlp, bm, predictions_);</div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;            cross_buffer_.push_back(Input(input, abstract_f_ihlp, bm));</div>
-<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;          } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160; </div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;            <a class="code" href="classcore_1_1_p.html">P&lt;_Fact&gt;</a> abstract_input = (_Fact *)bm-&gt;abstract_object(input_object, <span class="keyword">false</span>);</div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;            <span class="keywordtype">bool</span> injected = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;            dispatch(input, abstract_input, bm, injected, goals_);</div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;            dispatch(input, abstract_input, bm, injected, predictions_);</div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;          }</div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;        }</div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;      }</div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;    }</div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;  }</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;<span class="keywordtype">void</span> AutoFocusController::inject_hlps(<span class="keyword">const</span> vector&lt;<a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> &gt; &amp;hlps)<span class="keyword"> const </span>{ <span class="comment">// inject in the primary group; models will be injected in the secondary group automatically.</span></div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160; </div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;  vector&lt;View *&gt; views;</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160; </div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;  <span class="keyword">auto</span> now = Now();</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160; </div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;  vector&lt;P&lt;Code&gt; &gt;::const_iterator hlp;</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;  <span class="keywordflow">for</span> (hlp = hlps.begin(); hlp != hlps.end(); ++hlp) {</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160; </div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;    View *view = <span class="keyword">new</span> View(View::SYNC_ONCE, now, 0, -1, output_groups_[0], NULL, *hlp, 1); <span class="comment">// SYNC_ONCE,sln=0,res=forever,act=1.</span></div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;    view-&gt;references_[0] = output_groups_[0];</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;    views.push_back(view);</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;  }</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160; </div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;  _Mem::Get()-&gt;inject_hlps(views, output_groups_[0]);</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;}</div>
 <div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160; </div>
-<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;  reductionCS_.leave();</div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;}</div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160; </div>
-<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;<span class="keywordtype">void</span> AutoFocusController::inject_hlps(<span class="keyword">const</span> vector&lt;<a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> &gt; &amp;hlps)<span class="keyword"> const </span>{ <span class="comment">// inject in the primary group; models will be injected in the secondary group automatically.</span></div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160; </div>
-<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;  vector&lt;View *&gt; views;</div>
-<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160; </div>
-<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;  <span class="keyword">auto</span> now = Now();</div>
-<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160; </div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;  vector&lt;P&lt;Code&gt; &gt;::const_iterator hlp;</div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;  <span class="keywordflow">for</span> (hlp = hlps.begin(); hlp != hlps.end(); ++hlp) {</div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160; </div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;    View *view = <span class="keyword">new</span> View(View::SYNC_ONCE, now, 0, -1, output_groups_[0], NULL, *hlp, 1); <span class="comment">// SYNC_ONCE,sln=0,res=forever,act=1.</span></div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;    view-&gt;references_[0] = output_groups_[0];</div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;    views.push_back(view);</div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;  }</div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160; </div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;  _Mem::Get()-&gt;inject_hlps(views, output_groups_[0]);</div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;}</div>
-<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160; </div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;<span class="keywordtype">void</span> AutoFocusController::copy_cross_buffer(<a class="code" href="classr__code_1_1list.html">r_code::list&lt;Input&gt;</a> &amp;destination) { <span class="comment">// copy inputs so they can be flagged independently by the tpxs that share the cross buffer.</span></div>
-<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160; </div>
-<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;  reductionCS_.enter();</div>
-<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;  <a class="code" href="classr__code_1_1time__buffer_1_1iterator.html">time_buffer&lt;Input, Input::IsInvalidated&gt;::iterator</a> i;</div>
-<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;  <span class="keywordflow">for</span> (i = cross_buffer_.begin(Now()); i != cross_buffer_.end(); ++i)</div>
-<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;    destination.push_back(Input(*i));</div>
-<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;  reductionCS_.leave();</div>
-<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;}</div>
-<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;}</div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;<span class="keywordtype">void</span> AutoFocusController::copy_cross_buffer(<a class="code" href="classr__code_1_1list.html">r_code::list&lt;Input&gt;</a> &amp;destination) { <span class="comment">// copy inputs so they can be flagged independently by the tpxs that share the cross buffer.</span></div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160; </div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;  reductionCS_.enter();</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;  <a class="code" href="classr__code_1_1time__buffer_1_1iterator.html">time_buffer&lt;Input, Input::IsInvalidated&gt;::iterator</a> i;</div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;  <span class="keywordflow">for</span> (i = cross_buffer_.begin(Now()); i != cross_buffer_.end(); ++i)</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;    destination.push_back(Input(*i));</div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;  reductionCS_.leave();</div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;}</div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassr__code_1_1___view_html"><div class="ttname"><a href="classr__code_1_1___view.html">r_code::_View</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00163">r_code/object.h:164</a></div></div>
 <div class="ttc" id="aclasscore_1_1_p_html"><div class="ttname"><a href="classcore_1_1_p.html">core::P</a></div><div class="ttdef"><b>Definition:</b> <a href="base_8h_source.html#l00102">base.h:102</a></div></div>

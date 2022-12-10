@@ -74,9 +74,9 @@ $(function() {
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//_/_/ AERA</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//_/_/ Autocatalytic Endogenous Reflective Architecture</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//_/_/ </span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Jeff Thompson</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Jeff Thompson</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//_/_/ http://www.iiim.is</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//_/_/ </span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//_/_/ Copyright (c) 2010-2012 Eric Nivel</span></div>
@@ -212,7 +212,7 @@ $(function() {
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    <a class="code" href="classr__exec_1_1_fact.html">Fact</a> *goal,</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    <a class="code" href="classr__exec_1_1_fact.html">Fact</a> *f_imdl); <span class="comment">// goal is f0-&gt;g-&gt;f1-&gt;object.</span></div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00155"></a><span class="lineno"><a class="line" href="classr__exec_1_1___g_monitor.html#aa0251ca529180717d997d25274fc0fb5">  155</a></span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classr__exec_1_1___g_monitor.html#aa0251ca529180717d997d25274fc0fb5">signal</a>(<a class="code" href="classr__exec_1_1_pred.html">Pred</a>* prediction) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
+<div class="line"><a name="l00155"></a><span class="lineno"><a class="line" href="classr__exec_1_1___g_monitor.html#a646b61cd3f2f9166bb819d27390f09d6">  155</a></span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classr__exec_1_1___g_monitor.html#a646b61cd3f2f9166bb819d27390f09d6">signal</a>(<a class="code" href="classr__exec_1_1_pred.html">Pred</a>* <span class="comment">/* prediction */</span>) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;};</div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
 <div class="line"><a name="l00185"></a><span class="lineno"><a class="line" href="classr__exec_1_1_g_monitor.html">  185</a></span>&#160;<span class="keyword">class </span><a class="code" href="classr__exec_1_1_g_monitor.html">GMonitor</a> :</div>
@@ -231,7 +231,7 @@ $(function() {
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    <a class="code" href="classr__exec_1_1_fact.html">Fact</a> *f_imdl,</div>
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    <a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *predicted_evidence); <span class="comment">// goal is f0-&gt;g-&gt;f1-&gt;object.</span></div>
 <div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160; </div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> reduce(<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *input); <span class="comment">// returning true will remove the monitor form the controller.</span></div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;  <span class="keywordtype">bool</span> reduce(<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *input) <span class="keyword">override</span>; <span class="comment">// returning true will remove the monitor form the controller.</span></div>
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> update(Timestamp &amp;next_target);</div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;};</div>
 <div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160; </div>
@@ -245,9 +245,9 @@ $(function() {
 <div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    <a class="code" href="classr__exec_1_1_fact.html">Fact</a> *goal,</div>
 <div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;    <a class="code" href="classr__exec_1_1_fact.html">Fact</a> *f_imdl);</div>
 <div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160; </div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;  <span class="keywordtype">bool</span> reduce(<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *input);</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;  <span class="keywordtype">void</span> update(Timestamp &amp;next_target);</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="classr__exec_1_1_r_monitor.html#a2918c362790c58257c743fdb562a2fb3">signal</a>(<a class="code" href="classr__exec_1_1_pred.html">Pred</a>* prediction);</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;  <span class="keywordtype">bool</span> reduce(<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *input) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;  <span class="keywordtype">void</span> update(Timestamp &amp;next_target) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="classr__exec_1_1_r_monitor.html#a99c1faf974f6dbd98a12b5d9c2a42ab8">signal</a>(<a class="code" href="classr__exec_1_1_pred.html">Pred</a>* prediction) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;};</div>
 <div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160; </div>
 <div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="comment">// Monitors simulated goals.</span></div>
@@ -262,7 +262,7 @@ $(function() {
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    <a class="code" href="classr__exec_1_1_fact.html">Fact</a> *goal,</div>
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;    <a class="code" href="classr__exec_1_1_fact.html">Fact</a> *f_imdl); <span class="comment">// goal is f0-&gt;g-&gt;f1-&gt;object.</span></div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160; </div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;  <span class="keywordtype">bool</span> reduce(<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *input);</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;  <span class="keywordtype">bool</span> reduce(<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *input) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;  <span class="keywordtype">void</span> update(Timestamp &amp;next_target);</div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;};</div>
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160; </div>
@@ -277,10 +277,10 @@ $(function() {
 <div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    <a class="code" href="classr__exec_1_1_fact.html">Fact</a> *goal,</div>
 <div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    <a class="code" href="classr__exec_1_1_fact.html">Fact</a> *f_imdl);</div>
 <div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160; </div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;  <span class="keywordtype">bool</span> reduce(<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *input);</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;  <span class="keywordtype">bool</span> reduce(<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *input) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;  <span class="keywordtype">void</span> update(Timestamp &amp;next_target);</div>
 <div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160; </div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="classr__exec_1_1_s_r_monitor.html#adcd4f275347cfbeac6ceb5417f9ff482">signal</a>(<a class="code" href="classr__exec_1_1_pred.html">Pred</a>* prediction);</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="classr__exec_1_1_s_r_monitor.html#a6327edfa65637f98ec3e3927b8f90b3f">signal</a>(<a class="code" href="classr__exec_1_1_pred.html">Pred</a>* prediction) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;};</div>
 <div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160; </div>
 <div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="comment">// Case A: target==actual goal and target!=f_imdl: simulations have been produced for all sub-goals.</span></div>
@@ -321,27 +321,27 @@ $(function() {
 <div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassr__exec_1_1___g_monitor_1_1_sim_outcomes_html"><div class="ttname"><a href="classr__exec_1_1___g_monitor_1_1_sim_outcomes.html">r_exec::_GMonitor::SimOutcomes</a></div><div class="ttdef"><b>Definition:</b> <a href="g__monitor_8h_source.html#l00124">g_monitor.h:124</a></div></div>
-<div class="ttc" id="aclassr__exec_1_1_s_r_monitor_html_adcd4f275347cfbeac6ceb5417f9ff482"><div class="ttname"><a href="classr__exec_1_1_s_r_monitor.html#adcd4f275347cfbeac6ceb5417f9ff482">r_exec::SRMonitor::signal</a></div><div class="ttdeci">bool signal(Pred *prediction)</div><div class="ttdef"><b>Definition:</b> <a href="g__monitor_8cpp_source.html#l00584">g_monitor.cpp:584</a></div></div>
+<div class="ttc" id="aclassr__exec_1_1_r_monitor_html_a99c1faf974f6dbd98a12b5d9c2a42ab8"><div class="ttname"><a href="classr__exec_1_1_r_monitor.html#a99c1faf974f6dbd98a12b5d9c2a42ab8">r_exec::RMonitor::signal</a></div><div class="ttdeci">bool signal(Pred *prediction) override</div><div class="ttdef"><b>Definition:</b> <a href="g__monitor_8cpp_source.html#l00394">g_monitor.cpp:394</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_binding_map_html"><div class="ttname"><a href="classr__exec_1_1_binding_map.html">r_exec::BindingMap</a></div><div class="ttdef"><b>Definition:</b> <a href="binding__map_8h_source.html#l00229">binding_map.h:230</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_goal_html"><div class="ttname"><a href="classr__exec_1_1_goal.html">r_exec::Goal</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00499">factory.h:500</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_sim_html"><div class="ttname"><a href="classr__exec_1_1_sim.html">r_exec::Sim</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00230">factory.h:231</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___g_monitor_html_a101039104d71c5d9a2f60beabfc7e6b9"><div class="ttname"><a href="classr__exec_1_1___g_monitor.html#a101039104d71c5d9a2f60beabfc7e6b9">r_exec::_GMonitor::store_simulated_outcome</a></div><div class="ttdeci">void store_simulated_outcome(_Fact *f_pred_f_success, Sim *sim)</div><div class="ttdef"><b>Definition:</b> <a href="g__monitor_8cpp_source.html#l00112">g_monitor.cpp:112</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___fact_html"><div class="ttname"><a href="classr__exec_1_1___fact.html">r_exec::_Fact</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00154">factory.h:155</a></div></div>
 <div class="ttc" id="aclasscore_1_1_p_html"><div class="ttname"><a href="classcore_1_1_p.html">core::P</a></div><div class="ttdef"><b>Definition:</b> <a href="base_8h_source.html#l00102">base.h:102</a></div></div>
-<div class="ttc" id="aclassr__exec_1_1_r_monitor_html_a2918c362790c58257c743fdb562a2fb3"><div class="ttname"><a href="classr__exec_1_1_r_monitor.html#a2918c362790c58257c743fdb562a2fb3">r_exec::RMonitor::signal</a></div><div class="ttdeci">bool signal(Pred *prediction)</div><div class="ttdef"><b>Definition:</b> <a href="g__monitor_8cpp_source.html#l00394">g_monitor.cpp:394</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_s_r_monitor_html"><div class="ttname"><a href="classr__exec_1_1_s_r_monitor.html">r_exec::SRMonitor</a></div><div class="ttdef"><b>Definition:</b> <a href="g__monitor_8h_source.html#l00249">g_monitor.h:250</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_s_g_monitor_html"><div class="ttname"><a href="classr__exec_1_1_s_g_monitor.html">r_exec::SGMonitor</a></div><div class="ttdef"><b>Definition:</b> <a href="g__monitor_8h_source.html#l00232">g_monitor.h:233</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_success_html"><div class="ttname"><a href="classr__exec_1_1_success.html">r_exec::Success</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00578">factory.h:579</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_g_monitor_html"><div class="ttname"><a href="classr__exec_1_1_g_monitor.html">r_exec::GMonitor</a></div><div class="ttdef"><b>Definition:</b> <a href="g__monitor_8h_source.html#l00185">g_monitor.h:186</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_r_monitor_html"><div class="ttname"><a href="classr__exec_1_1_r_monitor.html">r_exec::RMonitor</a></div><div class="ttdef"><b>Definition:</b> <a href="g__monitor_8h_source.html#l00216">g_monitor.h:217</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_pred_html"><div class="ttname"><a href="classr__exec_1_1_pred.html">r_exec::Pred</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00376">factory.h:377</a></div></div>
+<div class="ttc" id="aclassr__exec_1_1___g_monitor_html_a646b61cd3f2f9166bb819d27390f09d6"><div class="ttname"><a href="classr__exec_1_1___g_monitor.html#a646b61cd3f2f9166bb819d27390f09d6">r_exec::_GMonitor::signal</a></div><div class="ttdeci">virtual bool signal(Pred *)</div><div class="ttdef"><b>Definition:</b> <a href="g__monitor_8h_source.html#l00155">g_monitor.h:155</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_primary_m_d_l_controller_html"><div class="ttname"><a href="classr__exec_1_1_primary_m_d_l_controller.html">r_exec::PrimaryMDLController</a></div><div class="ttdef"><b>Definition:</b> <a href="mdl__controller_8h_source.html#l00420">mdl_controller.h:421</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___g_monitor_html"><div class="ttname"><a href="classr__exec_1_1___g_monitor.html">r_exec::_GMonitor</a></div><div class="ttdef"><b>Definition:</b> <a href="g__monitor_8h_source.html#l00096">g_monitor.h:97</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_fact_html"><div class="ttname"><a href="classr__exec_1_1_fact.html">r_exec::Fact</a></div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00342">factory.h:343</a></div></div>
+<div class="ttc" id="aclassr__exec_1_1_s_r_monitor_html_a6327edfa65637f98ec3e3927b8f90b3f"><div class="ttname"><a href="classr__exec_1_1_s_r_monitor.html#a6327edfa65637f98ec3e3927b8f90b3f">r_exec::SRMonitor::signal</a></div><div class="ttdeci">bool signal(Pred *prediction) override</div><div class="ttdef"><b>Definition:</b> <a href="g__monitor_8cpp_source.html#l00584">g_monitor.cpp:584</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_success_html_a43056bc746fb6d613d9d15cbd0f68ee4"><div class="ttname"><a href="classr__exec_1_1_success.html#a43056bc746fb6d613d9d15cbd0f68ee4">r_exec::Success::get_object</a></div><div class="ttdeci">_Fact * get_object() const</div><div class="ttdef"><b>Definition:</b> <a href="factory_8h_source.html#l00588">factory.h:588</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_monitor_html"><div class="ttname"><a href="classr__exec_1_1_monitor.html">r_exec::Monitor</a></div><div class="ttdef"><b>Definition:</b> <a href="monitor_8h_source.html#l00097">monitor.h:98</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_p_m_d_l_controller_html"><div class="ttname"><a href="classr__exec_1_1_p_m_d_l_controller.html">r_exec::PMDLController</a></div><div class="ttdef"><b>Definition:</b> <a href="mdl__controller_8h_source.html#l00324">mdl_controller.h:325</a></div></div>
-<div class="ttc" id="aclassr__exec_1_1___g_monitor_html_aa0251ca529180717d997d25274fc0fb5"><div class="ttname"><a href="classr__exec_1_1___g_monitor.html#aa0251ca529180717d997d25274fc0fb5">r_exec::_GMonitor::signal</a></div><div class="ttdeci">virtual bool signal(Pred *prediction)</div><div class="ttdef"><b>Definition:</b> <a href="g__monitor_8h_source.html#l00155">g_monitor.h:155</a></div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

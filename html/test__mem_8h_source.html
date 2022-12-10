@@ -74,10 +74,10 @@ $(function() {
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//_/_/ AERA</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//_/_/ Autocatalytic Endogenous Reflective Architecture</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//_/_/ </span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Jeff Thompson</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Kristinn R. Thorisson</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2021 Arash Sheikhlar</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2021 Icelandic Institute for Intelligent Machines</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Jeff Thompson</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//_/_/ Copyright (c) 2021 Arash Sheikhlar</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//_/_/ http://www.iiim.is</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//_/_/ </span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">//_/_/ Copyright (c) 2010-2012 Eric Nivel</span></div>
@@ -166,71 +166,67 @@ $(function() {
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;  ~<a class="code" href="class_test_mem.html">TestMem</a>();</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_test_mem.html#a2308897f92bc95a57b7c3229555c6423">load</a>(std::vector&lt;r_code::Code *&gt; *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="class_test_mem.html#a66ba43a58e85ac7f5c15c5474ab0fa2a">load</a>(std::vector&lt;r_code::Code *&gt; *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* <a class="code" href="class_test_mem.html#a84e63f256ffd7757a04b11a92eee6e03">eject</a>(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *command);</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* <a class="code" href="class_test_mem.html#a6778ea0b286e7b72b2875d6a4bcaa195">eject</a>(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *command) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
-<div class="line"><a name="l00124"></a><span class="lineno"><a class="line" href="class_test_mem.html#a46a3864976bb0605eab119c6dc45184c">  124</a></span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_test_mem.html#a46a3864976bb0605eab119c6dc45184c">on_diagnostic_time_tick</a>() { on_time_tick(); }</div>
+<div class="line"><a name="l00124"></a><span class="lineno"><a class="line" href="class_test_mem.html#a880d896be3dc16aadd2475b271f251b7">  124</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="class_test_mem.html#a880d896be3dc16aadd2475b271f251b7">on_diagnostic_time_tick</a>()<span class="keyword"> override </span>{ on_time_tick(); }</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="keyword">protected</span>:</div>
 <div class="line"><a name="l00127"></a><span class="lineno"><a class="line" href="class_test_mem_1_1___thread.html">  127</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_test_mem_1_1___thread.html">_Thread</a> : <span class="keyword">public</span> <a class="code" href="classcore_1_1_thread.html">Thread</a> {</div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;  };</div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;  <span class="keyword">static</span> <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* <a class="code" href="class_test_mem.html#ac28693d3e54d8a8fb00d4f12ba934ca4">findObject</a>(</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    std::vector&lt;r_code::Code *&gt; *objects, <span class="keyword">const</span> <span class="keywordtype">char</span>* name);</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160; </div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;  <span class="keywordtype">void</span> on_time_tick();</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="class_test_mem.html#a4856f3f08a41711de046641e26e1327d">startTimeTickThread</a>();</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;  <span class="keywordtype">void</span> on_time_tick();</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="class_test_mem.html#a4856f3f08a41711de046641e26e1327d">startTimeTickThread</a>();</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;  <span class="keyword">static</span> thread_ret thread_function_call <a class="code" href="class_test_mem.html#a5256418558c8151064f2f67c6d77931d">timeTickRun</a>(<span class="keywordtype">void</span> *args);</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;  std::ofstream ofs;</div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160; </div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;  <span class="keyword">static</span> thread_ret thread_function_call <a class="code" href="class_test_mem.html#a5256418558c8151064f2f67c6d77931d">timeTickRun</a>(<span class="keywordtype">void</span> *args);</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;  std::ofstream ofs;</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; </div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;  <a class="code" href="classcore_1_1_thread.html">Thread</a>* timeTickThread_;</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;  Timestamp lastInjectTime_;</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;  <span class="keywordtype">float</span> velocity_y_;</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;  <span class="keywordtype">float</span> position_y_;</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;  <span class="keywordtype">float</span> force_y_;</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;  <span class="keywordtype">float</span> next_velocity_y_;</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;  <span class="keywordtype">float</span> next_position_y_;</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;  <span class="keywordtype">float</span> next_theta_y_;</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;  <span class="keywordtype">float</span> next_omega_y_;</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* position_y_obj_;</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* cart_position_y_obj_;</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* position_property_;</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* position_y_property_;</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* velocity_y_property_;</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* force_y_property_;</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* theta_y_property_;</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* omega_y_property_;</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* primary_group_;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;  uint16 ready_opcode_;</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;  uint16 set_velocity_y_opcode_;</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;  uint16 set_force_y_opcode_;</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;  uint16 move_y_plus_opcode_;</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;  uint16 move_y_minus_opcode_;</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;  Timestamp lastCommandTime_;</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160; </div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* yEnt_[10];</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* discretePositionObj_;</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* discretePosition_;</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* nextDiscretePosition_;</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;  <span class="keywordtype">int</span> babbleState_;</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;};</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;  <a class="code" href="classcore_1_1_thread.html">Thread</a>* timeTickThread_;</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;  Timestamp lastInjectTime_;</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;  <span class="keywordtype">float</span> velocity_y_;</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;  <span class="keywordtype">float</span> position_y_;</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;  <span class="keywordtype">float</span> force_y_;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;  <span class="keywordtype">float</span> next_velocity_y_;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;  <span class="keywordtype">float</span> next_position_y_;</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;  <span class="keywordtype">float</span> next_theta_y_;</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;  <span class="keywordtype">float</span> next_omega_y_;</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* position_y_obj_;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* cart_position_y_obj_;</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* position_property_;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* position_y_property_;</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* velocity_y_property_;</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* force_y_property_;</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* theta_y_property_;</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* omega_y_property_;</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* primary_group_;</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;  uint16 ready_opcode_;</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;  uint16 set_velocity_y_opcode_;</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;  uint16 set_force_y_opcode_;</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;  uint16 move_y_plus_opcode_;</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;  uint16 move_y_minus_opcode_;</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;  Timestamp lastCommandTime_;</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160; </div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* yEnt_[10];</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* discretePositionObj_;</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* discretePosition_;</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;  <a class="code" href="classr__code_1_1_code.html">r_code::Code</a>* nextDiscretePosition_;</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;  <span class="keywordtype">int</span> babbleState_;</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;};</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160; </div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclass_test_mem_html_a2308897f92bc95a57b7c3229555c6423"><div class="ttname"><a href="class_test_mem.html#a2308897f92bc95a57b7c3229555c6423">TestMem::load</a></div><div class="ttdeci">virtual bool load(std::vector&lt; r_code::Code * &gt; *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid)</div><div class="ttdef"><b>Definition:</b> <a href="test__mem_8cpp_source.html#l00135">test_mem.cpp:136</a></div></div>
+<div class="ttc" id="aclass_test_mem_html_a66ba43a58e85ac7f5c15c5474ab0fa2a"><div class="ttname"><a href="class_test_mem.html#a66ba43a58e85ac7f5c15c5474ab0fa2a">TestMem::load</a></div><div class="ttdeci">bool load(std::vector&lt; r_code::Code * &gt; *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid) override</div><div class="ttdef"><b>Definition:</b> <a href="test__mem_8cpp_source.html#l00135">test_mem.cpp:136</a></div></div>
+<div class="ttc" id="aclass_test_mem_html_a6778ea0b286e7b72b2875d6a4bcaa195"><div class="ttname"><a href="class_test_mem.html#a6778ea0b286e7b72b2875d6a4bcaa195">TestMem::eject</a></div><div class="ttdeci">r_code::Code * eject(r_code::Code *command) override</div><div class="ttdef"><b>Definition:</b> <a href="test__mem_8cpp_source.html#l00165">test_mem.cpp:165</a></div></div>
 <div class="ttc" id="aclass_test_mem_1_1___thread_html"><div class="ttname"><a href="class_test_mem_1_1___thread.html">TestMem::_Thread</a></div><div class="ttdef"><b>Definition:</b> <a href="test__mem_8h_source.html#l00127">test_mem.h:127</a></div></div>
 <div class="ttc" id="aclass_test_mem_html"><div class="ttname"><a href="class_test_mem.html">TestMem</a></div><div class="ttdef"><b>Definition:</b> <a href="test__mem_8h_source.html#l00098">test_mem.h:99</a></div></div>
+<div class="ttc" id="aclass_test_mem_html_a880d896be3dc16aadd2475b271f251b7"><div class="ttname"><a href="class_test_mem.html#a880d896be3dc16aadd2475b271f251b7">TestMem::on_diagnostic_time_tick</a></div><div class="ttdeci">void on_diagnostic_time_tick() override</div><div class="ttdef"><b>Definition:</b> <a href="test__mem_8h_source.html#l00124">test_mem.h:124</a></div></div>
 <div class="ttc" id="aclasscore_1_1_thread_html"><div class="ttname"><a href="classcore_1_1_thread.html">core::Thread</a></div><div class="ttdef"><b>Definition:</b> <a href="submodules_2_core_library_2_core_library_2utils_8h_source.html#l00159">submodules/CoreLibrary/CoreLibrary/utils.h:159</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_code_html"><div class="ttname"><a href="classr__code_1_1_code.html">r_code::Code</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00223">r_code/object.h:224</a></div></div>
-<div class="ttc" id="aclass_test_mem_html_a84e63f256ffd7757a04b11a92eee6e03"><div class="ttname"><a href="class_test_mem.html#a84e63f256ffd7757a04b11a92eee6e03">TestMem::eject</a></div><div class="ttdeci">virtual r_code::Code * eject(r_code::Code *command)</div><div class="ttdef"><b>Definition:</b> <a href="test__mem_8cpp_source.html#l00182">test_mem.cpp:182</a></div></div>
-<div class="ttc" id="aclass_test_mem_html_a5256418558c8151064f2f67c6d77931d"><div class="ttname"><a href="class_test_mem.html#a5256418558c8151064f2f67c6d77931d">TestMem::timeTickRun</a></div><div class="ttdeci">static thread_ret thread_function_call timeTickRun(void *args)</div><div class="ttdef"><b>Definition:</b> <a href="test__mem_8cpp_source.html#l00578">test_mem.cpp:578</a></div></div>
-<div class="ttc" id="aclassr__exec_1_1_mem_exec_html"><div class="ttname"><a href="classr__exec_1_1_mem_exec.html">r_exec::MemExec</a></div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00669">mem.h:670</a></div></div>
-<div class="ttc" id="aclass_test_mem_html_ac28693d3e54d8a8fb00d4f12ba934ca4"><div class="ttname"><a href="class_test_mem.html#ac28693d3e54d8a8fb00d4f12ba934ca4">TestMem::findObject</a></div><div class="ttdeci">static r_code::Code * findObject(std::vector&lt; r_code::Code * &gt; *objects, const char *name)</div><div class="ttdef"><b>Definition:</b> <a href="test__mem_8cpp_source.html#l00166">test_mem.cpp:166</a></div></div>
-<div class="ttc" id="aclass_test_mem_html_a46a3864976bb0605eab119c6dc45184c"><div class="ttname"><a href="class_test_mem.html#a46a3864976bb0605eab119c6dc45184c">TestMem::on_diagnostic_time_tick</a></div><div class="ttdeci">virtual void on_diagnostic_time_tick()</div><div class="ttdef"><b>Definition:</b> <a href="test__mem_8h_source.html#l00124">test_mem.h:124</a></div></div>
-<div class="ttc" id="aclass_test_mem_html_a4856f3f08a41711de046641e26e1327d"><div class="ttname"><a href="class_test_mem.html#a4856f3f08a41711de046641e26e1327d">TestMem::startTimeTickThread</a></div><div class="ttdeci">void startTimeTickThread()</div><div class="ttdef"><b>Definition:</b> <a href="test__mem_8cpp_source.html#l00564">test_mem.cpp:564</a></div></div>
+<div class="ttc" id="aclass_test_mem_html_a5256418558c8151064f2f67c6d77931d"><div class="ttname"><a href="class_test_mem.html#a5256418558c8151064f2f67c6d77931d">TestMem::timeTickRun</a></div><div class="ttdeci">static thread_ret thread_function_call timeTickRun(void *args)</div><div class="ttdef"><b>Definition:</b> <a href="test__mem_8cpp_source.html#l00561">test_mem.cpp:561</a></div></div>
+<div class="ttc" id="aclassr__exec_1_1_mem_exec_html"><div class="ttname"><a href="classr__exec_1_1_mem_exec.html">r_exec::MemExec</a></div><div class="ttdef"><b>Definition:</b> <a href="mem_8h_source.html#l00762">mem.h:763</a></div></div>
+<div class="ttc" id="aclass_test_mem_html_a4856f3f08a41711de046641e26e1327d"><div class="ttname"><a href="class_test_mem.html#a4856f3f08a41711de046641e26e1327d">TestMem::startTimeTickThread</a></div><div class="ttdeci">void startTimeTickThread()</div><div class="ttdef"><b>Definition:</b> <a href="test__mem_8cpp_source.html#l00547">test_mem.cpp:547</a></div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

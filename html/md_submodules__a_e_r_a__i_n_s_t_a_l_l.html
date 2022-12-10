@@ -76,7 +76,7 @@ Prerequisites</h1>
 <p>Following are the detailed steps for each platform to install the prerequisites.</p>
 <h2><a class="anchor" id="autotoc_md12"></a>
 Windows</h2>
-<p>To install Visual Studio, download and install Visual Studio Community Edition from <a href="https://visualstudio.microsoft.com/vs/community">https://visualstudio.microsoft.com/vs/community</a> . In the installer, under "Desktop development with C++", check "Windows 10 SDK (10.0.17134.0)" and "MSVC v141 - VS 2017 C++ build tools".</p>
+<p>To install Visual Studio, download and install Visual Studio Community Edition 2019 from <a href="https://visualstudio.microsoft.com/vs/older-downloads">https://visualstudio.microsoft.com/vs/older-downloads</a> . In the installer, under "Desktop development with C++", check "Windows 10 SDK (10.0.17134.0)" and "MSVC v141 - VS 2017 C++ build tools".</p>
 <p>To install Git, download and install GitHub for Desktop from <a href="https://desktop.github.com">https://desktop.github.com</a> .</p>
 <p>To get the AERA code repository, launch GitHub for Desktop and sign in to GitHub. In the File menu, click "Clone a Repository". Click the URL tab and enter <code><a href="https://github.com/IIIM-IS/AERA">https://github.com/IIIM-IS/AERA</a></code> . It should be a recursive clone (which is the default).</p>
 <h1><a class="anchor" id="autotoc_md13"></a>
@@ -87,7 +87,7 @@ Build</h1>
 <p>To work with the AERA Visualizer, we must enable <code>WITH_DETAIL_OID</code> as follows. In the Visual Studio Solution Explorer, open the section for <code>CoreLibrary</code>. Double-click <code><a class="el" href="base_8h_source.html">base.h</a></code> . Uncomment the define for <code>WITH_DETAIL_OID</code>, so that the line is: </p><pre class="fragment">#define WITH_DETAIL_OID // Enable get_detail_oid() in every object.
 </pre><h2><a class="anchor" id="autotoc_md15"></a>
 Compile</h2>
-<p>On the Build menu, click Build Solution. (Don't worry about all the compiler warnings.)</p>
+<p>In the Solution Configurations drop-down, make sure you select Release (unless you plan to debug AERA). On the Build menu, click Build Solution. (Don't worry about all the compiler warnings.)</p>
 <h1><a class="anchor" id="autotoc_md16"></a>
 Run</h1>
 <p>To run, in Visual Studio on the Debug menu, select "Run Without Debugging". When first installed, the default is to run the program <code>main.replicode</code> which by default loads the program <code>hello.world.1.replicode</code>. The output window should show some text including: </p><pre class="fragment">0s:50ms:0us: hello world 1
