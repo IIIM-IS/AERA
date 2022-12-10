@@ -154,7 +154,7 @@ M6:(mdl [H: C: P0: T0: T1:] []
    T1_RHS:(+ T0 100ms); Repeat from M0.
    T3:(+ T1 100ms);     Repeat from M0.
 []
-   T0_cmd:(- T1_RHS 100ms); Copy from M0, but subtract 100ms because the LHS is not a command.
+   T0_cmd:(- T1_RHS 80ms);  Copy from M0.
    T1_cmd:(- T3 100ms);     Copy from M0.
    T0:(- T1_RHS 100ms);     Copy from M0.
    T1:(- T3 100ms);         Copy from M0.
