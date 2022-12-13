@@ -120,7 +120,7 @@ public:
 
   /**
    * Return the trace of the value as a string by creating a temporary Code
-   * object and calling valuate(). For debugging purposes only(can be inefficient).
+   * object and calling valuate(). For debugging purposes only (can be inefficient).
    */
   std::string trace_string() const {
     P<LObject> code = new LObject();
@@ -340,6 +340,12 @@ public:
   int16 get_fwd_after_index() const { return fwd_after_index_; }
   int16 get_fwd_before_index() const { return fwd_before_index_; }
   bool scan_variable(uint16 id) const; // return true if id<first_index or map[id] is not an UnboundValue.
+
+  /**
+   * Return the trace of the value at index i as a string by creating a temporary Code
+   * object and calling valuate(). For debugging purposes only (can be inefficient).
+   */
+  std::string trace_string(uint16 i) const { return map_[i]->trace_string(); }
 };
 
 class r_exec_dll HLPBindingMap :
