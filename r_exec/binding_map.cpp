@@ -592,7 +592,7 @@ Atom BindingMap::get_object_variable(Code *object) {
   return Atom::VLPointer(size);
 }
 
-BindingMap::BindingMap() : _Object(), fwd_after_index_(-1), fwd_before_index_(-1), unbound_values_(0) {
+BindingMap::BindingMap() : _Object(), first_index_(-1), fwd_after_index_(-1), fwd_before_index_(-1), unbound_values_(0) {
 }
 
 BindingMap::BindingMap(const BindingMap *source) : _Object() {
