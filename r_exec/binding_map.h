@@ -322,8 +322,8 @@ public:
   void bind_variable(BoundValue *value, uint8 id);
   void bind_variable(Atom *code, uint8 id, uint16 value_index, Atom *intermediate_results);
 
-  Atom *get_value_code(uint16 id);
-  uint16 get_value_code_size(uint16 id);
+  Atom *get_value_code(uint16 id) const;
+  uint16 get_value_code_size(uint16 id) const;
 
   /**
    * Check if any value in bm matches any value in this BindingMap

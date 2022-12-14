@@ -846,12 +846,12 @@ void BindingMap::bind_variable(Atom *code, uint8 id, uint16 value_index, Atom *i
   }
 }
 
-Atom *BindingMap::get_value_code(uint16 id) {
+Atom *BindingMap::get_value_code(uint16 id) const {
 
   return map_[id]->get_code();
 }
 
-uint16 BindingMap::get_value_code_size(uint16 id) {
+uint16 BindingMap::get_value_code_size(uint16 id) const {
 
   return map_[id]->get_code_size();
 }
