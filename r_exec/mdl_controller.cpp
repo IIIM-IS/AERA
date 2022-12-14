@@ -450,18 +450,17 @@ public:
     auto other_template_after_index = other_template_set_index + (other_template_set_count - 1);
     auto other_template_before_index = other_template_set_index + other_template_set_count;
 
-    Timestamp other_f_imdl_template_after, other_f_imdl_template_before;
     if (!get_timestamp(
-        other_imdl, other_template_set_index + (other_template_set_count - 1), other_f_imdl_template_after, bm))
+        other_imdl, other_template_set_index + (other_template_set_count - 1), other_f_imdl_template_after_, bm))
       return;
     if (!get_timestamp(other_imdl, other_template_set_index + other_template_set_count, 
-        other_f_imdl_template_before, bm))
+        other_f_imdl_template_before_, bm))
       return;
 
     // When Match is updated with time interval comparison, it will do this test for strict overlap.
-    if (save_template_after_ < other_f_imdl_template_before && save_template_before_ > other_f_imdl_template_after) {
-      Utils::SetTimestampStruct(f_imdl_->get_reference(0), template_after_ts_index_, other_f_imdl_template_after);
-      Utils::SetTimestampStruct(f_imdl_->get_reference(0), template_before_ts_index_, other_f_imdl_template_before);
+    if (save_template_after_ < other_f_imdl_template_before_ && save_template_before_ > other_f_imdl_template_after_) {
+      Utils::SetTimestampStruct(f_imdl_->get_reference(0), template_after_ts_index_, other_f_imdl_template_after_);
+      Utils::SetTimestampStruct(f_imdl_->get_reference(0), template_before_ts_index_, other_f_imdl_template_before_);
     }
   }
 
@@ -495,6 +494,7 @@ public:
   }
 
   _Fact *f_imdl_;
+  Timestamp other_f_imdl_template_after_, other_f_imdl_template_before_;
   Timestamp save_template_after_, save_template_before_;
   uint16 template_after_ts_index_, template_before_ts_index_;
   bool have_saved_template_timings_;
