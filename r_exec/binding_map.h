@@ -240,19 +240,6 @@ protected:
   int16 fwd_after_index_; // tpl args (if any) are located before fwd_after_index.
   int16 fwd_before_index_;
 
-  /**
-   * Match the given time interval to the time interval at this binding map's after_index and before_index,
-   * updating the binding map's values to "narrow" them to the given time interval if needed.
-   * This assumes you have already checked to make sure that there are valid Timestamp bindings at
-   * after_index and before_index.
-   * \param after The beginning of the time interval to compare with this binding map's time interval.
-   * \param before The end of the time interval to compare with this binding map's time interval.
-   * \param after_index The index in the binding map's time interval after Timestamp.
-   * \param before_index The index in the binding map's time interval after Timestamp.
-   * \return True if the time intervals match, in which case this binding map's values may have been updated
-   * to "narrow" the time interval.
-   */
-  bool match_timings(Timestamp after, Timestamp before, uint32 after_index, uint32 before_index);
   bool match_fwd_timings(const _Fact *f_object);
   bool match(const r_code::Code *object, uint16 o_base_index, uint16 o_index, const r_code::Code *pattern, uint16 p_index, uint16 o_arity);
 
@@ -352,6 +339,20 @@ public:
   int16 get_fwd_after_index() const { return fwd_after_index_; }
   int16 get_fwd_before_index() const { return fwd_before_index_; }
   bool scan_variable(uint16 id) const; // return true if id<first_index or map[id] is not an UnboundValue.
+
+  /**
+   * Match the given time interval to the time interval at this binding map's after_index and before_index,
+   * updating the binding map's values to "narrow" them to the given time interval if needed.
+   * This assumes you have already checked to make sure that there are valid Timestamp bindings at
+   * after_index and before_index.
+   * \param after The beginning of the time interval to compare with this binding map's time interval.
+   * \param before The end of the time interval to compare with this binding map's time interval.
+   * \param after_index The index in the binding map of the time interval after Timestamp.
+   * \param before_index The index in the binding map of the time interval before Timestamp.
+   * \return True if the time intervals match, in which case this binding map's values may have been updated
+   * to "narrow" the time interval.
+   */
+  bool match_timings(Timestamp after, Timestamp before, uint32 after_index, uint32 before_index);
 
   /**
    * Return the trace of the value at index i as a string by creating a temporary Code
