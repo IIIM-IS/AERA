@@ -324,6 +324,7 @@ public:
 
   Atom *get_value_code(uint16 id) const;
   uint16 get_value_code_size(uint16 id) const;
+  uint16 get_first_index() const { return first_index_;  }
 
   /**
    * Check if any value in bm matches any value in this BindingMap
