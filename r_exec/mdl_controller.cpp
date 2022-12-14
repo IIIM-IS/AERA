@@ -180,6 +180,9 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
       for (size_t i = 0; i < bind_results.size(); ++i) {
         // evaluate_fwd_guards() uses bindings_, so set it to the binding map.
         bindings_ = bind_results[i].map_;
+        if (i > 0)
+          // During the previous iteration, evaluate_fwd_guards patched code_ in place, so restore.
+          load_code();
         if (evaluate_fwd_guards()) { // may update bindings_ .
           f_imdl->set_reference(0, bindings_->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated binding map.
           ((PrimaryMDLController *)controller_)->predict(bindings_, input, f_imdl, chaining_allowed, r_p, bind_results[i].ground_);
