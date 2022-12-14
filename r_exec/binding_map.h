@@ -240,7 +240,19 @@ protected:
   int16 fwd_after_index_; // tpl args (if any) are located before fwd_after_index.
   int16 fwd_before_index_;
 
-  bool match_timings(Timestamp stored_after, Timestamp stored_before, Timestamp after, Timestamp before, uint32 destination_after_index, uint32 destination_before_index);
+  /**
+   * Match the given time interval to the time interval at this binding map's after_index and before_index,
+   * updating the binding map's values to "narrow" them to the given time interval if needed.
+   * This assumes you have already checked to make sure that there are valid Timestamp bindings at
+   * after_index and before_index.
+   * \param after The beginning of the time interval to compare with this binding map's time interval.
+   * \param before The end of the time interval to compare with this binding map's time interval.
+   * \param after_index The index in the binding map's time interval after Timestamp.
+   * \param before_index The index in the binding map's time interval after Timestamp.
+   * \return True if the time intervals match, in which case this binding map's values may have been updated
+   * to "narrow" the time interval.
+   */
+  bool match_timings(Timestamp after, Timestamp before, uint32 after_index, uint32 before_index);
   bool match_fwd_timings(const _Fact *f_object);
   bool match(const r_code::Code *object, uint16 o_base_index, uint16 o_index, const r_code::Code *pattern, uint16 p_index, uint16 o_arity);
 
@@ -297,7 +309,7 @@ public:
    * to "narrow" the time interval.
    */
   bool match_fwd_timings(Timestamp after, Timestamp before) {
-    return match_timings(get_fwd_after(), get_fwd_before(), after, before, fwd_after_index_, fwd_before_index_);
+    return match_timings(after, before, fwd_after_index_, fwd_before_index_);
   }
 
   MatchResult match_fwd_lenient(const _Fact *f_object, const _Fact *f_pattern); // use for facts when we are lenient about fact vs |fact.

@@ -738,20 +738,23 @@ void BindingMap::reset_fwd_timings(_Fact *reference_fact) { // valuate at after_
     map_[fwd_before_index_] = new StructureValue(this, reference_fact, reference_fact->code(FACT_BEFORE).asIndex());
 }
 
-bool BindingMap::match_timings(Timestamp stored_after, Timestamp stored_before, Timestamp after, Timestamp before, uint32 destination_after_index, uint32 destination_before_index) {
+bool BindingMap::match_timings(Timestamp after, Timestamp before, uint32 after_index, uint32 before_index) {
+
+  Timestamp stored_after = Utils::GetTimestamp(map_[after_index]->get_code());
+  Timestamp stored_before = Utils::GetTimestamp(map_[before_index]->get_code());
 
   if (stored_after <= after) {
 
     if (stored_before >= before) { // sa a b sb
 
-      Utils::SetTimestamp(map_[destination_after_index]->get_code(), after);
-      Utils::SetTimestamp(map_[destination_before_index]->get_code(), before);
+      Utils::SetTimestamp(map_[after_index]->get_code(), after);
+      Utils::SetTimestamp(map_[before_index]->get_code(), before);
       return true;
     } else {
 
       if (stored_before > after) { // sa a sb b
 
-        Utils::SetTimestamp(map_[destination_after_index]->get_code(), after);
+        Utils::SetTimestamp(map_[after_index]->get_code(), after);
         return true;
       }
       return false;
@@ -762,7 +765,7 @@ bool BindingMap::match_timings(Timestamp stored_after, Timestamp stored_before, 
       return true;
     else if (stored_after < before) { // a sa b sb
 
-      Utils::SetTimestamp(map_[destination_before_index]->get_code(), before);
+      Utils::SetTimestamp(map_[before_index]->get_code(), before);
       return true;
     }
     return false;
@@ -1179,7 +1182,7 @@ void HLPBindingMap::reset_bwd_timings(_Fact *reference_fact) { // valuate at aft
 
 bool HLPBindingMap::match_bwd_timings(const _Fact *f_object, const _Fact *f_pattern) {
 
-  return match_timings(get_bwd_after(), get_bwd_before(), f_object->get_after(), f_object->get_before(), bwd_after_index_, bwd_before_index_);
+  return match_timings(f_object->get_after(), f_object->get_before(), bwd_after_index_, bwd_before_index_);
 }
 
 bool HLPBindingMap::match_bwd_strict(const _Fact *f_object, const _Fact *f_pattern) {
