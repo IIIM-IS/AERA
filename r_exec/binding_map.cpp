@@ -470,7 +470,7 @@ Code *BindingMap::abstract_object(Code *object, bool force_sync, int timing_vars
     abstracted_object = _Mem::Get()->build_object(object->code(0));
     abstract_member(object, I_HLP_OBJ, abstracted_object, I_HLP_OBJ, extent_index);
     abstract_member(object, I_HLP_TPL_ARGS, abstracted_object, I_HLP_TPL_ARGS, extent_index, timing_vars_first_search_index);
-    // Set allow_shared_variable to not search because exposed args are "output values" which can't be assume to be the same as other values.
+    // Set first_search_index to not search because exposed args are "output values" which can't be assume to be the same as other values.
     abstract_member(object, I_HLP_EXPOSED_ARGS, abstracted_object, I_HLP_EXPOSED_ARGS, extent_index, -1);
     abstracted_object->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Wildcard();
     abstracted_object->code(I_HLP_ARITY) = Atom::Wildcard();
