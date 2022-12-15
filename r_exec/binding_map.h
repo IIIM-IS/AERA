@@ -356,6 +356,15 @@ public:
   bool match_timings(Timestamp after, Timestamp before, uint32 after_index, uint32 before_index);
 
   /**
+   * Get the code index where the exposed args will start after calling abstract_object on the ihlp. This is
+   * Necessary because the ihlp may have structured values before the exposed args which will be removed by
+   * abstract_object (which only has variables and no structured values).
+   * \param ihlp The imdl or icst.
+   * \return The exposed args index.
+   */
+  static uint16 get_abstracted_ihlp_exposed_args_index(const r_code::Code* ihlp);
+
+  /**
    * Return the trace of the value at index i as a string by creating a temporary Code
    * object and calling valuate(). For debugging purposes only (can be inefficient).
    */

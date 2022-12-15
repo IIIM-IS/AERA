@@ -479,6 +479,16 @@ Code *BindingMap::abstract_object(Code *object, bool force_sync, int timing_vars
   return abstracted_object;
 }
 
+uint16 BindingMap::get_abstracted_ihlp_exposed_args_index(const Code* ihlp) {
+  if (!(ihlp->code(0).asOpcode() != Opcodes::IMdl || ihlp->code(0).asOpcode() != Opcodes::ICst))
+    // We don't expect this to happen.
+    return 0;
+
+  uint16 template_args_index = ihlp->code(I_HLP_TPL_ARGS).asIndex();
+  // The abstracted exposed args will start right after the template args.
+  return template_args_index + 1 + ihlp->code(template_args_index).getAtomCount();
+}
+
 void BindingMap::abstract_member(Code *object, uint16 index, Code *abstracted_object, uint16 write_index, uint16 &extent_index, int first_search_index) {
 
   Atom a = object->code(index);
