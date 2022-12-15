@@ -961,8 +961,11 @@ Simulator
 * DONE. Use C++ override keyword https://github.com/IIIM-IS/AERA/issues/189
 * DONE. Review Chloe's pull request for Zoom To button https://github.com/IIIM-IS/AERA_Visualizer/pull/43
 
+2022-12-15
+* DONE. Review pull request to allow shared template timing variables https://github.com/IIIM-IS/AERA/pull/240
+* DONE. Close Arash's pull request for reuse models in CTPX (now not needed) https://github.com/IIIM-IS/AERA/pull/238
+
 next meeting
-* Review Arash's pull request for reuse models in CTPX https://github.com/IIIM-IS/AERA/pull/238
 * hand-grab-sphere
   * Represent sphere position without direct I/O input.
   * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
@@ -986,7 +989,6 @@ TODO
   * Learn the exception "bounce" model.
 * Try commenting out PTPX::reduce:666 if (i->input_ == Opcodes::Cmd)
 * Try pass_through==false. Do CTPX and PTPX still work?
-* For an anti-goal can AERA check if it doesn't violate any "current" drive? Need a list of "current" drives?
 * Make a mk.rdx for (fact (pred (fact (imdl ...)))). (May affect other code that expects the other kind of prediction.)
 * Visualizer: Option to position simulation objects by predicted time vs. created time.
 * Visualizer: Add an item for prediction reduction, initially hidden.
