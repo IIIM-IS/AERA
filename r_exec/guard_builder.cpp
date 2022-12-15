@@ -253,9 +253,8 @@ void SGuardBuilder::build(Code *mdl, _Fact *premise_pattern, _Fact *cause_patter
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-NoArgCmdGuardBuilder::NoArgCmdGuardBuilder(microseconds period, microseconds offset, microseconds cmd_duration,
-  bool add_imdl_template_timings)
-: TimingGuardBuilder(period), offset_(offset), cmd_duration_(cmd_duration), add_imdl_template_timings_(add_imdl_template_timings) {
+NoArgCmdGuardBuilder::NoArgCmdGuardBuilder(microseconds period, microseconds offset, microseconds cmd_duration)
+: TimingGuardBuilder(period), offset_(offset), cmd_duration_(cmd_duration) {
 }
 
 NoArgCmdGuardBuilder::~NoArgCmdGuardBuilder() {
@@ -282,23 +281,8 @@ void NoArgCmdGuardBuilder::_build(Code *mdl, uint16 q0, uint16 t0, uint16 t1, ui
   write_index = extent_index;
   mdl->code(MDL_BWD_GUARDS) = Atom::IPointer(++write_index);
 
-  if (add_imdl_template_timings_) {
-    // We have already made sure the timings exist using MDLController::get_imdl_template_timings.
-    auto imdl = lhs->get_reference(0);
-    auto template_set_index = imdl->code(I_HLP_TPL_ARGS).asIndex();
-    auto template_set_count = imdl->code(template_set_index).getAtomCount();
-    uint16 template_t0 = imdl->code(template_set_index + (template_set_count - 1)).asIndex();
-    uint16 template_t1 = imdl->code(template_set_index + template_set_count).asIndex();
-
-    mdl->code(write_index) = Atom::Set(6);
-    extent_index = write_index + 6;
-    write_guard(mdl, template_t0, t2, Opcodes::Sub, period_, write_index, extent_index);
-    write_guard(mdl, template_t1, t3, Opcodes::Sub, period_, write_index, extent_index);
-  }
-  else {
-    mdl->code(write_index) = Atom::Set(4);
-    extent_index = write_index + 4;
-  }
+  mdl->code(write_index) = Atom::Set(4);
+  extent_index = write_index + 4;
 
   write_guard(mdl, t0, t2, Opcodes::Sub, period_, write_index, extent_index);
   write_guard(mdl, t1, t3, Opcodes::Sub, period_, write_index, extent_index);
