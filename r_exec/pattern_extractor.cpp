@@ -1088,7 +1088,8 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
       float32 _s = s.asFloat();
       if (Utils::Equal(_s, searched_for)) {
         auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target_, FACT_AFTER));
-        return new ACGuardBuilder(period, period - offset, imdl_exposed_args_index + i);
+        // Use the exposed args index in what will be the abstracted imdl.
+        return new ACGuardBuilder(period, period - offset, BindingMap::get_abstracted_ihlp_exposed_args_index(imdl) + i);
       }
     }
 
@@ -1103,7 +1104,9 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
         float32 _s = s.asFloat();
         if (Utils::Equal(_s, searched_for)) {
           auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target_, FACT_AFTER));
-          return new MCGuardBuilder(period, period - offset, i);
+          // Use the exposed args index in what will be the abstracted imdl.
+          return new MCGuardBuilder(period, period - offset,
+            (i - imdl_exposed_args_index) + BindingMap::get_abstracted_ihlp_exposed_args_index(imdl));
         }
       }
     }
