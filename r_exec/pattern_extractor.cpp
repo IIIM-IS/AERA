@@ -1010,12 +1010,7 @@ GuardBuilder *CTPX::get_default_guard_builder(_Fact *cause, _Fact *consequent, m
 
     auto offset = duration_cast<microseconds>(consequent->get_after() - cause->get_after());
     auto cmd_duration = duration_cast<microseconds>(cause->get_before() - cause->get_after());
-    auto add_imdl_template_timings = false;
-    Timestamp after, before;
-    if (opcode == Opcodes::IMdl && MDLController::get_imdl_template_timings(cause_payload, after, before))
-      // The imdl has template timings, so we want the backward guards to assign them.
-      add_imdl_template_timings = true;
-    return new NoArgCmdGuardBuilder(period, offset, cmd_duration, add_imdl_template_timings);
+    return new NoArgCmdGuardBuilder(period, offset, cmd_duration);
   }
 
   return new TimingGuardBuilder(period);
