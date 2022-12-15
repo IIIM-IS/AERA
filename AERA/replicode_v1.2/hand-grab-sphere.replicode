@@ -148,7 +148,7 @@ M5:(mdl [] []
 
 ; When model M0 fires the prediction of the next position P1 of hand H, something C will also be at the same position P1.
 M6:(mdl [H: C: P0: T0: T1:] []
-   (fact (imdl M0 [H: P0: T0_M0: T1_M0:] [DeltaP: P1: T1_RHS: T3:] : :) T0_cmd: T1_cmd: : :); Change timings from T1 T3 to T0_cmd T1_cmd. T2 is not exposed from M0. T1_RHS is also exposed. Distinguish T0_M0 and T1_M0.
+   (fact (imdl M0 [H: P0: T0: T1:] [DeltaP: P1: T1_RHS: T3:] : :) T0_cmd: T1_cmd: : :); Change timings from T1 T3 to T0_cmd T1_cmd. T2 is not exposed from M0. T1_RHS is also exposed.
    (fact (mk.val C: position P1: :) T1_RHS: T3: : :); Fix bug as explained: Change C to P1. Change T1 to T1_RHS.
 []
    T1_RHS:(+ T0 100ms); Repeat from M0.
@@ -158,14 +158,12 @@ M6:(mdl [H: C: P0: T0: T1:] []
    T1_cmd:(- T3 100ms);     Copy from M0.
    T0:(- T1_RHS 100ms);     Copy from M0.
    T1:(- T3 100ms);         Copy from M0.
-   T0_M0:(- T1_RHS 100ms);  Duplicate T0.
-   T1_M0:(- T3 100ms);      Duplicate T1.
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; When hand H is holding some C and the hand moves to position P1, then C will also be at P1.
 M7:(mdl [] []
    (fact (icst S2 [] [H: P: C: X:] : :) T0: T1: : :); X is also exposed from S2.
-   (fact (imdl M6 [H: C: P: T0: T1:] [T0_M0: T1_M0: DeltaP: P1: T1_RHS: T3:] : :) T0: T1: : :); M6 template needs P. T0_M0 T1_M0, DeltaP, P1 and T1_RHS are exposed. T2 is not exposed from M6.
+   (fact (imdl M6 [H: C: P: T0: T1:] [DeltaP: P1: T1_RHS: T3:] : :) T0: T1: : :); M6 template needs P. T0_M0 T1_M0, DeltaP, P1 and T1_RHS are exposed. T2 is not exposed from M6.
 |[]
 |[]
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
