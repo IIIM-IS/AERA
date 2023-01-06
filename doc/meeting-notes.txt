@@ -965,20 +965,25 @@ Simulator
 * DONE. Review pull request to allow shared template timing variables https://github.com/IIIM-IS/AERA/pull/240
 * DONE. Close Arash's pull request for reuse models in CTPX (now not needed) https://github.com/IIIM-IS/AERA/pull/238
 
+2023-01-06
+* DONE. Update copyright headers for 2023.
+* Webots
+  * DONE. Put code in IIIM-IS/AERA_Webots [Leonard]
+  * DONE. Make pull request for Webots controller to start example. [Jeff] https://github.com/IIIM-IS/AERA_Webots/pull/1
+
 next meeting
-* hand-grab-sphere
-  * Represent sphere position without direct I/O input.
-  * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
-    * Still need to allow multiple strong requirements in retrieve_imdl.
-    * A pgm to match a learned model and inject commands which use it?
 * Webots
   * Remove difference between AERA 100ms and Webots 1000 ms [defer]
   * Use setup command for automatic discovery of AERA objects and commands
   * Get command efferent copy from Webots (move limit to +/- 20) [Maybe in the setup message. Need more discussion]
   * Let AERA send "reset" message to reset the environment. (Use after grab fails.)
   * Reset the TCP connection when resetting the Webots simulation
-  * Put code in IIIM-IS/AERA_Webots [Leonard]
   * Make Visual Studio run protoc in AERA and AERA_Webots [Leonard to try]
+* hand-grab-sphere
+  * Represent sphere position without direct I/O input.
+  * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
+    * Still need to allow multiple strong requirements in retrieve_imdl.
+    * A pgm to match a learned model and inject commands which use it?
 
 TODO
 * Change (success) to refer to the prediction mk.rdx instead of the prediction. (Affects other code.)
