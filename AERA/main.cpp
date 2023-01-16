@@ -217,8 +217,8 @@ void decompile(Decompiler &decompiler, r_comp::Image *image, Timestamp time_refe
       continue;
     }
     std::ostringstream decompiled_code;
-    decompiler.decompile_object(index, &decompiled_code, time_offset);
-    std::cout << "\n\n> DECOMPILATION. TimeReference " << Time::ToString_seconds(time_reference) << "\n\n" <<
+    decompiler.decompile_object(index, &decompiled_code, time_reference);
+    std::cout << "\n\n> DECOMPILATION. TimeReference " << Utils::ToString_s_ms_us(time_reference, Timestamp(seconds(0))) << "\n\n" <<
       decompiled_code.str() << std::endl;
   }
 #else
