@@ -222,7 +222,7 @@ public:
    * Make a string from (timestamp - time_reference) in the form XXXs:YYYms:ZZZus, with a minus sign
    * if it is negative.
    * \param timestamp The time stamp.
-   * \param time_reference The reference time to subtract from timestamp, usuall the session start time.
+   * \param time_reference The reference time to subtract from timestamp, usually the session start time.
    * We do this because timestamp is seconds since 01/01/1970, so the seconds would be very large.
    * \return The formatted time string.
    */
