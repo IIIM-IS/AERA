@@ -436,6 +436,10 @@ bool InitOpcodes(const r_comp::Metadata& metadata) {
   Opcodes::Prb = _Opcodes.find("_prb")->second;
   Opcodes::Stop = _Opcodes.find("_stop")->second;
 
+  Opcodes::Gtr = _Opcodes.find("gtr")->second;
+  Opcodes::Lsr = _Opcodes.find("lsr")->second;
+  Opcodes::Gte = _Opcodes.find("gte")->second;
+  Opcodes::Lse = _Opcodes.find("lse")->second;
   Opcodes::Add = _Opcodes.find("add")->second;
   Opcodes::Sub = _Opcodes.find("sub")->second;
   Opcodes::Mul = _Opcodes.find("mul")->second;

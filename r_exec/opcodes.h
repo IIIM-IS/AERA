@@ -161,6 +161,10 @@ public:
   static uint16 Prb;
   static uint16 Stop;
 
+  static uint16 Gtr;
+  static uint16 Lsr;
+  static uint16 Gte;
+  static uint16 Lse;
   static uint16 Add;
   static uint16 Sub;
   static uint16 Mul;

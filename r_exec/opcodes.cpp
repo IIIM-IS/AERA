@@ -151,6 +151,10 @@ uint16 Opcodes::Swap;
 uint16 Opcodes::Prb;
 uint16 Opcodes::Stop;
 
+uint16 Opcodes::Gtr;
+uint16 Opcodes::Lsr;
+uint16 Opcodes::Gte;
+uint16 Opcodes::Lse;
 uint16 Opcodes::Add;
 uint16 Opcodes::Sub;
 uint16 Opcodes::Mul;
