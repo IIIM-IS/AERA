@@ -17,6 +17,8 @@ To install Visual Studio, download and install Visual Studio Community Edition 2
 https://visualstudio.microsoft.com/vs/older-downloads .
 In the installer, under "Desktop development with C++", check "Windows 10 SDK (10.0.17134.0)" and
   "MSVC v141 - VS 2017 C++ build tools".
+Note that in Visual Studio Community 2022, "Windows 10 SDK (10.0.17134.0)" is not listed as an option.
+Instead, you can install "Windows 10 SDK (10.0.17134.12)" from https://developer.microsoft.com/nl-nl/windows/downloads/sdk-archive/ .
 
 To install Git, download and install GitHub for Desktop from https://desktop.github.com .
 
@@ -41,6 +43,7 @@ the line is:
 ## Compile
 
 In the Solution Configurations drop-down, make sure you select Release (unless you plan to debug AERA).
+Also make sure you select Win32 in the Solutions Options drop-down, directly to the right of Solutions Configurations.
 On the Build menu, click Build Solution. (Don't worry about all the compiler warnings.)
 
 Run
