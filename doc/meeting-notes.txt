@@ -154,7 +154,7 @@
   settings.xml: Need to set tpx_time_horizon?
 * DONE. Is GTPX invoked when drive goal succeeds?
   ANSWER: Yes, but does nothing. GTPX::reduce needs inputs, but AutoFocusController::reduce:392
-    doesn't call dispatch becuase std.replicode:166 pass_through is true.
+    doesn't call dispatch because std.replicode:166 pass_through is true.
     Setting pass_through false: No auto focus, no learned models, no AutoFocus.goals. Still no dispatch.
 * DONE. Review/merge fix for getting fwd_after_index https://github.com/IIIM-IS/replicode/pull/63
 * DONE. Review/merge fix for accessing controllers array https://github.com/IIIM-IS/replicode/pull/64
@@ -971,7 +971,30 @@ Simulator
   * DONE. Put code in IIIM-IS/AERA_Webots [Leonard]
   * DONE. Make pull request for Webots controller to start example. [Jeff] https://github.com/IIIM-IS/AERA_Webots/pull/1
 
+2023-01-12
+* Causal process terminology
+  * Is using Lisp more clear to show inference process?
+  * If a goal state is not the current state, can that be called a "problem"? Attention to actions that "solve the problem"?
+
+2023-01-20
+* hand-grab-sphere
+  * DONE. Represent sphere position without direct I/O input.
+    * (mk.val h rfid s) when hand is at the position of s.
+    * Anti-requirement model for failure to position s when s is not reachable.
+    * Subgoal for (mk.val s reachable true). Can be achieved by "scanning" the hand and detecting rfid. ("Mandatory" solution.)
+    * When (mk.val s reachable true), the anti-requirement model is "counterattacked". (Anti requirement on the anti-requirement)
+    * Inject assumption (mk.val s inferred_position 0) from hand position and detected rfid of s.
+    * The "counterattack" model remembers the inferred position.
+    * Continue to inject the drive. The hand releases c. Artifically move the hand away from s.
+    * The rfid of s is not detected, but the "counterattack" model injects the inferred position of s.
+    * No "centralized" attention module.
+
 next meeting
+* GTPX not used for mk.val https://github.com/IIIM-IS/AERA/blob/8a0a88275d0be8c0b2da12e55e3c16052f379d72/r_exec/pattern_extractor.cpp#L583
+* hand-grab-sphere
+  * Represent sphere position without direct I/O input.
+  * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
+    * Still need to allow multiple strong requirements in retrieve_imdl.
 * Webots
   * Remove difference between AERA 100ms and Webots 1000 ms [defer]
   * Use setup command for automatic discovery of AERA objects and commands
@@ -979,11 +1002,6 @@ next meeting
   * Let AERA send "reset" message to reset the environment. (Use after grab fails.)
   * Reset the TCP connection when resetting the Webots simulation
   * Make Visual Studio run protoc in AERA and AERA_Webots [Leonard to try]
-* hand-grab-sphere
-  * Represent sphere position without direct I/O input.
-  * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
-    * Still need to allow multiple strong requirements in retrieve_imdl.
-    * A pgm to match a learned model and inject commands which use it?
 
 TODO
 * Change (success) to refer to the prediction mk.rdx instead of the prediction. (Affects other code.)
