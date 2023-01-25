@@ -901,10 +901,11 @@ ChainingStatus MDLController::retrieve_imdl_fwd(const HLPBindingMap *bm, Fact *f
             f_imdl->get_reference(0)->get_reference(0)->get_oid() << " matches evidence fact (" <<
             _f_imdl->get_detail_oid() << ") imdl mdl " << _f_imdl->get_reference(0)->get_reference(0)->get_oid());
 #endif
-          if (r == WEAK_REQUIREMENT_DISABLED && (*e).chaining_was_allowed_) { // first match.
+          if ((*e).chaining_was_allowed_) {
 
             r = WEAK_REQUIREMENT_ENABLED;
             results.push_back(BindingResult(new HLPBindingMap(_original), (*e).evidence_));
+            // Loop again to check for more matches.
           }
 
           r_p.weak_requirements_.controllers.insert((*e).controller_);
@@ -953,7 +954,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(const HLPBindingMap *bm, Fact *f
       return r;
     } else { // some strong req. and some weak req.: true if among the entries complying with timings and bindings, the youngest |f->imdl is weaker than the youngest f->imdl.
 
-      r = NO_REQUIREMENT;
+      r = WEAK_REQUIREMENT_DISABLED;
       requirements_.CS_.enter();
       float32 negative_cfd = 0;
       auto now = Now();
@@ -1003,8 +1004,6 @@ ChainingStatus MDLController::retrieve_imdl_fwd(const HLPBindingMap *bm, Fact *f
         return r;
       }
 #endif
-      HLPBindingMap result_bm(bm);
-
       for (e = requirements_.positive_evidences_.begin(); e != requirements_.positive_evidences_.end();) {
 
         if ((*e).is_too_old(now)) // garbage collection.
@@ -1017,7 +1016,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(const HLPBindingMap *bm, Fact *f
           HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
           if (_original.match_fwd_strict(_f_imdl, f_imdl)) {
 
-            if (r != WEAK_REQUIREMENT_ENABLED && (*e).chaining_was_allowed_) { // first siginificant match.
+            if ((*e).chaining_was_allowed_) {
 
               bool strong_matches_weak =
                 (strong_requirement_ground && HLPBindingMap(_original).match_fwd_lenient
@@ -1026,14 +1025,16 @@ ChainingStatus MDLController::retrieve_imdl_fwd(const HLPBindingMap *bm, Fact *f
 
                 r = WEAK_REQUIREMENT_ENABLED;
                 results.push_back(BindingResult(new HLPBindingMap(_original), (*e).evidence_));
+                // Loop again to check for more matches.
                 wr_enabled = strong_matches_weak;
               } else {
 
-                r = STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
-                wr_enabled = false;
+                // If we already got a WEAK_REQUIREMENT_ENABLED, don't return STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
+                if (r != WEAK_REQUIREMENT_ENABLED) {
+                  r = STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
+                  wr_enabled = false;
+                }
               }
-              // We may do another iteration, so don't update bm yet.
-              result_bm.load(&_original);
             }
 
             r_p.weak_requirements_.controllers.insert((*e).controller_);
@@ -1043,8 +1044,6 @@ ChainingStatus MDLController::retrieve_imdl_fwd(const HLPBindingMap *bm, Fact *f
           ++e;
         }
       }
-
-      bm->load(&result_bm);
 
       requirements_.CS_.leave();
       return r;
