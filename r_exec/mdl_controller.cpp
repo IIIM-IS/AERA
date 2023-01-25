@@ -858,7 +858,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
   if (!sr_count) { // no strong req., some weak req.: true if there is one f->imdl complying with timings and bindings.
 
     wr_enabled = false;
-    // JTNote: We set ground = NULL above, so this is never true.
+#if 0 // JTNote: We set ground = NULL above, so (ground != NULL) is never true.
     if (ground != NULL) { // an imdl triggered the reduction of the cache.
 
       r_p.weak_requirements_.controllers.insert(req_controller);
@@ -866,6 +866,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
       r_p.weak_requirements_.chaining_was_allowed = true;
       return WEAK_REQUIREMENT_ENABLED;
     }
+#endif
 
     r = WEAK_REQUIREMENT_DISABLED;
     requirements_.CS_.enter();
@@ -977,7 +978,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
         }
       }
 
-      // JTNote: We set ground = NULL above, so this is never true.
+#if 0 // JTNote: We set ground = NULL above, so (ground != NULL) is never true.
       if (ground != NULL) { // an imdl triggered the reduction of the cache.
 
         requirements_.CS_.leave();
@@ -992,50 +993,49 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
         }
         return r;
       }
-      else {
-        HLPBindingMap result_bm(bm);
+#endif
+      HLPBindingMap result_bm(bm);
 
-        for (e = requirements_.positive_evidences_.begin(); e != requirements_.positive_evidences_.end();) {
+      for (e = requirements_.positive_evidences_.begin(); e != requirements_.positive_evidences_.end();) {
 
-          if ((*e).is_too_old(now)) // garbage collection.
-            e = requirements_.positive_evidences_.erase(e);
-          else if ((*e).is_out_of_range(now))
-            ++e;
-          else {
+        if ((*e).is_too_old(now)) // garbage collection.
+          e = requirements_.positive_evidences_.erase(e);
+        else if ((*e).is_out_of_range(now))
+          ++e;
+        else {
 
-            _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
-            HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
-            if (_original.match_fwd_strict(_f_imdl, f_imdl)) {
+          _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
+          HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
+          if (_original.match_fwd_strict(_f_imdl, f_imdl)) {
 
-              if (r != WEAK_REQUIREMENT_ENABLED && (*e).chaining_was_allowed_) { // first siginificant match.
+            if (r != WEAK_REQUIREMENT_ENABLED && (*e).chaining_was_allowed_) { // first siginificant match.
 
-                bool strong_matches_weak =
-                  (strong_requirement_ground && HLPBindingMap(_original).match_fwd_lenient
-                    (_f_imdl, strong_requirement_ground->get_pred()->get_target()) == MATCH_SUCCESS_NEGATIVE);
-                if (!strong_matches_weak || (*e).confidence_ > negative_cfd) {
+              bool strong_matches_weak =
+                (strong_requirement_ground && HLPBindingMap(_original).match_fwd_lenient
+                  (_f_imdl, strong_requirement_ground->get_pred()->get_target()) == MATCH_SUCCESS_NEGATIVE);
+              if (!strong_matches_weak || (*e).confidence_ > negative_cfd) {
 
-                  r = WEAK_REQUIREMENT_ENABLED;
-                  ground = (*e).evidence_;
-                  wr_enabled = strong_matches_weak;
-                } else {
+                r = WEAK_REQUIREMENT_ENABLED;
+                ground = (*e).evidence_;
+                wr_enabled = strong_matches_weak;
+              } else {
 
-                  r = STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
-                  wr_enabled = false;
-                }
-                // We may do another iteration, so don't update bm yet.
-                result_bm.load(&_original);
+                r = STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
+                wr_enabled = false;
               }
-
-              r_p.weak_requirements_.controllers.insert((*e).controller_);
-              r_p.weak_requirements_.f_imdl = _f_imdl;
-              r_p.weak_requirements_.chaining_was_allowed = (*e).chaining_was_allowed_;
+              // We may do another iteration, so don't update bm yet.
+              result_bm.load(&_original);
             }
-            ++e;
-          }
-        }
 
-        bm->load(&result_bm);
+            r_p.weak_requirements_.controllers.insert((*e).controller_);
+            r_p.weak_requirements_.f_imdl = _f_imdl;
+            r_p.weak_requirements_.chaining_was_allowed = (*e).chaining_was_allowed_;
+          }
+          ++e;
+        }
       }
+
+      bm->load(&result_bm);
 
       requirements_.CS_.leave();
       return r;
