@@ -989,10 +989,19 @@ Simulator
     * The rfid of s is not detected, but the "counterattack" model injects the inferred position of s.
     * No "centralized" attention module.
 
-next meeting
-* GTPX not used for mk.val https://github.com/IIIM-IS/AERA/blob/8a0a88275d0be8c0b2da12e55e3c16052f379d72/r_exec/pattern_extractor.cpp#L583
+2023-01-27
+* GTPX
+  * Not used for mk.val https://github.com/IIIM-IS/AERA/blob/8a0a88275d0be8c0b2da12e55e3c16052f379d72/r_exec/pattern_extractor.cpp#L583
 * hand-grab-sphere
   * Represent sphere position without direct I/O input.
+    * DONE. Review/merge pull request for multiple matches in retrieve_imdl_fwd https://github.com/IIIM-IS/AERA/pull/243
+
+next meeting
+* GTPX
+  * Try making goal of icst.
+* hand-grab-sphere
+  * Represent sphere position without direct I/O input.
+    * Handle case of non-simulated strong requirement and no simulated weak requirement.
   * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
     * Still need to allow multiple strong requirements in retrieve_imdl.
 * Webots
