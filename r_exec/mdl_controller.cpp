@@ -135,20 +135,20 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
     bool match = false;
     Fact *f_imdl = ((MDLController *)controller_)->get_f_ihlp(bm, false);
     RequirementsPair r_p;
-    Fact *ground = NULL;
+    vector<BindingResult> bind_results;
     bool wr_enabled = false;
-    ChainingStatus c_s = ((MDLController *)controller_)->retrieve_imdl_fwd(bm, f_imdl, r_p, ground, req_controller, wr_enabled);
+    ChainingStatus c_s = ((MDLController *)controller_)->retrieve_imdl_fwd(bm, f_imdl, r_p, bind_results, req_controller, wr_enabled);
     f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(wr_enabled);
 
     bool chaining_allowed = (c_s >= WEAK_REQUIREMENT_ENABLED);
     bool did_check_simulated_chaining = false;
     bool check_simulated_chaining_result;
-    vector<BindingResult> bind_results;
     switch (c_s) {
     case WEAK_REQUIREMENT_DISABLED:
     case STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT: // silent monitoring of a prediction that will not be injected.
       if (is_simulation) { // if there is simulated imdl for the root of one sim in prediction, allow forward chaining.
 
+        bind_results.clear();
         check_simulated_chaining_result = check_simulated_chaining(bm, f_imdl, prediction, bind_results);
         did_check_simulated_chaining = true;
         if (check_simulated_chaining_result)
@@ -165,6 +165,7 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
       if (is_simulation) { // if there is simulated imdl for the root of one sim in prediction, allow forward chaining.
 
         if (!did_check_simulated_chaining) {
+          bind_results.clear();
           check_simulated_chaining_result = check_simulated_chaining(bm, f_imdl, prediction, bind_results);
           did_check_simulated_chaining = true;
         }
@@ -175,8 +176,8 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
       }
     case WEAK_REQUIREMENT_ENABLED:
       if (bind_results.size() == 0)
-        // check_simulated_chaining did not create any new bindings, so use the bm that we have been updating.
-        bind_results.push_back(BindingResult(bm, ground));
+        // retrieve_imdl_fwd doesn't add a result for status such as NO_REQUIREMENT, so use the bm that we created above.
+        bind_results.push_back(BindingResult(bm, NULL));
       for (size_t i = 0; i < bind_results.size(); ++i) {
         // evaluate_fwd_guards() uses bindings_, so set it to the binding map.
         bindings_ = bind_results[i].map_;
@@ -242,9 +243,9 @@ bool SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *
     bool match = false;
     Fact *f_imdl = ((MDLController *)controller_)->get_f_ihlp(bm, false);
     RequirementsPair r_p;
-    Fact *ground = f_p_f_imdl;
+    vector<BindingResult> bind_results;
     bool wr_enabled = false;
-    ChainingStatus c_s = ((MDLController *)controller_)->retrieve_imdl_fwd(bm, f_imdl, r_p, ground, req_controller, wr_enabled);
+    ChainingStatus c_s = ((MDLController *)controller_)->retrieve_imdl_fwd(bm, f_imdl, r_p, bind_results, req_controller, wr_enabled);
     f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(wr_enabled);
     bool chaining_allowed = (c_s >= NO_REQUIREMENT);
     switch (c_s) {
@@ -257,10 +258,20 @@ bool SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *
         f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(false);
     case STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT:
     case WEAK_REQUIREMENT_ENABLED:
-      if (evaluate_fwd_guards()) { // may update bindings.
-        f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
-        ((SecondaryMDLController *)controller_)->predict(bindings_, input, NULL, true, r_p, ground);
-        match = true;
+      if (bind_results.size() == 0)
+        // retrieve_imdl_fwd doesn't add a result for status such as NO_REQUIREMENT, so use the bm that we created above.
+        bind_results.push_back(BindingResult(bm, NULL));
+      for (size_t i = 0; i < bind_results.size(); ++i) {
+        // evaluate_fwd_guards() uses bindings_, so set it to the binding map.
+        bindings_ = bind_results[i].map_;
+        if (i > 0)
+          // During the previous iteration, evaluate_fwd_guards patched code_ in place, so restore.
+          load_code();
+        if (evaluate_fwd_guards()) { // may update bindings_ .
+          f_imdl->set_reference(0, bindings_->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated binding map.
+          ((SecondaryMDLController*)controller_)->predict(bindings_, input, NULL, true, r_p, bind_results[i].ground_);
+          match = true;
+        }
       }
       break;
     }
@@ -846,12 +857,11 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
   }
 }
 
-ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl, RequirementsPair &r_p, Fact *&ground, MDLController *req_controller, bool &wr_enabled) { // wr_enabled: true if there is at least one wr stronger than at least one sr.
+ChainingStatus MDLController::retrieve_imdl_fwd(const HLPBindingMap *bm, Fact *f_imdl, RequirementsPair &r_p, std::vector<BindingResult>& results, MDLController *req_controller, bool &wr_enabled) { // wr_enabled: true if there is at least one wr stronger than at least one sr.
 
   uint32 wr_count;
   uint32 sr_count;
   uint32 r_count = get_requirement_count(wr_count, sr_count);
-  ground = NULL;
   if (!r_count)
     return NO_REQUIREMENT;
   ChainingStatus r;
@@ -891,11 +901,11 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
             f_imdl->get_reference(0)->get_reference(0)->get_oid() << " matches evidence fact (" <<
             _f_imdl->get_detail_oid() << ") imdl mdl " << _f_imdl->get_reference(0)->get_reference(0)->get_oid());
 #endif
-          if (r == WEAK_REQUIREMENT_DISABLED && (*e).chaining_was_allowed_) { // first match.
+          if ((*e).chaining_was_allowed_) {
 
             r = WEAK_REQUIREMENT_ENABLED;
-            bm->load(&_original);
-            ground = (*e).evidence_;
+            results.push_back(BindingResult(new HLPBindingMap(_original), (*e).evidence_));
+            // Loop again to check for more matches.
           }
 
           r_p.weak_requirements_.controllers.insert((*e).controller_);
@@ -944,7 +954,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
       return r;
     } else { // some strong req. and some weak req.: true if among the entries complying with timings and bindings, the youngest |f->imdl is weaker than the youngest f->imdl.
 
-      r = NO_REQUIREMENT;
+      r = WEAK_REQUIREMENT_DISABLED;
       requirements_.CS_.enter();
       float32 negative_cfd = 0;
       auto now = Now();
@@ -994,8 +1004,6 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
         return r;
       }
 #endif
-      HLPBindingMap result_bm(bm);
-
       for (e = requirements_.positive_evidences_.begin(); e != requirements_.positive_evidences_.end();) {
 
         if ((*e).is_too_old(now)) // garbage collection.
@@ -1008,7 +1016,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
           HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
           if (_original.match_fwd_strict(_f_imdl, f_imdl)) {
 
-            if (r != WEAK_REQUIREMENT_ENABLED && (*e).chaining_was_allowed_) { // first siginificant match.
+            if ((*e).chaining_was_allowed_) {
 
               bool strong_matches_weak =
                 (strong_requirement_ground && HLPBindingMap(_original).match_fwd_lenient
@@ -1016,15 +1024,17 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
               if (!strong_matches_weak || (*e).confidence_ > negative_cfd) {
 
                 r = WEAK_REQUIREMENT_ENABLED;
-                ground = (*e).evidence_;
+                results.push_back(BindingResult(new HLPBindingMap(_original), (*e).evidence_));
+                // Loop again to check for more matches.
                 wr_enabled = strong_matches_weak;
               } else {
 
-                r = STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
-                wr_enabled = false;
+                // If we already got a WEAK_REQUIREMENT_ENABLED, don't return STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
+                if (r != WEAK_REQUIREMENT_ENABLED) {
+                  r = STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
+                  wr_enabled = false;
+                }
               }
-              // We may do another iteration, so don't update bm yet.
-              result_bm.load(&_original);
             }
 
             r_p.weak_requirements_.controllers.insert((*e).controller_);
@@ -1034,8 +1044,6 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
           ++e;
         }
       }
-
-      bm->load(&result_bm);
 
       requirements_.CS_.leave();
       return r;
