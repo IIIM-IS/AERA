@@ -857,7 +857,8 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
   }
 }
 
-ChainingStatus MDLController::retrieve_imdl_fwd(const HLPBindingMap *bm, Fact *f_imdl, RequirementsPair &r_p, std::vector<BindingResult>& results, MDLController *req_controller, bool &wr_enabled) { // wr_enabled: true if there is at least one wr stronger than at least one sr.
+// wr_enabled: true if there is at least one wr stronger than at least one sr.
+ChainingStatus MDLController::retrieve_imdl_fwd(const HLPBindingMap *bm, Fact *f_imdl, RequirementsPair &r_p, std::vector<BindingResult>& results, MDLController *req_controller, bool &wr_enabled) {
 
   uint32 wr_count;
   uint32 sr_count;
