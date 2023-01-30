@@ -862,12 +862,12 @@ ChainingStatus MDLController::retrieve_imdl_fwd(const HLPBindingMap *bm, Fact *f
   uint32 wr_count;
   uint32 sr_count;
   uint32 r_count = get_requirement_count(wr_count, sr_count);
+  wr_enabled = false;
   if (!r_count)
     return NO_REQUIREMENT;
   ChainingStatus r;
   if (!sr_count) { // no strong req., some weak req.: true if there is one f->imdl complying with timings and bindings.
 
-    wr_enabled = false;
 #if 0 // JTNote: We set ground = NULL above, so (ground != NULL) is never true.
     if (ground != NULL) { // an imdl triggered the reduction of the cache.
 
@@ -922,7 +922,6 @@ ChainingStatus MDLController::retrieve_imdl_fwd(const HLPBindingMap *bm, Fact *f
 
     if (!wr_count) { // some strong req., no weak req.: true if there is no |f->imdl complying with timings and bindings.
 
-      wr_enabled = false;
       r = WEAK_REQUIREMENT_ENABLED;
       requirements_.CS_.enter();
       auto now = Now();
