@@ -607,7 +607,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(const HLPBindingMap *b
       }
 
       requirements_.CS_.leave();
-      return WEAK_REQUIREMENT_ENABLED;
+      return NO_REQUIREMENT;
     } else { // some strong req. and some weak req.: true if among the entries complying with timings and bindings, the youngest |f->imdl is weaker than the youngest f->imdl.
 
       r = WEAK_REQUIREMENT_DISABLED;
@@ -764,7 +764,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
       }
 
       requirements_.CS_.leave();
-      return WEAK_REQUIREMENT_ENABLED;
+      return NO_REQUIREMENT;
     } else { // some strong req. and some weak req.: true if among the entries complying with timings and bindings, the youngest |f->imdl is weaker than the youngest f->imdl.
 
       r = WEAK_REQUIREMENT_DISABLED;
@@ -923,7 +923,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(const HLPBindingMap *bm, Fact *f
 
     if (!wr_count) { // some strong req., no weak req.: true if there is no |f->imdl complying with timings and bindings.
 
-      r = WEAK_REQUIREMENT_ENABLED;
+      r = NO_REQUIREMENT;
       requirements_.CS_.enter();
       auto now = Now();
       r_code::list<RequirementEntry>::const_iterator e;
@@ -939,7 +939,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(const HLPBindingMap *bm, Fact *f
           HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
           if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) { // tpl args will be valuated in bm.
 
-            if (r == WEAK_REQUIREMENT_ENABLED && (*e).chaining_was_allowed_) // first match.
+            if (r == NO_REQUIREMENT && (*e).chaining_was_allowed_) // first match.
               r = STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
 
             r_p.strong_requirements_.controllers.insert((*e).controller_);
@@ -1131,7 +1131,7 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
       }
 
       requirements_.CS_.leave();
-      return WEAK_REQUIREMENT_ENABLED;
+      return NO_REQUIREMENT;
     } else { // some strong req. and some weak req.: true if among the entries complying with timings and bindings, the youngest |f->imdl is weaker than the youngest f->imdl.
 
       r = WEAK_REQUIREMENT_DISABLED;
