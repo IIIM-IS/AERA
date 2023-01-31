@@ -2004,6 +2004,9 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
       Fact *sim_ground;
       Fact *sim_strong_requirement_ground;
       ChainingStatus sim_c_s = retrieve_simulated_imdl_bwd(bm, f_imdl, sim, sim_ground, sim_strong_requirement_ground);
+      if (c_s == STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT && sim_c_s == NO_REQUIREMENT)
+        // There is no simulated weak requirement to override the non-simulated strong requirement.
+        sim_c_s = STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
       switch (sim_c_s) {
       case WEAK_REQUIREMENT_ENABLED:
         f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(true);
