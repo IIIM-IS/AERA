@@ -1943,7 +1943,9 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
 
   P<Fact> f_imdl = get_f_ihlp(bm, false);
   Sim *sim = super_goal->get_goal()->get_sim();
-  auto sim_thz = sim->get_thz(); // 0 if super-goal had no time for simulation.
+  microseconds sim_thz(0);
+  if (sim)
+    sim_thz = sim->get_thz(); // 0 if super-goal had no time for simulation.
   auto min_sim_thz = _Mem::Get()->get_min_sim_time_horizon() / 2; // time allowance for the simulated predictions to flow upward.
 
   Sim *sub_sim;
