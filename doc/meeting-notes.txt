@@ -996,11 +996,20 @@ Simulator
   * Represent sphere position without direct I/O input.
     * DONE. Review/merge pull request for multiple matches in retrieve_imdl_fwd https://github.com/IIIM-IS/AERA/pull/243
 
-next meeting
-* GTPX
-  * Try making goal of icst.
+2023-02-03
+* DONE. Make issue for PTPX makes an anti-requirement which uses the wrong variable from the cst https://github.com/IIIM-IS/AERA/issues/245
 * hand-grab-sphere
   * Represent sphere position without direct I/O input.
+    * DONE. Make pull request to return NO_REQUIREMENT if only strong requirements but none match https://github.com/IIIM-IS/AERA/pull/244
+
+next meeting
+* Solve issue for PTPX makes an anti-requirement which uses the wrong variable from the cst https://github.com/IIIM-IS/AERA/issues/245
+* GTPX
+  * Try making a goal of icst.
+    * Find out why there are no inputs_ for GTPX.
+* hand-grab-sphere
+  * Represent sphere position without direct I/O input.
+    * Review/merge pull request to return NO_REQUIREMENT if only strong requirements but none match https://github.com/IIIM-IS/AERA/pull/244
     * Handle case of non-simulated strong requirement and no simulated weak requirement.
   * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
     * Still need to allow multiple strong requirements in retrieve_imdl.
