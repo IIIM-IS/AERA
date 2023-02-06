@@ -186,8 +186,10 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
           load_code();
         if (evaluate_fwd_guards()) { // may update bindings_ .
           // Valuate f_imdl from updated binding map.
-          f_imdl->set_reference(0, bindings_->bind_pattern(f_imdl->get_reference(0)));
-          ((PrimaryMDLController *)controller_)->predict(bindings_, input, f_imdl, chaining_allowed, r_p, bind_results[i].ground_);
+          P<Fact> f_imdl_copy = new Fact(
+            bindings_->bind_pattern(f_imdl->get_reference(0)), f_imdl->get_after(), f_imdl->get_before(),
+            f_imdl->get_cfd(), f_imdl->get_psln_thr());
+          ((PrimaryMDLController*)controller_)->predict(bindings_, input, f_imdl_copy, chaining_allowed, r_p, bind_results[i].ground_);
           match = true;
         }
       }
