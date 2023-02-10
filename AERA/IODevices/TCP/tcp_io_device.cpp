@@ -324,8 +324,11 @@ namespace tcp_io_device {
     }
     case VariableDescription_DataType_STRING:
     {
-      // TODO: Using the .asIndex() function this can be done
+      // TODO: Using the .asIndex() function this can be done (See the Utils::GetString())
       cout << "> WARNING: String type not implemented, yet" << endl;
+      break;
+      // std::string data = cmd->code(args_set_index + 2).String(0);
+      // var->set_data(data);
     }
     }
     return msg;
@@ -436,7 +439,35 @@ namespace tcp_io_device {
 
       auto entity = entities_[id_mapping_[var.getMetaData().getEntityID()]];
       auto obj = objects_[id_mapping_[var.getMetaData().getID()]];
-      Atom val = Atom::Float(var.getData<double>()[0]);
+      
+      Atom val = Atom();
+      if (var.getMetaData().getType() == VariableDescription_DataType_DOUBLE)
+      {
+        val = Atom::Float(var.getData<double>()[0]);
+      }
+      else if (var.getMetaData().getType() == VariableDescription_DataType_INT64){
+        val = Atom::Float(var.getData<int64_t>()[0]);
+      }
+      else if (var.getMetaData().getType() == VariableDescription_DataType_COMMUNICATION_ID) {
+        int64_t val = var.getData<int64_t>()[0];
+        std::vector<r_code::Code*> value;
+        if (val != -1) {
+          if (id_mapping_.find(val) == id_mapping_.end())
+          {
+            std::cout << "WARNING: Received message with unknown Communication ID" << std::endl;
+            continue;
+          }
+          std::string object_entity = id_mapping_[val];
+          if (entities_.find(object_entity) == entities_.end())
+          {
+            std::cout << "WARNING: Received message with uninitalized entity, this should never happen!" << std::endl;
+            continue;
+          }
+          value.push_back(entities_[object_entity]);
+        }
+        inject_marker_value_from_io_device(entity, obj, value, now, now + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
+        continue;
+      }
       if (id_mapping_[var.getMetaData().getID()] == "velocity_y") {
         inject_marker_value_from_io_device(entity, obj, val, now, now + get_sampling_period(), r_exec::View::SYNC_HOLD, get_stdin());
       }

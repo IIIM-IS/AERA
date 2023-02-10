@@ -132,12 +132,13 @@ enum VariableDescription_DataType : int {
   VariableDescription_DataType_BOOL = 12,
   VariableDescription_DataType_STRING = 13,
   VariableDescription_DataType_BYTES = 14,
+  VariableDescription_DataType_COMMUNICATION_ID = 15,
   VariableDescription_DataType_VariableDescription_DataType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   VariableDescription_DataType_VariableDescription_DataType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool VariableDescription_DataType_IsValid(int value);
 constexpr VariableDescription_DataType VariableDescription_DataType_DataType_MIN = VariableDescription_DataType_DOUBLE;
-constexpr VariableDescription_DataType VariableDescription_DataType_DataType_MAX = VariableDescription_DataType_BYTES;
+constexpr VariableDescription_DataType VariableDescription_DataType_DataType_MAX = VariableDescription_DataType_COMMUNICATION_ID;
 constexpr int VariableDescription_DataType_DataType_ARRAYSIZE = VariableDescription_DataType_DataType_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* VariableDescription_DataType_descriptor();
@@ -1495,6 +1496,8 @@ class VariableDescription final :
     VariableDescription_DataType_STRING;
   static constexpr DataType BYTES =
     VariableDescription_DataType_BYTES;
+  static constexpr DataType COMMUNICATION_ID =
+    VariableDescription_DataType_COMMUNICATION_ID;
   static inline bool DataType_IsValid(int value) {
     return VariableDescription_DataType_IsValid(value);
   }
