@@ -63,6 +63,7 @@ message VariableDescription {
         BOOL = 12;
         STRING = 13;
         BYTES = 14;
+        COMMUNICATION_ID = 15; // Handled the same as a INT64, but provides information that the sent int is an ID (e.g. to send "holding s").
     }
 
     int32 entityID = 1;

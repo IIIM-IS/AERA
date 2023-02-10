@@ -332,19 +332,19 @@ const char descriptor_table_protodef_tcp_5fdata_5fmessage_2eproto[] PROTOBUF_SEC
   "\0227\n\013description\030\001 \001(\0132\".tcp_io_device.Va"
   "riableDescription\022\014\n\004name\030\002 \001(\t\"P\n\013DataM"
   "essage\022/\n\tvariables\030\001 \003(\0132\034.tcp_io_devic"
-  "e.ProtoVariable\022\020\n\010timeSpan\030\002 \001(\004\"\312\001\n\023Va"
+  "e.ProtoVariable\022\020\n\010timeSpan\030\002 \001(\004\"\340\001\n\023Va"
   "riableDescription\022\020\n\010entityID\030\001 \001(\005\022\n\n\002I"
   "D\030\002 \001(\005\022=\n\010dataType\030\003 \001(\0162+.tcp_io_devic"
   "e.VariableDescription.DataType\022\022\n\ndimens"
-  "ions\030\004 \003(\004\"B\n\010DataType\022\n\n\006DOUBLE\020\000\022\t\n\005IN"
-  "T64\020\003\022\010\n\004BOOL\020\014\022\n\n\006STRING\020\r\022\t\n\005BYTES\020\016\"S"
-  "\n\rProtoVariable\0224\n\010metaData\030\001 \001(\0132\".tcp_"
-  "io_device.VariableDescription\022\014\n\004data\030\002 "
-  "\001(\014b\006proto3"
+  "ions\030\004 \003(\004\"X\n\010DataType\022\n\n\006DOUBLE\020\000\022\t\n\005IN"
+  "T64\020\003\022\010\n\004BOOL\020\014\022\n\n\006STRING\020\r\022\t\n\005BYTES\020\016\022\024"
+  "\n\020COMMUNICATION_ID\020\017\"S\n\rProtoVariable\0224\n"
+  "\010metaData\030\001 \001(\0132\".tcp_io_device.Variable"
+  "Description\022\014\n\004data\030\002 \001(\014b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_tcp_5fdata_5fmessage_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_tcp_5fdata_5fmessage_2eproto = {
-    false, false, 1331, descriptor_table_protodef_tcp_5fdata_5fmessage_2eproto,
+    false, false, 1353, descriptor_table_protodef_tcp_5fdata_5fmessage_2eproto,
     "tcp_data_message.proto",
     &descriptor_table_tcp_5fdata_5fmessage_2eproto_once, nullptr, 0, 11,
     schemas, file_default_instances, TableStruct_tcp_5fdata_5fmessage_2eproto::offsets,
@@ -394,6 +394,7 @@ bool VariableDescription_DataType_IsValid(int value) {
     case 12:
     case 13:
     case 14:
+    case 15:
       return true;
     default:
       return false;
@@ -406,6 +407,7 @@ constexpr VariableDescription_DataType VariableDescription::INT64;
 constexpr VariableDescription_DataType VariableDescription::BOOL;
 constexpr VariableDescription_DataType VariableDescription::STRING;
 constexpr VariableDescription_DataType VariableDescription::BYTES;
+constexpr VariableDescription_DataType VariableDescription::COMMUNICATION_ID;
 constexpr VariableDescription_DataType VariableDescription::DataType_MIN;
 constexpr VariableDescription_DataType VariableDescription::DataType_MAX;
 constexpr int VariableDescription::DataType_ARRAYSIZE;

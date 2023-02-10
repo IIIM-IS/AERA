@@ -142,6 +142,9 @@ namespace tcp_io_device {
       case 3:
         type_size_ = 8;
         break;
+      case 15:
+        type_size_ = 8;
+        break;
       default:
         type_size_ = 1;
         break;
