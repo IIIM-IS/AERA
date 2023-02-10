@@ -324,8 +324,11 @@ namespace tcp_io_device {
     }
     case VariableDescription_DataType_STRING:
     {
-      // TODO: Using the .asIndex() function this can be done
+      // TODO: Using the .asIndex() function this can be done (See the Utils::GetString())
       cout << "> WARNING: String type not implemented, yet" << endl;
+      break;
+      // std::string data = cmd->code(args_set_index + 2).String(0);
+      // var->set_data(data);
     }
     }
     return msg;

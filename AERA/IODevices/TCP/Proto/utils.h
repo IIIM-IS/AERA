@@ -193,6 +193,7 @@ namespace tcp_io_device {
       return meta_data_;
     }
 
+    std::string _data() { return data_; }
 
     /**
     * Casts the data from the byte representation stored as a string to the template type.
@@ -200,9 +201,9 @@ namespace tcp_io_device {
     template <typename T> std::vector<T> getData() {
       T a;
       std::vector<T> values;
-      for (int i = 0; i < meta_data_.data_size_; i += meta_data_.type_size_) {
+      for (int i = 0; i < meta_data_.data_size_; i += sizeof(T)) {
         char* pos = &data_[i];
-        memcpy(&a, pos, meta_data_.type_size_);
+        memcpy(&a, pos, sizeof(T));
         values.push_back(a);
       }
       return values;
