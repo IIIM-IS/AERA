@@ -1002,19 +1002,23 @@ Simulator
   * Represent sphere position without direct I/O input.
     * DONE. Make pull request to return NO_REQUIREMENT if only strong requirements but none match https://github.com/IIIM-IS/AERA/pull/244
 
-next meeting
-* Solve issue for PTPX makes an anti-requirement which uses the wrong variable from the cst https://github.com/IIIM-IS/AERA/issues/245
+2023-02-24
+* DONE. Review/merge pull request to solve issue #245 for PTPX makes an anti-requirement which uses the wrong variable from the cst https://github.com/IIIM-IS/AERA/pull/246
 * GTPX
   * Try making a goal of icst.
-    * Find out why there are no inputs_ for GTPX.
+    * DONE. Try adding inputs_ for GTPX.
 * hand-grab-sphere
   * Represent sphere position without direct I/O input.
-    * Review/merge pull request to return NO_REQUIREMENT if only strong requirements but none match https://github.com/IIIM-IS/AERA/pull/244
-    * Handle case of non-simulated strong requirement and no simulated weak requirement.
+    * DONE. Review/merge pull request to return NO_REQUIREMENT if only strong requirements but none match https://github.com/IIIM-IS/AERA/pull/244
+
+next meeting
+* hand-grab-sphere
+  * Represent sphere position without direct I/O input.
+  * Make moves take 1000ms to complete. (More realistic, test multi-frame action, compatible with Webots)
   * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
     * Still need to allow multiple strong requirements in retrieve_imdl.
 * Webots
-  * Remove difference between AERA 100ms and Webots 1000 ms [defer]
+  * Try camera
   * Use setup command for automatic discovery of AERA objects and commands
   * Get command efferent copy from Webots (move limit to +/- 20) [Maybe in the setup message. Need more discussion]
   * Let AERA send "reset" message to reset the environment. (Use after grab fails.)
@@ -1023,19 +1027,17 @@ next meeting
 
 TODO
 * Change (success) to refer to the prediction mk.rdx instead of the prediction. (Affects other code.)
+* Make a mk.rdx for (fact (pred (fact (imdl ...)))). (May affect other code that expects the other kind of prediction.)
 * PTPX: Learned cst may only have icsts. But using a cst for later model-building requires a non-icst fact. Should icst->contains be recursive? (Need limit.) Or always include a fact in new_cst?
 * Pong
   * Add paddle. Make goal for the ball to be at a position which requires moving the paddle to bounce it.
   * Remove cst_ball_position, etc. and learn them.
   * Learn the exception "bounce" model.
 * Try commenting out PTPX::reduce:666 if (i->input_ == Opcodes::Cmd)
-* Try pass_through==false. Do CTPX and PTPX still work?
-* Make a mk.rdx for (fact (pred (fact (imdl ...)))). (May affect other code that expects the other kind of prediction.)
 * Visualizer: Option to position simulation objects by predicted time vs. created time.
 * Visualizer: Add an item for prediction reduction, initially hidden.
 * Visualizer: Show the time job queue sorted by time.
 * If min_sim_time_horizon > 0, how is the behavior different?
-* In babbling, issue a goal for a position, an "unrelated" move command, and move the position there. Is GTPX invoked?
 * Issue #2: Try to reproduce.
 * Issue #25: Reproduce running in real-time, and see if it happens in diagnostic time.
 
@@ -1051,11 +1053,11 @@ Y Y _ _ Non-simulated icst from facts/icsts
 Y Y _ _ Non-simulated prediction of imdl from weak requirement model
 Y _ _ _ Rating of weak requirement models
 Y Y _ _ Testing and re-activation of models and weak requirement models in the secondary group
-_ _ _ _ Use of deleted models to prevent re-creating them
+Y _ _ _ Use of deleted models to prevent re-creating them
 Y Y _ _ Non-simulated prediction of fact from model
 Y _ _ _ Non-simulated cmd from non-simulated goal RHS
 _ _ _ _ Auto-focus based on active predictions and goals (not pass-through)
-_ _ _ _ Views/groups and saliency propagation
+Y _ _ _ Views/groups and saliency propagation
 Y _ _ _ Simulated prediction of icst from facts/icsts
 Y _ _ _ Simulated prediction of imdl from weak requirement model
 Y _ _ _ Simulated prediction of fact from model
