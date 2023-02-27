@@ -22,7 +22,7 @@ s_is_a_hand:(mk.val s essence hand 1) |[]
 (|fact s_is_a_hand 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 
 ; Internal state used by the programs to emulate the environment.
-; (mk.val e1 emulator_state [holding_obj Pos_h Pos_c Pos_s])
+; (mk.val e1 emulator_state [Holding_obj Pos_h Pos_c Pos_s])
 e1:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
 emulator_state:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 ; Inject the emulator state into the emulator group.
