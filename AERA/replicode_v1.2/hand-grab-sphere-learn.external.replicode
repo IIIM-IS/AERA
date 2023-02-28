@@ -72,7 +72,7 @@ pgm_babbleA_1:(pgm [] []
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; Delay a little to allow predictions for this sampling period before processing.
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
@@ -92,7 +92,7 @@ pgm_babbleA_2:(pgm [] []
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; Delay a little to allow predictions for this sampling period before processing.
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
@@ -112,7 +112,7 @@ pgm_babbleA_3:(pgm [] []
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; Delay a little to allow predictions for this sampling period before processing.
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
@@ -132,7 +132,7 @@ pgm_babbleA_4:(pgm [] []
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; Delay a little to allow predictions for this sampling period before processing.
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
@@ -152,7 +152,7 @@ pgm_babbleA_5:(pgm [] []
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; Delay a little to allow predictions for this sampling period before processing.
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
@@ -172,7 +172,7 @@ pgm_babbleA_6:(pgm [] []
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; Delay a little to allow predictions for this sampling period before processing.
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
@@ -192,7 +192,7 @@ pgm_babbleA_7:(pgm [] []
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; Delay a little to allow predictions for this sampling period before processing.
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
@@ -212,7 +212,7 @@ pgm_babbleA_8:(pgm [] []
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; Delay a little to allow predictions for this sampling period before processing.
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
@@ -232,7 +232,7 @@ pgm_babbleA_9:(pgm [] []
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; Delay a little to allow predictions for this sampling period before processing.
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
@@ -252,7 +252,7 @@ pgm_babbleA_10:(pgm [] []
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; Delay a little to allow predictions for this sampling period before processing.
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
@@ -272,7 +272,7 @@ pgm_babbleA_11:(pgm [] []
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; Delay a little to allow predictions for this sampling period before processing.
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
@@ -292,7 +292,7 @@ pgm_babbleA_12:(pgm [] []
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; Delay a little to allow predictions for this sampling period before processing.
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
@@ -350,7 +350,7 @@ pgm_experimentingA_0:(pgm [] []
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; Delay a little to allow predictions for this sampling period before processing.
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
@@ -369,7 +369,7 @@ pgm_experimentingA_1:(pgm [] []
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; Delay a little to allow predictions for this sampling period before processing.
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
@@ -388,7 +388,7 @@ pgm_experimentingA_2:(pgm [] []
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; Delay a little to allow predictions for this sampling period before processing.
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
@@ -407,7 +407,7 @@ pgm_experimentingA_3:(pgm [] []
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; Delay a little to allow predictions for this sampling period before processing.
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
@@ -426,7 +426,7 @@ pgm_experimentingA_4:(pgm [] []
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; Delay a little to allow predictions for this sampling period before processing.
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
@@ -445,7 +445,7 @@ pgm_experimentingA_5:(pgm [] []
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; Delay a little to allow predictions for this sampling period before processing.
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
@@ -464,7 +464,7 @@ pgm_experimentingA_6:(pgm [] []
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; Delay a little to allow predictions for this sampling period before processing.
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
@@ -483,7 +483,7 @@ pgm_experimentingA_7:(pgm [] []
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; Delay a little to allow predictions for this sampling period before processing.
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
@@ -502,7 +502,7 @@ pgm_experimentingA_8:(pgm [] []
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; Delay a little to allow predictions for this sampling period before processing.
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
@@ -521,7 +521,7 @@ pgm_experimentingA_9:(pgm [] []
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
-      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      ; Delay a little to allow predictions for this sampling period before processing.
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
