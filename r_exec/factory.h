@@ -176,7 +176,7 @@ public:
 
   bool is_fact() const { return (code(0).asOpcode() == Opcodes::Fact); }
   bool is_anti_fact() const { return (code(0).asOpcode() == Opcodes::AntiFact); }
-  void set_opposite() const {
+  void set_opposite() {
     if (is_fact())
       code(0) = Atom::Object(Opcodes::AntiFact, FACT_ARITY);
     else
