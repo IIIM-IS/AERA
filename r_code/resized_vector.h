@@ -98,6 +98,8 @@ namespace r_code {
 template<typename T> class resized_vector :
   private std::vector<T> {
 public:
+  resized_vector() {}
+  resized_vector(size_t n) : std::vector(n) {}
   uint32 size() const { return std::vector<T>::size(); }
   T &operator [](uint32 i) {
 
