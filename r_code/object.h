@@ -247,7 +247,7 @@ public:
   virtual void set_oid(uint32 oid) = 0;
 
   virtual Atom &code(uint16 i) = 0;
-  virtual Atom &code(uint16 i) const = 0;
+  virtual const Atom &code(uint16 i) const = 0;
   virtual uint16 code_size() const = 0;
   virtual void resize_code(uint16 new_size) = 0;
   virtual void set_reference(uint16 i, Code *object) = 0;
@@ -290,7 +290,7 @@ public:
    * Print the trace of code(i) to the out stream, using the given TraceContext.
    */
   void trace(uint16 i, std::ostream& out, Atom::TraceContext& context) const {
-    Atom& atom = code(i);
+    Atom atom = code(i);
     atom.trace(context, out);
     if (atom.getDescriptor() == Atom::R_PTR) {
       if (atom.asIndex() < references_size()) {
@@ -370,7 +370,7 @@ public:
   void set_oid(uint32 oid) override { oid_ = oid; }
 
   Atom &code(uint16 i) override { return code_[i]; }
-  Atom &code(uint16 i) const override { return (*code_.as_std())[i]; }
+  const Atom &code(uint16 i) const override { return (*code_.as_std())[i]; }
   uint16 code_size() const override {
     // There can't be more than 65536 code bytes. Explicitly cast to the return type.
     return (uint16)code_.size();
