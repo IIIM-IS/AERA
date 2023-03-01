@@ -278,7 +278,7 @@ public:
   virtual void mod(uint16 /* member_index */, float32 /* value */) {};
   virtual void set(uint16 /* member_index */, float32 /* value */) {};
   virtual _View *get_view(Code* /* group */, bool /* lock */) { return NULL; }
-  virtual void add_reference(Code* /* object */) const {} // called only on local objects.
+  virtual void add_reference(Code* /* object */) {} // called only on local objects.
   void remove_marker(Code *m) {
 
     acq_markers();
@@ -384,7 +384,7 @@ public:
   }
   void clear_references() override { references_.as_std()->clear(); }
   void set_references(std::vector<P<Code> > &new_references) override { (*references_.as_std()) = new_references; }
-  void add_reference(Code *object) const override { references_.as_std()->push_back(object); }
+  void add_reference(Code *object) override { references_.as_std()->push_back(object); }
 };
 
 class dll_export Mem {
