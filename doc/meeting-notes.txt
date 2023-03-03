@@ -1011,10 +1011,20 @@ Simulator
   * Represent sphere position without direct I/O input.
     * DONE. Review/merge pull request to return NO_REQUIREMENT if only strong requirements but none match https://github.com/IIIM-IS/AERA/pull/244
 
+2023-03-03
+* DONE. Try interval syntax "a-floating-point-number|a-floating-point-number" and "a-timestamp|a-timestamp"
+  RESULT: Not implemented.
+* DONE. Discuss intermittent Visualizer crash: Root cause not found.
+* hand-grab-sphere
+  * DONE. Try moves taking 1000ms to complete. (More realistic, test multi-frame action, compatible with Webots)
+    * (Needed to hack PASTController to allow repeated values since the command.)
+
 next meeting
 * hand-grab-sphere
+  * Moves taking 1000ms to complete.
+    * CTPX: Need to extend time span between command and effect.
+      * Try injecting robot signals into a group with longer update period
   * Represent sphere position without direct I/O input.
-  * Make moves take 1000ms to complete. (More realistic, test multi-frame action, compatible with Webots)
   * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
     * Still need to allow multiple strong requirements in retrieve_imdl.
 * Webots
