@@ -113,6 +113,10 @@ AutoFocusController::AutoFocusController(_View *view) : Controller(view) {
   auto thz = 2 * ((r_exec::View*)view)->get_host()->get_upr()*Utils::GetBasePeriod(); // thz==2*sampling period.
   cache_.set_thz(thz);
   cache_.reserve(CacheInitialSize);
+
+#ifdef WITH_DETAIL_OID
+  OUTPUT_LINE(AUTO_FOCUS, "new controller(" << get_detail_oid() << ") for auto_focus " << view->object_->get_oid());
+#endif
 }
 
 AutoFocusController::~AutoFocusController() {
