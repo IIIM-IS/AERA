@@ -184,6 +184,15 @@ drives:(std_grp 40 0 0 0 [stdout]) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]
 ; args: pass_through, ctpx_on, gtpx_on, ptpx_on, trace injections, decompile_models, primary group, other output groups.
 auto_focus:(icpp_pgm "auto_focus" [true true true true true true primary secondary] RUN_ALWAYS 0us VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
 
+; These are the same as stdin, primary and secondary except the group update period is times 10.
+; If the sampling period is 100ms, this means that CTPX will have a time range more than 1 second.
+; (To increase the time range of PTPX, you may also increase tpx_time_horizon in settings.xml.)
+times10_stdin:(std_grp 20 0 0 0 [stdout]) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]
+times10_primary:(std_grp 20 0 0.4 0 []) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]
+times10_secondary:(std_grp 20 0 0.3 0 []) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]
+times10_grp_pair:(mk.grp_pair times10_primary times10_secondary 1) [[SYNC_ONCE now 0 forever root nil]]
+times10_auto_focus:(icpp_pgm "auto_focus" [true true true true true true times10_primary times10_secondary] RUN_ALWAYS 0us VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever times10_stdin nil 1]]
+
 ; initial application objects.
 
 self:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
