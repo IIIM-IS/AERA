@@ -1019,11 +1019,15 @@ Simulator
   * DONE. Try moves taking 1000ms to complete. (More realistic, test multi-frame action, compatible with Webots)
     * (Needed to hack PASTController to allow repeated values since the command.)
 
+2023-03-16
+* hand-grab-sphere
+  * Moves taking 1s to complete.
+    * CTPX: Need to extend time span between command and effect.
+      * Try injecting robot signals into a group with longer update period.
+
 next meeting
 * hand-grab-sphere
-  * Moves taking 1000ms to complete.
-    * CTPX: Need to extend time span between command and effect.
-      * Try injecting robot signals into a group with longer update period
+  * Try injecting the command efferent copy at the time of completion but with the timestamp of original command.
   * Represent sphere position without direct I/O input.
   * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
     * Still need to allow multiple strong requirements in retrieve_imdl.
