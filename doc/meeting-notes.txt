@@ -1023,21 +1023,38 @@ Simulator
 * hand-grab-sphere
   * Moves taking 1s to complete.
     * CTPX: Need to extend time span between command and effect.
-      * Try injecting robot signals into a group with longer update period.
+      * DONE. Try injecting robot signals into a group with longer update period.
+        RESULT. It works. The longer period is used for CTPX.
+
+2023-03-24
+* hand-grab-sphere
+  * DONE. Try injecting the command efferent copy at the time of completion but with the timestamp of original command.
+    hand-grab-sphere-learn works when injecting efferent copy at (+ After 99ms) .
+* Webots
+  * DONE. Get hand-grab-sphere-learn working with Leonard's interface (and a few hacks)
 
 next meeting
+* Try (for 6 hours) to debug the Visualizer crash.
 * hand-grab-sphere
-  * Try injecting the command efferent copy at the time of completion but with the timestamp of original command.
   * Represent sphere position without direct I/O input.
   * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
     * Still need to allow multiple strong requirements in retrieve_imdl.
+* Networking example
+  * C++ I/O interface for packets going through a router. Test is real time.
 * Webots
-  * Try camera
+  * (Added hack to reset positions after release.)
+  * (Babble code was updated for extra move.)
+  * Need reprodicible behavior for failed release. (Now have using delay.)
+  * Babble move from 0 learns wrong model [Jeff]
+    * Check whether the "bogus" can be unleared, or whether they make good predictions.
+      If that doesn't work, change init() state where sphere is at 5.
+  * Try to increase friction on gripper and objects. [Leonard]
   * Use setup command for automatic discovery of AERA objects and commands
   * Get command efferent copy from Webots (move limit to +/- 20) [Maybe in the setup message. Need more discussion]
   * Let AERA send "reset" message to reset the environment. (Use after grab fails.)
   * Reset the TCP connection when resetting the Webots simulation
   * Make Visual Studio run protoc in AERA and AERA_Webots [Leonard to try]
+  * Try camera
 
 TODO
 * Change (success) to refer to the prediction mk.rdx instead of the prediction. (Affects other code.)
