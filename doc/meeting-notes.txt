@@ -1033,28 +1033,34 @@ Simulator
 * Webots
   * DONE. Get hand-grab-sphere-learn working with Leonard's interface (and a few hacks)
 
+2023-03-31
+* Webots
+  * DONE. Babble move from 0 learns different models. Check if they make good predictions. [Jeff]
+    * DONE: It works. Review/merge pull request to avoid duplicate predictions https://github.com/IIIM-IS/AERA/pull/248
+  * DONE. Incorporate Leonard's latest AERA_Webots changes.
+
 next meeting
+* Implement time interval proposal https://github.com/IIIM-IS/AERA/issues/137
+* Networking example
+  * C++ I/O interface for packets going through a router. Test in real time.
+* Webots
+  * Let AERA send "reset" message to reset the environment. (Use after grab fails.)
+  * Link to Debug version of Protobuf library.
+  * Pull request to AERA_Webots for min Z value, etc. [Jeff]
+  * Try one step so that Webots initial values are correct [Jeff]
+  * (Added hack to reset positions after release.)
+  * Need reprodicible behavior for failed release. (Now using delay.)
+  * Try to increase friction on gripper and objects. [Leonard]
+  * Use setup command for automatic discovery of AERA objects and commands
+  * Get command efferent copy from Webots (move limit to +/- 20) [Maybe in the setup message. Need more discussion]
+  * Reset the TCP connection when resetting the Webots simulation
+  * Make Visual Studio run protoc in AERA and AERA_Webots [Leonard to try]
+  * Try camera
 * Try (for 6 hours) to debug the Visualizer crash.
 * hand-grab-sphere
   * Represent sphere position without direct I/O input.
   * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
     * Still need to allow multiple strong requirements in retrieve_imdl.
-* Networking example
-  * C++ I/O interface for packets going through a router. Test is real time.
-* Webots
-  * (Added hack to reset positions after release.)
-  * (Babble code was updated for extra move.)
-  * Need reprodicible behavior for failed release. (Now have using delay.)
-  * Babble move from 0 learns wrong model [Jeff]
-    * Check whether the "bogus" can be unleared, or whether they make good predictions.
-      If that doesn't work, change init() state where sphere is at 5.
-  * Try to increase friction on gripper and objects. [Leonard]
-  * Use setup command for automatic discovery of AERA objects and commands
-  * Get command efferent copy from Webots (move limit to +/- 20) [Maybe in the setup message. Need more discussion]
-  * Let AERA send "reset" message to reset the environment. (Use after grab fails.)
-  * Reset the TCP connection when resetting the Webots simulation
-  * Make Visual Studio run protoc in AERA and AERA_Webots [Leonard to try]
-  * Try camera
 
 TODO
 * Change (success) to refer to the prediction mk.rdx instead of the prediction. (Affects other code.)
