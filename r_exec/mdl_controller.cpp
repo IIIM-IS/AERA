@@ -178,6 +178,7 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
       if (bind_results.size() == 0)
         // retrieve_imdl_fwd doesn't add a result for status such as NO_REQUIREMENT, so use the bm that we created above.
         bind_results.push_back(BindingResult(bm, NULL));
+      vector<P<_Fact> > already_predicted;
       for (size_t i = 0; i < bind_results.size(); ++i) {
         // evaluate_fwd_guards() uses bindings_, so set it to the binding map.
         bindings_ = bind_results[i].map_;
@@ -189,7 +190,7 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
           P<Fact> f_imdl_copy = new Fact(
             bindings_->bind_pattern(f_imdl->get_reference(0)), f_imdl->get_after(), f_imdl->get_before(),
             f_imdl->get_cfd(), f_imdl->get_psln_thr());
-          ((PrimaryMDLController*)controller_)->predict(bindings_, input, f_imdl_copy, chaining_allowed, r_p, bind_results[i].ground_);
+          ((PrimaryMDLController*)controller_)->predict(bindings_, input, f_imdl_copy, chaining_allowed, r_p, bind_results[i].ground_, already_predicted);
           match = true;
         }
       }
@@ -264,6 +265,7 @@ bool SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *
       if (bind_results.size() == 0)
         // retrieve_imdl_fwd doesn't add a result for status such as NO_REQUIREMENT, so use the bm that we created above.
         bind_results.push_back(BindingResult(bm, NULL));
+      vector<P<_Fact> > already_predicted;
       for (size_t i = 0; i < bind_results.size(); ++i) {
         // evaluate_fwd_guards() uses bindings_, so set it to the binding map.
         bindings_ = bind_results[i].map_;
@@ -272,7 +274,7 @@ bool SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *
           load_code();
         if (evaluate_fwd_guards()) { // may update bindings_ .
           f_imdl->set_reference(0, bindings_->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated binding map.
-          ((SecondaryMDLController*)controller_)->predict(bindings_, input, NULL, true, r_p, bind_results[i].ground_);
+          ((SecondaryMDLController*)controller_)->predict(bindings_, input, NULL, true, r_p, bind_results[i].ground_, already_predicted);
           match = true;
         }
       }
@@ -1477,7 +1479,8 @@ void TopLevelMDLController::abduce_lhs(HLPBindingMap *bm,
     " goal [" << Utils::RelativeTime(sub_goal_target->get_after()) << "," << Utils::RelativeTime(sub_goal_target->get_before()) << "]");
 }
 
-void TopLevelMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground) { // no prediction here.
+void TopLevelMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground,
+  vector<P<_Fact> >& already_predicted) { // no prediction here.
 }
 
 void TopLevelMDLController::register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures) {
@@ -1685,9 +1688,17 @@ void PrimaryMDLController::take_input(r_exec::View *input) {
     Controller::__take_input<PrimaryMDLController>(input);
 }
 
-void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground) {
+void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground,
+  vector<P<_Fact> >& already_predicted) {
 
   _Fact *bound_rhs = (_Fact *)bm->bind_pattern(rhs_); // fact or |fact.
+  // TODO: Do we need a critical section?
+  for (auto i = already_predicted.begin(); i != already_predicted.end(); ++i) {
+    // bound_rhs confidence is a wildcard, so it will match any confidence.
+    if (_Fact::MatchObject(bound_rhs, *i, true))
+      // Already predicted.
+      return;
+  }
 
   bool is_simulation;
   float32 confidence;
@@ -1766,6 +1777,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
         Fact *f_pred_f_imdl = new Fact(new Pred(f_imdl, 1), now, now, 1, 1);
         if (!inject_prediction(production, f_pred_f_imdl, confidence, before - now, NULL))
           return;
+        already_predicted.push_back(bound_rhs);
         string f_imdl_info;
 #ifdef WITH_DETAIL_OID
         f_imdl_info = " fact (" + to_string(f_imdl->get_detail_oid()) + ") imdl";
@@ -1811,6 +1823,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
     // In the Pred constructor, we already copied the simulations from prediction.
     if (!HLPController::inject_prediction(production, confidence)) // inject a simulated prediction in the primary group.
       return;
+    already_predicted.push_back(bound_rhs);
     string ground_info;
 #ifdef WITH_DETAIL_OID
     if (ground)
@@ -2877,7 +2890,8 @@ void SecondaryMDLController::reduce_batch(Fact *f_p_f_imdl, MDLController *contr
   reduce_cache<PredictedEvidenceEntry>(&predicted_evidences_, f_p_f_imdl, controller);
 }
 
-void SecondaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground) { // predicitons are not injected: they are silently produced for rating purposes.
+void SecondaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground,
+  vector<P<_Fact> >& already_predicted) { // predicitons are not injected: they are silently produced for rating purposes.
 
   _Fact *bound_rhs = (_Fact *)bm->bind_pattern(rhs_); // fact or |fact.
   Pred *_prediction = new Pred(bound_rhs, 1);
