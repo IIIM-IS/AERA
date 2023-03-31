@@ -355,6 +355,7 @@ namespace tcp_io_device {
         return;
       }
     }
+    std::cout << "Received message of type " << msg->messagetype();
 
     handleMessage(std::move(msg));
     lastInjectTime_ = now;
@@ -407,6 +408,7 @@ namespace tcp_io_device {
   template<class O, class S>
   void TcpIoDevice<O, S>::sendMessage(std::unique_ptr<TCPMessage> msg) {
     // Simply enqueue the message to send and let the TCPConnection do the actual sending.
+    std::cout << "Sending Message of type " << msg->messagetype() << std::endl;
     send_queue_->enqueue(std::move(msg));
   }
 
@@ -482,19 +484,26 @@ namespace tcp_io_device {
   {
     auto setup_message = setup_msg->release_setupmessage();
     // Initialize all entities and store their communication ids in the id_mapping_ map.
+    cout << "Setup message received." << endl;
+    cout << "Parsing entities with communication ids:" << endl;
     for (auto it = setup_message->entities().begin(); it != setup_message->entities().end(); ++it) {
       id_mapping_[it->second] = it->first;
       entities_[it->first] = NULL;
+      cout << it->first << " : " << it->second << endl;
     }
     // Initialize all commands and store their communication ids in the id_mapping_ map.
+    cout << "Parsing commands with communication ids:" << endl;
     for (auto it = setup_message->commands().begin(); it != setup_message->commands().end(); ++it) {
       id_mapping_[it->second] = it->first;
       commands_[it->first] = 0xFFFF;
+      cout << it->first << " : " << it->second << endl;
     }
     // Initialize all properties and store their communication ids in the id_mapping_ map.
+    cout << "Parsing objects with communication ids:" << endl;
     for (auto it = setup_message->objects().begin(); it != setup_message->objects().end(); ++it) {
       id_mapping_[it->second] = it->first;
       objects_[it->first] = NULL;
+      cout << it->first << " : " << it->second << endl;
     }
     // Add the ready-command, if not received from the environment simulation.
     if (commands_.find("ready") == commands_.end()) {
