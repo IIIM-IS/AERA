@@ -1554,7 +1554,7 @@ void TopLevelMDLController::register_drive_outcome(Fact *drive, bool success) co
   _Mem::Get()->inject(view); // inject in the drives group (will be caught by the drive injectors).
 }
 
-void TopLevelMDLController::register_simulated_goal_outcome(Fact *goal, bool success, _Fact *evidence) const { // evidence is a simulated prediction.
+void PMDLController::inject_simulated_goal_success(Fact *goal, bool success, _Fact *evidence) const { // evidence is a simulated prediction.
 
   Code *success_object = new Success(goal, evidence, 1);
   Pred *evidence_pred = evidence->get_pred();
@@ -1576,6 +1576,10 @@ void TopLevelMDLController::register_simulated_goal_outcome(Fact *goal, bool suc
   _Mem::Get()->inject(view); // inject in the primary group.
   OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << get_object()->get_oid() << ": fact " <<
     evidence->get_oid() << " pred -> fact " << f_pred->get_oid() << " simulated pred");
+}
+
+void TopLevelMDLController::register_simulated_goal_outcome(Fact* goal, bool success, _Fact* evidence) const { // evidence is a simulated prediction.
+  inject_simulated_goal_success(goal, success, evidence);
 }
 
 void TopLevelMDLController::register_req_outcome(Fact *f_pred, bool success, bool rate_failures) {

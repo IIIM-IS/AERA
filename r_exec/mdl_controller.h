@@ -347,6 +347,7 @@ public:
   virtual void register_goal_outcome(Fact *goal, bool success, _Fact *evidence) const = 0;
   void register_predicted_goal_outcome(Fact *goal, HLPBindingMap *bm, Fact *f_imdl, bool success, bool injected_goal);
   virtual void register_simulated_goal_outcome(Fact *goal, bool success, _Fact *evidence) const = 0;
+  void inject_simulated_goal_success(Fact* goal, bool success, _Fact* evidence) const;
 };
 
 /**
