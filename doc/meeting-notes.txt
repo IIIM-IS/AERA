@@ -1039,23 +1039,27 @@ Simulator
     * DONE: It works. Review/merge pull request to avoid duplicate predictions https://github.com/IIIM-IS/AERA/pull/248
   * DONE. Incorporate Leonard's latest AERA_Webots changes.
 
+2023-04-07
+* Webots
+  * DONE. Review/merge pull request to AERA_Webots for min Z value, etc. [Jeff] https://github.com/IIIM-IS/AERA_Webots/pull/2
+  * DONE. Review/merge pull request for one step so that Webots initial values are correct [Jeff] https://github.com/IIIM-IS/AERA_Webots/pull/3
+
 next meeting
+* Demonstrate AERA removing model for disuse.
 * Implement time interval proposal https://github.com/IIIM-IS/AERA/issues/137
-* Networking example
-  * C++ I/O interface for packets going through a router. Test in real time.
 * Webots
   * Let AERA send "reset" message to reset the environment. (Use after grab fails.)
+  * Try to increase friction on gripper and objects. [Leonard]
   * Link to Debug version of Protobuf library.
-  * Pull request to AERA_Webots for min Z value, etc. [Jeff]
-  * Try one step so that Webots initial values are correct [Jeff]
   * (Added hack to reset positions after release.)
   * Need reprodicible behavior for failed release. (Now using delay.)
-  * Try to increase friction on gripper and objects. [Leonard]
   * Use setup command for automatic discovery of AERA objects and commands
-  * Get command efferent copy from Webots (move limit to +/- 20) [Maybe in the setup message. Need more discussion]
+  * Get command efferent copy from Webots (move limit to +/- 20) [Maybe in the setup message or command reply. Need more discussion]
   * Reset the TCP connection when resetting the Webots simulation
   * Make Visual Studio run protoc in AERA and AERA_Webots [Leonard to try]
   * Try camera
+* Networking example
+  * C++ I/O interface for packets going through a router. Test in real time.
 * Try (for 6 hours) to debug the Visualizer crash.
 * hand-grab-sphere
   * Represent sphere position without direct I/O input.
