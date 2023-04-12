@@ -1067,6 +1067,27 @@ void HLPBindingMap::init_from_f_ihlp(const _Fact *f_ihlp) { // source is f->icst
   map_[fwd_before_index_] = new StructureValue(this, f_ihlp, f_ihlp->code(FACT_BEFORE).asIndex());
 }
 
+void HLPBindingMap::build_ihlp_structure(
+  const Code* hlp, uint16 hlp_structure_index, Code* ihlp, uint16& extent_index) const
+{
+  uint16 count = hlp->code(hlp_structure_index).getAtomCount();
+  ihlp->code(extent_index) = hlp->code(hlp_structure_index);
+  uint16 write_index = extent_index + 1;
+  extent_index = write_index + count;
+
+  // Copy from the HLP structure, valuating each VL_PTR.
+  for (uint16 i = 0; i < count; ++i) {
+    Atom a = hlp->code(hlp_structure_index + 1 + i);
+    if (a.getDescriptor() == Atom::VL_PTR)
+      // Valuate the arg.
+      map_[a.asIndex()]->valuate(ihlp, write_index, extent_index);
+    else
+      ihlp->code(write_index) = a;
+
+    ++write_index;
+  }
+}
+
 Fact *HLPBindingMap::build_f_ihlp(Code *hlp, uint16 opcode, bool wr_enabled) const {
 
   Code *ihlp = _Mem::Get()->build_object(Atom::Object(opcode, I_HLP_ARITY));
@@ -1075,21 +1096,15 @@ Fact *HLPBindingMap::build_f_ihlp(Code *hlp, uint16 opcode, bool wr_enabled) con
 
   uint16 tpl_arg_index = I_HLP_ARITY + 1;
   ihlp->code(I_HLP_TPL_ARGS) = Atom::IPointer(tpl_arg_index);
-  ihlp->code(tpl_arg_index) = Atom::Set(first_index_);
-  uint16 write_index = tpl_arg_index + 1;
-  uint16 extent_index = write_index + first_index_;
-  for (uint16 i = 0; i < first_index_; ++i) { // valuate tpl args.
-
-    map_[i]->valuate(ihlp, write_index, extent_index);
-    ++write_index;
-  }
+  uint16 extent_index = tpl_arg_index;
+  build_ihlp_structure(hlp, hlp->code(HLP_TPL_ARGS).asIndex(), ihlp, extent_index);
 
   ihlp->code(I_HLP_EXPOSED_ARGS) = Atom::IPointer(extent_index);
   uint16 exposed_arg_start = first_index_;
   uint16 exposed_arg_count = map_.size() - exposed_arg_start - 2; // -2: do not expose the first after/before timestamps.
   ihlp->code(extent_index) = Atom::Set(exposed_arg_count);
 
-  write_index = extent_index + 1;
+  uint16 write_index = extent_index + 1;
   extent_index = write_index + exposed_arg_count;
   for (uint16 i = exposed_arg_start; i < map_.size(); ++i) { // valuate args.
 

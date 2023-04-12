@@ -388,6 +388,17 @@ private:
    * \param structure_index The index in hlp of the structure to scan.
    */
   void add_unbound_values(const r_code::Code* hlp, uint16 structure_index);
+
+  /**
+   * Copy the structure in hlp at hlp_structure_index to ihlp at extent_index, and call valuate for
+   * each VL_PTR.
+   * \param hlp The HLP with the code.
+   * \param hlp_structure_index The index in hlp of the structure to copy.
+   * \param ihlp The ihlp to write to.
+   * \param extent_index The index in ihlp to write to. This updates extent_index to the end of written code.
+   */
+  void HLPBindingMap::build_ihlp_structure(
+    const r_code::Code* hlp, uint16 hlp_structure_index, r_code::Code* ihlp, uint16& extent_index) const;
 public:
   HLPBindingMap();
   HLPBindingMap(const HLPBindingMap *source);
