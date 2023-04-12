@@ -986,16 +986,19 @@ void HLPBindingMap::init_from_pattern(const Code *source, int16 position) { // s
     init_from_pattern(source->get_reference(i), -1);
 }
 
-void HLPBindingMap::init_from_hlp(const Code *hlp) { // hlp is cst or mdl.
+void HLPBindingMap::add_unbound_values(const Code* hlp, uint16 structure_index) {
+  uint16 arg_count = hlp->code(structure_index).getAtomCount();
+  for (uint16 i = 1; i <= arg_count; ++i) {
 
-  uint16 tpl_arg_set_index = hlp->code(HLP_TPL_ARGS).asIndex();
-  uint16 tpl_arg_count = hlp->code(tpl_arg_set_index).getAtomCount();
-  for (uint16 i = 1; i <= tpl_arg_count; ++i) {
-
-    Atom a = hlp->code(tpl_arg_set_index + i);
+    Atom a = hlp->code(structure_index + i);
     if (a.getDescriptor() == Atom::VL_PTR)
       add_unbound_value(a.asIndex());
   }
+}
+
+void HLPBindingMap::init_from_hlp(const Code *hlp) { // hlp is cst or mdl.
+
+  add_unbound_values(hlp, hlp->code(HLP_TPL_ARGS).asIndex());
 
   first_index_ = map_.size();
 

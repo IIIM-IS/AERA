@@ -381,6 +381,13 @@ private:
 
   bool need_binding(r_code::Code *pattern) const;
   void init_from_pattern(const r_code::Code *source, int16 position); // first source is f->obj.
+
+  /**
+   * Scan the structure in hlp at structure_index and call add_unbound_value for each VL_PTR.
+   * \param hlp The HLP with the code.
+   * \param structure_index The index in hlp of the structure to scan.
+   */
+  void add_unbound_values(const r_code::Code* hlp, uint16 structure_index);
 public:
   HLPBindingMap();
   HLPBindingMap(const HLPBindingMap *source);
