@@ -400,7 +400,16 @@ private:
   void build_ihlp_structure(
     const r_code::Code* hlp, uint16 hlp_structure_index, r_code::Code* ihlp, uint16& extent_index) const;
 
-  void init_from_ihlp_args(const r_code::Code* ihlp);
+  /**
+   * Scan the structure in hlp at hlp_args_index and for each VL_PTR set the binding map to a subclass of
+   * BoundValue based on the value in ihlp at ihlp_args_index.
+   * \param hlp The HLP with the code to scan.
+   * \param hlp_args_index The index in hlp of the structure to scan.
+   * \param ihlp The ihlp to init the binding map from.
+   * \param ihlp_args_index The index in ihlp of the equivalent structure as in hlp.
+   */
+  void init_from_ihlp_args(
+    const r_code::Code* hlp, uint16 hlp_args_index, const r_code::Code* ihlp, uint16 ihlp_args_index);
 public:
   HLPBindingMap();
   HLPBindingMap(const HLPBindingMap *source);
