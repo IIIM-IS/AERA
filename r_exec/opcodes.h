@@ -101,6 +101,8 @@ public:
   static uint16 PgmView;
   static uint16 GrpView;
 
+  static uint16 TI;
+
   static uint16 Ent;
   static uint16 Ont;
   static uint16 MkVal;

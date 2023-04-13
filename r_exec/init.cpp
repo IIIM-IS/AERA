@@ -375,6 +375,8 @@ bool InitOpcodes(const r_comp::Metadata& metadata) {
   Opcodes::PgmView = _Opcodes.find("pgm_view")->second;
   Opcodes::GrpView = _Opcodes.find("grp_view")->second;
 
+  Opcodes::TI = _Opcodes.find("ti")->second;
+
   Opcodes::Ent = _Opcodes.find("ent")->second;
   Opcodes::Ont = _Opcodes.find("ont")->second;
   Opcodes::MkVal = _Opcodes.find("mk.val")->second;

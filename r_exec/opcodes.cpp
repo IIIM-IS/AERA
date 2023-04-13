@@ -91,6 +91,8 @@ uint16 Opcodes::View;
 uint16 Opcodes::PgmView;
 uint16 Opcodes::GrpView;
 
+uint16 Opcodes::TI;
+
 uint16 Opcodes::Ent;
 uint16 Opcodes::Ont;
 uint16 Opcodes::MkVal;
