@@ -1011,27 +1011,32 @@ void HLPBindingMap::init_from_hlp(const Code *hlp) { // hlp is cst or mdl.
   }
 }
 
+void HLPBindingMap::init_from_ihlp_args(const Code* ihlp) {
+  uint16 ihlp_args_index = ihlp->code(I_HLP_TPL_ARGS).asIndex();
+  uint16 count = ihlp->code(ihlp_args_index).getAtomCount();
+  // valuate args.
+  for (uint16 i = 0; i < count; ++i) {
+
+    Atom ihlp_atom = ihlp->code(ihlp_args_index + 1 + i);
+    switch (ihlp_atom.getDescriptor()) {
+    case Atom::R_PTR:
+      map_[i] = new ObjectValue(this, ihlp->get_reference(ihlp_atom.asIndex()));
+      break;
+    case Atom::I_PTR:
+      map_[i] = new StructureValue(this, ihlp, ihlp_atom.asIndex());
+      break;
+    default:
+      map_[i] = new AtomValue(this, ihlp_atom);
+      break;
+    }
+  }
+}
+
 void HLPBindingMap::init_from_f_ihlp(const _Fact *f_ihlp) { // source is f->icst or f->imdl; map already initialized with values from hlp.
 
   Code *ihlp = f_ihlp->get_reference(0);
 
-  uint16 tpl_val_set_index = ihlp->code(I_HLP_TPL_ARGS).asIndex();
-  uint16 tpl_val_count = ihlp->code(tpl_val_set_index++).getAtomCount();
-  for (uint16 i = 0; i < tpl_val_count; ++i) { // valuate tpl args.
-
-    Atom atom = ihlp->code(tpl_val_set_index + i);
-    switch (atom.getDescriptor()) {
-    case Atom::R_PTR:
-      map_[i] = new ObjectValue(this, ihlp->get_reference(atom.asIndex()));
-      break;
-    case Atom::I_PTR:
-      map_[i] = new StructureValue(this, ihlp, atom.asIndex());
-      break;
-    default:
-      map_[i] = new AtomValue(this, atom);
-      break;
-    }
-  }
+  init_from_ihlp_args(ihlp);
 
   uint16 val_set_index = ihlp->code(I_HLP_EXPOSED_ARGS).asIndex() + 1;
   uint32 i = 0;
