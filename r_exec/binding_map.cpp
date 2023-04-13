@@ -510,7 +510,8 @@ void BindingMap::abstract_member(const Code *object, uint16 index, Code *abstrac
     }
     break;
   }case Atom::I_PTR:
-    if (object->code(ai).getDescriptor() == Atom::SET) {
+    // If there is a SET or an OBJECT, then we use its structure.
+    if (object->code(ai).getDescriptor() == Atom::SET || object->code(ai).getDescriptor() == Atom::OBJECT) {
 
       abstracted_object->code(write_index) = Atom::IPointer(extent_index);
 
@@ -998,6 +999,9 @@ void HLPBindingMap::add_unbound_values(const Code* hlp, uint16 structure_index) 
     Atom a = hlp->code(structure_index + i);
     if (a.getDescriptor() == Atom::VL_PTR)
       add_unbound_value(a.asIndex());
+    else if (a.getDescriptor() == Atom::I_PTR)
+      // Recurse into the structure.
+      add_unbound_values(hlp, hlp->code(structure_index + i).asIndex());
   }
 }
 
@@ -1028,6 +1032,15 @@ void HLPBindingMap::init_from_ihlp_args(
 
     Atom hlp_atom = hlp->code(hlp_args_index + 1 + i);
     Atom ihlp_atom = ihlp->code(ihlp_args_index + 1 + i);
+
+    if (hlp_atom.getDescriptor() == Atom::I_PTR) {
+      if (ihlp_atom.getDescriptor() != Atom::I_PTR)
+        // Can't get values from the ihlp
+        continue;
+      // Recurse into the structure.
+      init_from_ihlp_args(hlp, hlp_atom.asIndex(), ihlp, ihlp_atom.asIndex());
+      continue;
+    }
     if (hlp_atom.getDescriptor() != Atom::VL_PTR)
       // No variable to set.
       continue;
@@ -1101,6 +1114,11 @@ void HLPBindingMap::build_ihlp_structure(
     if (a.getDescriptor() == Atom::VL_PTR)
       // Valuate the arg.
       map_[a.asIndex()]->valuate(ihlp, write_index, extent_index);
+    else if (a.getDescriptor() == Atom::I_PTR) {
+      ihlp->code(write_index) = Atom::IPointer(extent_index);
+      // Recurse into the structure.
+      build_ihlp_structure(hlp, a.asIndex(), ihlp, extent_index);
+    }
     else
       ihlp->code(write_index) = a;
 
