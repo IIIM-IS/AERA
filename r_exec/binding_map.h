@@ -397,10 +397,10 @@ private:
    * \param ihlp The ihlp to write to.
    * \param extent_index The index in ihlp to write to. This updates extent_index to the end of written code.
    */
-  void HLPBindingMap::build_ihlp_structure(
+  void build_ihlp_structure(
     const r_code::Code* hlp, uint16 hlp_structure_index, r_code::Code* ihlp, uint16& extent_index) const;
 
-  void HLPBindingMap::init_from_ihlp_args(const r_code::Code* ihlp);
+  void init_from_ihlp_args(const r_code::Code* ihlp);
 public:
   HLPBindingMap();
   HLPBindingMap(const HLPBindingMap *source);
