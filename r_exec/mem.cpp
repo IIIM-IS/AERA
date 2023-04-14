@@ -84,7 +84,6 @@
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
 #include <algorithm>
-#include <deque>
 #include "mem.h"
 #include "mdl_controller.h"
 #include "model_base.h"
@@ -528,128 +527,140 @@ void _Mem::run_in_diagnostic_time(milliseconds run_time) {
     // This should only be called if there are no running core threads.
     return;
 
+  DiagnosticTimeState diagnostic_time_state(this, run_time);
+  // Step until we reach the run_time.
+  while (diagnostic_time_state.step()) {}
+}
+
+DiagnosticTimeState::DiagnosticTimeState(_Mem* mem, milliseconds run_time)
+  : mem_(mem),
+    run_time_(run_time),
+    n_reduction_jobs_this_sampling_period_(0) {
+  tick_time_ = Now();
+  mem_->on_diagnostic_time_tick();
+  end_time_ = Now() + run_time_;
+  pass_number_ = 1;
+}
+
+bool DiagnosticTimeState::step() {
   // The maximum number of reduction jobs to run before trying a time job.
   // Average job time is 10us. 10000 jobs is 100000us, which is the sampling period.
   // Assume 8 threads (on 4 cores), so allow 10000 * 8 = 80000 jobs per cycle.
   const size_t max_reduction_jobs_per_cycle = 80000;
-  size_t n_reduction_jobs_this_sampling_period = 0;
-  vector<P<_ReductionJob>> reduction_job_queue;
-  // Use a deque so we can efficiently remove from the front.
-  std::deque<P<TimeJob>> ordered_time_job_queue;
 
-  auto tick_time = Now();
-  on_diagnostic_time_tick();
-  auto end_time = Now() + run_time;
+  if (mem_->get_state() == _Mem::STOPPED)
+    return false;
 
-  // Loop until the runTimeMilliseconds expires.
-  while (true) {
-    if (state_ == STOPPED)
-      break;
-
-    // Reduction jobs can add more reduction jobs, so make a few passes.
-    for (int pass_number = 1; pass_number <= 100; ++pass_number) {
-      // Transfer all reduction jobs to a local queue and run only these.
-      // Below, we only run one time job, so any extra jobs that these reduction
-      // jobs add will be run on the next pass after running the time job.
-      while (true) {
-        P<_ReductionJob> reduction_job = pop_reduction_job(false);
-        if (reduction_job == NULL)
-          // No more reduction jobs.
-          break;
-        reduction_job_queue.push_back(reduction_job);
-      }
-
-      size_t n_jobs_to_run = min(reduction_job_queue.size(), max_reduction_jobs_per_cycle);
-      if (n_jobs_to_run == 0)
-        break;
-      for (size_t i = 0; i < n_jobs_to_run; ++i) {
-        reduction_job_queue[i]->update(Now());
-        reduction_job_queue[i] = NULL;
-      }
-      n_reduction_jobs_this_sampling_period += n_jobs_to_run;
-
-      if (reduction_job_queue.size() > max_reduction_jobs_per_cycle)
-        // There are remaining jobs to be run. Shift them to the front.
-        reduction_job_queue.erase(
-          reduction_job_queue.begin(), reduction_job_queue.begin() + max_reduction_jobs_per_cycle);
-      else
-        reduction_job_queue.clear();
-
-      if (n_reduction_jobs_this_sampling_period >= max_reduction_jobs_per_cycle)
-        // We have hit the limit of reduction jobs this sampling period.
-        break;
-    }
-
-    // Transfer all time jobs to ordered_time_job_queue,
-    // sorted on target_time_.
+  // Reduction jobs can add more reduction jobs, so make a few passes.
+  if (pass_number_ <= 100) {
+    // Transfer all reduction jobs to a local queue and run only these.
+    // Below, we only run one time job, so any extra jobs that these reduction
+    // jobs add will be run on the next pass after running the time job.
     while (true) {
-      P<TimeJob> time_job = pop_time_job(false);
-      if (time_job == NULL)
-        // No more time jobs.
+      P<_ReductionJob> reduction_job = mem_->pop_reduction_job(false);
+      if (reduction_job == NULL)
+        // No more reduction jobs.
         break;
-
-      ordered_time_job_queue.insert(
-        upper_bound(ordered_time_job_queue.begin(),
-          ordered_time_job_queue.end(), time_job, time_job_compare_),
-        time_job);
+      reduction_job_queue_.push_back(reduction_job);
     }
 
-    if (Now() >= end_time)
-      // Finished.
-      break;
-
-    // The entry at the front is the earliest.
-    if (ordered_time_job_queue.size() == 0 ||
-      ordered_time_job_queue.front()->target_time_ >=
-        tick_time + get_sampling_period()) {
-      // There is no time job before the next tick time, so tick.
-      tick_time += get_sampling_period();
-      // Increase the diagnostic time to the tick time.
-      diagnostic_time_now_ = tick_time;
-      // We are beginning a new sampling period.
-      n_reduction_jobs_this_sampling_period = 0;
-      on_diagnostic_time_tick();
-
-      // Loop again in case on_diagnostic_time_tick() added a reduction job,
-      // or a reduction job will add more time jobs.
-      continue;
+    size_t n_jobs_to_run = min(reduction_job_queue_.size(), max_reduction_jobs_per_cycle);
+    if (n_jobs_to_run == 0)
+      goto end_passes;
+    for (size_t i = 0; i < n_jobs_to_run; ++i) {
+      reduction_job_queue_[i]->update(Now());
+      reduction_job_queue_[i] = NULL;
     }
+    n_reduction_jobs_this_sampling_period_ += n_jobs_to_run;
 
-    if (ordered_time_job_queue.size() == 0)
-      // No time jobs. Loop again in case a reduction job will add one.
-      continue;
-
-    if (ordered_time_job_queue.front()->target_time_ > Now())
-      // Increase the diagnostic time to the job's target time.
-      diagnostic_time_now_ = ordered_time_job_queue.front()->target_time_;
-
-    // Only process one job in case it adds more jobs.
-    P<TimeJob> time_job = ordered_time_job_queue.front();
-    ordered_time_job_queue.erase(ordered_time_job_queue.begin());
-
-    if (!time_job->is_alive()) {
-      time_job = NULL;
-      continue;
-    }
-
-    Timestamp next_target(seconds(0));
-    if (!time_job->update(next_target)) {
-      // update() says to stop running.
-      time_job = NULL;
-      break;
-    }
-
-    if (next_target.time_since_epoch().count() != 0) {
-      // The job wants to run again, so re-insert into the queue.
-      time_job->target_time_ = next_target;
-      ordered_time_job_queue.insert(
-        upper_bound(ordered_time_job_queue.begin(),
-          ordered_time_job_queue.end(), time_job, time_job_compare_),
-        time_job);
-    }
+    if (reduction_job_queue_.size() > max_reduction_jobs_per_cycle)
+      // There are remaining jobs to be run. Shift them to the front.
+      reduction_job_queue_.erase(
+        reduction_job_queue_.begin(), reduction_job_queue_.begin() + max_reduction_jobs_per_cycle);
     else
-      time_job = NULL;
+      reduction_job_queue_.clear();
+
+    if (n_reduction_jobs_this_sampling_period_ >= max_reduction_jobs_per_cycle)
+      // We have hit the limit of reduction jobs this sampling period.
+      goto end_passes;
+
+    ++pass_number_;
+    // Try the next pass.
+    return true;
   }
+
+end_passes:
+  pass_number_ = 1;
+
+  // Transfer all time jobs to ordered_time_job_queue_,
+  // sorted on target_time_.
+  while (true) {
+    P<TimeJob> time_job = mem_->pop_time_job(false);
+    if (time_job == NULL)
+      // No more time jobs.
+      break;
+
+    ordered_time_job_queue_.insert(
+      upper_bound(ordered_time_job_queue_.begin(),
+        ordered_time_job_queue_.end(), time_job, time_job_compare_),
+      time_job);
+  }
+
+  if (Now() >= end_time_)
+    // Finished.
+    return false;
+
+  // The entry at the front is the earliest.
+  if (ordered_time_job_queue_.size() == 0 ||
+    ordered_time_job_queue_.front()->target_time_ >=
+      tick_time_ + mem_->get_sampling_period()) {
+    // There is no time job before the next tick time, so tick.
+    tick_time_ += mem_->get_sampling_period();
+    // Increase the diagnostic time to the tick time.
+    _Mem::diagnostic_time_now_ = tick_time_;
+    // We are beginning a new sampling period.
+    n_reduction_jobs_this_sampling_period_ = 0;
+    mem_->on_diagnostic_time_tick();
+
+    // Step again in case on_diagnostic_time_tick() added a reduction job,
+    // or a reduction job will add more time jobs.
+    return true;
+  }
+
+  if (ordered_time_job_queue_.size() == 0)
+    // No time jobs. Step again in case a reduction job will add one.
+    return true;
+
+  if (ordered_time_job_queue_.front()->target_time_ > Now())
+    // Increase the diagnostic time to the job's target time.
+    _Mem::diagnostic_time_now_ = ordered_time_job_queue_.front()->target_time_;
+
+  // Only process one job in case it adds more jobs.
+  P<TimeJob> time_job = ordered_time_job_queue_.front();
+  ordered_time_job_queue_.erase(ordered_time_job_queue_.begin());
+
+  if (!time_job->is_alive()) {
+    time_job = NULL;
+    return true;
+  }
+
+  Timestamp next_target(seconds(0));
+  if (!time_job->update(next_target)) {
+    // update() says to stop running.
+    time_job = NULL;
+    return true;
+  }
+
+  if (next_target.time_since_epoch().count() != 0) {
+    // The job wants to run again, so re-insert into the queue.
+    time_job->target_time_ = next_target;
+    ordered_time_job_queue_.insert(
+      upper_bound(ordered_time_job_queue_.begin(),
+        ordered_time_job_queue_.end(), time_job, time_job_compare_),
+      time_job);
+  }
+  else
+    time_job = NULL;
 }
 
 Timestamp _Mem::diagnostic_time_now_ = Timestamp(microseconds(1));

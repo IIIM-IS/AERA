@@ -93,6 +93,7 @@
 #include "dll.h"
 
 #include <list>
+#include <deque>
 
 #include "../r_code/list.h"
 #include "../r_comp/segments.h"
@@ -153,7 +154,6 @@ protected:
   PipeNN<P<TimeJob>, 1024> *time_job_queue_;
   ReductionCore **reduction_cores_;
   TimeCore **time_cores_;
-  TimeJob::Compare time_job_compare_;
 
   // Performance stats.
   uint32 reduction_job_count_;
@@ -233,6 +233,7 @@ public:
     uint32 traces,
     bool keep_invalidated_objects);
 
+  State get_state() const { return state_;  }
   /**
    * Get the sampling period, which is 2 * base_period from settings.xml. This should
    * match sampling_period in user.classes.replicode.
@@ -715,6 +716,38 @@ public:
    */
   static std::ostream &Output(TraceLevel l);
 };
+
+/**
+ * DiagnosticTimeState holds the state of stepping in diagnostic time.
+ */
+class DiagnosticTimeState {
+public:
+  /**
+   * Initialize a DiagnosticTimeState and call mem_->on_diagnostic_time_tick() once
+   * to initialize it too.
+   * \param mem The main _Mem object.
+   * \param run_time The run time. See step().
+   */
+  DiagnosticTimeState(_Mem* mem, std::chrono::milliseconds run_time);
+
+  /**
+   * Do one step in diagnostic time. This runs one reduction job or one time job (or neither).
+   * \return True if finished (reached the run_time), false if you should call this again.
+   */
+  bool step();
+private:
+  _Mem* mem_;
+  std::chrono::milliseconds run_time_;
+  TimeJob::Compare time_job_compare_;
+  size_t n_reduction_jobs_this_sampling_period_;
+  std::vector<P<_ReductionJob>> reduction_job_queue_;
+  // Use a deque so we can efficiently remove from the front.
+  std::deque<P<TimeJob>> ordered_time_job_queue_;
+  Timestamp tick_time_;
+  Timestamp end_time_;
+  int pass_number_;
+};
+
 
 // _Mem that stores the objects as long as they are not invalidated.
 class r_exec_dll MemStatic :
