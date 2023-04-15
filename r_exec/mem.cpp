@@ -535,7 +535,8 @@ void _Mem::run_in_diagnostic_time(milliseconds run_time) {
 DiagnosticTimeState::DiagnosticTimeState(_Mem* mem, milliseconds run_time)
   : mem_(mem),
     run_time_(run_time),
-    n_reduction_jobs_this_sampling_period_(0) {
+    n_reduction_jobs_this_sampling_period_(0),
+    reduction_job_queue_index_(0) {
   tick_time_ = Now();
   mem_->on_diagnostic_time_tick();
   end_time_ = Now() + run_time_;
@@ -553,43 +554,51 @@ bool DiagnosticTimeState::step() {
 
   // Reduction jobs can add more reduction jobs, so make a few passes.
   if (pass_number_ <= 100) {
-    // Transfer all reduction jobs to a local queue and run only these.
-    // Below, we only run one time job, so any extra jobs that these reduction
-    // jobs add will be run on the next pass after running the time job.
-    while (true) {
-      P<_ReductionJob> reduction_job = mem_->pop_reduction_job(false);
-      if (reduction_job == NULL)
-        // No more reduction jobs.
-        break;
-      reduction_job_queue_.push_back(reduction_job);
+    if (reduction_job_queue_index_ == 0) {
+      // We're ready to run the first reduction job for this pass.
+      // Transfer all reduction jobs to a local queue and run only these.
+      // Below, we only run one time job, so any extra jobs that these reduction
+      // jobs add will be run on the next pass after running the time job.
+      while (true) {
+        P<_ReductionJob> reduction_job = mem_->pop_reduction_job(false);
+        if (reduction_job == NULL)
+          // No more reduction jobs.
+          break;
+        reduction_job_queue_.push_back(reduction_job);
+      }
     }
 
     size_t n_jobs_to_run = min(reduction_job_queue_.size(), max_reduction_jobs_per_cycle);
-    if (n_jobs_to_run == 0)
-      goto end_passes;
-    for (size_t i = 0; i < n_jobs_to_run; ++i) {
-      reduction_job_queue_[i]->update(Now());
-      reduction_job_queue_[i] = NULL;
+    if (n_jobs_to_run > 0) {
+      if (reduction_job_queue_index_ < n_jobs_to_run) {
+        reduction_job_queue_[reduction_job_queue_index_]->update(Now());
+        reduction_job_queue_[reduction_job_queue_index_] = NULL;
+        ++reduction_job_queue_index_;
+        // Try the next reduction job.
+        return true;
+      }
+      // We have done all the reduction jobs for this pass, so reset.
+      reduction_job_queue_index_ = 0;
+
+      n_reduction_jobs_this_sampling_period_ += n_jobs_to_run;
+
+      if (reduction_job_queue_.size() > max_reduction_jobs_per_cycle)
+        // There are remaining jobs to be run. Shift them to the front.
+        reduction_job_queue_.erase(
+          reduction_job_queue_.begin(), reduction_job_queue_.begin() + max_reduction_jobs_per_cycle);
+      else
+        reduction_job_queue_.clear();
+
+      // Make sure we haven't hit the limit of reduction jobs this sampling period.
+      if (n_reduction_jobs_this_sampling_period_ < max_reduction_jobs_per_cycle) {
+        ++pass_number_;
+        // Try the next pass.
+        return true;
+      }
     }
-    n_reduction_jobs_this_sampling_period_ += n_jobs_to_run;
-
-    if (reduction_job_queue_.size() > max_reduction_jobs_per_cycle)
-      // There are remaining jobs to be run. Shift them to the front.
-      reduction_job_queue_.erase(
-        reduction_job_queue_.begin(), reduction_job_queue_.begin() + max_reduction_jobs_per_cycle);
-    else
-      reduction_job_queue_.clear();
-
-    if (n_reduction_jobs_this_sampling_period_ >= max_reduction_jobs_per_cycle)
-      // We have hit the limit of reduction jobs this sampling period.
-      goto end_passes;
-
-    ++pass_number_;
-    // Try the next pass.
-    return true;
   }
 
-end_passes:
+  // We have done all the passes, so reset.
   pass_number_ = 1;
 
   // Transfer all time jobs to ordered_time_job_queue_,
@@ -661,6 +670,8 @@ end_passes:
   }
   else
     time_job = NULL;
+
+  return true;
 }
 
 Timestamp _Mem::diagnostic_time_now_ = Timestamp(microseconds(1));

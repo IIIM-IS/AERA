@@ -741,6 +741,7 @@ private:
   TimeJob::Compare time_job_compare_;
   size_t n_reduction_jobs_this_sampling_period_;
   std::vector<P<_ReductionJob>> reduction_job_queue_;
+  size_t reduction_job_queue_index_;
   // Use a deque so we can efficiently remove from the front.
   std::deque<P<TimeJob>> ordered_time_job_queue_;
   Timestamp tick_time_;
