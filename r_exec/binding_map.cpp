@@ -515,7 +515,7 @@ void BindingMap::abstract_member(Code *object, uint16 index, Code *abstracted_ob
       abstracted_object->code(write_index) = Atom::IPointer(extent_index);
 
       uint16 element_count = object->code(ai).getAtomCount();
-      abstracted_object->code(extent_index) = Atom::Set(element_count);
+      abstracted_object->code(extent_index) = object->code(ai);
       uint16 _write_index = extent_index;
       extent_index += element_count + 1;
       for (uint16 i = 1; i <= element_count; ++i)
