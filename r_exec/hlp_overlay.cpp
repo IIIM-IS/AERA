@@ -233,12 +233,12 @@ bool HLPOverlay::scan_bwd_guards() const {
     Atom a = code_[index];
     switch (a.getDescriptor()) {
     case Atom::I_PTR:
-      if (!scan_location(a.asIndex()))
+      if (!scan_location(a.asIndex(), index))
         return false;
       break;
     case Atom::ASSIGN_PTR:
       // If scan_location fails, then succeed if the assignment variable is already bound.
-      if (!scan_location(a.asIndex()) && !bindings_->scan_variable(a.asAssignmentIndex()))
+      if (!scan_location(a.asIndex(), index) && !bindings_->scan_variable(a.asAssignmentIndex()))
         return false;
       break;
     }
@@ -246,24 +246,24 @@ bool HLPOverlay::scan_bwd_guards() const {
   return true;
 }
 
-bool HLPOverlay::scan_location(uint16 index) const {
+bool HLPOverlay::scan_location(uint16 index, uint16 parent_guard_index) const {
 
   Atom a = code_[index];
   switch (a.getDescriptor()) {
   case Atom::I_PTR:
-    return scan_location(a.asIndex());
+    return scan_location(a.asIndex(), parent_guard_index);
   case Atom::ASSIGN_PTR:
-    return scan_location(a.asIndex());
+    return scan_location(a.asIndex(), parent_guard_index);
   case Atom::VL_PTR:
     if (bindings_->scan_variable(a.asIndex()))
       return true;
     else
-      return scan_variable(a.asIndex());
+      return scan_variable(a.asIndex(), parent_guard_index);
   case Atom::OPERATOR: {
     uint16 atom_count = a.getAtomCount();
     for (uint16 j = 1; j <= atom_count; ++j) {
 
-      if (!scan_location(index + j))
+      if (!scan_location(index + j, parent_guard_index))
         return false;
     }
     return true;
@@ -273,7 +273,7 @@ bool HLPOverlay::scan_location(uint16 index) const {
   }
 }
 
-bool HLPOverlay::scan_variable(uint16 index) const { // check if the variable can be bound.
+bool HLPOverlay::scan_variable(uint16 index, uint16 parent_guard_index) const { // check if the variable can be bound.
 
   uint16 guard_set_index = code_[HLP_BWD_GUARDS].asIndex();
   uint16 guard_count = code_[guard_set_index].getAtomCount();
@@ -283,8 +283,12 @@ bool HLPOverlay::scan_variable(uint16 index) const { // check if the variable ca
     Atom a = code_[guard_index];
     switch (a.getDescriptor()) {
     case Atom::ASSIGN_PTR:
-      if (a.asAssignmentIndex() == index)
-        return scan_location(a.asIndex());
+      if (a.asAssignmentIndex() == index) {
+        if (guard_index == parent_guard_index)
+          // Prevent loops.
+          return false;
+        return scan_location(a.asIndex(), guard_index);
+      }
       break;
     }
   }

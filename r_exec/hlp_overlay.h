@@ -116,8 +116,8 @@ protected:
   bool evaluate_fwd_timings();
 
   bool scan_bwd_guards() const;
-  bool scan_location(uint16 index) const;
-  bool scan_variable(uint16 index) const;
+  bool scan_location(uint16 index, uint16 parent_guard_index) const;
+  bool scan_variable(uint16 index, uint16 parent_guard_index) const;
 
   void store_evidence(_Fact *evidence, bool prediction, bool is_simulation); // stores both actual and non-simulated predicted evidences.
 
