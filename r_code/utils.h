@@ -185,8 +185,13 @@ public:
   template<class O> static bool HasTimestamp(const O *object, uint16 index) {
     if (object->code_size() <= index)
       return false;
-    uint16 t_index = object->code(index).asIndex();
-    return object->code_size() > t_index + 2;
+    Atom a = object->code(index);
+    if (a.getDescriptor() != Atom::I_PTR)
+      return false;
+    uint16 t_index = a.asIndex();
+    if (object->code_size() <= t_index + 2)
+      return false;
+    return object->code(t_index).getDescriptor() == Atom::TIMESTAMP;
   }
 
   /**
