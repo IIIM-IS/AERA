@@ -1041,15 +1041,18 @@ Simulator
 
 2023-04-07
 * Webots
-  * DONE. Review/merge pull request to AERA_Webots for min Z value, etc. [Jeff] https://github.com/IIIM-IS/AERA_Webots/pull/2
+  * DONE. Review/merge pull request for min Z value, etc. [Jeff] https://github.com/IIIM-IS/AERA_Webots/pull/2
   * DONE. Review/merge pull request for one step so that Webots initial values are correct [Jeff] https://github.com/IIIM-IS/AERA_Webots/pull/3
 
+2023-04-21
+* DONE. In _Mem::run_in_diagnostic_time, factor out code in the main loop as DiagnosticTimeState::step().
+
 next meeting
-* Demonstrate AERA removing model for disuse.
-* Implement time interval proposal https://github.com/IIIM-IS/AERA/issues/137
+* Pull request to implement time interval proposal https://github.com/IIIM-IS/AERA/issues/137  https://github.com/IIIM-IS/AERA/pull/250
+  * First need to solve bug for using the narrowed timing values in the imdl https://github.com/IIIM-IS/AERA/issues/251
 * Webots
   * Let AERA send "reset" message to reset the environment. (Use after grab fails.)
-  * Try to increase friction on gripper and objects. [Leonard]
+  * Try to increase friction on gripper and objects. [Leonard] https://github.com/IIIM-IS/AERA_Webots/pull/4
   * Link to Debug version of Protobuf library.
   * (Added hack to reset positions after release.)
   * Need reprodicible behavior for failed release. (Now using delay.)
@@ -1058,6 +1061,7 @@ next meeting
   * Reset the TCP connection when resetting the Webots simulation
   * Make Visual Studio run protoc in AERA and AERA_Webots [Leonard to try]
   * Try camera
+* Demonstrate AERA removing model for disuse.
 * Networking example
   * C++ I/O interface for packets going through a router. Test in real time.
 * Try (for 6 hours) to debug the Visualizer crash.
