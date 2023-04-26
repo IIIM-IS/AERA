@@ -180,7 +180,7 @@ private:
   StructureValue(BindingMap *map, const r_code::Code *structure);
 public:
   StructureValue(BindingMap *map, const r_code::Code *source, uint16 structure_index);
-  StructureValue(BindingMap *map, Atom *source, uint16 structure_index);
+  StructureValue(BindingMap *map, const Atom *source, uint16 structure_index);
   StructureValue(BindingMap *map, Timestamp time);
   StructureValue(BindingMap *map, std::chrono::microseconds duration);
 
@@ -243,7 +243,7 @@ protected:
   bool match_fwd_timings(const _Fact *f_object);
   bool match(const r_code::Code *object, uint16 o_base_index, uint16 o_index, const r_code::Code *pattern, uint16 p_index, uint16 o_arity);
 
-  void abstract_member(r_code::Code *object, uint16 index, r_code::Code *abstracted_object, uint16 write_index, uint16 &extent_index, int first_search_index = 0);
+  void abstract_member(const r_code::Code *object, uint16 index, r_code::Code *abstracted_object, uint16 write_index, uint16 &extent_index, int first_search_index = 0);
   Atom get_atom_variable(Atom a);
 
   /**
@@ -256,7 +256,7 @@ protected:
    * add the structure as a new binding. If omitted, then use 0 to search the whole map from the beginning.
    * \return A VLPointer to the index in the bindings of the structure (possible of a new binding).
    */
-  Atom get_structure_variable(r_code::Code *object, uint16 index, int first_search_index = 0);
+  Atom get_structure_variable(const r_code::Code *object, uint16 index, int first_search_index = 0);
   Atom get_object_variable(r_code::Code *object);
 public:
   BindingMap();
@@ -269,7 +269,7 @@ public:
 
   virtual void clear();
 
-  void init(r_code::Code *object, uint16 index);
+  void init(const r_code::Code *object, uint16 index);
 
   _Fact *abstract_f_ihlp(_Fact *fact) const; // for icst and imdl.
 
@@ -280,7 +280,7 @@ public:
    * \param timing_vars_first_search_index (optional) Use this for first_search_index when calling
    * abstract_member() for the fact's timing values. If omitted, use 0.
    */
-  _Fact *abstract_fact(_Fact *fact, _Fact *original, bool force_sync, int timing_vars_first_search_index = 0);
+  _Fact *abstract_fact(_Fact *fact, const _Fact *original, bool force_sync, int timing_vars_first_search_index = 0);
   r_code::Code *abstract_object(r_code::Code *object, bool force_sync, int timing_vars_first_search_index = 0);
 
   void reset_fwd_timings(_Fact *reference_fact); // reset after and before from the timings of the reference object.

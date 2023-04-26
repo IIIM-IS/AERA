@@ -228,7 +228,7 @@ StructureValue::StructureValue(BindingMap *map, const Code *source, uint16 struc
     structure_->code(i) = source->code(structure_index + i);
 }
 
-StructureValue::StructureValue(BindingMap *map, Atom *source, uint16 structure_index) : BoundValue(map) {
+StructureValue::StructureValue(BindingMap *map, const Atom *source, uint16 structure_index) : BoundValue(map) {
 
   structure_ = new LocalObject();
   for (uint16 i = 0; i <= source[structure_index].getAtomCount(); ++i)
@@ -411,7 +411,7 @@ _Fact *BindingMap::abstract_f_ihlp(_Fact *f_ihlp) const { // bindings are set al
   return _f_ihlp;
 }
 
-_Fact *BindingMap::abstract_fact(_Fact *fact, _Fact *original, bool force_sync, int timing_vars_first_search_index) { // abstract values as they are encountered.
+_Fact *BindingMap::abstract_fact(_Fact *fact, const _Fact *original, bool force_sync, int timing_vars_first_search_index) { // abstract values as they are encountered.
 
   if (fwd_after_index_ == -1)
     first_index_ = map_.size();
@@ -490,7 +490,7 @@ uint16 BindingMap::get_abstracted_ihlp_exposed_args_index(const Code* ihlp) {
   return template_args_index + 1 + ihlp->code(template_args_index).getAtomCount();
 }
 
-void BindingMap::abstract_member(Code *object, uint16 index, Code *abstracted_object, uint16 write_index, uint16 &extent_index, int first_search_index) {
+void BindingMap::abstract_member(const Code *object, uint16 index, Code *abstracted_object, uint16 write_index, uint16 &extent_index, int first_search_index) {
 
   Atom a = object->code(index);
   uint16 ai = a.asIndex();
@@ -529,7 +529,7 @@ void BindingMap::abstract_member(Code *object, uint16 index, Code *abstracted_ob
   }
 }
 
-void BindingMap::init(Code *object, uint16 index) {
+void BindingMap::init(const Code *object, uint16 index) {
 
   Atom a = object->code(index);
   switch (a.getDescriptor()) {
@@ -564,7 +564,7 @@ Atom BindingMap::get_atom_variable(Atom a) {
   return Atom::VLPointer(size);
 }
 
-Atom BindingMap::get_structure_variable(Code *object, uint16 index, int first_search_index) {
+Atom BindingMap::get_structure_variable(const Code *object, uint16 index, int first_search_index) {
 
   if (first_search_index >= 0 && map_.size() > 0) {
     if (first_search_index > map_.size())
@@ -586,7 +586,7 @@ Atom BindingMap::get_structure_variable(Code *object, uint16 index, int first_se
   }
 
   uint32 size = map_.size();
-  map_.push_back(new StructureValue(this, object, index));
+  map_.push_back(new StructureValue(this, &object->code(0), index));
   return Atom::VLPointer(size);
 }
 
