@@ -751,21 +751,26 @@ void BindingMap::reset_fwd_timings(_Fact *reference_fact) { // valuate at after_
 
 bool BindingMap::match_timings(Timestamp after, Timestamp before, uint32 after_index, uint32 before_index) {
 
-  Timestamp stored_after = Utils::GetTimestamp(map_[after_index]->get_code());
-  Timestamp stored_before = Utils::GetTimestamp(map_[before_index]->get_code());
+  Atom* after_code = map_[after_index]->get_code();
+  Atom* before_code = map_[before_index]->get_code();
+  if (after_code[0].getDescriptor() != Atom::TIMESTAMP ||
+      before_code[0].getDescriptor() != Atom::TIMESTAMP)
+    return false;
+  Timestamp stored_after = Utils::GetTimestamp(after_code);
+  Timestamp stored_before = Utils::GetTimestamp(before_code);
 
   if (stored_after <= after) {
 
     if (stored_before >= before) { // sa a b sb
 
-      Utils::SetTimestamp(map_[after_index]->get_code(), after);
-      Utils::SetTimestamp(map_[before_index]->get_code(), before);
+      Utils::SetTimestamp(after_code, after);
+      Utils::SetTimestamp(before_code, before);
       return true;
     } else {
 
       if (stored_before > after) { // sa a sb b
 
-        Utils::SetTimestamp(map_[after_index]->get_code(), after);
+        Utils::SetTimestamp(after_code, after);
         return true;
       }
       return false;
@@ -776,7 +781,7 @@ bool BindingMap::match_timings(Timestamp after, Timestamp before, uint32 after_i
       return true;
     else if (stored_after < before) { // a sa b sb
 
-      Utils::SetTimestamp(map_[before_index]->get_code(), before);
+      Utils::SetTimestamp(before_code, before);
       return true;
     }
     return false;
