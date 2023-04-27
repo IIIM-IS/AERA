@@ -1973,8 +1973,6 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
 
     sim_thz -= min_sim_thz;
 
-    f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
-
     auto now = Now();
     switch (sim->get_mode()) {
     case SIM_ROOT:
@@ -2065,7 +2063,6 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
     SimMode mode = sim->get_mode();
     switch (mode) {
     case SIM_ROOT:
-      f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
       switch (retrieve_imdl_bwd(bm, f_imdl, ground, strong_requirement_ground)) {
       case WEAK_REQUIREMENT_ENABLED:
         f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(true);
