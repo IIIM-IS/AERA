@@ -44,6 +44,9 @@
 !def SIM_OPTIONAL 1
 !def SIM_MANDATORY 2
 
+; A time interval to use as a template parameter, etc. Matching two ti objects is flexible.
+!class (ti after:ts before:ts)
+
 ; mapping high-level objects -> r-code.
 !class (mk.val (_obj {obj: attr:ont val:}))
 !class (mk.act (_obj {actr:ent cmd:cmd}))

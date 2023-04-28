@@ -510,7 +510,8 @@ void BindingMap::abstract_member(const Code *object, uint16 index, Code *abstrac
     }
     break;
   }case Atom::I_PTR:
-    if (object->code(ai).getDescriptor() == Atom::SET) {
+    // If there is a SET or an OBJECT, then we use its structure.
+    if (object->code(ai).getDescriptor() == Atom::SET || object->code(ai).getDescriptor() == Atom::OBJECT) {
 
       abstracted_object->code(write_index) = Atom::IPointer(extent_index);
 
@@ -738,6 +739,22 @@ bool BindingMap::match_structure(const Code *object, uint16 o_base_index, uint16
     return true;
   if (o_atom.getDescriptor() == Atom::TIMESTAMP)
     return Utils::Synchronous(Utils::GetTimestamp(&object->code(o_full_index)), Utils::GetTimestamp(&pattern->code(p_index)));
+  if (p_atom == Atom::Object(Opcodes::TI, 2)) {
+    // This is a (ti : :). Check the args.
+    Atom after_atom = pattern->code(p_index + 1);
+    Atom before_atom = pattern->code(p_index + 2);
+    if (after_atom.getDescriptor() == Atom::VL_PTR && before_atom.getDescriptor() == Atom::VL_PTR &&
+        map_[after_atom.asIndex()]->get_code() != NULL && map_[before_atom.asIndex()]->get_code() != NULL) {
+      // Both args are variables pointing to a value.
+      if (Utils::HasTimestamp<Code>(object, o_full_index + 1) &&
+          Utils::HasTimestamp<Code>(object, o_full_index + 2))
+        // The object to match has timestamp values in its (ti After Before). Use the same "smart" match_timings
+        // method that match_fwd_timings, etc. use to match the time intervals of two facts.
+        return match_timings(
+          Utils::GetTimestamp<Code>(object, o_full_index + 1),
+          Utils::GetTimestamp<Code>(object, o_full_index + 2), after_atom.asIndex(), before_atom.asIndex());
+    }
+  }
   return match(object, o_base_index, o_index + 1, pattern, p_index + 1, arity);
 }
 
@@ -998,6 +1015,9 @@ void HLPBindingMap::add_unbound_values(const Code* hlp, uint16 structure_index) 
     Atom a = hlp->code(structure_index + i);
     if (a.getDescriptor() == Atom::VL_PTR)
       add_unbound_value(a.asIndex());
+    else if (a.getDescriptor() == Atom::I_PTR)
+      // Recurse into the structure.
+      add_unbound_values(hlp, hlp->code(structure_index + i).asIndex());
   }
 }
 
@@ -1016,22 +1036,40 @@ void HLPBindingMap::init_from_hlp(const Code *hlp) { // hlp is cst or mdl.
   }
 }
 
-void HLPBindingMap::init_from_ihlp_args(const Code* ihlp) {
-  uint16 ihlp_args_index = ihlp->code(I_HLP_TPL_ARGS).asIndex();
+void HLPBindingMap::init_from_ihlp_args(
+  const Code* hlp, uint16 hlp_args_index, const Code* ihlp, uint16 ihlp_args_index) {
+  if (hlp->code(hlp_args_index) != ihlp->code(ihlp_args_index))
+    // The type of structure or the arity doesn't match.
+    return;
+
   uint16 count = ihlp->code(ihlp_args_index).getAtomCount();
   // valuate args.
   for (uint16 i = 0; i < count; ++i) {
 
+    Atom hlp_atom = hlp->code(hlp_args_index + 1 + i);
     Atom ihlp_atom = ihlp->code(ihlp_args_index + 1 + i);
+
+    if (hlp_atom.getDescriptor() == Atom::I_PTR) {
+      if (ihlp_atom.getDescriptor() != Atom::I_PTR)
+        // Can't get values from the ihlp
+        continue;
+      // Recurse into the structure.
+      init_from_ihlp_args(hlp, hlp_atom.asIndex(), ihlp, ihlp_atom.asIndex());
+      continue;
+    }
+    if (hlp_atom.getDescriptor() != Atom::VL_PTR)
+      // No variable to set.
+      continue;
+
     switch (ihlp_atom.getDescriptor()) {
     case Atom::R_PTR:
-      map_[i] = new ObjectValue(this, ihlp->get_reference(ihlp_atom.asIndex()));
+      map_[hlp_atom.asIndex()] = new ObjectValue(this, ihlp->get_reference(ihlp_atom.asIndex()));
       break;
     case Atom::I_PTR:
-      map_[i] = new StructureValue(this, ihlp, ihlp_atom.asIndex());
+      map_[hlp_atom.asIndex()] = new StructureValue(this, ihlp, ihlp_atom.asIndex());
       break;
     default:
-      map_[i] = new AtomValue(this, ihlp_atom);
+      map_[hlp_atom.asIndex()] = new AtomValue(this, ihlp_atom);
       break;
     }
   }
@@ -1041,7 +1079,8 @@ void HLPBindingMap::init_from_f_ihlp(const _Fact *f_ihlp) { // source is f->icst
 
   Code *ihlp = f_ihlp->get_reference(0);
 
-  init_from_ihlp_args(ihlp);
+  Code* hlp = ihlp->get_reference(0);
+  init_from_ihlp_args(hlp, hlp->code(HLP_TPL_ARGS).asIndex(), ihlp, ihlp->code(I_HLP_TPL_ARGS).asIndex());
 
   uint16 val_set_index = ihlp->code(I_HLP_EXPOSED_ARGS).asIndex() + 1;
   uint32 i = 0;
@@ -1084,13 +1123,20 @@ void HLPBindingMap::build_ihlp_structure(
   ihlp->code(extent_index) = hlp->code(hlp_structure_index);
   uint16 write_index = extent_index + 1;
   extent_index = write_index + count;
+  bool is_ti = (hlp->code(hlp_structure_index) == Atom::Object(Opcodes::TI, 2));
 
   // Copy from the HLP structure, valuating each VL_PTR.
   for (uint16 i = 0; i < count; ++i) {
     Atom a = hlp->code(hlp_structure_index + 1 + i);
-    if (a.getDescriptor() == Atom::VL_PTR)
+    // Leave the args of (ti After: Before:) as variables so that Match can "narrow" them.
+    if (a.getDescriptor() == Atom::VL_PTR && !is_ti)
       // Valuate the arg.
       map_[a.asIndex()]->valuate(ihlp, write_index, extent_index);
+    else if (a.getDescriptor() == Atom::I_PTR) {
+      ihlp->code(write_index) = Atom::IPointer(extent_index);
+      // Recurse into the structure.
+      build_ihlp_structure(hlp, a.asIndex(), ihlp, extent_index);
+    }
     else
       ihlp->code(write_index) = a;
 

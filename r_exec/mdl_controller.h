@@ -313,13 +313,14 @@ public:
    * \param imdl The imdl object.
    * \param after Set this to the after timestamp (if this returns true).
    * \param before Set this to the before timestamp (if this returns true).
+   * \param allow_ti If true, allow the last template value to be a (ti After: Before:). If omitted, use true.
    * \param (optional) after_ts_index If not NULL, set this to the index in imdl Code array of the after time stamp structure.
    * \param (optional)  before_ts_index If not NULL, set this to the index in imdl Code array of the before time stamp structure.
    * \return True for success, otherwise false if there are not enough template parameters,
    * or if the value is some type other than a timestamp (such as an unbound variable).
    */
   static bool get_imdl_template_timings(
-    r_code::Code* imdl, Timestamp& after, Timestamp& before, uint16* after_ts_index = NULL, uint16* before_ts_index = NULL);
+    r_code::Code* imdl, Timestamp& after, Timestamp& before, bool allow_ti = true, uint16* after_ts_index = NULL, uint16* before_ts_index = NULL);
 };
 
 class PMDLController :

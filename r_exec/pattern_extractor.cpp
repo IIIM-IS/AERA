@@ -365,6 +365,8 @@ _Fact *_TPX::make_f_icst(_Fact *component, _Fact*& component_pattern, P<Code> &n
   // build_cst adds the abstract object of the component as the first reference.
   component_pattern = (_Fact*)new_cst->get_reference(0);
   _Fact *f_icst = bm->build_f_ihlp(new_cst, Opcodes::ICst, false);
+  // build_f_ihlp can leave some variables pointing into bm, but we need everything valuated.
+  f_icst->set_reference(0, bm->bind_pattern(f_icst->get_reference(0)));
   f_icsts_.push_back(f_icst); // the f_icst can be reused in subsequent model building attempts.
   return f_icst;
 }
@@ -450,9 +452,25 @@ Code *_TPX::build_mdl_head(HLPBindingMap *bm, uint16 tpl_arg_count, _Fact *lhs, 
   write_index = MDL_ARITY;
 
   mdl->code(MDL_TPL_ARGS) = Atom::IPointer(++write_index);
-  mdl->code(write_index) = Atom::Set(tpl_arg_count);
-  for (uint16 i = 0; i < tpl_arg_count; ++i)
-    mdl->code(++write_index) = Atom::VLPointer(i);
+  if (tpl_arg_count >= 2) {
+    // Assume the last two template args are a time interval.
+    mdl->code(write_index) = Atom::Set(tpl_arg_count - 1);
+    // Write the template args before the time interval.
+    for (uint16 i = 0; i < tpl_arg_count - 2; ++i)
+      mdl->code(++write_index) = Atom::VLPointer(i);
+    ++write_index;
+    mdl->code(write_index) = Atom::IPointer(write_index + 1);
+    ++write_index;
+    // Make the (ti : :) .
+    mdl->code(write_index) = Atom::Object(Opcodes::TI, 2);
+    mdl->code(++write_index) = Atom::VLPointer(tpl_arg_count - 2);
+    mdl->code(++write_index) = Atom::VLPointer(tpl_arg_count - 1);
+  }
+  else {
+    mdl->code(write_index) = Atom::Set(tpl_arg_count);
+    for (uint16 i = 0; i < tpl_arg_count; ++i)
+      mdl->code(++write_index) = Atom::VLPointer(i);
+  }
 
   mdl->code(MDL_OBJS) = Atom::IPointer(++write_index);
   mdl->code(write_index) = Atom::Set(2);
@@ -1185,6 +1203,8 @@ bool CTPX::build_requirement(HLPBindingMap *bm, Code *m0, microseconds period) {
   _Fact* f_icst = results[0].f_icst;
   _Fact* premise_pattern = results[0].component_pattern;
   P<Fact> f_im0 = bm->build_f_ihlp(m0, Opcodes::IMdl, false);
+  // build_f_ihlp can leave some variables pointing into bm, but abstract_object needs everything valuated.
+  f_im0->set_reference(0, bm->bind_pattern(f_im0->get_reference(0)));
   Utils::SetTimestamp<Code>(f_im0, FACT_AFTER, f_icst->get_after());
   Utils::SetTimestamp<Code>(f_im0, FACT_BEFORE, f_icst->get_before());
 
