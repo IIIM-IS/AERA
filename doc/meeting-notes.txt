@@ -1047,13 +1047,18 @@ Simulator
 2023-04-21
 * DONE. In _Mem::run_in_diagnostic_time, factor out code in the main loop as DiagnosticTimeState::step().
 
+2023-04-28
+* DONE. Review/merge pull request to implement time interval proposal https://github.com/IIIM-IS/AERA/issues/137  https://github.com/IIIM-IS/AERA/pull/250
+  * Solves bug for using the narrowed time interval values in the imdl https://github.com/IIIM-IS/AERA/issues/251
+* Webots
+  * DONE. Try to increase friction on gripper and objects. [Leonard] https://github.com/IIIM-IS/AERA_Webots/pull/4
+  * DONE. Pull request to make Webots aera_us match the AERA fact times. https://github.com/IIIM-IS/AERA_Webots/pull/6
+
 next meeting
-* Pull request to implement time interval proposal https://github.com/IIIM-IS/AERA/issues/137  https://github.com/IIIM-IS/AERA/pull/250
-  * First need to solve bug for using the narrowed timing values in the imdl https://github.com/IIIM-IS/AERA/issues/251
 * Webots
   * Let AERA send "reset" message to reset the environment. (Use after grab fails.)
-  * Try to increase friction on gripper and objects. [Leonard] https://github.com/IIIM-IS/AERA_Webots/pull/4
-  * Link to Debug version of Protobuf library.
+  * init() should "instantly" set the arm position. Right now it move to the init position and can hit objects.
+  * Link to Debug version of Protobuf library. [Jeff to try]
   * (Added hack to reset positions after release.)
   * Need reprodicible behavior for failed release. (Now using delay.)
   * Use setup command for automatic discovery of AERA objects and commands
@@ -1061,9 +1066,9 @@ next meeting
   * Reset the TCP connection when resetting the Webots simulation
   * Make Visual Studio run protoc in AERA and AERA_Webots [Leonard to try]
   * Try camera
-* Demonstrate AERA removing model for disuse.
 * Networking example
   * C++ I/O interface for packets going through a router. Test in real time.
+* Demonstrate AERA removing model for disuse.
 * Try (for 6 hours) to debug the Visualizer crash.
 * hand-grab-sphere
   * Represent sphere position without direct I/O input.
