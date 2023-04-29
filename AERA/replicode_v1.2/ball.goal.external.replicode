@@ -41,7 +41,7 @@ ball_position:(cst |[]
 
 ; This model says that a command to set the velocity to a value causes the position to have a
 ; value in the next frame based on the new velocity.
-mdl_set_velocity_y:(mdl [B: P0: T0: T1:]
+mdl_set_velocity_y:(mdl [B: P0: (ti T0: T1:)]
 []
    (fact (cmd set_velocity_y [B: V:] 1) T0_cmd: T1_cmd: : :)
    (fact (mk.val B: position_y P1: :) T2: T3: : :)
@@ -60,7 +60,7 @@ mdl_set_velocity_y:(mdl [B: P0: T0: T1:]
 mdl_set_velocity_y_req:(mdl |[]
 []
    (fact (icst ball_position |[] [B: P0:] : :) T0: T1: : :)
-   (fact (imdl mdl_set_velocity_y [B: P0: T0: T1:] [V: P1: T2: T3:] : :) T0: T1: : :)
+   (fact (imdl mdl_set_velocity_y [B: P0: (ti T0: T1:)] [V: P1: T2: T3:] : :) T0: T1: : :)
 |[]
 |[]
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]

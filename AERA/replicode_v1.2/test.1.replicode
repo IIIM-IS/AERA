@@ -13,7 +13,7 @@ s0:(cst |[] []
 |[]
 [stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
-m0:(mdl [p0: t0: t1:] []
+m0:(mdl [p0: (ti t0: t1:)] []
    (fact (cmd lift_hand [h: delta_z:] :) t2: t3: ::)
    (fact (mk.val h: position_z p1: 1) t4: t5: : 1)
 []; forward guards
@@ -34,7 +34,7 @@ m0:(mdl [p0: t0: t1:] []
 
 m1:(mdl |[] []
    (fact (icst s0 |[] [h: p0:] ::) t0: t1: ::)
-   (fact (imdl m0 [p0: t0: t1:] [h: delta_z: p1: : :] : 1) t0: t2: : 1)
+   (fact (imdl m0 [p0: (ti t0: t1:)] [h: delta_z: p1: : :] : 1) t0: t2: : 1)
 []
    t2:(+ t0 sampling_period); domain of validity of the lhs, as enforced by the input generators.
 []

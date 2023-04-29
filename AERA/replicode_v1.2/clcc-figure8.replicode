@@ -73,7 +73,7 @@ C10:(cst [] []
 
 ; After the move command for hand H, H has position P1.
 ; (Figure 8 uses "pos" instead of "position".)
-M3:(mdl [H: P0: T0: T1:] []
+M3:(mdl [H: P0: (ti T0: T1:)] []
    (fact (cmd move [H: DP:] :) T0_cmd: T1_cmd: : :)
    (fact (mk.val H: position P1: :) T2: T3: : :)
 []
@@ -92,13 +92,13 @@ M3:(mdl [H: P0: T0: T1:] []
 ; M3 will work (move will cause hand H to have position P1) if H has position P0.
 (mdl [] []
    (fact (icst C0 [] [H: hand P0:] : :) T0: T1: : :)
-   (fact (imdl M3 [H: P0: T0: T1:] [DP: P1: T2: T3:] : :) T0: T1: : :)
+   (fact (imdl M3 [H: P0: (ti T0: T1:)] [DP: P1: T2: T3:] : :) T0: T1: : :)
 |[]
 |[]
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; After the grab command for hand H, H is holding object X.
-M6:(mdl [X: H: T0: T1:] []
+M6:(mdl [X: H: (ti T0: T1:)] []
    (fact (cmd grab [H:] :) T0_cmd: T1_cmd: : :)
    (fact (mk.val H: holding [X:] :) T2: T3: : :)
 []
@@ -115,14 +115,14 @@ M6:(mdl [X: H: T0: T1:] []
 ; and H is not holding anything.
 (mdl [] []
    (fact (icst C9 [] [H: P: X:] : :) T0: T1: : :)
-   (fact (imdl M6 [X: H: T0: T1:] [T2: T3:] : :) T0: T1: : :)
+   (fact (imdl M6 [X: H: (ti T0: T1:)] [T2: T3:] : :) T0: T1: : :)
 |[]
 |[]
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; When model M3 fires the prediction of the next position P1 of hand H, something X will also be at the same position P1.
-M10:(mdl [H: X: T0: T1:] []
-   (fact (imdl M3 [H: P0: T0_M3: T1_M3:] [DP: P1: T2: T3:] : :) T0_cmd: T1_cmd: : :)
+M10:(mdl [H: X: (ti T0: T1:)] []
+   (fact (imdl M3 [H: P0: (ti T0_M3: T1_M3:)] [DP: P1: T2: T3:] : :) T0_cmd: T1_cmd: : :)
    (fact (mk.val X: position P1: :) T2: T3: : :)
 []
    T2:(+ T0 100ms)
@@ -139,13 +139,13 @@ M10:(mdl [H: X: T0: T1:] []
 ; When hand H is holding some X and the hand moves to position P1, then X will also be at P1.
 (mdl [] []
    (fact (icst C10 [] [H: P: X:] : :) T0: T1: : :)
-   (fact (imdl M10 [H: X: T0: T1:] [P0: T0_M0: T1_M0: DP: P1: T2: T3:] : :) T0: T1: : :)
+   (fact (imdl M10 [H: X: (ti T0: T1:)] [P0: T0_M0: T1_M0: DP: P1: T2: T3:] : :) T0: T1: : :)
 |[]
 |[]
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; After the release command for hand H, H is not holding anything.
-M20:(mdl [H: X: T0: T1:] []
+M20:(mdl [H: X: (ti T0: T1:)] []
    (fact (cmd release [H:] :) T0_cmd: T1_cmd: : :)
    (fact (mk.val H: holding [] :) T2: T3: : :)
 []
@@ -161,7 +161,7 @@ M20:(mdl [H: X: T0: T1:] []
 ; M20 will work (release will cause hand H not holding something) if it is at the same position as hand H and H is already holding it.
 (mdl [] []
    (fact (icst C10 [] [H: P: X:] : :) T0: T1: : :)
-   (fact (imdl M20 [H: X: T0: T1:] [T2: T3:] : :) T0: T1: : :)
+   (fact (imdl M20 [H: X: (ti T0: T1:)] [T2: T3:] : :) T0: T1: : :)
 |[]
 |[]
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
