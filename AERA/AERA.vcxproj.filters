@@ -18,6 +18,7 @@
     <ClCompile Include="IODevices\video_screen\video_screen_io_device.cpp">
       <Filter>IODevices\video_screen</Filter>
     </ClCompile>
+    <ClCompile Include="AERA_main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="settings.h" />
@@ -40,6 +41,7 @@
     <ClInclude Include="IODevices\TCP\Proto\utils.h">
       <Filter>IODevices\TCP\Proto</Filter>
     </ClInclude>
+    <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="settings.xml" />

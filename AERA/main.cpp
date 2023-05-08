@@ -90,6 +90,7 @@
 #include "init.h"
 #include "image_impl.h"
 #include "settings.h"
+#include "main.h"
 
 
 //#define DECOMPILE_ONE_BY_ONE
@@ -260,12 +261,11 @@ void write_to_file(r_comp::Image *image, std::string &image_path, Decompiler *de
   }
 }
 
-int32 main(int argc, char **argv) {
+int32 start_AERA(const char* file_name, const char* decompiled_file_name) {
 
   core::Time::Init(1000);
 
   Settings settings;
-  const char* file_name = (argc >= 2 ? argv[1] : "settings.xml");
   if (!settings.load(file_name))
     return 1;
 
@@ -417,7 +417,7 @@ int32 main(int argc, char **argv) {
 
       if (settings.decompile_objects_ && (!settings.write_objects_ || !settings.test_objects_)) {
 
-        if (settings.decompile_to_file_) { // argv[2] is a file to redirect the decompiled code to.
+        if (settings.decompile_to_file_) {
 
           std::ofstream outfile;
           outfile.open(settings.decompilation_file_path_.c_str(), std::ios_base::trunc);
@@ -445,10 +445,10 @@ int32 main(int argc, char **argv) {
 
       if (settings.decompile_models_ && (!settings.write_models_ || !settings.test_models_)) {
 
-        if (argc > 2) { // argv[2] is a file to redirect the decompiled code to.
+        if (decompiled_file_name && decompiled_file_name[0] != '\0') {
 
           std::ofstream outfile;
-          outfile.open(argv[2], std::ios_base::trunc);
+          outfile.open(decompiled_file_name, std::ios_base::trunc);
           std::streambuf *coutbuf = std::cout.rdbuf(outfile.rdbuf());
 
           decompile(decompiler, image, starting_time, settings.ignore_named_models_);
