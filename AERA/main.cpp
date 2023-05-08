@@ -402,13 +402,6 @@ int32 main(int argc, char **argv) {
       Thread::Sleep(milliseconds(settings.run_time_));
     }
 
-    /*Thread::Sleep(settings.run_time/2);
-    test_many_injections(mem,
-        argc > 2 ? atoi(argv[2]) : 100, // sampling period in ms
-        argc > 3 ? atoi(argv[3]) : 600, // number of batches
-        argc > 4 ? atoi(argv[4]) : 66); // number of objects per batch
-    Thread::Sleep(settings.run_time/2);*/
-
     std::cout << "\n> shutting rMem down...\n";
     mem->stop();
 
