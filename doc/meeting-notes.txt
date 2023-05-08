@@ -1054,20 +1054,22 @@ Simulator
   * DONE. Try to increase friction on gripper and objects. [Leonard] https://github.com/IIIM-IS/AERA_Webots/pull/4
   * DONE. Pull request to make Webots aera_us match the AERA fact times. https://github.com/IIIM-IS/AERA_Webots/pull/6
 
-next meeting
+2023-05-08
 * Webots
+  * DONE. Link to Debug version of Protobuf library. [Leonard] https://github.com/IIIM-IS/AERA/pull/252
+
+next meeting
+* Cisco demo: Traceroute.
+* Webots
+  * Reproducability: Wait until 65 ms to execute command.
   * Let AERA send "reset" message to reset the environment. (Use after grab fails.)
   * init() should "instantly" set the arm position. Right now it move to the init position and can hit objects.
-  * Link to Debug version of Protobuf library. [Jeff to try]
   * (Added hack to reset positions after release.)
-  * Need reprodicible behavior for failed release. (Now using delay.)
   * Use setup command for automatic discovery of AERA objects and commands
   * Get command efferent copy from Webots (move limit to +/- 20) [Maybe in the setup message or command reply. Need more discussion]
   * Reset the TCP connection when resetting the Webots simulation
   * Make Visual Studio run protoc in AERA and AERA_Webots [Leonard to try]
   * Try camera
-* Networking example
-  * C++ I/O interface for packets going through a router. Test in real time.
 * Demonstrate AERA removing model for disuse.
 * Try (for 6 hours) to debug the Visualizer crash.
 * hand-grab-sphere
