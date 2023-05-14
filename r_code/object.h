@@ -370,21 +370,25 @@ public:
   void set_oid(uint32 oid) override { oid_ = oid; }
 
   Atom &code(uint16 i) override { return code_[i]; }
-  const Atom &code(uint16 i) const override { return (*code_.as_std())[i]; }
+  const Atom &code(uint16 i) const override { return code_[i]; }
   uint16 code_size() const override {
     // There can't be more than 65536 code bytes. Explicitly cast to the return type.
     return (uint16)code_.size();
   }
-  void resize_code(uint16 new_size) override { code_.as_std()->resize(new_size); }
+  void resize_code(uint16 new_size) override { code_.resize(new_size); }
   void set_reference(uint16 i, Code *object) override { references_[i] = object; }
-  Code *get_reference(uint16 i) const override { return (*references_.as_std())[i]; }
+  Code *get_reference(uint16 i) const override { return references_[i]; }
   uint16 references_size() const override {
     // There can't be more than 65536 references. Explicitly cast to the return type.
     return (uint16)references_.size();
   }
-  void clear_references() override { references_.as_std()->clear(); }
-  void set_references(std::vector<P<Code> > &new_references) override { (*references_.as_std()) = new_references; }
-  void add_reference(Code *object) override { references_.as_std()->push_back(object); }
+  void clear_references() override { references_.clear(); }
+  void set_references(std::vector<P<Code> > &new_references) override {
+    references_.clear();
+    for (size_t i = 0; i < new_references.size(); ++i)
+      references_.push_back(new_references[i]);
+  }
+  void add_reference(Code *object) override { references_.push_back(object); }
 };
 
 class dll_export Mem {

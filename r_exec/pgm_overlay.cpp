@@ -157,7 +157,7 @@ void InputLessPGMOverlay::reset() {
 
   patch_indices_.clear();
   value_commit_index_ = 0;
-  values_.as_std()->clear();
+  values_.clear();
   productions_.clear();
 }
 

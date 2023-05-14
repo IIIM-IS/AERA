@@ -95,25 +95,27 @@ using namespace core;
 namespace r_code {
 
 // auto-resized vector
-template<typename T> class resized_vector :
-  private std::vector<T> {
+template<typename T> class resized_vector {
 public:
   resized_vector() {}
-  resized_vector(size_t n) : vector(n) {}
-  uint32 size() const { return std::vector<T>::size(); }
-  T &operator [](uint32 i) {
+  resized_vector(size_t n) : vector_(n) {}
+  size_t size() const { return vector_.size(); }
+  T &operator [](size_t i) {
 
     if (i >= size())
-      std::vector<T>::resize(i + 1);
-    return std::vector<T>::operator [](i);
+      vector_.resize(i + 1);
+    return vector_[i];
   }
-  const T &operator [](uint32 i) const {
+  const T &operator [](size_t i) const {
 
-    return std::vector<T>::operator [](i);
+    return vector_[i];
   }
-  void push_back(T t) { std::vector<T>::push_back(t); }
-  std::vector<T>* as_std() { return (std::vector<T> *)this; }
-  const std::vector<T>* as_std() const { return (const std::vector<T> *)this; }
+  void push_back(T t) { vector_.push_back(t); }
+  void clear() { vector_.clear(); }
+  void resize(size_t new_size) { vector_.resize(new_size); }
+  const std::vector<T>* as_std() const { return &vector_; }
+private:
+  std::vector<T> vector_;
 };
 }
 
