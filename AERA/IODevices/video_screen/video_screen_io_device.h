@@ -69,7 +69,7 @@ public:
   /**
    * Call the parent class load(), then set up the objects to emulate the environment.
    */
-  bool load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid) override;
+  bool load(const std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid) override;
 
   /**
    * Override eject to check for implemented commands.

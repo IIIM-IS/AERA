@@ -295,7 +295,7 @@ void _Mem::store(Code *object) {
   object->set_strorage_index(location);
 }
 
-bool _Mem::load(vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid) { // no cov at init time.
+bool _Mem::load(const vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid) { // no cov at init time.
 
   uint32 i;
   reduction_cores_ = new ReductionCore *[reduction_core_count_];
@@ -1309,7 +1309,7 @@ void _Mem::pack_fact_object(Code *fact_object, Code *hlp, uint16 &write_index, v
   }
 }
 
-Code* _Mem::find_object(vector<Code*> *objects, const char* name) {
+Code* _Mem::find_object(const vector<Code*> *objects, const char* name) {
   // Find the object OID.
   uint32 oid = Seed.object_names_.findSymbol(name);
   if (oid == UNDEFINED_OID)

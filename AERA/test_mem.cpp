@@ -133,7 +133,7 @@ template<class O, class S> TestMem<O, S>::~TestMem() {
 }
 
 template<class O, class S> bool TestMem<O, S>::load
-(vector<Code*> *objects, uint32 stdin_oid, uint32 stdout_oid,
+(const vector<Code*> *objects, uint32 stdin_oid, uint32 stdout_oid,
   uint32 self_oid) {
   // Call the method in the parent class.
   if (!MemExec<O, S>::load(objects, stdin_oid, stdout_oid, self_oid))

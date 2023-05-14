@@ -277,7 +277,7 @@ public:
   void start_core(); // called upon creation of a delegate.
   void shutdown_core(); // called upon completion of a delegate's task.
 
-  virtual bool load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid); // call before start; no mod/set/eje will be executed (only inj);
+  virtual bool load(const std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid); // call before start; no mod/set/eje will be executed (only inj);
                                                                                                                   // return false on error.
   Timestamp start(); // return the starting time.
 
@@ -672,7 +672,7 @@ public:
    * \return The object, or NULL if not found.
    */
   static r_code::Code* find_object(
-    std::vector<r_code::Code *> *objects, const char* name);
+    const std::vector<r_code::Code *> *objects, const char* name);
 
   r_code::Code *clone(r_code::Code *original) const; // shallow copy.
 

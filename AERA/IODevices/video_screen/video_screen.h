@@ -78,7 +78,7 @@ public:
    * \param objects The objects array from load(), used to call find_object.
    * \return True for success, false if can't initialize.
    */
-  bool load(std::vector<r_code::Code *> *objects);
+  bool load(const std::vector<r_code::Code *> *objects);
 
   /**
    * Move the eye (and the fovea with it) by the given delta X and Y. Set the output

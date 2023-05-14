@@ -72,7 +72,7 @@ namespace video_screen {
   clear_screen();
 }
 
-bool VideoScreen::load(vector<Code*> *objects) {
+bool VideoScreen::load(const vector<Code*> *objects) {
   // Draw an initial objects.
   draw_paddle(3, 5);
   draw_ball(10, 10);

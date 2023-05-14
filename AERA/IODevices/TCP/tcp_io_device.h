@@ -153,7 +153,7 @@ namespace tcp_io_device {
     /**
      * Call the parent class load(), then set up the objects for the external environment.
      */
-    virtual bool load(std::vector<r_code::Code*>* objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid);
+    virtual bool load(const std::vector<r_code::Code*>* objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid);
 
     /**
      * Override eject to check for (cmd set_velocity_y ...) and other implemented commands.
