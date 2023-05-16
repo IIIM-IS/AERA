@@ -90,6 +90,7 @@
 #include "init.h"
 #include "image_impl.h"
 #include "settings.h"
+#include "../usr_operators/usr_operators.h"
 #include "main.h"
 
 
@@ -261,6 +262,17 @@ void write_to_file(r_comp::Image *image, std::string &image_path, Decompiler *de
   }
 }
 
+/**
+ * UserOperatorLibrary extends FunctionLibrary to implement
+ * functionName where the user operator functions are statically linked.
+ */
+class UserOperatorLibrary : public r_exec::FunctionLibrary {
+public:
+  void* getFunction(const char* function_name) override {
+    return GetUserOperatorFunction(function_name);
+  }
+};
+
 int32 start_AERA(const char* file_name, const char* decompiled_file_name) {
 
   core::Time::Init(1000);
@@ -279,9 +291,7 @@ int32 start_AERA(const char* file_name, const char* decompiled_file_name) {
   }
 
   std::cout << "> compiling ...\n";
-  r_exec::SharedFunctionLibrary userOperatorLibrary;
-  if (!userOperatorLibrary.load(settings.usr_operator_path_.c_str()))
-    return 2;
+  UserOperatorLibrary userOperatorLibrary;
 
   if (settings.reduction_core_count_ == 0 && settings.time_core_count_ == 0) {
     // Below, we will use run_in_diagnostic_time.
