@@ -112,8 +112,6 @@ unordered_map<std::string, uint16> _Opcodes;
 dll_export r_comp::Compiler Compiler;
 r_exec_dll r_comp::Preprocessor Preprocessor;
 
-SharedLibrary userOperatorLibrary;
-
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool Compile(std::istream &source_code, const std::string& filePath, std::string &error, bool compile_metadata) {
@@ -477,7 +475,7 @@ bool InitOpcodes(const r_comp::Metadata& metadata) {
   return true;
 }
 
-bool Init(const char *user_operator_library_path,
+static bool Init(SharedLibrary* userOperatorLibrary,
           Timestamp (*time_base)()) {
 
   Now = time_base;
@@ -485,27 +483,25 @@ bool Init(const char *user_operator_library_path,
   if (!InitOpcodes(Metadata))
     return false;
 
-  if (!user_operator_library_path) // when no rMem is used.
+  if (!userOperatorLibrary) // when no rMem is used.
     return true;
 
   // load usr operators and c++ programs.
-  if (!(userOperatorLibrary.load(user_operator_library_path)))
-    exit(-1);
 
   // Operators.
   typedef uint16 (*OpcodeRetriever)(const char *);
   typedef void (*UserInit)(OpcodeRetriever);
-  auto _Init = (UserInit)userOperatorLibrary.getFunction("Init");
+  auto _Init = (UserInit)userOperatorLibrary->getFunction("Init");
   if (!_Init)
     return false;
 
   typedef uint16 (*UserGetOperatorCount)();
-  auto GetOperatorCount = (UserGetOperatorCount)userOperatorLibrary.getFunction("GetOperatorCount");
+  auto GetOperatorCount = (UserGetOperatorCount)userOperatorLibrary->getFunction("GetOperatorCount");
   if (!GetOperatorCount)
     return false;
 
   typedef void (*UserGetOperatorName)(char *);
-  auto GetOperatorName = (UserGetOperatorName)userOperatorLibrary.getFunction("GetOperatorName");
+  auto GetOperatorName = (UserGetOperatorName)userOperatorLibrary->getFunction("GetOperatorName");
   if (!GetOperatorName)
     return false;
 
@@ -526,7 +522,7 @@ bool Init(const char *user_operator_library_path,
       std::cerr << "Operator " << op_name << " is undefined" << std::endl;
       exit(-1);
     }
-    auto op = (UserOperator)userOperatorLibrary.getFunction(op_name);
+    auto op = (UserOperator)userOperatorLibrary->getFunction(op_name);
     if (!op)
       return false;
 
@@ -535,12 +531,12 @@ bool Init(const char *user_operator_library_path,
 
   // C++ programs.
   typedef uint16 (*UserGetProgramCount)();
-  auto GetProgramCount = (UserGetProgramCount)userOperatorLibrary.getFunction("GetProgramCount");
+  auto GetProgramCount = (UserGetProgramCount)userOperatorLibrary->getFunction("GetProgramCount");
   if (!GetProgramCount)
     return false;
 
   typedef void (*UserGetProgramName)(char *);
-  auto GetProgramName = (UserGetProgramName)userOperatorLibrary.getFunction("GetProgramName");
+  auto GetProgramName = (UserGetProgramName)userOperatorLibrary->getFunction("GetProgramName");
   if (!GetProgramName)
     return false;
 
@@ -555,7 +551,7 @@ bool Init(const char *user_operator_library_path,
 
     std::string _pgm_name = pgm_name;
 
-    auto pgm = (UserProgram)userOperatorLibrary.getFunction(pgm_name);
+    auto pgm = (UserProgram)userOperatorLibrary->getFunction(pgm_name);
     if (!pgm)
       return false;
 
@@ -564,12 +560,12 @@ bool Init(const char *user_operator_library_path,
 
   // Callbacks.
   typedef uint16(*UserGetCallbackCount)();
-  auto GetCallbackCount = (UserGetCallbackCount)userOperatorLibrary.getFunction("GetCallbackCount");
+  auto GetCallbackCount = (UserGetCallbackCount)userOperatorLibrary->getFunction("GetCallbackCount");
   if (!GetCallbackCount)
     return false;
 
   typedef void(*UserGetCallbackName)(char *);
-  auto GetCallbackName = (UserGetCallbackName)userOperatorLibrary.getFunction("GetCallbackName");
+  auto GetCallbackName = (UserGetCallbackName)userOperatorLibrary->getFunction("GetCallbackName");
   if (!GetCallbackName)
     return false;
 
@@ -584,19 +580,19 @@ bool Init(const char *user_operator_library_path,
 
     std::string _callback_name = callback_name;
 
-    auto callback = (UserCallback)userOperatorLibrary.getFunction(callback_name);
+    auto callback = (UserCallback)userOperatorLibrary->getFunction(callback_name);
     if (!callback)
       return false;
 
     Callbacks::Register(_callback_name, callback);
   }
 
-  std::cout << "> user-defined operator library " << user_operator_library_path << " loaded" << std::endl;
+  std::cout << "> user-defined operator library loaded" << std::endl;
 
   return true;
 }
 
-bool Init(const char *user_operator_library_path,
+bool Init(SharedLibrary* userOperatorLibrary,
   Timestamp (*time_base)(),
   const char *seed_path) {
 
@@ -607,10 +603,10 @@ bool Init(const char *user_operator_library_path,
     return false;
   }
 
-  return Init(user_operator_library_path, time_base);
+  return Init(userOperatorLibrary, time_base);
 }
 
-bool Init(const char *user_operator_library_path,
+bool Init(SharedLibrary* userOperatorLibrary,
   Timestamp (*time_base)(),
   const r_comp::Metadata &metadata,
   const r_comp::Image &seed) {
@@ -618,7 +614,7 @@ bool Init(const char *user_operator_library_path,
   Metadata = metadata;
   Seed = seed;
 
-  return Init(user_operator_library_path, time_base);
+  return Init(userOperatorLibrary, time_base);
 }
 
 uint16 GetOpcode(const char *name) {

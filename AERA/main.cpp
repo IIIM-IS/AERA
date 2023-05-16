@@ -279,17 +279,21 @@ int32 start_AERA(const char* file_name, const char* decompiled_file_name) {
   }
 
   std::cout << "> compiling ...\n";
+  SharedLibrary userOperatorLibrary;
+  if (!(userOperatorLibrary.load(settings.usr_operator_path_.c_str())))
+    return 2;
+
   if (settings.reduction_core_count_ == 0 && settings.time_core_count_ == 0) {
     // Below, we will use run_in_diagnostic_time.
     // Initialize the diagnostic time to the real now.
     r_exec::_Mem::diagnostic_time_now_ = Time::Get();
     if (!r_exec::Init
-    (settings.usr_operator_path_.c_str(), r_exec::_Mem::get_diagnostic_time_now,
+     (&userOperatorLibrary, r_exec::_Mem::get_diagnostic_time_now,
       settings.usr_class_path_.c_str()))
       return 2;
   }
   else {
-    if (!r_exec::Init(settings.usr_operator_path_.c_str(), Time::Get, settings.usr_class_path_.c_str()))
+    if (!r_exec::Init(&userOperatorLibrary, Time::Get, settings.usr_class_path_.c_str()))
       return 2;
   }
 
