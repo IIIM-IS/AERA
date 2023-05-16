@@ -76,7 +76,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\CoreLibrary;..\r_code;..\r_exec;..\r_comp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions);EXECUTIVE_EXPORTS;CORELIBRARY_EXPORTS</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <ExceptionHandling />
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -100,7 +100,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <AdditionalIncludeDirectories>..\r_code;..\CoreLibrary;..\r_exec;..\r_comp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);EXECUTIVE_EXPORTS;CORELIBRARY_EXPORTS</PreprocessorDefinitions>
       <ExceptionHandling />
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -123,7 +123,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\CoreLibrary;..\r_code;..\r_exec;..\r_comp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;DEBUG_VISUALIZER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;DEBUG_VISUALIZER;%(PreprocessorDefinitions);EXECUTIVE_EXPORTS;CORELIBRARY_EXPORTS</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <ExceptionHandling />
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -142,6 +142,114 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\r_code\atom.cpp" />
+    <ClCompile Include="..\r_code\atom.inline.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugVisualizer|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\r_code\code_utils.cpp" />
+    <ClCompile Include="..\r_code\image.cpp" />
+    <ClCompile Include="..\r_code\image.tpl.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugVisualizer|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\r_code\image_impl.cpp" />
+    <ClCompile Include="..\r_code\object.cpp" />
+    <ClCompile Include="..\r_code\r_code.cpp" />
+    <ClCompile Include="..\r_comp\class.cpp" />
+    <ClCompile Include="..\r_comp\compiler.cpp" />
+    <ClCompile Include="..\r_comp\decompiler.cpp" />
+    <ClCompile Include="..\r_comp\preprocessor.cpp" />
+    <ClCompile Include="..\r_comp\r_comp.cpp" />
+    <ClCompile Include="..\r_comp\segments.cpp" />
+    <ClCompile Include="..\r_comp\structure_member.cpp" />
+    <ClCompile Include="..\r_exec\ast_controller.cpp" />
+    <ClCompile Include="..\r_exec\ast_controller.tpl.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugVisualizer|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\auto_focus.cpp" />
+    <ClCompile Include="..\r_exec\binding_map.cpp" />
+    <ClCompile Include="..\r_exec\callbacks.cpp" />
+    <ClCompile Include="..\r_exec\context.cpp" />
+    <ClCompile Include="..\r_exec\cpp_programs.cpp" />
+    <ClCompile Include="..\r_exec\cst_controller.cpp" />
+    <ClCompile Include="..\r_exec\factory.cpp" />
+    <ClCompile Include="..\r_exec\group.cpp" />
+    <ClCompile Include="..\r_exec\group.inline.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugVisualizer|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\guard_builder.cpp" />
+    <ClCompile Include="..\r_exec\g_monitor.cpp" />
+    <ClCompile Include="..\r_exec\hlp_context.cpp" />
+    <ClCompile Include="..\r_exec\hlp_controller.cpp" />
+    <ClCompile Include="..\r_exec\hlp_overlay.cpp" />
+    <ClCompile Include="..\r_exec\init.cpp" />
+    <ClCompile Include="..\r_exec\mdl_controller.cpp" />
+    <ClCompile Include="..\r_exec\mem.cpp" />
+    <ClCompile Include="..\r_exec\mem.tpl.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugVisualizer|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\model_base.cpp" />
+    <ClCompile Include="..\r_exec\monitor.cpp" />
+    <ClCompile Include="..\r_exec\object.tpl.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugVisualizer|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\opcodes.cpp" />
+    <ClCompile Include="..\r_exec\operator.cpp" />
+    <ClCompile Include="..\r_exec\overlay.cpp" />
+    <ClCompile Include="..\r_exec\pattern_extractor.cpp" />
+    <ClCompile Include="..\r_exec\pgm_controller.cpp" />
+    <ClCompile Include="..\r_exec\pgm_overlay.cpp" />
+    <ClCompile Include="..\r_exec\pgm_overlay.inline.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugVisualizer|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\p_monitor.cpp" />
+    <ClCompile Include="..\r_exec\reduction_core.cpp" />
+    <ClCompile Include="..\r_exec\reduction_job.cpp" />
+    <ClCompile Include="..\r_exec\time_core.cpp" />
+    <ClCompile Include="..\r_exec\time_job.cpp" />
+    <ClCompile Include="..\r_exec\view.cpp" />
+    <ClCompile Include="..\r_exec\view.inline.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugVisualizer|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\_context.cpp" />
+    <ClCompile Include="..\submodules\CoreLibrary\CoreLibrary\base.cpp" />
+    <ClCompile Include="..\submodules\CoreLibrary\CoreLibrary\base.tpl.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugVisualizer|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\submodules\CoreLibrary\CoreLibrary\pipe.tpl.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugVisualizer|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\submodules\CoreLibrary\CoreLibrary\utils.cpp" />
+    <ClCompile Include="..\submodules\CoreLibrary\CoreLibrary\utils.tpl.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugVisualizer|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\submodules\CoreLibrary\CoreLibrary\xml_parser.cpp" />
+    <ClCompile Include="..\usr_operators\auto_focus_callback.cpp" />
+    <ClCompile Include="..\usr_operators\Callbacks\callbacks.cpp" />
+    <ClCompile Include="..\usr_operators\Operators\operators.cpp" />
+    <ClCompile Include="..\usr_operators\TestProgram\test_program.cpp" />
+    <ClCompile Include="..\usr_operators\usr_operators.cpp" />
     <ClCompile Include="AERA_main.cpp" />
     <ClCompile Include="IODevices\TCP\Proto\tcp_data_message.pb.cc" />
     <ClCompile Include="IODevices\TCP\tcp_connection.cpp" />
@@ -152,6 +260,69 @@
     <ClCompile Include="test_mem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\r_code\atom.h" />
+    <ClInclude Include="..\r_code\image.h" />
+    <ClInclude Include="..\r_code\image_impl.h" />
+    <ClInclude Include="..\r_code\list.h" />
+    <ClInclude Include="..\r_code\object.h" />
+    <ClInclude Include="..\r_code\replicode_defs.h" />
+    <ClInclude Include="..\r_code\resized_vector.h" />
+    <ClInclude Include="..\r_code\r_code.h" />
+    <ClInclude Include="..\r_code\time_buffer.h" />
+    <ClInclude Include="..\r_code\utils.h" />
+    <ClInclude Include="..\r_comp\class.h" />
+    <ClInclude Include="..\r_comp\compiler.h" />
+    <ClInclude Include="..\r_comp\decompiler.h" />
+    <ClInclude Include="..\r_comp\out_stream.h" />
+    <ClInclude Include="..\r_comp\preprocessor.h" />
+    <ClInclude Include="..\r_comp\r_comp.h" />
+    <ClInclude Include="..\r_comp\segments.h" />
+    <ClInclude Include="..\r_comp\structure_member.h" />
+    <ClInclude Include="..\r_exec\ast_controller.h" />
+    <ClInclude Include="..\r_exec\auto_focus.h" />
+    <ClInclude Include="..\r_exec\binding_map.h" />
+    <ClInclude Include="..\r_exec\callbacks.h" />
+    <ClInclude Include="..\r_exec\context.h" />
+    <ClInclude Include="..\r_exec\cpp_programs.h" />
+    <ClInclude Include="..\r_exec\cst_controller.h" />
+    <ClInclude Include="..\r_exec\dll.h" />
+    <ClInclude Include="..\r_exec\factory.h" />
+    <ClInclude Include="..\r_exec\group.h" />
+    <ClInclude Include="..\r_exec\guard_builder.h" />
+    <ClInclude Include="..\r_exec\g_monitor.h" />
+    <ClInclude Include="..\r_exec\hlp_context.h" />
+    <ClInclude Include="..\r_exec\hlp_controller.h" />
+    <ClInclude Include="..\r_exec\hlp_overlay.h" />
+    <ClInclude Include="..\r_exec\init.h" />
+    <ClInclude Include="..\r_exec\mdl_controller.h" />
+    <ClInclude Include="..\r_exec\mem.h" />
+    <ClInclude Include="..\r_exec\model_base.h" />
+    <ClInclude Include="..\r_exec\monitor.h" />
+    <ClInclude Include="..\r_exec\object.h" />
+    <ClInclude Include="..\r_exec\opcodes.h" />
+    <ClInclude Include="..\r_exec\operator.h" />
+    <ClInclude Include="..\r_exec\overlay.h" />
+    <ClInclude Include="..\r_exec\pattern_extractor.h" />
+    <ClInclude Include="..\r_exec\pgm_controller.h" />
+    <ClInclude Include="..\r_exec\pgm_overlay.h" />
+    <ClInclude Include="..\r_exec\p_monitor.h" />
+    <ClInclude Include="..\r_exec\reduction_core.h" />
+    <ClInclude Include="..\r_exec\reduction_job.h" />
+    <ClInclude Include="..\r_exec\time_core.h" />
+    <ClInclude Include="..\r_exec\time_job.h" />
+    <ClInclude Include="..\r_exec\view.h" />
+    <ClInclude Include="..\r_exec\_context.h" />
+    <ClInclude Include="..\submodules\CoreLibrary\CoreLibrary\base.h" />
+    <ClInclude Include="..\submodules\CoreLibrary\CoreLibrary\pipe.h" />
+    <ClInclude Include="..\submodules\CoreLibrary\CoreLibrary\types.h" />
+    <ClInclude Include="..\submodules\CoreLibrary\CoreLibrary\utils.h" />
+    <ClInclude Include="..\submodules\CoreLibrary\CoreLibrary\xml_parser.h" />
+    <ClInclude Include="..\usr_operators\auto_focus_callback.h" />
+    <ClInclude Include="..\usr_operators\Callbacks\callbacks.h" />
+    <ClInclude Include="..\usr_operators\Operators\operators.h" />
+    <ClInclude Include="..\usr_operators\TestProgram\test_program.h" />
+    <ClInclude Include="..\usr_operators\types.h" />
+    <ClInclude Include="..\usr_operators\usr_operators.h" />
     <ClInclude Include="IODevices\TCP\Proto\tcp_data_message.pb.h" />
     <ClInclude Include="IODevices\TCP\Proto\utils.h" />
     <ClInclude Include="IODevices\TCP\tcp_connection.h" />
@@ -169,24 +340,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <SubType>Designer</SubType>
     </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\r_code\r_code.vcxproj">
-      <Project>{6f4e1695-bbef-46d1-b0c0-1b71a65fad66}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\r_comp\r_comp.vcxproj">
-      <Project>{345e47d7-90e9-482b-ad10-c11cc828e197}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\r_exec\r_exec.vcxproj">
-      <Project>{c36b96ec-ef72-4b21-87be-2130e997bda0}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\usr_operators\usr_operators.vcxproj">
-      <Project>{3de12b3f-d45e-46e1-b501-e294009ad4b9}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Correlator.Data.Generation\motor.babbling.replicode" />

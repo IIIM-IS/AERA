@@ -19,6 +19,198 @@
       <Filter>IODevices\video_screen</Filter>
     </ClCompile>
     <ClCompile Include="AERA_main.cpp" />
+    <ClCompile Include="..\submodules\CoreLibrary\CoreLibrary\base.cpp">
+      <Filter>CoreLibrary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\submodules\CoreLibrary\CoreLibrary\base.tpl.cpp">
+      <Filter>CoreLibrary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\submodules\CoreLibrary\CoreLibrary\pipe.tpl.cpp">
+      <Filter>CoreLibrary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\submodules\CoreLibrary\CoreLibrary\utils.cpp">
+      <Filter>CoreLibrary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\submodules\CoreLibrary\CoreLibrary\utils.tpl.cpp">
+      <Filter>CoreLibrary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\submodules\CoreLibrary\CoreLibrary\xml_parser.cpp">
+      <Filter>CoreLibrary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_code\atom.cpp">
+      <Filter>r_code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_code\atom.inline.cpp">
+      <Filter>r_code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_code\code_utils.cpp">
+      <Filter>r_code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_code\image.cpp">
+      <Filter>r_code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_code\image.tpl.cpp">
+      <Filter>r_code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_code\image_impl.cpp">
+      <Filter>r_code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_code\object.cpp">
+      <Filter>r_code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_code\r_code.cpp">
+      <Filter>r_code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_comp\class.cpp">
+      <Filter>r_comp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_comp\compiler.cpp">
+      <Filter>r_comp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_comp\decompiler.cpp">
+      <Filter>r_comp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_comp\preprocessor.cpp">
+      <Filter>r_comp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_comp\r_comp.cpp">
+      <Filter>r_comp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_comp\segments.cpp">
+      <Filter>r_comp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_comp\structure_member.cpp">
+      <Filter>r_comp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\_context.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\ast_controller.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\ast_controller.tpl.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\auto_focus.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\binding_map.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\callbacks.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\context.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\cpp_programs.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\cst_controller.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\factory.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\g_monitor.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\group.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\group.inline.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\guard_builder.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\hlp_context.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\hlp_controller.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\hlp_overlay.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\init.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\mdl_controller.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\mem.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\mem.tpl.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\model_base.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\monitor.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\object.tpl.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\opcodes.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\operator.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\overlay.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\p_monitor.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\pattern_extractor.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\pgm_controller.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\pgm_overlay.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\pgm_overlay.inline.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\reduction_core.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\reduction_job.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\time_core.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\time_job.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\view.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\r_exec\view.inline.cpp">
+      <Filter>r_exec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\usr_operators\auto_focus_callback.cpp">
+      <Filter>usr_operators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\usr_operators\usr_operators.cpp">
+      <Filter>usr_operators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\usr_operators\Callbacks\callbacks.cpp">
+      <Filter>usr_operators\Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\usr_operators\Operators\operators.cpp">
+      <Filter>usr_operators\Operators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\usr_operators\TestProgram\test_program.cpp">
+      <Filter>usr_operators\TestProgram</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="settings.h" />
@@ -42,6 +234,195 @@
       <Filter>IODevices\TCP\Proto</Filter>
     </ClInclude>
     <ClInclude Include="main.h" />
+    <ClInclude Include="..\submodules\CoreLibrary\CoreLibrary\base.h">
+      <Filter>CoreLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\submodules\CoreLibrary\CoreLibrary\pipe.h">
+      <Filter>CoreLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\submodules\CoreLibrary\CoreLibrary\types.h">
+      <Filter>CoreLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\submodules\CoreLibrary\CoreLibrary\utils.h">
+      <Filter>CoreLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\submodules\CoreLibrary\CoreLibrary\xml_parser.h">
+      <Filter>CoreLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_code\atom.h">
+      <Filter>r_code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_code\image.h">
+      <Filter>r_code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_code\image_impl.h">
+      <Filter>r_code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_code\list.h">
+      <Filter>r_code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_code\object.h">
+      <Filter>r_code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_code\r_code.h">
+      <Filter>r_code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_code\replicode_defs.h">
+      <Filter>r_code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_code\resized_vector.h">
+      <Filter>r_code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_code\time_buffer.h">
+      <Filter>r_code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_code\utils.h">
+      <Filter>r_code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_comp\class.h">
+      <Filter>r_comp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_comp\compiler.h">
+      <Filter>r_comp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_comp\decompiler.h">
+      <Filter>r_comp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_comp\out_stream.h">
+      <Filter>r_comp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_comp\preprocessor.h">
+      <Filter>r_comp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_comp\r_comp.h">
+      <Filter>r_comp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_comp\segments.h">
+      <Filter>r_comp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_comp\structure_member.h">
+      <Filter>r_comp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\_context.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\ast_controller.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\auto_focus.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\binding_map.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\callbacks.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\context.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\cpp_programs.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\cst_controller.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\dll.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\factory.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\g_monitor.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\group.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\guard_builder.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\hlp_context.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\hlp_controller.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\hlp_overlay.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\init.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\mdl_controller.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\mem.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\model_base.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\monitor.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\object.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\opcodes.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\operator.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\overlay.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\p_monitor.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\pattern_extractor.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\pgm_controller.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\pgm_overlay.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\reduction_core.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\reduction_job.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\time_core.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\time_job.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\r_exec\view.h">
+      <Filter>r_exec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\usr_operators\auto_focus_callback.h">
+      <Filter>usr_operators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\usr_operators\types.h">
+      <Filter>usr_operators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\usr_operators\usr_operators.h">
+      <Filter>usr_operators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\usr_operators\Operators\operators.h">
+      <Filter>usr_operators\Operators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\usr_operators\Callbacks\callbacks.h">
+      <Filter>usr_operators\Callbacks</Filter>
+    </ClInclude>
+    <ClInclude Include="..\usr_operators\TestProgram\test_program.h">
+      <Filter>usr_operators\TestProgram</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="settings.xml" />
@@ -70,6 +451,30 @@
     </Filter>
     <Filter Include="IODevices\video_screen">
       <UniqueIdentifier>{8da07ab6-5d70-4e7d-93e5-af3962f08372}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CoreLibrary">
+      <UniqueIdentifier>{7dbcafca-749e-4cd0-b6a6-9c589003020f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="r_code">
+      <UniqueIdentifier>{eac8b603-8353-4fd1-bca5-3b1766932aca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="r_comp">
+      <UniqueIdentifier>{59494609-c6d3-4f03-bc13-5f60ea913081}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="r_exec">
+      <UniqueIdentifier>{fb0e08d8-b6e9-481f-98c9-8d3a315e106c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="usr_operators">
+      <UniqueIdentifier>{cbd9f5c4-c19f-4ef4-aca5-bbe0c37c8ae3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="usr_operators\Callbacks">
+      <UniqueIdentifier>{8d4609a3-5bb1-4044-a34b-7b4df4f3acd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="usr_operators\Operators">
+      <UniqueIdentifier>{1c7715d3-6276-4c78-bd52-208a4fdd4ecd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="usr_operators\TestProgram">
+      <UniqueIdentifier>{e787001f-7749-4296-a5de-871c63f5fd62}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
