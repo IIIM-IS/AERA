@@ -85,6 +85,7 @@
 #include "usr_operators.h"
 
 #include "../r_exec/init.h"
+#include "auto_focus_callback.h"
 
 #include <iostream>
 #include <cmath>
@@ -193,4 +194,37 @@ void GetCallbackName(char *callback_name) {
     ++callback_index;
     return;
   }
+}
+
+void* GetUserOperatorFunction(const char* function_name) {
+  if (strcmp(function_name, "Init") == 0)
+    return &Init;
+  else if (strcmp(function_name, "GetOperatorCount") == 0)
+    return &GetOperatorCount;
+  else if (strcmp(function_name, "GetOperatorName") == 0)
+    return &GetOperatorName;
+  else if (strcmp(function_name, "add") == 0)
+    return &add;
+  else if (strcmp(function_name, "sub") == 0)
+    return &sub;
+  else if (strcmp(function_name, "mul") == 0)
+    return &mul;
+  else if (strcmp(function_name, "dis") == 0)
+    return &dis;
+  else if (strcmp(function_name, "GetProgramCount") == 0)
+    return &GetProgramCount;
+  else if (strcmp(function_name, "GetProgramName") == 0)
+    return &GetProgramName;
+  else if (strcmp(function_name, "test_program") == 0)
+    return &test_program;
+  else if (strcmp(function_name, "auto_focus") == 0)
+    return &auto_focus;
+  else if (strcmp(function_name, "GetCallbackCount") == 0)
+    return &GetCallbackCount;
+  else if (strcmp(function_name, "GetCallbackName") == 0)
+    return &GetCallbackName;
+  else if (strcmp(function_name, "print") == 0)
+    return &print;
+  else
+    return NULL;
 }
