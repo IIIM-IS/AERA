@@ -495,17 +495,17 @@ bool Init(const char *user_operator_library_path,
   // Operators.
   typedef uint16 (*OpcodeRetriever)(const char *);
   typedef void (*UserInit)(OpcodeRetriever);
-  UserInit _Init = userOperatorLibrary.getFunction<UserInit>("Init");
+  auto _Init = (UserInit)userOperatorLibrary.getFunction("Init");
   if (!_Init)
     return false;
 
   typedef uint16 (*UserGetOperatorCount)();
-  UserGetOperatorCount GetOperatorCount = userOperatorLibrary.getFunction<UserGetOperatorCount>("GetOperatorCount");
+  auto GetOperatorCount = (UserGetOperatorCount)userOperatorLibrary.getFunction("GetOperatorCount");
   if (!GetOperatorCount)
     return false;
 
   typedef void (*UserGetOperatorName)(char *);
-  UserGetOperatorName GetOperatorName = userOperatorLibrary.getFunction<UserGetOperatorName>("GetOperatorName");
+  auto GetOperatorName = (UserGetOperatorName)userOperatorLibrary.getFunction("GetOperatorName");
   if (!GetOperatorName)
     return false;
 
@@ -526,7 +526,7 @@ bool Init(const char *user_operator_library_path,
       std::cerr << "Operator " << op_name << " is undefined" << std::endl;
       exit(-1);
     }
-    UserOperator op = userOperatorLibrary.getFunction<UserOperator>(op_name);
+    auto op = (UserOperator)userOperatorLibrary.getFunction(op_name);
     if (!op)
       return false;
 
@@ -535,12 +535,12 @@ bool Init(const char *user_operator_library_path,
 
   // C++ programs.
   typedef uint16 (*UserGetProgramCount)();
-  UserGetProgramCount GetProgramCount = userOperatorLibrary.getFunction<UserGetProgramCount>("GetProgramCount");
+  auto GetProgramCount = (UserGetProgramCount)userOperatorLibrary.getFunction("GetProgramCount");
   if (!GetProgramCount)
     return false;
 
   typedef void (*UserGetProgramName)(char *);
-  UserGetProgramName GetProgramName = userOperatorLibrary.getFunction<UserGetProgramName>("GetProgramName");
+  auto GetProgramName = (UserGetProgramName)userOperatorLibrary.getFunction("GetProgramName");
   if (!GetProgramName)
     return false;
 
@@ -555,7 +555,7 @@ bool Init(const char *user_operator_library_path,
 
     std::string _pgm_name = pgm_name;
 
-    UserProgram pgm = userOperatorLibrary.getFunction<UserProgram>(pgm_name);
+    auto pgm = (UserProgram)userOperatorLibrary.getFunction(pgm_name);
     if (!pgm)
       return false;
 
@@ -564,12 +564,12 @@ bool Init(const char *user_operator_library_path,
 
   // Callbacks.
   typedef uint16(*UserGetCallbackCount)();
-  UserGetCallbackCount GetCallbackCount = userOperatorLibrary.getFunction<UserGetCallbackCount>("GetCallbackCount");
+  auto GetCallbackCount = (UserGetCallbackCount)userOperatorLibrary.getFunction("GetCallbackCount");
   if (!GetCallbackCount)
     return false;
 
   typedef void(*UserGetCallbackName)(char *);
-  UserGetCallbackName GetCallbackName = userOperatorLibrary.getFunction<UserGetCallbackName>("GetCallbackName");
+  auto GetCallbackName = (UserGetCallbackName)userOperatorLibrary.getFunction("GetCallbackName");
   if (!GetCallbackName)
     return false;
 
@@ -584,7 +584,7 @@ bool Init(const char *user_operator_library_path,
 
     std::string _callback_name = callback_name;
 
-    UserCallback callback = userOperatorLibrary.getFunction<UserCallback>(callback_name);
+    auto callback = (UserCallback)userOperatorLibrary.getFunction(callback_name);
     if (!callback)
       return false;
 
