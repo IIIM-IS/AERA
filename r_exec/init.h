@@ -180,14 +180,38 @@ public:
  */
 bool r_exec_dll InitOpcodes(const r_comp::Metadata& metadata);
 
+/**
+ * Library is an abstract base class for a shared or static library with getFunction.
+ */
+class FunctionLibrary {
+public:
+  /**
+   * Return the function with function_name or NULL if not found.
+   */
+  virtual void* getFunction(const char* function_name) = 0;
+};
+
+/**
+ * SharedFunctionLibrary extends FunctionLibrary to implement
+ * functionName using the SharedLibrary class.
+ */
+class SharedFunctionLibrary : public FunctionLibrary {
+public:
+  SharedLibrary* load(const char* file_name) { return sharedLibrary_.load(file_name); }
+
+  void* getFunction(const char* function_name) override { return sharedLibrary_.getFunction(function_name); }
+private:
+  SharedLibrary sharedLibrary_;
+};
+
 // Initialize Now, compile userOperatorLibrary, builds the Seed and loads the user-defined operators.
 // Return false in case of a problem (e.g. file not found, operator not found, etc.).
-bool r_exec_dll Init(SharedLibrary* userOperatorLibrary,
+bool r_exec_dll Init(FunctionLibrary* userOperatorLibrary,
   Timestamp (*time_base)(),
   const char *seed_path);
 
 // Alternate taking a ready-made metadata and seed (will be copied into Metadata and Seed).
-bool r_exec_dll Init(SharedLibrary* userOperatorLibrary,
+bool r_exec_dll Init(FunctionLibrary* userOperatorLibrary,
   Timestamp (*time_base)(),
   const r_comp::Metadata &metadata,
   const r_comp::Image &seed);

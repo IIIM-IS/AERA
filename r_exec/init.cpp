@@ -475,7 +475,7 @@ bool InitOpcodes(const r_comp::Metadata& metadata) {
   return true;
 }
 
-static bool Init(SharedLibrary* userOperatorLibrary,
+static bool Init(FunctionLibrary* userOperatorLibrary,
           Timestamp (*time_base)()) {
 
   Now = time_base;
@@ -592,7 +592,7 @@ static bool Init(SharedLibrary* userOperatorLibrary,
   return true;
 }
 
-bool Init(SharedLibrary* userOperatorLibrary,
+bool Init(FunctionLibrary* userOperatorLibrary,
   Timestamp (*time_base)(),
   const char *seed_path) {
 
@@ -606,7 +606,7 @@ bool Init(SharedLibrary* userOperatorLibrary,
   return Init(userOperatorLibrary, time_base);
 }
 
-bool Init(SharedLibrary* userOperatorLibrary,
+bool Init(FunctionLibrary* userOperatorLibrary,
   Timestamp (*time_base)(),
   const r_comp::Metadata &metadata,
   const r_comp::Image &seed) {
