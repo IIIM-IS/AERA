@@ -349,8 +349,8 @@ public:
    * \return The created View.
    */
   View* _Mem::inject_marker_value_from_io_device(
-    Code* obj, Code* prop, std::vector<Atom> val, Timestamp after, Timestamp before,
-    View::SyncMode sync_mode, Code* group);
+    r_code::Code* obj, r_code::Code* prop, std::vector<Atom> val, Timestamp after, Timestamp before,
+    View::SyncMode sync_mode, r_code::Code* group);
 
   /**
    * Inject (fact (mk.val obj prop val 1) after before 1 1)
