@@ -442,13 +442,19 @@ namespace tcp_io_device {
       auto entity = entities_[id_mapping_[var.getMetaData().getEntityID()]];
       auto obj = objects_[id_mapping_[var.getMetaData().getID()]];
       
-      Atom val = Atom();
+      std::vector<Atom> val;
       if (var.getMetaData().getType() == VariableDescription_DataType_DOUBLE)
       {
-        val = Atom::Float(var.getData<double>()[0]);
+        std::vector<double> values = var.getData<double>();
+        for (auto it = values.begin(); it != values.end(); ++it) {
+          val.push_back(Atom::Float(*it));
+        }
       }
       else if (var.getMetaData().getType() == VariableDescription_DataType_INT64){
-        val = Atom::Float(var.getData<int64_t>()[0]);
+        std::vector<int64_t> values = var.getData<int64_t>();
+        for (auto it = values.begin(); it != values.end(); ++it) {
+          val.push_back(Atom::Float(*it));
+        }
       }
       else if (var.getMetaData().getType() == VariableDescription_DataType_COMMUNICATION_ID) {
         int64_t val = var.getData<int64_t>()[0];
