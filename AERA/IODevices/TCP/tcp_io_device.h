@@ -218,9 +218,12 @@ namespace tcp_io_device {
     * \param cmd_identifier The identifier of the ejected command.
     * \param entity The name of the entity for which the command was ejected.
     * \param cmd the ejected r_code::Code*.
-    * \return The constructed TCPMessage which can be sent to the environment simulation.
+    * \return The constructed MsgData which can be sent to the environment simulation.
     */
-    std::unique_ptr< TCPMessage> constructMessageFromCommand(std::string cmd_identifier, std::string entity, r_code::Code* cmd);
+    tcp_io_device::MsgData constructMessageFromCommand(std::string cmd_identifier, std::string entity, r_code::Code* cmd);
+
+    template<class T>
+    std::vector<T> getDataVec(r_code::Code* cmd, int start_index, int end_index, tcp_io_device::VariableDescription_DataType type);
 
     /**
     * Message handler for incoming messages. Passes them on to specific handlers by the given TCPMessage_Type
@@ -235,11 +238,42 @@ namespace tcp_io_device {
     void handleDataMessage(std::unique_ptr<TCPMessage> data_msg);
 
     /**
+    * Injects numeric (i.e., int and double) variables without specified opcode_handle (i.e., empty string). Single dimensional variables are injected as is, empty and multi dimensional variables are injected as sets.
+    * \param var MsgData object to be injected.
+    */
+    template<class V>
+    void injectDefault(r_code::Code* entity, r_code::Code* object, std::vector<V> vals, core::Timestamp time);
+
+    void injectDefault(r_code::Code* entity, r_code::Code* object, std::vector<r_code::Code*> vals, core::Timestamp time);
+
+    /**
+    * Injects numeric (i.e., int and double) variables with either specified opcode_handle "set" (i.e. for single dimensional variables that are to be injected as sets), or multi dimensional variables injected through injectDefault().
+    * \param var MsgData object to be injected.
+    */
+    template<class V>
+    void injectSet(r_code::Code* entity, r_code::Code* object, std::vector<V> vals, core::Timestamp time);
+
+    void injectSet(r_code::Code* entity, r_code::Code* object, std::vector<r_code::Code*> vals, core::Timestamp time);
+
+    /**
+    * Injects numeric (i.e., int and double) variables with specified opcode_handle.
+    * \param var MsgData object to be injected.
+    */
+    template<class V>
+    void injectOpCode(r_code::Code* entity, r_code::Code* object, std::vector<V> vals, core::Timestamp time, std::string opcode_handle);
+
+    /**
     * Message handler for incoming setup messages. Fills the available entities_, objects_, and commands_ maps as well as
     * a mapping of id to string for fast access when receiving messages from the environment simulation.
     * \param setup_msg The incoming message.
     */
     void handleSetupMessage(std::unique_ptr<TCPMessage> setup_msg);
+
+    /**
+    * Handler to send messages. Transforms the MsgData object to a TCPMessage with type Data.
+    * \param msg_data MsgData object to send.
+    */
+    void sendDataMessage(tcp_io_device::MsgData msg_data);
 
     /**
     * Enqueues messages to the SafeQueues to pass them thread-safe to the TCPConnection which handles the actual sending of the message.
