@@ -335,6 +335,25 @@ public:
 
   /**
    * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * [sync_mode after 1 1 group nil]
+   * where val is a set of Atoms.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param val The Atom value for the mk.val, such as Atom::Float(1).
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \param sync_mode The view sync mode, such as View::SYNC_PERIODIC.
+   * \param group The group of the view, such as get_stdin().
+   * \return The created View.
+   */
+  View* _Mem::inject_marker_value_from_io_device(
+    Code* obj, Code* prop, std::vector<Atom> val, Timestamp after, Timestamp before,
+    View::SyncMode sync_mode, Code* group);
+
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
    * [sync_mode after 1 1 stdin nil]
    * where val is a simple Atom.
    * This is called from the I/O device to call the normal inject(view), then
