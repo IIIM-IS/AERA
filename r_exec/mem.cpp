@@ -844,10 +844,6 @@ View* _Mem::inject_marker_value_from_io_device(
     // We don't expect this, but sanity check.
     return NULL;
 
-  if (val.size() == 1) {
-    return inject_marker_value_from_io_device(obj, prop, val[0], after, before, sync_mode, group);
-  }
-
   Code* object = new LObject(this);
   uint16 extent_index = 4;
   object->code(0) = Atom::Marker(GetOpcode("mk.val"), 4); // Caveat: arity does not include the opcode.
