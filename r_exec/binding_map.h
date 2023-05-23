@@ -177,15 +177,32 @@ class r_exec_dll StructureValue :
   public BoundValue {
 private:
   P<r_code::Code> structure_;
-  StructureValue(BindingMap *map, const r_code::Code *structure);
+  StructureValue(BindingMap* map, const r_code::Code* structure)
+    : StructureValue(map, &structure->code(0), 0) {}
 public:
-  StructureValue(BindingMap *map, const r_code::Code *source, uint16 structure_index);
+  StructureValue(BindingMap *map, const r_code::Code *source, uint16 structure_index)
+    : StructureValue(map, &source->code(0), structure_index) {}
   StructureValue(BindingMap *map, const Atom *source, uint16 structure_index);
   StructureValue(BindingMap *map, Timestamp time);
   StructureValue(BindingMap *map, std::chrono::microseconds duration);
 
   Value *copy(BindingMap *map) const override;
-  void valuate(r_code::Code *destination, uint16 write_index, uint16 &extent_index) const override;
+  void valuate(r_code::Code* destination, uint16 write_index, uint16& extent_index) const override {
+    destination->code(write_index) = Atom::IPointer(extent_index);
+    copy_structure(destination, extent_index, &structure_->code(0), 0);
+  }
+
+  /**
+   * This is a helper to copy the structure starting at source(source_index) to the destination at extent_index.
+   * If needed, you should already have done destination->code(write_index) = Atom::IPointer(extent_index);
+   * This copies the structure to destination[extent_index].
+   * \param destination The destination code.
+   * \param extent_index Copy the structure to destination starting at this index and update the index.
+   * \param source_index Copy the structure from code(source_index).
+   */
+  static void copy_structure(
+    r_code::Code* destination, uint16& extent_index, const Atom* source, uint16 source_index);
+
   bool match(const r_code::Code *object, uint16 index) override;
   Atom *get_code() override;
   r_code::Code *get_object() override;
