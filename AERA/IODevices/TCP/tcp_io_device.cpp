@@ -112,8 +112,8 @@ namespace tcp_io_device {
 }
 #else
 
-#include "Proto/utils.h"
-#include "Proto/tcp_data_message.pb.h"
+#include "Protobuf/utils.h"
+#include "Protobuf/tcp_data_message.pb.h"
 
 namespace tcp_io_device {
 
