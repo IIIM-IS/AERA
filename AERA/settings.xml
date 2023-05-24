@@ -2,7 +2,7 @@
   <!-- Parameter to set which mem to use + aditional params specific to the mem.
        mem_file can be either test_mem, tcp_io_device or video_screen at the moment-->
   <IODevice
-	  io_device="tcp_io_device"
+	  io_device="test_mem"
   />
   <Load
     usr_operator_path="./usr_operators.dll"
@@ -47,7 +47,7 @@
       test_objects="no"
     />
   </Debug>
-  <Run run_time="1300" probe_level="2">
+  <Run run_time="1000" probe_level="2">
     <Models
       get_models="yes"
       decompile_models="yes"
