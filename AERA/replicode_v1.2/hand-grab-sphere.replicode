@@ -168,8 +168,9 @@ M7:(mdl [] []
 |[]
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
+!def p_zero 0
 !def pH0 25
-!def pS0 0
+!def pS0 p_zero
 !def pS1 15
 
 !def DRIVE_START 300ms
@@ -237,7 +238,8 @@ pgm_cmd_move_h_holding_c:(pgm [] []
    (> Cmd_before After)
 []
    ; Limit DeltaP to +/- 20. Inject the fact that the command was executed.
-   (inj [Command:(cmd move [h DeltaP:(min (max DeltaP_in -20) 20)] 1) []])
+   ; (/ DeltaP_in (dis 0 DeltaP_in))) is DeltaP_in normalized to size 1.
+   (inj [Command:(cmd move [h DeltaP:(* (min 20 (dis p_zero DeltaP_in)) (* DeltaP_in (/ 1 (dis p_zero DeltaP_in))))] 1) []])
    (inj []
       (fact Command (+ After 20ms) Before 1 1)
       [SYNC_ONCE After 1 1 stdin nil]
@@ -263,7 +265,8 @@ pgm_cmd_move_h_holding_s:(pgm [] []
    (> Cmd_before After)
 []
    ; Limit DeltaP to +/- 20. Inject the fact that the command was executed.
-   (inj [Command:(cmd move [h DeltaP:(min (max DeltaP_in -20) 20)] 1) []])
+   ; (/ DeltaP_in (dis 0 DeltaP_in))) is DeltaP_in normalized to size 1.
+   (inj [Command:(cmd move [h DeltaP:(* (min 20 (dis p_zero DeltaP_in)) (* DeltaP_in (/ 1 (dis p_zero DeltaP_in))))] 1) []])
    (inj []
       (fact Command (+ After 20ms) Before 1 1)
       [SYNC_ONCE After 1 1 stdin nil]
@@ -289,7 +292,8 @@ pgm_cmd_move_h_not_holding:(pgm [] []
    (> Cmd_before After)
 []
    ; Limit DeltaP to +/- 20. Inject the fact that the command was executed.
-   (inj [Command:(cmd move [h DeltaP:(min (max DeltaP_in -20) 20)] 1) []])
+   ; (/ DeltaP_in (dis 0 DeltaP_in))) is DeltaP_in normalized to size 1.
+   (inj [Command:(cmd move [h DeltaP:(* (min 20 (dis p_zero DeltaP_in)) (* DeltaP_in (/ 1 (dis p_zero DeltaP_in))))] 1) []])
    (inj []
       (fact Command (+ After 20ms) Before 1 1)
       [SYNC_ONCE After 1 1 stdin nil]
@@ -334,7 +338,7 @@ pgm_cmd_grab_h:(pgm [] []
    (ptn (fact G:(goal (fact Command:(cmd grab [h] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
    (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Pos_c: Pos_s:] :) After: Before: ::) [])
 []
-   (= Pos_h Pos_s); For h to grab s, they must be at the same position.
+   (< (dis Pos_h Pos_s) 0.00001); For h to grab s, they must be at the same position.
    (= (is_sim G) false)
    (< Cmd_after Before)
    (> Cmd_before After)
