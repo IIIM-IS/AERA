@@ -7,7 +7,7 @@
   <Load
     usr_operator_path="./usr_operators.dll"
     usr_class_path="../AERA/replicode_v1.2/user.classes.replicode"
-    source_file_name="../AERA/replicode_v1.2/hand-grab-sphere-learn.external.replicode"
+    source_file_name="../AERA/replicode_v1.2/main.replicode"
   />
   <!--Init is set to diagnostic time by default. 
       For real time, set reduction_core_count to "6" and time_core_count to "2" . -->
