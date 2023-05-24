@@ -2,12 +2,12 @@
   <!-- Parameter to set which mem to use + aditional params specific to the mem.
        mem_file can be either test_mem, tcp_io_device or video_screen at the moment-->
   <IODevice
-	  io_device="test_mem"
+	  io_device="tcp_io_device"
   />
   <Load
     usr_operator_path="./usr_operators.dll"
     usr_class_path="../AERA/replicode_v1.2/user.classes.replicode"
-    source_file_name="../AERA/replicode_v1.2/main.replicode"
+    source_file_name="../AERA/replicode_v1.2/hand-grab-sphere-learn.external.replicode"
   />
   <!--Init is set to diagnostic time by default. 
       For real time, set reduction_core_count to "6" and time_core_count to "2" . -->
@@ -47,7 +47,7 @@
       test_objects="no"
     />
   </Debug>
-  <Run run_time="1000" probe_level="2">
+  <Run run_time="1300" probe_level="2">
     <Models
       get_models="yes"
       decompile_models="yes"
