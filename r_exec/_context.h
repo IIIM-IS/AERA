@@ -142,7 +142,14 @@ public:
   void setAtomicResult(Atom a) const;
   void setTimestampResult(Timestamp t) const;
   void setDurationResult(std::chrono::microseconds d) const;
-  void setCompoundResultHead(Atom a) const;
+
+  /**
+   * Patch the code with a VALUE_PTR to the values array.
+   * \param a The Atom that is the head of the compound value.
+   * \return The index in the value array of the head.
+   */
+  uint16 setCompoundResultHead(Atom a) const;
+
   void addCompoundResultPart(Atom a) const;
 
   void trace(std::ostream& out) const;
