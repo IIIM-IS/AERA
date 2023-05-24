@@ -1,3 +1,6 @@
 [submodule "submodules/CoreLibrary"]
 	path = submodules/CoreLibrary
 	url = https://github.com/IIIM-IS/CoreLibrary.git
+[submodule "AERA\\IODevices\\TCP\\Protobuf"]
+	path = AERA\\IODevices\\TCP\\Protobuf
+	url = https://github.com/IIIM-IS/AERA_Protobuf.git
