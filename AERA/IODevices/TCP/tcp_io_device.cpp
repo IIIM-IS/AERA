@@ -112,8 +112,8 @@ namespace tcp_io_device {
 }
 #else
 
-#include "Protobuf/utils.h"
-#include "Protobuf/tcp_data_message.pb.h"
+#include "AERA_Protobuf/utils.h"
+#include "AERA_Protobuf/tcp_data_message.pb.h"
 
 namespace tcp_io_device {
 

@@ -16,7 +16,7 @@
       <Filter>IODevices\video_screen</Filter>
     </ClCompile>
     <ClCompile Include="AERA_main.cpp" />
-    <ClCompile Include="IODevices\TCP\Protobuf\tcp_data_message.pb.cc" />
+    <ClCompile Include="IODevices\TCP\AERA_Protobuf\tcp_data_message.pb.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="settings.h" />
@@ -34,8 +34,8 @@
       <Filter>IODevices\video_screen</Filter>
     </ClInclude>
     <ClInclude Include="main.h" />
-    <ClInclude Include="IODevices\TCP\Protobuf\tcp_data_message.pb.h" />
-    <ClInclude Include="IODevices\TCP\Protobuf\utils.h" />
+    <ClInclude Include="IODevices\TCP\AERA_Protobuf\tcp_data_message.pb.h" />
+    <ClInclude Include="IODevices\TCP\AERA_Protobuf\utils.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="settings.xml" />
@@ -283,7 +283,7 @@
     <None Include="replicode_v1.2\hand-grab-sphere-learn.external.replicode">
       <Filter>replicode_v1.2</Filter>
     </None>
-    <None Include="IODevices\TCP\Protobuf\README.md" />
-    <None Include="IODevices\TCP\Protobuf\tcp_data_message.proto" />
+    <None Include="IODevices\TCP\AERA_Protobuf\README.md" />
+    <None Include="IODevices\TCP\AERA_Protobuf\tcp_data_message.proto" />
   </ItemGroup>
 </Project>
