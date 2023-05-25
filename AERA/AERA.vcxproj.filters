@@ -16,7 +16,9 @@
       <Filter>IODevices\video_screen</Filter>
     </ClCompile>
     <ClCompile Include="AERA_main.cpp" />
-    <ClCompile Include="IODevices\TCP\AERA_Protobuf\tcp_data_message.pb.cc" />
+    <ClCompile Include="IODevices\TCP\AERA_Protobuf\tcp_data_message.pb.cc">
+      <Filter>IODevices\TCP\AERA_Protobuf</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="settings.h" />
@@ -34,8 +36,12 @@
       <Filter>IODevices\video_screen</Filter>
     </ClInclude>
     <ClInclude Include="main.h" />
-    <ClInclude Include="IODevices\TCP\AERA_Protobuf\tcp_data_message.pb.h" />
-    <ClInclude Include="IODevices\TCP\AERA_Protobuf\utils.h" />
+    <ClInclude Include="IODevices\TCP\AERA_Protobuf\tcp_data_message.pb.h">
+      <Filter>IODevices\TCP\AERA_Protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="IODevices\TCP\AERA_Protobuf\utils.h">
+      <Filter>IODevices\TCP\AERA_Protobuf</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="settings.xml" />
@@ -61,6 +67,9 @@
     </Filter>
     <Filter Include="IODevices\video_screen">
       <UniqueIdentifier>{8da07ab6-5d70-4e7d-93e5-af3962f08372}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IODevices\TCP\AERA_Protobuf">
+      <UniqueIdentifier>{ce2ba5d1-fcef-4708-80fe-1d70bea0460c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -283,7 +292,11 @@
     <None Include="replicode_v1.2\hand-grab-sphere-learn.external.replicode">
       <Filter>replicode_v1.2</Filter>
     </None>
-    <None Include="IODevices\TCP\AERA_Protobuf\README.md" />
-    <None Include="IODevices\TCP\AERA_Protobuf\tcp_data_message.proto" />
+    <None Include="IODevices\TCP\AERA_Protobuf\README.md">
+      <Filter>IODevices\TCP\AERA_Protobuf</Filter>
+    </None>
+    <None Include="IODevices\TCP\AERA_Protobuf\tcp_data_message.proto">
+      <Filter>IODevices\TCP\AERA_Protobuf</Filter>
+    </None>
   </ItemGroup>
 </Project>
