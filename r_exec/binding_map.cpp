@@ -214,25 +214,11 @@ bool AtomValue::contains(const Atom a) const {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-StructureValue::StructureValue(BindingMap *map, const Code *structure) : BoundValue(map) {
-
-  structure_ = new LocalObject();
-  for (uint16 i = 0; i < structure->code_size(); ++i)
-    structure_->code(i) = structure->code(i);
-}
-
-StructureValue::StructureValue(BindingMap *map, const Code *source, uint16 structure_index) : BoundValue(map) {
-
-  structure_ = new LocalObject();
-  for (uint16 i = 0; i <= source->code(structure_index).getAtomCount(); ++i)
-    structure_->code(i) = source->code(structure_index + i);
-}
-
 StructureValue::StructureValue(BindingMap *map, const Atom *source, uint16 structure_index) : BoundValue(map) {
 
   structure_ = new LocalObject();
-  for (uint16 i = 0; i <= source[structure_index].getAtomCount(); ++i)
-    structure_->code(i) = source[structure_index + i];
+  uint16 extent_index = 0;
+  copy_structure(structure_, extent_index, source, structure_index);
 }
 
 StructureValue::StructureValue(BindingMap *map, Timestamp time) : BoundValue(map) {
@@ -253,11 +239,17 @@ Value *StructureValue::copy(BindingMap *map) const {
   return new StructureValue(map, structure_);
 }
 
-void StructureValue::valuate(Code *destination, uint16 write_index, uint16 &extent_index) const {
+void StructureValue::copy_structure(
+  Code *destination, uint16 &extent_index, const Atom* source, uint16 source_index) {
 
-  destination->code(write_index) = Atom::IPointer(extent_index);
-  for (uint16 i = 0; i <= structure_->code(0).getAtomCount(); ++i)
-    destination->code(extent_index++) = structure_->code(i);
+  uint16 extent_start = extent_index;
+  uint8 atom_count = source[source_index].getAtomCount();
+  // Increment extent_index now in case we need to write more after the structure.
+  extent_index += (1 + atom_count);
+  for (uint16 i = 0; i <= atom_count; ++i) {
+    Atom a = source[source_index + i];
+    destination->code(extent_start + i) = a;
+  }
 }
 
 bool StructureValue::match(const Code *object, uint16 index) {

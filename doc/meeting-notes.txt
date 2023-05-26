@@ -1058,20 +1058,32 @@ Simulator
 * Webots
   * DONE. Link to Debug version of Protobuf library. [Leonard] https://github.com/IIIM-IS/AERA/pull/252
 
+2023-05-19
+* DONE. Make temporary fix for Visualizer crash. If enabled, skip deleting memory when resizing a vector. Doesn't crash, but leaks memory.
+* DONE. Update AERA to make it easier to statically link in AERA_Visualizer.
+* Webots
+  * DONE. Make pull request to wait until 65 ms to execute command and wait for it to complete. https://github.com/IIIM-IS/AERA_Webots/pull/9
+
+2023-05-25
+* DONE. Merge Leonard's AERA_Protobuf submodule update https://github.com/IIIM-IS/AERA/pull/256
+* DONE. Make hand-grab-sphere work with (vec [25 0 0]) .
+
 next meeting
+* DONE. Make pull request for bound objects with sub-structures https://github.com/IIIM-IS/AERA/pull/257
 * Cisco demo: Traceroute.
 * Webots
-  * Reproducability: Wait until 65 ms to execute command.
+  * Check if hand-grab-sphere runs with Webots.
+  * Make CTPX work with vec3 for the move model DeltaP.
+    * Add temporary special case in CTPX for vec3 [Jeff]
+    * Try putting code in usr_operators in a class.
   * Let AERA send "reset" message to reset the environment. (Use after grab fails.)
   * init() should "instantly" set the arm position. Right now it move to the init position and can hit objects.
   * (Added hack to reset positions after release.)
   * Use setup command for automatic discovery of AERA objects and commands
   * Get command efferent copy from Webots (move limit to +/- 20) [Maybe in the setup message or command reply. Need more discussion]
   * Reset the TCP connection when resetting the Webots simulation
-  * Make Visual Studio run protoc in AERA and AERA_Webots [Leonard to try]
   * Try camera
 * Demonstrate AERA removing model for disuse.
-* Try (for 6 hours) to debug the Visualizer crash.
 * hand-grab-sphere
   * Represent sphere position without direct I/O input.
   * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
