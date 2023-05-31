@@ -204,13 +204,13 @@ void* GetUserOperatorFunction(const char* function_name) {
   else if (strcmp(function_name, "GetOperatorName") == 0)
     return &GetOperatorName;
   else if (strcmp(function_name, "add") == 0)
-    return &add;
+    return &usr_operators::add;
   else if (strcmp(function_name, "sub") == 0)
-    return &sub;
+    return &usr_operators::sub;
   else if (strcmp(function_name, "mul") == 0)
-    return &mul;
+    return &usr_operators::mul;
   else if (strcmp(function_name, "dis") == 0)
-    return &dis;
+    return &usr_operators::dis;
   else if (strcmp(function_name, "GetProgramCount") == 0)
     return &GetProgramCount;
   else if (strcmp(function_name, "GetProgramName") == 0)
@@ -224,7 +224,7 @@ void* GetUserOperatorFunction(const char* function_name) {
   else if (strcmp(function_name, "GetCallbackName") == 0)
     return &GetCallbackName;
   else if (strcmp(function_name, "print") == 0)
-    return &print;
+    return &usr_operators::print;
   else
     return NULL;
 }
