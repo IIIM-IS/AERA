@@ -239,7 +239,7 @@ pgm_cmd_move_h_holding_c:(pgm [] []
 []
    ; Limit DeltaP to +/- 20. Inject the fact that the command was executed.
    ; (/ DeltaP_in (dis 0 DeltaP_in))) is DeltaP_in normalized to size 1.
-   (inj [Command:(cmd move [h DeltaP:(* (min 20 (dis p_zero DeltaP_in)) (* DeltaP_in (/ 1 (dis p_zero DeltaP_in))))] 1) []])
+   (inj [Command:(cmd move [h DeltaP:(* (min 20 (dis p_zero DeltaP_in)) (/ DeltaP_in (dis p_zero DeltaP_in)))] 1) []])
    (inj []
       (fact Command (+ After 20ms) Before 1 1)
       [SYNC_ONCE After 1 1 stdin nil]
@@ -266,7 +266,7 @@ pgm_cmd_move_h_holding_s:(pgm [] []
 []
    ; Limit DeltaP to +/- 20. Inject the fact that the command was executed.
    ; (/ DeltaP_in (dis 0 DeltaP_in))) is DeltaP_in normalized to size 1.
-   (inj [Command:(cmd move [h DeltaP:(* (min 20 (dis p_zero DeltaP_in)) (* DeltaP_in (/ 1 (dis p_zero DeltaP_in))))] 1) []])
+   (inj [Command:(cmd move [h DeltaP:(* (min 20 (dis p_zero DeltaP_in)) (/ DeltaP_in (dis p_zero DeltaP_in)))] 1) []])
    (inj []
       (fact Command (+ After 20ms) Before 1 1)
       [SYNC_ONCE After 1 1 stdin nil]
@@ -293,7 +293,7 @@ pgm_cmd_move_h_not_holding:(pgm [] []
 []
    ; Limit DeltaP to +/- 20. Inject the fact that the command was executed.
    ; (/ DeltaP_in (dis 0 DeltaP_in))) is DeltaP_in normalized to size 1.
-   (inj [Command:(cmd move [h DeltaP:(* (min 20 (dis p_zero DeltaP_in)) (* DeltaP_in (/ 1 (dis p_zero DeltaP_in))))] 1) []])
+   (inj [Command:(cmd move [h DeltaP:(* (min 20 (dis p_zero DeltaP_in)) (/ DeltaP_in (dis p_zero DeltaP_in)))] 1) []])
    (inj []
       (fact Command (+ After 20ms) Before 1 1)
       [SYNC_ONCE After 1 1 stdin nil]
