@@ -93,6 +93,7 @@ namespace usr_operators {
 bool add(const r_exec::Context &context);
 bool sub(const r_exec::Context &context);
 bool mul(const r_exec::Context &context);
+bool div(const r_exec::Context& context);
 bool dis(const r_exec::Context &context);
 
 }
