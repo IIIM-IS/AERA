@@ -87,7 +87,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>r_comp.lib;r_code.lib;CoreLibrary.lib;r_exec.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir);$(SolutionDir)\..\CoreLibrary\trunk\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
@@ -110,7 +110,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>r_comp.lib;r_code.lib;r_exec.lib;CoreLibrary.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir);$(SolutionDir)\submodules\CoreLibrary\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
@@ -134,7 +134,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>r_comp.lib;r_code.lib;CoreLibrary.lib;r_exec.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>CoreLibrary.lib;r_exec.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\CoreLibrary\trunk\DebugVisualizer;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
@@ -246,7 +246,11 @@
     </ClCompile>
     <ClCompile Include="..\submodules\CoreLibrary\CoreLibrary\xml_parser.cpp" />
     <ClCompile Include="..\usr_operators\auto_focus_callback.cpp" />
-    <ClCompile Include="..\usr_operators\Callbacks\callbacks.cpp" />
+    <ClCompile Include="..\usr_operators\Callbacks\callbacks.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)/usr_operators_callbacks.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DebugVisualizer|Win32'">$(IntDir)/usr_operators_callbacks.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)/usr_operators_callbacks.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="..\usr_operators\Operators\operators.cpp" />
     <ClCompile Include="..\usr_operators\TestProgram\test_program.cpp" />
     <ClCompile Include="..\usr_operators\usr_operators.cpp" />
