@@ -88,10 +88,11 @@
 #include "../r_exec/init.h"
 #include "../r_exec/mem.h"
 
+static uint16 Vec3Opcode;
+static uint16 Vec2Opcode;
+static uint16 VecOpcode;
 
-uint16 Vec3Opcode;
-uint16 Vec2Opcode;
-uint16 VecOpcode;
+namespace usr_operators {
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -317,6 +318,8 @@ bool dis(const r_exec::Context &context) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+}
 
 void Operators::Init(OpcodeRetriever r) {
 

@@ -88,11 +88,13 @@
 #include "../types.h"
 
 
-extern "C" {
-bool dll_export add(const r_exec::Context &context);
-bool dll_export sub(const r_exec::Context &context);
-bool dll_export mul(const r_exec::Context &context);
-bool dll_export dis(const r_exec::Context &context);
+namespace usr_operators {
+
+bool add(const r_exec::Context &context);
+bool sub(const r_exec::Context &context);
+bool mul(const r_exec::Context &context);
+bool dis(const r_exec::Context &context);
+
 }
 
 class Operators {
