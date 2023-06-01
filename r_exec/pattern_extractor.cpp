@@ -969,13 +969,12 @@ void CTPX::reduce(r_exec::View *input) {
       ++i;
   }
 
-  bool need_guard;
+  bool need_guard = false;
   if (target_->get_reference(0)->code(0).asOpcode() == Opcodes::MkVal) {
     Atom target_val = target_->get_reference(0)->code(MK_VAL_VALUE);
-    need_guard = target_val.isFloat();
+    if (target_val.isFloat())
+      need_guard = true;
   }
-  else
-    need_guard = false;
 
   auto period = duration_cast<microseconds>(Utils::GetTimestamp<Code>(consequent, FACT_AFTER) - Utils::GetTimestamp<Code>(target_, FACT_AFTER)); // sampling period.
   P<GuardBuilder> guard_builder;
