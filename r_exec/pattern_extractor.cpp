@@ -970,8 +970,10 @@ void CTPX::reduce(r_exec::View *input) {
   }
 
   bool need_guard;
-  if (target_->get_reference(0)->code(0).asOpcode() == Opcodes::MkVal)
-    need_guard = target_->get_reference(0)->code(MK_VAL_VALUE).isFloat();
+  if (target_->get_reference(0)->code(0).asOpcode() == Opcodes::MkVal) {
+    Atom target_val = target_->get_reference(0)->code(MK_VAL_VALUE);
+    need_guard = target_val.isFloat();
+  }
   else
     need_guard = false;
 
