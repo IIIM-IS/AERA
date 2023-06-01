@@ -1048,9 +1048,12 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
   if (opcode == Opcodes::Cmd) {
     uint16 cmd_arg_set_index = cause_payload->code(CMD_ARGS).asIndex();
     uint16 cmd_arg_count = cause_payload->code(cmd_arg_set_index).getAtomCount();
+    Atom target_val = target_->get_reference(0)->code(MK_VAL_VALUE);
+    Atom consequent_val = consequent->get_reference(0)->code(MK_VAL_VALUE);
+
     // Form 1
-    float32 q0 = target_->get_reference(0)->code(MK_VAL_VALUE).asFloat();
-    float32 q1 = consequent->get_reference(0)->code(MK_VAL_VALUE).asFloat();
+    float32 q0 = target_val.asFloat();
+    float32 q1 = consequent_val.asFloat();
 
     // Form 1A
     float32 searched_for = q1 - q0;
