@@ -434,13 +434,46 @@ namespace tcp_io_device {
     // @todo: Need to change it to actual receive time
     auto now = r_exec::Now();
     auto data = data_msg->release_datamessage();
+    std::cout << "Received data message. Injecting received data:" << std::endl;
     for (int i = 0; i < data->variables_size(); ++i) {
-      ProtoVariable v = data->variables(i);
-      MsgData var(&v);
-      std::string d = v.data();
-
+      MsgData var(&(data->variables(i)));
       auto entity = entities_[id_mapping_[var.getMetaData().getEntityID()]];
       auto obj = objects_[id_mapping_[var.getMetaData().getID()]];
+      std::cout << "Variable " << i << ":" << std::endl;
+      std::cout << "Entity: " << id_mapping_[var.getMetaData().getEntityID()] << std::endl;
+      std::cout << "Property: " << id_mapping_[var.getMetaData().getID()] << std::endl;
+      std::cout << "Value(s):" << std::endl;
+
+      if (var.getMetaData().getType() == VariableDescription_DataType_DOUBLE)
+      {
+        if (var.getMetaData().getOpCodeHandle() == "") {
+          injectDefault<double>(entity, obj, var.getData<double>(), now);
+          continue;
+        }
+        else if (var.getMetaData().getOpCodeHandle() == "set") {
+          injectSet<double>(entity, obj, var.getData<double>(), now);
+          continue;
+        }
+        else {
+          injectOpCode<double>(entity, obj, var.getData<double>(), now);
+          continue;
+        }
+      }
+      else if (var.getMetaData().getType() == VariableDescription_DataType_INT64)
+      {
+        if (var.getMetaData().getOpCodeHandle() == "") {
+          injectDefault<int64_t>(entity, obj, var.getData<int64_t>(), now);
+          continue;
+        }
+        else if (var.getMetaData().getOpCodeHandle() == "set") {
+          injectSet<int64_t>(entity, obj, var.getData<int64_t>(), now);
+          continue;
+        }
+        else {
+          injectOpCode<int64_t>(entity, obj, var.getData<int64_t>(), now);
+          continue;
+        }
+      }
       
       std::vector<Atom> val;
       if (var.getMetaData().getType() == VariableDescription_DataType_DOUBLE)
@@ -466,6 +499,7 @@ namespace tcp_io_device {
             continue;
           }
           std::string object_entity = id_mapping_[val];
+          std::cout << object_entity << std::endl;
           if (entities_.find(object_entity) == entities_.end())
           {
             std::cout << "WARNING: Received message with uninitalized entity, this should never happen!" << std::endl;
@@ -477,12 +511,63 @@ namespace tcp_io_device {
         continue;
       }
       if (id_mapping_[var.getMetaData().getID()] == "velocity_y") {
-        inject_marker_value_from_io_device(entity, obj, val, now, now + get_sampling_period(), r_exec::View::SYNC_HOLD, get_stdin());
+        //inject_marker_value_from_io_device(entity, obj, val, now, now + get_sampling_period(), r_exec::View::SYNC_HOLD, get_stdin());
       }
       else {
-        inject_marker_value_from_io_device(entity, obj, val, now, now + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
+        //inject_marker_value_from_io_device(entity, obj, val, now, now + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
       }
     }
+  }
+
+  template<class O, class S>
+  template<class V>
+  void TcpIoDevice<O, S>::injectDefault(r_code::Code* entity, r_code::Code* object, std::vector<V> vals, core::Timestamp time) {
+    if (vals.size() == 0) {
+      std::cout << "[]" << std::endl;
+      inject_marker_value_from_io_device(entity, object, std::vector<r_code::Code*>(), time, time + get_sampling_period(), r_exec::View::SYNC_HOLD, get_stdin());
+      return;
+    }
+    if (vals.size() == 1) {
+      std::cout << vals[0] << std::endl;
+      inject_marker_value_from_io_device(entity, object, Atom::Float(vals[0]), time, time + get_sampling_period(), r_exec::View::SYNC_HOLD, get_stdin());
+      return;
+    }
+    injectSet<V>(entity, object, vals, time);
+  }
+
+  template<class O, class S>
+  void TcpIoDevice<O, S>::injectDefault(r_code::Code* entity, r_code::Code* object, std::vector<r_code::Code*> vals, core::Timestamp time) {
+    if (vals.size() == 0) {
+      inject_marker_value_from_io_device(entity, object, std::vector<r_code::Code*>(), time, time + get_sampling_period(), r_exec::View::SYNC_HOLD, get_stdin());
+      return;
+    }
+    if (vals.size() == 1) {
+      inject_marker_value_from_io_device(entity, object, vals[0], time, time + get_sampling_period(), r_exec::View::SYNC_HOLD, get_stdin());
+      return;
+    }
+    injectSet(entity, object, vals, time);
+  }
+
+  template<class O, class S>
+  template<class V>
+  void TcpIoDevice<O, S>::injectSet(r_code::Code* entity, r_code::Code* object, std::vector<V> vals, core::Timestamp time) {
+    std::vector<Atom> atom_vals;
+    for (auto it = vals.begin(); it != vals.end(); ++it) {
+      std::cout << *it << std::endl;
+      atom_vals.push_back(Atom::Float(*it));
+    }
+    inject_marker_value_from_io_device(entity, object, atom_vals, time, time + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
+  }
+
+  template<class O, class S>
+  void TcpIoDevice<O, S>::injectSet(r_code::Code* entity, r_code::Code* object, std::vector<r_code::Code*> vals, core::Timestamp time) {
+    inject_marker_value_from_io_device(entity, object, vals, time, time + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
+  }
+
+  template<class O, class S>
+  template<class V>
+  void TcpIoDevice<O, S>::injectOpCode(r_code::Code* entity, r_code::Code* object, std::vector<V> vals, core::Timestamp time) {
+
   }
 
   template<class O, class S>

@@ -235,6 +235,31 @@ namespace tcp_io_device {
     void handleDataMessage(std::unique_ptr<TCPMessage> data_msg);
 
     /**
+    * Injects numeric (i.e., int and double) variables without specified opcode_handle (i.e., empty string). Single dimensional variables are injected as is, empty and multi dimensional variables are injected as sets.
+    * \param var MsgData object to be injected.
+    */
+    template<class V>
+    void injectDefault(r_code::Code* entity, r_code::Code* object, std::vector<V> vals, core::Timestamp time);
+
+    void injectDefault(r_code::Code* entity, r_code::Code* object, std::vector<r_code::Code*> vals, core::Timestamp time);
+
+    /**
+    * Injects numeric (i.e., int and double) variables with either specified opcode_handle "set" (i.e. for single dimensional variables that are to be injected as sets), or multi dimensional variables injected through injectDefault().
+    * \param var MsgData object to be injected.
+    */
+    template<class V>
+    void injectSet(r_code::Code* entity, r_code::Code* object, std::vector<V> vals, core::Timestamp time);
+
+    void injectSet(r_code::Code* entity, r_code::Code* object, std::vector<r_code::Code*> vals, core::Timestamp time);
+
+    /**
+    * Injects numeric (i.e., int and double) variables with specified opcode_handle.
+    * \param var MsgData object to be injected.
+    */
+    template<class V>
+    void injectOpCode(r_code::Code* entity, r_code::Code* object, std::vector<V> vals, core::Timestamp time);
+
+    /**
     * Message handler for incoming setup messages. Fills the available entities_, objects_, and commands_ maps as well as
     * a mapping of id to string for fast access when receiving messages from the environment simulation.
     * \param setup_msg The incoming message.
