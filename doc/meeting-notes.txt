@@ -1069,22 +1069,26 @@ Simulator
 * DONE. Make hand-grab-sphere work with (vec [25 0 0]) .
 * Webots
 
-next meeting
+2023-06-09
 * DONE. Make pull request for bound objects with sub-structures https://github.com/IIIM-IS/AERA/pull/257
 * Webots
   * DONE. Update AERA_Webots to use the AERA_Protobuf submodule https://github.com/IIIM-IS/AERA_Webots/pull/10
   * DONE. Put code in usr_operators in a namespace. Implement vec3 div. (No conflict with Windows div.)
+  * DONE (side effect). Reset the TCP connection when resetting the Webots simulation
   * Make CTPX work with vec3 for the move model DeltaP.
     * DONE. Add temporary special case in CTPX for vec3. [Jeff]
-    * Generalize CTPX for all strucured types.
+
+next meeting
+* Cisco demo: Traceroute.
+* Webots
+  * Make CTPX work with vec3 for the move model DeltaP.
+    * Generalize CTPX for all strucured types. [Leonard]
   * Let AERA send "reset" message to reset the environment. (Use after grab fails.)
-  * init() should "instantly" set the arm position. Right now it move to the init position and can hit objects.
+  * init() should "instantly" set the arm position. Right now it moves to the init position and can hit objects.
   * (Added hack to reset positions after release.)
   * Use setup command for automatic discovery of AERA objects and commands
   * Get command efferent copy from Webots (move limit to +/- 20) [Maybe in the setup message or command reply. Need more discussion]
-  * Reset the TCP connection when resetting the Webots simulation
   * Try camera
-* Cisco demo: Traceroute.
 * Demonstrate AERA removing model for disuse.
 * hand-grab-sphere
   * Represent sphere position without direct I/O input.
