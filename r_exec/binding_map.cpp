@@ -248,6 +248,12 @@ void StructureValue::copy_structure(
   extent_index += (1 + atom_count);
   for (uint16 i = 0; i <= atom_count; ++i) {
     Atom a = source[source_index + i];
+    if (a.getDescriptor() == Atom::I_PTR) {
+      // Write an I_PTR and recurse to copy the the sub-structure.
+      destination->code(extent_start + i) = Atom::IPointer(extent_index);
+      copy_structure(destination, extent_index, source, a.asIndex());
+      continue;
+    }
     destination->code(extent_start + i) = a;
   }
 }

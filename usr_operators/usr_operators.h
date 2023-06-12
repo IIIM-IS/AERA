@@ -111,7 +111,7 @@ void dll_export GetCallbackName(char *callback_name);
  * Return the function with function_name or NULL if not found.
  * This can be used to implement r_exec::FunctionLibrary getFunction.
  */
-void* GetUserOperatorFunction(const char* function_name);
+void dll_export *GetUserOperatorFunction(const char* function_name);
 }
 
 #include "./Operators/operators.h"

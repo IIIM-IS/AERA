@@ -87,9 +87,10 @@
 
 #include "../types.h"
 
+namespace usr_operators {
 
-extern "C" {
-bool dll_export print(std::chrono::microseconds relative_time, bool suspended, const char *msg, uint8 object_count, r_code::Code **objects);
+bool print(std::chrono::microseconds relative_time, bool suspended, const char *msg, uint8 object_count, r_code::Code **objects);
+
 }
 
 

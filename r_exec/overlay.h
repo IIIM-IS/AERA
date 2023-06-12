@@ -222,6 +222,7 @@ protected:
   Overlay();
   Overlay(Controller *c, bool load_code = true);
 public:
+  Overlay(size_t values_size);
   virtual ~Overlay();
 
   virtual void reset(); // reset to original state.
@@ -234,6 +235,7 @@ public:
   r_exec::View *get_view() const { return ((Controller *)controller_)->get_view(); }
 
   r_code::Code *build_object(r_code::Atom head) const;
+  const Atom* values() const { return &values_[0]; }
 };
 
 class r_exec_dll OController :

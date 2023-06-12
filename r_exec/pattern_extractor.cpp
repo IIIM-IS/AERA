@@ -969,11 +969,12 @@ void CTPX::reduce(r_exec::View *input) {
       ++i;
   }
 
-  bool need_guard;
-  if (target_->get_reference(0)->code(0).asOpcode() == Opcodes::MkVal)
-    need_guard = target_->get_reference(0)->code(MK_VAL_VALUE).isFloat();
-  else
-    need_guard = false;
+  bool need_guard = false;
+  if (target_->get_reference(0)->code(0).asOpcode() == Opcodes::MkVal) {
+    Atom target_val = target_->get_reference(0)->code(MK_VAL_VALUE);
+    if (target_val.isFloat())
+      need_guard = true;
+  }
 
   auto period = duration_cast<microseconds>(Utils::GetTimestamp<Code>(consequent, FACT_AFTER) - Utils::GetTimestamp<Code>(target_, FACT_AFTER)); // sampling period.
   P<GuardBuilder> guard_builder;
@@ -1045,14 +1046,17 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
   Code *cause_payload = cause->get_reference(0);
   uint16 opcode = cause_payload->code(0).asOpcode();
   if (opcode == Opcodes::Cmd) {
+    uint16 cmd_arg_set_index = cause_payload->code(CMD_ARGS).asIndex();
+    uint16 cmd_arg_count = cause_payload->code(cmd_arg_set_index).getAtomCount();
+    Atom target_val = target_->get_reference(0)->code(MK_VAL_VALUE);
+    Atom consequent_val = consequent->get_reference(0)->code(MK_VAL_VALUE);
+
     // Form 1
-    float32 q0 = target_->get_reference(0)->code(MK_VAL_VALUE).asFloat();
-    float32 q1 = consequent->get_reference(0)->code(MK_VAL_VALUE).asFloat();
+    float32 q0 = target_val.asFloat();
+    float32 q1 = consequent_val.asFloat();
 
     // Form 1A
     float32 searched_for = q1 - q0;
-    uint16 cmd_arg_set_index = cause_payload->code(CMD_ARGS).asIndex();
-    uint16 cmd_arg_count = cause_payload->code(cmd_arg_set_index).getAtomCount();
     for (uint16 i = 1; i <= cmd_arg_count; ++i) {
 
       Atom s = cause_payload->code(cmd_arg_set_index + i);

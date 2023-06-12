@@ -197,11 +197,28 @@ public:
  */
 class SharedFunctionLibrary : public FunctionLibrary {
 public:
-  SharedLibrary* load(const char* file_name) { return sharedLibrary_.load(file_name); }
+  SharedFunctionLibrary() : getUserOperatorFunction_(0) {}
 
-  void* getFunction(const char* function_name) override { return sharedLibrary_.getFunction(function_name); }
+  SharedLibrary* load(const char* file_name) { 
+    SharedLibrary* library = sharedLibrary_.load(file_name);
+    getUserOperatorFunction_ = (void* (*)(const char*))sharedLibrary_.getFunction("GetUserOperatorFunction");
+    return library;
+  }
+
+  void* getFunction(const char* function_name) override {
+    if (getUserOperatorFunction_) {
+      // Try GetUserOperatorFunction first.
+      void* result = getUserOperatorFunction_(function_name);
+      if (result)
+        return result;
+    }
+
+    // Fall back to searching for the function in the shared library global name space.
+    return sharedLibrary_.getFunction(function_name);
+  }
 private:
   SharedLibrary sharedLibrary_;
+  void* (*getUserOperatorFunction_)(const char* function_name);
 };
 
 // Initialize Now, compile userOperatorLibrary, builds the Seed and loads the user-defined operators.

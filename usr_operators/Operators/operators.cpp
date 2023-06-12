@@ -88,10 +88,11 @@
 #include "../r_exec/init.h"
 #include "../r_exec/mem.h"
 
+static uint16 Vec3Opcode;
+static uint16 Vec2Opcode;
+static uint16 VecOpcode;
 
-uint16 Vec3Opcode;
-uint16 Vec2Opcode;
-uint16 VecOpcode;
+namespace usr_operators {
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -269,6 +270,55 @@ bool mul(const r_exec::Context &context) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+bool div(const r_exec::Context& context) {
+
+  r_exec::Context lhs = *context.get_child(1);
+  r_exec::Context rhs = *context.get_child(2);
+
+  if (lhs[0].asOpcode() == Vec3Opcode) {
+
+    if (rhs[0].isFloat() && rhs[0].asFloat() != 0) {
+
+      context.setCompoundResultHead(Atom::Object(Vec3Opcode, 3));
+      context.addCompoundResultPart(Atom::Float((*lhs.get_child(1))[0].asFloat() / rhs[0].asFloat()));
+      context.addCompoundResultPart(Atom::Float((*lhs.get_child(2))[0].asFloat() / rhs[0].asFloat()));
+      context.addCompoundResultPart(Atom::Float((*lhs.get_child(3))[0].asFloat() / rhs[0].asFloat()));
+      return true;
+    }
+  }
+  else if (lhs[0].asOpcode() == Vec2Opcode) {
+
+    if (rhs[0].isFloat() && rhs[0].asFloat() != 0) {
+
+      context.setCompoundResultHead(Atom::Object(Vec2Opcode, 2));
+      context.addCompoundResultPart(Atom::Float((*lhs.get_child(1))[0].asFloat() / rhs[0].asFloat()));
+      context.addCompoundResultPart(Atom::Float((*lhs.get_child(2))[0].asFloat() / rhs[0].asFloat()));
+      return true;
+    }
+  }
+  else if (lhs[0].asOpcode() == VecOpcode) {
+
+    if (rhs[0].isFloat() && rhs[0].asFloat() != 0) {
+
+      r_exec::Context lhs_vals = *lhs.get_child(1);
+      int dimensionality = lhs_vals.get_children_count();
+      uint16 vals_index = 2 + context.setCompoundResultHead(Atom::Object(VecOpcode, 1));
+      context.addCompoundResultPart(Atom::IPointer(vals_index));
+
+      context.addCompoundResultPart(Atom::Set(dimensionality));
+      for (int i = 1; i <= dimensionality; ++i) {
+        context.addCompoundResultPart(Atom::Float((*lhs_vals.get_child(i))[0].asFloat() / rhs[0].asFloat()));
+      }
+      return true;
+    }
+  }
+
+  context.setAtomicResult(Atom::Nil());
+  return false;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 bool dis(const r_exec::Context &context) {
 
   r_exec::Context lhs = *context.get_child(1);
@@ -317,6 +367,8 @@ bool dis(const r_exec::Context &context) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+}
 
 void Operators::Init(OpcodeRetriever r) {
 
