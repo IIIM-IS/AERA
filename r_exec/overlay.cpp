@@ -92,9 +92,16 @@ using namespace r_code;
 
 namespace r_exec {
 
-Overlay::Overlay() : _Object(), invalidated_(0) {
+Overlay::Overlay()
+  // MAX_VALUE_SIZE is the limit; if the array is resized later on, some contexts with data==VALUE_ARRAY
+  // may point to invalid adresses: case of embedded contexts with both data==VALUE_ARRAY.
+  : Overlay(MAX_VALUE_SIZE)
+{}
 
-  values_.resize(MAX_VALUE_SIZE); // MAX_VALUE_SIZE is the limit; if the array is resized later on, some contexts with data==VALUE_ARRAY may point to invalid adresses: case of embedded contexts with both data==VALUE_ARRAY.
+Overlay::Overlay(size_t values_size) : _Object(), invalidated_(0) {
+
+  code_ = new r_code::Atom[1];
+  values_.resize(values_size);
 }
 
 Overlay::Overlay(Controller *c, bool load_code) : _Object(), controller_(c), value_commit_index_(0), code_(NULL), invalidated_(0) {
