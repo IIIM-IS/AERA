@@ -524,12 +524,12 @@ namespace tcp_io_device {
   void TcpIoDevice<O, S>::injectDefault(r_code::Code* entity, r_code::Code* object, std::vector<V> vals, core::Timestamp time) {
     if (vals.size() == 0) {
       std::cout << "[]" << std::endl;
-      inject_marker_value_from_io_device(entity, object, std::vector<r_code::Code*>(), time, time + get_sampling_period(), r_exec::View::SYNC_HOLD, get_stdin());
+      inject_marker_value_from_io_device(entity, object, std::vector<r_code::Code*>(), time, time + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
       return;
     }
     if (vals.size() == 1) {
       std::cout << vals[0] << std::endl;
-      inject_marker_value_from_io_device(entity, object, Atom::Float(vals[0]), time, time + get_sampling_period(), r_exec::View::SYNC_HOLD, get_stdin());
+      inject_marker_value_from_io_device(entity, object, Atom::Float(vals[0]), time, time + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
       return;
     }
     injectSet<V>(entity, object, vals, time);
@@ -538,11 +538,11 @@ namespace tcp_io_device {
   template<class O, class S>
   void TcpIoDevice<O, S>::injectDefault(r_code::Code* entity, r_code::Code* object, std::vector<r_code::Code*> vals, core::Timestamp time) {
     if (vals.size() == 0) {
-      inject_marker_value_from_io_device(entity, object, std::vector<r_code::Code*>(), time, time + get_sampling_period(), r_exec::View::SYNC_HOLD, get_stdin());
+      inject_marker_value_from_io_device(entity, object, std::vector<r_code::Code*>(), time, time + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
       return;
     }
     if (vals.size() == 1) {
-      inject_marker_value_from_io_device(entity, object, vals[0], time, time + get_sampling_period(), r_exec::View::SYNC_HOLD, get_stdin());
+      inject_marker_value_from_io_device(entity, object, vals[0], time, time + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
       return;
     }
     injectSet(entity, object, vals, time);
