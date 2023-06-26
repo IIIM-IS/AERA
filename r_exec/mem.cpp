@@ -885,6 +885,32 @@ View* _Mem::inject_marker_value_from_io_device(
   return inject_fact_from_io_device(object, after, before, sync_mode, group);
 }
 
+View* _Mem::inject_marker_value_from_io_device(
+  Code* obj, Code* prop, uint16 opcode, const vector<Atom>& vals, Timestamp after, Timestamp before,
+  View::SyncMode sync_mode, Code* group)
+{
+  if (!obj || !prop)
+    // We don't expect this, but sanity check.
+    return NULL;
+
+  Code* object = new LObject(this);
+  uint16 extent_index = 4;
+  object->code(0) = Atom::Marker(GetOpcode("mk.val"), 4); // Caveat: arity does not include the opcode.
+  object->code(1) = Atom::RPointer(0); // obj
+  object->set_reference(0, obj);
+  object->code(2) = Atom::RPointer(1); // prop
+  object->set_reference(1, prop);
+  object->code(3) = Atom::IPointer(++extent_index); // val
+  object->code(4) = Atom::Float(1); // psln_thr.
+
+  object->code(extent_index++) = Atom::Object(opcode, vals.size());
+  for (uint16 i = 0; i < vals.size(); ++i) {
+    object->code(extent_index++) = vals[i];
+  }
+
+  return inject_fact_from_io_device(object, after, before, sync_mode, group);
+}
+
 View* _Mem::inject_fact_from_io_device(
   Code* object, Timestamp after, Timestamp before, View::SyncMode sync_mode,
   Code* group)
