@@ -522,7 +522,7 @@ public:
   /**
    * Inject (fact (mk.val obj prop [o1 o2] 1) after before 1 1)
    * [sync_mode after 1 1 stdin nil]
-   * where val is a referenced Code object.
+   * where val is a set of referenced Code objects.
    * This is called from the I/O device to call the normal inject(view), then
    * log the injection event.
    * \param obj The object for the mk.val.
@@ -544,7 +544,7 @@ public:
   /**
    * Inject (fact (mk.val obj prop [o1 o2] 1) after before 1 1)
    * [SYNC_PERIODIC after 1 1 group nil]
-   * where val is a referenced Code object.
+   * where val is a set of referenced Code objects.
    * This is called from the I/O device to call the normal inject(view), then
    * log the injection event.
    * \param obj The object for the mk.val.
@@ -567,7 +567,7 @@ public:
   /**
    * Inject (fact (mk.val obj prop [o1 o2] 1) after before 1 1)
    * [SYNC_PERIODIC after 1 1 stdin nil]
-   * where val is a referenced Code object.
+   * where val is a set of referenced Code objects.
    * This is called from the I/O device to call the normal inject(view), then
    * log the injection event.
    * \param obj The object for the mk.val.
@@ -584,6 +584,93 @@ public:
   {
     return inject_marker_value_from_io_device(
       obj, prop, val, after, before, View::SYNC_PERIODIC, get_stdin());
+  }
+
+  /**
+   * Inject (fact (mk.val obj prop (opcode val1 val2 ...) 1) after before 1 1)
+   * [sync_mode after 1 1 group nil]
+   * where val1 val2 ... come from the vals Atom list.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param opcode The opcode for the value structure.
+   * \param vals The list of Atom for val1 val2 ....
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \param sync_mode The view sync mode, such as View::SYNC_PERIODIC.
+   * \param group The group of the view, such as get_stdin().
+   * \return The created View.
+   */
+  View* inject_marker_value_from_io_device(
+    r_code::Code* obj, r_code::Code* prop, uint16 opcode, const std::vector<r_code::Atom>& vals,
+    Timestamp after, Timestamp before, View::SyncMode sync_mode, r_code::Code* group);
+
+  /**
+   * Inject (fact (mk.val obj prop (opcode val1 val2 ...) 1) after before 1 1)
+   * [sync_mode after 1 1 stdin nil]
+   * where val1 val2 ... come from the vals Atom list.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param opcode The opcode for the value structure.
+   * \param vals The list of Atom for val1 val2 ....
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \param sync_mode The view sync mode, such as View::SYNC_PERIODIC.
+   * \return The created View.
+   */
+  View* inject_marker_value_from_io_device(
+    r_code::Code* obj, r_code::Code* prop, uint16 opcode, const std::vector<r_code::Atom>& vals,
+    Timestamp after, Timestamp before, View::SyncMode sync_mode)
+  {
+    return inject_marker_value_from_io_device(obj, prop, opcode, vals, after, before, sync_mode, get_stdin());
+  }
+
+  /**
+   * Inject (fact (mk.val obj prop (opcode val1 val2 ...) 1) after before 1 1)
+   * [SYNC_PERIODIC after 1 1 group nil]
+   * where val1 val2 ... come from the vals Atom list.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param opcode The opcode for the value structure.
+   * \param vals The list of Atom for val1 val2 ....
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \param group The group of the view, such as get_stdin().
+   * \return The created View.
+   */
+  View* inject_marker_value_from_io_device(
+    r_code::Code* obj, r_code::Code* prop, uint16 opcode, const std::vector<r_code::Atom>& vals,
+    Timestamp after, Timestamp before, r_code::Code* group)
+  {
+    return inject_marker_value_from_io_device(
+      obj, prop, opcode, vals, after, before, View::SYNC_PERIODIC, group);
+  }
+
+  /**
+   * Inject (fact (mk.val obj prop (opcode val1 val2 ...) 1) after before 1 1)
+   * [SYNC_PERIODIC after 1 1 stdin nil]
+   * where val1 val2 ... come from the vals Atom list.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param opcode The opcode for the value structure.
+   * \param vals The list of Atom for val1 val2 ....
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \return The created View.
+   */
+  View* inject_marker_value_from_io_device(
+    r_code::Code* obj, r_code::Code* prop, uint16 opcode, const std::vector<r_code::Atom>& vals,
+    Timestamp after, Timestamp before)
+  {
+    return inject_marker_value_from_io_device(
+      obj, prop, opcode, vals, after, before, View::SYNC_PERIODIC, get_stdin());
   }
 
   /**
