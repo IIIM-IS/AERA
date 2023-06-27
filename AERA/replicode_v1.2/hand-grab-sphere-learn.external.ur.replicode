@@ -8,18 +8,27 @@
 h:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
 h_is_a_hand:(mk.val h essence hand 1) |[]
 (fact h_is_a_hand 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
-c:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
-c_is_a_cube:(mk.val c essence cube 1) |[]
-(fact c_is_a_cube 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
-c_is_a_hand:(mk.val c essence hand 1) |[]
+
+b_0:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+b_0_is_a_cube:(mk.val b_0 essence cube 1) |[]
+(fact b_0_is_a_cube 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+b_0_is_a_hand:(mk.val b_0 essence hand 1) |[]
 ; This is needed for S3.
-(|fact c_is_a_hand 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
-s:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
-s_is_a_sphere:(mk.val s essence sphere 1) |[]
-(fact s_is_a_sphere 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
-s_is_a_hand:(mk.val s essence hand 1) |[]
+(|fact b_0_is_a_hand 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+b_1:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+b_1_is_a_cube:(mk.val b_1 essence cube 1) |[]
+(fact b_1_is_a_cube 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+b_1_is_a_hand:(mk.val b_1 essence hand 1) |[]
 ; This is needed for S3.
-(|fact s_is_a_hand 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+(|fact b_1_is_a_hand 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+b_2:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+b_2_is_a_cube:(mk.val b_2 essence cube 1) |[]
+(fact b_2_is_a_cube 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+b_2_is_a_hand:(mk.val b_2 essence hand 1) |[]
+; This is needed for S3.
+(|fact b_2_is_a_hand 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 
 ; Hand H has position P.
 S0:(cst [] []
@@ -56,7 +65,7 @@ start:(pgm [] [] [] []
 
 m_drive:(mdl [] []
    ; The goal target timings are the same as the drive timings.
-   (fact (mk.val s position pS1 1) T0: T1: 1 1)
+   (fact (mk.val b_1 position pS1 1) T0: T1: 1 1)
    (fact run T0: T1: ::)
 |[]
 |[]
@@ -77,7 +86,7 @@ pgm_babbleA_1:(pgm [] []
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
-   (prb [1 "print" "injected (cmd move [h -5])" []])
+   (prb [1 "print" "injected (cmd move [h (vec3 -5 0 0)])" []])
 1) |[]
 (ipgm pgm_babbleA_1 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
@@ -97,7 +106,7 @@ pgm_babbleA_2:(pgm [] []
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
-   (prb [1 "print" "injected (cmd move [h -10])" []])
+   (prb [1 "print" "injected (cmd move [h (vec3 -10 0 0)])" []])
 1) |[]
 (ipgm pgm_babbleA_2 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
@@ -177,7 +186,7 @@ pgm_babbleA_6:(pgm [] []
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
-   (prb [1 "print" "injected (cmd move [h 10])" []])
+   (prb [1 "print" "injected (cmd move [h (vec3 10 0 0)])" []])
 1) |[]
 (ipgm pgm_babbleA_6 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
@@ -197,7 +206,7 @@ pgm_babbleA_7:(pgm [] []
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
-   (prb [1 "print" "injected (cmd move [h -10])" []])
+   (prb [1 "print" "injected (cmd move [h (vec3 -10 0 0)])" []])
 1) |[]
 (ipgm pgm_babbleA_7 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
@@ -237,7 +246,7 @@ pgm_babbleA_9:(pgm [] []
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
-   (prb [1 "print" "injected (cmd move [h 5])" []])
+   (prb [1 "print" "injected (cmd move [h (vec3 5 0 0)])" []])
 1) |[]
 (ipgm pgm_babbleA_9 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
@@ -317,7 +326,7 @@ pgm_babbleA_13:(pgm [] []
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
-   (prb [1 "print" "injected (cmd move [h 20])" []])
+   (prb [1 "print" "injected (cmd move [h (vec3 20 0 0)])" []])
 1) |[]
 (ipgm pgm_babbleA_13 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
@@ -394,7 +403,7 @@ pgm_experimentingA_1:(pgm [] []
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
-   (prb [1 "print" "injected (cmd move [h -15])" []])
+   (prb [1 "print" "injected (cmd move [h (vec3 -15 0 0)])" []])
 1) |[]
 (ipgm pgm_experimentingA_1 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
@@ -489,7 +498,7 @@ pgm_experimentingA_6:(pgm [] []
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
-   (prb [1 "print" "injected (cmd move [h 5])" []])
+   (prb [1 "print" "injected (cmd move [h (vec3 5 0 0)])" []])
 1) |[]
 (ipgm pgm_experimentingA_6 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
@@ -565,7 +574,7 @@ pgm_experimentingA_10:(pgm [] []
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
-   (prb [1 "print" "injected (cmd move [h 20])" []])
+   (prb [1 "print" "injected (cmd move [h (vec3 20 0 0)])" []])
 1) |[]
 (ipgm pgm_experimentingA_10 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
