@@ -256,11 +256,13 @@ namespace tcp_io_device {
   std::unique_ptr< TCPMessage> TcpIoDevice<O, S>::constructMessageFromCommand(string cmd_identifier, string entity, r_code::Code* cmd)
   {
     // Get the stored meta data received by the SetupMessage during establishConnection with the correct identifier.
-    std::map<string, MetaData>::iterator stored_meta_data = meta_data_map_.find(cmd_identifier);
-    if (stored_meta_data == meta_data_map_.end()) {
+    std::map<string, MetaData>::iterator meta_data_it = meta_data_map_.find(cmd_identifier);
+    if (meta_data_it == meta_data_map_.end()) {
       cout << "> WARNING: Could not find cmd identifier " << cmd_identifier << " in the MetaData of available commands!" << endl;
       return NULL;
     }
+
+    MetaData stored_meta_data = meta_data_it->second;
 
     // Create a new message to send later
     std::unique_ptr<TCPMessage> msg = std::make_unique<TCPMessage>();
@@ -271,7 +273,7 @@ namespace tcp_io_device {
     ProtoVariable* var = data_msg->add_variables();
 
     VariableDescription* meta_data = var->mutable_metadata();
-    meta_data->set_datatype(stored_meta_data->second.getType());
+    meta_data->set_datatype(stored_meta_data.getType());
 
     for (auto it = id_mapping_.begin(); it != id_mapping_.end(); ++it) {
       if (it->second.compare(entity) == 0) {
@@ -283,8 +285,8 @@ namespace tcp_io_device {
     }
 
     auto dim = meta_data->mutable_dimensions();
-    for (uint64_t i = 0; i < stored_meta_data->second.getDimensions().size(); i++) {
-      dim->Add(stored_meta_data->second.getDimensions()[i]);
+    for (uint64_t i = 0; i < stored_meta_data.getDimensions().size(); i++) {
+      dim->Add(stored_meta_data.getDimensions()[i]);
     }
 
     uint16 args_set_index = cmd->code(CMD_ARGS).asIndex();
@@ -293,9 +295,13 @@ namespace tcp_io_device {
 
 
     // @todo: Only a single value implemented. For multiple values (dim != [1]) this needs to be extended.
-    switch (stored_meta_data->second.getType()) {
+    if (stored_meta_data.getOpCodeHandle() != "" && stored_meta_data.getOpCodeHandle() != "set") {
+      return msg;
+    }
+    switch (stored_meta_data.getType()) {
     case VariableDescription_DataType_BOOL:
     {
+      std::string data = "";
       char d = (char)cmd->code(args_set_index + 2).asBoolean();
       var->set_data(std::string(&d));
       break;
@@ -455,7 +461,7 @@ namespace tcp_io_device {
           continue;
         }
         else {
-          injectOpCode<double>(entity, obj, var.getData<double>(), now);
+          injectOpCode<double>(entity, obj, var.getData<double>(), now, var.getMetaData().getOpCodeHandle());
           continue;
         }
       }
@@ -470,7 +476,7 @@ namespace tcp_io_device {
           continue;
         }
         else {
-          injectOpCode<int64_t>(entity, obj, var.getData<int64_t>(), now);
+          injectOpCode<int64_t>(entity, obj, var.getData<int64_t>(), now, var.getMetaData().getOpCodeHandle());
           continue;
         }
       }
@@ -566,8 +572,18 @@ namespace tcp_io_device {
 
   template<class O, class S>
   template<class V>
-  void TcpIoDevice<O, S>::injectOpCode(r_code::Code* entity, r_code::Code* object, std::vector<V> vals, core::Timestamp time) {
-
+  void TcpIoDevice<O, S>::injectOpCode(r_code::Code* entity, r_code::Code* object, std::vector<V> vals, core::Timestamp time, std::string opcode_handle) {
+    core::uint16 op_code = r_exec::GetOpcode(opcode_handle.c_str());
+    if (op_code == 0xFFFF) {
+      std::cout << "ERROR: Received message with unknown opcode handle! Handle: " << opcode_handle << std::endl;
+      return;
+    }
+    std::vector<Atom> atom_vals;
+    for (auto it = vals.begin(); it != vals.end(); ++it) {
+      std::cout << *it << std::endl;
+      atom_vals.push_back(Atom::Float(*it));
+    }
+    inject_marker_value_from_io_device(entity, object, op_code, atom_vals, time, time);
   }
 
   template<class O, class S>

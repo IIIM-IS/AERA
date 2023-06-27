@@ -257,7 +257,7 @@ namespace tcp_io_device {
     * \param var MsgData object to be injected.
     */
     template<class V>
-    void injectOpCode(r_code::Code* entity, r_code::Code* object, std::vector<V> vals, core::Timestamp time);
+    void injectOpCode(r_code::Code* entity, r_code::Code* object, std::vector<V> vals, core::Timestamp time, std::string opcode_handle);
 
     /**
     * Message handler for incoming setup messages. Fills the available entities_, objects_, and commands_ maps as well as
