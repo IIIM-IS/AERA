@@ -238,12 +238,12 @@ namespace tcp_io_device {
         if (it->second != obj) {
           continue;
         }
-        std::unique_ptr<TCPMessage> msg = std::move(constructMessageFromCommand(cmd->first, it->first, command));
-        if (!msg) {
+        tcp_io_device::MsgData msg = constructMessageFromCommand(cmd->first, it->first, command);
+        if (!msg.isValid()) {
           cout << "Could not create message from ejected command" << endl;
           return NULL;
         }
-        sendMessage(std::move(msg));
+        sendDataMessage(msg);
         break;
       }
       return command;
@@ -253,91 +253,124 @@ namespace tcp_io_device {
   }
 
   template<class O, class S>
-  std::unique_ptr< TCPMessage> TcpIoDevice<O, S>::constructMessageFromCommand(string cmd_identifier, string entity, r_code::Code* cmd)
+  tcp_io_device::MsgData TcpIoDevice<O, S>::constructMessageFromCommand(string cmd_identifier, string entity, r_code::Code* cmd)
   {
     // Get the stored meta data received by the SetupMessage during establishConnection with the correct identifier.
     std::map<string, MetaData>::iterator meta_data_it = meta_data_map_.find(cmd_identifier);
     if (meta_data_it == meta_data_map_.end()) {
       cout << "> WARNING: Could not find cmd identifier " << cmd_identifier << " in the MetaData of available commands!" << endl;
-      return NULL;
+      return tcp_io_device::MsgData::invalidMsgData();
     }
 
     MetaData stored_meta_data = meta_data_it->second;
-
-    // Create a new message to send later
-    std::unique_ptr<TCPMessage> msg = std::make_unique<TCPMessage>();
-    msg->set_messagetype(TCPMessage::DATA);
-
-    DataMessage* data_msg = msg->mutable_datamessage();
-
-    ProtoVariable* var = data_msg->add_variables();
-
-    VariableDescription* meta_data = var->mutable_metadata();
-    meta_data->set_datatype(stored_meta_data.getType());
-
-    for (auto it = id_mapping_.begin(); it != id_mapping_.end(); ++it) {
-      if (it->second.compare(entity) == 0) {
-        meta_data->set_entityid(it->first);
-      }
-      if (it->second.compare(cmd_identifier) == 0) {
-        meta_data->set_id(it->first);
-      }
-    }
-
-    auto dim = meta_data->mutable_dimensions();
-    for (uint64_t i = 0; i < stored_meta_data.getDimensions().size(); i++) {
-      dim->Add(stored_meta_data.getDimensions()[i]);
-    }
-
     uint16 args_set_index = cmd->code(CMD_ARGS).asIndex();
 
-    std::cout << "Eject cmd: " << cmd_identifier << ", entity: " << entity << ", Value: " << cmd->code(args_set_index + 2).asFloat() << std::endl;
+    tcp_io_device::MsgData msg_data = tcp_io_device::MsgData::invalidMsgData();
+    // Default values for OpCodeHandle == "" and dimensionality of 1.
+    int start = args_set_index + 2;
+    int end = args_set_index + 3;
 
-
-    // @todo: Only a single value implemented. For multiple values (dim != [1]) this needs to be extended.
-    if (stored_meta_data.getOpCodeHandle() != "" && stored_meta_data.getOpCodeHandle() != "set") {
-      return msg;
+    // Otherwise retrieve the start and end indices by de-constructing the r_code::Code object.
+    if (stored_meta_data.getOpCodeHandle() != "" ||
+      (stored_meta_data.getDimensions() != std::vector<uint64_t>({ 1 }) && stored_meta_data.getDimensions() != std::vector<uint64_t>({ 1, 1 }))) {
+      if (cmd->code(args_set_index + 2).getDescriptor() != Atom::I_PTR) {
+        std::cout << "ERROR: Ejected command with OpCodeHandle " << stored_meta_data.getOpCodeHandle() << " with dimensionality > 1 and r_code object without the necessary nesting." << std::endl;
+        return tcp_io_device::MsgData::invalidMsgData();
+      }
+      int set_index = cmd->code(args_set_index + 2).asIndex();
+      // @todo Check whether dimensionality of stored_meta_data fits the atom count of the set of the r_code Object.
+      start = set_index + 1;
+      end = start + cmd->code(set_index).getAtomCount();
     }
-    switch (stored_meta_data.getType()) {
+
+    std::cout << "Eject cmd: " << cmd_identifier << ", entity: " << entity << ", Value(s): "; // << cmd->code(args_set_index + 2).asFloat() << std::endl;
+    for (int i = start; i < end; ++i) {
+      std::cout << cmd->code(i).asFloat() << " ";
+    }
+    std::cout << std::endl;
+
+    switch (auto t = stored_meta_data.getType()) {
+      case VariableDescription_DataType_BOOL:
+      {
+        std::vector<bool> data = getDataVec<bool>(cmd, start, end, t);
+        msg_data = tcp_io_device::MsgData::createNewMsgData(stored_meta_data, data);
+        break;
+      }
+      case VariableDescription_DataType_INT64:
+      {
+        std::vector<int64_t> data = getDataVec<int64_t>(cmd, start, end, t);
+        msg_data = tcp_io_device::MsgData::createNewMsgData(stored_meta_data, data);
+        break;
+      }
+      case VariableDescription_DataType_DOUBLE:
+      {
+        std::vector<double> data = getDataVec<double>(cmd, start, end, t);
+        msg_data = tcp_io_device::MsgData::createNewMsgData(stored_meta_data, data);
+        break;
+      }
+      case VariableDescription_DataType_COMMUNICATION_ID:
+      {
+        std::vector<communication_id_t> data = getDataVec<communication_id_t>(cmd, start, end, t);
+        msg_data = tcp_io_device::MsgData::createNewMsgData(stored_meta_data, data);
+        break;
+      }
+      case VariableDescription_DataType_STRING:
+      {
+        // std::vector<bool> data = getDataVec<bool>(cmd, start, end, t);
+        // msg_data.push_back(tcp_io_device::MsgData::createNewMsgData(stored_meta_data, data));
+        // TODO: Using the .asIndex() function this can be done (See the Utils::GetString())
+        cout << "> WARNING: String type not implemented, yet" << endl;
+        return tcp_io_device::MsgData::invalidMsgData();
+        break;
+      }
+    }
+    return msg_data;
+  }
+
+  template<class O, class S>
+  template<class T>
+  std::vector<T> TcpIoDevice<O, S>::getDataVec(r_code::Code* cmd, int start_index, int end_index, tcp_io_device::VariableDescription_DataType type) {
+    std::vector<T> data;
+    switch (type) {
     case VariableDescription_DataType_BOOL:
-    {
-      std::string data = "";
-      char d = (char)cmd->code(args_set_index + 2).asBoolean();
-      var->set_data(std::string(&d));
+      for (int i = start_index; i < end_index; ++i) {
+        data.push_back(cmd->code(i).asBoolean());
+      }
       break;
-    }
     case VariableDescription_DataType_INT64:
-    {
-      // No direct representation as integer, only float32 in AERA
-      int val = (int)cmd->code(args_set_index + 2).asFloat();
-      char d[8];
-      for (int i = 0; i < 8; i++) {
-        d[i] = val >> (8 - 1 - i) * 8;
+      for (int i = start_index; i < end_index; ++i) {
+        data.push_back((int)cmd->code(i).asFloat());
       }
-      var->set_data(std::string(d));
       break;
-    }
     case VariableDescription_DataType_DOUBLE:
-    {
-      double val = (double)cmd->code(args_set_index + 2).asFloat();
-      std::string data;
-      char const* d = reinterpret_cast<char const*>(&val);
-      for (size_t i = 0; i < sizeof(double); ++i) {
-        data += d[i];
+      for (int i = start_index; i < end_index; ++i) {
+        data.push_back(cmd->code(i).asFloat());
       }
-      var->set_data(data);
       break;
-    }
+    case VariableDescription_DataType_COMMUNICATION_ID:
+      for (int i = start_index; i < end_index; ++i) {
+        if (cmd->code(i).getDescriptor() != Atom::R_PTR) {
+          // @todo This isn't an R_PTR whysoever...
+          std::cout << "WARNING: Got command which should include a communicaiton id which points to another object without R_PTR. Ignoring it." << std::endl;;
+          continue;
+        }
+        r_code::Code* reference = cmd->get_reference(cmd->code(i).asIndex());
+        for (auto it = entities_.begin(); it != entities_.end(); ++it) {
+          if (it->second != reference) {
+            continue;
+          }
+          // @todo Need to implement this once the proper object is found earlier.
+        }
+        data.push_back(cmd->code(i).asFloat());
+      }
+      break;
     case VariableDescription_DataType_STRING:
-    {
-      // TODO: Using the .asIndex() function this can be done (See the Utils::GetString())
-      cout << "> WARNING: String type not implemented, yet" << endl;
+      // for (int i = start_index; i < end_index; ++i) {
+      //   data.push_back(cmd->code(i).asBoolean());
+      // }
       break;
-      // std::string data = cmd->code(args_set_index + 2).String(0);
-      // var->set_data(data);
     }
-    }
-    return msg;
+    return data;
   }
 
   template<class O, class S>
@@ -409,6 +442,17 @@ namespace tcp_io_device {
     self->tcp_connection_->stop();
 
     thread_ret_val(0);
+  }
+
+
+  template<class O, class S>
+  void TcpIoDevice<O, S>::sendDataMessage(tcp_io_device::MsgData msg_data) {
+    std::unique_ptr<tcp_io_device::TCPMessage> msg = std::make_unique<tcp_io_device::TCPMessage>();
+    msg->set_messagetype(tcp_io_device::TCPMessage::DATA);
+    tcp_io_device::DataMessage* data_msg = msg->mutable_datamessage();
+    tcp_io_device::ProtoVariable* var = data_msg->add_variables();
+    msg_data.toMutableProtoVariable(var);
+    sendMessage(std::move(msg));
   }
 
   template<class O, class S>

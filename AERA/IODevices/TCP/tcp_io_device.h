@@ -218,9 +218,12 @@ namespace tcp_io_device {
     * \param cmd_identifier The identifier of the ejected command.
     * \param entity The name of the entity for which the command was ejected.
     * \param cmd the ejected r_code::Code*.
-    * \return The constructed TCPMessage which can be sent to the environment simulation.
+    * \return The constructed MsgData which can be sent to the environment simulation.
     */
-    std::unique_ptr< TCPMessage> constructMessageFromCommand(std::string cmd_identifier, std::string entity, r_code::Code* cmd);
+    tcp_io_device::MsgData constructMessageFromCommand(std::string cmd_identifier, std::string entity, r_code::Code* cmd);
+
+    template<class T>
+    std::vector<T> getDataVec(r_code::Code* cmd, int start_index, int end_index, tcp_io_device::VariableDescription_DataType type);
 
     /**
     * Message handler for incoming messages. Passes them on to specific handlers by the given TCPMessage_Type
@@ -265,6 +268,12 @@ namespace tcp_io_device {
     * \param setup_msg The incoming message.
     */
     void handleSetupMessage(std::unique_ptr<TCPMessage> setup_msg);
+
+    /**
+    * Handler to send messages. Transforms the MsgData object to a TCPMessage with type Data.
+    * \param msg_data MsgData object to send.
+    */
+    void sendDataMessage(tcp_io_device::MsgData msg_data);
 
     /**
     * Enqueues messages to the SafeQueues to pass them thread-safe to the TCPConnection which handles the actual sending of the message.
