@@ -78,7 +78,7 @@ pgm_babbleA_1:(pgm [] []
    (>= After (+ this.vw.ijt 100ms))
 []
    ; Move where initial and final positions have no objects so that they are not correlated.
-   (inj [Command:(cmd move [h (vec3 -5 0 0)] 1) []])
+   (inj [Command:(cmd move [h (vec3 -1 0 0.2)] 1) []])
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
@@ -86,7 +86,7 @@ pgm_babbleA_1:(pgm [] []
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
-   (prb [1 "print" "injected (cmd move [h (vec3 -5 0 0)])" []])
+   (prb [1 "print" "injected (cmd move [h (vec3 -1 0 0.2)])" []])
 1) |[]
 (ipgm pgm_babbleA_1 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
@@ -98,7 +98,7 @@ pgm_babbleA_2:(pgm [] []
    (>= After (+ this.vw.ijt 200ms))
 []
    ; Now move to the sphere.
-   (inj [Command:(cmd move [h (vec3 -10 0 0)] 1) []])
+   (inj [Command:(cmd move [h (vec3 1 0.5 0)] 1) []])
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
@@ -106,7 +106,7 @@ pgm_babbleA_2:(pgm [] []
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
-   (prb [1 "print" "injected (cmd move [h (vec3 -10 0 0)])" []])
+   (prb [1 "print" "injected (cmd move [h (vec3 1 0.5 0)])" []])
 1) |[]
 (ipgm pgm_babbleA_2 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
@@ -178,7 +178,7 @@ pgm_babbleA_6:(pgm [] []
    (>= After (+ this.vw.ijt 600ms))
 []
    ; Move while holding the sphere to learn the re-use model.
-   (inj [Command:(cmd move [h (vec3 10 0 0)] 1) []])
+   (inj [Command:(cmd move [h (vec3 0.5 -0.2 0)] 1) []])
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
@@ -186,7 +186,7 @@ pgm_babbleA_6:(pgm [] []
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
-   (prb [1 "print" "injected (cmd move [h (vec3 10 0 0)])" []])
+   (prb [1 "print" "injected (cmd move [h (vec3 0.5 -0.2 0)])" []])
 1) |[]
 (ipgm pgm_babbleA_6 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
@@ -198,7 +198,7 @@ pgm_babbleA_7:(pgm [] []
    (>= After (+ this.vw.ijt 700ms))
 []
    ; Move while holding the sphere to learn the re-use model.
-   (inj [Command:(cmd move [h (vec3 -10 0 0)] 1) []])
+   (inj [Command:(cmd move [h (vec3 -0.9 -0.5 0)] 1) []])
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
@@ -206,7 +206,7 @@ pgm_babbleA_7:(pgm [] []
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
-   (prb [1 "print" "injected (cmd move [h (vec3 -10 0 0)])" []])
+   (prb [1 "print" "injected (cmd move [h (vec3 -0.9 -0.5 0)])" []])
 1) |[]
 (ipgm pgm_babbleA_7 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
@@ -238,7 +238,7 @@ pgm_babbleA_9:(pgm [] []
    (>= After (+ this.vw.ijt 900ms))
 []
    ; Move to the cube.
-   (inj [Command:(cmd move [h (vec3 5 0 0)] 1) []])
+   (inj [Command:(cmd move [h (vec3 -0.5 0 0)] 1) []])
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
@@ -246,7 +246,7 @@ pgm_babbleA_9:(pgm [] []
       (fact G T0:(+ After 10ms) T0 1 1)
       [SYNC_ONCE T0 1 forever primary nil]
    )
-   (prb [1 "print" "injected (cmd move [h (vec3 5 0 0)])" []])
+   (prb [1 "print" "injected (cmd move [h (vec3 -0.5 0 0)])" []])
 1) |[]
 (ipgm pgm_babbleA_9 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
