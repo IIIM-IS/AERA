@@ -86,6 +86,7 @@
 #include "reduction_job.h"
 #include "mem.h"
 #include "model_base.h"
+#include "hlp_context.h"
 #include "mdl_controller.h"
 
 using namespace std;
@@ -974,6 +975,12 @@ void CTPX::reduce(r_exec::View *input) {
     Atom target_val = target_->get_reference(0)->code(MK_VAL_VALUE);
     if (target_val.isFloat())
       need_guard = true;
+#if 1 // vec3
+    else if (target_val.getDescriptor() == Atom::I_PTR) {
+      if (target_->get_reference(0)->code(target_val.asIndex()) == Atom::Object(GetOpcode("vec3"), 3))
+        need_guard = true;
+    }
+#endif
   }
 
   auto period = duration_cast<microseconds>(Utils::GetTimestamp<Code>(consequent, FACT_AFTER) - Utils::GetTimestamp<Code>(target_, FACT_AFTER)); // sampling period.
@@ -1051,6 +1058,46 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
     Atom target_val = target_->get_reference(0)->code(MK_VAL_VALUE);
     Atom consequent_val = consequent->get_reference(0)->code(MK_VAL_VALUE);
 
+#if 1 // vec3
+    if (target_val.getDescriptor() == Atom::I_PTR && consequent_val.getDescriptor() == Atom::I_PTR) {
+      uint16 q0 = target_val.asIndex();
+      uint16 q1 = consequent_val.asIndex();
+      if (target_->get_reference(0)->code(q0) == Atom::Object(GetOpcode("vec3"), 3) &&
+          consequent->get_reference(0)->code(q1) == Atom::Object(GetOpcode("vec3"), 3)) {
+        // Form 1
+        // Build the expression (- q1 q0), copying the code structure at q1 and q0.
+        LocalObject search_code;
+        uint16 extent_index = 3;
+        search_code.code(0) = Atom::Operator(Opcodes::Sub, 2);
+        search_code.code(1) = Atom::IPointer(extent_index);
+        StructureValue::copy_structure(&search_code, extent_index, &consequent->get_reference(0)->code(0), q1);
+        search_code.code(2) = Atom::IPointer(extent_index);
+        StructureValue::copy_structure(&search_code, extent_index, &target_->get_reference(0)->code(0), q0);
+
+        // Use HLPContext to evaluate the expression. The result goes in the overlay's values array.
+        Overlay overlay((size_t)0);
+        HLPContext c(&search_code.code(0), 0, (HLPOverlay*)&overlay);
+        if (c.evaluate_no_dereference()) {
+          // Extract the expression result.
+          LocalObject searched_for;
+          extent_index = 0;
+          StructureValue::copy_structure(&searched_for, extent_index, overlay.values(), 0);
+
+          for (uint16 i = 1; i <= cmd_arg_count; ++i) {
+            Atom s = cause_payload->code(cmd_arg_set_index + i);
+            if (!(s.getDescriptor() == Atom::I_PTR &&
+                  cause_payload->code(s.asIndex()) == Atom::Object(GetOpcode("vec3"), 3)))
+              continue;
+
+            if (_Fact::MatchStructure(cause_payload, s.asIndex(), 0, &searched_for, 0)) {
+              auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target_, FACT_AFTER));
+              return new ACGuardBuilder(period, period - offset, cmd_arg_set_index + i);
+            }
+          }
+        }
+      }
+    }
+#endif
     // Form 1
     float32 q0 = target_val.asFloat();
     float32 q1 = consequent_val.asFloat();

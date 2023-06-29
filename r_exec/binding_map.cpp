@@ -509,6 +509,11 @@ void BindingMap::abstract_member(const Code *object, uint16 index, Code *abstrac
     break;
   }case Atom::I_PTR:
     // If there is a SET or an OBJECT, then we use its structure.
+#if 1 // vec3
+    if (object->code(ai) == Atom::Object(GetOpcode("vec3"), 3))
+      abstracted_object->code(write_index) = get_structure_variable(object, ai);
+    else
+#endif
     if (object->code(ai).getDescriptor() == Atom::SET || object->code(ai).getDescriptor() == Atom::OBJECT) {
 
       abstracted_object->code(write_index) = Atom::IPointer(extent_index);
