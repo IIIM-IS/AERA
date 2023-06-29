@@ -335,6 +335,10 @@ private:
   GuardBuilder *get_default_guard_builder(_Fact *cause, _Fact *consequent, std::chrono::microseconds period);
   GuardBuilder *find_guard_builder(_Fact *cause, _Fact *consequent, std::chrono::microseconds period);
 
+  static r_code::LocalObject build_expression_object(_Fact* target, _Fact* consequent, Atom op);
+
+  static r_code::resized_vector<r_code::Atom> evaluate_expression(r_code::LocalObject expression);
+
   bool build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period);
   bool build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period);
 

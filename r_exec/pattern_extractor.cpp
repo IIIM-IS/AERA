@@ -86,6 +86,7 @@
 #include "reduction_job.h"
 #include "mem.h"
 #include "model_base.h"
+#include "hlp_context.h"
 #include "mdl_controller.h"
 
 using namespace std;
@@ -1116,44 +1117,82 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
   if (opcode == Opcodes::Cmd) {
     uint16 cmd_arg_set_index = cause_payload->code(CMD_ARGS).asIndex();
     uint16 cmd_arg_count = cause_payload->code(cmd_arg_set_index).getAtomCount();
-    Atom target_val = target_->get_reference(0)->code(MK_VAL_VALUE);
-    Atom consequent_val = consequent->get_reference(0)->code(MK_VAL_VALUE);
 
     // Form 1
-    float32 q0 = target_val.asFloat();
-    float32 q1 = consequent_val.asFloat();
-
     // Form 1A
-    float32 searched_for = q1 - q0;
-    for (uint16 i = 1; i <= cmd_arg_count; ++i) {
+    // Build the expression (- q1 q0), copying the code structure at q1 and q0.
+    LocalObject expression = build_expression_object(target_, consequent, Atom::Operator(Opcodes::Sub, 2));
+    auto result = evaluate_expression(expression);
 
-      Atom s = cause_payload->code(cmd_arg_set_index + i);
-      if (!s.isFloat())
-        continue;
-      float32 _s = s.asFloat();
-      if (Utils::Equal(_s, searched_for)) {
-        auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target_, FACT_AFTER));
-        return new ACGuardBuilder(period, period - offset, cmd_arg_set_index + i);
+    //Check whether a valid result was returned.
+    int index = -1;
+    for (size_t i = 0; i < result.size(); ++i) {
+      if (result[i] != Atom::Nil()) {
+        index = i;
+        break;
+      }
+    }
+    // Match the result to the cause_payload.
+    if (index != -1) {
+      LocalObject searched_for;
+      uint16 extent_index = 0;
+      StructureValue::copy_structure(&searched_for, extent_index, &result[index], 0);
+
+      for (uint16 i = 1; i <= cmd_arg_count; ++i) {
+        Atom s = cause_payload->code(cmd_arg_set_index + i);
+        uint16 cmd_index = cmd_arg_set_index + i;
+        bool match = false;
+        if (s.getDescriptor() == Atom::I_PTR) {
+          cmd_index = s.asIndex();
+          match = _Fact::MatchStructure(cause_payload, cmd_index, 0, &searched_for, 0, s.getAtomCount());
+        }
+        else {
+          match = _Fact::Match(cause_payload, cmd_index, 0, &searched_for, 0, s.getAtomCount());
+        }
+        if (match) {
+          auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target_, FACT_AFTER));
+          return new ACGuardBuilder(period, period - offset, cmd_arg_set_index + i);
+        }
       }
     }
 
-    if (q0 != 0) {
-      // Form 1B
-      searched_for = q1 / q0;
-      for (uint16 i = cmd_arg_set_index + 1; i <= cmd_arg_count; ++i) {
+    // Form 1B
+    // Build the expression (/ q1 q0), copying the code structure at q1 and q0.
+    expression = build_expression_object(target_, consequent, Atom::Operator(Opcodes::Div, 2));
+    result = evaluate_expression(expression);
 
-        Atom s = cause_payload->code(i);
-        if (!s.isFloat())
-          continue;
-        float32 _s = s.asFloat();
-        if (Utils::Equal(_s, searched_for)) {
+    //Check whether a valid result was returned.
+    index = -1;
+    for (int i = 0; i < result.size(); ++i) {
+      if (result[i] != Atom::Nil()) {
+        index = i;
+        break;
+      }
+    }
+
+    // Match the result to the cause_payload.
+    if (index != -1) {
+      LocalObject searched_for;
+      uint16 extent_index = 0;
+      StructureValue::copy_structure(&searched_for, extent_index, &result[index], 0);
+      for (uint16 i = 1; i <= cmd_arg_count; ++i) {
+        Atom s = cause_payload->code(cmd_arg_set_index + i);
+        uint16 cmd_index = cmd_arg_set_index + i;
+        bool match = false;
+        if (s.getDescriptor() == Atom::I_PTR) {
+          cmd_index = s.asIndex();
+          match = _Fact::MatchStructure(cause_payload, cmd_index, 0, &searched_for, 0, s.getAtomCount());
+        }
+        else {
+          match = _Fact::Match(cause_payload, cmd_index, 0, &searched_for, 0, s.getAtomCount());
+        }
+        if (match) {
           auto offset = duration_cast<microseconds>(Utils::GetTimestamp<Code>(cause, FACT_AFTER) - Utils::GetTimestamp<Code>(target_, FACT_AFTER));
-          return new MCGuardBuilder(period, period - offset, i);
+          return new MCGuardBuilder(period, period - offset, cmd_arg_set_index + i);
         }
       }
     }
   }
-
   else if (opcode == Opcodes::IMdl) {
     // Form 1
     float32 q0 = target_->get_reference(0)->code(MK_VAL_VALUE).asFloat();
@@ -1228,6 +1267,58 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
 
   return NULL;
 }
+
+r_code::LocalObject CTPX::build_expression_object(_Fact* target, _Fact* consequent, Atom op) {
+
+  uint16 target_source_index = 0;
+  uint16 consequent_source_index = 0;
+
+  Atom target_val = target->get_reference(0)->code(MK_VAL_VALUE);
+  Atom consequent_val = consequent->get_reference(0)->code(MK_VAL_VALUE);
+  // Form 1
+  // Build the expression (- q1 q0), copying the code structure at q1 and q0.
+  LocalObject expression;
+  uint16 extent_index = 1;
+  expression.code(0) = op;
+  Atom* copy_ptr = &consequent_val;
+  if (consequent_val.getDescriptor() == Atom::I_PTR) {
+    consequent_source_index = consequent_val.asIndex();
+    copy_ptr = &consequent->get_reference(0)->code(0);
+    extent_index += 2;
+    expression.code(1) = Atom::IPointer(extent_index);
+  }
+  StructureValue::copy_structure(&expression, extent_index, copy_ptr, consequent_source_index);
+
+  copy_ptr = &target_val;
+  if (target_val.getDescriptor() == Atom::I_PTR) {
+    target_source_index = target_val.asIndex();
+    copy_ptr = &target->get_reference(0)->code(0);
+    expression.code(2) = Atom::IPointer(extent_index);
+  }
+  StructureValue::copy_structure(&expression, extent_index, copy_ptr, target_source_index);
+
+  return expression;
+}
+
+r_code::resized_vector<r_code::Atom> CTPX::evaluate_expression(r_code::LocalObject expression) {
+  // Use HLPContext to evaluate the expression. The result goes in the OpContext's result array.
+  Overlay overlay((size_t)0);
+  HLPContext c(&expression.code(0), 0, (HLPOverlay*)&overlay);
+
+  uint16 atom_count = c.get_children_count();
+  for (uint16 i = 1; i <= atom_count; ++i) {
+
+    if (!c.get_child_deref(i).evaluate_no_dereference())
+      return r_code::resized_vector<r_code::Atom>();
+  }
+
+  Operator op = Operator::Get(c[0].asOpcode());
+  HLPContext* _c = new HLPContext(c);
+  OpContext op_context(_c);
+  op(op_context);
+  return op_context.result();
+}
+
 
 // m0:[premise.value premise.after premise.before][cause->consequent].
 // m1:[icst->imdl m0[...][...]] with icst containing the premise.
