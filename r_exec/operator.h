@@ -86,6 +86,7 @@
 #define operator_h
 
 #include "../r_code/object.h"
+#include "../r_code/utils.h"
 
 #include "_context.h"
 
@@ -121,13 +122,51 @@ public:
 
   Atom &operator [](uint16 i) const { return implementation_->get_atom(i); }
 
-  void setAtomicResult(Atom a) const { implementation_->setAtomicResult(a); }
-  void setTimestampResult(Timestamp t) const { implementation_->setTimestampResult(t); }
-  void setDurationResult(std::chrono::microseconds d) const { implementation_->setDurationResult(d); }
-  uint16 setCompoundResultHead(Atom a) const { return implementation_->setCompoundResultHead(a); }
-  void addCompoundResultPart(Atom a) const { implementation_->addCompoundResultPart(a); }
+  virtual void setAtomicResult(Atom a) const { implementation_->setAtomicResult(a); }
+  virtual void setTimestampResult(Timestamp t) const { implementation_->setTimestampResult(t); }
+  virtual void setDurationResult(std::chrono::microseconds d) const { implementation_->setDurationResult(d); }
+  virtual uint16 setCompoundResultHead(Atom a) const { return implementation_->setCompoundResultHead(a); }
+  virtual void addCompoundResultPart(Atom a) const { implementation_->addCompoundResultPart(a); }
 
   void trace(std::ostream& out) const { return implementation_->trace(out); }
+};
+
+class OpContext : public Context {
+private:
+  r_code::resized_vector<r_code::Atom>* operation_results_;
+public:
+  OpContext(_Context* implementation) : Context(implementation) {
+    operation_results_ = new r_code::resized_vector<r_code::Atom>(0);
+  }
+  ~OpContext() {}
+
+  void setAtomicResult(Atom a) const override {
+    Context::setAtomicResult(a);
+    operation_results_->push_back(a);
+  }
+  void setTimestampResult(Timestamp t) const override {
+    Context::setTimestampResult(t);
+    operation_results_->resize(operation_results_->size() + 3);
+    uint16 value_index = operation_results_->size() - 3;
+    r_code::Utils::SetTimestamp(&(*operation_results_)[value_index], t);
+  }
+  void setDurationResult(std::chrono::microseconds d) const override {
+    Context::setDurationResult(d);
+    operation_results_->resize(operation_results_->size() + 3);
+    uint16 value_index = operation_results_->size() - 3;
+    r_code::Utils::SetDuration(&(*operation_results_)[value_index], d);
+  }
+  uint16 setCompoundResultHead(Atom a) const override {
+    uint16 value_index = Context::setCompoundResultHead(a);
+    addCompoundResultPart(a);
+    return value_index;
+  }
+  void addCompoundResultPart(Atom a) const override{
+    Context::addCompoundResultPart(a);
+    operation_results_->push_back(a);
+  }
+
+  r_code::resized_vector<r_code::Atom> result() { return *operation_results_; }
 };
 
 bool red(const Context &context); // executive-dependent.
