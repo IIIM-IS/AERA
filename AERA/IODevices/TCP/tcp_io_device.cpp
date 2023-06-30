@@ -265,6 +265,11 @@ namespace tcp_io_device {
     MetaData stored_meta_data = meta_data_it->second;
     uint16 args_set_index = cmd->code(CMD_ARGS).asIndex();
 
+    if (cmd->code(args_set_index).getAtomCount() == 1) {
+      // std::cout << "Cmd without values ejected." << std::endl;
+      return tcp_io_device::MsgData::createNewMsgData(stored_meta_data);
+    }
+
     tcp_io_device::MsgData msg_data = tcp_io_device::MsgData::invalidMsgData();
     // Default values for OpCodeHandle == "" and dimensionality of 1.
     int start = args_set_index + 2;
@@ -345,10 +350,13 @@ namespace tcp_io_device {
     case VariableDescription_DataType_DOUBLE:
       for (int i = start_index; i < end_index; ++i) {
         data.push_back(cmd->code(i).asFloat());
+        // std::cout << "Debug DataType Double trace:" << cmd->trace_string() << std::endl;
       }
       break;
     case VariableDescription_DataType_COMMUNICATION_ID:
       for (int i = start_index; i < end_index; ++i) {
+        // std::cout << "Start: " << start_index << " End:" << end_index << std::endl;
+        // std::cout << "Debug test of Communication_id. 1) cmd trace " << cmd->trace_string() << std::endl;
         if (cmd->code(i).getDescriptor() != Atom::R_PTR) {
           // @todo This isn't an R_PTR whysoever...
           std::cout << "WARNING: Got command which should include a communicaiton id which points to another object without R_PTR. Ignoring it." << std::endl;;
@@ -394,7 +402,7 @@ namespace tcp_io_device {
         return;
       }
     }
-    std::cout << "Received message of type " << msg->messagetype();
+    std::cout << "Received message of type " << msg->messagetype() << std::endl;
 
     handleMessage(std::move(msg));
     lastInjectTime_ = now;
@@ -484,15 +492,15 @@ namespace tcp_io_device {
     // @todo: Need to change it to actual receive time
     auto now = r_exec::Now();
     auto data = data_msg->release_datamessage();
-    std::cout << "Received data message. Injecting received data:" << std::endl;
+    // std::cout << "Received data message. Injecting received data:" << std::endl;
     for (int i = 0; i < data->variables_size(); ++i) {
       MsgData var(&(data->variables(i)));
       auto entity = entities_[id_mapping_[var.getMetaData().getEntityID()]];
       auto obj = objects_[id_mapping_[var.getMetaData().getID()]];
-      std::cout << "Variable " << i << ":" << std::endl;
-      std::cout << "Entity: " << id_mapping_[var.getMetaData().getEntityID()] << std::endl;
-      std::cout << "Property: " << id_mapping_[var.getMetaData().getID()] << std::endl;
-      std::cout << "Value(s):" << std::endl;
+      // std::cout << "Variable " << i << ":" << std::endl;
+      // std::cout << "Entity: " << id_mapping_[var.getMetaData().getEntityID()] << std::endl;
+      // std::cout << "Property: " << id_mapping_[var.getMetaData().getID()] << std::endl;
+      // std::cout << "Value(s):" << std::endl;
 
       if (var.getMetaData().getType() == VariableDescription_DataType_DOUBLE)
       {
@@ -549,7 +557,7 @@ namespace tcp_io_device {
             continue;
           }
           std::string object_entity = id_mapping_[val];
-          std::cout << object_entity << std::endl;
+          // std::cout << object_entity << std::endl;
           if (entities_.find(object_entity) == entities_.end())
           {
             std::cout << "WARNING: Received message with uninitalized entity, this should never happen!" << std::endl;
@@ -573,12 +581,12 @@ namespace tcp_io_device {
   template<class V>
   void TcpIoDevice<O, S>::injectDefault(r_code::Code* entity, r_code::Code* object, std::vector<V> vals, core::Timestamp time) {
     if (vals.size() == 0) {
-      std::cout << "[]" << std::endl;
+      // std::cout << "[]" << std::endl;
       inject_marker_value_from_io_device(entity, object, std::vector<r_code::Code*>(), time, time + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
       return;
     }
     if (vals.size() == 1) {
-      std::cout << vals[0] << std::endl;
+      // std::cout << vals[0] << std::endl;
       inject_marker_value_from_io_device(entity, object, Atom::Float(vals[0]), time, time + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
       return;
     }
@@ -603,7 +611,7 @@ namespace tcp_io_device {
   void TcpIoDevice<O, S>::injectSet(r_code::Code* entity, r_code::Code* object, std::vector<V> vals, core::Timestamp time) {
     std::vector<Atom> atom_vals;
     for (auto it = vals.begin(); it != vals.end(); ++it) {
-      std::cout << *it << std::endl;
+      // std::cout << *it << std::endl;
       atom_vals.push_back(Atom::Float(*it));
     }
     inject_marker_value_from_io_device(entity, object, atom_vals, time, time + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
@@ -624,7 +632,7 @@ namespace tcp_io_device {
     }
     std::vector<Atom> atom_vals;
     for (auto it = vals.begin(); it != vals.end(); ++it) {
-      std::cout << *it << std::endl;
+      // std::cout << *it << std::endl;
       atom_vals.push_back(Atom::Float(*it));
     }
     inject_marker_value_from_io_device(entity, object, op_code, atom_vals, time, time);
