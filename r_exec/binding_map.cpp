@@ -982,14 +982,8 @@ void HLPBindingMap::init_from_pattern(const Code *source) { // source is abstrac
   for (uint16 i = 1; i < source->code_size(); ++i) {
 
     Atom s = source->code(i);
-    switch (s.getDescriptor()) {
-    case Atom::VL_PTR: {
-      uint8 value_index = source->code(i).asIndex();
-      add_unbound_value(value_index);
-      break;
-    }default:
-      break;
-    }
+    if (s.getDescriptor() == Atom::VL_PTR)
+      add_unbound_value(s.asIndex());
   }
 
   for (uint16 i = 0; i < source->references_size(); ++i)
