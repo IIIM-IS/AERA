@@ -1015,10 +1015,12 @@ void HLPBindingMap::init_from_hlp(const Code* hlp, const Code* packed_hlp) { // 
   if (obj_count >= 2)
     init_timing_indexes(hlp->get_reference(hlp->code(obj_set_index + 2).asIndex()),
       bwd_after_index_, bwd_before_index_);
-  for (uint16 i = 1; i <= obj_count; ++i) {
 
-    _Fact *pattern = (_Fact *)hlp->get_reference(hlp->code(obj_set_index + i).asIndex());
-    init_from_pattern(pattern);
+  // Use the packed hlp without recursion which has exactly the vars we need for the binding map.
+  for (uint16 i = 1; i < packed_hlp->code_size(); ++i) {
+    Atom s = packed_hlp->code(i);
+    if (s.getDescriptor() == Atom::VL_PTR)
+      add_unbound_value(s.asIndex());
   }
 }
 
