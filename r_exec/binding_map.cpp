@@ -972,10 +972,8 @@ void HLPBindingMap::load(const HLPBindingMap *source) {
   *this = *source;
 }
 
-void HLPBindingMap::init_from_pattern(const Code *source, int16 position) { // source is abstracted.
+void HLPBindingMap::init_from_pattern(const Code *source) { // source is abstracted.
 
-  bool set_fwd_timing_index = (position == 0);
-  bool set_bwd_timing_index = (position == 1);
   for (uint16 i = 1; i < source->code_size(); ++i) {
 
     Atom s = source->code(i);
@@ -983,19 +981,6 @@ void HLPBindingMap::init_from_pattern(const Code *source, int16 position) { // s
     case Atom::VL_PTR: {
       uint8 value_index = source->code(i).asIndex();
       add_unbound_value(value_index);
-      if (set_fwd_timing_index && i == FACT_AFTER)
-        fwd_after_index_ = value_index;
-      else if (set_fwd_timing_index && i == FACT_BEFORE) {
-
-        fwd_before_index_ = value_index;
-        set_fwd_timing_index = false;
-      } else if (set_bwd_timing_index && i == FACT_AFTER)
-        bwd_after_index_ = value_index;
-      else if (set_bwd_timing_index && i == FACT_BEFORE) {
-
-        bwd_before_index_ = value_index;
-        set_bwd_timing_index = false;
-      }
       break;
     }default:
       break;
@@ -1003,7 +988,7 @@ void HLPBindingMap::init_from_pattern(const Code *source, int16 position) { // s
   }
 
   for (uint16 i = 0; i < source->references_size(); ++i)
-    init_from_pattern(source->get_reference(i), -1);
+    init_from_pattern(source->get_reference(i));
 }
 
 void HLPBindingMap::add_unbound_values(const Code* hlp, uint16 structure_index) {
@@ -1027,10 +1012,16 @@ void HLPBindingMap::init_from_hlp(const Code *hlp) { // hlp is cst or mdl.
 
   uint16 obj_set_index = hlp->code(HLP_OBJS).asIndex();
   uint16 obj_count = hlp->code(obj_set_index).getAtomCount();
+  if (obj_count >= 1)
+    init_timing_indexes(hlp->get_reference(hlp->code(obj_set_index + 1).asIndex()),
+      fwd_after_index_, fwd_before_index_);
+  if (obj_count >= 2)
+    init_timing_indexes(hlp->get_reference(hlp->code(obj_set_index + 2).asIndex()),
+      bwd_after_index_, bwd_before_index_);
   for (uint16 i = 1; i <= obj_count; ++i) {
 
     _Fact *pattern = (_Fact *)hlp->get_reference(hlp->code(obj_set_index + i).asIndex());
-    init_from_pattern(pattern, i - 1);
+    init_from_pattern(pattern);
   }
 }
 
