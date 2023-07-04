@@ -397,7 +397,22 @@ private:
   bool match_bwd_timings(const _Fact *f_object, const _Fact *f_pattern);
 
   bool need_binding(r_code::Code *pattern) const;
-  void init_from_pattern(const r_code::Code *source, int16 position); // first source is f->obj.
+
+  /**
+   * If source->code(FACT_AFTER) and source->code(FACT_BEFORE) are VL_PTR, then set the respective
+   * after_index and before_index.
+   */
+  void init_timing_indexes(const r_code::Code* source, int16& after_index, int16& before_index) {
+    if (source->code_size() <= FACT_BEFORE)
+      // We don't expect this.
+      return;
+    if (source->code(FACT_AFTER).getDescriptor() == Atom::VL_PTR)
+      after_index = source->code(FACT_AFTER).asIndex();
+    if (source->code(FACT_BEFORE).getDescriptor() == Atom::VL_PTR)
+      before_index = source->code(FACT_BEFORE).asIndex();
+  }
+
+  void init_from_pattern(const r_code::Code *source);
 
   /**
    * Scan the structure in hlp at structure_index and call add_unbound_value for each VL_PTR.
