@@ -417,7 +417,7 @@ bool _Fact::CounterEvidence(const Code *lhs, const Code *rhs) {
       case Atom::R_PTR:
         return !MatchObject(lhs->get_reference(lhs->code(MK_VAL_VALUE).asIndex()), rhs->get_reference(rhs->code(MK_VAL_VALUE).asIndex()));
       case Atom::I_PTR:
-        return !MatchStructure(lhs, MK_VAL_VALUE, lhs_atom.asIndex(), rhs, rhs_atom.asIndex(), false);
+        return !MatchStructure(lhs, lhs_atom.asIndex(), 0, rhs, rhs_atom.asIndex(), false);
       default:
         return !MatchAtom(lhs_atom, rhs_atom);
       }
