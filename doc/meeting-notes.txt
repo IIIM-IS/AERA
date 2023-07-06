@@ -1078,14 +1078,23 @@ Simulator
   * Make CTPX work with vec3 for the move model DeltaP.
     * DONE. Add temporary special case in CTPX for vec3. [Jeff]
 
-next meeting
-* Cisco demo: Traceroute.
+2023-07-06
+* DONE. Merge pull request to fix out-of-bounds error (seen by Chloe) https://github.com/IIIM-IS/AERA/pull/261
 * Webots
-  * Make CTPX work with vec3 for the move model DeltaP.
-    * Generalize CTPX for all strucured types. [Leonard]
+  * DONE. Make CTPX work with vec3 for the move model DeltaP.
+
+next meeting
+* 5 slides for simple "hand" demo.
+* PTPX to accept objects with same "property-value"
+* DONE. Make pull request to fix bug initializing CST binding map https://github.com/IIIM-IS/AERA/pull/260
+* Cisco demo: Traceroute.
+  * Abduction to reconfigure route.
+* Webots
+  * Put a tray at goal position.
+  * Re-add (possibly as a hack) moves limited to distance of 20.
+  * Generalize CTPX for all strucured types (vec2, vec3, vec [], etc.) [Leonard]
+  * Align aera_us with AERA time.
   * Let AERA send "reset" message to reset the environment. (Use after grab fails.)
-  * init() should "instantly" set the arm position. Right now it moves to the init position and can hit objects.
-  * (Added hack to reset positions after release.)
   * Use setup command for automatic discovery of AERA objects and commands
   * Get command efferent copy from Webots (move limit to +/- 20) [Maybe in the setup message or command reply. Need more discussion]
   * Try camera
