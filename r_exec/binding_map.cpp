@@ -403,7 +403,7 @@ _Fact *BindingMap::abstract_f_ihlp(const _Fact *f_ihlp) const { // bindings are 
 
   _ihlp->code(I_HLP_ARITY) = ihlp->code(I_HLP_ARITY);
 
-  _ihlp->add_reference(f_ihlp->get_reference(f_ihlp->code(I_HLP_OBJ).asIndex()));
+  _ihlp->add_reference(ihlp->get_reference(ihlp->code(I_HLP_OBJ).asIndex()));
 
   _f_ihlp->add_reference(_ihlp);
   return _f_ihlp;
