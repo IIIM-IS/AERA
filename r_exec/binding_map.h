@@ -288,7 +288,7 @@ public:
 
   void init(const r_code::Code *object, uint16 index);
 
-  _Fact *abstract_f_ihlp(const _Fact *fact) const; // for icst and imdl.
+  static _Fact *abstract_f_ihlp(const _Fact *fact); // for icst and imdl.
 
   /**
    * Fill in the fresh fact object as an abstract copy of the original fact, creating new bindings as needed.
