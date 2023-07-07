@@ -365,7 +365,7 @@ bool ObjectValue::contains(const Code *o) const {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-_Fact *BindingMap::abstract_f_ihlp(_Fact *f_ihlp) const { // bindings are set already (coming from a mk.rdx caught by auto-focus).
+_Fact *BindingMap::abstract_f_ihlp(const _Fact *f_ihlp) const { // bindings are set already (coming from a mk.rdx caught by auto-focus).
 
   uint16 opcode;
   Code *ihlp = f_ihlp->get_reference(0);
