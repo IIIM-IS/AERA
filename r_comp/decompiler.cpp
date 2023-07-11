@@ -271,6 +271,9 @@ uint32 Decompiler::decompile_references(r_comp::Image *image, unordered_map<uint
     if (n != image->object_names_.symbols_.end())
       // Already set the user-defined name in the first pass.
       continue;
+    if (object_names_.find(i) != object_names_.end())
+      // Already assigned by the passed-in object_names.
+      continue;
 
     Class *c = metadata_->get_class(sys_object->code_[0].asOpcode());
     string className = c->str_opcode;
