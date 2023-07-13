@@ -365,7 +365,7 @@ bool ObjectValue::contains(const Code *o) const {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-_Fact *BindingMap::abstract_f_ihlp(const _Fact *f_ihlp) const { // bindings are set already (coming from a mk.rdx caught by auto-focus).
+_Fact *BindingMap::abstract_f_ihlp(const _Fact *f_ihlp) { // bindings are set already (coming from a mk.rdx caught by auto-focus).
 
   uint16 opcode;
   Code *ihlp = f_ihlp->get_reference(0);
@@ -392,7 +392,7 @@ _Fact *BindingMap::abstract_f_ihlp(const _Fact *f_ihlp) const { // bindings are 
   _ihlp->code(extent_index) = Atom::Set(tpl_arg_count);
   for (uint16 i = 1; i <= tpl_arg_count; ++i)
     _ihlp->code(extent_index + i) = Atom::VLPointer(map_index++);
-  extent_index += tpl_arg_count;
+  extent_index += 1 + tpl_arg_count;
 
   uint16 arg_set_index = ihlp->code(I_HLP_EXPOSED_ARGS).asIndex();
   uint16 arg_count = ihlp->code(arg_set_index).getAtomCount();
@@ -401,6 +401,7 @@ _Fact *BindingMap::abstract_f_ihlp(const _Fact *f_ihlp) const { // bindings are 
   for (uint16 i = 1; i <= arg_count; ++i)
     _ihlp->code(extent_index + i) = Atom::VLPointer(map_index++);
 
+  _ihlp->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = ihlp->code(I_HLP_WEAK_REQUIREMENT_ENABLED);
   _ihlp->code(I_HLP_ARITY) = ihlp->code(I_HLP_ARITY);
 
   _ihlp->add_reference(ihlp->get_reference(ihlp->code(I_HLP_OBJ).asIndex()));
