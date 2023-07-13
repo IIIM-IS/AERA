@@ -1083,12 +1083,12 @@ Simulator
 * Webots
   * DONE. Make CTPX work with vec3 for the move model DeltaP.
 
+2023-07-13
+* DONE. Merge request to fix bug in abstract_f_ihlp (for Arash) https://github.com/IIIM-IS/AERA/pull/262
+
 next meeting
-* 5 slides for simple "hand" demo.
 * PTPX to accept objects with same "property-value"
 * DONE. Make pull request to fix bug initializing CST binding map https://github.com/IIIM-IS/AERA/pull/260
-* Cisco demo: Traceroute.
-  * Abduction to reconfigure route.
 * Webots
   * Put a tray at goal position.
   * Re-add (possibly as a hack) moves limited to distance of 20.
