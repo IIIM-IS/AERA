@@ -759,10 +759,14 @@ void PTPX::reduce(r_exec::View *input) {
   r_code::list<Input>::const_iterator i;
   for (i = inputs_.begin(); i != inputs_.end();) { // filter out inputs irrelevant for the prediction.
 
-    if (i->input_->get_reference(0)->code(0).asOpcode() == Opcodes::Cmd) // no cmds as req lhs (because no bwd-operational); prefer: cmd->effect, effect->imdl.
+    if (i->input_->get_reference(0)->code(0).asOpcode() == Opcodes::Cmd)
+      // no cmds as req lhs (because no bwd-operational); prefer: cmd->effect, effect->imdl.
       i = inputs_.erase(i);
-    else if (!end_bm->intersect(i->bindings_) || // discard inputs that do not share values with the consequent.
-             i->input_->get_after() > consequent->get_after()) // discard inputs that started after the consequent started.
+    else if (i->input_->get_after() > consequent->get_after())
+      // discard inputs that started after the consequent started.
+      i = inputs_.erase(i);
+    else if (!end_bm->intersect(i->bindings_))
+      // discard inputs that do not share values with the consequent.
       i = inputs_.erase(i);
     else
       ++i;
