@@ -1090,11 +1090,9 @@ next meeting
 * PTPX to accept objects with same "property-value"
 * DONE. Make pull request to fix bug initializing CST binding map https://github.com/IIIM-IS/AERA/pull/260
 * Webots
-  * Put a tray at goal position.
   * Re-add (possibly as a hack) moves limited to distance of 20.
   * Generalize CTPX for all strucured types (vec2, vec3, vec [], etc.) [Leonard]
   * Align aera_us with AERA time.
-  * Let AERA send "reset" message to reset the environment. (Use after grab fails.)
   * Use setup command for automatic discovery of AERA objects and commands
   * Get command efferent copy from Webots (move limit to +/- 20) [Maybe in the setup message or command reply. Need more discussion]
   * Try camera
