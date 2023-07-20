@@ -1087,10 +1087,11 @@ Simulator
 * DONE. Merge request to fix bug in abstract_f_ihlp (for Arash) https://github.com/IIIM-IS/AERA/pull/262
 
 next meeting
-* PTPX to accept objects with same "property-value"
+* DONE. PTPX to accept objects with same "attribute, value"
 * DONE. Make pull request to fix bug initializing CST binding map https://github.com/IIIM-IS/AERA/pull/260
 * Webots
-  * Re-add (possibly as a hack) moves limited to distance of 20.
+  * Set tpx_time_horizon="100000"
+  * Put a tray at the goal position (if not too hard) [Leonard]
   * Generalize CTPX for all strucured types (vec2, vec3, vec [], etc.) [Leonard]
   * Align aera_us with AERA time.
   * Use setup command for automatic discovery of AERA objects and commands
