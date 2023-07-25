@@ -532,21 +532,6 @@ namespace tcp_io_device {
           continue;
         }
       }
-      
-      std::vector<Atom> val;
-      if (var.getMetaData().getType() == VariableDescription_DataType_DOUBLE)
-      {
-        std::vector<double> values = var.getData<double>();
-        for (auto it = values.begin(); it != values.end(); ++it) {
-          val.push_back(Atom::Float(*it));
-        }
-      }
-      else if (var.getMetaData().getType() == VariableDescription_DataType_INT64){
-        std::vector<int64_t> values = var.getData<int64_t>();
-        for (auto it = values.begin(); it != values.end(); ++it) {
-          val.push_back(Atom::Float(*it));
-        }
-      }
       else if (var.getMetaData().getType() == VariableDescription_DataType_COMMUNICATION_ID) {
         int64_t val = var.getData<int64_t>()[0];
         std::vector<r_code::Code*> value;
@@ -568,11 +553,11 @@ namespace tcp_io_device {
         inject_marker_value_from_io_device(entity, obj, value, now, now + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
         continue;
       }
-      if (id_mapping_[var.getMetaData().getID()] == "velocity_y") {
-        //inject_marker_value_from_io_device(entity, obj, val, now, now + get_sampling_period(), r_exec::View::SYNC_HOLD, get_stdin());
-      }
-      else {
-        //inject_marker_value_from_io_device(entity, obj, val, now, now + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
+      else if (var.getMetaData().getType() == VariableDescription_DataType_STRING) {
+        /** @todo multidimensionality not working, yet*/
+        std::string val = var.getData<std::string>()[0];
+        inject_marker_value_from_io_device(entity, obj, val, now, now + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
+        
       }
     }
   }
