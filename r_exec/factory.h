@@ -614,7 +614,21 @@ public:
 
   bool is_invalidated() override;
 
+  /**
+   * Check if the components_ contains the given component. This does not recurse.
+   * \param component The component to search for. This checks for the exact object (not a match).
+   * \param component_index If this returns true, set component_index to the index of the found component.
+   * \return True if found the component.
+   */
   bool contains(const _Fact *component, uint16 &component_index) const;
+
+  /**
+   * Check if the components_ or any sub icst contains the give component. (If a component is an f_icst, this
+   * recursively calls itself.)
+   * \param component The component to search for. This checks for the exact object (not a match).
+   * \return True if found the component.
+   */
+  bool r_contains(const _Fact* component) const;
 
   P<BindingMap> bindings_;
   std::vector<P<_Fact> > components_; // the inputs that triggered the building of the icst.

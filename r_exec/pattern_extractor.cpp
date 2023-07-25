@@ -431,10 +431,7 @@ Code *_TPX::build_cst(const vector<Component> &components, BindingMap *bm, _Fact
 
 Code *_TPX::build_mdl_head(HLPBindingMap *bm, uint16 tpl_arg_count, _Fact *lhs, _Fact *rhs, uint16 &write_index, bool allow_shared_timing_vars) {
 
-  Code *mdl = _Mem::Get()->build_object(Atom::Model(Opcodes::Mdl, MDL_ARITY));
-
   Code* abstract_lhs = bm->abstract_object(lhs, false, allow_shared_timing_vars ? 0 : -1);
-  mdl->add_reference(abstract_lhs); // reference lhs.
 
   int rhs_first_search_index = (allow_shared_timing_vars ? 0 : -1);
   if (abstract_lhs->get_reference(0)->code(0).asOpcode() == Opcodes::IMdl) {
@@ -448,7 +445,15 @@ Code *_TPX::build_mdl_head(HLPBindingMap *bm, uint16 tpl_arg_count, _Fact *lhs, 
         imdl->code(exposed_after_index).getDescriptor() == Atom::VL_PTR)
       rhs_first_search_index = imdl->code(exposed_after_index).asIndex();
   }
-  mdl->add_reference(bm->abstract_object(rhs, false, rhs_first_search_index)); // reference rhs.
+  Code* abstract_rhs = bm->abstract_object(rhs, false, rhs_first_search_index);
+
+  return build_mdl_head_from_abstract(tpl_arg_count, abstract_lhs, abstract_rhs, write_index);
+}
+
+Code* _TPX::build_mdl_head_from_abstract(uint16 tpl_arg_count, Code* abstract_lhs, Code* abstract_rhs, uint16& write_index) {
+  Code* mdl = _Mem::Get()->build_object(Atom::Model(Opcodes::Mdl, MDL_ARITY));
+  mdl->add_reference(abstract_lhs); // reference lhs.
+  mdl->add_reference(abstract_rhs); // reference rhs.
 
   write_index = MDL_ARITY;
 
@@ -754,10 +759,14 @@ void PTPX::reduce(r_exec::View *input) {
   r_code::list<Input>::const_iterator i;
   for (i = inputs_.begin(); i != inputs_.end();) { // filter out inputs irrelevant for the prediction.
 
-    if (i->input_->get_reference(0)->code(0).asOpcode() == Opcodes::Cmd) // no cmds as req lhs (because no bwd-operational); prefer: cmd->effect, effect->imdl.
+    if (i->input_->get_reference(0)->code(0).asOpcode() == Opcodes::Cmd)
+      // no cmds as req lhs (because no bwd-operational); prefer: cmd->effect, effect->imdl.
       i = inputs_.erase(i);
-    else if (!end_bm->intersect(i->bindings_) || // discard inputs that do not share values with the consequent.
-             i->input_->get_after() > consequent->get_after()) // discard inputs that started after the consequent started.
+    else if (i->input_->get_after() > consequent->get_after())
+      // discard inputs that started after the consequent started.
+      i = inputs_.erase(i);
+    else if (!end_bm->intersect(i->bindings_))
+      // discard inputs that do not share values with the consequent.
       i = inputs_.erase(i);
     else
       ++i;

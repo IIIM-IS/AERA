@@ -925,4 +925,19 @@ bool ICST::contains(const _Fact *component, uint16 &component_index) const {
 
   return false;
 }
+
+bool ICST::r_contains(const _Fact* component) const {
+
+  for (auto i = components_.begin(); i != components_.end(); ++i) {
+    if (*i == component)
+      return true;
+
+    if ((*i)->get_reference(0)->code(0).asOpcode() == Opcodes::ICst &&
+        ((ICST*)(*i)->get_reference(0))->r_contains(component))
+      return true;
+  }
+
+  return false;
+}
+
 }
