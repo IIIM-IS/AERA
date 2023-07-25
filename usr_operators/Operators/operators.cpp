@@ -370,13 +370,16 @@ bool dis(const r_exec::Context &context) {
 
 }
 
-void Operators::Init(OpcodeRetriever r) {
+r_code::resized_vector<uint16> Operators::Init(OpcodeRetriever r) {
 
   const char* vec3 = "vec3";
   const char* vec2 = "vec2";
   const char* vec = "vec";
 
-  Vec3Opcode = r(vec3);
-  Vec2Opcode = r(vec2);
-  VecOpcode = r(vec);
+  r_code::resized_vector<uint16> initialized_opcodes;
+  initialized_opcodes.push_back(Vec3Opcode = r(vec3));
+  initialized_opcodes.push_back(Vec2Opcode = r(vec2));
+  initialized_opcodes.push_back(VecOpcode = r(vec));
+
+  return initialized_opcodes;
 }

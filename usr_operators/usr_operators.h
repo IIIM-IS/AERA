@@ -90,7 +90,7 @@
 
 
 extern "C" {
-void dll_export Init(OpcodeRetriever r); // OpcodeRetriever allows the dll to retrieve opcodes from the r_rxec dll without referencing the corresponding STL structures.
+  r_code::resized_vector<uint16> dll_export Init(OpcodeRetriever r); // OpcodeRetriever allows the dll to retrieve opcodes from the r_rxec dll without referencing the corresponding STL structures.
 
 // Operators //////////////////////////////////////////////////////////////////////////////
 
