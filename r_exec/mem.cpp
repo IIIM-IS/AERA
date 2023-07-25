@@ -571,6 +571,7 @@ bool DiagnosticTimeState::step() {
     size_t n_jobs_to_run = min(reduction_job_queue_.size(), max_reduction_jobs_per_cycle);
     if (n_jobs_to_run > 0) {
       if (reduction_job_queue_index_ < n_jobs_to_run) {
+        // Add breakpoint here to check which reduction job leads to the failure.
         reduction_job_queue_[reduction_job_queue_index_]->update(Now());
         reduction_job_queue_[reduction_job_queue_index_] = NULL;
         ++reduction_job_queue_index_;
@@ -881,6 +882,28 @@ View* _Mem::inject_marker_value_from_io_device(
   object->set_reference(0, obj);
   object->set_reference(1, prop);
   object->set_reference(2, val);
+
+  return inject_fact_from_io_device(object, after, before, sync_mode, group);
+}
+
+View* _Mem::inject_marker_value_from_io_device(
+  Code* obj, Code* prop, const std::string& val, Timestamp after, Timestamp before, View::SyncMode sync_mode, Code* group)
+{
+  if (!obj || !prop)
+    // We don't expect this, but sanity check.
+    return NULL;
+
+  Code* object = new LObject(this);
+  uint16 extent_index = 4;
+  object->code(0) = Atom::Marker(GetOpcode("mk.val"), 4); // Caveat: arity does not include the opcode.
+  object->code(1) = Atom::RPointer(0); // obj
+  object->set_reference(0, obj);
+  object->code(2) = Atom::RPointer(1); // prop
+  object->set_reference(1, prop);
+  object->code(3) = Atom::IPointer(++extent_index); // val
+  object->code(4) = Atom::Float(1); // psln_thr.
+
+  Utils::SetString<Code>(object, 3, val);
 
   return inject_fact_from_io_device(object, after, before, sync_mode, group);
 }
