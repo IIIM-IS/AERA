@@ -490,7 +490,7 @@ static bool Init(FunctionLibrary* userOperatorLibrary,
 
   // Operators.
   typedef uint16 (*OpcodeRetriever)(const char *);
-  typedef void (*UserInit)(OpcodeRetriever);
+  typedef r_code::resized_vector<uint16> (*UserInit)(OpcodeRetriever);
   auto _Init = (UserInit)userOperatorLibrary->getFunction("Init");
   if (!_Init)
     return false;
@@ -505,7 +505,7 @@ static bool Init(FunctionLibrary* userOperatorLibrary,
   if (!GetOperatorName)
     return false;
 
-  _Init(RetrieveOpcode);
+  Metadata.usr_classes_ = _Init(RetrieveOpcode);
 
   typedef bool (*UserOperator)(const Context &);
 
@@ -629,4 +629,17 @@ std::string GetAxiomName(const uint16 index) {
 
   return Compiler.getObjectName(index);
 }
+
+bool hasUserDefinedOperators(const uint16 opcode) {
+  const std::vector<uint16> *usr_defined_opcodes = Metadata.usr_classes_.as_std();
+  return std::find(usr_defined_opcodes->begin(), usr_defined_opcodes->end(), opcode) != usr_defined_opcodes->end();
+}
+
+bool hasUserDefinedOperators(const std::string class_name) {
+  if (_Opcodes.find(class_name) == _Opcodes.end()) {
+    return false;
+  }
+  return hasUserDefinedOperators(_Opcodes[class_name]);
+}
+
 }

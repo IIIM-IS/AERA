@@ -1038,6 +1038,10 @@ void CTPX::reduce(r_exec::View *input) {
     Atom target_val = target_->get_reference(0)->code(MK_VAL_VALUE);
     if (target_val.isFloat())
       need_guard = true;
+    else if (target_val.getDescriptor() == Atom::I_PTR) {
+      if (hasUserDefinedOperators(target_->get_reference(0)->code(target_val.asIndex()).asOpcode()))
+        need_guard = true;
+    }
   }
 
   auto period = duration_cast<microseconds>(Utils::GetTimestamp<Code>(consequent, FACT_AFTER) - Utils::GetTimestamp<Code>(target_, FACT_AFTER)); // sampling period.

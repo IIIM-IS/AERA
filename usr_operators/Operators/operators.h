@@ -100,7 +100,7 @@ bool dis(const r_exec::Context &context);
 
 class Operators {
 public:
-  static void Init(OpcodeRetriever r);
+  static r_code::resized_vector<uint16> Init(OpcodeRetriever r);
 };
 
 
