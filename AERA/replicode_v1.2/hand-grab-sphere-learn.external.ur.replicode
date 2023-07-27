@@ -47,13 +47,6 @@ S3:(cst [] []
 |[]
 [stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
-cst_same_pos:(cst [] []
-   (fact (icst S0 [] [H: P:] : :) T0: T1: : :)
-   (fact (icst S3 [] [C: X: P:] : :) T0: T1: : :)
-|[]
-|[]
-[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
-
 !def pS1 (vec3 -0.5 0.5 0)
 
 ; Execute babble pass A commands.
