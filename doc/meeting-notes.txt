@@ -1086,8 +1086,10 @@ Simulator
 2023-07-13
 * DONE. Merge request to fix bug in abstract_f_ihlp (for Arash) https://github.com/IIIM-IS/AERA/pull/262
 
+2023-07-27
+* DONE. Merge request for PTPX to accept objects with same "attribute, value" https://github.com/IIIM-IS/AERA/pull/263
+
 next meeting
-* DONE. PTPX to accept objects with same "attribute, value"
 * DONE. Make pull request to fix bug initializing CST binding map https://github.com/IIIM-IS/AERA/pull/260
 * Webots
   * Set tpx_time_horizon="100000"
