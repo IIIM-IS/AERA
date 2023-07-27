@@ -750,6 +750,10 @@ void PTPX::reduce(r_exec::View *input) {
   P<_Fact> consequent = new Fact(f_imdl->get_reference(0), f_imdl_after, f_imdl_before, f_imdl->get_cfd(), f_imdl->get_psln_thr());
   consequent->set_opposite();
 
+  vector<Input> discarded_f_mk_vals;
+  vector<Input> discarded_f_icsts;
+  vector<Code*> accepted_mk_vals;
+
   P<BindingMap> end_bm = new BindingMap();
   {
     // Call abstract_object only to update the binding map.
@@ -764,11 +768,62 @@ void PTPX::reduce(r_exec::View *input) {
     else if (i->input_->get_after() > consequent->get_after())
       // discard inputs that started after the consequent started.
       i = inputs_.erase(i);
-    else if (!end_bm->intersect(i->bindings_))
+    else if (!end_bm->intersect(i->bindings_)) {
       // discard inputs that do not share values with the consequent.
+      if (i->input_->get_reference(0)->code(0).asOpcode() == Opcodes::MkVal &&
+          !_Mem::Get()->matches_axiom(i->input_->get_reference(0)))
+        // Save for below.
+        discarded_f_mk_vals.push_back(*i);
+      else if (i->input_->get_reference(0)->code(0).asOpcode() == Opcodes::ICst)
+        // Save for below.
+        discarded_f_icsts.push_back(*i);
+
       i = inputs_.erase(i);
-    else
+    }
+    else {
+      if (i->input_->get_reference(0)->code(0).asOpcode() == Opcodes::MkVal &&
+          !_Mem::Get()->matches_axiom(i->input_->get_reference(0)))
+        // Save for below.
+        accepted_mk_vals.push_back(i->input_->get_reference(0));
+
       ++i;
+    }
+  }
+
+  // Only keep discarded mk.vals that share "attribute, value" with at least one accepted mk.val.
+  for (auto f_mk_val = discarded_f_mk_vals.begin(); f_mk_val != discarded_f_mk_vals.end();) {
+    bool match = false;
+    for (auto accepted = accepted_mk_vals.begin(); accepted != accepted_mk_vals.end(); ++accepted) {
+      // Skip the mk.val object. Start matching from the attribute.
+      if (_Fact::Match(f_mk_val->input_->get_reference(0), 0, MK_VAL_ATTR,
+                       *accepted, MK_VAL_ATTR, MK_VAL_ARITY)) {
+        match = true;
+        break;
+      }
+    }
+
+    if (match) {
+      // Restore as an accepted input.
+      inputs_.push_back(Input(*f_mk_val));
+      ++f_mk_val;
+    }
+    else
+      f_mk_val = discarded_f_mk_vals.erase(f_mk_val);
+  }
+
+  // Find discarded f_icsts which have a discarded mk.val (which shares an "attribute, value" with an accepted mk.val).
+  for (auto f_icst = discarded_f_icsts.begin(); f_icst != discarded_f_icsts.end(); ++f_icst) {
+    bool contains = false;
+    for (auto f_mk_val = discarded_f_mk_vals.begin(); f_mk_val != discarded_f_mk_vals.end(); ++f_mk_val) {
+      if (((ICST*)f_icst->input_->get_reference(0))->r_contains(f_mk_val->input_)) {
+        contains = true;
+        break;
+      }
+    }
+
+    if (contains)
+      // Restore as an accepted input.
+      inputs_.push_back(Input(*f_icst));
   }
 
   P<GuardBuilder> guard_builder;
