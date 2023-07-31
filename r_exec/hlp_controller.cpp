@@ -95,7 +95,7 @@ HLPController::HLPController(_View *view) : OController(view), strong_requiremen
   bindings_ = new HLPBindingMap();
 
   Code *object = get_unpacked_object();
-  bindings_->init_from_hlp(object, get_object()); // init a binding map from the patterns.
+  bindings_->init_from_hlp(object); // init a binding map from the patterns.
 
   has_tpl_args_ = object->code(object->code(HLP_TPL_ARGS).asIndex()).getAtomCount() > 0;
   ref_count_ = 0;

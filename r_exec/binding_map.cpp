@@ -977,6 +977,19 @@ void HLPBindingMap::load(const HLPBindingMap *source) {
   *this = *source;
 }
 
+void HLPBindingMap::init_from_pattern(const Code *source) { // source is abstracted.
+
+  for (uint16 i = 1; i < source->code_size(); ++i) {
+
+    Atom s = source->code(i);
+    if (s.getDescriptor() == Atom::VL_PTR)
+      add_unbound_value(s.asIndex());
+  }
+
+  for (uint16 i = 0; i < source->references_size(); ++i)
+    init_from_pattern(source->get_reference(i));
+}
+
 void HLPBindingMap::add_unbound_values(const Code* hlp, uint16 structure_index) {
   uint16 arg_count = hlp->code(structure_index).getAtomCount();
   for (uint16 i = 1; i <= arg_count; ++i) {
@@ -990,7 +1003,7 @@ void HLPBindingMap::add_unbound_values(const Code* hlp, uint16 structure_index) 
   }
 }
 
-void HLPBindingMap::init_from_hlp(const Code* hlp, const Code* packed_hlp) { // hlp is cst or mdl.
+void HLPBindingMap::init_from_hlp(const Code *hlp) { // hlp is cst or mdl.
 
   add_unbound_values(hlp, hlp->code(HLP_TPL_ARGS).asIndex());
 
@@ -1004,12 +1017,10 @@ void HLPBindingMap::init_from_hlp(const Code* hlp, const Code* packed_hlp) { // 
   if (obj_count >= 2)
     init_timing_indexes(hlp->get_reference(hlp->code(obj_set_index + 2).asIndex()),
       bwd_after_index_, bwd_before_index_);
+  for (uint16 i = 1; i <= obj_count; ++i) {
 
-  // Use the packed hlp without recursion which has exactly the vars we need for the binding map.
-  for (uint16 i = 1; i < packed_hlp->code_size(); ++i) {
-    Atom s = packed_hlp->code(i);
-    if (s.getDescriptor() == Atom::VL_PTR)
-      add_unbound_value(s.asIndex());
+    _Fact *pattern = (_Fact *)hlp->get_reference(hlp->code(obj_set_index + i).asIndex());
+    init_from_pattern(pattern);
   }
 }
 
