@@ -1089,17 +1089,22 @@ Simulator
 2023-07-27
 * DONE. Merge request for PTPX to accept objects with same "attribute, value" https://github.com/IIIM-IS/AERA/pull/263
 
+2023-08-10
+* DONE. Look for the AERA code for removing a model for disuse.
+  RESULT: Model view is "forever". I think it is not implemented. Couldn't find this described in the Replicode Tech Report.
+* Webots
+  * DONE. Try camera [Leonard]
+
 next meeting
 * DONE. Make pull request to fix bug initializing CST binding map https://github.com/IIIM-IS/AERA/pull/260
 * Webots
-  * Set tpx_time_horizon="100000"
-  * Put a tray at the goal position (if not too hard) [Leonard]
+  * Put a tray at the goal position
+  * Put boxes at initial position
   * Generalize CTPX for all strucured types (vec2, vec3, vec [], etc.) [Leonard]
   * Align aera_us with AERA time.
   * Use setup command for automatic discovery of AERA objects and commands
   * Get command efferent copy from Webots (move limit to +/- 20) [Maybe in the setup message or command reply. Need more discussion]
-  * Try camera
-* Demonstrate AERA removing model for disuse.
+  * Try Webots streaming to the Visualize [Chloe]
 * hand-grab-sphere
   * Represent sphere position without direct I/O input.
   * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
