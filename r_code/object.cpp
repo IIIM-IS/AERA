@@ -303,6 +303,29 @@ void SysObject::trace(std::ostream& out) const {
 
 void SysObject::trace() const { trace(std::cout); }
 
+void Code::r_trace(ostream& out) const {
+  trace(out);
+
+  if (references_size() < 1)
+    // Done recursing.
+    return;
+
+  auto obj = get_reference(0);
+  if (obj->code_size() <= 2)
+    // Assume this is an ent or ont.
+    return;
+
+  switch (obj->code(0).getDescriptor()) {
+  case Atom::MODEL:
+  case Atom::COMPOSITE_STATE:
+    // Don't trace these big structures.
+    return;
+  }
+
+  out << endl;
+  obj->r_trace(out);
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Mem *Mem::singleton_ = NULL;

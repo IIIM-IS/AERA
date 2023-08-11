@@ -344,6 +344,25 @@ public:
     trace(i, out, context);
     return out.str();
   }
+
+  /**
+   * Recursively call trace(out) to print the trace of this Code to the out stream, along
+   * the trace of each get_reference(0). (This doesn't print the trace of get_reference(0) if
+   * it is a mdl, cst, ent or ont.) This is useful, for example, to trace a fact as well as the
+   * mk.val it references.
+   */
+  void r_trace(std::ostream& out) const;
+
+  void r_trace() const { r_trace(std::cout); }
+
+  /**
+   * Return the r_trace as a string. For debugging purposes only (can be inefficient).
+   */
+  std::string r_trace_string() const {
+    std::ostringstream out;
+    r_trace(out);
+    return out.str();
+  }
 };
 
 // Implementation for local objects (non distributed).
