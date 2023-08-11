@@ -110,7 +110,7 @@ public:
 
   virtual void write(word32 *data) = 0;
   virtual void read(word32 *data) = 0;
-  virtual void trace(std::ostream& out) = 0;
+  virtual void trace(std::ostream& out) const = 0;
 };
 
 class _View;
@@ -124,7 +124,7 @@ public:
   void write(word32 *data) override;
   void read(word32 *data) override;
   uint32 get_size() const;
-  void trace(std::ostream& out) override;
+  void trace(std::ostream& out) const override;
 #ifdef WITH_DETAIL_OID
   int detail_oid_;
 #endif
@@ -152,8 +152,8 @@ public:
   void write(word32 *data) override;
   void read(word32 *data) override;
   uint32 get_size();
-  void trace(std::ostream& out) override;
-  void trace();
+  void trace(std::ostream& out)const override;
+  void trace() const;
 };
 
 // Interfaces for r_exec classes ////////////////////////////////////////////////////////////////////////
@@ -327,7 +327,7 @@ public:
   void trace() const { trace(std::cout); }
 
   /**
-   * Return the trace as a string. For debugging purposes only(can be inefficient).
+   * Return the trace as a string. For debugging purposes only (can be inefficient).
    */
   std::string trace_string() const {
     std::ostringstream out;

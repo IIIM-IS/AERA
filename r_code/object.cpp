@@ -146,7 +146,7 @@ uint32 SysView::get_size() const {
   return 2 + code_.size() + references_.size();
 }
 
-void SysView::trace(std::ostream& out) {
+void SysView::trace(std::ostream& out) const {
 
   out << " code size: " << code_.size() << std::endl;
   out << " reference set size: " << references_.size() << std::endl;
@@ -259,7 +259,7 @@ uint32 SysObject::get_size() {
   return 5 + code_.size() + references_.size() + markers_.size() + view_set_size;
 }
 
-void SysObject::trace(std::ostream& out) {
+void SysObject::trace(std::ostream& out) const {
 
   out << "\n---object---\n";
   out << oid_ << std::endl;
@@ -301,7 +301,7 @@ void SysObject::trace(std::ostream& out) {
   }
 }
 
-void SysObject::trace() { trace(std::cout); }
+void SysObject::trace() const { trace(std::cout); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
