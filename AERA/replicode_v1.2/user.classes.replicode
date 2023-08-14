@@ -5,6 +5,7 @@
 !class (vec2 x:nb y:nb)
 !class (vec3 x:nb y:nb z:nb)
 !class (vec vals:[])
+!class (quat x:nb y:nb z:nb w:nb)
 !class (speech_context (_obj {speaker:ent listener:ent}))
 
 !class (Ping (_obj {object:}))
@@ -28,6 +29,7 @@
 !dfn (grab :); arg0: an object.
 !dfn (release :); arg0: an object.
 !dfn (move :); arg0: an object, arg1: target position
+!dfn (rotate :); arg0: an object, ag1: target rotation
 !dfn (set_velocity_y :); arg0: an object, arg1: velocity.
 !dfn (set_acceleration_y :); arg0: an object, arg1: acceleration.
 !dfn (move_y_plus :); arg0: an object.
@@ -35,6 +37,7 @@
 !dfn (set_force_y :); arg0: an object, arg1: force.
 !dfn (set_state :); arg0: an object, arg1: the state.
 !dfn (tick :)
+!dfn (measure :); arg0: an entity to measure. e.g. measure [camera] to take a measurement with the camera.
 
 ; The sampling_period should be 2 * base_period, where base_period is from settings.xml.
 !def sampling_period 100ms
@@ -70,6 +73,7 @@ theta_z:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 omega_x:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 omega_y:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 omega_z:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+rotation:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 
 
 attachment:(ont 1) [[SYNC_ONCE now 0 forever root nil]]; usage: (mk.val self_right_hand attachment a_thing 1)
@@ -91,3 +95,7 @@ hand:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 head:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 cube:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
 sphere:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+camera:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+red_box:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+green_box:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+blue_box:(ont 1) [[SYNC_ONCE now 1 forever root nil]]

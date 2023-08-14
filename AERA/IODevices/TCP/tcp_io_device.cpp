@@ -279,13 +279,21 @@ namespace tcp_io_device {
     if (stored_meta_data.getOpCodeHandle() != "" ||
       (stored_meta_data.getDimensions() != std::vector<uint64_t>({ 1 }) && stored_meta_data.getDimensions() != std::vector<uint64_t>({ 1, 1 }))) {
       if (cmd->code(args_set_index + 2).getDescriptor() != Atom::I_PTR) {
-        std::cout << "ERROR: Ejected command with OpCodeHandle " << stored_meta_data.getOpCodeHandle() << " with dimensionality > 1 and r_code object without the necessary nesting." << std::endl;
+        std::cout << "ERROR: Ejected command with OpCodeHandle \"" << stored_meta_data.getOpCodeHandle() << "\" with dimensionality > 1 and r_code object without the necessary nesting." << std::endl;
         return tcp_io_device::MsgData::invalidMsgData();
       }
       int set_index = cmd->code(args_set_index + 2).asIndex();
       // @todo Check whether dimensionality of stored_meta_data fits the atom count of the set of the r_code Object.
       start = set_index + 1;
       end = start + cmd->code(set_index).getAtomCount();
+#if 1
+      if (cmd->code(set_index).asOpcode() == GetOpcode("quat")) {
+        double _1 = cmd->code(start) < 0 ? -1 : 1;
+        for (int i = start; i < end; ++i) {
+          cmd->code(i) = Atom::Float(cmd->code(i).asFloat() * _1);
+        }
+      }
+#endif
     }
 
     std::cout << "Eject cmd: " << cmd_identifier << ", entity: " << entity << ", Value(s): "; // << cmd->code(args_set_index + 2).asFloat() << std::endl;
