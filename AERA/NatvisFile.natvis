@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+	<Type Name="r_code::Atom">
+		<Intrinsic Name="cast_to_float" Category="Method" Expression="*reinterpret_cast&lt;float*&gt;(&amp;a)">
+			<Parameter Name="a" Type="int" />
+		</Intrinsic>
+		<Intrinsic Name="shift_left_by_x" Category="Method" Expression="a &lt;&lt; x">
+			<Parameter Name="a" Type="int" />
+			<Parameter Name="x" Type="int" />
+		</Intrinsic>
+		<DisplayString Condition="atom_ >> 31 == 0">{{ Atom::Float -> {cast_to_float(shift_left_by_x(atom_, 1))}}}</DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0x80"> {{ Atom::NIL }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0x81"> {{ Atom::BOOLEAN_ }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0x82"> {{ Atom::WILDCARD }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0x83"> {{ Atom::T_WILDCARD }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0x84"> {{ Atom::I_PTR -> {atom_ &amp; 0x00000FFF} }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0x85"> {{ Atom::R_PTR }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0x86"> {{ Atom::VL_PTR }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0x87"> {{ Atom::IPGM_PTR }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0x88"> {{ Atom::IN_OBJ_PTR }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0x89"> {{ Atom::VALUE_PTR }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0x8A"> {{ Atom::PROD_PTR }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0x8B"> {{ Atom::OUT_OBJ_PTR }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0x8C"> {{ Atom::D_IN_OBJ_PTR }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0x8D"> {{ Atom::ASSIGN_PTR }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0x8E"> {{ Atom::CODE_VL_PTR }} </DisplayString>
+
+		<DisplayString Condition="atom_ >> 24 == 0x90"> {{ Atom::THIS }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0x91"> {{ Atom::VIEW }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0x92"> {{ Atom::MKS }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0x93"> {{ Atom::VWS }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0xA0"> {{ Atom::NODE }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0xA1"> {{ Atom::DEVICE }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0xA2"> {{ Atom::DEVICE_FUNCTION -> OpCode: {(atom_ >> 8) &amp; 0x00000FFF} }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0xC0"> {{ Atom::C_PTR }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0xC1"> {{ Atom::SET -> Size: {atom_ &amp; 0x000000FF} }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0xC2"> {{ Atom::S_SET -> OpCode: {(atom_ >> 8) &amp; 0x00000FFF} }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0xC3"> {{ Atom::OBJECT -> OpCode: {(atom_ >> 8) &amp; 0x00000FFF} }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0xC4"> {{ Atom::MARKER -> OpCode: {(atom_ >> 8) &amp; 0x00000FFF} }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0xC5"> {{ Atom::OPERATOR -> OpCode: {(atom_ >> 8) &amp; 0x00000FFF} }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0xC6"> {{ Atom::STRING }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0xC7"> {{ Atom::TIMESTAMP }} </DisplayString>
+
+		<DisplayString Condition="atom_ >> 24 == 0xC8"> {{ Atom::GROUP }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0xC9"> {{ Atom::INSTANTIATED_PROGRAM -> OpCode: {(atom_ >> 8) &amp; 0x00000FFF} }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0xCA"> {{ Atom::INSTANTIATED_CPP_PROGRAM -> OpCode: {(atom_ >> 8) &amp; 0x00000FFF} }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0xCB"> {{ Atom::INSTANTIATED_INPUT_LESS_PROGRAM -> OpCode: {(atom_ >> 8) &amp; 0x00000FFF} }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0xCC"> {{ Atom::INSTANTIATED_ANTI_PROGRAM -> OpCode: {(atom_ >> 8) &amp; 0x00000FFF} }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0xCD"> {{ Atom::COMPOSITE_STATE -> OpCode: {(atom_ >> 8) &amp; 0x00000FFF} }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0xCE"> {{ Atom::MODEL -> OpCode: {(atom_ >> 8) &amp; 0x00000FFF} }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0xCF"> {{ Atom::NULL_PROGRAM }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0xD0"> {{ Atom::DURATION }} </DisplayString>
+		<Expand>
+			<Synthetic Name="Selected Values">
+				<DisplayString>Selected set of representations</DisplayString>
+				<Expand>
+					<Item Name="asFloat()">cast_to_float(shift_left_by_x(atom_, 1))</Item>
+					<Item Name="asIndex()">atom_ &amp; 0x00000FFF</Item>
+					<Item Name="asOpcode()">(atom_ >> 8) &amp; 0x00000FFF</Item>
+					<Item Condition="atom_ >> 24 == 0xC1" Name="getAtomCount()">atom_ &amp; 0x000000FF</Item>
+					<Item Condition="atom_ >> 24 == 0xC3" Name="getAtomCount()">atom_ &amp; 0x000000FF</Item>
+					<Item Condition="atom_ >> 24 == 0xC4" Name="getAtomCount()">atom_ &amp; 0x000000FF</Item>
+					<Item Condition="atom_ >> 24 == 0xC0" Name="getAtomCount()">atom_ &amp; 0x000000FF</Item>
+					<Item Condition="atom_ >> 24 == 0xC5" Name="getAtomCount()">atom_ &amp; 0x000000FF</Item>
+					<Item Condition="atom_ >> 24 == 0xC9" Name="getAtomCount()">atom_ &amp; 0x000000FF</Item>
+					<Item Condition="atom_ >> 24 == 0xCA" Name="getAtomCount()">atom_ &amp; 0x000000FF</Item>
+					<Item Condition="atom_ >> 24 == 0xCB" Name="getAtomCount()">atom_ &amp; 0x000000FF</Item>
+					<Item Condition="atom_ >> 24 == 0xCC" Name="getAtomCount()">atom_ &amp; 0x000000FF</Item>
+					<Item Condition="atom_ >> 24 == 0xCD" Name="getAtomCount()">atom_ &amp; 0x000000FF</Item>
+					<Item Condition="atom_ >> 24 == 0xCE" Name="getAtomCount()">atom_ &amp; 0x000000FF</Item>
+					<Item Condition="atom_ >> 24 == 0xC8" Name="getAtomCount()">atom_ &amp; 0x000000FF</Item>
+					<Item Condition="atom_ >> 24 == 0xC2" Name="getAtomCount()">atom_ &amp; 0x000000FF</Item>
+					<Item Condition="atom_ >> 24 == 0xC6" Name="getAtomCount()">(atom_ &amp; 0x0000FF00) >> 8</Item>
+					<Item Condition="atom_ >> 24 == 0xC7" Name="getAtomCount()">2</Item>
+					<Item Condition="atom_ >> 24 == 0xD0" Name="getAtomCount()">2</Item>
+					<Item Name="getAtomCount()">0</Item>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="Additional Values">
+				<DisplayString>Other representations</DisplayString>
+				<Expand>
+					<Item Name="asBoolean()">atom_ &amp; 0x000000FF</Item>
+					<Item Name="asInputIndex()">(atom_ &amp; 0x000FF000) >> 12</Item>
+					<Item Name="asRelativeIndex()">(atom_ &amp; 0x000FF000) >> 12</Item>
+					<Item Name="asCastOpcode()">(atom_ &amp; 0x00FFF000) >> 12</Item>
+					<Item Name="getNodeID()">(atom_ &amp; 0x00FF0000) >> 16</Item>
+					<Item Name="getClassID()">(atom_ &amp; 0x00FFF000) >> 12</Item>
+					<Item Name="getDeviceID()">(atom_ &amp; 0x00FFF000) >> 12</Item>
+					<Item Name="asAssignmentIndex()">(atom_ &amp; 0x00FFF000) >> 12</Item>
+				</Expand>
+			</Synthetic>
+		</Expand>
+	</Type>
+	<Type Name="r_exec::LObject">
+		<DisplayString>r_exec::LObject</DisplayString>
+		<Expand>
+			<ExpandedItem>*(r_code::LocalObject*)this,nd</ExpandedItem>
+		</Expand>
+	</Type>
+	<Type Name="r_code::Code">
+		<DisplayString>code_</DisplayString>
+		<Expand>
+			<Item Name="code_">code_.vector_</Item>
+		</Expand>
+	</Type>
+</AutoVisualizer>
+
+
+<!--
+
+-->
