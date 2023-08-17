@@ -1120,14 +1120,13 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
 
     // Form 1
     // Form 1A
-    // Build the expression (- q1 q0), copying the code structure at q1 and q0.
-    LocalObject expression = build_expression_object(target_, consequent, Atom::Operator(Opcodes::Sub, 2));
-    auto result = evaluate_expression(expression);
+    // Build the expression (- q1 q0), copying the code structure at q1 and q0 and evaluate it.
+    auto result = build_and_evaluate_expression(target_, consequent, Atom::Operator(Opcodes::Sub, 2));
 
     //Check whether a valid result was returned.
     int index = -1;
     for (size_t i = 0; i < result.size(); ++i) {
-      if (result[i] != Atom::Nil()) {
+      if (*result[i] != Atom::Nil()) {
         index = i;
         break;
       }
@@ -1136,7 +1135,7 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
     if (index != -1) {
       LocalObject searched_for;
       uint16 extent_index = 0;
-      StructureValue::copy_structure(&searched_for, extent_index, &result[index], 0);
+      StructureValue::copy_structure(&searched_for, extent_index, result[index], 0);
 
       for (uint16 i = 1; i <= cmd_arg_count; ++i) {
         Atom s = cause_payload->code(cmd_arg_set_index + i);
@@ -1157,14 +1156,13 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
     }
 
     // Form 1B
-    // Build the expression (/ q1 q0), copying the code structure at q1 and q0.
-    expression = build_expression_object(target_, consequent, Atom::Operator(Opcodes::Div, 2));
-    result = evaluate_expression(expression);
+    // Build the expression (/ q1 q0), copying the code structure at q1 and q0 and evaluate it.
+    result = build_and_evaluate_expression(target_, consequent, Atom::Operator(Opcodes::Div, 2));
 
     //Check whether a valid result was returned.
     index = -1;
     for (int i = 0; i < result.size(); ++i) {
-      if (result[i] != Atom::Nil()) {
+      if (*result[i] != Atom::Nil()) {
         index = i;
         break;
       }
@@ -1174,7 +1172,7 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
     if (index != -1) {
       LocalObject searched_for;
       uint16 extent_index = 0;
-      StructureValue::copy_structure(&searched_for, extent_index, &result[index], 0);
+      StructureValue::copy_structure(&searched_for, extent_index, result[index], 0);
       for (uint16 i = 1; i <= cmd_arg_count; ++i) {
         Atom s = cause_payload->code(cmd_arg_set_index + i);
         uint16 cmd_index = cmd_arg_set_index + i;
@@ -1268,22 +1266,51 @@ GuardBuilder *CTPX::find_guard_builder(_Fact *cause, _Fact *consequent, microsec
   return NULL;
 }
 
-r_code::LocalObject CTPX::build_expression_object(_Fact* target, _Fact* consequent, Atom op) {
+r_code::resized_vector<r_code::Atom*> CTPX::build_and_evaluate_expression(_Fact* q0, _Fact* q1, Atom op) {
+  if (q0->get_reference(0)->code(MK_VAL_VALUE).isFloat() && q1->get_reference(0)->code(MK_VAL_VALUE).isFloat()) {
+
+    float32 _q0 = q0->get_reference(0)->code(MK_VAL_VALUE).asFloat();
+    float32 _q1 = q1->get_reference(0)->code(MK_VAL_VALUE).asFloat();
+
+    Atom* result = new Atom();
+    if (op.asOpcode() == Opcodes::Gtr) { *result = Atom::Boolean(_q1 > _q0); }
+    else if (op.asOpcode() == Opcodes::Lsr) { *result = Atom::Boolean(_q1 < _q0); }
+    else if (op.asOpcode() == Opcodes::Gte) { *result = Atom::Boolean(_q1 >= _q0); }
+    else if (op.asOpcode() == Opcodes::Lse) { *result = Atom::Boolean(_q1 <= _q0); }
+    else if (op.asOpcode() == Opcodes::Add) { *result = Atom::Float(_q1 + _q0); }
+    else if (op.asOpcode() == Opcodes::Sub) { *result = Atom::Float(_q1 - _q0); }
+    else if (op.asOpcode() == Opcodes::Mul) { *result = Atom::Float(_q1 * _q0); }
+    else if (op.asOpcode() == Opcodes::Div) {
+      if (_q0 == 0)
+        return r_code::resized_vector<r_code::Atom*>();
+      *result = Atom::Float(_q1 / _q0);
+    }
+    if (!result->isUndefined()) {
+      r_code::resized_vector<r_code::Atom*> out;
+      out.push_back(result);
+      return out;
+    }
+  }
+  r_code::LocalObject* expression = build_expression_object(q0, q1, op);
+  return evaluate_expression(expression);
+}
+
+P<r_code::LocalObject> CTPX::build_expression_object(_Fact* q0, _Fact* q1, Atom op) {
 
   uint16 target_source_index = 0;
   uint16 consequent_source_index = 0;
 
-  Atom target_val = target->get_reference(0)->code(MK_VAL_VALUE);
-  Atom consequent_val = consequent->get_reference(0)->code(MK_VAL_VALUE);
-  // Form 1
-  // Build the expression (- q1 q0), copying the code structure at q1 and q0.
+  Atom target_val = q0->get_reference(0)->code(MK_VAL_VALUE);
+  Atom consequent_val = q1->get_reference(0)->code(MK_VAL_VALUE);
+
+  // Build the expression (op q1 q0), copying the code structure at q1 and q0. For example (- q1 q0) in the case of subtraction.
   LocalObject expression;
   uint16 extent_index = 1;
   expression.code(0) = op;
   Atom* copy_ptr = &consequent_val;
   if (consequent_val.getDescriptor() == Atom::I_PTR) {
     consequent_source_index = consequent_val.asIndex();
-    copy_ptr = &consequent->get_reference(0)->code(0);
+    copy_ptr = &q1->get_reference(0)->code(0);
     extent_index += 2;
     expression.code(1) = Atom::IPointer(extent_index);
   }
@@ -1292,24 +1319,24 @@ r_code::LocalObject CTPX::build_expression_object(_Fact* target, _Fact* conseque
   copy_ptr = &target_val;
   if (target_val.getDescriptor() == Atom::I_PTR) {
     target_source_index = target_val.asIndex();
-    copy_ptr = &target->get_reference(0)->code(0);
+    copy_ptr = &q0->get_reference(0)->code(0);
     expression.code(2) = Atom::IPointer(extent_index);
   }
   StructureValue::copy_structure(&expression, extent_index, copy_ptr, target_source_index);
 
-  return expression;
+  return &expression;
 }
 
-r_code::resized_vector<r_code::Atom> CTPX::evaluate_expression(r_code::LocalObject expression) {
+r_code::resized_vector<r_code::Atom*> CTPX::evaluate_expression(r_code::LocalObject* expression) {
   // Use HLPContext to evaluate the expression. The result goes in the OpContext's result array.
   Overlay overlay((size_t)0);
-  HLPContext c(&expression.code(0), 0, (HLPOverlay*)&overlay);
+  HLPContext c(&expression->code(0), 0, (HLPOverlay*)&overlay);
 
   uint16 atom_count = c.get_children_count();
   for (uint16 i = 1; i <= atom_count; ++i) {
 
     if (!c.get_child_deref(i).evaluate_no_dereference())
-      return r_code::resized_vector<r_code::Atom>();
+      return r_code::resized_vector<r_code::Atom*>();
   }
 
   Operator op = Operator::Get(c[0].asOpcode());

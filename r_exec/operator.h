@@ -133,28 +133,28 @@ public:
 
 class OpContext : public Context {
 private:
-  r_code::resized_vector<r_code::Atom>* operation_results_;
+  r_code::resized_vector<r_code::Atom*>* operation_results_;
 public:
   OpContext(_Context* implementation) : Context(implementation) {
-    operation_results_ = new r_code::resized_vector<r_code::Atom>(0);
+    operation_results_ = new r_code::resized_vector<r_code::Atom*>(0);
   }
   ~OpContext() {}
 
   void setAtomicResult(Atom a) const override {
     Context::setAtomicResult(a);
-    operation_results_->push_back(a);
+    operation_results_->push_back(&a);
   }
   void setTimestampResult(Timestamp t) const override {
     Context::setTimestampResult(t);
     operation_results_->resize(operation_results_->size() + 3);
     uint16 value_index = operation_results_->size() - 3;
-    r_code::Utils::SetTimestamp(&(*operation_results_)[value_index], t);
+    r_code::Utils::SetTimestamp((*operation_results_)[value_index], t);
   }
   void setDurationResult(std::chrono::microseconds d) const override {
     Context::setDurationResult(d);
     operation_results_->resize(operation_results_->size() + 3);
     uint16 value_index = operation_results_->size() - 3;
-    r_code::Utils::SetDuration(&(*operation_results_)[value_index], d);
+    r_code::Utils::SetDuration((*operation_results_)[value_index], d);
   }
   uint16 setCompoundResultHead(Atom a) const override {
     uint16 value_index = Context::setCompoundResultHead(a);
@@ -163,10 +163,10 @@ public:
   }
   void addCompoundResultPart(Atom a) const override{
     Context::addCompoundResultPart(a);
-    operation_results_->push_back(a);
+    operation_results_->push_back(&a);
   }
 
-  r_code::resized_vector<r_code::Atom> result() { return *operation_results_; }
+  r_code::resized_vector<r_code::Atom*> result() { return *operation_results_; }
 };
 
 bool red(const Context &context); // executive-dependent.
