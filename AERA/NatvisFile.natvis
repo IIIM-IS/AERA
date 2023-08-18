@@ -14,7 +14,7 @@
 		<DisplayString Condition="atom_ >> 24 == 0x82"> {{ Atom::WILDCARD }} </DisplayString>
 		<DisplayString Condition="atom_ >> 24 == 0x83"> {{ Atom::T_WILDCARD }} </DisplayString>
 		<DisplayString Condition="atom_ >> 24 == 0x84"> {{ Atom::I_PTR -> {atom_ &amp; 0x00000FFF} }} </DisplayString>
-		<DisplayString Condition="atom_ >> 24 == 0x85"> {{ Atom::R_PTR }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0x85"> {{ Atom::R_PTR -> references({atom_ &amp; 0x00000FFF}) }} </DisplayString>
 		<DisplayString Condition="atom_ >> 24 == 0x86"> {{ Atom::VL_PTR }} </DisplayString>
 		<DisplayString Condition="atom_ >> 24 == 0x87"> {{ Atom::IPGM_PTR }} </DisplayString>
 		<DisplayString Condition="atom_ >> 24 == 0x88"> {{ Atom::IN_OBJ_PTR }} </DisplayString>
@@ -39,7 +39,7 @@
 		<DisplayString Condition="atom_ >> 24 == 0xC4"> {{ Atom::MARKER -> OpCode: {(atom_ >> 8) &amp; 0x00000FFF} }} </DisplayString>
 		<DisplayString Condition="atom_ >> 24 == 0xC5"> {{ Atom::OPERATOR -> OpCode: {(atom_ >> 8) &amp; 0x00000FFF} }} </DisplayString>
 		<DisplayString Condition="atom_ >> 24 == 0xC6"> {{ Atom::STRING }} </DisplayString>
-		<DisplayString Condition="atom_ >> 24 == 0xC7"> {{ Atom::TIMESTAMP }} </DisplayString>
+		<DisplayString Condition="atom_ >> 24 == 0xC7"> {{ Atom::TIMESTAMP -> Next 2 Atoms build one timestamp}} </DisplayString>
 
 		<DisplayString Condition="atom_ >> 24 == 0xC8"> {{ Atom::GROUP }} </DisplayString>
 		<DisplayString Condition="atom_ >> 24 == 0xC9"> {{ Atom::INSTANTIATED_PROGRAM -> OpCode: {(atom_ >> 8) &amp; 0x00000FFF} }} </DisplayString>
@@ -91,21 +91,44 @@
 			</Synthetic>
 		</Expand>
 	</Type>
-	<Type Name="r_exec::LObject">
-		<DisplayString>r_exec::LObject</DisplayString>
+	<Type Name="r_code::LocalObject">
+		<DisplayString>{{ r_code::LocalObject }}</DisplayString>
 		<Expand>
-			<ExpandedItem>*(r_code::LocalObject*)this,nd</ExpandedItem>
+			<Item Name="code">code_</Item>
+			<Item Name="references">references_.vector_</Item>
 		</Expand>
 	</Type>
-	<Type Name="r_code::Code">
-		<DisplayString>code_</DisplayString>
+	<Type Name="r_code::resized_vector&lt;r_code::Atom&gt;">
+		<DisplayString>{{ r_code::resized_vector&lt;r_code::Atom&gt; }}</DisplayString>
 		<Expand>
-			<Item Name="code_">code_.vector_</Item>
+			<CustomListItems>
+				<Variable Name="i" InitialValue="vector_._Mypair._Myval2._Myfirst"/>
+				<Variable Name="timestamp_index" InitialValue="0"/>
+				<Size>vector_._Mypair._Myval2._Mylast - vector_._Mypair._Myval2._Myfirst</Size>
+				<Loop>
+					<If Condition="i->atom_ >> 24 == 0xC7 &amp;&amp; timestamp_index == 0">
+						<Item>i</Item>
+						<Exec>timestamp_index++</Exec>
+					</If>
+					<Elseif Condition="timestamp_index == 1">
+						<Item>(i->atom_ &lt;&lt; 32 | (i + 1)->atom_)</Item>
+						<Exec>timestamp_index++</Exec>
+					</Elseif>
+					<Elseif Condition="timestamp_index == 2">
+						<Item>(i - 1)->atom_ &lt;&lt; 32 | i->atom_</Item>
+						<Exec>timestamp_index = 0</Exec>
+					</Elseif>
+					<Else>
+						<Item>i</Item>
+					</Else>
+					<Exec>i++</Exec>
+				</Loop>
+			</CustomListItems>
 		</Expand>
 	</Type>
 </AutoVisualizer>
 
 
-<!--
+	<!--
 
 -->
