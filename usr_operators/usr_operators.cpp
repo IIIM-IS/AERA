@@ -91,11 +91,13 @@
 #include <cmath>
 
 
-void Init(OpcodeRetriever r) {
+r_code::resized_vector<uint16> Init(OpcodeRetriever r) {
 
-  Operators::Init(r);
+  r_code::resized_vector<uint16> val = Operators::Init(r);
 
   std::cout << "> usr operators initialized" << std::endl;
+
+  return val;
 }
 
 uint16 GetOperatorCount() {

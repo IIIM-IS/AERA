@@ -6,6 +6,7 @@
 //_/_/ Copyright (c) 2018-2023 Jeff Thompson
 //_/_/ Copyright (c) 2018-2023 Kristinn R. Thorisson
 //_/_/ Copyright (c) 2018-2023 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2023 Leonard M. Eberding
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -86,6 +87,8 @@
 #define operator_h
 
 #include "../r_code/object.h"
+#include "../r_code/utils.h"
+#include "factory.h"
 
 #include "_context.h"
 
@@ -121,13 +124,58 @@ public:
 
   Atom &operator [](uint16 i) const { return implementation_->get_atom(i); }
 
-  void setAtomicResult(Atom a) const { implementation_->setAtomicResult(a); }
-  void setTimestampResult(Timestamp t) const { implementation_->setTimestampResult(t); }
-  void setDurationResult(std::chrono::microseconds d) const { implementation_->setDurationResult(d); }
-  uint16 setCompoundResultHead(Atom a) const { return implementation_->setCompoundResultHead(a); }
-  void addCompoundResultPart(Atom a) const { implementation_->addCompoundResultPart(a); }
+  virtual void setAtomicResult(Atom a) const { implementation_->setAtomicResult(a); }
+  virtual void setTimestampResult(Timestamp t) const { implementation_->setTimestampResult(t); }
+  virtual void setDurationResult(std::chrono::microseconds d) const { implementation_->setDurationResult(d); }
+  virtual uint16 setCompoundResultHead(Atom a) const { return implementation_->setCompoundResultHead(a); }
+  virtual void addCompoundResultPart(Atom a) const { implementation_->addCompoundResultPart(a); }
 
   void trace(std::ostream& out) const { return implementation_->trace(out); }
+};
+
+class OpContext : public Context {
+private:
+  std::vector<r_code::Atom> operation_results_;
+
+  std::vector<Atom>& operation_results() const {
+    return const_cast<OpContext*>(this)->operation_results_;
+  }
+
+public:
+  OpContext(_Context* implementation) : Context(implementation) {}
+  ~OpContext() {}
+
+  void setAtomicResult(Atom a) const override {
+    Context::setAtomicResult(a);
+    operation_results().push_back(a);
+  }
+  void setTimestampResult(Timestamp t) const override {
+    Context::setTimestampResult(t);
+    operation_results().resize(operation_results_.size() + 3);
+    uint16 value_index = operation_results().size() - 3;
+    r_code::Utils::SetTimestamp(&operation_results()[value_index], t);
+  }
+  void setDurationResult(std::chrono::microseconds d) const override {
+    Context::setDurationResult(d);
+    operation_results().resize(operation_results_.size() + 3);
+    uint16 value_index = operation_results().size() - 3;
+    r_code::Utils::SetDuration(&operation_results()[value_index], d);
+  }
+  uint16 setCompoundResultHead(Atom a) const override {
+    uint16 value_index = Context::setCompoundResultHead(a);
+    addCompoundResultPart(a);
+    return value_index;
+  }
+  void addCompoundResultPart(Atom a) const override{
+    Context::addCompoundResultPart(a);
+    operation_results().push_back(a);
+  }
+
+  const std::vector<r_code::Atom>& result() { return operation_results_; }
+
+  static std::vector<r_code::Atom> build_and_evaluate_expression(_Fact* q0, _Fact* q1, r_code::Atom op);
+  static P<r_code::LocalObject> build_expression_object(_Fact* q0, _Fact* q1, r_code::Atom op);
+  static std::vector<r_code::Atom> evaluate_expression(r_code::LocalObject* expression);
 };
 
 bool red(const Context &context); // executive-dependent.

@@ -236,6 +236,10 @@ bool r_exec_dll Init(FunctionLibrary* userOperatorLibrary,
 uint16 r_exec_dll GetOpcode(const char *name); // classes, operators and functions.
 
 std::string r_exec_dll GetAxiomName(const uint16 index); // for constant objects (ex: self, position, and other axioms).
+
+bool r_exec_dll hasUserDefinedOperators(const std::string class_name);
+
+bool r_exec_dll hasUserDefinedOperators(const uint16 opcode);
 }
 
 
