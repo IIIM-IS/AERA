@@ -136,7 +136,7 @@ std::vector<r_code::Atom> OpContext::build_and_evaluate_expression(_Fact* q0, _F
       return out;
     }
   }
-  r_code::LocalObject* expression = build_expression_object(q0, q1, op);
+  P<r_code::LocalObject> expression = build_expression_object(q0, q1, op);
   return evaluate_expression(expression);
 }
 
@@ -149,27 +149,27 @@ P<r_code::LocalObject> OpContext::build_expression_object(_Fact* q0, _Fact* q1, 
   Atom consequent_val = q1->get_reference(0)->code(MK_VAL_VALUE);
 
   // Build the expression (op q1 q0), copying the code structure at q1 and q0. For example (- q1 q0) in the case of subtraction.
-  LocalObject expression;
+  P<LocalObject> expression = new LocalObject();
   uint16 extent_index = 1;
-  expression.code(0) = op;
+  expression->code(0) = op;
   Atom* copy_ptr = &consequent_val;
   if (consequent_val.getDescriptor() == Atom::I_PTR) {
     consequent_source_index = consequent_val.asIndex();
     copy_ptr = &q1->get_reference(0)->code(0);
     extent_index += 2;
-    expression.code(1) = Atom::IPointer(extent_index);
+    expression->code(1) = Atom::IPointer(extent_index);
   }
-  StructureValue::copy_structure(&expression, extent_index, copy_ptr, consequent_source_index);
+  StructureValue::copy_structure(expression, extent_index, copy_ptr, consequent_source_index);
 
   copy_ptr = &target_val;
   if (target_val.getDescriptor() == Atom::I_PTR) {
     target_source_index = target_val.asIndex();
     copy_ptr = &q0->get_reference(0)->code(0);
-    expression.code(2) = Atom::IPointer(extent_index);
+    expression->code(2) = Atom::IPointer(extent_index);
   }
-  StructureValue::copy_structure(&expression, extent_index, copy_ptr, target_source_index);
+  StructureValue::copy_structure(expression, extent_index, copy_ptr, target_source_index);
 
-  return &expression;
+  return expression;
 }
 
 std::vector<r_code::Atom> OpContext::evaluate_expression(r_code::LocalObject* expression) {
