@@ -6,6 +6,7 @@
 //_/_/ Copyright (c) 2018-2023 Jeff Thompson
 //_/_/ Copyright (c) 2018-2023 Kristinn R. Thorisson
 //_/_/ Copyright (c) 2018-2023 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2023 Leonard M. Eberding
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -334,10 +335,6 @@ private:
 
   GuardBuilder *get_default_guard_builder(_Fact *cause, _Fact *consequent, std::chrono::microseconds period);
   GuardBuilder *find_guard_builder(_Fact *cause, _Fact *consequent, std::chrono::microseconds period);
-
-  static P<r_code::LocalObject> build_expression_object(_Fact* q0, _Fact* q1, Atom op);
-  static r_code::resized_vector<r_code::Atom*> evaluate_expression(r_code::LocalObject* expression);
-  static r_code::resized_vector<r_code::Atom*> build_and_evaluate_expression(_Fact* q0, _Fact* q1, Atom op);
 
   bool build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period);
   bool build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period);

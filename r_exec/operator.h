@@ -6,6 +6,7 @@
 //_/_/ Copyright (c) 2018-2023 Jeff Thompson
 //_/_/ Copyright (c) 2018-2023 Kristinn R. Thorisson
 //_/_/ Copyright (c) 2018-2023 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2023 Leonard M. Eberding
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -87,6 +88,7 @@
 
 #include "../r_code/object.h"
 #include "../r_code/utils.h"
+#include "factory.h"
 
 #include "_context.h"
 
@@ -133,28 +135,31 @@ public:
 
 class OpContext : public Context {
 private:
-  r_code::resized_vector<r_code::Atom*>* operation_results_;
-public:
-  OpContext(_Context* implementation) : Context(implementation) {
-    operation_results_ = new r_code::resized_vector<r_code::Atom*>(0);
+  std::vector<r_code::Atom> operation_results_;
+
+  std::vector<Atom>& operation_results() const {
+    return const_cast<OpContext*>(this)->operation_results_;
   }
+
+public:
+  OpContext(_Context* implementation) : Context(implementation) {}
   ~OpContext() {}
 
   void setAtomicResult(Atom a) const override {
     Context::setAtomicResult(a);
-    operation_results_->push_back(&a);
+    operation_results().push_back(a);
   }
   void setTimestampResult(Timestamp t) const override {
     Context::setTimestampResult(t);
-    operation_results_->resize(operation_results_->size() + 3);
-    uint16 value_index = operation_results_->size() - 3;
-    r_code::Utils::SetTimestamp((*operation_results_)[value_index], t);
+    operation_results().resize(operation_results_.size() + 3);
+    uint16 value_index = operation_results().size() - 3;
+    r_code::Utils::SetTimestamp(&operation_results()[value_index], t);
   }
   void setDurationResult(std::chrono::microseconds d) const override {
     Context::setDurationResult(d);
-    operation_results_->resize(operation_results_->size() + 3);
-    uint16 value_index = operation_results_->size() - 3;
-    r_code::Utils::SetDuration((*operation_results_)[value_index], d);
+    operation_results().resize(operation_results_.size() + 3);
+    uint16 value_index = operation_results().size() - 3;
+    r_code::Utils::SetDuration(&operation_results()[value_index], d);
   }
   uint16 setCompoundResultHead(Atom a) const override {
     uint16 value_index = Context::setCompoundResultHead(a);
@@ -163,10 +168,14 @@ public:
   }
   void addCompoundResultPart(Atom a) const override{
     Context::addCompoundResultPart(a);
-    operation_results_->push_back(&a);
+    operation_results().push_back(a);
   }
 
-  r_code::resized_vector<r_code::Atom*> result() { return *operation_results_; }
+  const std::vector<r_code::Atom>& result() { return operation_results_; }
+
+  static std::vector<r_code::Atom> build_and_evaluate_expression(_Fact* q0, _Fact* q1, r_code::Atom op);
+  static P<r_code::LocalObject> build_expression_object(_Fact* q0, _Fact* q1, r_code::Atom op);
+  static std::vector<r_code::Atom> evaluate_expression(r_code::LocalObject* expression);
 };
 
 bool red(const Context &context); // executive-dependent.
