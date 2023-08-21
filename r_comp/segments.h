@@ -124,6 +124,7 @@ public:
   r_code::resized_vector<std::string> operator_names_;
   r_code::resized_vector<std::string> function_names_;
   r_code::resized_vector<Class> classes_by_opcodes_; // classes indexed by opcodes; used to retrieve member names; registers all classes (incl. set classes).
+  r_code::resized_vector<uint16> usr_classes_;
 
   Class *get_class(std::string &class_name);
   Class *get_class(uint16 opcode);

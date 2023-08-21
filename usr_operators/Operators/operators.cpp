@@ -463,7 +463,7 @@ bool dis(const r_exec::Context &context) {
 
 }
 
-void Operators::Init(OpcodeRetriever r) {
+r_code::resized_vector<uint16> Operators::Init(OpcodeRetriever r) {
 
   const char* vec3 = "vec3";
   const char* vec2 = "vec2";
