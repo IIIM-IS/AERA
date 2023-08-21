@@ -91,6 +91,7 @@
 static uint16 Vec3Opcode;
 static uint16 Vec2Opcode;
 static uint16 VecOpcode;
+static uint16 QuatOpcode;
 
 namespace usr_operators {
 
@@ -135,6 +136,15 @@ bool add(const r_exec::Context &context) {
       }
       return true;
     }
+  }
+
+  if (lhs[0].asOpcode() == QuatOpcode && rhs[0].asOpcode() == QuatOpcode) {
+
+    context.setCompoundResultHead(Atom::Object(QuatOpcode, 4));
+    context.addCompoundResultPart(Atom::Float((*lhs.get_child(1))[0].asFloat() + (*rhs.get_child(1))[0].asFloat()));
+    context.addCompoundResultPart(Atom::Float((*lhs.get_child(2))[0].asFloat() + (*rhs.get_child(2))[0].asFloat()));
+    context.addCompoundResultPart(Atom::Float((*lhs.get_child(3))[0].asFloat() + (*rhs.get_child(3))[0].asFloat()));
+    context.addCompoundResultPart(Atom::Float((*lhs.get_child(4))[0].asFloat() + (*rhs.get_child(4))[0].asFloat()));
   }
 
   context.setAtomicResult(Atom::Nil());
@@ -183,6 +193,15 @@ bool sub(const r_exec::Context &context) {
     }
   }
 
+  if (lhs[0].asOpcode() == QuatOpcode && rhs[0].asOpcode() == QuatOpcode) {
+
+    context.setCompoundResultHead(Atom::Object(QuatOpcode, 4));
+    context.addCompoundResultPart(Atom::Float((*lhs.get_child(1))[0].asFloat() - (*rhs.get_child(1))[0].asFloat()));
+    context.addCompoundResultPart(Atom::Float((*lhs.get_child(2))[0].asFloat() - (*rhs.get_child(2))[0].asFloat()));
+    context.addCompoundResultPart(Atom::Float((*lhs.get_child(3))[0].asFloat() - (*rhs.get_child(3))[0].asFloat()));
+    context.addCompoundResultPart(Atom::Float((*lhs.get_child(4))[0].asFloat() - (*rhs.get_child(4))[0].asFloat()));
+  }
+
   context.setAtomicResult(Atom::Nil());
   return false;
 }
@@ -226,7 +245,8 @@ bool mul(const r_exec::Context &context) {
       }
       return true;
     }
-  } else if (lhs[0].asOpcode() == Vec3Opcode) {
+  }
+  else if (lhs[0].asOpcode() == Vec3Opcode) {
 
     if (rhs[0].isFloat()) {
 
@@ -263,7 +283,31 @@ bool mul(const r_exec::Context &context) {
       return true;
     }
   }
+  else if (lhs[0].asOpcode() == QuatOpcode && rhs[0].asOpcode() == QuatOpcode) {
 
+    float32 w1 = (*lhs.get_child(1))[0].asFloat();
+    float32 x1 = (*lhs.get_child(2))[0].asFloat();
+    float32 y1 = (*lhs.get_child(3))[0].asFloat();
+    float32 z1 = (*lhs.get_child(4))[0].asFloat();
+
+    float32 w2 = (*rhs.get_child(1))[0].asFloat();
+    float32 x2 = (*rhs.get_child(2))[0].asFloat();
+    float32 y2 = (*rhs.get_child(3))[0].asFloat();
+    float32 z2 = (*rhs.get_child(4))[0].asFloat();
+
+    float32 w_new = round((-x1 * x2 - y1 * y2 - z1 * z2 + w1 * w2) * 100.) / 100.;
+    float32 x_new = round(( x1 * w2 + y1 * z2 - z1 * y2 + w1 * x2) * 100.) / 100.;
+    float32 y_new = round((-x1 * z2 + y1 * w2 + z1 * x2 + w1 * y2) * 100.) / 100.;
+    float32 z_new = round(( x1 * y2 - y1 * x2 + z1 * w2 + w1 * z2) * 100.) / 100.;
+
+    context.setCompoundResultHead(Atom::Object(QuatOpcode, 4));
+    context.addCompoundResultPart(Atom::Float(w_new));
+    context.addCompoundResultPart(Atom::Float(x_new));
+    context.addCompoundResultPart(Atom::Float(y_new));
+    context.addCompoundResultPart(Atom::Float(z_new));
+
+    return true;
+  }
   context.setAtomicResult(Atom::Nil());
   return false;
 }
@@ -311,6 +355,35 @@ bool div(const r_exec::Context& context) {
       }
       return true;
     }
+  }
+  else if (lhs[0].asOpcode() == QuatOpcode && rhs[0].asOpcode() == QuatOpcode) {
+
+    //taking the conjugate here.
+    float32 w1 = (*lhs.get_child(1))[0].asFloat();
+    float32 x1 = -(*lhs.get_child(2))[0].asFloat();
+    float32 y1 = -(*lhs.get_child(3))[0].asFloat();
+    float32 z1 = -(*lhs.get_child(4))[0].asFloat();
+
+    float32 w2 = (*rhs.get_child(1))[0].asFloat();
+    float32 x2 = (*rhs.get_child(2))[0].asFloat();
+    float32 y2 = (*rhs.get_child(3))[0].asFloat();
+    float32 z2 = (*rhs.get_child(4))[0].asFloat();
+
+    // And take the conjugate again
+    float32 w_new = round((-x1 * x2 - y1 * y2 - z1 * z2 + w1 * w2) * 100.) / 100.;
+    float32 x_new = -round((x1 * w2 + y1 * z2 - z1 * y2 + w1 * x2) * 100.) / 100.;
+    float32 y_new = -round((-x1 * z2 + y1 * w2 + z1 * x2 + w1 * y2) * 100.) / 100.;
+    float32 z_new = -round((x1 * y2 - y1 * x2 + z1 * w2 + w1 * z2) * 100.) / 100.;
+
+    float32 _1 = w_new < 0 ? -1. : 1.;
+
+    context.setCompoundResultHead(Atom::Object(QuatOpcode, 4));
+    context.addCompoundResultPart(Atom::Float(_1 * w_new));
+    context.addCompoundResultPart(Atom::Float(_1 * x_new));
+    context.addCompoundResultPart(Atom::Float(_1 * y_new));
+    context.addCompoundResultPart(Atom::Float(_1 * z_new));
+
+    return true;
   }
 
   context.setAtomicResult(Atom::Nil());
@@ -362,6 +435,26 @@ bool dis(const r_exec::Context &context) {
     }
   }
 
+  if (lhs[0].asOpcode() == QuatOpcode && rhs[0].asOpcode() == QuatOpcode) {
+
+
+    float32 w1 = (*lhs.get_child(1))[0].asFloat();
+    float32 x1 = (*lhs.get_child(2))[0].asFloat();
+    float32 y1 = (*lhs.get_child(3))[0].asFloat();
+    float32 z1 = (*lhs.get_child(4))[0].asFloat();
+
+    float32 w2 = (*rhs.get_child(1))[0].asFloat();
+    float32 x2 = (*rhs.get_child(2))[0].asFloat();
+    float32 y2 = (*rhs.get_child(3))[0].asFloat();
+    float32 z2 = (*rhs.get_child(4))[0].asFloat();
+
+    float32 inner_product = x1 * x2 + y1 * y2 + z1 * z2 + w1 * w2;
+    float32 dis = acos(2 * inner_product * inner_product - 1);
+
+    context.setAtomicResult(Atom::Float(dis));
+
+  }
+
   context.setAtomicResult(Atom::Nil());
   return false;
 }
@@ -375,11 +468,12 @@ r_code::resized_vector<uint16> Operators::Init(OpcodeRetriever r) {
   const char* vec3 = "vec3";
   const char* vec2 = "vec2";
   const char* vec = "vec";
-
+  const char* quat = "quat";
   r_code::resized_vector<uint16> initialized_opcodes;
   initialized_opcodes.push_back(Vec3Opcode = r(vec3));
   initialized_opcodes.push_back(Vec2Opcode = r(vec2));
   initialized_opcodes.push_back(VecOpcode = r(vec));
+  initialized_opcodes.push_back(QuatOpcode = r(quat));
 
   return initialized_opcodes;
 }
