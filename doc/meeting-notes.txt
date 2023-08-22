@@ -1095,11 +1095,17 @@ Simulator
 * Webots
   * DONE. Try camera [Leonard]
 
+2023-08-18
+* DONE. Update "Perceptual Explanation" slide for robot example.
+* DONE. Merge Leonard's pull request for decoding Atoms in Visual Studio https://github.com/IIIM-IS/AERA/pull/268
+* DONE. Merge Leonard's pull request for generalized operators https://github.com/IIIM-IS/AERA/pull/266
+* DONE. Merge Leonard's pull request for multi-dimensional marker values in TCP (Webots) https://github.com/IIIM-IS/AERA/pull/267
+
 next meeting
 * DONE. Make pull request to fix bug initializing CST binding map https://github.com/IIIM-IS/AERA/pull/260
 * Webots
   * Put a tray at the goal position
-  * Put boxes at initial position
+  * Set position of boxes on initial load to the correct position
   * Generalize CTPX for all strucured types (vec2, vec3, vec [], etc.) [Leonard]
   * Align aera_us with AERA time.
   * Use setup command for automatic discovery of AERA objects and commands
