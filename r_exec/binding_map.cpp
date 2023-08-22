@@ -1001,7 +1001,7 @@ void HLPBindingMap::add_unbound_values(const Code* hlp, uint16 structure_index) 
   }
 }
 
-void HLPBindingMap::init_from_hlp(const Code *hlp) { // hlp is cst or mdl.
+void HLPBindingMap::init_from_hlp(const Code* hlp, const Code* packed_hlp) { // hlp is cst or mdl.
 
   add_unbound_values(hlp, hlp->code(HLP_TPL_ARGS).asIndex());
 

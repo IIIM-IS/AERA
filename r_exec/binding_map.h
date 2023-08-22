@@ -452,7 +452,7 @@ public:
   void load(const HLPBindingMap *source);
   void clear() override;
 
-  void init_from_hlp(const r_code::Code *hlp);
+  void init_from_hlp(const r_code::Code *hlp, const r_code::Code* packed_hlp);
   void init_from_f_ihlp(const _Fact *f_ihlp);
   Fact *build_f_ihlp(r_code::Code *hlp, uint16 opcode, bool wr_enabled) const; // return f->ihlp.
   r_code::Code *bind_pattern(r_code::Code *pattern) const;
