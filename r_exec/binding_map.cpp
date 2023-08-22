@@ -975,19 +975,6 @@ void HLPBindingMap::load(const HLPBindingMap *source) {
   *this = *source;
 }
 
-void HLPBindingMap::init_from_pattern(const Code *source) { // source is abstracted.
-
-  for (uint16 i = 1; i < source->code_size(); ++i) {
-
-    Atom s = source->code(i);
-    if (s.getDescriptor() == Atom::VL_PTR)
-      add_unbound_value(s.asIndex());
-  }
-
-  for (uint16 i = 0; i < source->references_size(); ++i)
-    init_from_pattern(source->get_reference(i));
-}
-
 void HLPBindingMap::add_unbound_values(const Code* hlp, uint16 structure_index) {
   uint16 arg_count = hlp->code(structure_index).getAtomCount();
   for (uint16 i = 1; i <= arg_count; ++i) {
