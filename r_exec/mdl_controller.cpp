@@ -1094,31 +1094,23 @@ void MDLController::register_requirement(_Fact *f_pred, RequirementsPair &r_p) {
 }
 
 bool MDLController::get_imdl_template_timings(
-    r_code::Code* imdl, Timestamp& after, Timestamp& before, bool allow_ti, uint16* after_ts_index, uint16* before_ts_index) {
+    r_code::Code* imdl, Timestamp& after, Timestamp& before, uint16* after_ts_index, uint16* before_ts_index) {
   auto template_set_index = imdl->code(I_HLP_TPL_ARGS).asIndex();
   auto template_set_count = imdl->code(template_set_index).getAtomCount();
-  auto template_after_index = template_set_index + (template_set_count - 1);
-  auto template_before_index = template_set_index + template_set_count;
-  if (template_set_count >= 1 && imdl->code(template_before_index).getDescriptor() == Atom::I_PTR &&
-      imdl->code(imdl->code(template_before_index).asIndex()).asOpcode() == Opcodes::TI) {
-    if (!allow_ti)
-      return false;
-    template_set_index = imdl->code(template_before_index).asIndex();
-    template_set_count = imdl->code(template_set_index).getAtomCount();
-    template_after_index = template_set_index + (template_set_count - 1);
-    template_before_index = template_set_index + template_set_count;
-  }
-  if (!(template_set_count >= 2 &&
-        imdl->code(template_after_index).getDescriptor() == Atom::I_PTR &&
-        imdl->code(template_before_index).getDescriptor() == Atom::I_PTR))
+  auto template_ti_index = template_set_index + template_set_count;
+  if (!(template_set_count >= 1 && imdl->code(template_ti_index).getDescriptor() == Atom::I_PTR &&
+        imdl->code(imdl->code(template_ti_index).asIndex()).asOpcode() == Opcodes::TI))
     return false;
+  auto ti_index = imdl->code(template_ti_index).asIndex();
+  auto after_index = ti_index + 1;
+  auto before_index = ti_index + 2;
 
-  after = Utils::GetTimestamp(imdl, template_after_index);
-  before = Utils::GetTimestamp(imdl, template_before_index);
+  after = Utils::GetTimestamp(imdl, after_index);
+  before = Utils::GetTimestamp(imdl, before_index);
   if (after_ts_index)
-    *after_ts_index = imdl->code(template_after_index).asIndex();
+    *after_ts_index = imdl->code(after_index).asIndex();
   if (before_ts_index)
-    *before_ts_index = imdl->code(template_before_index).asIndex();
+    *before_ts_index = imdl->code(before_index).asIndex();
 
   return true;
 }
@@ -2691,19 +2683,13 @@ bool PrimaryMDLController::get_template_timings(HLPBindingMap *bm, Timestamp& af
   Code* model = get_core_object();
   auto template_set_index = model->code(MDL_TPL_ARGS).asIndex();
   auto template_set_count = model->code(template_set_index).getAtomCount();
-  auto after_code_index = template_set_index + (template_set_count - 1);
-  auto before_code_index = template_set_index + template_set_count;
-  if (template_set_count >= 1 && model->code(before_code_index).getDescriptor() == Atom::I_PTR &&
-      model->code(model->code(before_code_index).asIndex()).asOpcode() == Opcodes::TI) {
-    // Use the timings in (ti : :) .
-    template_set_index = model->code(before_code_index).asIndex();
-    template_set_count = model->code(template_set_index).getAtomCount();
-    after_code_index = template_set_index + (template_set_count - 1);
-    before_code_index = template_set_index + template_set_count;
-  }
-  if (template_set_count < 2)
-    // Not enough template parameters.
+  auto template_ti_index = template_set_index + template_set_count;
+  if (!(template_set_count >= 1 && model->code(template_ti_index).getDescriptor() == Atom::I_PTR &&
+        model->code(model->code(template_ti_index).asIndex()).asOpcode() == Opcodes::TI))
     return false;
+  auto ti_index = model->code(template_ti_index).asIndex();
+  auto after_code_index = ti_index + 1;
+  auto before_code_index = ti_index + 2;
   if (model->code(after_code_index).getDescriptor() != Atom::VL_PTR ||
       model->code(before_code_index).getDescriptor() != Atom::VL_PTR)
     // Parameters are not variables.
