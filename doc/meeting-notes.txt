@@ -1101,9 +1101,15 @@ Simulator
 * DONE. Merge Leonard's pull request for generalized operators https://github.com/IIIM-IS/AERA/pull/266
 * DONE. Merge Leonard's pull request for multi-dimensional marker values in TCP (Webots) https://github.com/IIIM-IS/AERA/pull/267
 
+2023-08-25
+* DONE. Merge request to fix bug initializing CST binding map https://github.com/IIIM-IS/AERA/pull/260
+* DONE. Merge request to remove unneded TemplateTimingsUpdater https://github.com/IIIM-IS/AERA/pull/269
+* Discuss: Simulation forward chaining vs. argumentation
+
 next meeting
-* DONE. Make pull request to fix bug initializing CST binding map https://github.com/IIIM-IS/AERA/pull/260
 * Webots
+  * Webots (occasionally) sends data for rotation which confuses the current example. [Leonard]
+  * This should either include the Eigen library as a submodule, or update the README with instructions to install it. [Leonard]
   * Put a tray at the goal position
   * Set position of boxes on initial load to the correct position
   * Generalize CTPX for all strucured types (vec2, vec3, vec [], etc.) [Leonard]
