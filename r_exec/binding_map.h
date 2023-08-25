@@ -412,8 +412,6 @@ private:
       before_index = source->code(FACT_BEFORE).asIndex();
   }
 
-  void init_from_pattern(const r_code::Code *source);
-
   /**
    * Scan the structure in hlp at structure_index and call add_unbound_value for each VL_PTR.
    * \param hlp The HLP with the code.
