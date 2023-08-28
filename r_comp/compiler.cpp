@@ -1318,7 +1318,7 @@ bool Compiler::timestamp_s_ms_us(int64 &ts) {
   }
 
   bool negative = match_symbol("-", false);
-  int64 s;
+  uint64 s;
   *in_stream_ >> std::dec >> s;
   if (in_stream_->fail() || in_stream_->eof()) {
     in_stream_->clear();
@@ -1331,7 +1331,7 @@ bool Compiler::timestamp_s_ms_us(int64 &ts) {
     return false;
   }
 
-  int64 ms;
+  uint64 ms;
   *in_stream_ >> std::dec >> ms;
   if (in_stream_->fail() || in_stream_->eof()) {
     in_stream_->clear();
@@ -1344,7 +1344,7 @@ bool Compiler::timestamp_s_ms_us(int64 &ts) {
     return false;
   }
 
-  int64 us;
+  uint64 us;
   *in_stream_ >> std::dec >> us;
   if (in_stream_->fail() || in_stream_->eof()) {
     in_stream_->clear();
