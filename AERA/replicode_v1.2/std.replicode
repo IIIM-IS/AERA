@@ -161,7 +161,7 @@
 !def RUN_ONCE false
 
 ; system internal constants.
-!def MAX_TIME 922337203685477580us; See Utils_MaxTime
+!def MAX_TIME 9223372036854775807us; See Utils_MaxTime
 ; EPOCH is used to convert between time stamp and duration.
 ; To convert a duration to a time stamp, use: (+ duration EPOCH)
 ; To convert a time stamp to a duration, use: (- timestamp EPOCH)

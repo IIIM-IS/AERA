@@ -340,9 +340,6 @@ public:
   }
 
   static int32 GetResilience(Timestamp now, std::chrono::microseconds time_to_live, uint64 upr); // ttl: us, upr: us.
-  static int32 GetResilience(Timestamp now, Timestamp::duration time_to_live, uint64 upr) {
-    return GetResilience(now, std::chrono::duration_cast<std::chrono::microseconds>(time_to_live), upr);
-  }
   static int32 GetResilience(float32 resilience, float32 origin_upr, float32 destination_upr); // express the res in destination group, given the res in origin group.
 
   static std::string RelativeTime(Timestamp t);
@@ -357,8 +354,7 @@ public:
 };
 
 // This is Timestamp::max() duration_cast to microseconds and used to initialize a Timestamp.
-// The result is a slightly different value from Timestamp::max(), but convertible to/from microseconds.
-const Timestamp Utils_MaxTime(std::chrono::microseconds(922337203685477580LL));
+const Timestamp Utils_MaxTime(std::chrono::microseconds(9223372036854775807LL));
 
 }
 
