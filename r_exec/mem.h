@@ -250,9 +250,6 @@ public:
   std::chrono::microseconds get_sim_time_horizon(std::chrono::microseconds horizon) const { 
     return std::chrono::microseconds((int64)(horizon.count() * sim_time_horizon_factor_)); 
   }
-  std::chrono::microseconds get_sim_time_horizon(Timestamp::duration horizon) const { 
-    return get_sim_time_horizon(std::chrono::duration_cast<std::chrono::microseconds>(horizon));
-  }
   std::chrono::microseconds get_tpx_time_horizon() const { return tpx_time_horizon_; }
   std::chrono::microseconds get_primary_thz() const { return primary_thz_; }
   std::chrono::microseconds get_secondary_thz() const { return secondary_thz_; }
@@ -816,13 +813,7 @@ public:
 
   // Called by cores.
   void register_reduction_job_latency(std::chrono::microseconds latency);
-  void register_reduction_job_latency(Timestamp::duration latency) {
-    register_reduction_job_latency(std::chrono::duration_cast<std::chrono::microseconds>(latency));
-  };
   void register_time_job_latency(std::chrono::microseconds latency);
-  void register_time_job_latency(Timestamp::duration latency) {
-    register_time_job_latency(std::chrono::duration_cast<std::chrono::microseconds>(latency)); 
-  };
   void inject_perf_stats();
 
   // rMem to rMem.

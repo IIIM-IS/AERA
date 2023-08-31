@@ -219,13 +219,7 @@ public:
   Fact *get_f_icst(HLPBindingMap *bindings, std::vector<P<_Fact> > *axiom_inputs, std::vector<P<_Fact> > *non_axiom_inputs) const;
 
   void inject_icst(Fact *production, float32 confidence, std::chrono::microseconds time_to_live) const; // here, resilience=time to live, in us.
-  void inject_icst(Fact *production, float32 confidence, Timestamp::duration time_to_live) const {
-    inject_icst(production, confidence, std::chrono::duration_cast<std::chrono::microseconds>(time_to_live));
-  }
   bool inject_prediction(Fact *prediction, float32 confidence, std::chrono::microseconds time_to_live) const; // here, resilience=time to live, in us; returns true if the prediction has actually been injected.
-  bool inject_prediction(Fact *prediction, float32 confidence, Timestamp::duration time_to_live) const {
-    return inject_prediction(prediction, confidence, std::chrono::duration_cast<std::chrono::microseconds>(time_to_live));
-  }
 
   void set_secondary_host(Group *host);
   Group *get_secondary_host() const;
