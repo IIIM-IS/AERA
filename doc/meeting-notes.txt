@@ -1106,6 +1106,10 @@ Simulator
 * DONE. Merge request to remove unneded TemplateTimingsUpdater https://github.com/IIIM-IS/AERA/pull/269
 * Discuss: Simulation forward chaining vs. argumentation
 
+2023-08-31
+DONE. Fix Webots to fix includes for the Eigen library.
+DONE. Merge pull request to use microseconds for Timestamp https://github.com/IIIM-IS/AERA/pull/270
+
 next meeting
 * Webots
   * Webots (occasionally) sends data for rotation which confuses the current example. [Leonard]
