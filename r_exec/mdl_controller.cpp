@@ -1489,10 +1489,10 @@ void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *c
   }
   else {
     // Negative requirement.
-    if (!is_simulation)
-      _store_requirement(&requirements_.negative_evidences_, e);
-    else
+    if (is_simulation)
       _store_requirement(&simulated_requirements_.negative_evidences_, e);
+    else
+      _store_requirement(&requirements_.negative_evidences_, e);
   }
 
   // Check here if this new strong requirement disables a weak requirement which may have been used.
