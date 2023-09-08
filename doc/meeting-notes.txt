@@ -1114,19 +1114,22 @@ DONE. Merge pull request to use microseconds for Timestamp https://github.com/II
   * DONE. This should either include the Eigen library as a submodule, or update the README with instructions to install it. [Leonard]
   * DONE. Generalize CTPX for all strucured types (vec2, vec3, vec [], etc.) [Leonard]
 
+2023-09-08
+* DONE. Merge pull request to update projects to SDK 18362 (for Visual Studio 2022). https://github.com/IIIM-IS/AERA/pull/271
+
 next meeting
-* Make pull request to update projects to SDK 18362 (for Visual Studio 2022).
 * Webots
+  * In TCPConnection add both client and server versions of establishConnection. (Move TCPConnection to AERA_Protobuf?)
   * Put a tray at the goal position
   * Set position of boxes on initial load to the correct position
-  * Align aera_us with AERA time.
+  * Align Webots aera_us with AERA time.
   * Use setup command for automatic discovery of AERA objects and commands
   * Get command efferent copy from Webots (move limit to +/- 20) [Maybe in the setup message or command reply. Need more discussion]
   * Try Webots streaming to the Visualize [Chloe]
 * hand-grab-sphere
-  * Represent sphere position without direct I/O input.
   * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
     * Still need to allow multiple strong requirements in retrieve_imdl.
+  * Represent sphere position without direct I/O input.
 
 TODO
 * Change (success) to refer to the prediction mk.rdx instead of the prediction. (Affects other code.)
