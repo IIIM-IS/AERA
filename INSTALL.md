@@ -13,14 +13,11 @@ Prerequisites
 Following are the detailed steps for each platform to install the prerequisites.
 
 ## Windows
-To install Visual Studio, download and install Visual Studio Community Edition 2019 from
-https://visualstudio.microsoft.com/vs/older-downloads .
-In the installer, under "Desktop development with C++", check "Windows 10 SDK (10.0.17134.0)" and
+To install Visual Studio, download and install Visual Studio Community Edition 2022 from
+https://visualstudio.microsoft.com/vs/community . (If you already have Visual Studio 2019 installed,
+this also works. Visual Studio 2017 is no longer supported.)
+In the installer, under "Desktop development with C++", check "Windows 10 SDK (10.018362.0)" and
   "MSVC v141 - VS 2017 C++ build tools".
-  
-In case you have Visual Studio Community Edition 2022 installed, "Windows 10 SDK (10.0.17134.0)" will
-  not be listed as an option in the installer.
-Instead, you can download  "Windows 10 SDK (10.0.17134.12)" from https://developer.microsoft.com/windows/downloads/sdk-archive/ .
 
 To install Git, download and install GitHub for Desktop from https://desktop.github.com .
 

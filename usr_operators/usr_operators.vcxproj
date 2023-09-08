@@ -18,7 +18,7 @@
     <ProjectGuid>{3DE12B3F-D45E-46E1-B501-E294009AD4B9}</ProjectGuid>
     <RootNamespace>usr_operators</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugVisualizer|Win32'" Label="Configuration">
