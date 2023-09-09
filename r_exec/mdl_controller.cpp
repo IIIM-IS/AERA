@@ -1120,7 +1120,7 @@ bool MDLController::get_imdl_template_timings(
 MDLController::RequirementEntry::RequirementEntry() : PredictedEvidenceEntry(), controller_(NULL), chaining_was_allowed_(false) {
 }
 
-MDLController::RequirementEntry::RequirementEntry(_Fact *f_p_f_imdl, MDLController *c, bool chaining_was_allowed) : PredictedEvidenceEntry(f_p_f_imdl), controller_(c), chaining_was_allowed_(chaining_was_allowed) {
+MDLController::RequirementEntry::RequirementEntry(_Fact *f_p_f_imdl, _Fact* input, MDLController *c, bool chaining_was_allowed) : PredictedEvidenceEntry(f_p_f_imdl), input_(input), controller_(c), chaining_was_allowed_(chaining_was_allowed) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1252,7 +1252,7 @@ inline microseconds PMDLController::get_sim_thz(Timestamp now, Timestamp deadlin
 TopLevelMDLController::TopLevelMDLController(_View *view) : PMDLController(view) {
 }
 
-void TopLevelMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed) {
+void TopLevelMDLController::store_requirement(_Fact *f_p_f_imdl, _Fact* input, MDLController *controller, bool chaining_was_allowed) {
 }
 
 void TopLevelMDLController::take_input(r_exec::View *input) {
@@ -1474,11 +1474,11 @@ void PrimaryMDLController::set_secondary(SecondaryMDLController *secondary) {
   secondary->add_requirement_to_rhs();
 }
 
-void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed) {
+void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, _Fact* input, MDLController *controller, bool chaining_was_allowed) {
 
   bool is_simulation = f_p_f_imdl->get_pred()->is_simulation();
   _Fact *f_imdl = f_p_f_imdl->get_pred()->get_target();
-  RequirementEntry e(f_p_f_imdl, controller, chaining_was_allowed);
+  RequirementEntry e(f_p_f_imdl, input, controller, chaining_was_allowed);
 
   // Store the requirement before signaling the monitor so that its target will match the requirement.
   if (f_imdl->is_fact()) {
@@ -1553,7 +1553,7 @@ void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *c
   }
 
   if (!is_simulation)
-    secondary_->store_requirement(f_p_f_imdl, controller, chaining_was_allowed);
+    secondary_->store_requirement(f_p_f_imdl, NULL, controller, chaining_was_allowed);
 }
 
 void PrimaryMDLController::take_input(r_exec::View *input) {
@@ -1625,7 +1625,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
     OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << get_object()->get_oid() << " predict imdl -> mk.rdx " << mk_rdx->get_oid());
 
     PrimaryMDLController *c = (PrimaryMDLController *)controllers_[RHSController]; // rhs controller: in the same view.
-    c->store_requirement(production, this, chaining_was_allowed); // if not simulation, stores also in the secondary controller.
+    c->store_requirement(production, input, this, chaining_was_allowed); // if not simulation, stores also in the secondary controller.
 #ifdef WITH_DETAIL_OID
     OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " fact (" << f_imdl->get_detail_oid() << ") imdl mdl " << get_object()->get_oid() <<
       ": " << input->get_oid() << " -> fact (" << production->get_detail_oid() << ") pred fact (" <<
@@ -2782,7 +2782,7 @@ void SecondaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_im
     if (is_invalidated())
       // Another thread has invalidated this controller which clears the controllers.
       return;
-    ((MDLController *)controllers_[RHSController])->store_requirement(production, this, chaining_was_allowed);
+    ((MDLController *)controllers_[RHSController])->store_requirement(production, NULL, this, chaining_was_allowed);
     return;
   }
 
@@ -2790,9 +2790,9 @@ void SecondaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_im
   add_monitor(m);
 }
 
-void SecondaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed) {
+void SecondaryMDLController::store_requirement(_Fact *f_p_f_imdl, _Fact* input, MDLController *controller, bool chaining_was_allowed) {
 
-  RequirementEntry e(f_p_f_imdl, controller, chaining_was_allowed);
+  RequirementEntry e(f_p_f_imdl, NULL, controller, chaining_was_allowed);
   if (((_Fact*)f_p_f_imdl->get_reference(0)->get_reference(0))->is_fact()) {
 
     _store_requirement(&requirements_.positive_evidences_, e);
