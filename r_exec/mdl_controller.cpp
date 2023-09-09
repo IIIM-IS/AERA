@@ -1270,12 +1270,6 @@ void TopLevelMDLController::reduce(r_exec::View *input) { // no lock.
   Goal *goal = ((_Fact *)input->object_)->get_goal();
   if (goal && goal->is_drive()) {
 
-    if (goal->get_reference(0)->get_reference(0)->code(0).asOpcode() == Opcodes::Ent) {
-      // Log the injection of a drive, presumably from a program.
-      // The view injection time may be different than now, so log it too.
-      OUTPUT_LINE(MDL_IN, Utils::RelativeTime(Now()) << " -> drive " <<
-        input->object_->get_oid() << ", ijt " << Utils::RelativeTime(input->get_ijt()));
-    }
     _Fact *goal_target = goal->get_target(); // goal_target is f->object.
     float32 confidence = get_success_rate() * goal_target->get_cfd(); // reading STRONG_REQUIREMENT is atomic.
     if (confidence <= get_host()->code(GRP_SLN_THR).asFloat()) // cfd is too low for any sub-goal to be injected.
@@ -1283,8 +1277,13 @@ void TopLevelMDLController::reduce(r_exec::View *input) { // no lock.
 
     P<HLPBindingMap> bm = new HLPBindingMap(bindings_);
     bm->reset_bwd_timings(goal_target);
-    if (bm->match_bwd_strict(goal_target, rhs_)) // the rhs of a top-level model is never a |fact, hence strict matching instead of lenient.
-      abduce(bm, (Fact *)input->object_, confidence);
+    if (bm->match_bwd_strict(goal_target, rhs_)) { // the rhs of a top-level model is never a |fact, hence strict matching instead of lenient.
+      // Log the injection of a drive, presumably from a program.
+      // The view injection time may be different than now, so log it too.
+      OUTPUT_LINE(MDL_IN, Utils::RelativeTime(Now()) << " -> drive " <<
+        input->object_->get_oid() << ", ijt " << Utils::RelativeTime(input->get_ijt()));
+      abduce(bm, (Fact*)input->object_, confidence);
+    }
     else if (!goal->is_requirement()) { // goal_target may be f->imdl and not a requirement: case of a reuse of the model, i.e. the goal target is for the model to make a prediction: this translates into making a sub-goal from the lhs.
 
       Code *imdl = goal_target->get_reference(0);
