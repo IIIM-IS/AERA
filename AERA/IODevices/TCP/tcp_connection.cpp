@@ -166,6 +166,70 @@ namespace tcp_io_device {
     return 0;
   }
 
+  int TCPConnection::establishConnection(std::string host, std::string port) {
+
+    WSADATA wsaData;
+    struct addrinfo* result = NULL, hints;
+
+    int err;
+
+    // Initialize Winsock
+    std::cout << "> INFO: Initializing Winsock" << std::endl;
+    err = WSAStartup(MAKEWORD(2, 2), &wsaData);
+    if (err != 0) {
+      std::cout << "ERROR: WSAStartup failed with error: " << err << std::endl;
+      return 1;
+    }
+
+    ZeroMemory(&hints, sizeof(hints));
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_protocol = IPPROTO_TCP;
+    hints.ai_flags = AI_PASSIVE;
+
+    std::cout << "> INFO: Resolving server address and port" << std::endl;
+    // Resolve the server address and port
+    err = getaddrinfo(host.c_str(), port.c_str(), &hints, &result);
+    if (err != 0) {
+      std::cout << "ERROR: getaddrinfo failed with error: " << err << std::endl;
+      WSACleanup();
+      return 1;
+    }
+
+    std::cout << "> INFO: Creating socket for connection to server" << std::endl;
+    // Create a SOCKET for connecting to server
+    tcp_socket_ = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
+    if (tcp_socket_ == INVALID_SOCKET) {
+      std::cout << "ERROR: Socker failed with error: " << WSAGetLastError() << std::endl;
+      freeaddrinfo(result);
+      WSACleanup();
+      return 1;
+    }
+
+    std::cout << "> INFO: Connecting to TCP server" << std::endl;
+    // Connect to server.
+    err = connect(tcp_socket_, result->ai_addr, (int)result->ai_addrlen);
+    if (err == SOCKET_ERROR) {
+      std::cout << "ERROR: Connect failed with error: " << WSAGetLastError() << std::endl;
+      freeaddrinfo(result);
+      closesocket(tcp_socket_);
+      WSACleanup();
+      return 1;
+    }
+
+    freeaddrinfo(result);
+
+    if (tcp_socket_ == INVALID_SOCKET) {
+      printf("Unable to connect to server!\n");
+      WSACleanup();
+      return 1;
+    }
+
+    std::cout << "> INFO: TCP connection successfully established" << std::endl;
+
+    return 0;
+  }
+
   void TCPConnection::start() {
     // Start the background thread to handle incoming and outgoing messages.
     state_ = RUNNING;

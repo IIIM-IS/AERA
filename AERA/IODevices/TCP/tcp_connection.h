@@ -185,6 +185,14 @@ namespace tcp_io_device {
     int listenAndAwaitConnection(std::string port);
 
     /**
+    * Opens a socket to connect to a client on the passed port.
+    * \param host The host address used to communicate with the server.
+    * \param port The port used to communicate with the server.
+    * \return 0 for success, nonzero for error.
+    */
+    int establishConnection(std::string host, std::string port);
+
+    /**
     * Starts the communication between environment simulation and the AERA TCPConnection.
     */
     void start();
