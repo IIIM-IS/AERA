@@ -6,7 +6,7 @@
 //_/_/ Copyright (c) 2018-2023 Jeff Thompson
 //_/_/ Copyright (c) 2018-2023 Kristinn R. Thorisson
 //_/_/ Copyright (c) 2018-2023 Icelandic Institute for Intelligent Machines
-//_/_/ Copyright (c) 2021 Leonard Eberding
+//_/_/ Copyright (c) 2021-2023 Leonard Eberding
 //_/_/ http://www.iiim.is
 //_/_/
 //_/_/ --- Open-Source BSD License, with CADIA Clause v 1.0 ---
@@ -69,9 +69,8 @@
 #include <thread>
 #include <bitset>
 
-#include"../r_exec/init.h"
-
 #include "AERA_Protobuf/tcp_data_message.pb.h"
+
 namespace tcp_io_device {
 
   /**
@@ -163,9 +162,11 @@ namespace tcp_io_device {
   * TCPConnection is used to pass data using Win-Sockets between the environment simulation and the TcpIoDevice object. It runs
   * in a different thread and uses SafeQueues to pass data between the IODevice and the socket connection.
   */
-  class TCPConnection
-  {
+  class TCPConnection {
+
   public:
+
+    static std::map<int, std::string> type_to_name_map_;
 
     /**
     * Constructor for the TCPConnection used in a seperate thread to communicate with the environment simulation
@@ -179,11 +180,12 @@ namespace tcp_io_device {
     /**
     * Opens a socket to connect to a client on the passed port.
     * \param port The port used to communicate with the client.
+    * \return 0 for success, nonzero for error.
     */
     int establishConnection(std::string port);
 
     /**
-    * Starts the communication between environment simulation (client) and the TCPConnection (server).
+    * Starts the communication between environment simulation and the AERA TCPConnection.
     */
     void start();
 
@@ -218,7 +220,7 @@ namespace tcp_io_device {
 
     std::shared_ptr<std::thread> tcp_background_thread_;
 
-    SOCKET tcp_client_socket_;
+    SOCKET tcp_socket_;
 
     uint64_t msg_buf_size_;
     uint64_t msg_length_buf_size_;
@@ -227,8 +229,8 @@ namespace tcp_io_device {
     std::shared_ptr<SafeQueue> outgoing_queue_;
 
     /**
-    * Handles the TCP connection in the background by checking for new outgoing and incoming messages, dequeueing and enqueueing the 
-    * SafeQueues, respectively. Repeatedly checks for new messages on the socket and parses them to TCPMessage objects. Takes TCPMessage 
+    * Handles the TCP connection in the background by checking for new outgoing and incoming messages, dequeueing and enqueueing the
+    * SafeQueues, respectively. Repeatedly checks for new messages on the socket and parses them to TCPMessage objects. Takes TCPMessage
     * objects from the outgoing_queue_ and parses them into a byte-stream to send to the client.
     */
     void tcpBackgroundHandler();
