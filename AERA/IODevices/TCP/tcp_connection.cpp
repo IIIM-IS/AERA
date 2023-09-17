@@ -85,7 +85,7 @@ namespace tcp_io_device {
     }
   }
 
-  int TCPConnection::establishConnection(std::string port)
+  int TCPConnection::listenAndAwaitConnection(std::string port)
   {
     WSADATA wsa_data;
     int err;

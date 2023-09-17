@@ -178,11 +178,11 @@ namespace tcp_io_device {
     ~TCPConnection();
 
     /**
-    * Opens a socket to connect to a client on the passed port.
+    * Listen on the passed port and wait for a client to connect.
     * \param port The port used to communicate with the client.
     * \return 0 for success, nonzero for error.
     */
-    int establishConnection(std::string port);
+    int listenAndAwaitConnection(std::string port);
 
     /**
     * Starts the communication between environment simulation and the AERA TCPConnection.

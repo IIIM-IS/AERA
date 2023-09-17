@@ -156,7 +156,7 @@ namespace tcp_io_device {
   template<class O, class S>
   int TcpIoDevice<O, S>::initTCP(string port)
   {
-    int err = tcp_connection_->establishConnection(port);
+    int err = tcp_connection_->listenAndAwaitConnection(port);
     tcp_connection_->start();
     // Wait for a SetupMessage from the client.
     while (true) {
