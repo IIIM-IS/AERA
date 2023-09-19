@@ -143,8 +143,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AERA_main.cpp" />
+    <ClCompile Include="IODevices\TCP\AERA_Protobuf\tcp_connection.cpp" />
     <ClCompile Include="IODevices\TCP\AERA_Protobuf\tcp_data_message.pb.cc" />
-    <ClCompile Include="IODevices\TCP\tcp_connection.cpp" />
     <ClCompile Include="IODevices\TCP\tcp_io_device.cpp" />
     <ClCompile Include="IODevices\video_screen\video_screen.cpp" />
     <ClCompile Include="IODevices\video_screen\video_screen_io_device.cpp" />
@@ -152,9 +152,9 @@
     <ClCompile Include="test_mem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="IODevices\TCP\AERA_Protobuf\tcp_connection.h" />
     <ClInclude Include="IODevices\TCP\AERA_Protobuf\tcp_data_message.pb.h" />
     <ClInclude Include="IODevices\TCP\AERA_Protobuf\utils.h" />
-    <ClInclude Include="IODevices\TCP\tcp_connection.h" />
     <ClInclude Include="IODevices\TCP\tcp_io_device.h" />
     <ClInclude Include="IODevices\video_screen\video_screen.h" />
     <ClInclude Include="IODevices\video_screen\video_screen_io_device.h" />

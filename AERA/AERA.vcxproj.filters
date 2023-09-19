@@ -3,9 +3,6 @@
   <ItemGroup>
     <ClCompile Include="test_mem.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="IODevices\TCP\tcp_connection.cpp">
-      <Filter>IODevices\TCP</Filter>
-    </ClCompile>
     <ClCompile Include="IODevices\TCP\tcp_io_device.cpp">
       <Filter>IODevices\TCP</Filter>
     </ClCompile>
@@ -19,13 +16,13 @@
     <ClCompile Include="IODevices\TCP\AERA_Protobuf\tcp_data_message.pb.cc">
       <Filter>IODevices\TCP\AERA_Protobuf</Filter>
     </ClCompile>
+    <ClCompile Include="IODevices\TCP\AERA_Protobuf\tcp_connection.cpp">
+      <Filter>IODevices\TCP\AERA_Protobuf</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="settings.h" />
     <ClInclude Include="test_mem.h" />
-    <ClInclude Include="IODevices\TCP\tcp_connection.h">
-      <Filter>IODevices\TCP</Filter>
-    </ClInclude>
     <ClInclude Include="IODevices\TCP\tcp_io_device.h">
       <Filter>IODevices\TCP</Filter>
     </ClInclude>
@@ -40,6 +37,9 @@
       <Filter>IODevices\TCP\AERA_Protobuf</Filter>
     </ClInclude>
     <ClInclude Include="IODevices\TCP\AERA_Protobuf\utils.h">
+      <Filter>IODevices\TCP\AERA_Protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="IODevices\TCP\AERA_Protobuf\tcp_connection.h">
       <Filter>IODevices\TCP\AERA_Protobuf</Filter>
     </ClInclude>
   </ItemGroup>

@@ -123,7 +123,7 @@ namespace tcp_io_device {
 
 #else
 
-#include "tcp_connection.h"
+#include "AERA_Protobuf/tcp_connection.h"
 
 namespace tcp_io_device {
 
