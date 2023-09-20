@@ -153,8 +153,9 @@ bool PMonitor::reduce(_Fact *input) { // input is always an actual fact.
 
 void PMonitor::update(Timestamp &next_target) { // executed by a time core, upon reaching the expected time of occurrence of the target of the prediction.
 
-  if (!target_->is_invalidated()) { // received nothing matching the target's object so far (neither positively nor negatively).
+  if (!target_->is_invalidated()) {
 
+    // Received nothing matching the target's object so far (neither positively nor negatively).
     if (rate_failures_)
       controller_->register_pred_outcome(target_, false, NULL, 1, rate_failures_);
   }
