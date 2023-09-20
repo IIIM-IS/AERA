@@ -430,6 +430,63 @@ Code *_TPX::build_cst(const vector<Component> &components, BindingMap *bm, _Fact
   return cst;
 }
 
+Code* _TPX::build_cst_sim(const vector<Component>& components, BindingMap* bm, _Fact* main_component, Group* host) {
+
+  _Fact* abstracted_component = (_Fact*)bm->abstract_object(main_component, false);
+
+  Code* cst = _Mem::Get()->build_object(Atom::CompositeState(Opcodes::Cst, CST_ARITY));
+
+  uint16 actual_component_count = 0;
+  // Add the main_component first since its variables are assigned first.
+  for (uint16 i = 0; i < components.size(); ++i) {
+    if (components[i].discarded)
+      continue;
+    if (components[i].object == main_component) {
+      cst->add_reference(abstracted_component);
+      ++actual_component_count;
+      break;
+    }
+  }
+
+  for (uint16 i = 0; i < components.size(); ++i) { // reference patterns;
+
+    if (components[i].discarded)
+      continue;
+    if (components[i].object == main_component)
+      // Already added.
+      continue;
+    else
+      cst->add_reference(bm->abstract_object(components[i].object, true));
+    ++actual_component_count;
+  }
+
+  uint16 extent_index = CST_ARITY;
+
+  cst->code(CST_TPL_ARGS) = Atom::IPointer(++extent_index);
+  cst->code(extent_index) = Atom::Set(0); // no tpl args.
+
+  cst->code(CST_OBJS) = Atom::IPointer(++extent_index);
+  cst->code(extent_index) = Atom::Set(actual_component_count);
+  for (uint16 i = 0; i < actual_component_count; ++i)
+    cst->code(++extent_index) = Atom::RPointer(i);
+
+  cst->code(CST_FWD_GUARDS) = Atom::IPointer(++extent_index);
+  cst->code(extent_index) = Atom::Set(0); // no fwd guards.
+
+  cst->code(CST_BWD_GUARDS) = Atom::IPointer(++extent_index);
+  cst->code(extent_index) = Atom::Set(0); // no bwd guards.
+
+  cst->code(CST_OUT_GRPS) = Atom::IPointer(++extent_index);
+  cst->code(extent_index) = Atom::Set(1); // only one output group: the one the tpx lives in.
+  cst->code(++extent_index) = Atom::RPointer(cst->references_size());
+
+  cst->code(CST_ARITY) = Atom::Float(1); // psln_thr.
+
+  cst->add_reference(host); // reference the output group.
+
+  return cst;
+}
+
 Code *_TPX::build_mdl_head(HLPBindingMap *bm, uint16 tpl_arg_count, _Fact *lhs, _Fact *rhs, uint16 &write_index, bool allow_shared_timing_vars) {
 
   Code* abstract_lhs = bm->abstract_object(lhs, false, allow_shared_timing_vars ? 0 : -1);
@@ -500,6 +557,21 @@ void _TPX::build_mdl_tail(Code *mdl, uint16 write_index) {
   mdl->code(MDL_ARITY) = Atom::Float(1); // psln_thr.
 
   mdl->add_reference(auto_focus_->get_view()->get_host()); // reference the output group.
+}
+
+void _TPX::build_mdl_tail_sim(Code* mdl, uint16 write_index, Group* host) {
+
+  mdl->code(MDL_OUT_GRPS) = Atom::IPointer(++write_index);
+  mdl->code(write_index) = Atom::Set(1); // only one group: the one the tpx lives in.
+  mdl->code(++write_index) = Atom::RPointer(2);
+
+  mdl->code(MDL_STRENGTH) = Atom::Float(0);
+  mdl->code(MDL_CNT) = Atom::Float(1);
+  mdl->code(MDL_SR) = Atom::Float(1);
+  mdl->code(MDL_DSR) = Atom::Float(1);
+  mdl->code(MDL_ARITY) = Atom::Float(1); // psln_thr.
+
+  mdl->add_reference(host); // reference the output group.
 }
 
 void _TPX::inject_hlps() const {

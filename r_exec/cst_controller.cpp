@@ -85,6 +85,8 @@
 #include "cst_controller.h"
 #include "mem.h"
 #include "hlp_context.h"
+#include "pattern_extractor.h"
+#include "mdl_controller.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -593,6 +595,7 @@ void CSTController::abduce_simulated(HLPBindingMap *bm, Fact *f_super_goal) {
   Goal *g = f_super_goal->get_goal();
   _Fact *super_goal_target = g->get_target();
   Fact* remade_f_icst = get_f_ihlp(bm, false);
+  BOOLEAN analogy;
 
   for (auto o = overlays_.begin(); o != overlays_.end(); ++o) {
     if (((CSTOverlay*)(*o))->is_simulated())
@@ -602,9 +605,123 @@ void CSTController::abduce_simulated(HLPBindingMap *bm, Fact *f_super_goal) {
     HLPBindingMap bm_copy(bm);
     // TODO: this is inefficient. We want to merge (*o)->binding_ into bm_copy, but use an icst.
     Fact* overlay_f_icst = get_f_ihlp(((HLPOverlay*)(*o))->bindings_, false);
-    if (bm_copy.match_object(overlay_f_icst->get_reference(0), remade_f_icst->get_reference(0)))
-      abduce(&bm_copy, f_super_goal);
+    if (bm_copy.match_object(overlay_f_icst->get_reference(0), remade_f_icst->get_reference(0))){
+      abduce(&bm_copy, f_super_goal, analogy);
+      analogy = FALSE;
+    }
   }
+}
+
+void CSTController::abduce(HLPBindingMap* bm, Fact* f_super_goal, BOOLEAN analogy) {
+
+  Goal* g = f_super_goal->get_goal();
+  _Fact* super_goal_target = g->get_target();
+  bool opposite = (super_goal_target->is_anti_fact());
+
+  float32 confidence = super_goal_target->get_cfd();
+
+  Sim* sim = g->get_sim();
+  // The following gets the fact where it is specified if the goal from which the subgoal is produced is an imdl or icst. We need imdl.
+  auto goalGoal = sim->get_f_super_goal()->get_goal()->get_reference(0)->get_reference(0);
+  Sim* sub_sim;
+  auto now = Now();
+  if (sim->get_mode() == SIM_ROOT)
+    sub_sim = new Sim(opposite ? SIM_MANDATORY : SIM_OPTIONAL, sim->get_thz(), f_super_goal, opposite, sim->root_, 1, sim->solution_controller_, sim->get_solution_cfd(), now + sim->get_thz());
+  else
+    sub_sim = new Sim(sim->get_mode(), sim->get_thz(), f_super_goal, opposite, sim->root_, 1, sim->solution_controller_, sim->get_solution_cfd(), sim->get_solution_before());
+
+  Code* cst = get_unpacked_object();
+  uint16 obj_set_index = cst->code(CST_OBJS).asIndex();
+  uint16 obj_count = cst->code(obj_set_index).getAtomCount();
+  Group* host = get_host();
+  vector<_TPX::Component> components;
+  P<Code> new_cst;
+  vector<View*> views_mdl;
+  vector<View*> views_cst;
+  bool matchFailiure = false;
+  for (uint16 i = 1; i <= obj_count; ++i) {
+
+    _Fact* pattern = (_Fact*)cst->get_reference(cst->code(obj_set_index + i).asIndex());
+    _Fact* bound_pattern = (_Fact*)bm->bind_pattern(pattern);
+    _Fact* evidence;
+    if (opposite)
+      bound_pattern->set_opposite();
+    
+    //// add the matched components to the components vector based on if it matched the evidence
+    if (check_evidences(bound_pattern, evidence) == MATCH_SUCCESS_POSITIVE
+      || _Mem::Get()->matches_axiom(bound_pattern->get_reference(0)))
+      components.push_back(_TPX::Component(bound_pattern));
+
+    if (_Mem::Get()->matches_axiom(bound_pattern->get_reference(0)))
+      // Don't make a goal of a member which is an axiom.
+      continue;
+
+    switch (check_evidences(bound_pattern, evidence)) {
+    case MATCH_SUCCESS_POSITIVE: // positive evidence, no need to produce a sub-goal: skip.
+      break;
+    case MATCH_SUCCESS_NEGATIVE: // negative evidence, no need to produce a sub-goal, the super-goal will probably fail within the target time frame: skip.
+      break;
+    case MATCH_FAILURE:
+      switch (check_predicted_evidences(bound_pattern, evidence)) {
+      case MATCH_SUCCESS_POSITIVE:
+        break;
+      case MATCH_SUCCESS_NEGATIVE:
+      case MATCH_FAILURE: // inject a sub-goal for the missing predicted positive evidence.
+        matchFailiure = true;
+        inject_goal(bm, f_super_goal, bound_pattern, sub_sim, now, confidence, host); // all sub-goals share the same sim.
+        break;
+      }
+    }
+  }
+  // create a CST-REQ
+  if (!(goalGoal->code(0).asOpcode() == Opcodes::IMdl && matchFailiure && analogy
+    && components.size() >= 3))
+    // limit the number of created CSTs to CSTs with 3 and more components so that the
+   //number of variables does not change in CSTs of models of the hand-grab-sphere example.
+    return;
+
+    P<HLPBindingMap> bmcst = new HLPBindingMap();
+    new_cst = _TPX::build_cst_sim(components, bmcst, components[0].object, (Group*)get_out_group(0));
+    _Fact* f_icst = bmcst->build_f_ihlp(new_cst, Opcodes::ICst, false);
+    // f_icst->set_reference(0, bmcst->bind_pattern(f_icst->get_reference(0)));
+    // _Fact* component_pattern = (_Fact*)new_cst->get_reference(0);
+    _Mem::Get()->pack_hlp(new_cst);
+    View* view_cst = new View(View::SYNC_ONCE, now, 0, -1, host, NULL, new_cst, 1); // SYNC_ONCE,sln=0,res=forever,act=1.
+    views_cst.push_back(view_cst);
+    _Mem::Get()->inject_hlps(views_cst, host);
+
+    // causal model
+    auto crm_controller = (HLPController*)sim->get_f_super_goal()->get_goal()->get_sim()->solution_controller_;
+    BindingMap* crm_binding_map = crm_controller->bindings_;
+    Code* crm = crm_controller->get_object();
+
+    // build model head, guards, and model tail for a requirement model
+    auto req_controller = (MDLController*)sim->solution_controller_;
+    auto abstract_f_icst = req_controller->bindings_->abstract_f_ihlp(f_icst);
+    // The timings should have been set correctly when f_icst was created.
+    abstract_f_icst->code(FACT_AFTER) = req_controller->get_rhs()->code(FACT_AFTER);
+    abstract_f_icst->code(FACT_BEFORE) = req_controller->get_rhs()->code(FACT_BEFORE);
+    // For the abstract icst, we want wildcards here.
+    abstract_f_icst->code(FACT_CFD) = Atom::Wildcard();
+    abstract_f_icst->code(FACT_ARITY) = Atom::Wildcard();
+    abstract_f_icst->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Wildcard();
+    abstract_f_icst->get_reference(0)->code(I_HLP_ARITY) = Atom::Wildcard();
+
+    uint16 write_index;
+    P<Code> req = _TPX::build_mdl_head_from_abstract(0, abstract_f_icst, req_controller->get_rhs(), write_index);
+    P<GuardBuilder> guard_builder = new GuardBuilder();
+    guard_builder->build(req, NULL, NULL, write_index);
+    _TPX::build_mdl_tail_sim(req, write_index, (Group*)get_out_group(0));
+    req->code(MDL_SR) = Atom::Float(.6); // consdier confidence below .6
+
+
+    // pack requirement model
+    _Mem::Get()->pack_hlp(req);
+
+    // create the view of the requirement model and inject it 
+    View* view_req = new View(View::SYNC_ONCE, now, 0, -1, host, NULL, req, 1);
+    views_mdl.push_back(view_req);
+    _Mem::Get()->inject_hlps(views_mdl, host);
 }
 
 void CSTController::abduce(HLPBindingMap *bm, Fact *f_super_goal) {

@@ -161,6 +161,7 @@ protected:
     cache->CS_.leave();
   }
 
+public:
   P<HLPBindingMap> bindings_;
 
   /**

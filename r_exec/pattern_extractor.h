@@ -177,7 +177,7 @@ class r_exec_dll _TPX :
   public TPX {
 private:
   static const uint32 InputsInitialSize = 16;
-protected:
+public:
   class Component { // for building csts.
   public:
     _Fact *object;
@@ -253,10 +253,12 @@ protected:
 
   _Fact *make_f_icst(_Fact *component, _Fact*& component_pattern, P<r_code::Code> &new_cst);
   r_code::Code *build_cst(const std::vector<Component> &components, BindingMap *bm, _Fact *main_component);
+  static r_code::Code* build_cst_sim(const std::vector<Component>& components, BindingMap* bm, _Fact* main_component, Group* host);
 
   static r_code::Code *build_mdl_head(HLPBindingMap *bm, uint16 tpl_arg_count, _Fact *lhs, _Fact *rhs, uint16 &write_index, bool allow_shared_timing_vars = true);
   static r_code::Code* build_mdl_head_from_abstract(uint16 tpl_arg_count, r_code::Code* lhs, r_code::Code* rhs, uint16& write_index);
   void build_mdl_tail(r_code::Code *mdl, uint16 write_index);
+  static void build_mdl_tail_sim(r_code::Code* mdl, uint16 write_index, Group* host);
 
   void inject_hlps() const;
   void inject_hlps(Timestamp analysis_starting_time);
