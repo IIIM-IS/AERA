@@ -23,6 +23,8 @@
 
 !dfn (lift_hand :); arg0: a hand, arg1: a distance.
 !dfn (grab_hand :); arg0: a hand.
+!dfn (grab_type1 :)
+!dfn (grab_type2 :)
 !dfn (release_hand :); arg0: a hand.
 !dfn (move_hand :); arg0: a hand, arg1: target position
 ; Some programs use grab, release and move instead of grab_hand, etc.
@@ -95,6 +97,7 @@ hand:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 head:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 cube:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
 sphere:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+cylinder:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
 camera:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
 red_box:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
 green_box:(ont 1) [[SYNC_ONCE now 1 forever root nil]]

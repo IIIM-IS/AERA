@@ -203,3 +203,4 @@ self:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
 
 ; drive targets; drives are goals whose target fact points to an entity.
 run:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
+run2:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
