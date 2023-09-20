@@ -156,7 +156,11 @@ void PMonitor::update(Timestamp &next_target) { // executed by a time core, upon
   if (!target_->is_invalidated()) {
 
     // Received nothing matching the target's object so far (neither positively nor negatively).
-    if (rate_failures_)
+    // It is only a failure if the target is a fact. If the target is an anti-fact then reaching this
+    // point means that the object was not observed *as expected* (not a failure).
+    // TODO: If the model correctly predicts an anti-fact that the object won't be observed, then should we register
+    // a success for the model? If yes then what should "evidence" point? Maybe nil?
+    if (rate_failures_ && target_->get_pred()->get_target()->is_fact())
       controller_->register_pred_outcome(target_, false, NULL, 1, rate_failures_);
   }
   controller_->remove_monitor(this);
