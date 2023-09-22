@@ -1292,6 +1292,10 @@ void TopLevelMDLController::reduce(r_exec::View *input) { // no lock.
         bm = new HLPBindingMap(bindings_);
         bm->reset_bwd_timings(goal_target);
         bm->init_from_f_ihlp(goal_target);
+        // Log the injection of a drive, presumably from a program.
+        // The view injection time may be different than now, so log it too.
+        OUTPUT_LINE(MDL_IN, Utils::RelativeTime(Now()) << " -> drive " <<
+          input->object_->get_oid() << ", ijt " << Utils::RelativeTime(input->get_ijt()));
         abduce(bm, (Fact *)input->object_, confidence);
       }
     }
