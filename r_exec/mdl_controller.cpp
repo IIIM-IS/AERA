@@ -1943,7 +1943,9 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
 
     Fact *ground;
     Fact *strong_requirement_ground;
-    SimMode mode = sim->get_mode();
+    SimMode mode = SIM_ROOT;
+    if (sim)
+      mode = sim->get_mode();
     switch (mode) {
     case SIM_ROOT:
       switch (retrieve_imdl_bwd(bm, f_imdl, ground, strong_requirement_ground)) {
