@@ -93,7 +93,7 @@ S4:(cst [] []
 
 ; Initial conditions.
 start:(pgm [] [] [] []
-   (inj [State:(mk.val e1 emulator_state [nil (vec3 0 0 0) (vec3 5 0 0) (vec3 10 0 0) (vec3 15 0 0)] 1) []])
+   (inj [State:(mk.val e1 emulator_state [nil (vec3 1.2 0.5 0) (vec3 0 1 0) (vec3 -0.5 1 0) (vec3 0 -1 0)] 1) []])
    (inj []
       (fact State After:(now) (+ After sampling_period) 1 1)
       [SYNC_PERIODIC now 1 1 emulator nil]
@@ -125,7 +125,7 @@ pgm_babbleA_0:(pgm [] []
    (>= After (+ this.vw.ijt 100ms))
 []
    ; Move where initial and final positions have no objects so that they are not correlated.
-   (inj [Command:(cmd move [h (vec3 2 0 0)] 1) []])
+   (inj [Command:(cmd move [h (vec3 -2.2 0 0)] 1) []])
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
@@ -146,7 +146,7 @@ pgm_babbleA_1:(pgm [] []
    (>= After (+ this.vw.ijt 200ms))
 []
    ; Move where initial and final positions have no objects so that they are not correlated.
-   (inj [Command:(cmd move [h (vec3 3 0 0)] 1) []])
+   (inj [Command:(cmd move [h (vec3 1 0.5 0)] 1) []])
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
@@ -206,7 +206,7 @@ pgm_babbleA_4:(pgm [] []
    (>= After (+ this.vw.ijt 500ms))
 []
    ; Release the cube 2 to learn the release model and the "holding" cst.
-   (inj [Command:(cmd move [h (vec3 5 0 0)] 1) []])
+   (inj [Command:(cmd move [h (vec3 -0.5 0 0)] 1) []])
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
    (inj []
@@ -448,8 +448,7 @@ pgm_cmd_move_h_not_holding:(pgm [] []
    (< Cmd_after Before)
    (> Cmd_before After)
 []
-   ; Limit DeltaP to +/- 20. Inject the fact that the command was executed.
-   (inj [Command:(cmd move [h DeltaP_in 20] 1) []])
+   (inj [Command:(cmd move [h DeltaP_in] 1) []])
    (inj []
       (fact Command (+ After 20ms) Before 1 1)
       [SYNC_ONCE After 1 1 stdin nil]
@@ -495,7 +494,7 @@ pgm_cmd_grab_h_cube_1:(pgm [] []
    (ptn (fact G:(goal (fact Command:(cmd grab_type1 [h] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
    (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Pos_cube_1: Pos_cube_2: Pos_cyl_1:] :) After: Before: ::) [])
 []
-   (= Pos_h Pos_cube_1); For h to grab cube_1, they must be at the same position.
+   (< (dis Pos_h Pos_cube_1) 0.01); For h to grab cube_1, they must be at the same position.
    (= (is_sim G) false)
    (< Cmd_after Before)
    (> Cmd_before After)
@@ -519,7 +518,7 @@ pgm_cmd_grab_h_cube_1_fail:(pgm [] []
    (ptn (fact G:(goal (fact Command:(cmd grab_type2 [h] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
    (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Pos_cube_1: Pos_cube_2: Pos_cyl_1:] :) After: Before: ::) [])
 []
-   (= Pos_h Pos_cube_1)
+   (< (dis Pos_h Pos_cube_1) 0.01)
    (= (is_sim G) false)
    (< Cmd_after Before)
    (> Cmd_before After)
