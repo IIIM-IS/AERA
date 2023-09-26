@@ -595,7 +595,7 @@ void CSTController::abduce_simulated(HLPBindingMap *bm, Fact *f_super_goal) {
   Goal *g = f_super_goal->get_goal();
   _Fact *super_goal_target = g->get_target();
   Fact* remade_f_icst = get_f_ihlp(bm, false);
-  BOOLEAN analogy;
+  BOOLEAN analogy = TRUE;
 
   for (auto o = overlays_.begin(); o != overlays_.end(); ++o) {
     if (((CSTOverlay*)(*o))->is_simulated())
