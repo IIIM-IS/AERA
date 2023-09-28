@@ -118,7 +118,7 @@ m_drive2:(mdl [] []
 [stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 
-pgm_babbleA_0:(pgm [] []
+pgm_babbleA_1:(pgm [] []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
 []
@@ -135,11 +135,11 @@ pgm_babbleA_0:(pgm [] []
    )
    (prb [1 "print" "injected (cmd move [h (vec3 2 0 0)])" []])
 1) |[]
-(ipgm pgm_babbleA_0 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_babbleA_1 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
 
-pgm_babbleA_1:(pgm [] []
+pgm_babbleA_2:(pgm [] []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
 []
@@ -156,10 +156,10 @@ pgm_babbleA_1:(pgm [] []
    )
    (prb [1 "print" "injected (cmd move [h (vec3 3 0 0)])" []])
 1) |[]
-(ipgm pgm_babbleA_1 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_babbleA_2 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-pgm_babbleA_2:(pgm [] []
+pgm_babbleA_3:(pgm [] []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
 []
@@ -176,10 +176,10 @@ pgm_babbleA_2:(pgm [] []
    )
    (prb [1 "print" "injected (cmd grab_type1 [h])" []])
 1) |[]
-(ipgm pgm_babbleA_2 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_babbleA_3 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-pgm_babbleA_3:(pgm [] []
+pgm_babbleA_4:(pgm [] []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
 []
@@ -196,10 +196,10 @@ pgm_babbleA_3:(pgm [] []
    )
    (prb [1 "print" "injected (cmd release [h])" []])
 1) |[]
-(ipgm pgm_babbleA_3 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_babbleA_4 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-pgm_babbleA_4:(pgm [] []
+pgm_babbleA_5:(pgm [] []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
 []
@@ -216,14 +216,14 @@ pgm_babbleA_4:(pgm [] []
    )
    (prb [1 "print" "injected (cmd move [h (vec3 5 0 0)])" []])
 1) |[]
-(ipgm pgm_babbleA_4 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_babbleA_5 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
 pgm_inject_drive_pass1:(pgm [] []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
 []
-   (= After (+ this.vw.ijt 600ms))
+   (>= After (+ this.vw.ijt 600ms))
 []
    ; The end of the time interval will be used in m_drive as the end of the goal interval.
    (inj [F_run:(fact run After (+ Before 600ms) 1 1) []])
@@ -235,10 +235,10 @@ pgm_inject_drive_pass1:(pgm [] []
    )
    (prb [1 "print" "injected drive" []])
 1) |[]
-(ipgm pgm_inject_drive_pass1 [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_inject_drive_pass1 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-pgm_babbleA_6:(pgm [] []
+pgm_babbleA_7:(pgm [] []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
 []
@@ -255,10 +255,10 @@ pgm_babbleA_6:(pgm [] []
    )
    (prb [1 "print" "injected (cmd move [h (vec3 -5 0 0)])" []])
 1) |[]
-(ipgm pgm_babbleA_6 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_babbleA_7 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-pgm_babbleA_7:(pgm [] []
+pgm_babbleA_8:(pgm [] []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
 []
@@ -275,10 +275,10 @@ pgm_babbleA_7:(pgm [] []
    )
    (prb [1 "print" "injected (cmd grab_type1 [h])" []])
 1) |[]
-(ipgm pgm_babbleA_7 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_babbleA_8 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-pgm_babbleA_8:(pgm [] []
+pgm_babbleA_9:(pgm [] []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
 []
@@ -295,10 +295,10 @@ pgm_babbleA_8:(pgm [] []
    )
    (prb [1 "print" "injected (cmd release [h])" []])
 1) |[]
-(ipgm pgm_babbleA_8 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_babbleA_9 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-pgm_babbleA_9:(pgm [] []
+pgm_babbleA_10:(pgm [] []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
 []
@@ -315,10 +315,10 @@ pgm_babbleA_9:(pgm [] []
    )
    (prb [1 "print" "injected (cmd grab_type1 [h])" []])
 1) |[]
-(ipgm pgm_babbleA_9 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_babbleA_10 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-pgm_babbleA_10:(pgm [] []
+pgm_babbleA_11:(pgm [] []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
 []
@@ -335,10 +335,10 @@ pgm_babbleA_10:(pgm [] []
    )
    (prb [1 "print" "injected (cmd release [h])" []])
 1) |[]
-(ipgm pgm_babbleA_10 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_babbleA_11 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-pgm_babbleA_11:(pgm [] []
+pgm_babbleA_12:(pgm [] []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
 []
@@ -355,10 +355,10 @@ pgm_babbleA_11:(pgm [] []
    )
    (prb [1 "print" "injected (cmd move [h (vec3 5 0 0)])" []])
 1) |[]
-(ipgm pgm_babbleA_11 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_babbleA_12 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-pgm_babbleA_12:(pgm [] []
+pgm_babbleA_13:(pgm [] []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
 []
@@ -375,10 +375,10 @@ pgm_babbleA_12:(pgm [] []
    )
    (prb [1 "print" "injected (cmd mgrab_type2 [h])" []])
 1) |[]
-(ipgm pgm_babbleA_12 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_babbleA_13 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-pgm_babbleA_13:(pgm [] []
+pgm_babbleA_14:(pgm [] []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
 []
@@ -395,10 +395,10 @@ pgm_babbleA_13:(pgm [] []
    )
    (prb [1 "print" "injected (cmd release [h])" []])
 1) |[]
-(ipgm pgm_babbleA_13 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_babbleA_14 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-pgm_babbleA_14:(pgm [] []
+pgm_babbleA_15:(pgm [] []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
 []
@@ -415,7 +415,7 @@ pgm_babbleA_14:(pgm [] []
    )
    (prb [1 "print" "injected (cmd move [h (vec3 5 0 0)])" []])
 1) |[]
-(ipgm pgm_babbleA_14 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+(ipgm pgm_babbleA_15 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
 
@@ -423,7 +423,7 @@ pgm_inject_drive_pass2:(pgm [] []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
 []
-   (= After (+ this.vw.ijt 1600ms))
+   (>= After (+ this.vw.ijt 1600ms))
 []
    ; The end of the time interval will be used in m_drive as the end of the goal interval.
    (inj [F_run:(fact run2 After (+ Before 600ms) 1 1) []])
