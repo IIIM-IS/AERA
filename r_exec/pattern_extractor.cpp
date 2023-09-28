@@ -643,9 +643,9 @@ void GTPX::reduce(r_exec::View *input) { // input->object: f->success.
       continue;
     }
 
+    period = duration_cast<microseconds>(consequent->get_after() - cause.input_->get_after());
     guard_builder = new TimingGuardBuilder(period);// TODO: use the durations.
 
-    period = duration_cast<microseconds>(consequent->get_after() - cause.input_->get_after());
     lhs_duration = duration_cast<microseconds>(cause.input_->get_before() - cause.input_->get_after());
     rhs_duration = duration_cast<microseconds>(consequent->get_before() - consequent->get_after());
 
