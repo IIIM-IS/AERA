@@ -539,6 +539,7 @@ DiagnosticTimeState::DiagnosticTimeState(_Mem* mem, milliseconds run_time)
     reduction_job_queue_index_(0) {
   tick_time_ = Now();
   mem_->on_diagnostic_time_tick();
+  need_diagnostic_time_tick_ = false;
   end_time_ = Now() + run_time_;
   pass_number_ = 1;
 }
@@ -621,15 +622,24 @@ bool DiagnosticTimeState::step() {
     return false;
 
   // The entry at the front is the earliest.
-  if (ordered_time_job_queue_.size() == 0 ||
-    ordered_time_job_queue_.front()->target_time_ >=
-      tick_time_ + mem_->get_sampling_period()) {
+  if (!need_diagnostic_time_tick_ &&
+      (ordered_time_job_queue_.size() == 0 ||
+       ordered_time_job_queue_.front()->target_time_ >=
+       tick_time_ + mem_->get_sampling_period())) {
     // There is no time job before the next tick time, so tick.
     tick_time_ += mem_->get_sampling_period();
     // Increase the diagnostic time to the tick time.
     _Mem::diagnostic_time_now_ = tick_time_;
     // We are beginning a new sampling period.
     n_reduction_jobs_this_sampling_period_ = 0;
+    need_diagnostic_time_tick_ = true;
+  }
+
+  // Call on_diagnostic_time_tick() only if there are no time jobs to run now.
+  if (need_diagnostic_time_tick_ &&
+      !(ordered_time_job_queue_.size() > 0 &&
+        ordered_time_job_queue_.front()->target_time_ <= tick_time_)) {
+    need_diagnostic_time_tick_ = false;
     mem_->on_diagnostic_time_tick();
 
     // Step again in case on_diagnostic_time_tick() added a reduction job,

@@ -927,6 +927,7 @@ private:
   Timestamp tick_time_;
   Timestamp end_time_;
   int pass_number_;
+  bool need_diagnostic_time_tick_;
 };
 
 
