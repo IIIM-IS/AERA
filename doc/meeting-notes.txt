@@ -1122,6 +1122,9 @@ DONE. Merge pull request to not register a failure for predicted anti-fact https
 * Webots
   * DONE. Merge pull request to move TCPConnection to AERA_Protobuf. https://github.com/IIIM-IS/AERA/pull/272 https://github.com/IIIM-IS/AERA_Webots/pull/12
 
+2023-09-29
+DONE. Fix Arash's analogy example in Webots. https://github.com/IIIM-IS/AERA/commit/ced50ed6a7d0b66ca4f5ba13d00d91f7e1779e15
+
 next meeting
 * hand-grab-sphere
   * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
@@ -1132,10 +1135,9 @@ next meeting
   * Update the original Webots controller. [Leonard]
   * Merge AERA_Webots ur-robot-demo into master.
   * Make Webots the TCP server. [Jeff]
-  * Put a tray at the goal position
   * Align Webots aera_us with AERA time.
-  * Get command efferent copy from Webots (move limit to +/- 20) [Maybe in the setup message or command reply. Need more discussion]
   * Try Webots streaming to the Visualizer [Chloe]
+  * Get command efferent copy from Webots (move limit to +/- 20) [Maybe in the setup message or command reply. Need more discussion]
 
 TODO
 * Change (success) to refer to the prediction mk.rdx instead of the prediction. (Affects other code.)
