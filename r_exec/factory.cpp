@@ -450,12 +450,13 @@ MatchResult _Fact::is_evidence(const _Fact *target) const {
 
     if (target->match_timings_overlap(this))
       return r;
-  } else if (target->code(0) == code(0)) { // check for a counter-evidence only if both the lhs and rhs are of the same kind of fact.
+  } else if (is_fact()) { // check for a counter-evidence only if the evidence is a fact.
 
     if (target->match_timings_inclusive(this)) { // check timings first as this is less expensive than the counter-evidence check.
 
       if (CounterEvidence(get_reference(0), target->get_reference(0)))
-        return MATCH_SUCCESS_NEGATIVE;
+        // If the target is an anti-fact, then counter-evidence is a positive success.
+        return target->is_anti_fact() ? MATCH_SUCCESS_POSITIVE : MATCH_SUCCESS_NEGATIVE;
     }
   }
   return MATCH_FAILURE;
