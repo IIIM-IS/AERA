@@ -1125,15 +1125,24 @@ DONE. Merge pull request to not register a failure for predicted anti-fact https
 2023-09-29
 DONE. Fix Arash's analogy example in Webots. https://github.com/IIIM-IS/AERA/commit/ced50ed6a7d0b66ca4f5ba13d00d91f7e1779e15
 
+2023-10-13
+* hand-grab-sphere
+  * Try to get GTPX to learn mdl_displace_hand by making it a goal to not be at a position and observe what achieves it.
+    * DONE. Merge pull request to fix is_evedence if the goal is an anti-fact https://github.com/IIIM-IS/AERA/pull/277
+* Webots
+  * DONE. Merge AERA_Webots ur-robot-demo into master.
+
 next meeting
+* Fix https://github.com/IIIM-IS/AERA_Visualizer/issues/53
+* Update feature matrix. Move to AERA README.
 * hand-grab-sphere
   * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
     * Still need to allow multiple strong requirements in retrieve_imdl.
   * Try to get GTPX to learn mdl_displace_hand by making it a goal to not be at a position and observe what achieves it.
+    * Try only assign DeltaP in a backward guard DeltaP:(vec3 -0.5 0 0) .
   * Represent sphere position without direct I/O input.
 * Webots
-  * Update the original Webots controller. [Leonard]
-  * Merge AERA_Webots ur-robot-demo into master.
+  * Update hand_grab_sphere_NED_1D_controller. [Leonard]
   * Make Webots the TCP server. [Jeff]
   * Align Webots aera_us with AERA time.
   * Try Webots streaming to the Visualizer [Chloe]
