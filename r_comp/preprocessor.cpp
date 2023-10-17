@@ -821,6 +821,11 @@ bool RepliStruct::isFileLoaded(const std::string& file_path) {
 
 std::string RepliStruct::print() const {
 
+#if 1 // Just use a stringstream.
+  ostringstream out;
+  out << *this;
+  return out.str();
+#else
   std::string str;
   switch (type_) {
   case Atom:
@@ -853,6 +858,7 @@ std::string RepliStruct::print() const {
     break;
   }
   return str;
+#endif
 }
 
 std::ostream &operator<<(std::ostream &os, RepliStruct *structure) {
