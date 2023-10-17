@@ -42,8 +42,8 @@ cyl_is_a_hand:(mk.val cyl essence hand 1) |[]
 (|fact cyl_is_a_hand 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 
 s:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
-s_is_a_cylinder:(mk.val s essence sphere 1) |[]
-(fact s_is_a_cylinder 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+s_is_a_sphere:(mk.val s essence sphere 1) |[]
+(fact s_is_a_sphere 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 s_is_large:(mk.val s size large 1) |[]
 (fact s_is_large 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 s_is_a_hand:(mk.val s essence hand 1) |[]
@@ -235,7 +235,7 @@ pgm_babbleA_6:(pgm [] []
 []
    (>= After (+ this.vw.ijt 600ms))
 []
-   ; Release the cube 2 to learn the release model and the "holding" cst.
+   ; Release the cube 1 to learn the release model and the "holding" cst.
    (inj [Command:(cmd release [h] 1) []])
    (inj [F_Command:(fact Command After Before 1 1) []])
    (inj [G:(goal F_Command self nil 1) []])
@@ -257,7 +257,7 @@ pgm_inject_drive_pass1:(pgm [] []
    (<= After (+ this.vw.ijt 800ms))
 []
    ; The end of the time interval will be used in m_drive as the end of the goal interval.
-   (inj [F_run:(fact run After (+ Before 600ms) 1 1) []])
+   (inj [F_run:(fact run After (+ Before 300ms) 1 1) []])
    (inj [G:(goal F_run self nil 1) []])
    (inj []
       ; Delay a little to allow predictions for this sampling period before injecting the drive.
@@ -276,7 +276,7 @@ pgm_inject_drive_pass2:(pgm [] []
    (>= After (+ this.vw.ijt 900ms))
 []
    ; The end of the time interval will be used in m_drive as the end of the goal interval.
-   (inj [F_run:(fact run2 After (+ Before 600ms) 1 1) []])
+   (inj [F_run:(fact run2 After (+ Before 300ms) 1 1) []])
    (inj [G:(goal F_run self nil 1) []])
    (inj []
       ; Delay a little to allow predictions for this sampling period before injecting the drive.
@@ -288,36 +288,15 @@ pgm_inject_drive_pass2:(pgm [] []
 (ipgm pgm_inject_drive_pass2 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
 
-;;;;;; This babbling command makes the hand empty
-;pgm_babbleA_9:(pgm [] []
-;   ; This fact repeats periodically. We use it as a "heartbeat".
-;   (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
-;[]
-;   (>= After (+ this.vw.ijt 900ms))
-;[]
-;   ; Release the cube 2 to learn the release model and the "holding" cst.
-;   (inj [Command:(cmd release [h] 1) []])
-;   (inj [F_Command:(fact Command After Before 1 1) []])
-;   (inj [G:(goal F_Command self nil 1) []])
-;   (inj []
-;      ; Delay a little to allow predictions for this sampling period before processing.
-;      (fact G T0:(+ After 10ms) T0 1 1)
-;      [SYNC_ONCE T0 1 forever primary nil]
-;   )
-;   (prb [1 "print" "injected (cmd release [h])" []])
-;1) |[]
-;(ipgm pgm_babbleA_9 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
-;   [SYNC_ONCE now 0 forever primary nil 1]
-
 pgm_inject_drive_pass3:(pgm [] []
    ; This fact repeats periodically. We use it as a "heartbeat".
    (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
 []
    (>= After (+ this.vw.ijt 1000ms))
-   (<= After (+ this.vw.ijt 1200ms))
+   (<= After (+ this.vw.ijt 1100ms))
 []
    ; The end of the time interval will be used in m_drive as the end of the goal interval.
-   (inj [F_run:(fact run3 After (+ Before 600ms) 1 1) []])
+   (inj [F_run:(fact run3 After (+ Before 300ms) 1 1) []])
    (inj [G:(goal F_run self nil 1) []])
    (inj []
       ; Delay a little to allow predictions for this sampling period before injecting the drive.
@@ -328,7 +307,6 @@ pgm_inject_drive_pass3:(pgm [] []
 1) |[]
 (ipgm pgm_inject_drive_pass3 [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever primary nil 1]
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -381,6 +359,30 @@ pgm_cmd_release_h:(pgm [] []
    (prb [1 "print" "pgm_cmd_release_h from command:" [Command]])
 1) |[]
 (ipgm pgm_cmd_release_h [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever emulator nil 1]
+
+pgm_cmd_release_h_not_holding:(pgm [] []
+   (ptn (fact G:(goal (fact Command:(cmd release [h] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Pos_c1: Pos_c2: Pos_cyl: Pos_s:] :) After: Before: ::) [])
+[]
+   (= (is_sim G) false)
+   (< Cmd_after Before)
+   (> Cmd_before After)
+[]
+   ; Inject the fact that the command was executed.
+   (inj []
+      (fact Command (+ After 20ms) Before 1 1)
+      [SYNC_ONCE After 1 1 stdin nil]
+   )
+   ; h is still not holding.
+   (inj [Next_state:(mk.val e1 emulator_state [nil Pos_h Pos_c1 Pos_c2 Pos_cyl Pos_s] 1) []])
+   (inj []
+      (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
+   )
+   (prb [1 "print" "pgm_cmd_release_h_not_holding from command:" [Command]])
+1) |[]
+(ipgm pgm_cmd_release_h_not_holding [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
    [SYNC_ONCE now 0 forever emulator nil 1]
 
 pgm_cmd_grab_h_c1:(pgm [] []
