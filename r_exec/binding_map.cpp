@@ -874,6 +874,10 @@ void BindingMap::bind_variable(Atom *code, uint8 id, uint16 value_index, Atom *i
   if (v_atom.isFloat())
     bind_variable(new AtomValue(this, v_atom), id);
   else switch (v_atom.getDescriptor()) {
+  case Atom::OBJECT:
+    // Assume this is an object literal like (vec3 -0.5 0 0).
+    bind_variable(new StructureValue(this, code, value_index), id);
+    break;
   case Atom::VALUE_PTR:
     bind_variable(new StructureValue(this, intermediate_results, v_atom.asIndex()), id);
     break;
