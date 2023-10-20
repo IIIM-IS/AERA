@@ -188,7 +188,8 @@ inline View *AutoFocusController::inject_input(View *input) {
       if (i == 0) {
 
         primary_view = view;
-        if (ctpx_on_)
+        // Don't use CTPX to model changes in anti-facts.
+        if (ctpx_on_ && input_fact->is_fact())
           // Set time_to_live to 2 frame periods so that PASTController stays valid during the whole frame when CTPX may build models.
           _Mem::Get()->inject_null_program(new PASTController(this, view), output_group, 2 * output_group->get_upr()*Utils::GetBasePeriod(), true);
       }
