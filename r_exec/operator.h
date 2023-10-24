@@ -241,6 +241,7 @@ bool fvw(const Context &context); // executive-dependent.
 bool is_sim(const Context &context);
 bool minimum(const Context &context);
 bool maximum(const Context &context);
+bool id(const Context& context);
 }
 
 

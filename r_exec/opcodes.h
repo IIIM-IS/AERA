@@ -151,6 +151,7 @@ public:
   static uint16 MkActChg;
 
   static uint16 Sim;
+  static uint16 Id;
 
   static uint16 Inject;
   static uint16 Eject;

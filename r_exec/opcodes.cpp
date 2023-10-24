@@ -141,6 +141,7 @@ uint16 Opcodes::MkSlnChg;
 uint16 Opcodes::MkActChg;
 
 uint16 Opcodes::Sim;
+uint16 Opcodes::Id;
 
 uint16 Opcodes::Inject;
 uint16 Opcodes::Eject;
