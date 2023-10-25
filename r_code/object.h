@@ -251,7 +251,6 @@ public:
   virtual uint16 code_size() const = 0;
   virtual void resize_code(uint16 new_size) = 0;
   bool includes(Atom a) const {
-    // NOTE: If the this contains a string literal where a char looks like a VL_PTR, this won't work.
     for (uint16 i = 0; i < code_size(); ++i) {
       if (code(i) == a)
         return true;
