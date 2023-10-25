@@ -1008,6 +1008,7 @@ void HLPBindingMap::init_from_hlp(const Code* hlp, const Code* packed_hlp) { // 
       bwd_after_index_, bwd_before_index_);
 
   // Use the packed hlp without recursion which has exactly the vars we need for the binding map.
+  // NOTE: If the hlp contains a string literal where a char looks like a VL_PTR, this won't work.
   for (uint16 i = 1; i < packed_hlp->code_size(); ++i) {
     Atom s = packed_hlp->code(i);
     if (s.getDescriptor() == Atom::VL_PTR)
