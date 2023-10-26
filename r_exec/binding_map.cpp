@@ -1162,6 +1162,28 @@ Fact *HLPBindingMap::build_f_ihlp(Code *hlp, uint16 opcode, bool wr_enabled) con
   return f_ihlp;
 }
 
+int16 HLPBindingMap::get_ihlp_exposed_args_position(int16 index) const {
+  // Use the same logic as build_f_ihlp.
+  uint16 exposed_arg_start = first_index_;
+  if (index == fwd_after_index_ || index == fwd_before_index_ ||
+      index < exposed_arg_start || index >= map_.size())
+    return -1;
+
+  uint16 exposed_arg_count = map_.size() - exposed_arg_start - 2; // -2: do not expose the first after/before timestamps.
+  uint16 position = 0;
+  for (uint16 i = exposed_arg_start; i < map_.size(); ++i) {
+    if (i == fwd_after_index_ || i == fwd_before_index_)
+      continue;
+
+    if (i == index)
+      return position;
+    ++position;
+  }
+
+  return -1;
+}
+
+
 Code *HLPBindingMap::bind_pattern(Code *pattern) const {
 
   if (!need_binding(pattern))

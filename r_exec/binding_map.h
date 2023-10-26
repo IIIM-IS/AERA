@@ -455,6 +455,15 @@ public:
   Fact *build_f_ihlp(r_code::Code *hlp, uint16 opcode, bool wr_enabled) const; // return f->ihlp.
   r_code::Code *bind_pattern(r_code::Code *pattern) const;
 
+  /**
+   * Assume that the variable index is the same index that would be bound in build_f_ihlp. Find the
+   * position of this variable in the ihlp exposed args. This uses the same logic as build_f_ihlp to
+   * skip variable indexes that are for the "after" and "before" timing variables.
+   * \param The index in the binding map.
+   * \return The position in the exposed args (starting from 0), or -1 if index is not in the exposed args.
+   */
+  int16 get_ihlp_exposed_args_position(int16 index) const;
+
   void reset_bwd_timings(_Fact *reference_fact); // idem for the last 2 unbound variables (i.e. timings of the second pattern in a mdl).
 
   MatchResult match_bwd_lenient(const _Fact *f_object, const _Fact *f_pattern); // use for facts when we are lenient about fact vs |fact.
