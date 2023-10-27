@@ -1136,18 +1136,25 @@ DONE. Fix Arash's analogy example in Webots. https://github.com/IIIM-IS/AERA/com
 * DONE. Fix https://github.com/IIIM-IS/AERA_Visualizer/issues/53
 * hand-grab-sphere
   * Try to get GTPX to learn mdl_displace_hand by making it a goal to not be at a position and observe what achieves it.
-    * DONE. Make pull request to not use CTPX for anti-facts. https://github.com/IIIM-IS/AERA/pull/278
-    * DONE. Make pull request to allow assignment guards to bind an object literal https://github.com/IIIM-IS/AERA/pull/279
+    * DONE. Merge pull request to not use CTPX for anti-facts. https://github.com/IIIM-IS/AERA/pull/278
+    * DONE. Merge pull request to allow assignment guards to bind an object literal https://github.com/IIIM-IS/AERA/pull/279
+
+2023-10-27
+* DONE. Merge pull request to support the identity function (id X). https://github.com/IIIM-IS/AERA/pull/280
+* hand-grab-sphere
+  * Try to get GTPX to learn mdl_displace_hand by making it a goal to not be at a position and observe what achieves it.
+    * DONE. Try only assign DeltaP in a backward guard DeltaP:(vec3 -0.5 0 0) .
+    * DONE. Merge pull request for CTPX to check if the RHS has a free variable. https://github.com/IIIM-IS/AERA/pull/281
 
 next meeting
 * Will a drive goal be marked as failed if simulation doesn't commit to a command?
 * Does the prediction monitor check if the same prediction was already made?
-* Support the identity function (id X)
 * hand-grab-sphere
   * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
     * Still need to allow multiple strong requirements in retrieve_imdl.
   * Try to get GTPX to learn mdl_displace_hand by making it a goal to not be at a position and observe what achieves it.
-    * Try only assign DeltaP in a backward guard DeltaP:(vec3 -0.5 0 0) .
+    * Fix GTPX new cst which is overly-specific.
+    * Make guard builder for GTPX.
   * Represent sphere position without direct I/O input.
 * Webots
   * Update hand_grab_sphere_NED_1D_controller. [Leonard]
