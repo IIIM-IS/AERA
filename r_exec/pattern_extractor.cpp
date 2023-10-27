@@ -1328,6 +1328,28 @@ bool CTPX::build_requirement(HLPBindingMap *bm, Code *m0, microseconds period) {
   guard_builder->build(m1, premise_pattern, NULL, write_index);
   build_mdl_tail(m1, write_index);
 
+  // Search m0 RHS for variables and check if the variable is mentioned elsewhere.
+  Code* rhs_object = m0->get_reference(1)->get_reference(0);
+  for (uint16 i = 0; i < rhs_object->code_size(); ++i) {
+    Atom v = rhs_object->code(i);
+    if (v.getDescriptor() == Atom::VL_PTR) {
+      // Check the LHS of m0 and the rest of the m0.
+      if (!(m0->get_reference(0)->get_reference(0)->includes(v) || m0->includes(v))) {
+        // Find the corresponding position of v in m1 RHS exposed args.
+        int16 exposed_args_position = bm->get_ihlp_exposed_args_position(v.asIndex());
+        if (exposed_args_position >= 0) {
+          Code* m1_rhs_object = m1->get_reference(1)->get_reference(0);
+          uint16 i_exposed_args = m1_rhs_object->code(I_HLP_EXPOSED_ARGS).asIndex();
+          Atom m1_rhs_var = m1_rhs_object->code(i_exposed_args + 1 + exposed_args_position);
+          // Check the LHS of m1.
+          if (!m1->get_reference(0)->get_reference(0)->includes(m1_rhs_var))
+            // v is a free variable. Don't make a model where the RHS has a free variable.
+            return false;
+        }
+      }
+    }
+  }
+
   Code *_m0;
   Code *_m1;
   ModelBase::Get()->check_existence(m0, m1, _m0, _m1);
