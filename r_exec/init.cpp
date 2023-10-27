@@ -423,6 +423,7 @@ bool InitOpcodes(const r_comp::Metadata& metadata) {
   Opcodes::MkActChg = _Opcodes.find("mk.act_chg")->second;
 
   Opcodes::Sim = _Opcodes.find("sim")->second;
+  Opcodes::Id = _Opcodes.find("id")->second;
 
   // load executive function Opcodes.
   Opcodes::Inject = _Opcodes.find("_inj")->second;
@@ -471,6 +472,7 @@ bool InitOpcodes(const r_comp::Metadata& metadata) {
   Operator::Register(operator_opcode++, is_sim);
   Operator::Register(operator_opcode++, minimum);
   Operator::Register(operator_opcode++, maximum);
+  Operator::Register(operator_opcode++, id);
 
   return true;
 }

@@ -897,4 +897,18 @@ bool maximum(const Context &context) {
   return false;
 }
 
+bool id(const Context& context) {
+  Context arg = *context.get_child(1);
+
+  if (arg[0].isFloat()) {
+
+    context.setAtomicResult(Atom::Float(arg[0].asFloat()));
+    return true;
+  }
+  // TODO: Support copying a structured object (with possible nested structures).
+
+  context.setAtomicResult(Atom::Nil());
+  return false;
+}
+
 }
