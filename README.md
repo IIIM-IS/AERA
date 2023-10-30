@@ -13,7 +13,7 @@ See the file [CHANGELOG.md](https://github.com/IIIM-IS/AERA/blob/master/CHANGELO
 
 For code documentation, see https://iiim-is.github.io/AERA .
 
-## code structure
+## Code structure
 The main program execution for the example happens in AERA/main.cpp
 - `main()` // loads the `settings.xml` and the seed image, starts up `r_exec/mem.cpp` and then waits for run_time and ends by saving the results to disk to `decompiled.txt`
 - `r_exec/mem.cpp` starts up the `runReductionCore` and the `runTimeCore` threads which do the magic
@@ -22,7 +22,6 @@ The main program execution for the example happens in AERA/main.cpp
 - The commands (`cmd`) activated in the replicode scripts would be activated through `r_exec/mem.cpp::eject(Code *command)`, see https://github.com/IIIM-IS/Integration_OpenAI for actual device commands
 
 ## Gotchas
-
 This is a list of unintuitive issues with using AERA, to help new users.
 
 * Only the `AERA/replicode_v1.2` examples really function due to syntax changes.
@@ -67,3 +66,46 @@ This is a list of unintuitive issues with using AERA, to help new users.
   - (/ us nb) -> us
   - (/ us us) -> nb
   - (/ nb ts) or (/ ts nb) or (/ us ts) or (/ ts us) or (/ ts ts) not allowed
+
+### Implementation status
+Demo = demonstrated functionality. Vis = explanation in Visualizer. Comm = code commented. Doc = details in software design document
+
+| Demo | Vis | Comm | Doc | Functionality
+|:----:|:---:|:----:|:---:| -------------
+|      |     |      |     | **_Facts / Success_**
+| ✓    |     |      |     | Learn models in change targeted pattern extractor (CTPX)
+|      |     |      |     | Learn models in goal targeted pattern extractor (GTPX) due to unexpected goal achievement
+| ✓    | ✓   |      |     | Non-simulated icst from facts/icsts
+| ✓    | ✓   |      |     | Non-simulated prediction of imdl from weak requirement model
+| ✓    |     |      |     | Rating of weak requirement models
+| ✓    | ✓   |      |     | Testing and re-activation of models and weak requirement models in the secondary group
+| ✓    |     |      |     | Use of deleted models to prevent re-creating them
+| ✓    | ✓   |      |     | Non-simulated prediction of fact from model
+| ✓    |     |      |     | Non-simulated cmd from non-simulated goal RHS
+|      |     |      |     | Auto-focus based on active predictions and goals (not pass-through)
+| ✓    |     |      |     | Views/groups and saliency propagation
+| ✓    |     |      |     | Simulated prediction of icst from facts/icsts
+| ✓    |     |      |     | Simulated prediction of imdl from weak requirement model
+| ✓    |     |      |     | Simulated prediction of fact from model
+| ✓    |     |      |     | Simulated goal from drive
+| ✓    |     |      |     | Simulated goal cmd from model
+| ✓    |     |      |     | Simulated goal requirement imdl from model
+| ✓    |     |      |     | Simulated goal icst from requirement model
+| ✓    |     |      |     | Simulated goal facts/icsts from icst
+| ✓    |     |      |     | Commiting to optional solutions
+|      |     |      |     | **_Anti-facts / Failure_**
+| ✓    |     |      |     | Learn strong requirement models (predicted anti-imdl) in prediction targeted pattern extractor (PTPX) due to prediction failure
+|      |     |      |     | Non-simulated prediction of anti-fact from model (Is such a prediction tested?)
+| ✓    |     |      |     | Non-simulated prediction of anti-imdl from strong requirement model (to prevent model prediction)
+| ✓    |     |      |     | Rating of strong requirement models
+|      |     |      |     | Testing and re-activation of strong requirement models in the secondary group
+|      |     |      |     | Goal actions to test conflicting weak and strong requirements
+|      |     |      |     | Simulated anti-goal from opposite match of drive (and starting of new simulation from anti-goal)
+| ✓    |     |      |     | Simulated prediction of anti-imdl from strong requirement model (to prevent model prediction)
+|      |     |      |     | Simulated prediction of anti-fact from model (how does this make the simulation proceed?)
+|      |     |      |     | Conflict resolution of conflicting predictions (fact and anti-fact)
+|      |     |      |     | Simulated anti-goal of cmd from model with anti-matched RHS
+|      |     |      |     | Simulated anti-goal requirement imdl from model with anti-matched RHS
+|      |     |      |     | Simulated anti-goal icst from requirement model with anti-matched RHS
+|      |     |      |     | Simulated anti-goal facts/icsts from anti-fact icst
+| ✓    |     |      |     | Commiting to mandatory solutions
