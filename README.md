@@ -74,7 +74,7 @@ Demo = demonstrated functionality. Vis = explanation in Visualizer. Comm = code 
 |:----:|:---:|:----:|:---:| -------------
 |      |     |      |     | **_Facts / Success_**
 | ✓    |     |      |     | Learn models in change targeted pattern extractor (CTPX)
-|      |     |      |     | Learn models in goal targeted pattern extractor (GTPX) due to unexpected goal achievement
+|      |     |      |     | Learn models in goal targeted pattern extractor (GTPX) due to unexpected achievement of goal fact
 | ✓    | ✓   |      |     | Non-simulated icst from facts/icsts
 | ✓    | ✓   |      |     | Non-simulated prediction of imdl from weak requirement model
 | ✓    |     |      |     | Rating of weak requirement models
@@ -95,7 +95,8 @@ Demo = demonstrated functionality. Vis = explanation in Visualizer. Comm = code 
 | ✓    |     |      |     | Commiting to optional solutions
 |      |     |      |     | **_Anti-facts / Failure_**
 | ✓    |     |      |     | Learn strong requirement models (predicted anti-imdl) in prediction targeted pattern extractor (PTPX) due to prediction failure
-|      |     |      |     | Non-simulated prediction of anti-fact from model (Is such a prediction tested?)
+| ✓    |     |      |     | Learn models in goal targeted pattern extractor (GTPX) due to unexpected achievement of goal anti-fact
+| ✓    |     |      |     | Non-simulated prediction of anti-fact from model
 | ✓    |     |      |     | Non-simulated prediction of anti-imdl from strong requirement model (to prevent model prediction)
 | ✓    |     |      |     | Rating of strong requirement models
 |      |     |      |     | Testing and re-activation of strong requirement models in the secondary group
