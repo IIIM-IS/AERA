@@ -103,7 +103,7 @@ Demo = demonstrated functionality. Vis = explanation in Visualizer. Comm = code 
 |      |     |      |     | Goal actions to test conflicting weak and strong requirements
 |      |     |      |     | Simulated anti-goal from opposite match of drive (and starting of new simulation from anti-goal)
 | ✓    |     |      |     | Simulated prediction of anti-imdl from strong requirement model (to prevent model prediction)
-|      |     |      |     | Simulated prediction of anti-fact from model (how does this make the simulation proceed?)
+| ✓    |     |      |     | Simulated prediction of anti-fact from model
 |      |     |      |     | Conflict resolution of conflicting predictions (fact and anti-fact)
 |      |     |      |     | Simulated anti-goal of cmd from model with anti-matched RHS
 |      |     |      |     | Simulated anti-goal requirement imdl from model with anti-matched RHS
