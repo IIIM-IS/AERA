@@ -375,8 +375,6 @@ _Fact *_TPX::make_f_icst(_Fact *component, _Fact*& component_pattern, P<Code> &n
 
 Code *_TPX::build_cst(const vector<Component> &components, BindingMap *bm, _Fact *main_component) {
 
-  _Fact *abstracted_component = (_Fact *)bm->abstract_object(main_component, false);
-
   Code *cst = _Mem::Get()->build_object(Atom::CompositeState(Opcodes::Cst, CST_ARITY));
 
   uint16 actual_component_count = 0;
@@ -385,7 +383,7 @@ Code *_TPX::build_cst(const vector<Component> &components, BindingMap *bm, _Fact
     if (components[i].discarded)
       continue;
     if (components[i].object == main_component) {
-      cst->add_reference(abstracted_component);
+      cst->add_reference(bm->abstract_object(main_component, false));
       ++actual_component_count;
       break;
     }
