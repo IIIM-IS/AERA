@@ -94,7 +94,8 @@ Demo = demonstrated functionality. Vis = explanation in Visualizer. Comm = code 
 | ✓    |     |      |     | Simulated goal facts/icsts from icst
 | ✓    |     |      |     | Commiting to optional solutions
 |      |     |      |     | **_Anti-facts / Failure_**
-| ✓    |     |      |     | Learn strong requirement models (predicted anti-imdl) in prediction targeted pattern extractor (PTPX) due to prediction failure
+| ✓    |     |      |     | Learn strong requirement models (predicted anti-imdl) in prediction targeted pattern extractor (PTPX) due to failed prediction of a fact
+|      |     |      |     | Learn strong requirement models (predicted anti-imdl) in prediction targeted pattern extractor (PTPX) due to failed prediction of an anti-fact
 | ✓    |     |      |     | Learn models in goal targeted pattern extractor (GTPX) due to unexpected achievement of goal anti-fact
 | ✓    |     |      |     | Non-simulated prediction of anti-fact from model
 | ✓    |     |      |     | Non-simulated prediction of anti-imdl from strong requirement model (to prevent model prediction)
