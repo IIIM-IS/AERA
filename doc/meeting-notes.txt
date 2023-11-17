@@ -1153,18 +1153,26 @@ DONE. Fix Arash's analogy example in Webots. https://github.com/IIIM-IS/AERA/com
 * DONE. Check if a drive goal is marked as failed if simulation doesn't commit to a command.
   ANSWER: No, only when the drive goal expires and fails. "2s:100ms:0us fact 1724: 1178 goal failure (TopLevel)"
 
+2023-11-17
+* Webots
+  * DONE. Update hand_grab_sphere_NED_1D_controller. [Leonard]
+* hand-grab-sphere
+  * Try to get GTPX to learn mdl_displace_hand by making it a goal to not be at a position and observe what achieves it.
+    * DONE. Try generating more permutations of the cst and "experiment" to try weeding some out.
+      RESULT. Difficult. Try using a modification of the predicting model.
+
 next meeting
+* Cook up an argumention example showing multiple levels of competing goals.
 * hand-grab-sphere
   * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
     * Still need to allow multiple strong requirements in retrieve_imdl.
   * Try to get GTPX to learn mdl_displace_hand by making it a goal to not be at a position and observe what achieves it.
-    * Fix GTPX new cst to omit non-intersecting facts.
-    * Try generating more permutations of the cst and "experiment" to try weeding some out.
+    * Try using a modification of the predicting model.
+        (success f_prediction evidence) => (success (mk.rdx f_imdl [f_cmd requirement] [f_prediction]) evidence)
     * Try chain of groups with < 1 saliency where objects are moved as time passes. (Older items will cumulatively have lower saliency.)
     * Make guard builder for GTPX.
   * Represent sphere position without direct I/O input.
 * Webots
-  * Update hand_grab_sphere_NED_1D_controller. [Leonard]
   * Make Webots the TCP server. [Jeff]
   * Align Webots aera_us with AERA time.
   * Try Webots streaming to the Visualizer [Chloe]
