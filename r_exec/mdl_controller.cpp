@@ -1120,7 +1120,7 @@ bool MDLController::get_imdl_template_timings(
 MDLController::RequirementEntry::RequirementEntry() : PredictedEvidenceEntry(), controller_(NULL), chaining_was_allowed_(false) {
 }
 
-MDLController::RequirementEntry::RequirementEntry(_Fact *f_p_f_imdl, _Fact* input, MDLController *c, bool chaining_was_allowed) : PredictedEvidenceEntry(f_p_f_imdl), input_(input), controller_(c), chaining_was_allowed_(chaining_was_allowed) {
+MDLController::RequirementEntry::RequirementEntry(_Fact *f_p_f_imdl, MkRdx* mk_rdx, MDLController *c, bool chaining_was_allowed) : PredictedEvidenceEntry(f_p_f_imdl), mk_rdx_(mk_rdx), controller_(c), chaining_was_allowed_(chaining_was_allowed) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1252,7 +1252,7 @@ inline microseconds PMDLController::get_sim_thz(Timestamp now, Timestamp deadlin
 TopLevelMDLController::TopLevelMDLController(_View *view) : PMDLController(view) {
 }
 
-void TopLevelMDLController::store_requirement(_Fact *f_p_f_imdl, _Fact* input, MDLController *controller, bool chaining_was_allowed) {
+void TopLevelMDLController::store_requirement(_Fact *f_p_f_imdl, MkRdx* mk_rdx, MDLController *controller, bool chaining_was_allowed) {
 }
 
 void TopLevelMDLController::take_input(r_exec::View *input) {
@@ -1483,11 +1483,12 @@ void PrimaryMDLController::set_secondary(SecondaryMDLController *secondary) {
   secondary->add_requirement_to_rhs();
 }
 
-void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, _Fact* input, MDLController *controller, bool chaining_was_allowed) {
+void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MkRdx* mk_rdx, MDLController *controller, bool chaining_was_allowed) {
 
+  Code* input = mk_rdx->get_first_input();
   bool is_simulation = f_p_f_imdl->get_pred()->is_simulation();
   _Fact *f_imdl = f_p_f_imdl->get_pred()->get_target();
-  RequirementEntry e(f_p_f_imdl, input, controller, chaining_was_allowed);
+  RequirementEntry e(f_p_f_imdl, mk_rdx, controller, chaining_was_allowed);
 
   // Store the requirement before signaling the monitor so that its target will match the requirement.
   if (f_imdl->is_fact()) {
@@ -1629,12 +1630,12 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
       // Another thread has invalidated this controller which clears the controllers.
       return;
     // In the Pred constructor, we already copied the simulations from prediction.
-    Code* mk_rdx = new MkRdx(f_imdl, (Code *)input, production, 1, bm);
+    MkRdx* mk_rdx = new MkRdx(f_imdl, (Code *)input, production, 1, bm);
     inject_notification_into_out_groups(get_host(), mk_rdx);
     OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << get_object()->get_oid() << " predict imdl -> mk.rdx " << mk_rdx->get_oid());
 
     PrimaryMDLController *c = (PrimaryMDLController *)controllers_[RHSController]; // rhs controller: in the same view.
-    c->store_requirement(production, input, this, chaining_was_allowed); // if not simulation, stores also in the secondary controller.
+    c->store_requirement(production, mk_rdx, this, chaining_was_allowed); // if not simulation, stores also in the secondary controller.
 #ifdef WITH_DETAIL_OID
     OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " fact (" << f_imdl->get_detail_oid() << ") imdl mdl " << get_object()->get_oid() <<
       ": " << input->get_oid() << " -> fact (" << production->get_detail_oid() << ") pred fact (" <<
@@ -2801,7 +2802,7 @@ void SecondaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_im
   add_monitor(m);
 }
 
-void SecondaryMDLController::store_requirement(_Fact *f_p_f_imdl, _Fact* input, MDLController *controller, bool chaining_was_allowed) {
+void SecondaryMDLController::store_requirement(_Fact *f_p_f_imdl, MkRdx* mk_rdx, MDLController *controller, bool chaining_was_allowed) {
 
   RequirementEntry e(f_p_f_imdl, NULL, controller, chaining_was_allowed);
   if (((_Fact*)f_p_f_imdl->get_reference(0)->get_reference(0))->is_fact()) {

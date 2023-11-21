@@ -186,12 +186,13 @@ protected:
   class RequirementEntry : // use for requirements.
     public PredictedEvidenceEntry {
   public:
-    P<_Fact> input_;
+    // The reduction which made the requirement.
+    P<MkRdx> mk_rdx_;
     P<MDLController> controller_; // of the requirement.
     bool chaining_was_allowed_;
 
     RequirementEntry();
-    RequirementEntry(_Fact *f_p_f_imdl, _Fact* input, MDLController *c, bool chaining_was_allowed); // f_imdl is f0 as in f0->pred->f1->imdl.
+    RequirementEntry(_Fact *f_p_f_imdl, MkRdx* mk_rdx, MDLController *c, bool chaining_was_allowed); // f_imdl is f0 as in f0->pred->f1->imdl.
 
     bool is_out_of_range(Timestamp now) const { return (before_<now || after_>now); }
   };
@@ -288,7 +289,7 @@ public:
   /**
    * If f_p_f_imdl->get_pred()->is_simulation(), then this is for a simulation.
    */
-  virtual void store_requirement(_Fact *f_p_f_imdl, _Fact* input, MDLController *controller, bool chaining_was_allowed) = 0;
+  virtual void store_requirement(_Fact *f_p_f_imdl, MkRdx* mk_rdx, MDLController *controller, bool chaining_was_allowed) = 0;
   ChainingStatus retrieve_imdl_fwd(const HLPBindingMap *bm, Fact *f_imdl, RequirementsPair &r_p, std::vector<BindingResult>& results, MDLController *req_controller, bool &wr_enabled); // checks the requirement instances during fwd; r_p: all wrs in first, all srs in second.
   ChainingStatus retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl, Fact *&ground, Fact *&strong_requirement_ground); // checks the requirement instances during bwd; ground is set to the best weak requirement if chaining allowed, NULL otherwise.
   ChainingStatus retrieve_simulated_imdl_fwd(const HLPBindingMap *bm, Fact *f_imdl, Sim* sim, std::vector<BindingResult>& results);
@@ -391,7 +392,7 @@ public:
   void take_input(r_exec::View *input) override;
   void reduce(r_exec::View *input);
 
-  void store_requirement(_Fact *f_p_f_imdl, _Fact* input, MDLController *controller, bool chaining_was_allowed) override; // never called.
+  void store_requirement(_Fact *f_p_f_imdl, MkRdx* mk_rdx, MDLController *controller, bool chaining_was_allowed) override; // never called.
 
   void predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground,
     std::vector<P<_Fact> >& already_predicted) override;
@@ -465,7 +466,7 @@ public:
   void reduce(r_exec::View *input);
   void reduce_batch(Fact *f_p_f_imdl, MDLController *controller);
 
-  void store_requirement(_Fact *f_p_f_imdl, _Fact* input, MDLController *controller, bool chaining_was_allowed) override;
+  void store_requirement(_Fact *f_p_f_imdl, MkRdx* mk_rdx, MDLController *controller, bool chaining_was_allowed) override;
 
   void predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground,
     std::vector<P<_Fact> >& already_predicted) override;
@@ -541,7 +542,7 @@ public:
   void reduce(r_exec::View *input);
   void reduce_batch(Fact *f_p_f_imdl, MDLController *controller);
 
-  void store_requirement(_Fact *f_p_f_imdl, _Fact* input, MDLController *controller, bool chaining_was_allowed) override;
+  void store_requirement(_Fact *f_p_f_imdl, MkRdx* mk_rdx, MDLController *controller, bool chaining_was_allowed) override;
 
   void predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground,
     std::vector<P<_Fact> >& already_predicted) override;
