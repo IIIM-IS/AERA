@@ -571,6 +571,14 @@ public:
   MkRdx(r_code::Code *imdl_fact, r_code::Code *input, r_code::Code *output, float32 psln_thr, BindingMap *binding_map); // for mdl.
   MkRdx(r_code::Code *imdl_fact, r_code::Code *input1, r_code::Code *input2, r_code::Code *output, float32 psln_thr, BindingMap *binding_map); // for mdl.
 
+  r_code::Code* get_first_input() {
+    return get_reference(code(code(MK_RDX_INPUTS).asIndex() + 1).asIndex());
+  }
+
+  r_code::Code* get_first_production() {
+    return get_reference(code(code(MK_RDX_PRODS).asIndex() + 1).asIndex());
+  }
+
   P<BindingMap> bindings_; // NULL when produced by programs.
 };
 
