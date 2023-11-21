@@ -1485,7 +1485,6 @@ void PrimaryMDLController::set_secondary(SecondaryMDLController *secondary) {
 
 void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MkRdx* mk_rdx, MDLController *controller, bool chaining_was_allowed) {
 
-  Code* input = mk_rdx->get_first_input();
   bool is_simulation = f_p_f_imdl->get_pred()->is_simulation();
   _Fact *f_imdl = f_p_f_imdl->get_pred()->get_target();
   RequirementEntry e(f_p_f_imdl, mk_rdx, controller, chaining_was_allowed);
