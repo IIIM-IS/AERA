@@ -1327,6 +1327,7 @@ bool CTPX::build_requirement(HLPBindingMap *bm, Code *m0, microseconds period) {
   build_mdl_tail(m1, write_index);
 
   // Search m0 RHS for variables and check if the variable is mentioned elsewhere.
+  // See https://github.com/IIIM-IS/AERA/pull/281 for the explanation of this algorithm.
   Code* rhs_object = m0->get_reference(1)->get_reference(0);
   for (uint16 i = 0; i < rhs_object->code_size(); ++i) {
     Atom v = rhs_object->code(i);
