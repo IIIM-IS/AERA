@@ -825,35 +825,39 @@ MkRdx::MkRdx(Code *imdl_fact, Code *input, Code *output, float32 psln_thr, Bindi
 
   uint16 extent_index = MK_RDX_ARITY + 1;
   code(0) = Atom::Marker(Opcodes::MkRdx, MK_RDX_ARITY);
-  code(MK_RDX_CODE) = Atom::RPointer(0); // code.
+  code(MK_RDX_CODE) = Atom::RPointer(references_size()); // code.
   add_reference(imdl_fact);
   code(MK_RDX_INPUTS) = Atom::IPointer(extent_index); // inputs.
   code(MK_RDX_ARITY) = Atom::Float(psln_thr);
   code(extent_index++) = Atom::Set(1); // set of one input.
-  code(extent_index++) = Atom::RPointer(1);
+  code(extent_index++) = Atom::RPointer(references_size());
   add_reference(input);
   code(MK_RDX_PRODS) = Atom::IPointer(extent_index); // set of one production.
   code(extent_index++) = Atom::Set(1);
-  code(extent_index++) = Atom::RPointer(2);
+  code(extent_index++) = Atom::RPointer(references_size());
   add_reference(output);
 }
 
-MkRdx::MkRdx(Code *imdl_fact, Code *inpu1, Code *input2, Code *output, float32 psln_thr, BindingMap *binding_map) : LObject(), bindings_(binding_map) {
+MkRdx::MkRdx(Code *imdl_fact, Code *input1, Code *input2, Code *output, float32 psln_thr, BindingMap *binding_map) : LObject(), bindings_(binding_map) {
 
   uint16 extent_index = MK_RDX_ARITY + 1;
   code(0) = Atom::Marker(Opcodes::MkRdx, MK_RDX_ARITY);
-  code(MK_RDX_CODE) = Atom::RPointer(0); // code.
+  code(MK_RDX_CODE) = Atom::RPointer(references_size()); // code.
   add_reference(imdl_fact);
   code(MK_RDX_INPUTS) = Atom::IPointer(extent_index); // inputs.
   code(MK_RDX_ARITY) = Atom::Float(psln_thr);
   code(extent_index++) = Atom::Set(2); // set of two inputs.
-  code(extent_index++) = Atom::RPointer(1);
-  add_reference(inpu1);
-  code(extent_index++) = Atom::RPointer(2);
-  add_reference(input2);
+  code(extent_index++) = Atom::RPointer(references_size());
+  add_reference(input1);
+  if (input2) {
+    code(extent_index++) = Atom::RPointer(references_size());
+    add_reference(input2);
+  }
+  else
+    code(extent_index++) = Atom::Nil();
   code(MK_RDX_PRODS) = Atom::IPointer(extent_index); // set of one production.
   code(extent_index++) = Atom::Set(1);
-  code(extent_index++) = Atom::RPointer(3);
+  code(extent_index++) = Atom::RPointer(references_size());
   add_reference(output);
 }
 
