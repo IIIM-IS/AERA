@@ -1678,7 +1678,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
 
         Code *mk_rdx;
         if (ground)
-          mk_rdx = new MkRdx(f_imdl, (Code *)input, ground, production, 1, bm);
+          mk_rdx = new MkRdx(f_imdl, (Code *)input, ground_mk_rdx, production, 1, bm);
         else
           mk_rdx = new MkRdx(f_imdl, (Code *)input, production, 1, bm);
         bool rate_failures = inject_prediction(production, f_imdl, confidence, before - now, mk_rdx);
