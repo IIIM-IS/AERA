@@ -869,15 +869,17 @@ Success::Success() : LObject() {
 Success::Success(_Fact *object, _Fact *evidence, float32 psln_thr) : LObject() {
 
   code(0) = Atom::Object(Opcodes::Success, SUCCESS_ARITY);
-  code(SUCCESS_OBJ) = Atom::RPointer(0);
-  if (evidence)
-    code(SUCCESS_EVD) = Atom::RPointer(1);
+  code(SUCCESS_OBJ) = Atom::RPointer(references_size());
+  add_reference(object);
+
+  if (evidence) {
+    code(SUCCESS_EVD) = Atom::RPointer(references_size());
+    add_reference(evidence);
+  }
   else
     code(SUCCESS_EVD) = Atom::Nil();
+
   code(SUCCESS_ARITY) = Atom::Float(psln_thr);
-  add_reference(object);
-  if (evidence)
-    add_reference(evidence);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
