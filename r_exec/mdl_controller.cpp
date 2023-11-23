@@ -177,7 +177,7 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
     case WEAK_REQUIREMENT_ENABLED:
       if (bind_results.size() == 0)
         // retrieve_imdl_fwd doesn't add a result for status such as NO_REQUIREMENT, so use the bm that we created above.
-        bind_results.push_back(BindingResult(bm, NULL));
+        bind_results.push_back(BindingResult(bm, NULL, NULL));
       vector<P<_Fact> > already_predicted;
       for (size_t i = 0; i < bind_results.size(); ++i) {
         // evaluate_fwd_guards() uses bindings_, so set it to the binding map.
@@ -190,7 +190,8 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
           P<Fact> f_imdl_copy = new Fact(
             bindings_->bind_pattern(f_imdl->get_reference(0)), f_imdl->get_after(), f_imdl->get_before(),
             f_imdl->get_cfd(), f_imdl->get_psln_thr());
-          ((PrimaryMDLController*)controller_)->predict(bindings_, input, f_imdl_copy, chaining_allowed, r_p, bind_results[i].ground_, already_predicted);
+          ((PrimaryMDLController*)controller_)->predict(bindings_, input, f_imdl_copy, chaining_allowed, r_p, bind_results[i].ground_,
+            bind_results[i].mk_rdx_, already_predicted);
           match = true;
         }
       }
@@ -264,7 +265,7 @@ bool SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *
     case WEAK_REQUIREMENT_ENABLED:
       if (bind_results.size() == 0)
         // retrieve_imdl_fwd doesn't add a result for status such as NO_REQUIREMENT, so use the bm that we created above.
-        bind_results.push_back(BindingResult(bm, NULL));
+        bind_results.push_back(BindingResult(bm, NULL, NULL));
       vector<P<_Fact> > already_predicted;
       for (size_t i = 0; i < bind_results.size(); ++i) {
         // evaluate_fwd_guards() uses bindings_, so set it to the binding map.
@@ -274,7 +275,8 @@ bool SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *
           load_code();
         if (evaluate_fwd_guards()) { // may update bindings_ .
           f_imdl->set_reference(0, bindings_->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated binding map.
-          ((SecondaryMDLController*)controller_)->predict(bindings_, input, NULL, true, r_p, bind_results[i].ground_, already_predicted);
+          ((SecondaryMDLController*)controller_)->predict(bindings_, input, NULL, true, r_p, bind_results[i].ground_,
+            bind_results[i].mk_rdx_, already_predicted);
           match = true;
         }
       }
@@ -466,7 +468,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(const HLPBindingMap *b
           if (_original.match_fwd_strict(_f_imdl, f_imdl)) { // tpl args will be valuated in bm, but not in f_imdl yet.
 
             r = WEAK_REQUIREMENT_ENABLED;
-            results.push_back(BindingResult(new HLPBindingMap(_original), (*e).evidence_));
+            results.push_back(BindingResult(new HLPBindingMap(_original), (*e).evidence_, (*e).mk_rdx_));
             // Loop again to check for more matches.
           }
         }
@@ -497,7 +499,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(const HLPBindingMap *b
             HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
             if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) { // tpl args will be valuated in bm.
 
-              results.push_back(BindingResult(new HLPBindingMap(_original), NULL));
+              results.push_back(BindingResult(new HLPBindingMap(_original), NULL, NULL));
               requirements_.CS_.leave();
               return STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
             }
@@ -559,7 +561,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(const HLPBindingMap *b
               if (!strong_matches_weak || (*e).confidence_ > negative_cfd) {
 
                 r = WEAK_REQUIREMENT_ENABLED;
-                results.push_back(BindingResult(new HLPBindingMap(_original), (*e).evidence_));
+                results.push_back(BindingResult(new HLPBindingMap(_original), (*e).evidence_, (*e).mk_rdx_));
                 // Loop again to check for more matches.
               } else {
                 // If we already got a WEAK_REQUIREMENT_ENABLED, don't return STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
@@ -576,7 +578,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(const HLPBindingMap *b
       }
 
       if (r == STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT || r == STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT)
-        results.push_back(BindingResult(new HLPBindingMap(strong_bm), ground));
+        results.push_back(BindingResult(new HLPBindingMap(strong_bm), ground, NULL));
 
       requirements_.CS_.leave();
       return r;
@@ -793,7 +795,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(const HLPBindingMap *bm, Fact *f
           if ((*e).chaining_was_allowed_) {
 
             r = WEAK_REQUIREMENT_ENABLED;
-            results.push_back(BindingResult(new HLPBindingMap(_original), (*e).evidence_));
+            results.push_back(BindingResult(new HLPBindingMap(_original), (*e).evidence_, (*e).mk_rdx_));
             // Loop again to check for more matches.
           }
 
@@ -916,7 +918,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(const HLPBindingMap *bm, Fact *f
               if (!strong_matches_weak || (*e).confidence_ > negative_cfd) {
 
                 r = WEAK_REQUIREMENT_ENABLED;
-                results.push_back(BindingResult(new HLPBindingMap(_original), (*e).evidence_));
+                results.push_back(BindingResult(new HLPBindingMap(_original), (*e).evidence_, (*e).mk_rdx_));
                 // Loop again to check for more matches.
                 wr_enabled = strong_matches_weak;
               } else {
@@ -940,7 +942,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(const HLPBindingMap *bm, Fact *f
       }
 
       if (r == STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT || r == STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT)
-        results.push_back(BindingResult(new HLPBindingMap(strong_bm), ground));
+        results.push_back(BindingResult(new HLPBindingMap(strong_bm), ground, NULL));
 
       requirements_.CS_.leave();
       return r;
@@ -1365,7 +1367,7 @@ void TopLevelMDLController::abduce_lhs(HLPBindingMap *bm,
 }
 
 void TopLevelMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground,
-  vector<P<_Fact> >& already_predicted) { // no prediction here.
+  MkRdx* ground_mk_rdx, vector<P<_Fact> >& already_predicted) { // no prediction here.
 }
 
 void TopLevelMDLController::register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures) {
@@ -1576,7 +1578,7 @@ void PrimaryMDLController::take_input(r_exec::View *input) {
 }
 
 void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground,
-  vector<P<_Fact> >& already_predicted) {
+  MkRdx* ground_mk_rdx, vector<P<_Fact> >& already_predicted) {
 
   _Fact *bound_rhs = (_Fact *)bm->bind_pattern(rhs_); // fact or |fact.
   // TODO: Do we need a critical section?
@@ -2779,7 +2781,7 @@ void SecondaryMDLController::reduce_batch(Fact *f_p_f_imdl, MDLController *contr
 }
 
 void SecondaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground,
-  vector<P<_Fact> >& already_predicted) { // predicitons are not injected: they are silently produced for rating purposes.
+  MkRdx* ground_mk_rdx, vector<P<_Fact> >& already_predicted) { // predicitons are not injected: they are silently produced for rating purposes.
 
   _Fact *bound_rhs = (_Fact *)bm->bind_pattern(rhs_); // fact or |fact.
   Pred *_prediction = new Pred(bound_rhs, 1);

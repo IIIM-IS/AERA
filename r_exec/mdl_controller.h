@@ -114,15 +114,18 @@ public:
    * Create a HLPBindingMap with the given values.
    * \param map The HLPBindingMap. This keeps a P<HLPBindingMap> for it.
    * \param ground A pointer to the Fact which is the ground for the bindings. This only keeps a pointer.
+   * \param ground_mk_rdx A pointer to the mk.rdx which made groung, or NULL if not available. This only keeps a pointer.
    */
-  BindingResult(HLPBindingMap* map, Fact* ground)
+  BindingResult(HLPBindingMap* map, Fact* ground, MkRdx* ground_mk_rdx)
   {
     map_ = map;
     ground_ = ground;
+    ground_mk_rdx_ = ground_mk_rdx;
   }
 
   P<HLPBindingMap> map_;
   Fact* ground_;
+  MkRdx* ground_mk_rdx_;
 };
 
 class PrimaryMDLOverlay :
@@ -296,7 +299,7 @@ public:
   ChainingStatus retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl, Sim* prediction_sim, Fact *&ground, Fact *&strong_requirement_ground);
 
   virtual void predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground,
-    std::vector<P<_Fact> >& already_predicted) = 0;
+    MkRdx* ground_mk_rdx, std::vector<P<_Fact> >& already_predicted) = 0;
   virtual void register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures) = 0;
   virtual void register_req_outcome(Fact *f_pred, bool success, bool rate_failures) = 0;
 
@@ -395,7 +398,7 @@ public:
   void store_requirement(_Fact *f_p_f_imdl, MkRdx* mk_rdx, MDLController *controller, bool chaining_was_allowed) override; // never called.
 
   void predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground,
-    std::vector<P<_Fact> >& already_predicted) override;
+    MkRdx* ground_mk_rdx, std::vector<P<_Fact> >& already_predicted) override;
   void register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures) override;
   void register_goal_outcome(Fact *goal, bool success, _Fact *evidence) const override;
   void register_simulated_goal_outcome(Fact *goal, bool success, _Fact *evidence) const override;
@@ -469,7 +472,7 @@ public:
   void store_requirement(_Fact *f_p_f_imdl, MkRdx* mk_rdx, MDLController *controller, bool chaining_was_allowed) override;
 
   void predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground,
-    std::vector<P<_Fact> >& already_predicted) override;
+    MkRdx* ground_mk_rdx, std::vector<P<_Fact> >& already_predicted) override;
   bool inject_prediction(Fact *prediction, Fact *f_imdl, float32 confidence, Timestamp::duration time_to_live, r_code::Code *mk_rdx) const; // here, resilience=time to live, in us; returns true if the prediction has actually been injected.
 
   void register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures) override;
@@ -545,7 +548,7 @@ public:
   void store_requirement(_Fact *f_p_f_imdl, MkRdx* mk_rdx, MDLController *controller, bool chaining_was_allowed) override;
 
   void predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground,
-    std::vector<P<_Fact> >& already_predicted) override;
+    MkRdx* ground_mk_rdx, std::vector<P<_Fact> >& already_predicted) override;
   void register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures) override;
   void register_req_outcome(Fact *f_pred, bool success, bool rate_failures) override;
 };
