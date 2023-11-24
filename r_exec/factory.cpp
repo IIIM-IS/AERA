@@ -866,7 +866,7 @@ MkRdx::MkRdx(Code *imdl_fact, Code *input1, Code *input2, Code *output, float32 
 Success::Success() : LObject() {
 }
 
-Success::Success(_Fact *object, _Fact *evidence, float32 psln_thr) : LObject() {
+Success::Success(_Fact *object, _Fact *evidence, Code* object_mk_rdx, float32 psln_thr) : LObject() {
 
   code(0) = Atom::Object(Opcodes::Success, SUCCESS_ARITY);
   code(SUCCESS_OBJ) = Atom::RPointer(references_size());
@@ -878,6 +878,13 @@ Success::Success(_Fact *object, _Fact *evidence, float32 psln_thr) : LObject() {
   }
   else
     code(SUCCESS_EVD) = Atom::Nil();
+
+  if (object_mk_rdx) {
+    code(SUCCESS_OBJ_MK_RDX) = Atom::RPointer(references_size());
+    add_reference(object_mk_rdx);
+  }
+  else
+    code(SUCCESS_OBJ_MK_RDX) = Atom::Nil();
 
   code(SUCCESS_ARITY) = Atom::Float(psln_thr);
 }

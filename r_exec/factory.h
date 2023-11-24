@@ -586,7 +586,8 @@ class r_exec_dll Success :
   public LObject {
 public:
   Success();
-  Success(_Fact *object, _Fact *evidence, float32 psln_thr);
+  Success(_Fact *object, _Fact *evidence, r_code::Code* object_mk_rdx, float32 psln_thr);
+  Success(_Fact* object, _Fact* evidence, float32 psln_thr): Success(object, evidence, NULL, psln_thr) {}
 
   /**
    * Get the object of this Success.

@@ -1370,7 +1370,7 @@ void TopLevelMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imd
   MkRdx* ground_mk_rdx, vector<P<_Fact> >& already_predicted) { // no prediction here.
 }
 
-void TopLevelMDLController::register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures) {
+void TopLevelMDLController::register_pred_outcome(Fact *f_pred, Code* mk_rdx, bool success, _Fact *evidence, float32 confidence, bool rate_failures) {
 }
 
 void TopLevelMDLController::register_goal_outcome(Fact *goal, bool success, _Fact *evidence) const {
@@ -2352,7 +2352,7 @@ inline Fact* PrimaryMDLController::predict_simulated_evidence(_Fact *evidence, S
   return fact_pred;
 }
 
-void PrimaryMDLController::register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures) {
+void PrimaryMDLController::register_pred_outcome(Fact *f_pred, Code* mk_rdx, bool success, _Fact *evidence, float32 confidence, bool rate_failures) {
 
   f_pred->invalidate();
 
@@ -2366,7 +2366,7 @@ void PrimaryMDLController::register_pred_outcome(Fact *f_pred, bool success, _Fa
   if (!f_evidence) // failure: assert absence of the pred target.
     f_evidence = f_pred->get_pred()->get_target()->get_absentee();
 
-  Success *success_object = new Success(f_pred, f_evidence, 1);
+  Success *success_object = new Success(f_pred, f_evidence, mk_rdx, 1);
   Code *f_success_object;
   auto now = Now();
   // We print the result to the output below, after injecting f_success_object to get its OID.
@@ -2856,7 +2856,7 @@ void SecondaryMDLController::rate_model() { // acknowledge successes only; the p
     OUTPUT_LINE(MDL_REV, Utils::RelativeTime(Now()) << " mdl " << model->get_oid() << " phased in");
 }
 
-void SecondaryMDLController::register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures) { // success==false means executed in the thread of a time core; otherwise, executed in the same thread as for Controller::reduce().
+void SecondaryMDLController::register_pred_outcome(Fact *f_pred, Code* mk_rdx, bool success, _Fact *evidence, float32 confidence, bool rate_failures) { // success==false means executed in the thread of a time core; otherwise, executed in the same thread as for Controller::reduce().
 
   register_req_outcome(f_pred, success, rate_failures);
 }

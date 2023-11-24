@@ -257,7 +257,8 @@
 
 #define SUCCESS_OBJ 1
 #define SUCCESS_EVD 2
-#define SUCCESS_ARITY 3
+#define SUCCESS_OBJ_MK_RDX 3
+#define SUCCESS_ARITY 4
 
 
 #define GRP_PAIR_FIRST 1
