@@ -140,11 +140,11 @@ bool PMonitor::reduce(_Fact *input) { // input is always an actual fact.
     //uint32 oid=input->get_oid();
     switch (((Fact *)input)->is_evidence(prediction_target_)) {
     case MATCH_SUCCESS_POSITIVE:
-      controller_->register_pred_outcome(target_, true, input, input->get_cfd(), rate_failures_);
+      controller_->register_pred_outcome(target_, mk_rdx_, true, input, input->get_cfd(), rate_failures_);
       return true;
     case MATCH_SUCCESS_NEGATIVE:
       if (rate_failures_)
-        controller_->register_pred_outcome(target_, false, input, input->get_cfd(), rate_failures_);
+        controller_->register_pred_outcome(target_, mk_rdx_, false, input, input->get_cfd(), rate_failures_);
       return true;
     case MATCH_FAILURE:
       return false;
@@ -162,7 +162,7 @@ void PMonitor::update(Timestamp &next_target) { // executed by a time core, upon
     // TODO: If the model correctly predicts an anti-fact that the object won't be observed, then should we register
     // a success for the model? If yes then what should "evidence" point? Maybe nil?
     if (rate_failures_ && target_->get_pred()->get_target()->is_fact())
-      controller_->register_pred_outcome(target_, false, NULL, 1, rate_failures_);
+      controller_->register_pred_outcome(target_, mk_rdx_, false, NULL, 1, rate_failures_);
   }
   controller_->remove_monitor(this);
   next_target = Timestamp(seconds(0));
