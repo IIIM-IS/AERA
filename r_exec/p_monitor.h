@@ -101,6 +101,7 @@ public:
   PMonitor(MDLController *controller,
     BindingMap *bindings,
     Fact *prediction, // f0->pred->f1->object.
+    r_code::Code* mk_rdx,
     bool rate_failures);
   ~PMonitor();
 

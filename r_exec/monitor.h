@@ -99,12 +99,14 @@ class Monitor :
 protected:
   P<BindingMap> bindings_;
   P<Fact> target_; // f->g or f->p.
+  P<r_code::Code> mk_rdx_; // The reduction which make the target.
 
   MDLController *controller_;
 
   Monitor(MDLController *controller,
     BindingMap *bindings,
-    Fact *target); // fact.
+    Fact *target,
+    r_code::Code* mk_rdx);
 public:
   bool is_alive() const;
   virtual bool reduce(_Fact *input) = 0;

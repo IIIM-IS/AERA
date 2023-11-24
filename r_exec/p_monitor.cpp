@@ -94,7 +94,8 @@ namespace r_exec {
 PMonitor::PMonitor(MDLController *controller,
   BindingMap *bindings,
   Fact *prediction,
-  bool rate_failures) : Monitor(controller, bindings, prediction), rate_failures_(rate_failures) { // prediction is f0->pred->f1->obj; not simulated.
+  Code* mk_rdx,
+  bool rate_failures) : Monitor(controller, bindings, prediction, mk_rdx), rate_failures_(rate_failures) { // prediction is f0->pred->f1->obj; not simulated.
 
   prediction_target_ = prediction->get_pred()->get_target(); // f1.
   auto now = Now();

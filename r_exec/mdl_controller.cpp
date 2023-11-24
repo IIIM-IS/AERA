@@ -191,7 +191,7 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
             bindings_->bind_pattern(f_imdl->get_reference(0)), f_imdl->get_after(), f_imdl->get_before(),
             f_imdl->get_cfd(), f_imdl->get_psln_thr());
           ((PrimaryMDLController*)controller_)->predict(bindings_, input, f_imdl_copy, chaining_allowed, r_p, bind_results[i].ground_,
-            bind_results[i].mk_rdx_, already_predicted);
+            bind_results[i].ground_mk_rdx_, already_predicted);
           match = true;
         }
       }
@@ -276,7 +276,7 @@ bool SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *
         if (evaluate_fwd_guards()) { // may update bindings_ .
           f_imdl->set_reference(0, bindings_->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated binding map.
           ((SecondaryMDLController*)controller_)->predict(bindings_, input, NULL, true, r_p, bind_results[i].ground_,
-            bind_results[i].mk_rdx_, already_predicted);
+            bind_results[i].ground_mk_rdx_, already_predicted);
           match = true;
         }
       }
@@ -1654,7 +1654,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
 
     if (!chaining_was_allowed) { // reaching this point in the code means that the input was not a prediction.
 
-      PMonitor *m = new PMonitor(this, bm, production, false); // the model will not be rated in case of a failure; the requirements will be rated in both cases (if their own chaining was allowed, else only in case of success and recurse).
+      PMonitor *m = new PMonitor(this, bm, production, NULL, false); // the model will not be rated in case of a failure; the requirements will be rated in both cases (if their own chaining was allowed, else only in case of success and recurse).
       MDLController::add_monitor(m);
     } else { // try to inject the prediction: if cfd too low, the prediction is not injected.
 
@@ -1682,7 +1682,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
         else
           mk_rdx = new MkRdx(f_imdl, (Code *)input, production, 1, bm);
         bool rate_failures = inject_prediction(production, f_imdl, confidence, before - now, mk_rdx);
-        PMonitor *m = new PMonitor(this, bm, production, rate_failures); // not-injected predictions are monitored for rating the model that produced them (successes only).
+        PMonitor *m = new PMonitor(this, bm, production, mk_rdx, rate_failures); // not-injected predictions are monitored for rating the model that produced them (successes only).
         MDLController::add_monitor(m);
         Group *secondary_host = secondary_->get_view()->get_host(); // inject f_imdl in secondary group.
         View *view = new View(View::SYNC_ONCE, now, confidence, 1, get_view()->get_host(), secondary_host, f_imdl); // SYNC_ONCE,res=resilience.
@@ -2799,7 +2799,7 @@ void SecondaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_im
     return;
   }
 
-  PMonitor *m = new PMonitor(this, bm, production, false); // predictions are monitored for rating (successes only); no injection.
+  PMonitor *m = new PMonitor(this, bm, production, NULL, false); // predictions are monitored for rating (successes only); no injection.
   add_monitor(m);
 }
 
