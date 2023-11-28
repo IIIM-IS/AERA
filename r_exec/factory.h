@@ -606,6 +606,21 @@ public:
    * \return The evidence object as a _Fact, or NULL if this Success does not have an evidence object.
    */
   _Fact* get_evidence() const { return has_evidence() ? (_Fact*)get_reference(code(SUCCESS_EVD).asIndex()) : NULL; }
+
+  /**
+   * Check if this Success has an object_mk_rdx object.
+   * \return True if this Success has an object_mk_rdx object, otherwise false.
+   */
+  bool has_object_mk_rdx() const {
+    return code(SUCCESS_OBJ_MK_RDX).getDescriptor() == Atom::R_PTR &&
+      get_reference(code(SUCCESS_OBJ_MK_RDX).asIndex())->code(0).asOpcode() == Opcodes::MkRdx;
+  }
+
+  /**
+   * Get the object_mk_rdx object.
+   * \return The object_mk_rdx object as a MkRdx, or NULL if this Success does not have an object_mk_rdx object.
+   */
+  MkRdx* get_object_mk_rdx() const { return has_object_mk_rdx() ? (MkRdx*)get_reference(code(SUCCESS_OBJ_MK_RDX).asIndex()) : NULL; }
 };
 
 class r_exec_dll Perf :
