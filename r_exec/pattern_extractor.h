@@ -168,7 +168,7 @@ public:
 
   virtual bool take_input(View *view, _Fact *abstracted_input, BindingMap *bm);
   virtual void signal(View *input) const;
-  virtual void ack_pred_success(_Fact *predicted_f);
+  virtual void ack_pred_success(Success* success);
 };
 
 class ICST;
@@ -293,7 +293,13 @@ public:
 
   bool take_input(View *input, _Fact *abstracted_input, BindingMap *bm) override;
   void signal(View *input) const override;
-  void ack_pred_success(_Fact *predicted_f) override;
+
+  /**
+   * This is called on a successful prediction.Store it.At reduce() time, check if the
+   * target was successfully predicted and if so, abort mdl building.
+   * \success The Success object with the target: (success (fact (pred target ::) ::) ::).
+   */
+  void ack_pred_success(Success* success) override;
   void reduce(View *input); // input is v->f->success(target,input) or v->|f->success(target,input).
 };
 

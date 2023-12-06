@@ -141,7 +141,7 @@ bool TPX::take_input(View *input, _Fact *abstracted_input, BindingMap *bm) {
 void TPX::signal(View *input) const { // input->object is f->success or|f->success.
 }
 
-void TPX::ack_pred_success(_Fact *predicted_f) {
+void TPX::ack_pred_success(Success* success) {
 }
 
 bool TPX::filter(View *input, _Fact *abstracted_input, BindingMap *bm) {
@@ -579,9 +579,9 @@ void GTPX::signal(View *input) const { // will be erased from the AF map upon re
   }
 }
 
-void GTPX::ack_pred_success(_Fact *predicted_f) { // successful prediction: store; at reduce() time, check if the target was successfully predicted and if so, abort mdl building.
+void GTPX::ack_pred_success(Success* success) {
 
-  predictions_.push_back(predicted_f);
+  predictions_.push_back((_Fact*)success->get_object()->get_pred()->get_reference(0));
 }
 
 void GTPX::reduce(r_exec::View *input) { // input->object: f->success.

@@ -266,11 +266,11 @@ inline void AutoFocusController::notify(_Fact *target, View *input, TPXMap &map)
   }
 }
 
-inline void AutoFocusController::dispatch_pred_success(_Fact *predicted_f, TPXMap &map) {
+inline void AutoFocusController::dispatch_pred_success(Success* success, TPXMap &map) {
 
   TPXMap::const_iterator m;
   for (m = map.begin(); m != map.end(); ++m)
-    m->second->ack_pred_success(predicted_f);
+    m->second->ack_pred_success(success);
 }
 
 inline void AutoFocusController::dispatch(View *input, _Fact *abstract_input, BindingMap *bm, bool &injected, TPXMap &map) {
@@ -365,7 +365,7 @@ void AutoFocusController::reduce(r_exec::View *input) {
 
           notify(target, input, predictions_);
           if (success) // a mdl has correctly predicted a GTPX's target: the GTPX shall not produce anything: we need to pass the prediction to all GTPX.
-            dispatch_pred_success((_Fact *)target->get_pred()->get_reference(0), goals_);
+            dispatch_pred_success((Success*)payload, goals_);
         }
       } else if (opcode == Opcodes::Perf)
         inject_input(input, 2); // inject in all output groups but the primary and secondary.
