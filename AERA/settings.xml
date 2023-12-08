@@ -57,6 +57,19 @@
       test_models="no"
     />
   </Run>
+
+  <!--TcpConfiguration usage:
+  number_of_servers: The number of servers AERA is to connect to.
+  number_of_clients: AERA can additionally act as a server for TCP clients. Specify number of clients here.
+  server_configurations: comma-seperated list of IP:Port strings of the servers AERA is supposed to connect to.
+  client_configurations: comma-seperated list of ports to which clients can connect.
+  -->
+  <TCPConfiguration
+    number_of_servers="1"
+    number_of_clients="0"
+	server_configurations="127.0.0.1:8080"
+	client_configurations="8080"
+  />
 </AERAConfiguration>
 
 <!--Usage

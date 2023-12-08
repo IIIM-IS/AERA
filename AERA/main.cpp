@@ -324,15 +324,14 @@ int32 start_AERA(const char* file_name, const char* decompiled_file_name) {
         mem = new TestMem<r_exec::LObject, r_exec::MemVolatile>();
     }
     else if (settings.io_device_.compare("tcp_io_device") == 0) {
-      string port = "8080";
       int err = 0;
       if (settings.get_objects_) {
-        mem = new tcp_io_device::TcpIoDevice<r_exec::LObject, r_exec::MemStatic>();
-        err = static_cast<tcp_io_device::TcpIoDevice<r_exec::LObject, r_exec::MemStatic>*>(mem)->initTCP(port);
+        mem = new tcp_io_device::TcpIoDevice<r_exec::LObject, r_exec::MemStatic>(settings.number_of_servers_, settings.number_of_clients_, settings.server_configurations_, settings.client_configurations_);
+        err = static_cast<tcp_io_device::TcpIoDevice<r_exec::LObject, r_exec::MemStatic>*>(mem)->initTCP();
       }
       else {
-        mem = new tcp_io_device::TcpIoDevice<r_exec::LObject, r_exec::MemVolatile>();
-        err = static_cast<tcp_io_device::TcpIoDevice<r_exec::LObject, r_exec::MemVolatile>*>(mem)->initTCP(port);
+        mem = new tcp_io_device::TcpIoDevice<r_exec::LObject, r_exec::MemVolatile>(settings.number_of_servers_, settings.number_of_clients_, settings.server_configurations_, settings.client_configurations_);
+        err = static_cast<tcp_io_device::TcpIoDevice<r_exec::LObject, r_exec::MemVolatile>*>(mem)->initTCP();
       }
       if (err != 0) {
         cout << "ERROR: Could not connect to a TCP client" << endl;

@@ -102,7 +102,7 @@ namespace tcp_io_device {
   TcpIoDevice<O, S>::~TcpIoDevice() {}
 
   template<class O, class S>
-  int TcpIoDevice<O, S>::initTCP(string port)
+  int TcpIoDevice<O, S>::initTCP()
   {
     return 1;
   }
@@ -117,17 +117,26 @@ namespace tcp_io_device {
 
 namespace tcp_io_device {
 
-  template<class O, class S> TcpIoDevice<O, S>::TcpIoDevice() : MemExec<O, S>()
+  template<class O, class S> TcpIoDevice<O, S>::TcpIoDevice(
+    int number_of_servers,
+    int number_of_clients,
+    std::vector<std::pair<std::string, std::string> > server_configurations,
+    std::vector<std::string> client_configurations) :
+    MemExec<O, S>(),
+    number_of_servers_(number_of_servers),
+    number_of_clients_(number_of_clients),
+    server_configurations_(server_configurations),
+    client_configurations_(client_configurations)
   {
 
     timeTickThread_ = 0;
     lastInjectTime_ = Timestamp(seconds(0));
     lastCommandTime_ = Timestamp(seconds(0));
 
-    receive_queue_ = std::make_shared<SafeQueue>(1);
+    receive_queue_ = std::make_shared<SafeQueue>(number_of_servers + number_of_clients);
     send_queue_ = std::make_shared<SafeQueue>(100);
 
-    tcp_connection_ = new TCPConnection(receive_queue_, send_queue_, 8);
+    tcp_connections_.push_back(new TCPConnection(receive_queue_, send_queue_, 8));
 
     started_ = false;
   }
@@ -135,7 +144,10 @@ namespace tcp_io_device {
   template<class O, class S>
   TcpIoDevice<O, S>::~TcpIoDevice() {
 
-    delete tcp_connection_;
+    for (auto it = tcp_connections_.begin(); it != tcp_connections_.end();) {
+      delete *it;
+      it = tcp_connections_.erase(it);
+    }
 
     // Not sure if those are needed, I guess the ownership lies somewhere else, right?
     // Delete entities
@@ -154,10 +166,26 @@ namespace tcp_io_device {
   }
 
   template<class O, class S>
-  int TcpIoDevice<O, S>::initTCP(string port)
+  int TcpIoDevice<O, S>::initTCP()
   {
-    int err = tcp_connection_->listenAndAwaitConnection(port);
-    tcp_connection_->start();
+    int err = 0;
+    for (int i = 0; i < number_of_servers_; ++i) {
+      err = tcp_connections_[i]->establishConnection(server_configurations_[i].first, server_configurations_[i].second);
+      if (err != 0)
+      {
+        return err;
+      }
+    }
+    for (int i = number_of_servers_; i < number_of_servers_ + number_of_clients_; ++i) {
+      err = tcp_connections_[i]->listenAndAwaitConnection(client_configurations_[i-number_of_servers_]);
+      if (err != 0)
+      {
+        return err;
+      }
+    }
+    for (auto it = tcp_connections_.begin(); it != tcp_connections_.end(); ++it) {
+      (*it)->start();
+    }
     // Wait for a SetupMessage from the client.
     while (true) {
       auto msg = std::move(receive_queue_->dequeue());
@@ -455,7 +483,9 @@ namespace tcp_io_device {
       tickTime += sampling_period;
       Thread::Sleep(tickTime - r_exec::Now());
     }
-    self->tcp_connection_->stop();
+    for (auto it = self->tcp_connections_.begin(); it != self->tcp_connections_.end(); ++it) {
+      (*it)->stop();
+    }
 
     thread_ret_val(0);
   }
@@ -669,6 +699,12 @@ namespace tcp_io_device {
         continue;
       }
       meta_data_map_.insert(std::map<string, MetaData>::value_type(command_desscription.name(), MetaData(&command_desscription.description())));
+    }
+
+    if (started_) {
+      std::unique_ptr<TCPMessage> start_msg = std::make_unique<TCPMessage>();
+      start_msg->set_messagetype(TCPMessage_Type_START);
+      sendMessage(std::move(start_msg));
     }
   }
 

@@ -141,14 +141,14 @@ namespace tcp_io_device {
 
   public:
 
-    TcpIoDevice();
+    TcpIoDevice(int number_of_servers, int number_of_clients, std::vector<std::pair<std::string, std::string> > server_configurations, std::vector<std::string> client_configurations);
     ~TcpIoDevice();
 
     /**
-    * Initialize the TCP connection and wait for a client to connect to it.
-    * \param port the port in which the TCP/IP connection should be communicating with the environment simulation.
+    * Initialize the TCP connections according to the TCPConfiguration in the settings.xml file.
+    * \return Error code. If return != 0, an error occured.
     */
-    int initTCP(std::string port);
+    int initTCP();
 
     /**
      * Call the parent class load(), then set up the objects for the external environment.
@@ -176,7 +176,13 @@ namespace tcp_io_device {
     class _Thread : public Thread {
     };
 
-    TCPConnection* tcp_connection_;
+    int number_of_servers_;
+    int number_of_clients_;
+
+    std::vector<std::pair<std::string, std::string> > server_configurations_;
+    std::vector<std::string> client_configurations_;
+
+    std::vector<TCPConnection*> tcp_connections_;
     std::shared_ptr<SafeQueue> receive_queue_;
     std::shared_ptr<SafeQueue> send_queue_;
 
