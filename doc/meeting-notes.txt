@@ -1168,19 +1168,25 @@ DONE. Fix Arash's analogy example in Webots. https://github.com/IIIM-IS/AERA/com
     * DONE. Try using a modification of the predicting model.
         (success f_prediction evidence) => (success (mk.rdx f_imdl [f_cmd requirement] [f_prediction]) evidence)
 
+2023-12-08
+* DONE. Visualizer: Graphics item to display mk.rdx https://github.com/IIIM-IS/AERA_Visualizer/issues/55
+* hand-grab-sphere
+  * Try to get GTPX to learn mdl_displace_hand by making it a goal to not be at a position and observe what achieves it.
+    * DONE. register_goal_outcome: Instead of goal invalidate, try to mark as some other state (achieved) so that it lingers until GTPX looks at it.
+      RESULT. Not necessary to mark as another state. Instead, defer making the Success object for the goal.
+* Webots
+  * DONE. Make Webots the TCP server. [Leonard]
+
 next meeting
-* ALMOST DONE. Visualizer: Graphics item to display mk.rdx https://github.com/IIIM-IS/AERA_Visualizer/issues/55
 * Cook up an argumention example showing multiple levels of competing goals, and constructivist levels.
 * hand-grab-sphere
   * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
     * Still need to allow multiple strong requirements in retrieve_imdl.
   * Try to get GTPX to learn mdl_displace_hand by making it a goal to not be at a position and observe what achieves it.
-    * register_goal_outcome: Instead of goal invalidate, mark as some other state (achieved) so that it lingers until GTPX looks at it.
     * Make guard builder for GTPX.
     * Try chain of groups with < 1 saliency where objects are moved as time passes. (Older items will cumulatively have lower saliency.)
   * Represent sphere position without direct I/O input.
 * Webots
-  * Make Webots the TCP server. [Leonard]
   * Align Webots aera_us with AERA time.
   * Try Webots streaming to the Visualizer [Chloe]
   * Get command efferent copy from Webots (move limit to +/- 20) [Maybe in the setup message or command reply. Need more discussion]
