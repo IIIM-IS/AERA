@@ -1182,6 +1182,9 @@ DONE. Fix Arash's analogy example in Webots. https://github.com/IIIM-IS/AERA/com
 * Webots
   * DONE, but reverted. Make pull request to align Webots aera_us with AERA time (after testing in real time mode).
 
+2024-01-12
+* DONE. Merge pull request to update is_drive to check for a single ent like "run" https://github.com/IIIM-IS/AERA/pull/284
+
 next meeting
 * Cook up an argumention example showing multiple levels of competing goals, and constructivist levels.
 * hand-grab-sphere
