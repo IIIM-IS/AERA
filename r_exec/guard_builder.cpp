@@ -516,4 +516,65 @@ void AGuardBuilder::build(Code *mdl, _Fact *premise_pattern, _Fact *cause_patter
 
   _build(mdl, Opcodes::Add, Opcodes::Sub, premise_pattern, cause_pattern, write_index);
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ConstBwdArgCmdGuardBuilder::ConstBwdArgCmdGuardBuilder(microseconds period, microseconds offset, uint16 cmd_arg_index, _Fact* cause) : TimingGuardBuilder(period), offset_(offset), cmd_arg_index_(cmd_arg_index), cause_(cause) {
+}
+
+ConstBwdArgCmdGuardBuilder::~ConstBwdArgCmdGuardBuilder() {
+}
+
+void ConstBwdArgCmdGuardBuilder::build(Code* mdl, _Fact* premise_pattern, _Fact* cause_pattern, uint16& write_index) const {
+  // use the tpl args.
+  uint16 t0 = 1;
+  uint16 t1 = 2;
+
+  Code* rhs = mdl->get_reference(1);
+  uint16 t2 = rhs->code(FACT_AFTER).asIndex();
+  uint16 t3 = rhs->code(FACT_BEFORE).asIndex();
+
+  Code* lhs = mdl->get_reference(0);
+  uint16 cmd_t0 = lhs->code(FACT_AFTER).asIndex();
+  uint16 cmd_t1 = lhs->code(FACT_BEFORE).asIndex();
+  uint16 cmd_arg = lhs->get_reference(0)->code(cmd_arg_index_).asIndex();
+
+  mdl->code(MDL_FWD_GUARDS) = Atom::IPointer(++write_index);
+  mdl->code(write_index) = Atom::Set(2);
+
+  uint16 extent_index = write_index + 2;
+
+  write_guard(mdl, t2, t0, Opcodes::Add, period_, write_index, extent_index);
+  write_guard(mdl, t3, t1, Opcodes::Add, period_, write_index, extent_index);
+
+  write_index = extent_index;
+  mdl->code(MDL_BWD_GUARDS) = Atom::IPointer(++write_index);
+  mdl->code(write_index) = Atom::Set(5);
+
+  extent_index = write_index + 5;
+
+  write_guard(mdl, t0, t2, Opcodes::Sub, period_, write_index, extent_index);
+  write_guard(mdl, t1, t3, Opcodes::Sub, period_, write_index, extent_index);
+
+  write_guard(mdl, cmd_t0, t2, Opcodes::Sub, offset_, write_index, extent_index);
+  write_guard(mdl, cmd_t1, t3, Opcodes::Sub, period_, write_index, extent_index);
+
+  // Assign the specific value from the cause.
+  Atom cmd_arg_value = cause_->get_reference(0)->code(cmd_arg_index_);
+  mdl->code(++write_index) = Atom::AssignmentPointer(cmd_arg, ++extent_index);
+  if (cmd_arg_value.getDescriptor() == Atom::I_PTR &&
+    cause_->get_reference(0)->code(cmd_arg_value.asIndex()).getDescriptor() == Atom::OBJECT)
+    // Copy the object.
+    StructureValue::copy_structure(
+      mdl, extent_index, &cause_->get_reference(0)->code(0), cmd_arg_value.asIndex());
+  else if (cmd_arg_value.isFloat()) {
+    // We can't put the float value in the AssignmentPointer, so point to the identity operator.
+    mdl->code(extent_index) = Atom::Operator(Opcodes::Id, 1);
+    mdl->code(++extent_index) = cmd_arg_value;
+    extent_index += 1;
+  }
+
+  write_index = extent_index;
+}
+
 }

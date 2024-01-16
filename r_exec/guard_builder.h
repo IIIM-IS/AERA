@@ -225,6 +225,24 @@ public:
 
   void build(r_code::Code *mdl, _Fact *premise_pattern, _Fact *cause_pattern, uint16 &write_index) const override;
 };
+
+/**
+ * Use the timings of NoArgCmdGuardBuilder, but also add a backward guard to set the cmd arg to
+ * the constant value from the given original cause.
+ */
+class ConstBwdArgCmdGuardBuilder :
+  public TimingGuardBuilder {
+protected:
+  std::chrono::microseconds offset_;
+  uint16 cmd_arg_index_;
+  P<_Fact> cause_;
+public:
+  ConstBwdArgCmdGuardBuilder(std::chrono::microseconds period, std::chrono::microseconds offset, uint16 cmd_arg_index, _Fact* cause);
+  virtual ~ConstBwdArgCmdGuardBuilder();
+
+  void build(r_code::Code* mdl, _Fact* premise_pattern, _Fact* cause_pattern, uint16& write_index) const override;
+};
+
 }
 
 
