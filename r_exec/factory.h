@@ -510,6 +510,9 @@ public:
 
   bool is_self_goal() const;
   bool is_drive() const { return (!has_sim() && is_self_goal() && get_target()->get_reference(0)->code(0).asOpcode() == Opcodes::Ent); }
+  bool is_imdl_drive() const {
+    return (!has_sim() && is_self_goal() && get_target()->get_reference(0)->code(0).asOpcode() == Opcodes::IMdl);
+  }
 
   _Fact *get_target() const { return (_Fact *)get_reference(0); }
   _Fact *get_super_goal() const { return get_sim()->get_f_super_goal(); }

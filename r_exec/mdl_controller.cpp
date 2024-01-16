@@ -1270,7 +1270,7 @@ void TopLevelMDLController::reduce(r_exec::View *input) { // no lock.
     return;
 
   Goal *goal = ((_Fact *)input->object_)->get_goal();
-  if (goal && goal->is_drive()) {
+  if (goal && (goal->is_drive() || goal->is_imdl_drive())) {
 
     _Fact *goal_target = goal->get_target(); // goal_target is f->object.
     float32 confidence = get_success_rate() * goal_target->get_cfd(); // reading STRONG_REQUIREMENT is atomic.
