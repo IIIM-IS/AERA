@@ -651,7 +651,7 @@ void GTPX::reduce(r_exec::View *input) { // input->object: f->success.
     find_f_icst(cause.input_, results, new_cst);
     if (results.size() == 0) {
 
-      if (build_mdl(cause.input_, consequent, guard_builder, period))
+      if (build_mdl(cause.input_, NULL, consequent, guard_builder, period))
         inject_hlps(analysis_starting_time);
     } else {
 
@@ -662,7 +662,7 @@ void GTPX::reduce(r_exec::View *input) { // input->object: f->success.
   }
 }
 
-bool GTPX::build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, microseconds period) {
+bool GTPX::build_mdl(_Fact *cause, _Fact* f_icst, _Fact *consequent, GuardBuilder *guard_builder, microseconds period) {
 
   P<BindingMap> bm = new BindingMap();
 

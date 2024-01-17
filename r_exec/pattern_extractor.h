@@ -283,7 +283,7 @@ private:
 
   std::vector<P<_Fact> > predictions_; // successful predictions that may invalidate the need for model building.
 
-  bool build_mdl(_Fact *cause, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period);
+  bool build_mdl(_Fact *cause, _Fact* f_icst, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period);
   bool build_mdl(_Fact *f_icst, _Fact *cause_pattern, _Fact *consequent, GuardBuilder *guard_builder, std::chrono::microseconds period, r_code::Code *new_cst);
 
   std::string get_header() const override;
