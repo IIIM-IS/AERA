@@ -256,6 +256,9 @@ protected:
 
   static r_code::Code *build_mdl_head(HLPBindingMap *bm, uint16 tpl_arg_count, _Fact *lhs, _Fact *rhs, uint16 &write_index, bool allow_shared_timing_vars = true);
   static r_code::Code* build_mdl_head_from_abstract(uint16 tpl_arg_count, r_code::Code* lhs, r_code::Code* rhs, uint16& write_index);
+  // check for mdl existence at the same time(ModelBase::mdlCS_ - wise).
+  bool build_requirement(HLPBindingMap* bm, r_code::Code* m0, std::chrono::microseconds period, const std::vector<FindFIcstResult>& results,
+    r_code::Code* new_cst);
   void build_mdl_tail(r_code::Code *mdl, uint16 write_index);
 
   void inject_hlps() const;

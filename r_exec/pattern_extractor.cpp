@@ -1310,6 +1310,10 @@ bool CTPX::build_requirement(HLPBindingMap *bm, Code *m0, microseconds period) {
   if (results.size() == 0)
     return false;
 
+  return _TPX::build_requirement(bm, m0, period, results, new_cst);
+}
+
+bool _TPX::build_requirement(HLPBindingMap* bm, Code* m0, microseconds period, const vector<FindFIcstResult>& results, Code* new_cst) {
   _Fact* f_icst = results[0].f_icst;
   _Fact* premise_pattern = results[0].component_pattern;
   P<Fact> f_im0 = bm->build_f_ihlp(m0, Opcodes::IMdl, false);
