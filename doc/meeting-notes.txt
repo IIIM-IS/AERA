@@ -1185,14 +1185,19 @@ DONE. Fix Arash's analogy example in Webots. https://github.com/IIIM-IS/AERA/com
 2024-01-12
 * DONE. Merge pull request to update is_drive to check for a single ent like "run" https://github.com/IIIM-IS/AERA/pull/284
 
+2024-01-18
+* hand-grab-sphere
+  * Try to get GTPX to learn mdl_displace_hand by making it a goal to not be at a position and observe what achieves it.
+    * DONE. Merge pull request for GTPX to build the anti-fact model in ack_pred_success https://github.com/IIIM-IS/AERA/pull/285
+    * DONE. Merge pull request for GTPX to update build_mdl for anti-fact and given icst https://github.com/IIIM-IS/AERA/pull/286
+
 next meeting
 * Cook up an argumention example showing multiple levels of competing goals, and constructivist levels.
 * hand-grab-sphere
   * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
     * Still need to allow multiple strong requirements in retrieve_imdl.
   * Try to get GTPX to learn mdl_displace_hand by making it a goal to not be at a position and observe what achieves it.
-    * Make guard builder for GTPX.
-    * Try chain of groups with < 1 saliency where objects are moved as time passes. (Older items will cumulatively have lower saliency.)
+    * In abduce, ignore negative match of the RHS.
   * Represent sphere position without direct I/O input.
 * Webots
   * Make pull request to align Webots aera_us with AERA time (after testing in real time mode). [Jeff]
