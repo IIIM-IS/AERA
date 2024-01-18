@@ -581,6 +581,49 @@ void GTPX::signal(View *input) const { // will be erased from the AF map upon re
 
 void GTPX::ack_pred_success(Success* success) {
 
+  _Fact* consequent = target_->get_goal()->get_target();
+  // Use the same check as GMonitor::reduce.
+  if (consequent->is_anti_fact() && success->get_evidence()->is_fact() &&
+      success->get_evidence()->is_evidence(consequent) == MATCH_SUCCESS_POSITIVE) {
+    // The goal anti-fact is achieved by the prediction success object. Make a model.
+    auto analysis_starting_time = Now();
+
+    // The success object is
+    // (fact (success f_prediction evidence (mk.rdx f_imdl [cause req_mk_rdx] [f_prediction]))), and where req_mk_rdx is
+    // (mk.rdx : [f_icst] [requirement]).
+    // Make the model from fact_cst, cause and consequent.
+    MkRdx* mk_rdx = success->get_object_mk_rdx();
+    if (!mk_rdx)
+      // We don't expect this.
+      return;
+    uint16 inputs_index = mk_rdx->code(MK_RDX_INPUTS).asIndex();
+    if (mk_rdx->code(0).asOpcode() != r_exec::Opcodes::MkRdx ||
+      mk_rdx->code(inputs_index).getAtomCount() < 2)
+      // We don't expect this.
+      return;
+    _Fact* cause = (_Fact*)mk_rdx->get_first_input();
+    MkRdx* req_mk_rdx = (MkRdx*)mk_rdx->get_reference(mk_rdx->code(inputs_index + 2).asIndex());
+    if (req_mk_rdx->code(0).asOpcode() != r_exec::Opcodes::MkRdx)
+      // We don't expect this.
+      return;
+    _Fact* f_icst = (_Fact*)req_mk_rdx->get_first_input();
+
+    auto period = duration_cast<microseconds>(consequent->get_after() - cause->get_after());
+    P<GuardBuilder> guard_builder;
+    guard_builder = new ConstBwdArgCmdGuardBuilder(microseconds(100000), period, /*Debug: get correctly*/ 6, cause);
+
+    if (build_mdl(cause, f_icst, consequent, guard_builder, period))
+      inject_hlps(analysis_starting_time);
+
+    if (target_->get_goal()->has_sim()) {
+      auto controller = target_->get_goal()->get_sim()->root_;
+      if (!!controller)
+        // Report a success now since it was skipped in GMonitor::reduce. This also invalidates target_ .
+        ((PMDLController*)controller)->register_goal_outcome(target_, true, success->get_evidence());
+    }
+    return;
+  }
+
   predictions_.push_back((_Fact*)success->get_object()->get_pred()->get_reference(0));
 }
 

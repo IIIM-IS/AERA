@@ -343,6 +343,9 @@ bool GMonitor::reduce(_Fact *input) { // executed by a reduction core; invalidat
 
     switch (input->is_evidence(goal_target_)) {
     case MATCH_SUCCESS_POSITIVE:
+      if (input->is_fact() && goal_target_->is_anti_fact())
+        // This will be handled by GTPX::ack_pred_success, which will call register_goal_outcome.
+        return true;
       ((PMDLController *)controller_)->register_goal_outcome(target_, true, input); // report a success.
       return true;
     case MATCH_SUCCESS_NEGATIVE:
