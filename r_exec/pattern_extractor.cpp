@@ -706,6 +706,36 @@ void GTPX::reduce(r_exec::View *input) { // input->object: f->success.
 }
 
 bool GTPX::build_mdl(_Fact *cause, _Fact* f_icst, _Fact *consequent, GuardBuilder *guard_builder, microseconds period) {
+  if (consequent->is_anti_fact()) {
+    // Special handling to build a model with the consequent is an anti-fact.
+    // Find the requirement cst now.
+    vector<FindFIcstResult> results;
+    if (!!f_icst)
+      // Use the provided f_icst.
+      results.push_back(FindFIcstResult(f_icst, NULL));
+    else {
+      P<Code> new_cst;
+      find_f_icst(target_->get_goal()->get_target(), results, new_cst);
+      if (results.size() == 0)
+        return false;
+      _Fact* f_icst = results[0].f_icst;
+    }
+
+    P<HLPBindingMap> bm = new HLPBindingMap();
+    _Fact* goal_target = target_->get_goal()->get_target();
+    bm->init(goal_target->get_reference(0), MK_VAL_VALUE);
+    // The target is in the consequent frame but we want the pre-requisite frame.
+    bm->init(f_icst, FACT_AFTER);
+    bm->init(f_icst, FACT_BEFORE);
+
+    uint16 write_index;
+    // Set allow_shared_timing_vars false. See BindingMap::abstract_fact .
+    P<Code> m0 = build_mdl_head(bm, 3, cause, consequent, write_index, false);
+    guard_builder->build(m0, NULL, cause, write_index);
+    build_mdl_tail(m0, write_index);
+    // Existence checks performed in build_requirement.
+    return build_requirement(bm, m0, period + milliseconds(20), results, NULL);
+  }
 
   P<BindingMap> bm = new BindingMap();
 
