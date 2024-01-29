@@ -74,9 +74,9 @@ $(function() {
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//_/_/ AERA</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//_/_/ Autocatalytic Endogenous Reflective Architecture</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//_/_/ </span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Jeff Thompson</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Jeff Thompson</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Kristinn R. Thorisson</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Icelandic Institute for Intelligent Machines</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//_/_/ http://www.iiim.is</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//_/_/ </span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//_/_/ Copyright (c) 2010-2012 Eric Nivel</span></div>
@@ -1386,7 +1386,7 @@ $(function() {
 <div class="line"><a name="l01318"></a><span class="lineno"> 1318</span>&#160;  }</div>
 <div class="line"><a name="l01319"></a><span class="lineno"> 1319</span>&#160; </div>
 <div class="line"><a name="l01320"></a><span class="lineno"> 1320</span>&#160;  <span class="keywordtype">bool</span> negative = match_symbol(<span class="stringliteral">&quot;-&quot;</span>, <span class="keyword">false</span>);</div>
-<div class="line"><a name="l01321"></a><span class="lineno"> 1321</span>&#160;  int64 s;</div>
+<div class="line"><a name="l01321"></a><span class="lineno"> 1321</span>&#160;  uint64 s;</div>
 <div class="line"><a name="l01322"></a><span class="lineno"> 1322</span>&#160;  *in_stream_ &gt;&gt; std::dec &gt;&gt; s;</div>
 <div class="line"><a name="l01323"></a><span class="lineno"> 1323</span>&#160;  <span class="keywordflow">if</span> (in_stream_-&gt;fail() || in_stream_-&gt;eof()) {</div>
 <div class="line"><a name="l01324"></a><span class="lineno"> 1324</span>&#160;    in_stream_-&gt;clear();</div>
@@ -1399,7 +1399,7 @@ $(function() {
 <div class="line"><a name="l01331"></a><span class="lineno"> 1331</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l01332"></a><span class="lineno"> 1332</span>&#160;  }</div>
 <div class="line"><a name="l01333"></a><span class="lineno"> 1333</span>&#160; </div>
-<div class="line"><a name="l01334"></a><span class="lineno"> 1334</span>&#160;  int64 ms;</div>
+<div class="line"><a name="l01334"></a><span class="lineno"> 1334</span>&#160;  uint64 ms;</div>
 <div class="line"><a name="l01335"></a><span class="lineno"> 1335</span>&#160;  *in_stream_ &gt;&gt; std::dec &gt;&gt; ms;</div>
 <div class="line"><a name="l01336"></a><span class="lineno"> 1336</span>&#160;  <span class="keywordflow">if</span> (in_stream_-&gt;fail() || in_stream_-&gt;eof()) {</div>
 <div class="line"><a name="l01337"></a><span class="lineno"> 1337</span>&#160;    in_stream_-&gt;clear();</div>
@@ -1412,7 +1412,7 @@ $(function() {
 <div class="line"><a name="l01344"></a><span class="lineno"> 1344</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l01345"></a><span class="lineno"> 1345</span>&#160;  }</div>
 <div class="line"><a name="l01346"></a><span class="lineno"> 1346</span>&#160; </div>
-<div class="line"><a name="l01347"></a><span class="lineno"> 1347</span>&#160;  int64 us;</div>
+<div class="line"><a name="l01347"></a><span class="lineno"> 1347</span>&#160;  uint64 us;</div>
 <div class="line"><a name="l01348"></a><span class="lineno"> 1348</span>&#160;  *in_stream_ &gt;&gt; std::dec &gt;&gt; us;</div>
 <div class="line"><a name="l01349"></a><span class="lineno"> 1349</span>&#160;  <span class="keywordflow">if</span> (in_stream_-&gt;fail() || in_stream_-&gt;eof()) {</div>
 <div class="line"><a name="l01350"></a><span class="lineno"> 1350</span>&#160;    in_stream_-&gt;clear();</div>
@@ -2778,7 +2778,7 @@ $(function() {
 <div class="ttc" id="aclassr__code_1_1_sys_view_html"><div class="ttname"><a href="classr__code_1_1_sys_view.html">r_code::SysView</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00118">r_code/object.h:119</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_sys_object_html"><div class="ttname"><a href="classr__code_1_1_sys_object.html">r_code::SysObject</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00135">r_code/object.h:136</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_image_object_html"><div class="ttname"><a href="classr__code_1_1_image_object.html">r_code::ImageObject</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00106">r_code/object.h:106</a></div></div>
-<div class="ttc" id="aclassr__comp_1_1_image_html"><div class="ttname"><a href="classr__comp_1_1_image.html">r_comp::Image</a></div><div class="ttdef"><b>Definition:</b> <a href="segments_8h_source.html#l00176">segments.h:176</a></div></div>
+<div class="ttc" id="aclassr__comp_1_1_image_html"><div class="ttname"><a href="classr__comp_1_1_image.html">r_comp::Image</a></div><div class="ttdef"><b>Definition:</b> <a href="segments_8h_source.html#l00177">segments.h:177</a></div></div>
 <div class="ttc" id="aclassr__comp_1_1_metadata_html"><div class="ttname"><a href="classr__comp_1_1_metadata.html">r_comp::Metadata</a></div><div class="ttdef"><b>Definition:</b> <a href="segments_8h_source.html#l00109">segments.h:109</a></div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

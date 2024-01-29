@@ -72,37 +72,40 @@ $(function() {
 <div class="title">r_code::resized_vector&lt; T &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="dynheader">
-Inheritance diagram for r_code::resized_vector&lt; T &gt;:</div>
-<div class="dyncontent">
- <div class="center">
-  <img src="classr__code_1_1resized__vector.png" alt=""/>
- </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa5fb6072f2f714224d6ff295d61e3a21"><td class="memItemLeft" align="right" valign="top"><a id="aa5fb6072f2f714224d6ff295d61e3a21"></a>
-uint32&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const</td></tr>
-<tr class="separator:aa5fb6072f2f714224d6ff295d61e3a21"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea2df346aff5d27a56bd5692de35b257"><td class="memItemLeft" align="right" valign="top"><a id="aea2df346aff5d27a56bd5692de35b257"></a>
-T &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (uint32 i)</td></tr>
-<tr class="separator:aea2df346aff5d27a56bd5692de35b257"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ce7131a1a7c0d59668c2301277463c9"><td class="memItemLeft" align="right" valign="top"><a id="a2ce7131a1a7c0d59668c2301277463c9"></a>
-T &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (uint32 i) const</td></tr>
-<tr class="separator:a2ce7131a1a7c0d59668c2301277463c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab328bd13ab4f41cd3681188b0420cf3"><td class="memItemLeft" align="right" valign="top"><a id="aab328bd13ab4f41cd3681188b0420cf3"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>resized_vector</b> (size_t n)</td></tr>
+<tr class="separator:aab328bd13ab4f41cd3681188b0420cf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc4fb96199bb471b58d276ca0209f166"><td class="memItemLeft" align="right" valign="top"><a id="abc4fb96199bb471b58d276ca0209f166"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const</td></tr>
+<tr class="separator:abc4fb96199bb471b58d276ca0209f166"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1538488051e05d04cacb7914864ac53b"><td class="memItemLeft" align="right" valign="top"><a id="a1538488051e05d04cacb7914864ac53b"></a>
+T &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (size_t i)</td></tr>
+<tr class="separator:a1538488051e05d04cacb7914864ac53b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0a5e5681f4f5b82ca04c96e51ac0c9e"><td class="memItemLeft" align="right" valign="top"><a id="af0a5e5681f4f5b82ca04c96e51ac0c9e"></a>
+const T &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (size_t i) const</td></tr>
+<tr class="separator:af0a5e5681f4f5b82ca04c96e51ac0c9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9df5c8a5ebb5efa1c2a27d201cd9624c"><td class="memItemLeft" align="right" valign="top"><a id="a9df5c8a5ebb5efa1c2a27d201cd9624c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>push_back</b> (T t)</td></tr>
 <tr class="separator:a9df5c8a5ebb5efa1c2a27d201cd9624c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5adbc7270be65d57b3060c8e1931012"><td class="memItemLeft" align="right" valign="top"><a id="ad5adbc7270be65d57b3060c8e1931012"></a>
-std::vector&lt; T &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>as_std</b> () const</td></tr>
-<tr class="separator:ad5adbc7270be65d57b3060c8e1931012"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae26368aa856e29544c3f4c85eab97043"><td class="memItemLeft" align="right" valign="top"><a id="ae26368aa856e29544c3f4c85eab97043"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
+<tr class="separator:ae26368aa856e29544c3f4c85eab97043"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a739f57355ef152087849c5f5cecf8f0a"><td class="memItemLeft" align="right" valign="top"><a id="a739f57355ef152087849c5f5cecf8f0a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>resize</b> (size_t new_size)</td></tr>
+<tr class="separator:a739f57355ef152087849c5f5cecf8f0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2759ce0e9452b2765573f9ad4cddaf88"><td class="memItemLeft" align="right" valign="top"><a id="a2759ce0e9452b2765573f9ad4cddaf88"></a>
+const std::vector&lt; T &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>as_std</b> () const</td></tr>
+<tr class="separator:a2759ce0e9452b2765573f9ad4cddaf88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename T&gt;<br />
 class r_code::resized_vector&lt; T &gt;</h3>
 
 
-<p class="definition">Definition at line <a class="el" href="resized__vector_8h_source.html#l00098">98</a> of file <a class="el" href="resized__vector_8h_source.html">resized_vector.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="resized__vector_8h_source.html#l00137">137</a> of file <a class="el" href="resized__vector_8h_source.html">resized_vector.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="resized__vector_8h_source.html">resized_vector.h</a></li>
 </ul>

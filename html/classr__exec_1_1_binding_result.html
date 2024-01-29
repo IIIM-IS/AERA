@@ -78,8 +78,8 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:afb17de6fef23b820cd033eae19ed7100"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1_binding_result.html#afb17de6fef23b820cd033eae19ed7100">BindingResult</a> (<a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> *map, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *ground)</td></tr>
-<tr class="separator:afb17de6fef23b820cd033eae19ed7100"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a508cb2a713b2a108bc99a58f1bf33152"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1_binding_result.html#a508cb2a713b2a108bc99a58f1bf33152">BindingResult</a> (<a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> *map, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *ground, <a class="el" href="classr__exec_1_1_mk_rdx.html">MkRdx</a> *ground_mk_rdx)</td></tr>
+<tr class="separator:a508cb2a713b2a108bc99a58f1bf33152"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -89,14 +89,17 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a5a6059732f6c7b04c515d06df805c735"><td class="memItemLeft" align="right" valign="top"><a id="a5a6059732f6c7b04c515d06df805c735"></a>
 <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>ground_</b></td></tr>
 <tr class="separator:a5a6059732f6c7b04c515d06df805c735"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a033e9f10b12caf028d066a59ac5f3714"><td class="memItemLeft" align="right" valign="top"><a id="a033e9f10b12caf028d066a59ac5f3714"></a>
+<a class="el" href="classr__exec_1_1_mk_rdx.html">MkRdx</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>ground_mk_rdx_</b></td></tr>
+<tr class="separator:a033e9f10b12caf028d066a59ac5f3714"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A <a class="el" href="classr__exec_1_1_binding_result.html">BindingResult</a> is used by methods such as retrieve_simulated_imdl_fwd to return the updated binding maps for multiple matches. </p>
 
 <p class="definition">Definition at line <a class="el" href="mdl__controller_8h_source.html#l00111">111</a> of file <a class="el" href="mdl__controller_8h_source.html">mdl_controller.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="afb17de6fef23b820cd033eae19ed7100"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afb17de6fef23b820cd033eae19ed7100">&#9670;&nbsp;</a></span>BindingResult()</h2>
+<a id="a508cb2a713b2a108bc99a58f1bf33152"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a508cb2a713b2a108bc99a58f1bf33152">&#9670;&nbsp;</a></span>BindingResult()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -114,7 +117,13 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classr__exec_1_1_fact.html">Fact</a> *&#160;</td>
-          <td class="paramname"><em>ground</em>&#160;</td>
+          <td class="paramname"><em>ground</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classr__exec_1_1_mk_rdx.html">MkRdx</a> *&#160;</td>
+          <td class="paramname"><em>ground_mk_rdx</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -132,11 +141,12 @@ Public Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">map</td><td>The <a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a>. This keeps a P&lt;HLPBindingMap&gt; for it. </td></tr>
     <tr><td class="paramname">ground</td><td>A pointer to the <a class="el" href="classr__exec_1_1_fact.html">Fact</a> which is the ground for the bindings. This only keeps a pointer. </td></tr>
+    <tr><td class="paramname">ground_mk_rdx</td><td>A pointer to the mk.rdx which made ground, or NULL if not available. This only keeps a pointer. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="mdl__controller_8h_source.html#l00118">118</a> of file <a class="el" href="mdl__controller_8h_source.html">mdl_controller.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mdl__controller_8h_source.html#l00119">119</a> of file <a class="el" href="mdl__controller_8h_source.html">mdl_controller.h</a>.</p>
 
 </div>
 </div>

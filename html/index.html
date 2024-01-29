@@ -66,12 +66,13 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="md_submodules_AERA_README"></a> This project implements AERA (Auto-catalytic Endogenous Reflective Architecture) using the Replicode programming language.</p>
-<p>For an overview, please visit <a href="https://openaera.org">https://openaera.org</a> . This README file documents general information about the AERA code.</p>
+<p>For an overview, please visit <a href="https://openaera.org">https://openaera.org</a> . See our FAQ which answers many questions about AERA <a href="https://openaera.org/faq">https://openaera.org/faq</a> .</p>
+<p>This README file documents general information about the AERA code.</p>
 <p>See the file <a href="https://github.com/IIIM-IS/AERA/blob/master/INSTALL.md">INSTALL.md</a> for build and install instructions.</p>
 <p>See the file <a href="https://github.com/IIIM-IS/AERA/blob/master/CHANGELOG.md">CHANGELOG.md</a> for version numbers and changes.</p>
 <p>For code documentation, see <a href="https://iiim-is.github.io/AERA">https://iiim-is.github.io/AERA</a> .</p>
-<h1><a class="anchor" id="autotoc_md21"></a>
-code structure</h1>
+<h1><a class="anchor" id="autotoc_md12"></a>
+Code structure</h1>
 <p>The main program execution for the example happens in <a class="el" href="_a_e_r_a_2main_8cpp_source.html">AERA/main.cpp</a></p><ul>
 <li><code>main()</code> // loads the <code>settings.xml</code> and the seed image, starts up <code><a class="el" href="mem_8cpp_source.html">r_exec/mem.cpp</a></code> and then waits for run_time and ends by saving the results to disk to <code>decompiled.txt</code></li>
 <li><code><a class="el" href="mem_8cpp_source.html">r_exec/mem.cpp</a></code> starts up the <code>runReductionCore</code> and the <code>runTimeCore</code> threads which do the magic</li>
@@ -79,7 +80,7 @@ code structure</h1>
 <li>The <code>r_exec/*_controller.cpp</code> are the controllers for mdl, pgm and more</li>
 <li>The commands (<code>cmd</code>) activated in the replicode scripts would be activated through <code><a class="el" href="mem_8cpp_source.html">r_exec/mem.cpp</a>::eject(Code *command)</code>, see <a href="https://github.com/IIIM-IS/Integration_OpenAI">https://github.com/IIIM-IS/Integration_OpenAI</a> for actual device commands</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md22"></a>
+<h1><a class="anchor" id="autotoc_md13"></a>
 Gotchas</h1>
 <p>This is a list of unintuitive issues with using AERA, to help new users.</p>
 <ul>
@@ -115,10 +116,95 @@ Gotchas</h1>
 <li>(/ nb us) -&gt; nb</li>
 <li>(/ us nb) -&gt; us</li>
 <li>(/ us us) -&gt; nb</li>
-<li>(/ nb ts) or (/ ts nb) or (/ us ts) or (/ ts us) or (/ ts ts) not allowed </li>
+<li>(/ nb ts) or (/ ts nb) or (/ us ts) or (/ ts us) or (/ ts ts) not allowed</li>
 </ul>
 </li>
 </ul>
+<h2><a class="anchor" id="autotoc_md14"></a>
+Implementation status</h2>
+<p>Demo = demonstrated functionality. Vis = explanation in Visualizer. Comm = code commented. Doc = details in software design document</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadCenter">Demo </th><th class="markdownTableHeadCenter">Vis </th><th class="markdownTableHeadCenter">Comm </th><th class="markdownTableHeadCenter">Doc </th><th class="markdownTableHeadNone">Functionality  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">**_Facts / Success_**  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Learn models in change targeted pattern extractor (CTPX)  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Learn models in goal targeted pattern extractor (GTPX) due to unexpected achievement of goal fact  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Non-simulated icst from facts/icsts  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Non-simulated prediction of imdl from weak requirement model  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Rating of weak requirement models  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Testing and re-activation of models and weak requirement models in the secondary group  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Use of deleted models to prevent re-creating them  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Non-simulated prediction of fact from model  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Non-simulated cmd from non-simulated goal RHS  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Auto-focus based on active predictions and goals (not pass-through)  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Views/groups and saliency propagation  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Simulated prediction of icst from facts/icsts  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Simulated prediction of imdl from weak requirement model  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Simulated prediction of fact from model  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Simulated goal from drive  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Simulated goal cmd from model  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Simulated goal requirement imdl from model  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Simulated goal icst from requirement model  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Simulated goal facts/icsts from icst  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Commiting to optional solutions  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">**_Anti-facts / Failure_**  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Learn strong requirement models (predicted anti-imdl) in prediction targeted pattern extractor (PTPX) due to failed prediction of a fact  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Learn strong requirement models (predicted anti-imdl) in prediction targeted pattern extractor (PTPX) due to failed prediction of an anti-fact  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Learn models in goal targeted pattern extractor (GTPX) due to unexpected achievement of goal anti-fact  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Non-simulated prediction of anti-fact from model  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Non-simulated prediction of anti-imdl from strong requirement model (to prevent model prediction)  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Rating of strong requirement models  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Testing and re-activation of strong requirement models in the secondary group  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Goal actions to test conflicting weak and strong requirements  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Simulated anti-goal from opposite match of drive (and starting of new simulation from anti-goal)  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Simulated prediction of anti-imdl from strong requirement model (to prevent model prediction)  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Simulated prediction of anti-fact from model  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Conflict resolution of conflicting predictions (fact and anti-fact)  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Simulated anti-goal of cmd from model with anti-matched RHS  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Simulated anti-goal requirement imdl from model with anti-matched RHS  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Simulated anti-goal icst from requirement model with anti-matched RHS  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Simulated anti-goal facts/icsts from anti-fact icst  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyCenter">✓ </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyNone">Commiting to mandatory solutions  </td></tr>
+</table>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->

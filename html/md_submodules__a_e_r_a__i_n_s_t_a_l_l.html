@@ -66,7 +66,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p>These are instructions to build and run AERA.</p>
-<h1><a class="anchor" id="autotoc_md11"></a>
+<h1><a class="anchor" id="autotoc_md2"></a>
 Prerequisites</h1>
 <ul>
 <li>Required: On Windows, Visual Studio</li>
@@ -74,32 +74,34 @@ Prerequisites</h1>
 <li>Required: The AERA code repository from <a href="https://github.com/IIIM-IS/AERA">https://github.com/IIIM-IS/AERA</a></li>
 </ul>
 <p>Following are the detailed steps for each platform to install the prerequisites.</p>
-<h2><a class="anchor" id="autotoc_md12"></a>
+<h2><a class="anchor" id="autotoc_md3"></a>
 Windows</h2>
-<p>To install Visual Studio, download and install Visual Studio Community Edition 2019 from <a href="https://visualstudio.microsoft.com/vs/older-downloads">https://visualstudio.microsoft.com/vs/older-downloads</a> . In the installer, under "Desktop development with C++", check "Windows 10 SDK (10.0.17134.0)" and "MSVC v141 - VS 2017 C++ build tools".</p>
+<p>To install Visual Studio, download and install Visual Studio Community Edition 2022 from <a href="https://visualstudio.microsoft.com/vs/community">https://visualstudio.microsoft.com/vs/community</a> . (If you already have Visual Studio 2019 installed, this also works. Visual Studio 2017 is no longer supported.) In the installer, under "Desktop development with C++", check "Windows 10 SDK (10.018362.0)" and "MSVC v141 - VS 2017 C++ build tools".</p>
 <p>To install Git, download and install GitHub for Desktop from <a href="https://desktop.github.com">https://desktop.github.com</a> .</p>
 <p>To get the AERA code repository, launch GitHub for Desktop and sign in to GitHub. In the File menu, click "Clone a Repository". Click the URL tab and enter <code><a href="https://github.com/IIIM-IS/AERA">https://github.com/IIIM-IS/AERA</a></code> . It should be a recursive clone (which is the default).</p>
-<h1><a class="anchor" id="autotoc_md13"></a>
+<h1><a class="anchor" id="autotoc_md4"></a>
 Build</h1>
 <p>Launch Visual Studio and open the project <code>AERA.sln</code> from the cloned repository. E.g.: <code>C:\Users\Alice\Documents\GitHub\replicode\AERA.sln</code> . If a dialog box appears asking to retarget the Windows version, click cancel.</p>
-<h2><a class="anchor" id="autotoc_md14"></a>
+<h2><a class="anchor" id="autotoc_md5"></a>
 &lt;tt&gt;WITH_DETAIL_OID&lt;/tt&gt;</h2>
 <p>To work with the AERA Visualizer, we must enable <code>WITH_DETAIL_OID</code> as follows. In the Visual Studio Solution Explorer, open the section for <code>CoreLibrary</code>. Double-click <code><a class="el" href="base_8h_source.html">base.h</a></code> . Uncomment the define for <code>WITH_DETAIL_OID</code>, so that the line is: </p><pre class="fragment">#define WITH_DETAIL_OID // Enable get_detail_oid() in every object.
-</pre><h2><a class="anchor" id="autotoc_md15"></a>
+</pre><h2><a class="anchor" id="autotoc_md6"></a>
 Compile</h2>
-<p>In the Solution Configurations drop-down, make sure you select Release (unless you plan to debug AERA). On the Build menu, click Build Solution. (Don't worry about all the compiler warnings.)</p>
-<h1><a class="anchor" id="autotoc_md16"></a>
+<p>In the Solution Configurations drop-down, make sure you select Release (unless you plan to debug AERA).</p>
+<p>In the Solution Options drop-down, make sure you select Win32.</p>
+<p>On the Build menu, click Build Solution. (Don't worry about all the compiler warnings.)</p>
+<h1><a class="anchor" id="autotoc_md7"></a>
 Run</h1>
 <p>To run, in Visual Studio on the Debug menu, select "Run Without Debugging". When first installed, the default is to run the program <code>main.replicode</code> which by default loads the program <code>hello.world.1.replicode</code>. The output window should show some text including: </p><pre class="fragment">0s:50ms:0us: hello world 1
 </pre><p>To exit, close the output windows.</p>
-<h1><a class="anchor" id="autotoc_md17"></a>
+<h1><a class="anchor" id="autotoc_md8"></a>
 settings.xml</h1>
 <p>The <code>settings.xml</code> file specifies the program to run, AERA meta parameters, and other options for running AERA. To open <code>settings.xml</code>, in the Visual Studio Solution Explorer, open the section for <code>AERA</code>. Double click <code>settings.xml</code></p>
 <p>This has many parameters which are documented at the bottom of the file. Following are some highlights.</p>
-<h2><a class="anchor" id="autotoc_md18"></a>
+<h2><a class="anchor" id="autotoc_md9"></a>
 settings.xml source_file_name</h2>
 <p>The <code>source_file_name</code> parameter specifies the seed program to run. For example, a program to use with the AERA Visualizer is "../AERA/replicode_v1.2/ball.external.replicode".</p>
-<h2><a class="anchor" id="autotoc_md19"></a>
+<h2><a class="anchor" id="autotoc_md10"></a>
 settings.xml keep_invalidated_objects</h2>
 <p>To work with the AERA Visualizer, in the Debug section under Objects, set <code>keep_invalidated_objects</code> to "yes". (This is needed so that the decompiled objects file contains all the objects that were created during the run, including temporary objects.) </p>
 </div></div><!-- contents -->

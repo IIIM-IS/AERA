@@ -118,9 +118,9 @@ virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>take_input</b
 <tr class="memitem:ae1eb12fc389bca0880abf5cbab7134b6 inherit pub_methods_classr__exec_1_1_t_p_x"><td class="memItemLeft" align="right" valign="top"><a id="ae1eb12fc389bca0880abf5cbab7134b6"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>signal</b> (<a class="el" href="classr__exec_1_1_view.html">View</a> *input) const</td></tr>
 <tr class="separator:ae1eb12fc389bca0880abf5cbab7134b6 inherit pub_methods_classr__exec_1_1_t_p_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abee9cae2315e17236c630dd2707c0f4c inherit pub_methods_classr__exec_1_1_t_p_x"><td class="memItemLeft" align="right" valign="top"><a id="abee9cae2315e17236c630dd2707c0f4c"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>ack_pred_success</b> (<a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *predicted_f)</td></tr>
-<tr class="separator:abee9cae2315e17236c630dd2707c0f4c inherit pub_methods_classr__exec_1_1_t_p_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac575726a9395b264523603ad0bd6f277 inherit pub_methods_classr__exec_1_1_t_p_x"><td class="memItemLeft" align="right" valign="top"><a id="ac575726a9395b264523603ad0bd6f277"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>ack_pred_success</b> (<a class="el" href="classr__exec_1_1_success.html">Success</a> *success)</td></tr>
+<tr class="separator:ac575726a9395b264523603ad0bd6f277 inherit pub_methods_classr__exec_1_1_t_p_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classcore_1_1___object"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcore_1_1___object')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcore_1_1___object.html">core::_Object</a></td></tr>
 <tr class="memitem:a4a0780ae30bd77ef7b7c2f99b1bc61c0 inherit pub_methods_classcore_1_1___object"><td class="memItemLeft" align="right" valign="top"><a id="a4a0780ae30bd77ef7b7c2f99b1bc61c0"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>incRef</b> ()</td></tr>
@@ -146,9 +146,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>filter_icst_component
 <tr class="memitem:a8b3d6441cd9751988d33c942eb7e492d"><td class="memItemLeft" align="right" valign="top"><a id="a8b3d6441cd9751988d33c942eb7e492d"></a>
 <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>build_cst</b> (const std::vector&lt; <a class="el" href="classr__exec_1_1___t_p_x_1_1_component.html">Component</a> &gt; &amp;components, <a class="el" href="classr__exec_1_1_binding_map.html">BindingMap</a> *bm, <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *main_component)</td></tr>
 <tr class="separator:a8b3d6441cd9751988d33c942eb7e492d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ee8f871432c08eec421132c818ea716"><td class="memItemLeft" align="right" valign="top"><a id="a5ee8f871432c08eec421132c818ea716"></a>
-<a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>build_mdl_head</b> (<a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> *bm, uint16 tpl_arg_count, <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *lhs, <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *rhs, uint16 &amp;write_index, bool allow_shared_timing_vars=true)</td></tr>
-<tr class="separator:a5ee8f871432c08eec421132c818ea716"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a321a4d69a4b783385e1705ec61d0b1c0"><td class="memItemLeft" align="right" valign="top"><a id="a321a4d69a4b783385e1705ec61d0b1c0"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>build_requirement</b> (<a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> *bm, <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *m0, std::chrono::microseconds period, const std::vector&lt; <a class="el" href="classr__exec_1_1___t_p_x_1_1_find_f_icst_result.html">FindFIcstResult</a> &gt; &amp;results, <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *new_cst)</td></tr>
+<tr class="separator:a321a4d69a4b783385e1705ec61d0b1c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24f300fd3ddea04afd33629e19d9fe51"><td class="memItemLeft" align="right" valign="top"><a id="a24f300fd3ddea04afd33629e19d9fe51"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>build_mdl_tail</b> (<a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *mdl, uint16 write_index)</td></tr>
 <tr class="separator:a24f300fd3ddea04afd33629e19d9fe51"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -179,6 +179,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>filter</b> (<a class=
 Static Protected Member Functions</h2></td></tr>
 <tr class="memitem:abc6f5bcf628b6e11e1dd31c21580ba04"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1___t_p_x.html#abc6f5bcf628b6e11e1dd31c21580ba04">find_f_icst_component</a> (<a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *fact, const <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *component, int max_depth=3)</td></tr>
 <tr class="separator:abc6f5bcf628b6e11e1dd31c21580ba04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ee8f871432c08eec421132c818ea716"><td class="memItemLeft" align="right" valign="top"><a id="a5ee8f871432c08eec421132c818ea716"></a>
+static <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>build_mdl_head</b> (<a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> *bm, uint16 tpl_arg_count, <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *lhs, <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *rhs, uint16 &amp;write_index, bool allow_shared_timing_vars=true)</td></tr>
+<tr class="separator:a5ee8f871432c08eec421132c818ea716"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a751e9c3f110e229d1900244cddef8a07"><td class="memItemLeft" align="right" valign="top"><a id="a751e9c3f110e229d1900244cddef8a07"></a>
+static <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>build_mdl_head_from_abstract</b> (uint16 tpl_arg_count, <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *lhs, <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *rhs, uint16 &amp;write_index)</td></tr>
+<tr class="separator:a751e9c3f110e229d1900244cddef8a07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -220,7 +226,7 @@ int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="pattern__extractor_8h_source.html#l00175">175</a> of file <a class="el" href="pattern__extractor_8h_source.html">pattern_extractor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pattern__extractor_8h_source.html#l00176">176</a> of file <a class="el" href="pattern__extractor_8h_source.html">pattern_extractor.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="abd27107a9193343c409e739aec1bc5fd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abd27107a9193343c409e739aec1bc5fd">&#9670;&nbsp;</a></span>_find_f_icst()</h2>
@@ -270,7 +276,7 @@ int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="pattern__extractor_8cpp_source.html#l00259">259</a> of file <a class="el" href="pattern__extractor_8cpp_source.html">pattern_extractor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pattern__extractor_8cpp_source.html#l00261">261</a> of file <a class="el" href="pattern__extractor_8cpp_source.html">pattern_extractor.cpp</a>.</p>
 
 </div>
 </div>
@@ -321,8 +327,6 @@ int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</
   </table>
   </dd>
 </dl>
-
-<p class="definition">Definition at line <a class="el" href="pattern__extractor_8cpp_source.html#l00283">283</a> of file <a class="el" href="pattern__extractor_8cpp_source.html">pattern_extractor.cpp</a>.</p>
 
 </div>
 </div>
@@ -381,8 +385,6 @@ int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="pattern__extractor_8cpp_source.html#l00292">292</a> of file <a class="el" href="pattern__extractor_8cpp_source.html">pattern_extractor.cpp</a>.</p>
-
 </div>
 </div>
 <a id="abc6f5bcf628b6e11e1dd31c21580ba04"></a>
@@ -434,7 +436,7 @@ int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The Code pattern in the unpacked cst that matches the component, if found. NULL if not found. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pattern__extractor_8cpp_source.html#l00233">233</a> of file <a class="el" href="pattern__extractor_8cpp_source.html">pattern_extractor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pattern__extractor_8cpp_source.html#l00235">235</a> of file <a class="el" href="pattern__extractor_8cpp_source.html">pattern_extractor.cpp</a>.</p>
 
 </div>
 </div>

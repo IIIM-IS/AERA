@@ -72,6 +72,15 @@ $(function() {
 <div class="title">r_exec::Context Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+<div class="dynheader">
+Inheritance diagram for r_exec::Context:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classr__exec_1_1_context.png" usemap="#r_5Fexec::Context_map" alt=""/>
+  <map id="r_5Fexec::Context_map" name="r_5Fexec::Context_map">
+<area href="classr__exec_1_1_op_context.html" alt="r_exec::OpContext" shape="rect" coords="0,56,116,80"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -102,28 +111,28 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
 <tr class="memitem:a2b7086a8228b0f52f264b3be2fc8e227"><td class="memItemLeft" align="right" valign="top"><a id="a2b7086a8228b0f52f264b3be2fc8e227"></a>
 <a class="el" href="classr__code_1_1_atom.html">Atom</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (uint16 i) const</td></tr>
 <tr class="separator:a2b7086a8228b0f52f264b3be2fc8e227"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a61d4e4a1c7ac6801a254135829d556ca"><td class="memItemLeft" align="right" valign="top"><a id="a61d4e4a1c7ac6801a254135829d556ca"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setAtomicResult</b> (<a class="el" href="classr__code_1_1_atom.html">Atom</a> a) const</td></tr>
-<tr class="separator:a61d4e4a1c7ac6801a254135829d556ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3bd6e0b86eeddba90961db1025b3704c"><td class="memItemLeft" align="right" valign="top"><a id="a3bd6e0b86eeddba90961db1025b3704c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setTimestampResult</b> (Timestamp t) const</td></tr>
-<tr class="separator:a3bd6e0b86eeddba90961db1025b3704c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af29b213bb8290a7d3672fbe2f10b5748"><td class="memItemLeft" align="right" valign="top"><a id="af29b213bb8290a7d3672fbe2f10b5748"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setDurationResult</b> (std::chrono::microseconds d) const</td></tr>
-<tr class="separator:af29b213bb8290a7d3672fbe2f10b5748"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4c66ba22c385414814ca924117fff21"><td class="memItemLeft" align="right" valign="top"><a id="ae4c66ba22c385414814ca924117fff21"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setCompoundResultHead</b> (<a class="el" href="classr__code_1_1_atom.html">Atom</a> a) const</td></tr>
-<tr class="separator:ae4c66ba22c385414814ca924117fff21"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c07975dbc394001768a08e37faab2f1"><td class="memItemLeft" align="right" valign="top"><a id="a9c07975dbc394001768a08e37faab2f1"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addCompoundResultPart</b> (<a class="el" href="classr__code_1_1_atom.html">Atom</a> a) const</td></tr>
-<tr class="separator:a9c07975dbc394001768a08e37faab2f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abff5ee3c301541ee80b81c11fa353e95"><td class="memItemLeft" align="right" valign="top"><a id="abff5ee3c301541ee80b81c11fa353e95"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setAtomicResult</b> (<a class="el" href="classr__code_1_1_atom.html">Atom</a> a) const</td></tr>
+<tr class="separator:abff5ee3c301541ee80b81c11fa353e95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6d2fad4e843ef499907ef2b4b30c6e1"><td class="memItemLeft" align="right" valign="top"><a id="ab6d2fad4e843ef499907ef2b4b30c6e1"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setTimestampResult</b> (Timestamp t) const</td></tr>
+<tr class="separator:ab6d2fad4e843ef499907ef2b4b30c6e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cee4e7870a69b116b55d6681c9ef90c"><td class="memItemLeft" align="right" valign="top"><a id="a9cee4e7870a69b116b55d6681c9ef90c"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setDurationResult</b> (std::chrono::microseconds d) const</td></tr>
+<tr class="separator:a9cee4e7870a69b116b55d6681c9ef90c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e081c0ca03bc0668aa71591940ccc75"><td class="memItemLeft" align="right" valign="top"><a id="a3e081c0ca03bc0668aa71591940ccc75"></a>
+virtual uint16&#160;</td><td class="memItemRight" valign="bottom"><b>setCompoundResultHead</b> (<a class="el" href="classr__code_1_1_atom.html">Atom</a> a) const</td></tr>
+<tr class="separator:a3e081c0ca03bc0668aa71591940ccc75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9530ff7fa16bf4c9dfa2716d1e66b1b"><td class="memItemLeft" align="right" valign="top"><a id="ac9530ff7fa16bf4c9dfa2716d1e66b1b"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>addCompoundResultPart</b> (<a class="el" href="classr__code_1_1_atom.html">Atom</a> a) const</td></tr>
+<tr class="separator:ac9530ff7fa16bf4c9dfa2716d1e66b1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8be945cfb646bc357c576d043e60df6"><td class="memItemLeft" align="right" valign="top"><a id="ab8be945cfb646bc357c576d043e60df6"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>trace</b> (std::ostream &amp;out) const</td></tr>
 <tr class="separator:ab8be945cfb646bc357c576d043e60df6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="operator_8h_source.html#l00097">97</a> of file <a class="el" href="operator_8h_source.html">operator.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="operator_8h_source.html#l00100">100</a> of file <a class="el" href="operator_8h_source.html">operator.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="operator_8h_source.html">operator.h</a></li>
 </ul>

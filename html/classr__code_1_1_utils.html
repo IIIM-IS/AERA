@@ -156,9 +156,6 @@ template&lt;class O &gt; </td></tr>
 <tr class="memitem:a08ed5a02ad8683aceafcb6931d01298e"><td class="memItemLeft" align="right" valign="top"><a id="a08ed5a02ad8683aceafcb6931d01298e"></a>
 static int32&#160;</td><td class="memItemRight" valign="bottom"><b>GetResilience</b> (Timestamp now, std::chrono::microseconds time_to_live, uint64 upr)</td></tr>
 <tr class="separator:a08ed5a02ad8683aceafcb6931d01298e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad00f61901e77800e1d193b5b2d5ac051"><td class="memItemLeft" align="right" valign="top"><a id="ad00f61901e77800e1d193b5b2d5ac051"></a>
-static int32&#160;</td><td class="memItemRight" valign="bottom"><b>GetResilience</b> (Timestamp now, Timestamp::duration time_to_live, uint64 upr)</td></tr>
-<tr class="separator:ad00f61901e77800e1d193b5b2d5ac051"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41d320d2316488813b3bf6be880d99fa"><td class="memItemLeft" align="right" valign="top"><a id="a41d320d2316488813b3bf6be880d99fa"></a>
 static int32&#160;</td><td class="memItemRight" valign="bottom"><b>GetResilience</b> (float32 resilience, float32 origin_upr, float32 destination_upr)</td></tr>
 <tr class="separator:a41d320d2316488813b3bf6be880d99fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -209,7 +206,7 @@ static const uint64&#160;</td><td class="memItemRight" valign="bottom"><b>MaxTHZ
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The duration. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="r__code_2utils_8h_source.html#l00237">237</a> of file <a class="el" href="r__code_2utils_8h_source.html">r_code/utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="r__code_2utils_8h_source.html#l00242">242</a> of file <a class="el" href="r__code_2utils_8h_source.html">r_code/utils.h</a>.</p>
 
 </div>
 </div>
@@ -257,7 +254,7 @@ template&lt;class O &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The duration. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="r__code_2utils_8h_source.html#l00269">269</a> of file <a class="el" href="r__code_2utils_8h_source.html">r_code/utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="r__code_2utils_8h_source.html#l00274">274</a> of file <a class="el" href="r__code_2utils_8h_source.html">r_code/utils.h</a>.</p>
 
 </div>
 </div>
@@ -386,7 +383,7 @@ template&lt;class O &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The time stamp. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="r__code_2utils_8h_source.html#l00199">199</a> of file <a class="el" href="r__code_2utils_8h_source.html">r_code/utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="r__code_2utils_8h_source.html#l00204">204</a> of file <a class="el" href="r__code_2utils_8h_source.html">r_code/utils.h</a>.</p>
 
 </div>
 </div>
@@ -477,7 +474,7 @@ template&lt;class O &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="r__code_2utils_8h_source.html#l00246">246</a> of file <a class="el" href="r__code_2utils_8h_source.html">r_code/utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="r__code_2utils_8h_source.html#l00251">251</a> of file <a class="el" href="r__code_2utils_8h_source.html">r_code/utils.h</a>.</p>
 
 </div>
 </div>
@@ -531,7 +528,7 @@ template&lt;class O &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="r__code_2utils_8h_source.html#l00282">282</a> of file <a class="el" href="r__code_2utils_8h_source.html">r_code/utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="r__code_2utils_8h_source.html#l00287">287</a> of file <a class="el" href="r__code_2utils_8h_source.html">r_code/utils.h</a>.</p>
 
 </div>
 </div>
@@ -734,7 +731,7 @@ template&lt;class O &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="r__code_2utils_8h_source.html#l00212">212</a> of file <a class="el" href="r__code_2utils_8h_source.html">r_code/utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="r__code_2utils_8h_source.html#l00217">217</a> of file <a class="el" href="r__code_2utils_8h_source.html">r_code/utils.h</a>.</p>
 
 </div>
 </div>
@@ -826,7 +823,7 @@ template&lt;class O &gt; </div>
 <p>Make a string from (timestamp - time_reference) in the form XXXs:YYYms:ZZZus, with a minus sign if it is negative. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">timestamp</td><td>The time stamp. </td></tr>
-    <tr><td class="paramname">time_reference</td><td>The reference time to subtract from timestamp, usuall the session start time. We do this because timestamp is seconds since 01/01/1970, so the seconds would be very large. </td></tr>
+    <tr><td class="paramname">time_reference</td><td>The reference time to subtract from timestamp, usually the session start time. We do this because timestamp is seconds since 01/01/1970, so the seconds would be very large. </td></tr>
   </table>
   </dd>
 </dl>

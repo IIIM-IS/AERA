@@ -74,9 +74,9 @@ $(function() {
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//_/_/ AERA</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//_/_/ Autocatalytic Endogenous Reflective Architecture</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//_/_/ </span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Jeff Thompson</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Jeff Thompson</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Kristinn R. Thorisson</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Icelandic Institute for Intelligent Machines</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//_/_/ http://www.iiim.is</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//_/_/ </span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//_/_/ Copyright (c) 2010-2012 Eric Nivel</span></div>
@@ -604,7 +604,7 @@ $(function() {
 <div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;  }</div>
 <div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160; </div>
 <div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;  uint16 object_index;</div>
-<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;  ptrs_to_indices_[object] = object_index = code_segment_.objects_.as_std()-&gt;size();</div>
+<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;  ptrs_to_indices_[object] = object_index = code_segment_.objects_.size();</div>
 <div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160;  <a class="code" href="classr__code_1_1_sys_object.html">SysObject</a> *sys_object = <span class="keyword">new</span> <a class="code" href="classr__code_1_1_sys_object.html">SysObject</a>(<span class="keywordtype">object</span>);</div>
 <div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;  add_sys_object(sys_object);</div>
 <div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160; </div>
@@ -630,7 +630,7 @@ $(function() {
 <div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;    <span class="keywordflow">return</span> code_segment_.objects_[it-&gt;second];</div>
 <div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160; </div>
 <div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;  uint16 object_index;</div>
-<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;  ptrs_to_indices_[object] = object_index = code_segment_.objects_.as_std()-&gt;size();</div>
+<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;  ptrs_to_indices_[object] = object_index = code_segment_.objects_.size();</div>
 <div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;  <a class="code" href="classr__code_1_1_sys_object.html">SysObject</a> *sys_object = <span class="keyword">new</span> <a class="code" href="classr__code_1_1_sys_object.html">SysObject</a>(<span class="keywordtype">object</span>);</div>
 <div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;  add_sys_object(sys_object);</div>
 <div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160; </div>
@@ -692,7 +692,7 @@ $(function() {
 <div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160; </div>
 <div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;  <a class="code" href="classr__code_1_1_code.html">Code</a> *object;</div>
 <div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;  <a class="code" href="classr__code_1_1_sys_object.html">SysObject</a> *sys_object;</div>
-<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;  <span class="keywordflow">for</span> (uint32 i = 0; i &lt; code_segment_.objects_.as_std()-&gt;size(); ++i) {</div>
+<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;  <span class="keywordflow">for</span> (uint32 i = 0; i &lt; code_segment_.objects_.size(); ++i) {</div>
 <div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160; </div>
 <div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;    sys_object = code_segment_.objects_[i];</div>
 <div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;    <span class="comment">// The memory address of the original object was stored in sys_object-&gt;references_, so recover it.</span></div>
@@ -707,7 +707,7 @@ $(function() {
 <div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;    _object |= ((uint64)(sys_object-&gt;references_[3]) &lt;&lt; 48);</div>
 <div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;    <span class="keywordtype">object</span> = (<a class="code" href="classr__code_1_1_code.html">Code</a> *)_object;</div>
 <div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;    sys_object-&gt;references_.as_std()-&gt;clear();</div>
+<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;    sys_object-&gt;references_.clear();</div>
 <div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;    build_references(sys_object, <span class="keywordtype">object</span>);</div>
 <div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;  }</div>
 <div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;}</div>
@@ -764,30 +764,30 @@ $(function() {
 <div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;    <a class="code" href="classr__code_1_1_sys_object.html">SysObject</a> *sys_object = code_segment_.objects_[i];</div>
 <div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;    <a class="code" href="classr__code_1_1_code.html">Code</a> *ram_object = ram_objects[i];</div>
 <div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160; </div>
-<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;    <span class="keywordflow">for</span> (uint16 j = 0; j &lt; sys_object-&gt;views_.as_std()-&gt;size(); ++j) {</div>
+<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;    <span class="keywordflow">for</span> (uint16 j = 0; j &lt; sys_object-&gt;views_.size(); ++j) {</div>
 <div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160; </div>
 <div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;      <a class="code" href="classr__code_1_1_sys_view.html">SysView</a> *sys_v = sys_object-&gt;views_[j];</div>
 <div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;      <a class="code" href="classr__code_1_1___view.html">_View</a> *v = ram_object-&gt;build_view(sys_v);</div>
-<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;      <span class="keywordflow">for</span> (uint16 k = 0; k &lt; sys_v-&gt;references_.as_std()-&gt;size(); ++k)</div>
+<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;      <span class="keywordflow">for</span> (uint16 k = 0; k &lt; sys_v-&gt;references_.size(); ++k)</div>
 <div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160;        v-&gt;references_[k] = ram_objects[sys_v-&gt;references_[k]];</div>
 <div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160; </div>
 <div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;      ram_object-&gt;views_.insert(v);</div>
 <div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;    }</div>
 <div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160; </div>
-<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;    <span class="keywordflow">for</span> (uint16 j = 0; j &lt; sys_object-&gt;references_.as_std()-&gt;size(); ++j)</div>
+<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;    <span class="keywordflow">for</span> (uint16 j = 0; j &lt; sys_object-&gt;references_.size(); ++j)</div>
 <div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;      ram_object-&gt;set_reference(j, ram_objects[sys_object-&gt;references_[j]]);</div>
 <div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;  }</div>
 <div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;}</div>
 <div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclassr__code_1_1resized__vector_html"><div class="ttname"><a href="classr__code_1_1resized__vector.html">r_code::resized_vector</a></div><div class="ttdef"><b>Definition:</b> <a href="resized__vector_8h_source.html#l00098">resized_vector.h:99</a></div></div>
+<div class="ttc" id="aclassr__code_1_1resized__vector_html"><div class="ttname"><a href="classr__code_1_1resized__vector.html">r_code::resized_vector</a></div><div class="ttdef"><b>Definition:</b> <a href="resized__vector_8h_source.html#l00137">resized_vector.h:137</a></div></div>
 <div class="ttc" id="aclassr__code_1_1___view_html"><div class="ttname"><a href="classr__code_1_1___view.html">r_code::_View</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00163">r_code/object.h:164</a></div></div>
 <div class="ttc" id="aclassr__comp_1_1_image_html_a783edad562cc9cf2100e37c7b6dca7fa"><div class="ttname"><a href="classr__comp_1_1_image.html#a783edad562cc9cf2100e37c7b6dca7fa">r_comp::Image::add_objects</a></div><div class="ttdeci">void add_objects(r_code::list&lt; P&lt; r_code::Code &gt; &gt; &amp;objects, bool include_invalidated=false)</div><div class="ttdef"><b>Definition:</b> <a href="segments_8cpp_source.html#l00491">segments.cpp:491</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_sys_view_html"><div class="ttname"><a href="classr__code_1_1_sys_view.html">r_code::SysView</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00118">r_code/object.h:119</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_sys_object_html"><div class="ttname"><a href="classr__code_1_1_sys_object.html">r_code::SysObject</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00135">r_code/object.h:136</a></div></div>
 <div class="ttc" id="aclasscore_1_1_p_html"><div class="ttname"><a href="classcore_1_1_p.html">core::P&lt; r_code::Code &gt;</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_code_html"><div class="ttname"><a href="classr__code_1_1_code.html">r_code::Code</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00223">r_code/object.h:224</a></div></div>
-<div class="ttc" id="aclassr__code_1_1_mem_html"><div class="ttname"><a href="classr__code_1_1_mem.html">r_code::Mem</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00390">r_code/object.h:390</a></div></div>
+<div class="ttc" id="aclassr__code_1_1_mem_html"><div class="ttname"><a href="classr__code_1_1_mem.html">r_code::Mem</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00420">r_code/object.h:420</a></div></div>
 <div class="ttc" id="aclassr__code_1_1list_html"><div class="ttname"><a href="classr__code_1_1list.html">r_code::list</a></div><div class="ttdef"><b>Definition:</b> <a href="list_8h_source.html#l00099">list.h:99</a></div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

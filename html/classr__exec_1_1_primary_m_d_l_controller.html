@@ -106,17 +106,17 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>reduce</b> (<a class=
 <tr class="memitem:a3bf25a088624b99a12d3361d81f03d4d"><td class="memItemLeft" align="right" valign="top"><a id="a3bf25a088624b99a12d3361d81f03d4d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>reduce_batch</b> (<a class="el" href="classr__exec_1_1_fact.html">Fact</a> *f_p_f_imdl, <a class="el" href="classr__exec_1_1_m_d_l_controller.html">MDLController</a> *controller)</td></tr>
 <tr class="separator:a3bf25a088624b99a12d3361d81f03d4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada7c2dbfd61b86d45b5cffcbaffc4454"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1_primary_m_d_l_controller.html#ada7c2dbfd61b86d45b5cffcbaffc4454">store_requirement</a> (<a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *f_p_f_imdl, <a class="el" href="classr__exec_1_1_m_d_l_controller.html">MDLController</a> *controller, bool chaining_was_allowed) override</td></tr>
-<tr class="separator:ada7c2dbfd61b86d45b5cffcbaffc4454"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9bcc77d4549075989254ef8e6d7d9c8d"><td class="memItemLeft" align="right" valign="top"><a id="a9bcc77d4549075989254ef8e6d7d9c8d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>predict</b> (<a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> *bm, <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *input, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *f_imdl, bool chaining_was_allowed, <a class="el" href="classr__exec_1_1_requirements_pair.html">RequirementsPair</a> &amp;r_p, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *ground) override</td></tr>
-<tr class="separator:a9bcc77d4549075989254ef8e6d7d9c8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc197821134ee7ef425dd3efa6f1bd2f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1_primary_m_d_l_controller.html#adc197821134ee7ef425dd3efa6f1bd2f">store_requirement</a> (<a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *f_p_f_imdl, <a class="el" href="classr__exec_1_1_mk_rdx.html">MkRdx</a> *mk_rdx, <a class="el" href="classr__exec_1_1_m_d_l_controller.html">MDLController</a> *controller, bool chaining_was_allowed) override</td></tr>
+<tr class="separator:adc197821134ee7ef425dd3efa6f1bd2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46ab9895e0cd7722aa8ede6fed28b373"><td class="memItemLeft" align="right" valign="top"><a id="a46ab9895e0cd7722aa8ede6fed28b373"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>predict</b> (<a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> *bm, <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *input, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *f_imdl, bool chaining_was_allowed, <a class="el" href="classr__exec_1_1_requirements_pair.html">RequirementsPair</a> &amp;r_p, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *ground, <a class="el" href="classr__exec_1_1_mk_rdx.html">MkRdx</a> *ground_mk_rdx, std::vector&lt; P&lt; <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> &gt; &gt; &amp;already_predicted) override</td></tr>
+<tr class="separator:a46ab9895e0cd7722aa8ede6fed28b373"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8d80d5824f1d8af936b0494f59ef2c7"><td class="memItemLeft" align="right" valign="top"><a id="ad8d80d5824f1d8af936b0494f59ef2c7"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>inject_prediction</b> (<a class="el" href="classr__exec_1_1_fact.html">Fact</a> *prediction, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *f_imdl, float32 confidence, Timestamp::duration time_to_live, <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *mk_rdx) const</td></tr>
 <tr class="separator:ad8d80d5824f1d8af936b0494f59ef2c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9bd09b2ac9aa5e9d922b7f47e85632a5"><td class="memItemLeft" align="right" valign="top"><a id="a9bd09b2ac9aa5e9d922b7f47e85632a5"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>register_pred_outcome</b> (<a class="el" href="classr__exec_1_1_fact.html">Fact</a> *f_pred, bool success, <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *evidence, float32 confidence, bool rate_failures) override</td></tr>
-<tr class="separator:a9bd09b2ac9aa5e9d922b7f47e85632a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafaa5288dccf6978e1965199cf302ccd"><td class="memItemLeft" align="right" valign="top"><a id="aafaa5288dccf6978e1965199cf302ccd"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>register_pred_outcome</b> (<a class="el" href="classr__exec_1_1_fact.html">Fact</a> *f_pred, <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *mk_rdx, bool success, <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *evidence, float32 confidence, bool rate_failures) override</td></tr>
+<tr class="separator:aafaa5288dccf6978e1965199cf302ccd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a398bf8fadcff61eba753596830090bc5"><td class="memItemLeft" align="right" valign="top"><a id="a398bf8fadcff61eba753596830090bc5"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>register_req_outcome</b> (<a class="el" href="classr__exec_1_1_fact.html">Fact</a> *f_pred, bool success, bool rate_failures) override</td></tr>
 <tr class="separator:a398bf8fadcff61eba753596830090bc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -157,6 +157,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>remove_r_monitor</b> 
 <tr class="memitem:adc517deeccc2e1e1d878e51d677b151a inherit pub_methods_classr__exec_1_1_p_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="adc517deeccc2e1e1d878e51d677b151a"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>register_predicted_goal_outcome</b> (<a class="el" href="classr__exec_1_1_fact.html">Fact</a> *goal, <a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> *bm, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *f_imdl, bool success, bool injected_goal)</td></tr>
 <tr class="separator:adc517deeccc2e1e1d878e51d677b151a inherit pub_methods_classr__exec_1_1_p_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a156b2ab744c03982561b964d44646623 inherit pub_methods_classr__exec_1_1_p_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a156b2ab744c03982561b964d44646623"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>inject_simulated_goal_success</b> (<a class="el" href="classr__exec_1_1_fact.html">Fact</a> *goal, bool success, <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *evidence) const</td></tr>
+<tr class="separator:a156b2ab744c03982561b964d44646623 inherit pub_methods_classr__exec_1_1_p_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classr__exec_1_1_m_d_l_controller"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classr__exec_1_1_m_d_l_controller')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classr__exec_1_1_m_d_l_controller.html">r_exec::MDLController</a></td></tr>
 <tr class="memitem:a248a1a34b6ac89f403d4b2d4434fc89f inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a248a1a34b6ac89f403d4b2d4434fc89f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>add_monitor</b> (<a class="el" href="classr__exec_1_1_p_monitor.html">PMonitor</a> *m)</td></tr>
@@ -173,9 +176,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>remove_monitor</b> (<
 <tr class="memitem:a14ef51644688c23a96b77583a4177825 inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a14ef51644688c23a96b77583a4177825"></a>
 <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>get_f_ihlp</b> (<a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> *bindings, bool wr_enabled) const override</td></tr>
 <tr class="separator:a14ef51644688c23a96b77583a4177825 inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abef031d9a2bcb542125868b73b07aea4 inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="abef031d9a2bcb542125868b73b07aea4"></a>
-ChainingStatus&#160;</td><td class="memItemRight" valign="bottom"><b>retrieve_imdl_fwd</b> (<a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> *bm, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *f_imdl, <a class="el" href="classr__exec_1_1_requirements_pair.html">RequirementsPair</a> &amp;r_p, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *&amp;ground, <a class="el" href="classr__exec_1_1_m_d_l_controller.html">MDLController</a> *req_controller, bool &amp;wr_enabled)</td></tr>
-<tr class="separator:abef031d9a2bcb542125868b73b07aea4 inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59bb7855490954e1988ed0b0c4502abf inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a59bb7855490954e1988ed0b0c4502abf"></a>
+ChainingStatus&#160;</td><td class="memItemRight" valign="bottom"><b>retrieve_imdl_fwd</b> (const <a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> *bm, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *f_imdl, <a class="el" href="classr__exec_1_1_requirements_pair.html">RequirementsPair</a> &amp;r_p, std::vector&lt; <a class="el" href="classr__exec_1_1_binding_result.html">BindingResult</a> &gt; &amp;results, <a class="el" href="classr__exec_1_1_m_d_l_controller.html">MDLController</a> *req_controller, bool &amp;wr_enabled)</td></tr>
+<tr class="separator:a59bb7855490954e1988ed0b0c4502abf inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afee367440981783250fe5a49dad55431 inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="afee367440981783250fe5a49dad55431"></a>
 ChainingStatus&#160;</td><td class="memItemRight" valign="bottom"><b>retrieve_imdl_bwd</b> (<a class="el" href="classr__exec_1_1_h_l_p_binding_map.html">HLPBindingMap</a> *bm, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *f_imdl, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *&amp;ground, <a class="el" href="classr__exec_1_1_fact.html">Fact</a> *&amp;strong_requirement_ground)</td></tr>
 <tr class="separator:afee367440981783250fe5a49dad55431 inherit pub_methods_classr__exec_1_1_m_d_l_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -481,7 +484,7 @@ static const uint32&#160;</td><td class="memItemRight" valign="bottom"><b>RHSCon
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Backward chaining: inputs are goals, actual or simulated. Actual goals: if LHS is in the fact cache, stop. if LHS is in the prediction cache, spawn a g-monitor (will be ready to catch a counter-prediction, invalidate the goal and re-issue a new goal). else if (before-now)*percentage&lt;min sthz, commit sub-goal on LHS. else if chaining is allowed, simulate the LHS and spawn a g-monitor with sthz=min((before-now)*percentage,max sthz)-min sthz. else, simulate f-&gt;imdl and spawn a g-monitor with sthz=min((before-now)*percentage,max sthz)/2-min sthz. Simulated goals: if LHS is in the fact cache, . if LHS is in the prediction cache, else: if sthz/2&gt;min thz, simulate the LHS and spawn a g-monitor with sthz/2-min sthz. else predict RHS (cfd=1) and stop. Commands with unbound values are not injected. </p>
 
-<p class="definition">Definition at line <a class="el" href="mdl__controller_8h_source.html#l00420">420</a> of file <a class="el" href="mdl__controller_8h_source.html">mdl_controller.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mdl__controller_8h_source.html#l00428">428</a> of file <a class="el" href="mdl__controller_8h_source.html">mdl_controller.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a148f4ca816efb3c1a9ddbb008345f7f2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a148f4ca816efb3c1a9ddbb008345f7f2">&#9670;&nbsp;</a></span>abduce_no_simulation()</h2>
@@ -530,7 +533,7 @@ static const uint32&#160;</td><td class="memItemRight" valign="bottom"><b>RHSCon
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="mdl__controller_8cpp_source.html#l02012">2012</a> of file <a class="el" href="mdl__controller_8cpp_source.html">mdl_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mdl__controller_8cpp_source.html#l01975">1975</a> of file <a class="el" href="mdl__controller_8cpp_source.html">mdl_controller.cpp</a>.</p>
 
 </div>
 </div>
@@ -574,7 +577,7 @@ static const uint32&#160;</td><td class="memItemRight" valign="bottom"><b>RHSCon
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="mdl__controller_8cpp_source.html#l02319">2319</a> of file <a class="el" href="mdl__controller_8cpp_source.html">mdl_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mdl__controller_8cpp_source.html#l02282">2282</a> of file <a class="el" href="mdl__controller_8cpp_source.html">mdl_controller.cpp</a>.</p>
 
 </div>
 </div>
@@ -609,7 +612,7 @@ static const uint32&#160;</td><td class="memItemRight" valign="bottom"><b>RHSCon
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the last two values from the template parameters, assuming that they are the timings from the prerequisite model. This evaluates the backward guards if needed. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Get the two timestamps from the last template value which is a ti value, assuming that they are the timings from the prerequisite model. This evaluates the backward guards if needed. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">bm</td><td>The binding map, which is not changed. </td></tr>
     <tr><td class="paramname">after</td><td>Set this to the after timestamp (if this returns true). </td></tr>
@@ -619,12 +622,12 @@ static const uint32&#160;</td><td class="memItemRight" valign="bottom"><b>RHSCon
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True for success, otherwise false if there are not enough template parameters, or cannot evaluate the backward guards, or if the values are not timestamps. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="mdl__controller_8cpp_source.html#l02731">2731</a> of file <a class="el" href="mdl__controller_8cpp_source.html">mdl_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mdl__controller_8cpp_source.html#l02694">2694</a> of file <a class="el" href="mdl__controller_8cpp_source.html">mdl_controller.cpp</a>.</p>
 
 </div>
 </div>
-<a id="ada7c2dbfd61b86d45b5cffcbaffc4454"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ada7c2dbfd61b86d45b5cffcbaffc4454">&#9670;&nbsp;</a></span>store_requirement()</h2>
+<a id="adc197821134ee7ef425dd3efa6f1bd2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc197821134ee7ef425dd3efa6f1bd2f">&#9670;&nbsp;</a></span>store_requirement()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -637,6 +640,12 @@ static const uint32&#160;</td><td class="memItemRight" valign="bottom"><b>RHSCon
           <td>(</td>
           <td class="paramtype"><a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *&#160;</td>
           <td class="paramname"><em>f_p_f_imdl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classr__exec_1_1_mk_rdx.html">MkRdx</a> *&#160;</td>
+          <td class="paramname"><em>mk_rdx</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -664,9 +673,9 @@ static const uint32&#160;</td><td class="memItemRight" valign="bottom"><b>RHSCon
 </div><div class="memdoc">
 <p>If f_p_f_imdl-&gt;get_pred()-&gt;is_simulation(), then this is for a simulation. </p>
 
-<p>Implements <a class="el" href="classr__exec_1_1_m_d_l_controller.html#a39fa785fcf5660bbe3a2192a963047af">r_exec::MDLController</a>.</p>
+<p>Implements <a class="el" href="classr__exec_1_1_m_d_l_controller.html#aab92aaa6a8d241c796bd5d3f25f316bd">r_exec::MDLController</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="mdl__controller_8cpp_source.html#l01539">1539</a> of file <a class="el" href="mdl__controller_8cpp_source.html">mdl_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mdl__controller_8cpp_source.html#l01488">1488</a> of file <a class="el" href="mdl__controller_8cpp_source.html">mdl_controller.cpp</a>.</p>
 
 </div>
 </div>

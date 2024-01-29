@@ -67,6 +67,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
@@ -103,14 +104,11 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>load</b> (const <a cl
 <tr class="memitem:a0f765c3afb0df4764b317ae33632de9d"><td class="memItemLeft" align="right" valign="top"><a id="a0f765c3afb0df4764b317ae33632de9d"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
 <tr class="separator:a0f765c3afb0df4764b317ae33632de9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a623df6936157059ebcd2a1e5eac898ad"><td class="memItemLeft" align="right" valign="top"><a id="a623df6936157059ebcd2a1e5eac898ad"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> (<a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *object, uint16 index)</td></tr>
-<tr class="separator:a623df6936157059ebcd2a1e5eac898ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae84e2dcf181ddeed073a38376c220c7b"><td class="memItemLeft" align="right" valign="top"><a id="ae84e2dcf181ddeed073a38376c220c7b"></a>
-<a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>abstract_f_ihlp</b> (<a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *fact) const</td></tr>
-<tr class="separator:ae84e2dcf181ddeed073a38376c220c7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7af234cc1e49e733cc63531b84e5020"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1_binding_map.html#ab7af234cc1e49e733cc63531b84e5020">abstract_fact</a> (<a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *fact, <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *original, bool force_sync, int timing_vars_first_search_index=0)</td></tr>
-<tr class="separator:ab7af234cc1e49e733cc63531b84e5020"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab747c69f7323dfb7468999b11dc47755"><td class="memItemLeft" align="right" valign="top"><a id="ab747c69f7323dfb7468999b11dc47755"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> (const <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *object, uint16 index)</td></tr>
+<tr class="separator:ab747c69f7323dfb7468999b11dc47755"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4324001f0719af5c9c99d70f64864b60"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1_binding_map.html#a4324001f0719af5c9c99d70f64864b60">abstract_fact</a> (<a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *fact, const <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *original, bool force_sync, int timing_vars_first_search_index=0)</td></tr>
+<tr class="separator:a4324001f0719af5c9c99d70f64864b60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d1ff2b5f29c8f07b9394fa60854c0f3"><td class="memItemLeft" align="right" valign="top"><a id="a0d1ff2b5f29c8f07b9394fa60854c0f3"></a>
 <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>abstract_object</b> (<a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *object, bool force_sync, int timing_vars_first_search_index=0)</td></tr>
 <tr class="separator:a0d1ff2b5f29c8f07b9394fa60854c0f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -154,12 +152,15 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>bind_variable</b> (<a
 <tr class="memitem:a279750022fedfc63928901402c89817b"><td class="memItemLeft" align="right" valign="top"><a id="a279750022fedfc63928901402c89817b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>bind_variable</b> (<a class="el" href="classr__code_1_1_atom.html">Atom</a> *code, uint8 id, uint16 value_index, <a class="el" href="classr__code_1_1_atom.html">Atom</a> *intermediate_results)</td></tr>
 <tr class="separator:a279750022fedfc63928901402c89817b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb7a75bd24630837a5b8df8d5fe7ea14"><td class="memItemLeft" align="right" valign="top"><a id="afb7a75bd24630837a5b8df8d5fe7ea14"></a>
-<a class="el" href="classr__code_1_1_atom.html">Atom</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>get_value_code</b> (uint16 id)</td></tr>
-<tr class="separator:afb7a75bd24630837a5b8df8d5fe7ea14"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca24554627d05aa1fedba4d84f3de6ea"><td class="memItemLeft" align="right" valign="top"><a id="aca24554627d05aa1fedba4d84f3de6ea"></a>
-uint16&#160;</td><td class="memItemRight" valign="bottom"><b>get_value_code_size</b> (uint16 id)</td></tr>
-<tr class="separator:aca24554627d05aa1fedba4d84f3de6ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b3b10eea0a57d57267c1b561d0d7b7b"><td class="memItemLeft" align="right" valign="top"><a id="a7b3b10eea0a57d57267c1b561d0d7b7b"></a>
+<a class="el" href="classr__code_1_1_atom.html">Atom</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>get_value_code</b> (uint16 id) const</td></tr>
+<tr class="separator:a7b3b10eea0a57d57267c1b561d0d7b7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea4110f7151dfefe62ea825499766e8d"><td class="memItemLeft" align="right" valign="top"><a id="aea4110f7151dfefe62ea825499766e8d"></a>
+uint16&#160;</td><td class="memItemRight" valign="bottom"><b>get_value_code_size</b> (uint16 id) const</td></tr>
+<tr class="separator:aea4110f7151dfefe62ea825499766e8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7aa32616b82e0e9a592ae17720c891d2"><td class="memItemLeft" align="right" valign="top"><a id="a7aa32616b82e0e9a592ae17720c891d2"></a>
+uint16&#160;</td><td class="memItemRight" valign="bottom"><b>get_first_index</b> () const</td></tr>
+<tr class="separator:a7aa32616b82e0e9a592ae17720c891d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7922be04ee04adfd0e328040c17ff29"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1_binding_map.html#ae7922be04ee04adfd0e328040c17ff29">intersect</a> (const <a class="el" href="classr__exec_1_1_binding_map.html">BindingMap</a> *bm) const</td></tr>
 <tr class="separator:ae7922be04ee04adfd0e328040c17ff29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7f00d858911dce10213adeef7765fb5"><td class="memItemLeft" align="right" valign="top"><a id="af7f00d858911dce10213adeef7765fb5"></a>
@@ -180,6 +181,10 @@ int16&#160;</td><td class="memItemRight" valign="bottom"><b>get_fwd_before_index
 <tr class="memitem:a5e0f358cf0e7c5e10a212d24f7e30a0f"><td class="memItemLeft" align="right" valign="top"><a id="a5e0f358cf0e7c5e10a212d24f7e30a0f"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>scan_variable</b> (uint16 id) const</td></tr>
 <tr class="separator:a5e0f358cf0e7c5e10a212d24f7e30a0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab56d973520343dc8284b7a86ec499167"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1_binding_map.html#ab56d973520343dc8284b7a86ec499167">match_timings</a> (Timestamp after, Timestamp before, uint32 after_index, uint32 before_index)</td></tr>
+<tr class="separator:ab56d973520343dc8284b7a86ec499167"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a139ebf5f9f99f055d343395828c17fb3"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1_binding_map.html#a139ebf5f9f99f055d343395828c17fb3">trace_string</a> (uint16 i) const</td></tr>
+<tr class="separator:a139ebf5f9f99f055d343395828c17fb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classcore_1_1___object"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcore_1_1___object')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcore_1_1___object.html">core::_Object</a></td></tr>
 <tr class="memitem:a4a0780ae30bd77ef7b7c2f99b1bc61c0 inherit pub_methods_classcore_1_1___object"><td class="memItemLeft" align="right" valign="top"><a id="a4a0780ae30bd77ef7b7c2f99b1bc61c0"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>incRef</b> ()</td></tr>
@@ -188,28 +193,33 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>incRef</b> ()</td></t
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>decRef</b> ()</td></tr>
 <tr class="separator:a313a01f165e666c7e590fccd531f09b1 inherit pub_methods_classcore_1_1___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a98134f87f0398b60dd3621ba8c6f8ae7"><td class="memItemLeft" align="right" valign="top"><a id="a98134f87f0398b60dd3621ba8c6f8ae7"></a>
+static <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>abstract_f_ihlp</b> (const <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *fact)</td></tr>
+<tr class="separator:a98134f87f0398b60dd3621ba8c6f8ae7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9c092f0c7c3c67e1e6f167e46665a8b"><td class="memItemLeft" align="right" valign="top">static uint16&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1_binding_map.html#af9c092f0c7c3c67e1e6f167e46665a8b">get_abstracted_ihlp_exposed_args_index</a> (const <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *ihlp)</td></tr>
+<tr class="separator:af9c092f0c7c3c67e1e6f167e46665a8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a9e93fa1e5b3d8a10a9a9469c0c45e21e"><td class="memItemLeft" align="right" valign="top"><a id="a9e93fa1e5b3d8a10a9a9469c0c45e21e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>add_unbound_value</b> (uint8 id)</td></tr>
 <tr class="separator:a9e93fa1e5b3d8a10a9a9469c0c45e21e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a172fc3fb14cb0fc988f14b7441bd0b9f"><td class="memItemLeft" align="right" valign="top"><a id="a172fc3fb14cb0fc988f14b7441bd0b9f"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>match_timings</b> (Timestamp stored_after, Timestamp stored_before, Timestamp after, Timestamp before, uint32 destination_after_index, uint32 destination_before_index)</td></tr>
-<tr class="separator:a172fc3fb14cb0fc988f14b7441bd0b9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a78d4e859e960b92356dc09b29c2dd072"><td class="memItemLeft" align="right" valign="top"><a id="a78d4e859e960b92356dc09b29c2dd072"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>match_fwd_timings</b> (const <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *f_object)</td></tr>
 <tr class="separator:a78d4e859e960b92356dc09b29c2dd072"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a784d3af86118a2943d51ac26e38e7eb6"><td class="memItemLeft" align="right" valign="top"><a id="a784d3af86118a2943d51ac26e38e7eb6"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>match</b> (const <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *object, uint16 o_base_index, uint16 o_index, const <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *pattern, uint16 p_index, uint16 o_arity)</td></tr>
 <tr class="separator:a784d3af86118a2943d51ac26e38e7eb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6492c63a02859684840b3e01f85df4ed"><td class="memItemLeft" align="right" valign="top"><a id="a6492c63a02859684840b3e01f85df4ed"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>abstract_member</b> (<a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *object, uint16 index, <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *abstracted_object, uint16 write_index, uint16 &amp;extent_index, int first_search_index=0)</td></tr>
-<tr class="separator:a6492c63a02859684840b3e01f85df4ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8368622446080f49cf5c4b4f2070be2"><td class="memItemLeft" align="right" valign="top"><a id="ac8368622446080f49cf5c4b4f2070be2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>abstract_member</b> (const <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *object, uint16 index, <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *abstracted_object, uint16 write_index, uint16 &amp;extent_index, int first_search_index=0)</td></tr>
+<tr class="separator:ac8368622446080f49cf5c4b4f2070be2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a689b368a8aa929f1133f1bf3127c40cc"><td class="memItemLeft" align="right" valign="top"><a id="a689b368a8aa929f1133f1bf3127c40cc"></a>
 <a class="el" href="classr__code_1_1_atom.html">Atom</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_atom_variable</b> (<a class="el" href="classr__code_1_1_atom.html">Atom</a> a)</td></tr>
 <tr class="separator:a689b368a8aa929f1133f1bf3127c40cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af5f7e9f07568787d8fa39ec22b9df95a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classr__code_1_1_atom.html">Atom</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1_binding_map.html#af5f7e9f07568787d8fa39ec22b9df95a">get_structure_variable</a> (<a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *object, uint16 index, int first_search_index=0)</td></tr>
-<tr class="separator:af5f7e9f07568787d8fa39ec22b9df95a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f69e93672b2bf7682495bfe0b265dca"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classr__code_1_1_atom.html">Atom</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1_binding_map.html#a5f69e93672b2bf7682495bfe0b265dca">get_structure_variable</a> (const <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *object, uint16 index, int first_search_index=0)</td></tr>
+<tr class="separator:a5f69e93672b2bf7682495bfe0b265dca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f7f0e90f3ee219eb40ea88b75665654"><td class="memItemLeft" align="right" valign="top"><a id="a5f7f0e90f3ee219eb40ea88b75665654"></a>
 <a class="el" href="classr__code_1_1_atom.html">Atom</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_object_variable</b> (<a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *object)</td></tr>
 <tr class="separator:a5f7f0e90f3ee219eb40ea88b75665654"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -244,10 +254,10 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>UnboundValue</b></td
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="binding__map_8h_source.html#l00229">229</a> of file <a class="el" href="binding__map_8h_source.html">binding_map.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="binding__map_8h_source.html#l00246">246</a> of file <a class="el" href="binding__map_8h_source.html">binding_map.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ab7af234cc1e49e733cc63531b84e5020"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab7af234cc1e49e733cc63531b84e5020">&#9670;&nbsp;</a></span>abstract_fact()</h2>
+<a id="a4324001f0719af5c9c99d70f64864b60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4324001f0719af5c9c99d70f64864b60">&#9670;&nbsp;</a></span>abstract_fact()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -261,7 +271,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>UnboundValue</b></td
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="classr__exec_1_1___fact.html">_Fact</a> *&#160;</td>
           <td class="paramname"><em>original</em>, </td>
         </tr>
         <tr>
@@ -292,12 +302,47 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>UnboundValue</b></td
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="binding__map_8cpp_source.html#l00414">414</a> of file <a class="el" href="binding__map_8cpp_source.html">binding_map.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="binding__map_8cpp_source.html#l00413">413</a> of file <a class="el" href="binding__map_8cpp_source.html">binding_map.cpp</a>.</p>
 
 </div>
 </div>
-<a id="af5f7e9f07568787d8fa39ec22b9df95a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af5f7e9f07568787d8fa39ec22b9df95a">&#9670;&nbsp;</a></span>get_structure_variable()</h2>
+<a id="af9c092f0c7c3c67e1e6f167e46665a8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9c092f0c7c3c67e1e6f167e46665a8b">&#9670;&nbsp;</a></span>get_abstracted_ihlp_exposed_args_index()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16 r_exec::BindingMap::get_abstracted_ihlp_exposed_args_index </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *&#160;</td>
+          <td class="paramname"><em>ihlp</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the code index where the exposed args will start after calling abstract_object on the ihlp. This is Necessary because the ihlp may have structured values before the exposed args which will be removed by abstract_object (which only has variables and no structured values). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ihlp</td><td>The imdl or icst. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The exposed args index. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="binding__map_8cpp_source.html#l00482">482</a> of file <a class="el" href="binding__map_8cpp_source.html">binding_map.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a5f69e93672b2bf7682495bfe0b265dca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f69e93672b2bf7682495bfe0b265dca">&#9670;&nbsp;</a></span>get_structure_variable()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -308,7 +353,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>UnboundValue</b></td
         <tr>
           <td class="memname"><a class="el" href="classr__code_1_1_atom.html">Atom</a> r_exec::BindingMap::get_structure_variable </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *&#160;</td>
           <td class="paramname"><em>object</em>, </td>
         </tr>
         <tr>
@@ -345,7 +390,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>UnboundValue</b></td
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A VLPointer to the index in the bindings of the structure (possible of a new binding). </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="binding__map_8cpp_source.html#l00556">556</a> of file <a class="el" href="binding__map_8cpp_source.html">binding_map.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="binding__map_8cpp_source.html#l00569">569</a> of file <a class="el" href="binding__map_8cpp_source.html">binding_map.cpp</a>.</p>
 
 </div>
 </div>
@@ -372,7 +417,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>UnboundValue</b></td
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if any two values match. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="binding__map_8cpp_source.html#l00863">863</a> of file <a class="el" href="binding__map_8cpp_source.html">binding_map.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="binding__map_8cpp_source.html#l00904">904</a> of file <a class="el" href="binding__map_8cpp_source.html">binding_map.cpp</a>.</p>
 
 </div>
 </div>
@@ -401,7 +446,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>UnboundValue</b></td
 </div><div class="memdoc">
 <p>Check if the map entry at i is bound to a timestamp. </p><dl class="section return"><dt>Returns</dt><dd>True if it is a timestamp. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="binding__map_8h_source.html#l00310">310</a> of file <a class="el" href="binding__map_8h_source.html">binding_map.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="binding__map_8h_source.html#l00326">326</a> of file <a class="el" href="binding__map_8h_source.html">binding_map.h</a>.</p>
 
 </div>
 </div>
@@ -447,7 +492,88 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>UnboundValue</b></td
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the time intervals match, in which case this binding maps' values may have been updated to "narrow" the time interval. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="binding__map_8h_source.html#l00299">299</a> of file <a class="el" href="binding__map_8h_source.html">binding_map.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="binding__map_8h_source.html#l00315">315</a> of file <a class="el" href="binding__map_8h_source.html">binding_map.h</a>.</p>
+
+</div>
+</div>
+<a id="ab56d973520343dc8284b7a86ec499167"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab56d973520343dc8284b7a86ec499167">&#9670;&nbsp;</a></span>match_timings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool r_exec::BindingMap::match_timings </td>
+          <td>(</td>
+          <td class="paramtype">Timestamp&#160;</td>
+          <td class="paramname"><em>after</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Timestamp&#160;</td>
+          <td class="paramname"><em>before</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32&#160;</td>
+          <td class="paramname"><em>after_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32&#160;</td>
+          <td class="paramname"><em>before_index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Match the given time interval to the time interval at this binding map's after_index and before_index, updating the binding map's values to "narrow" them to the given time interval if needed. This assumes you have already checked to make sure that there are valid Timestamp bindings at after_index and before_index. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">after</td><td>The beginning of the time interval to compare with this binding map's time interval. </td></tr>
+    <tr><td class="paramname">before</td><td>The end of the time interval to compare with this binding map's time interval. </td></tr>
+    <tr><td class="paramname">after_index</td><td>The index in the binding map of the time interval after Timestamp. </td></tr>
+    <tr><td class="paramname">before_index</td><td>The index in the binding map of the time interval before Timestamp. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the time intervals match, in which case this binding map's values may have been updated to "narrow" the time interval. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="binding__map_8cpp_source.html#l00770">770</a> of file <a class="el" href="binding__map_8cpp_source.html">binding_map.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a139ebf5f9f99f055d343395828c17fb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a139ebf5f9f99f055d343395828c17fb3">&#9670;&nbsp;</a></span>trace_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string r_exec::BindingMap::trace_string </td>
+          <td>(</td>
+          <td class="paramtype">uint16&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Return the trace of the value at index i as a string by creating a temporary Code object and calling valuate(). For debugging purposes only (can be inefficient). </p>
+
+<p class="definition">Definition at line <a class="el" href="binding__map_8h_source.html#l00388">388</a> of file <a class="el" href="binding__map_8h_source.html">binding_map.h</a>.</p>
 
 </div>
 </div>

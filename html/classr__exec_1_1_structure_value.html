@@ -67,6 +67,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classr__exec_1_1_structure_value-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">r_exec::StructureValue Class Reference</div>  </div>
@@ -89,9 +90,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0f05d73e004c131d7d2c4bab33eb4e1d"><td class="memItemLeft" align="right" valign="top"><a id="a0f05d73e004c131d7d2c4bab33eb4e1d"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>StructureValue</b> (<a class="el" href="classr__exec_1_1_binding_map.html">BindingMap</a> *map, const <a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *source, uint16 structure_index)</td></tr>
 <tr class="separator:a0f05d73e004c131d7d2c4bab33eb4e1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d4630b2ea7e2b976564948438077abd"><td class="memItemLeft" align="right" valign="top"><a id="a6d4630b2ea7e2b976564948438077abd"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>StructureValue</b> (<a class="el" href="classr__exec_1_1_binding_map.html">BindingMap</a> *map, <a class="el" href="classr__code_1_1_atom.html">Atom</a> *source, uint16 structure_index)</td></tr>
-<tr class="separator:a6d4630b2ea7e2b976564948438077abd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a843bd322491bccab1750a984d4796d88"><td class="memItemLeft" align="right" valign="top"><a id="a843bd322491bccab1750a984d4796d88"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>StructureValue</b> (<a class="el" href="classr__exec_1_1_binding_map.html">BindingMap</a> *map, const <a class="el" href="classr__code_1_1_atom.html">Atom</a> *source, uint16 structure_index)</td></tr>
+<tr class="separator:a843bd322491bccab1750a984d4796d88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af08782354a0d229a06cdac126c8f9c2b"><td class="memItemLeft" align="right" valign="top"><a id="af08782354a0d229a06cdac126c8f9c2b"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>StructureValue</b> (<a class="el" href="classr__exec_1_1_binding_map.html">BindingMap</a> *map, Timestamp time)</td></tr>
 <tr class="separator:af08782354a0d229a06cdac126c8f9c2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -148,6 +149,11 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>incRef</b> ()</td></t
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>decRef</b> ()</td></tr>
 <tr class="separator:a313a01f165e666c7e590fccd531f09b1 inherit pub_methods_classcore_1_1___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a950a48f3626f72806b8b742aa241b4e5"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1_structure_value.html#a950a48f3626f72806b8b742aa241b4e5">copy_structure</a> (<a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *destination, uint16 &amp;extent_index, const <a class="el" href="classr__code_1_1_atom.html">Atom</a> *source, uint16 source_index)</td></tr>
+<tr class="separator:a950a48f3626f72806b8b742aa241b4e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_methods_classr__exec_1_1_bound_value"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classr__exec_1_1_bound_value')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classr__exec_1_1_bound_value.html">r_exec::BoundValue</a></td></tr>
@@ -170,7 +176,66 @@ int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p class="definition">Definition at line <a class="el" href="binding__map_8h_source.html#l00176">176</a> of file <a class="el" href="binding__map_8h_source.html">binding_map.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a950a48f3626f72806b8b742aa241b4e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a950a48f3626f72806b8b742aa241b4e5">&#9670;&nbsp;</a></span>copy_structure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void r_exec::StructureValue::copy_structure </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classr__code_1_1_code.html">r_code::Code</a> *&#160;</td>
+          <td class="paramname"><em>destination</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16 &amp;&#160;</td>
+          <td class="paramname"><em>extent_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classr__code_1_1_atom.html">Atom</a> *&#160;</td>
+          <td class="paramname"><em>source</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16&#160;</td>
+          <td class="paramname"><em>source_index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This is a helper to copy the structure starting at source(source_index) to the destination at extent_index. If needed, you should already have done destination-&gt;code(write_index) = Atom::IPointer(extent_index); This copies the structure to destination[extent_index]. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">destination</td><td>The destination code. </td></tr>
+    <tr><td class="paramname">extent_index</td><td>Copy the structure to destination starting at this index and update the index. </td></tr>
+    <tr><td class="paramname">source_index</td><td>Copy the structure from code(source_index). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="binding__map_8cpp_source.html#l00242">242</a> of file <a class="el" href="binding__map_8cpp_source.html">binding_map.cpp</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="binding__map_8h_source.html">binding_map.h</a></li>
 <li><a class="el" href="binding__map_8cpp_source.html">binding_map.cpp</a></li>
 </ul>

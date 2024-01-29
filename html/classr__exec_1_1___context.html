@@ -131,9 +131,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setTimestampResult</b
 <tr class="memitem:a772740cd3aebc192bf46af7b87e4b225"><td class="memItemLeft" align="right" valign="top"><a id="a772740cd3aebc192bf46af7b87e4b225"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setDurationResult</b> (std::chrono::microseconds d) const</td></tr>
 <tr class="separator:a772740cd3aebc192bf46af7b87e4b225"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a961d5a9732c3436b659ecfd08d37ca30"><td class="memItemLeft" align="right" valign="top"><a id="a961d5a9732c3436b659ecfd08d37ca30"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setCompoundResultHead</b> (<a class="el" href="classr__code_1_1_atom.html">Atom</a> a) const</td></tr>
-<tr class="separator:a961d5a9732c3436b659ecfd08d37ca30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05545bc717111f074ba813085a81fc31"><td class="memItemLeft" align="right" valign="top">uint16&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classr__exec_1_1___context.html#a05545bc717111f074ba813085a81fc31">setCompoundResultHead</a> (<a class="el" href="classr__code_1_1_atom.html">Atom</a> a) const</td></tr>
+<tr class="separator:a05545bc717111f074ba813085a81fc31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5de042fd5aba8669f32148b32313a0d5"><td class="memItemLeft" align="right" valign="top"><a id="a5de042fd5aba8669f32148b32313a0d5"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addCompoundResultPart</b> (<a class="el" href="classr__code_1_1_atom.html">Atom</a> a) const</td></tr>
 <tr class="separator:a5de042fd5aba8669f32148b32313a0d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -236,6 +235,33 @@ Data&#160;</td><td class="memItemRight" valign="bottom"><b>data_</b></td></tr>
 <p>Call get_child and return a new allocated copy of the child. The caller is responsible to delete it. </p>
 
 <p>Implemented in <a class="el" href="classr__exec_1_1_i_p_g_m_context.html#ade2eba0e7c20b4b2bd6989a6a9eb3f1d">r_exec::IPGMContext</a>, and <a class="el" href="classr__exec_1_1_h_l_p_context.html#a5bebbce9ac4dab82a50c12f1a4c3fdd8">r_exec::HLPContext</a>.</p>
+
+</div>
+</div>
+<a id="a05545bc717111f074ba813085a81fc31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05545bc717111f074ba813085a81fc31">&#9670;&nbsp;</a></span>setCompoundResultHead()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16 r_exec::_Context::setCompoundResultHead </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classr__code_1_1_atom.html">Atom</a>&#160;</td>
+          <td class="paramname"><em>a</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Patch the code with a VALUE_PTR to the values array. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a</td><td>The Atom that is the head of the compound value. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The index in the value array of the head. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="__context_8cpp_source.html#l00112">112</a> of file <a class="el" href="__context_8cpp_source.html">_context.cpp</a>.</p>
 
 </div>
 </div>

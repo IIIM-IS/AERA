@@ -74,9 +74,9 @@ $(function() {
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//_/_/ AERA</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//_/_/ Autocatalytic Endogenous Reflective Architecture</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//_/_/ </span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Jeff Thompson</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Jeff Thompson</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Kristinn R. Thorisson</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Icelandic Institute for Intelligent Machines</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//_/_/ http://www.iiim.is</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//_/_/ </span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//_/_/ Copyright (c) 2010-2012 Eric Nivel</span></div>
@@ -159,23 +159,27 @@ $(function() {
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="preprocessor">#include &quot;../types.h&quot;</span></div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> {</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="keywordtype">bool</span> dll_export add(<span class="keyword">const</span> <a class="code" href="classr__exec_1_1_context.html">r_exec::Context</a> &amp;context);</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="keywordtype">bool</span> dll_export sub(<span class="keyword">const</span> <a class="code" href="classr__exec_1_1_context.html">r_exec::Context</a> &amp;context);</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="keywordtype">bool</span> dll_export mul(<span class="keyword">const</span> <a class="code" href="classr__exec_1_1_context.html">r_exec::Context</a> &amp;context);</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="keywordtype">bool</span> dll_export dis(<span class="keyword">const</span> <a class="code" href="classr__exec_1_1_context.html">r_exec::Context</a> &amp;context);</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;}</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
-<div class="line"><a name="l00098"></a><span class="lineno"><a class="line" href="class_operators.html">   98</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_operators.html">Operators</a> {</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> Init(OpcodeRetriever r);</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;};</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="keyword">namespace </span>usr_operators {</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="keywordtype">bool</span> add(<span class="keyword">const</span> <a class="code" href="classr__exec_1_1_context.html">r_exec::Context</a> &amp;context);</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="keywordtype">bool</span> sub(<span class="keyword">const</span> <a class="code" href="classr__exec_1_1_context.html">r_exec::Context</a> &amp;context);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="keywordtype">bool</span> mul(<span class="keyword">const</span> <a class="code" href="classr__exec_1_1_context.html">r_exec::Context</a> &amp;context);</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="keywordtype">bool</span> div(<span class="keyword">const</span> <a class="code" href="classr__exec_1_1_context.html">r_exec::Context</a>&amp; context);</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="keywordtype">bool</span> dis(<span class="keyword">const</span> <a class="code" href="classr__exec_1_1_context.html">r_exec::Context</a> &amp;context);</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;}</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno"><a class="line" href="class_operators.html">  101</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_operators.html">Operators</a> {</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;  <span class="keyword">static</span> <a class="code" href="classr__code_1_1resized__vector.html">r_code::resized_vector&lt;uint16&gt;</a> Init(OpcodeRetriever r);</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;};</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclassr__exec_1_1_context_html"><div class="ttname"><a href="classr__exec_1_1_context.html">r_exec::Context</a></div><div class="ttdef"><b>Definition:</b> <a href="operator_8h_source.html#l00097">operator.h:97</a></div></div>
-<div class="ttc" id="aclass_operators_html"><div class="ttname"><a href="class_operators.html">Operators</a></div><div class="ttdef"><b>Definition:</b> <a href="operators_8h_source.html#l00098">operators.h:98</a></div></div>
+<div class="ttc" id="aclassr__code_1_1resized__vector_html"><div class="ttname"><a href="classr__code_1_1resized__vector.html">r_code::resized_vector&lt; uint16 &gt;</a></div></div>
+<div class="ttc" id="aclassr__exec_1_1_context_html"><div class="ttname"><a href="classr__exec_1_1_context.html">r_exec::Context</a></div><div class="ttdef"><b>Definition:</b> <a href="operator_8h_source.html#l00100">operator.h:100</a></div></div>
+<div class="ttc" id="aclass_operators_html"><div class="ttname"><a href="class_operators.html">Operators</a></div><div class="ttdef"><b>Definition:</b> <a href="operators_8h_source.html#l00101">operators.h:101</a></div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

@@ -74,9 +74,9 @@ $(function() {
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//_/_/ AERA</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//_/_/ Autocatalytic Endogenous Reflective Architecture</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//_/_/ </span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Jeff Thompson</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Jeff Thompson</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Kristinn R. Thorisson</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Icelandic Institute for Intelligent Machines</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//_/_/ http://www.iiim.is</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//_/_/ </span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//_/_/ Copyright (c) 2010-2012 Eric Nivel</span></div>
@@ -181,7 +181,7 @@ $(function() {
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> write(word32 *data) = 0;</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> read(word32 *data) = 0;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> trace(std::ostream&amp; out) = 0;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> trace(std::ostream&amp; out) <span class="keyword">const</span> = 0;</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;};</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="keyword">class </span><a class="code" href="classr__code_1_1___view.html">_View</a>;</div>
@@ -195,7 +195,7 @@ $(function() {
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;  <span class="keywordtype">void</span> write(word32 *data) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;  <span class="keywordtype">void</span> read(word32 *data) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;  uint32 get_size() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;  <span class="keywordtype">void</span> trace(std::ostream&amp; out) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;  <span class="keywordtype">void</span> trace(std::ostream&amp; out) <span class="keyword">const override</span>;</div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="preprocessor">#ifdef WITH_DETAIL_OID</span></div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;  <span class="keywordtype">int</span> detail_oid_;</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="preprocessor">#endif</span></div>
@@ -223,8 +223,8 @@ $(function() {
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;  <span class="keywordtype">void</span> write(word32 *data) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;  <span class="keywordtype">void</span> read(word32 *data) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;  uint32 get_size();</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;  <span class="keywordtype">void</span> trace(std::ostream&amp; out) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;  <span class="keywordtype">void</span> trace();</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;  <span class="keywordtype">void</span> trace(std::ostream&amp; out)<span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;  <span class="keywordtype">void</span> trace() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;};</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160; </div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="comment">// Interfaces for r_exec classes ////////////////////////////////////////////////////////////////////////</span></div>
@@ -318,169 +318,191 @@ $(function() {
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> set_oid(uint32 oid) = 0;</div>
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classr__code_1_1_atom.html">Atom</a> &amp;code(uint16 i) = 0;</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classr__code_1_1_atom.html">Atom</a> &amp;code(uint16 i) <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;  <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classr__code_1_1_atom.html">Atom</a> &amp;code(uint16 i) <span class="keyword">const</span> = 0;</div>
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;  <span class="keyword">virtual</span> uint16 code_size() <span class="keyword">const</span> = 0;</div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> resize_code(uint16 new_size) = 0;</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> set_reference(uint16 i, <a class="code" href="classr__code_1_1_code.html">Code</a> *<span class="keywordtype">object</span>) = 0;</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classr__code_1_1_code.html">Code</a> *get_reference(uint16 i) <span class="keyword">const</span> = 0;</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;  <span class="keyword">virtual</span> uint16 references_size() <span class="keyword">const</span> = 0;</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> clear_references() = 0;</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> set_references(std::vector&lt;<a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> &gt; &amp;new_references) = 0;</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160; </div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> is_compact()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> is_invalidated() { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> invalidate() { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160; </div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;  <a class="code" href="classr__code_1_1list.html">r_code::list&lt;Code *&gt;</a> markers_;</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;  std::unordered_set&lt;_View *, _View::Hash, _View::Equal&gt; views_; <span class="comment">// indexed by groups.</span></div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;  <span class="keywordtype">bool</span> includes(<a class="code" href="classr__code_1_1_atom.html">Atom</a> a)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    <span class="keywordflow">for</span> (uint16 i = 0; i &lt; code_size(); ++i) {</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;      <span class="keywordflow">if</span> (code(i) == a)</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    }</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;  }</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> set_reference(uint16 i, <a class="code" href="classr__code_1_1_code.html">Code</a> *<span class="keywordtype">object</span>) = 0;</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classr__code_1_1_code.html">Code</a> *get_reference(uint16 i) <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;  <span class="keyword">virtual</span> uint16 references_size() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> clear_references() = 0;</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> set_references(std::vector&lt;<a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> &gt; &amp;new_references) = 0;</div>
 <div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160; </div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classr__code_1_1___view.html">_View</a> *build_view(<a class="code" href="classr__code_1_1_sys_view.html">SysView</a> *source) = 0;</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160; </div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> acq_views() {}</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> rel_views() {}</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> acq_markers() {}</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> rel_markers() {}</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> is_compact()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> is_invalidated() { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> invalidate() { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160; </div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;  <a class="code" href="classr__code_1_1list.html">r_code::list&lt;Code *&gt;</a> markers_;</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;  std::unordered_set&lt;_View *, _View::Hash, _View::Equal&gt; views_; <span class="comment">// indexed by groups.</span></div>
 <div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160; </div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;  <span class="keyword">virtual</span> float32 get_psln_thr() { <span class="keywordflow">return</span> 1; }</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classr__code_1_1___view.html">_View</a> *build_view(<a class="code" href="classr__code_1_1_sys_view.html">SysView</a> *source) = 0;</div>
 <div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160; </div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;  <a class="code" href="classr__code_1_1_code.html">Code</a>() : storage_index_(null_storage_index) { markers_.reserve(CodeMarkersInitialSize); }</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;  <span class="keyword">virtual</span> ~<a class="code" href="classr__code_1_1_code.html">Code</a>() {}</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160; </div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> mod(uint16 <span class="comment">/* member_index */</span>, float32 <span class="comment">/* value */</span>) {};</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> set(uint16 <span class="comment">/* member_index */</span>, float32 <span class="comment">/* value */</span>) {};</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classr__code_1_1___view.html">_View</a> *get_view(<a class="code" href="classr__code_1_1_code.html">Code</a>* <span class="comment">/* group */</span>, <span class="keywordtype">bool</span> <span class="comment">/* lock */</span>) { <span class="keywordflow">return</span> NULL; }</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> add_reference(<a class="code" href="classr__code_1_1_code.html">Code</a>* <span class="comment">/* object */</span>)<span class="keyword"> const </span>{} <span class="comment">// called only on local objects.</span></div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;  <span class="keywordtype">void</span> remove_marker(<a class="code" href="classr__code_1_1_code.html">Code</a> *m) {</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160; </div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    acq_markers();</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    markers_.remove(m);</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    rel_markers();</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;  }</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160; </div>
-<div class="line"><a name="l00292"></a><span class="lineno"><a class="line" href="classr__code_1_1_code.html#a823ad2edfe90d62ce0f4ee203c85cc16">  292</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classr__code_1_1_code.html#a823ad2edfe90d62ce0f4ee203c85cc16">trace</a>(uint16 i, std::ostream&amp; out, <a class="code" href="classr__code_1_1_atom_1_1_trace_context.html">Atom::TraceContext</a>&amp; context)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    <a class="code" href="classr__code_1_1_atom.html">Atom</a>&amp; atom = code(i);</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    atom.trace(context, out);</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    <span class="keywordflow">if</span> (atom.getDescriptor() == Atom::R_PTR) {</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;      <span class="keywordflow">if</span> (atom.asIndex() &lt; references_size()) {</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        out &lt;&lt; <span class="stringliteral">&quot; -&gt; &quot;</span> &lt;&lt; get_reference(atom.asIndex())-&gt;get_oid();</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;<span class="preprocessor">#ifdef WITH_DETAIL_OID</span></div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        out &lt;&lt; <span class="stringliteral">&quot;(&quot;</span> &lt;&lt; get_reference(atom.asIndex())-&gt;get_detail_oid() &lt;&lt; <span class="stringliteral">&quot;)&quot;</span>;</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;      }</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;      <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        out &lt;&lt; <span class="stringliteral">&quot; (unassigned) &quot;</span>;</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    }</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;  }</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160; </div>
-<div class="line"><a name="l00310"></a><span class="lineno"><a class="line" href="classr__code_1_1_code.html#a284e2dd681efd6aec9aa5f236bfdcdd0">  310</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classr__code_1_1_code.html#a284e2dd681efd6aec9aa5f236bfdcdd0">trace</a>(std::ostream&amp; out)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160; </div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;    out &lt;&lt; <span class="stringliteral">&quot;--------\n&quot;</span>;</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    <a class="code" href="classr__code_1_1_atom_1_1_trace_context.html">Atom::TraceContext</a> context;</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;    <span class="keywordflow">for</span> (uint16 i = 0; i &lt; code_size(); ++i) {</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160; </div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;      out &lt;&lt; i &lt;&lt; <span class="stringliteral">&quot;\t&quot;</span>;</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;      trace(i, out, context);</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;      out &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    }</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    out &lt;&lt; <span class="stringliteral">&quot;OID: &quot;</span> &lt;&lt; get_oid();</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;<span class="preprocessor">#ifdef WITH_DETAIL_OID</span></div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;    out &lt;&lt; <span class="stringliteral">&quot;(&quot;</span> &lt;&lt; get_detail_oid() &lt;&lt; <span class="stringliteral">&quot;)&quot;</span>;</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    out &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;  }</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160; </div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;  <span class="keywordtype">void</span> trace()<span class="keyword"> const </span>{ trace(std::cout); }</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160; </div>
-<div class="line"><a name="l00332"></a><span class="lineno"><a class="line" href="classr__code_1_1_code.html#af9984a903c59aca3575c681335124378">  332</a></span>&#160;  std::string <a class="code" href="classr__code_1_1_code.html#af9984a903c59aca3575c681335124378">trace_string</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;    std::ostringstream out;</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;    trace(out);</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;    <span class="keywordflow">return</span> out.str();</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;  }</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160; </div>
-<div class="line"><a name="l00341"></a><span class="lineno"><a class="line" href="classr__code_1_1_code.html#a97d365bb59d5b52f0af5a826e88b3a2e">  341</a></span>&#160;  std::string <a class="code" href="classr__code_1_1_code.html#a97d365bb59d5b52f0af5a826e88b3a2e">trace_string</a>(uint16 i)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;    <a class="code" href="classr__code_1_1_atom_1_1_trace_context.html">Atom::TraceContext</a> context;</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    std::ostringstream out;</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;    trace(i, out, context);</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    <span class="keywordflow">return</span> out.str();</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;  }</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;};</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160; </div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;<span class="comment">// Implementation for local objects (non distributed).</span></div>
-<div class="line"><a name="l00350"></a><span class="lineno"><a class="line" href="classr__code_1_1_local_object.html">  350</a></span>&#160;<span class="keyword">class </span>dll_export <a class="code" href="classr__code_1_1_local_object.html">LocalObject</a> :</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;  <span class="keyword">public</span> <a class="code" href="classr__code_1_1_code.html">Code</a> {</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;  uint32 oid_;</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;  <a class="code" href="classr__code_1_1resized__vector.html">r_code::resized_vector&lt;Atom&gt;</a> code_;</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;  <a class="code" href="classr__code_1_1resized__vector.html">r_code::resized_vector&lt;P&lt;Code&gt;</a> &gt; references_;</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;  <a class="code" href="classr__code_1_1_local_object.html">LocalObject</a>() : <a class="code" href="classr__code_1_1_code.html">Code</a>() {}</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;  <a class="code" href="classr__code_1_1_local_object.html">LocalObject</a>(<a class="code" href="classr__code_1_1_sys_object.html">SysObject</a> *source) : <a class="code" href="classr__code_1_1_code.html">Code</a>() {</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160; </div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;    load(source);</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;  }</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;  <span class="keyword">virtual</span> ~<a class="code" href="classr__code_1_1_local_object.html">LocalObject</a>() {}</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160; </div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;  <a class="code" href="classr__code_1_1___view.html">_View</a> *build_view(<a class="code" href="classr__code_1_1_sys_view.html">SysView</a> *source)<span class="keyword"> override </span>{</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160; </div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;    <span class="keywordflow">return</span> Code::build_view&lt;_View&gt;(source);</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;  }</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160; </div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;  uint32 get_oid()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> oid_; }</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;  <span class="keywordtype">void</span> set_oid(uint32 oid)<span class="keyword"> override </span>{ oid_ = oid; }</div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160; </div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;  <a class="code" href="classr__code_1_1_atom.html">Atom</a> &amp;code(uint16 i)<span class="keyword"> override </span>{ <span class="keywordflow">return</span> code_[i]; }</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;  <a class="code" href="classr__code_1_1_atom.html">Atom</a> &amp;code(uint16 i)<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> (*code_.as_std())[i]; }</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;  uint16 code_size()<span class="keyword"> const override </span>{</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;    <span class="comment">// There can&#39;t be more than 65536 code bytes. Explicitly cast to the return type.</span></div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;    <span class="keywordflow">return</span> (uint16)code_.size();</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;  }</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;  <span class="keywordtype">void</span> resize_code(uint16 new_size)<span class="keyword"> override </span>{ code_.as_std()-&gt;resize(new_size); }</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;  <span class="keywordtype">void</span> set_reference(uint16 i, <a class="code" href="classr__code_1_1_code.html">Code</a> *<span class="keywordtype">object</span>)<span class="keyword"> override </span>{ references_[i] = object; }</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;  <a class="code" href="classr__code_1_1_code.html">Code</a> *get_reference(uint16 i)<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> (*references_.as_std())[i]; }</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;  uint16 references_size()<span class="keyword"> const override </span>{</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;    <span class="comment">// There can&#39;t be more than 65536 references. Explicitly cast to the return type.</span></div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;    <span class="keywordflow">return</span> (uint16)references_.size();</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;  }</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;  <span class="keywordtype">void</span> clear_references()<span class="keyword"> override </span>{ references_.as_std()-&gt;clear(); }</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;  <span class="keywordtype">void</span> set_references(std::vector&lt;<a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> &gt; &amp;new_references)<span class="keyword"> override </span>{ (*references_.as_std()) = new_references; }</div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;  <span class="keywordtype">void</span> add_reference(<a class="code" href="classr__code_1_1_code.html">Code</a> *<span class="keywordtype">object</span>)<span class="keyword"> const override </span>{ references_.as_std()-&gt;push_back(<span class="keywordtype">object</span>); }</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;};</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> acq_views() {}</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> rel_views() {}</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> acq_markers() {}</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> rel_markers() {}</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160; </div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;  <span class="keyword">virtual</span> float32 get_psln_thr() { <span class="keywordflow">return</span> 1; }</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160; </div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;  <a class="code" href="classr__code_1_1_code.html">Code</a>() : storage_index_(null_storage_index) { markers_.reserve(CodeMarkersInitialSize); }</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;  <span class="keyword">virtual</span> ~<a class="code" href="classr__code_1_1_code.html">Code</a>() {}</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160; </div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> mod(uint16 <span class="comment">/* member_index */</span>, float32 <span class="comment">/* value */</span>) {};</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> set(uint16 <span class="comment">/* member_index */</span>, float32 <span class="comment">/* value */</span>) {};</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classr__code_1_1___view.html">_View</a> *get_view(<a class="code" href="classr__code_1_1_code.html">Code</a>* <span class="comment">/* group */</span>, <span class="keywordtype">bool</span> <span class="comment">/* lock */</span>) { <span class="keywordflow">return</span> NULL; }</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> add_reference(<a class="code" href="classr__code_1_1_code.html">Code</a>* <span class="comment">/* object */</span>) {} <span class="comment">// called only on local objects.</span></div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;  <span class="keywordtype">void</span> remove_marker(<a class="code" href="classr__code_1_1_code.html">Code</a> *m) {</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160; </div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    acq_markers();</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    markers_.remove(m);</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    rel_markers();</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;  }</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160; </div>
+<div class="line"><a name="l00299"></a><span class="lineno"><a class="line" href="classr__code_1_1_code.html#a823ad2edfe90d62ce0f4ee203c85cc16">  299</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classr__code_1_1_code.html#a823ad2edfe90d62ce0f4ee203c85cc16">trace</a>(uint16 i, std::ostream&amp; out, <a class="code" href="classr__code_1_1_atom_1_1_trace_context.html">Atom::TraceContext</a>&amp; context)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;    <a class="code" href="classr__code_1_1_atom.html">Atom</a> atom = code(i);</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    atom.trace(context, out);</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;    <span class="keywordflow">if</span> (atom.getDescriptor() == Atom::R_PTR) {</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;      <span class="keywordflow">if</span> (atom.asIndex() &lt; references_size()) {</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        out &lt;&lt; <span class="stringliteral">&quot; -&gt; &quot;</span> &lt;&lt; get_reference(atom.asIndex())-&gt;get_oid();</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;<span class="preprocessor">#ifdef WITH_DETAIL_OID</span></div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;        out &lt;&lt; <span class="stringliteral">&quot;(&quot;</span> &lt;&lt; get_reference(atom.asIndex())-&gt;get_detail_oid() &lt;&lt; <span class="stringliteral">&quot;)&quot;</span>;</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;      }</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;      <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        out &lt;&lt; <span class="stringliteral">&quot; (unassigned) &quot;</span>;</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    }</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;  }</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160; </div>
+<div class="line"><a name="l00317"></a><span class="lineno"><a class="line" href="classr__code_1_1_code.html#a284e2dd681efd6aec9aa5f236bfdcdd0">  317</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classr__code_1_1_code.html#a284e2dd681efd6aec9aa5f236bfdcdd0">trace</a>(std::ostream&amp; out)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160; </div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    out &lt;&lt; <span class="stringliteral">&quot;--------\n&quot;</span>;</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    <a class="code" href="classr__code_1_1_atom_1_1_trace_context.html">Atom::TraceContext</a> context;</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    <span class="keywordflow">for</span> (uint16 i = 0; i &lt; code_size(); ++i) {</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160; </div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;      out &lt;&lt; i &lt;&lt; <span class="stringliteral">&quot;\t&quot;</span>;</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;      trace(i, out, context);</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;      out &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;    }</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;    out &lt;&lt; <span class="stringliteral">&quot;OID: &quot;</span> &lt;&lt; get_oid();</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;<span class="preprocessor">#ifdef WITH_DETAIL_OID</span></div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;    out &lt;&lt; <span class="stringliteral">&quot;(&quot;</span> &lt;&lt; get_detail_oid() &lt;&lt; <span class="stringliteral">&quot;)&quot;</span>;</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;    out &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;  }</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160; </div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;  <span class="keywordtype">void</span> trace()<span class="keyword"> const </span>{ trace(std::cout); }</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160; </div>
+<div class="line"><a name="l00339"></a><span class="lineno"><a class="line" href="classr__code_1_1_code.html#af9984a903c59aca3575c681335124378">  339</a></span>&#160;  std::string <a class="code" href="classr__code_1_1_code.html#af9984a903c59aca3575c681335124378">trace_string</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;    std::ostringstream out;</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    trace(out);</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;    <span class="keywordflow">return</span> out.str();</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;  }</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160; </div>
+<div class="line"><a name="l00348"></a><span class="lineno"><a class="line" href="classr__code_1_1_code.html#a97d365bb59d5b52f0af5a826e88b3a2e">  348</a></span>&#160;  std::string <a class="code" href="classr__code_1_1_code.html#a97d365bb59d5b52f0af5a826e88b3a2e">trace_string</a>(uint16 i)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    <a class="code" href="classr__code_1_1_atom_1_1_trace_context.html">Atom::TraceContext</a> context;</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    std::ostringstream out;</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    trace(i, out, context);</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    <span class="keywordflow">return</span> out.str();</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;  }</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160; </div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;  <span class="keywordtype">void</span> r_trace(std::ostream&amp; out) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160; </div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;  <span class="keywordtype">void</span> r_trace()<span class="keyword"> const </span>{ r_trace(std::cout); }</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160; </div>
+<div class="line"><a name="l00368"></a><span class="lineno"><a class="line" href="classr__code_1_1_code.html#a858edf9587a0d9be2322686e968d0e25">  368</a></span>&#160;  std::string <a class="code" href="classr__code_1_1_code.html#a858edf9587a0d9be2322686e968d0e25">r_trace_string</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;    std::ostringstream out;</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;    r_trace(out);</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;    <span class="keywordflow">return</span> out.str();</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;  }</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;};</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160; </div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;<span class="comment">// Implementation for local objects (non distributed).</span></div>
+<div class="line"><a name="l00376"></a><span class="lineno"><a class="line" href="classr__code_1_1_local_object.html">  376</a></span>&#160;<span class="keyword">class </span>dll_export <a class="code" href="classr__code_1_1_local_object.html">LocalObject</a> :</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;  <span class="keyword">public</span> <a class="code" href="classr__code_1_1_code.html">Code</a> {</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;  uint32 oid_;</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;  <a class="code" href="classr__code_1_1resized__vector.html">r_code::resized_vector&lt;Atom&gt;</a> code_;</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;  <a class="code" href="classr__code_1_1resized__vector.html">r_code::resized_vector&lt;P&lt;Code&gt;</a> &gt; references_;</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;  <a class="code" href="classr__code_1_1_local_object.html">LocalObject</a>() : <a class="code" href="classr__code_1_1_code.html">Code</a>() {}</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;  <a class="code" href="classr__code_1_1_local_object.html">LocalObject</a>(<a class="code" href="classr__code_1_1_sys_object.html">SysObject</a> *source) : <a class="code" href="classr__code_1_1_code.html">Code</a>() {</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160; </div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;    load(source);</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;  }</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;  <span class="keyword">virtual</span> ~<a class="code" href="classr__code_1_1_local_object.html">LocalObject</a>() {}</div>
 <div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160; </div>
-<div class="line"><a name="l00390"></a><span class="lineno"><a class="line" href="classr__code_1_1_mem.html">  390</a></span>&#160;<span class="keyword">class </span>dll_export <a class="code" href="classr__code_1_1_mem.html">Mem</a> {</div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;  <span class="keyword">static</span> <a class="code" href="classr__code_1_1_mem.html">Mem</a> *singleton_;</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;  <a class="code" href="classr__code_1_1_mem.html">Mem</a>();</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;  <span class="keyword">static</span> <a class="code" href="classr__code_1_1_mem.html">Mem</a> *Get();</div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160; </div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classr__code_1_1_code.html">Code</a> *build_object(<a class="code" href="classr__code_1_1_sys_object.html">SysObject</a> *source) <span class="keyword">const</span> = 0;</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> delete_object(<a class="code" href="classr__code_1_1_code.html">Code</a> *<span class="keywordtype">object</span>) = 0;</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;};</div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;}</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160; </div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160; </div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;  <a class="code" href="classr__code_1_1___view.html">_View</a> *build_view(<a class="code" href="classr__code_1_1_sys_view.html">SysView</a> *source)<span class="keyword"> override </span>{</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160; </div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;    <span class="keywordflow">return</span> Code::build_view&lt;_View&gt;(source);</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;  }</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160; </div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;  uint32 get_oid()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> oid_; }</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;  <span class="keywordtype">void</span> set_oid(uint32 oid)<span class="keyword"> override </span>{ oid_ = oid; }</div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160; </div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;  <a class="code" href="classr__code_1_1_atom.html">Atom</a> &amp;code(uint16 i)<span class="keyword"> override </span>{ <span class="keywordflow">return</span> code_[i]; }</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;  <span class="keyword">const</span> <a class="code" href="classr__code_1_1_atom.html">Atom</a> &amp;code(uint16 i)<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> code_[i]; }</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;  uint16 code_size()<span class="keyword"> const override </span>{</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;    <span class="comment">// There can&#39;t be more than 65536 code bytes. Explicitly cast to the return type.</span></div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;    <span class="keywordflow">return</span> (uint16)code_.size();</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;  }</div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;  <span class="keywordtype">void</span> resize_code(uint16 new_size)<span class="keyword"> override </span>{ code_.resize(new_size); }</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;  <span class="keywordtype">void</span> set_reference(uint16 i, <a class="code" href="classr__code_1_1_code.html">Code</a> *<span class="keywordtype">object</span>)<span class="keyword"> override </span>{ references_[i] = object; }</div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;  <a class="code" href="classr__code_1_1_code.html">Code</a> *get_reference(uint16 i)<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> references_[i]; }</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;  uint16 references_size()<span class="keyword"> const override </span>{</div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;    <span class="comment">// There can&#39;t be more than 65536 references. Explicitly cast to the return type.</span></div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;    <span class="keywordflow">return</span> (uint16)references_.size();</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;  }</div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;  <span class="keywordtype">void</span> clear_references()<span class="keyword"> override </span>{ references_.clear(); }</div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;  <span class="keywordtype">void</span> set_references(std::vector&lt;<a class="code" href="classcore_1_1_p.html">P&lt;Code&gt;</a> &gt; &amp;new_references)<span class="keyword"> override </span>{</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;    references_.clear();</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; new_references.size(); ++i)</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;      references_.push_back(new_references[i]);</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;  }</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;  <span class="keywordtype">void</span> add_reference(<a class="code" href="classr__code_1_1_code.html">Code</a> *<span class="keywordtype">object</span>)<span class="keyword"> override </span>{ references_.push_back(<span class="keywordtype">object</span>); }</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;};</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160; </div>
+<div class="line"><a name="l00420"></a><span class="lineno"><a class="line" href="classr__code_1_1_mem.html">  420</a></span>&#160;<span class="keyword">class </span>dll_export <a class="code" href="classr__code_1_1_mem.html">Mem</a> {</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;  <span class="keyword">static</span> <a class="code" href="classr__code_1_1_mem.html">Mem</a> *singleton_;</div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;  <a class="code" href="classr__code_1_1_mem.html">Mem</a>();</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;  <span class="keyword">static</span> <a class="code" href="classr__code_1_1_mem.html">Mem</a> *Get();</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160; </div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classr__code_1_1_code.html">Code</a> *build_object(<a class="code" href="classr__code_1_1_sys_object.html">SysObject</a> *source) <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> delete_object(<a class="code" href="classr__code_1_1_code.html">Code</a> *<span class="keywordtype">object</span>) = 0;</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;};</div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;}</div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160; </div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160; </div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclassr__code_1_1resized__vector_html"><div class="ttname"><a href="classr__code_1_1resized__vector.html">r_code::resized_vector</a></div><div class="ttdef"><b>Definition:</b> <a href="resized__vector_8h_source.html#l00098">resized_vector.h:99</a></div></div>
-<div class="ttc" id="aclassr__code_1_1_code_html_af9984a903c59aca3575c681335124378"><div class="ttname"><a href="classr__code_1_1_code.html#af9984a903c59aca3575c681335124378">r_code::Code::trace_string</a></div><div class="ttdeci">std::string trace_string() const</div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00332">r_code/object.h:332</a></div></div>
+<div class="ttc" id="aclassr__code_1_1resized__vector_html"><div class="ttname"><a href="classr__code_1_1resized__vector.html">r_code::resized_vector</a></div><div class="ttdef"><b>Definition:</b> <a href="resized__vector_8h_source.html#l00137">resized_vector.h:137</a></div></div>
+<div class="ttc" id="aclassr__code_1_1_code_html_af9984a903c59aca3575c681335124378"><div class="ttname"><a href="classr__code_1_1_code.html#af9984a903c59aca3575c681335124378">r_code::Code::trace_string</a></div><div class="ttdeci">std::string trace_string() const</div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00339">r_code/object.h:339</a></div></div>
 <div class="ttc" id="aclassr__code_1_1___view_1_1_hash_html"><div class="ttname"><a href="classr__code_1_1___view_1_1_hash.html">r_code::_View::Hash</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00201">r_code/object.h:201</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_atom_1_1_trace_context_html"><div class="ttname"><a href="classr__code_1_1_atom_1_1_trace_context.html">r_code::Atom::TraceContext</a></div><div class="ttdef"><b>Definition:</b> <a href="atom_8h_source.html#l00112">atom.h:112</a></div></div>
 <div class="ttc" id="aclassr__code_1_1___view_html"><div class="ttname"><a href="classr__code_1_1___view.html">r_code::_View</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00163">r_code/object.h:164</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_atom_html"><div class="ttname"><a href="classr__code_1_1_atom.html">r_code::Atom</a></div><div class="ttdef"><b>Definition:</b> <a href="atom_8h_source.html#l00104">atom.h:104</a></div></div>
-<div class="ttc" id="aclassr__code_1_1_code_html_a97d365bb59d5b52f0af5a826e88b3a2e"><div class="ttname"><a href="classr__code_1_1_code.html#a97d365bb59d5b52f0af5a826e88b3a2e">r_code::Code::trace_string</a></div><div class="ttdeci">std::string trace_string(uint16 i) const</div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00341">r_code/object.h:341</a></div></div>
+<div class="ttc" id="aclassr__code_1_1_code_html_a97d365bb59d5b52f0af5a826e88b3a2e"><div class="ttname"><a href="classr__code_1_1_code.html#a97d365bb59d5b52f0af5a826e88b3a2e">r_code::Code::trace_string</a></div><div class="ttdeci">std::string trace_string(uint16 i) const</div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00348">r_code/object.h:348</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_sys_view_html"><div class="ttname"><a href="classr__code_1_1_sys_view.html">r_code::SysView</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00118">r_code/object.h:119</a></div></div>
 <div class="ttc" id="aclassr__code_1_1___view_1_1_equal_html"><div class="ttname"><a href="classr__code_1_1___view_1_1_equal.html">r_code::_View::Equal</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00208">r_code/object.h:208</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_sys_object_html"><div class="ttname"><a href="classr__code_1_1_sys_object.html">r_code::SysObject</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00135">r_code/object.h:136</a></div></div>
-<div class="ttc" id="aclassr__code_1_1_code_html_a823ad2edfe90d62ce0f4ee203c85cc16"><div class="ttname"><a href="classr__code_1_1_code.html#a823ad2edfe90d62ce0f4ee203c85cc16">r_code::Code::trace</a></div><div class="ttdeci">void trace(uint16 i, std::ostream &amp;out, Atom::TraceContext &amp;context) const</div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00292">r_code/object.h:292</a></div></div>
+<div class="ttc" id="aclassr__code_1_1_code_html_a823ad2edfe90d62ce0f4ee203c85cc16"><div class="ttname"><a href="classr__code_1_1_code.html#a823ad2edfe90d62ce0f4ee203c85cc16">r_code::Code::trace</a></div><div class="ttdeci">void trace(uint16 i, std::ostream &amp;out, Atom::TraceContext &amp;context) const</div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00299">r_code/object.h:299</a></div></div>
 <div class="ttc" id="aclasscore_1_1_p_html"><div class="ttname"><a href="classcore_1_1_p.html">core::P</a></div><div class="ttdef"><b>Definition:</b> <a href="base_8h_source.html#l00102">base.h:102</a></div></div>
 <div class="ttc" id="aclassr__code_1_1___view_1_1_less_html"><div class="ttname"><a href="classr__code_1_1___view_1_1_less.html">r_code::_View::Less</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00215">r_code/object.h:215</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_code_html"><div class="ttname"><a href="classr__code_1_1_code.html">r_code::Code</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00223">r_code/object.h:224</a></div></div>
 <div class="ttc" id="aclasscore_1_1___object_html"><div class="ttname"><a href="classcore_1_1___object.html">core::_Object</a></div><div class="ttdef"><b>Definition:</b> <a href="base_8h_source.html#l00130">base.h:130</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_image_object_html"><div class="ttname"><a href="classr__code_1_1_image_object.html">r_code::ImageObject</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00106">r_code/object.h:106</a></div></div>
-<div class="ttc" id="aclassr__code_1_1_local_object_html"><div class="ttname"><a href="classr__code_1_1_local_object.html">r_code::LocalObject</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00350">r_code/object.h:351</a></div></div>
-<div class="ttc" id="aclassr__code_1_1_code_html_a284e2dd681efd6aec9aa5f236bfdcdd0"><div class="ttname"><a href="classr__code_1_1_code.html#a284e2dd681efd6aec9aa5f236bfdcdd0">r_code::Code::trace</a></div><div class="ttdeci">void trace(std::ostream &amp;out) const</div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00310">r_code/object.h:310</a></div></div>
-<div class="ttc" id="aclassr__code_1_1_mem_html"><div class="ttname"><a href="classr__code_1_1_mem.html">r_code::Mem</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00390">r_code/object.h:390</a></div></div>
+<div class="ttc" id="aclassr__code_1_1_local_object_html"><div class="ttname"><a href="classr__code_1_1_local_object.html">r_code::LocalObject</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00376">r_code/object.h:377</a></div></div>
+<div class="ttc" id="aclassr__code_1_1_code_html_a284e2dd681efd6aec9aa5f236bfdcdd0"><div class="ttname"><a href="classr__code_1_1_code.html#a284e2dd681efd6aec9aa5f236bfdcdd0">r_code::Code::trace</a></div><div class="ttdeci">void trace(std::ostream &amp;out) const</div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00317">r_code/object.h:317</a></div></div>
+<div class="ttc" id="aclassr__code_1_1_mem_html"><div class="ttname"><a href="classr__code_1_1_mem.html">r_code::Mem</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00420">r_code/object.h:420</a></div></div>
 <div class="ttc" id="aclassr__code_1_1list_html"><div class="ttname"><a href="classr__code_1_1list.html">r_code::list</a></div><div class="ttdef"><b>Definition:</b> <a href="list_8h_source.html#l00099">list.h:99</a></div></div>
+<div class="ttc" id="aclassr__code_1_1_code_html_a858edf9587a0d9be2322686e968d0e25"><div class="ttname"><a href="classr__code_1_1_code.html#a858edf9587a0d9be2322686e968d0e25">r_code::Code::r_trace_string</a></div><div class="ttdeci">std::string r_trace_string() const</div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00368">r_code/object.h:368</a></div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

@@ -74,9 +74,9 @@ $(function() {
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//_/_/ AERA</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//_/_/ Autocatalytic Endogenous Reflective Architecture</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//_/_/ </span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Jeff Thompson</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Jeff Thompson</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Kristinn R. Thorisson</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Icelandic Institute for Intelligent Machines</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//_/_/ http://www.iiim.is</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//_/_/ </span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//_/_/ Copyright (c) 2010-2012 Eric Nivel</span></div>
@@ -179,8 +179,8 @@ $(function() {
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;  <span class="keywordtype">bool</span> evaluate_fwd_timings();</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;  <span class="keywordtype">bool</span> scan_bwd_guards() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;  <span class="keywordtype">bool</span> scan_location(uint16 index) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;  <span class="keywordtype">bool</span> scan_variable(uint16 index) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;  <span class="keywordtype">bool</span> scan_location(uint16 index, uint16 parent_guard_index) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;  <span class="keywordtype">bool</span> scan_variable(uint16 index, uint16 parent_guard_index) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;  <span class="keywordtype">void</span> store_evidence(<a class="code" href="classr__exec_1_1___fact.html">_Fact</a> *evidence, <span class="keywordtype">bool</span> prediction, <span class="keywordtype">bool</span> is_simulation); <span class="comment">// stores both actual and non-simulated predicted evidences.</span></div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
@@ -216,7 +216,7 @@ $(function() {
 <div class="ttc" id="aclasscore_1_1_p_html"><div class="ttname"><a href="classcore_1_1_p.html">core::P</a></div><div class="ttdef"><b>Definition:</b> <a href="base_8h_source.html#l00102">base.h:102</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_code_html"><div class="ttname"><a href="classr__code_1_1_code.html">r_code::Code</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00223">r_code/object.h:224</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_h_l_p_overlay_html_a77b732c11282ef6a82181a0f7ba9b8cc"><div class="ttname"><a href="classr__exec_1_1_h_l_p_overlay.html#a77b732c11282ef6a82181a0f7ba9b8cc">r_exec::HLPOverlay::evaluate</a></div><div class="ttdeci">bool evaluate(uint16 index)</div><div class="ttdef"><b>Definition:</b> <a href="hlp__overlay_8cpp_source.html#l00160">hlp_overlay.cpp:160</a></div></div>
-<div class="ttc" id="aclassr__exec_1_1_h_l_p_binding_map_html"><div class="ttname"><a href="classr__exec_1_1_h_l_p_binding_map.html">r_exec::HLPBindingMap</a></div><div class="ttdef"><b>Definition:</b> <a href="binding__map_8h_source.html#l00345">binding_map.h:346</a></div></div>
+<div class="ttc" id="aclassr__exec_1_1_h_l_p_binding_map_html"><div class="ttname"><a href="classr__exec_1_1_h_l_p_binding_map.html">r_exec::HLPBindingMap</a></div><div class="ttdef"><b>Definition:</b> <a href="binding__map_8h_source.html#l00391">binding_map.h:392</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_h_l_p_overlay_html"><div class="ttname"><a href="classr__exec_1_1_h_l_p_overlay.html">r_exec::HLPOverlay</a></div><div class="ttdef"><b>Definition:</b> <a href="hlp__overlay_8h_source.html#l00097">hlp_overlay.h:98</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_c_s_t_controller_html"><div class="ttname"><a href="classr__exec_1_1_c_s_t_controller.html">r_exec::CSTController</a></div><div class="ttdef"><b>Definition:</b> <a href="cst__controller_8h_source.html#l00186">cst_controller.h:187</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_controller_html"><div class="ttname"><a href="classr__exec_1_1_controller.html">r_exec::Controller</a></div><div class="ttdef"><b>Definition:</b> <a href="overlay_8h_source.html#l00136">overlay.h:137</a></div></div>
