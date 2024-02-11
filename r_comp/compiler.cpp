@@ -2529,7 +2529,8 @@ bool Compiler::read_variable(uint16 write_index, uint16 &extent_index, bool writ
 
     if (state_.pattern_lvl || allow_variables_and_wildcards_outside_pattern_skeleton_) {
 
-      if (in_hlp_) {
+      if (in_hlp_ ||
+          (allow_variables_and_wildcards_outside_pattern_skeleton_ && current_class_.str_opcode != "pgm")) {
 
         uint8 variable_index = add_hlp_reference(v);
         if (write)
