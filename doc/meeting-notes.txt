@@ -1191,11 +1191,16 @@ DONE. Fix Arash's analogy example in Webots. https://github.com/IIIM-IS/AERA/com
     * DONE. Merge pull request for GTPX to build the anti-fact model in ack_pred_success https://github.com/IIIM-IS/AERA/pull/285
     * DONE. Merge pull request for GTPX to update build_mdl for anti-fact and given icst https://github.com/IIIM-IS/AERA/pull/286
 
+2024-02-15
+* Cook up an example where backward chaining for a counterexample finds the same information as forward chaining from the current state (friend has brought dinner)
+  * DONE: In Visualizer, show variables in backward chaining.
+  * DONE. Demo current shortcoming for multiple state changes: Add magnet to hand-grab-sphere.
+
 next meeting
+* Cook up an example where backward chaining for a counterexample finds the same information as forward chaining from the current state (friend has brought dinner)
 * Cook up an argumention example showing multiple levels of competing goals, and constructivist levels.
 * hand-grab-sphere
   * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
-    * Still need to allow multiple strong requirements in retrieve_imdl.
   * Try to get GTPX to learn mdl_displace_hand by making it a goal to not be at a position and observe what achieves it.
     * In abduce, ignore negative match of the RHS.
   * Represent sphere position without direct I/O input.
