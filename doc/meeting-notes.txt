@@ -1196,6 +1196,9 @@ DONE. Fix Arash's analogy example in Webots. https://github.com/IIIM-IS/AERA/com
   * DONE: In Visualizer, show variables in backward chaining.
   * DONE. Demo current shortcoming for multiple state changes: Add magnet to hand-grab-sphere.
 
+2024-03-01
+* DONE. Cook up an example where forward guards propagate uncertainty, and show that backward chaining with constraints gets the same result.
+
 next meeting
 * Cook up an example where backward chaining for a counterexample finds the same information as forward chaining from the current state (friend has brought dinner)
 * Cook up an argumention example showing multiple levels of competing goals, and constructivist levels.
