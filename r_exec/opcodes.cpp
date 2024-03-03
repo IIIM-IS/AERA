@@ -162,4 +162,6 @@ uint16 Opcodes::Add;
 uint16 Opcodes::Sub;
 uint16 Opcodes::Mul;
 uint16 Opcodes::Div;
+
+uint16 Opcodes::Var;
 }

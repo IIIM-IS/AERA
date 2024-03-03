@@ -172,6 +172,8 @@ public:
   static uint16 Sub;
   static uint16 Mul;
   static uint16 Div;
+
+  static uint16 Var;
 };
 }
 

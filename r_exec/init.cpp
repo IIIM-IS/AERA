@@ -446,6 +446,8 @@ bool InitOpcodes(const r_comp::Metadata& metadata) {
   Opcodes::Mul = _Opcodes.find("mul")->second;
   Opcodes::Div = _Opcodes.find("div")->second;
 
+  Opcodes::Var = _Opcodes.find("var")->second;
+
   // load std operators.
   uint16 operator_opcode = 0;
   Operator::Register(operator_opcode++, now);
