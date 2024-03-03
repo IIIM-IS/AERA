@@ -192,6 +192,24 @@ public:
 
   bool has_after() const { return r_code::Utils::HasTimestamp<r_code::Code>(this, FACT_AFTER); }
   bool has_before() const { return r_code::Utils::HasTimestamp<r_code::Code>(this, FACT_BEFORE); }
+  /**
+   * If the object at FACT_AFTER is (var v), then return v. Otherwise return -1.
+   */
+  int get_after_var() const {
+    uint16 v_index = code(FACT_AFTER).asIndex();
+    if (code(v_index) == Atom::Object(Opcodes::Var, 1))
+      return (int)code(v_index + 1).asFloat();
+    return -1;
+  }
+  /**
+   * If the object at FACT_BEFORE is (var v), then return v. Otherwise return -1.
+   */
+  int get_before_var() const {
+    uint16 v_index = code(FACT_BEFORE).asIndex();
+    if (code(v_index) == Atom::Object(Opcodes::Var, 1))
+      return (int)code(v_index + 1).asFloat();
+    return -1;
+  }
   Timestamp get_after() const;
   Timestamp get_before() const;
   float32 get_cfd() const { return code(FACT_CFD).asFloat(); }
