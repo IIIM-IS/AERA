@@ -97,6 +97,10 @@ namespace tcp_io_device {
   {
     cout << "\n> ERROR: Trying to use the TcpIoDevice without setting ENABLE_PROTOBUF flag in the beginning of main.cpp" << endl;
   }
+  template<class O, class S> TcpIoDevice<O, S>::TcpIoDevice(int number_of_servers, int number_of_clients, std::vector<std::pair<std::string, std::string> > server_configurations, std::vector<std::string> client_configurations) : MemExec<O, S>()
+  {
+    cout << "\n> ERROR: Trying to use the TcpIoDevice without setting ENABLE_PROTOBUF flag in the beginning of main.cpp" << endl;
+  }
 
   template<class O, class S>
   TcpIoDevice<O, S>::~TcpIoDevice() {}
