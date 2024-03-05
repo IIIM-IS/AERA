@@ -304,7 +304,8 @@ bool StructureValue::contains(const Atom *s) const {
       continue;
 
     if (a.isFloat() && _a.isFloat())
-      return Utils::Equal(a.asFloat(), _a.asFloat());
+      if (Utils::Equal(a.asFloat(), _a.asFloat()))
+        continue;
 
     return false;
   }
