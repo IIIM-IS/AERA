@@ -111,13 +111,14 @@ namespace tcp_io_device {
   public:
 
     TcpIoDevice();
+    TcpIoDevice(int number_of_servers, int number_of_clients, std::vector<std::pair<std::string, std::string> > server_configurations, std::vector<std::string> client_configurations);
     ~TcpIoDevice();
 
     /**
     * Initialize the TCP connection and wait for a client to connect to it.
     * \param port the port in which the TCP/IP connection should be communicating with the environment simulation.
     */
-    int initTCP(std::string port);
+    int initTCP();
   };
 }
 
