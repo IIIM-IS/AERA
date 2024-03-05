@@ -179,12 +179,12 @@ thread_ret TDecompiler::Decompile(void *args) {
 
   if (_this->ostream_id_ == 0) {
 
-    std::cout << _this->header_.c_str();
-    std::cout << decompiled_code.str().c_str();
+    std::cout << _this->header_;
+    std::cout << decompiled_code.str();
   } else {
 
-    PipeOStream::Get(_this->ostream_id_ - 1) << _this->header_.c_str();
-    PipeOStream::Get(_this->ostream_id_ - 1) << decompiled_code.str().c_str();
+    PipeOStream::Get(_this->ostream_id_ - 1) << _this->header_;
+    PipeOStream::Get(_this->ostream_id_ - 1) << decompiled_code.str();
   }
 
   thread_ret_val(0);
