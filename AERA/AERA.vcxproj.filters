@@ -12,13 +12,13 @@
     <ClCompile Include="IODevices\video_screen\video_screen_io_device.cpp">
       <Filter>IODevices\video_screen</Filter>
     </ClCompile>
-    <ClCompile Include="AERA_main.cpp" />
     <ClCompile Include="IODevices\TCP\AERA_Protobuf\tcp_data_message.pb.cc">
       <Filter>IODevices\TCP\AERA_Protobuf</Filter>
     </ClCompile>
     <ClCompile Include="IODevices\TCP\AERA_Protobuf\tcp_connection.cpp">
       <Filter>IODevices\TCP\AERA_Protobuf</Filter>
     </ClCompile>
+    <ClCompile Include="AERA_main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="settings.h" />
@@ -299,6 +299,15 @@
       <Filter>IODevices\TCP\AERA_Protobuf</Filter>
     </None>
     <None Include="replicode_v1.2\hand-grab-sphere-learn.external.ur.replicode">
+      <Filter>replicode_v1.2</Filter>
+    </None>
+    <None Include="replicode_v1.2\ATAI-24-A1-1-hand-grab-sphere.replicode">
+      <Filter>replicode_v1.2</Filter>
+    </None>
+    <None Include="replicode_v1.2\ATAI-24-A1-1-hand-grab-sphere-learn.replicode">
+      <Filter>replicode_v1.2</Filter>
+    </None>
+    <None Include="replicode_v1.2\ATAI-24-A1-2-hand-grab-sphere-learn.external.ur.replicode">
       <Filter>replicode_v1.2</Filter>
     </None>
   </ItemGroup>
