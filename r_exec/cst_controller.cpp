@@ -638,6 +638,7 @@ void CSTController::abduce(HLPBindingMap* bm, Fact* f_super_goal, BOOLEAN analog
   P<Code> new_cst;
   vector<View*> views_mdl;
   vector<View*> views_cst;
+  int component_size_limit = 3;
   bool matchFailiure = false;
   for (uint16 i = 1; i <= obj_count; ++i) {
 
@@ -675,7 +676,7 @@ void CSTController::abduce(HLPBindingMap* bm, Fact* f_super_goal, BOOLEAN analog
   }
   // create a CST-REQ
   if (!(goalGoal->code(0).asOpcode() == Opcodes::IMdl && matchFailiure && analogy
-    && components.size() >= 3))
+    && components.size() >= component_size_limit))
     // limit the number of created CSTs to CSTs with 3 and more components so that the
    //number of variables does not change in CSTs of models of the hand-grab-sphere example.
     return;

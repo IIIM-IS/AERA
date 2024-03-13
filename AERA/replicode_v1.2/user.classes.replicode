@@ -32,6 +32,7 @@
 !dfn (release :); arg0: an object.
 !dfn (move :); arg0: an object, arg1: target position
 !dfn (rotate :); arg0: an object, ag1: target rotation
+!dfn (rotate_y :); arg0: an object, ag1: target rotation
 !dfn (set_velocity_y :); arg0: an object, arg1: velocity.
 !dfn (set_acceleration_y :); arg0: an object, arg1: acceleration.
 !dfn (move_y_plus :); arg0: an object.
