@@ -63,7 +63,7 @@ S3:(cst [] []
 
 ; Execute babble pass A commands.
 !def DRIVE_PASS1_START 1300ms
-!def DRIVE_PASS1_END (+ DRIVE_PASS1_START 300ms)
+!def DRIVE_PASS1_END (+ DRIVE_PASS1_START 200ms)
 ; Execute experimenting pass A commands.
 !def DRIVE_PASS2_START (+ DRIVE_PASS1_END 600ms)
 
@@ -479,7 +479,7 @@ pgm_experimentingA_5:(pgm [] []
    [SYNC_ONCE now 0 forever primary nil 1]
 
 pgm_cmd_move_h_holding_c:(pgm [] []
-   (ptn (fact G:(goal (fact (cmd move [h DeltaP_in:] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact G:(goal (fact (cmd move [h DeltaP:] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
    (ptn (fact (mk.val e1 emulator_state [Holding_obj: Pos_h: Pos_c: Pos_s:] :) After: Before: ::) [])
 []
    (= Holding_obj c)
@@ -488,7 +488,7 @@ pgm_cmd_move_h_holding_c:(pgm [] []
    (> Cmd_before After)
 []
    ; Limit DeltaP to +/- 20. Inject the fact that the command was executed.
-   (inj [Command:(cmd move [h DeltaP_in] 1) []])
+   (inj [Command:(cmd move [h DeltaP] 1) []])
    (inj []
       (fact Command (+ After 20ms) Before 1 1)
       [SYNC_ONCE After 1 1 stdin nil]
@@ -505,7 +505,7 @@ pgm_cmd_move_h_holding_c:(pgm [] []
    [SYNC_ONCE now 0 forever emulator nil 1]
 
 pgm_cmd_move_h_holding_s:(pgm [] []
-   (ptn (fact G:(goal (fact (cmd move [h DeltaP_in:] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact G:(goal (fact (cmd move [h DeltaP:] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
    (ptn (fact (mk.val e1 emulator_state [Holding_obj: Pos_h: Pos_c: Pos_s:] :) After: Before: ::) [])
 []
    (= Holding_obj s)
@@ -514,7 +514,7 @@ pgm_cmd_move_h_holding_s:(pgm [] []
    (> Cmd_before After)
 []
    ; Limit DeltaP to +/- 20. Inject the fact that the command was executed.
-   (inj [Command:(cmd move [h DeltaP_in] 1) []])
+   (inj [Command:(cmd move [h DeltaP] 1) []])
    (inj []
       (fact Command (+ After 20ms) Before 1 1)
       [SYNC_ONCE After 1 1 stdin nil]
@@ -532,7 +532,7 @@ pgm_cmd_move_h_holding_s:(pgm [] []
    [SYNC_ONCE now 0 forever emulator nil 1]
 
 pgm_cmd_move_h_not_holding:(pgm [] []
-   (ptn (fact G:(goal (fact (cmd move [h DeltaP_in:] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact G:(goal (fact (cmd move [h DeltaP:] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
    (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Pos_c: Pos_s:] :) After: Before: ::) [])
 []
    (= (is_sim G) false)
@@ -540,7 +540,7 @@ pgm_cmd_move_h_not_holding:(pgm [] []
    (> Cmd_before After)
 []
    ; Limit DeltaP to +/- 20. Inject the fact that the command was executed.
-   (inj [Command:(cmd move [h DeltaP_in] 1) []])
+   (inj [Command:(cmd move [h DeltaP] 1) []])
    (inj []
       (fact Command (+ After 20ms) Before 1 1)
       [SYNC_ONCE After 1 1 stdin nil]
