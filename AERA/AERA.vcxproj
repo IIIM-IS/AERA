@@ -76,7 +76,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\CoreLibrary;..\r_code;..\r_exec;..\r_comp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;ENABLE_PROTOBUF;_DEBUG;_CONSOLE;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <ExceptionHandling />
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -100,7 +100,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <AdditionalIncludeDirectories>..\r_code;..\CoreLibrary;..\r_exec;..\r_comp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;ENABLE_PROTOBUF;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling />
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -123,7 +123,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\CoreLibrary;..\r_code;..\r_exec;..\r_comp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;DEBUG_VISUALIZER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;ENABLE_PROTOBUF;_DEBUG;_CONSOLE;DEBUG_VISUALIZER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <ExceptionHandling />
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -238,6 +238,8 @@
     <None Include="replicode_v1.2\ATAI-24-A1-2-hand-grab-sphere-learn.external.ur.replicode" />
     <None Include="replicode_v1.2\ATAI-24-A1-1-hand-grab-sphere-learn.replicode" />
     <None Include="replicode_v1.2\ATAI-24-A1-1-hand-grab-sphere.replicode" />
+    <None Include="replicode_v1.2\ATAI-24-A2-2-hand-grab-sphere-learn.external.ur.replicode" />
+    <None Include="replicode_v1.2\ATAI-24-A2-1-hand-grab-sphere-learn.replicode" />
     <None Include="replicode_v1.2\ball.goal.external.replicode" />
     <None Include="replicode_v1.2\clcc-figure8.replicode" />
     <None Include="replicode_v1.2\drives.replicode" />

@@ -310,6 +310,12 @@
     <None Include="replicode_v1.2\ATAI-24-A1-2-hand-grab-sphere-learn.external.ur.replicode">
       <Filter>replicode_v1.2</Filter>
     </None>
+    <None Include="replicode_v1.2\ATAI-24-A2-2-hand-grab-sphere-learn.external.ur.replicode">
+      <Filter>replicode_v1.2</Filter>
+    </None>
+    <None Include="replicode_v1.2\ATAI-24-A2-1-hand-grab-sphere-learn.replicode">
+      <Filter>replicode_v1.2</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="NatvisFile.natvis" />
