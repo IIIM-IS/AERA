@@ -1,0 +1,882 @@
+; There are 5 objects in this example
+; Size has a symbolic value in thei example
+; Good results: exploration demo.
+
+
+orientation:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+grey:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+green:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+blue:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+pink:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+size:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+small:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+large:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+
+
+h:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+h_is_a_hand:(mk.val h essence hand 1) |[]
+(fact h_is_a_hand 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+cube_1:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+cube_1_is_a_cube:(mk.val cube_1 essence cube 1) |[]
+(fact cube_1_is_a_cube 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+cube_1_is_grey:(mk.val cube_1 color grey 1) |[]
+(fact cube_1_is_grey 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+cube_1_is_small:(mk.val cube_1 size small 1) |[]
+(fact cube_1_is_small 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+cube_1_is_a_hand:(mk.val cube_1 essence hand 1) |[]
+; This is needed for S3.
+(|fact cube_1_is_a_hand 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+cube_2:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+cube_2_is_a_cube:(mk.val cube_2 essence cube 1) |[]
+(fact cube_2_is_a_cube 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+cube_2_is_blue:(mk.val cube_2 color blue 1) |[]
+(fact cube_2_is_blue 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+cube_2_is_large:(mk.val cube_2 size large 1) |[]
+(fact cube_2_is_large 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+cube_2_is_a_hand:(mk.val cube_2 essence hand 1) |[]
+; This is needed for S3.
+(|fact cube_2_is_a_hand 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+sphere_1:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+sphere_1_is_a_sphere:(mk.val sphere_1 essence sphere 1) |[]
+(fact sphere_1_is_a_sphere 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+sphere_1_is_blue:(mk.val sphere_1 color blue 1) |[]
+(fact sphere_1_is_blue 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+sphere_1_is_large:(mk.val sphere_1 size large 1) |[]
+(fact sphere_1_is_large 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+sphere_1_is_a_hand:(mk.val sphere_1 essence hand 1) |[]
+; This is needed for S3.
+(|fact sphere_1_is_a_hand 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+cyl_1:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+cyl_1_is_a_cylinder:(mk.val cyl_1 essence cylinder 1) |[]
+(fact cyl_1_is_a_cylinder 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+cyl_1_is_grey:(mk.val cyl_1 color grey 1) |[]
+(fact cyl_1_is_grey 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+cyl_1_is_a_hand:(mk.val cyl_1 essence hand 1) |[]
+; This is needed for S3.
+(|fact cyl_1_is_a_hand 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+cube_3:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+cube_3_is_a_cube:(mk.val cube_3 essence cube 1) |[]
+(fact cube_3_is_a_cube 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+cube_3_is_blue:(mk.val cube_3 color blue 1) |[]
+(fact cube_3_is_blue 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+cube_3_is_large:(mk.val cube_3 size large 1) |[]
+(fact cube_3_is_large 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+cube_3_is_a_hand:(mk.val cube_3 essence hand 1) |[]
+; This is needed for S3.
+(|fact cube_3_is_a_hand 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+; Internal state used by the programs to emulate the environment.
+; (mk.val e1 emulator_state [Holding_obj Pos_h Orien_h Pos_cube_1 Orien_cube_1 Pos_sphere_1 Orien_sphere_1 Pos_cyl_1 Orien_cyl_1 Pos_cube_2 Orien_cube_2 Pos_cube_3 Orien_cube_3)
+e1:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+emulator_state:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+; Inject the emulator state into the emulator group.
+emulator:(std_grp 2 0 0 0 []) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]
+
+; This program runs in the primary group to re-inject any (fact (goal (fact (cmd ::)))) into emulator.
+pgm_inject_in_emulator_group:(pgm [] []
+   (ptn F_G:(fact G:(goal (fact (cmd ::) ::) ::) ::) [])
+[]
+   ; Only re-inject non-simulation goals.
+   (= (is_sim G) false)
+[]
+   (inj [F_G [SYNC_ONCE (now) 1 1 emulator nil]])
+1) |[]
+(ipgm pgm_inject_in_emulator_group [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+; Hand H has position P.
+S_hand:(cst [] []
+   (fact (mk.val H: essence hand :) T0: T1: : :); Changed X to hand.
+   (fact (mk.val H: position P: :) T0: T1: : :)
+   (fact (mk.val H: orientation O: :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+
+
+
+; Initial conditions.
+; (mk.val e1 emulator_state [[Holding_obj Pos_h Orien_h Pos_cube_1 Orien_cube_1 Pos_sphere_1 Orien_sphere_1 Pos_cyl_1 Orien_cyl_1 Pos_cube_2 Orien_cube_2 Pos_cube_3 Orien_cube_3])
+start:(pgm [] [] [] []
+   (inj [State:(mk.val e1 emulator_state [nil -2 -1 7 2 14 3 21 3 28 -2 35 1] 1) []])
+   (inj []
+      (fact State After:(now) (+ After sampling_period) 1 1)
+      [SYNC_PERIODIC now 1 1 emulator nil]
+   )
+1) |[]
+(ipgm start [] RUN_ONCE sampling_period VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+
+m_drive:(mdl [] []
+   ; The goal target timings are the same as the drive timings.
+   (fact (mk.val h holding [cube_2] 1) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive2:(mdl [] []
+   ; The goal target timings are the same as the drive timings.
+   (fact (mk.val h holding [] 1) T0: T1: 1 1)
+   (fact run2 T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive3:(mdl [] []
+   ; The goal target timings are the same as the drive timings.
+   (fact (mk.val h holding [cube_3] 1) T0: T1: 1 1)
+   (fact run3 T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive4:(mdl [] []
+   ; The goal target timings are the same as the drive timings.
+   (fact (mk.val h holding [cyl_1] 1) T0: T1: 1 1)
+   (fact run4 T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+pgm_babbleA_1:(pgm [] []
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
+[]
+   (>= After (+ this.vw.ijt 100ms))
+[]
+   ; Move where initial and final positions have no objects so that they are not correlated.
+   (inj [Command:(cmd move [h 9] 1) []])
+   (inj [F_Command:(fact Command After Before 1 1) []])
+   (inj [G:(goal F_Command self nil 1) []])
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before processing.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd move [h 8])" []])
+1) |[]
+(ipgm pgm_babbleA_1 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_2:(pgm [] []
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
+[]
+   (>= After (+ this.vw.ijt 200ms))
+[]
+   ; Move where initial and final positions have no objects so that they are not correlated.
+   (inj [Command:(cmd rotate [h 3] 1) []])
+   (inj [F_Command:(fact Command After Before 1 1) []])
+   (inj [G:(goal F_Command self nil 1) []])
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before processing.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd rotate [h 3])" []])
+1) |[]
+(ipgm pgm_babbleA_2 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_3:(pgm [] []
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
+[]
+   (>= After (+ this.vw.ijt 300ms))
+[]
+   ; Grab the cube 1.
+   (inj [Command:(cmd grab_type1 [h] 1) []])
+   (inj [F_Command:(fact Command After Before 1 1) []])
+   (inj [G:(goal F_Command self nil 1) []])
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before processing.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd grab_type1 [h])" []])
+1) |[]
+(ipgm pgm_babbleA_3 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_4:(pgm [] []
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
+[]
+   (>= After (+ this.vw.ijt 400ms))
+[]
+   ; Release the cube 2 to learn the release model and the "holding" cst.
+   (inj [Command:(cmd release [h] 1) []])
+   (inj [F_Command:(fact Command After Before 1 1) []])
+   (inj [G:(goal F_Command self nil 1) []])
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before processing.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd release [h])" []])
+1) |[]
+(ipgm pgm_babbleA_4 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_5:(pgm [] []
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
+[]
+   (>= After (+ this.vw.ijt 500ms))
+[]
+   ; Move where initial and final positions have no objects so that they are not correlated.
+   (inj [Command:(cmd move [h 7] 1) []])
+   (inj [F_Command:(fact Command After Before 1 1) []])
+   (inj [G:(goal F_Command self nil 1) []])
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before processing.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd move [h 7])" []])
+1) |[]
+(ipgm pgm_babbleA_5 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_6:(pgm [] []
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
+[]
+   (>= After (+ this.vw.ijt 600ms))
+[]
+   ; Grab the cube 1.
+   (inj [Command:(cmd grab_type2 [h] 1) []])
+   (inj [F_Command:(fact Command After Before 1 1) []])
+   (inj [G:(goal F_Command self nil 1) []])
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before processing.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd grab_type2 [h])" []])
+1) |[]
+(ipgm pgm_babbleA_6 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_7:(pgm [] []
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
+[]
+   (>= After (+ this.vw.ijt 700ms))
+[]
+   ; Release the cube 2 to learn the release model and the "holding" cst.
+   (inj [Command:(cmd release [h] 1) []])
+   (inj [F_Command:(fact Command After Before 1 1) []])
+   (inj [G:(goal F_Command self nil 1) []])
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before processing.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected (cmd release [h])" []])
+1) |[]
+(ipgm pgm_babbleA_7 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+
+pgm_inject_drive_pass1:(pgm [] []
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
+[]
+   (>= After (+ this.vw.ijt 800ms))
+   (<= After (+ this.vw.ijt 1100ms))
+[]
+   ; The end of the time interval will be used in m_drive as the end of the goal interval.
+   (inj [F_run:(fact run After (+ Before 600ms) 1 1) []])
+   (inj [G:(goal F_run self nil 1) []])
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected drive 1" []])
+1) |[]
+(ipgm pgm_inject_drive_pass1 [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_inject_drive_pass2:(pgm [] []
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
+[]
+   (>= After (+ this.vw.ijt 1200ms))
+[]
+   ; The end of the time interval will be used in m_drive as the end of the goal interval.
+   (inj [F_run:(fact run2 After (+ Before 100ms) 1 1) []])
+   (inj [G:(goal F_run self nil 1) []])
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected drive 2" []])
+1) |[]
+(ipgm pgm_inject_drive_pass2 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_inject_drive_pass3:(pgm [] []
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
+[]
+   (>= After (+ this.vw.ijt 1300ms))
+   (<= After (+ this.vw.ijt 1500ms))
+[]
+   ; The end of the time interval will be used in m_drive as the end of the goal interval.
+   (inj [F_run:(fact run3 After (+ Before 600ms) 1 1) []])
+   (inj [G:(goal F_run self nil 1) []])
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected drive 3" []])
+1) |[]
+(ipgm pgm_inject_drive_pass3 [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_inject_drive_pass4:(pgm [] []
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
+[]
+   (>= After (+ this.vw.ijt 1600ms))
+[]
+   ; The end of the time interval will be used in m_drive as the end of the goal interval.
+   (inj [F_run:(fact run2 After (+ Before 100ms) 1 1) []])
+   (inj [G:(goal F_run self nil 1) []])
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected drive 4" []])
+1) |[]
+(ipgm pgm_inject_drive_pass4 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_inject_drive_pass5:(pgm [] []
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence hand :) After: Before: ::) [])
+[]
+   (>= After (+ this.vw.ijt 1700ms))
+   (<= After (+ this.vw.ijt 1800ms))
+[]
+   ; The end of the time interval will be used in m_drive as the end of the goal interval.
+   (inj [F_run:(fact run4 After (+ Before 600ms) 1 1) []])
+   (inj [G:(goal F_run self nil 1) []])
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected drive 5" []])
+1) |[]
+(ipgm pgm_inject_drive_pass5 [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+pgm_cmd_move_h_not_holding:(pgm [] []
+   (ptn (fact G:(goal (fact (cmd move [h DeltaP_in:] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Orien_h: Pos_cube_1: Orien_cube_1: Pos_sphere_1: Orien_sphere_1: Pos_cyl_1: Orien_cyl_1: Pos_cube_2: Orien_cube_2: Pos_cube_3: Orien_cube_3:] :) After: Before: ::) [])
+[]
+   (= (is_sim G) false)
+   (< Cmd_after Before)
+   (> Cmd_before After)
+[]
+   ; Limit DeltaP to +/- 20. Inject the fact that the command was executed.
+   (inj [Command:(cmd move [h DeltaP:(min (max DeltaP_in -20) 20)] 1) []])
+   (inj []
+      (fact Command (+ After 20ms) Before 1 1)
+      [SYNC_ONCE After 1 1 stdin nil]
+   )
+   ; Move h by DeltaP.
+   (inj [Next_state:(mk.val e1 emulator_state [nil (+ Pos_h DeltaP) Orien_h Pos_cube_1 Orien_cube_1 Pos_sphere_1 Orien_sphere_1 Pos_cyl_1 Orien_cyl_1 Pos_cube_2 Orien_cube_2 Pos_cube_3 Orien_cube_3] 1) []])
+   (inj []
+      (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
+   )
+   (prb [1 "print" "pgm_cmd_move_h_not_holding from command:" [Command]])
+1) |[]
+(ipgm pgm_cmd_move_h_not_holding [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever emulator nil 1]
+
+pgm_cmd_rotate_h_not_holding:(pgm [] []
+   (ptn (fact G:(goal (fact (cmd rotate [h DeltaP_in:] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Orien_h: Pos_cube_1: Orien_cube_1: Pos_sphere_1: Orien_sphere_1: Pos_cyl_1: Orien_cyl_1: Pos_cube_2: Orien_cube_2: Pos_cube_3: Orien_cube_3:] :) After: Before: ::) [])
+[]
+   (= (is_sim G) false)
+   (< Cmd_after Before)
+   (> Cmd_before After)
+[]
+   ; Limit DeltaP to +/- 20. Inject the fact that the command was executed.
+   (inj [Command:(cmd rotate [h DeltaP:(min (max DeltaP_in -5) 5)] 1) []])
+   (inj []
+      (fact Command (+ After 20ms) Before 1 1)
+      [SYNC_ONCE After 1 1 stdin nil]
+   )
+   ; Move h by DeltaP.
+   (inj [Next_state:(mk.val e1 emulator_state [nil Pos_h (+ Orien_h DeltaP) Pos_cube_1 Orien_cube_1 Pos_sphere_1 Orien_sphere_1 Pos_cyl_1 Orien_cyl_1 Pos_cube_2 Orien_cube_2 Pos_cube_3 Orien_cube_3] 1) []])
+   (inj []
+      (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
+   )
+   (prb [1 "print" "pgm_cmd_rotate_h_not_holding from command:" [Command]])
+1) |[]
+(ipgm pgm_cmd_rotate_h_not_holding [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever emulator nil 1]
+
+pgm_cmd_release_h:(pgm [] []
+   (ptn (fact G:(goal (fact Command:(cmd release [h] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact (mk.val e1 emulator_state [Holding_obj: Pos_h: Orien_h: Pos_cube_1: Orien_cube_1: Pos_sphere_1: Orien_sphere_1: Pos_cyl_1: Orien_cyl_1: Pos_cube_2: Orien_cube_2: Pos_cube_3: Orien_cube_3:] :) After: Before: ::) [])
+[]
+   (= (is_sim G) false)
+   (<> Holding_obj nil)
+   (< Cmd_after Before)
+   (> Cmd_before After)
+[]
+   ; Inject the fact that the command was executed.
+   (inj []
+      (fact Command (+ After 20ms) Before 1 1)
+      [SYNC_ONCE After 1 1 stdin nil]
+   )
+   ; h is now not holding.
+   (inj [Next_state:(mk.val e1 emulator_state [nil Pos_h Orien_h Pos_cube_1 Orien_cube_1 Pos_sphere_1 Orien_sphere_1 Pos_cyl_1 Orien_cyl_1 Pos_cube_2 Orien_cube_2 Pos_cube_3 Orien_cube_3] 1) []])
+   (inj []
+      (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
+   )
+   (prb [1 "print" "pgm_cmd_release_h from command:" [Command]])
+1) |[]
+(ipgm pgm_cmd_release_h [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever emulator nil 1]
+
+pgm_cmd_release_h_not_holding:(pgm [] []
+   (ptn (fact G:(goal (fact Command:(cmd release [h] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Orien_h: Pos_cube_1: Orien_cube_1: Pos_sphere_1: Orien_sphere_1: Pos_cyl_1: Orien_cyl_1: Pos_cube_2: Orien_cube_2: Pos_cube_3: Orien_cube_3:] :) After: Before: ::) [])
+[]
+   (= (is_sim G) false)
+   (< Cmd_after Before)
+   (> Cmd_before After)
+[]
+   ; Inject the fact that the command was executed.
+   (inj []
+      (fact Command (+ After 20ms) Before 1 1)
+      [SYNC_ONCE After 1 1 stdin nil]
+   )
+   ; h is still not holding.
+   (inj [Next_state:(mk.val e1 emulator_state [nil Pos_h Orien_h Pos_cube_1 Orien_cube_1 Pos_sphere_1 Orien_sphere_1 Pos_cyl_1 Orien_cyl_1 Pos_cube_2 Orien_cube_2 Pos_cube_3 Orien_cube_3] 1) []])
+   (inj []
+      (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
+   )
+   (prb [1 "print" "pgm_cmd_release_h_not_holding from command:" [Command]])
+1) |[]
+(ipgm pgm_cmd_release_h_not_holding [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever emulator nil 1]
+
+pgm_cmd_grab_h_cube_1:(pgm [] []
+   (ptn (fact G:(goal (fact Command:(cmd grab_type1 [h] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Orien_h: Pos_cube_1: Orien_cube_1: Pos_sphere_1: Orien_sphere_1: Pos_cyl_1: Orien_cyl_1: Pos_cube_2: Orien_cube_2: Pos_cube_3: Orien_cube_3:] :) After: Before: ::) [])
+[]
+   (= Pos_h Pos_cube_1); For h to grab cube_1, they must be at the same position.
+   (= Orien_h Orien_cube_1); For h to grab cube_1, they must be at the same orientation.
+   (= (is_sim G) false)
+   (< Cmd_after Before)
+   (> Cmd_before After)
+[]
+   ; Inject the fact that the command was executed.
+   (inj []
+      (fact Command (+ After 20ms) Before 1 1)
+      [SYNC_ONCE After 1 1 stdin nil]
+   )
+   (inj [Next_state:(mk.val e1 emulator_state [cube_1 Pos_h Orien_h Pos_cube_1 Orien_cube_1 Pos_sphere_1 Orien_sphere_1 Pos_cyl_1 Orien_cyl_1 Pos_cube_2 Orien_cube_2 Pos_cube_3 Orien_cube_3] 1) []])
+   (inj []
+      (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
+   )
+   (prb [1 "print" "pgm_cmd_grab_cube_1 from command:" [Command]])
+1) |[]
+(ipgm pgm_cmd_grab_h_cube_1 [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever emulator nil 1]
+
+pgm_cmd_grab_h_cube_1_fail:(pgm [] []
+   (ptn (fact G:(goal (fact Command:(cmd grab_type1 [h] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Orien_h: Pos_cube_1: Orien_cube_1: Pos_sphere_1: Orien_sphere_1: Pos_cyl_1: Orien_cyl_1: Pos_cube_2: Orien_cube_2: Pos_cube_3: Orien_cube_3:] :) After: Before: ::) [])
+[]
+   (= Pos_h Pos_cube_1); For h to grab c1, they must be at the same position.
+   (<> Orien_h Orien_cube_1); For h to grab cube_1, they must be at the same orientation.
+   (= (is_sim G) false)
+   (< Cmd_after Before)
+   (> Cmd_before After)
+[]
+   ; Inject the fact that the command was executed.
+   (inj []
+      (fact Command (+ After 20ms) Before 1 1)
+      [SYNC_ONCE After 1 1 stdin nil]
+   )
+   (inj [Next_state:(mk.val e1 emulator_state [nil Pos_h Orien_h Pos_cube_1 Orien_cube_1 Pos_sphere_1 Orien_sphere_1 Pos_cyl_1 Orien_cyl_1 Pos_cube_2 Orien_cube_2 Pos_cube_3 Orien_cube_3] 1) []])
+   (inj []
+      (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
+   )
+   (prb [1 "print" "pgm_cmd_grab_h_cube_1_fail from command:" [Command]])
+1) |[]
+(ipgm pgm_cmd_grab_h_cube_1_fail [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever emulator nil 1]
+
+pgm_cmd_grab_h_cube_2:(pgm [] []
+   (ptn (fact G:(goal (fact Command:(cmd grab_type1 [h] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Orien_h: Pos_cube_1: Orien_cube_1: Pos_sphere_1: Orien_sphere_1: Pos_cyl_1: Orien_cyl_1: Pos_cube_2: Orien_cube_2: Pos_cube_3: Orien_cube_3:] :) After: Before: ::) [])
+[]
+   (= Pos_h Pos_cube_2); For h to grab cube_2, they must be at the same position.
+   (= Orien_h Orien_cube_2); For h to grab cube_2, they must be at the same orientation.
+   (= (is_sim G) false)
+   (< Cmd_after Before)
+   (> Cmd_before After)
+[]
+   ; Inject the fact that the command was executed.
+   (inj []
+      (fact Command (+ After 20ms) Before 1 1)
+      [SYNC_ONCE After 1 1 stdin nil]
+   )
+   (inj [Next_state:(mk.val e1 emulator_state [cube_2 Pos_h Orien_h Pos_cube_1 Orien_cube_1 Pos_sphere_1 Orien_sphere_1 Pos_cyl_1 Orien_cyl_1 Pos_cube_2 Orien_cube_2 Pos_cube_3 Orien_cube_3] 1) []])
+   (inj []
+      (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
+   )
+   (prb [1 "print" "pgm_cmd_grab_cube_2 from command:" [Command]])
+1) |[]
+(ipgm pgm_cmd_grab_h_cube_2 [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever emulator nil 1]
+
+pgm_cmd_grab_h_cube_2_fail:(pgm [] []
+   (ptn (fact G:(goal (fact Command:(cmd grab_type2 [h] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Orien_h: Pos_cube_1: Orien_cube_1: Pos_sphere_1: Orien_sphere_1: Pos_cyl_1: Orien_cyl_1: Pos_cube_2: Orien_cube_2: Pos_cube_3: Orien_cube_3:] :) After: Before: ::) [])
+[]
+   (= Pos_h Pos_cube_2); For h to grab c1, they must be at the same position.
+   (<> Orien_h Orien_cube_2); For h to grab cube_1, they must be at the same orientation.
+   (= (is_sim G) false)
+   (< Cmd_after Before)
+   (> Cmd_before After)
+[]
+   ; Inject the fact that the command was executed.
+   (inj []
+      (fact Command (+ After 20ms) Before 1 1)
+      [SYNC_ONCE After 1 1 stdin nil]
+   )
+   (inj [Next_state:(mk.val e1 emulator_state [nil Pos_h Orien_h Pos_cube_1 Orien_cube_1 Pos_sphere_1 Orien_sphere_1 Pos_cyl_1 Orien_cyl_1 Pos_cube_2 Orien_cube_2 Pos_cube_3 Orien_cube_3] 1) []])
+   (inj []
+      (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
+   )
+   (prb [1 "print" "pgm_cmd_grab_h_cube_2_fail from command:" [Command]])
+1) |[]
+(ipgm pgm_cmd_grab_h_cube_2_fail [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever emulator nil 1]
+
+pgm_cmd_grab_h_cube_3:(pgm [] []
+   (ptn (fact G:(goal (fact Command:(cmd grab_type1 [h] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Orien_h: Pos_cube_1: Orien_cube_1: Pos_sphere_1: Orien_sphere_1: Pos_cyl_1: Orien_cyl_1: Pos_cube_2: Orien_cube_2: Pos_cube_3: Orien_cube_3:] :) After: Before: ::) [])
+[]
+   (= Pos_h Pos_cube_3); For h to grab cube_3, they must be at the same position.
+   (= Orien_h Orien_cube_3); For h to grab cube_3, they must be at the same orientation.
+   (= (is_sim G) false)
+   (< Cmd_after Before)
+   (> Cmd_before After)
+[]
+   ; Inject the fact that the command was executed.
+   (inj []
+      (fact Command (+ After 20ms) Before 1 1)
+      [SYNC_ONCE After 1 1 stdin nil]
+   )
+   (inj [Next_state:(mk.val e1 emulator_state [cube_3 Pos_h Orien_h Pos_cube_1 Orien_cube_1 Pos_sphere_1 Orien_sphere_1 Pos_cyl_1 Orien_cyl_1 Pos_cube_2 Orien_cube_2 Pos_cube_3 Orien_cube_3] 1) []])
+   (inj []
+      (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
+   )
+   (prb [1 "print" "pgm_cmd_grab_cube_3 from command:" [Command]])
+1) |[]
+(ipgm pgm_cmd_grab_h_cube_3 [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever emulator nil 1]
+
+pgm_cmd_grab_h_cube_3_fail:(pgm [] []
+   (ptn (fact G:(goal (fact Command:(cmd grab_type2 [h] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Orien_h: Pos_cube_1: Orien_cube_1: Pos_sphere_1: Orien_sphere_1: Pos_cyl_1: Orien_cyl_1: Pos_cube_2: Orien_cube_2: Pos_cube_3: Orien_cube_3:] :) After: Before: ::) [])
+[]
+   (= Pos_h Pos_cube_3); For h to grab c3, they must be at the same position.
+   (<> Orien_h Orien_cube_3); For h to grab cube_1, they must be at the same orientation.
+   (= (is_sim G) false)
+   (< Cmd_after Before)
+   (> Cmd_before After)
+[]
+   ; Inject the fact that the command was executed.
+   (inj []
+      (fact Command (+ After 20ms) Before 1 1)
+      [SYNC_ONCE After 1 1 stdin nil]
+   )
+   (inj [Next_state:(mk.val e1 emulator_state [nil Pos_h Orien_h Pos_cube_1 Orien_cube_1 Pos_sphere_1 Orien_sphere_1 Pos_cyl_1 Orien_cyl_1 Pos_cube_2 Orien_cube_2 Pos_cube_3 Orien_cube_3] 1) []])
+   (inj []
+      (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
+   )
+   (prb [1 "print" "pgm_cmd_grab_h_cube_3_fail from command:" [Command]])
+1) |[]
+(ipgm pgm_cmd_grab_h_cube_3_fail [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever emulator nil 1]
+
+pgm_cmd_grab_h_sphere_1:(pgm [] []
+   (ptn (fact G:(goal (fact Command:(cmd grab_type2 [h] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Orien_h: Pos_cube_1: Orien_cube_1: Pos_sphere_1: Orien_sphere_1: Pos_cyl_1: Orien_cyl_1: Pos_cube_2: Orien_cube_2: Pos_cube_3: Orien_cube_3:] :) After: Before: ::) [])
+[]
+   (= Pos_h Pos_sphere_1); For h to grab sphere_1, they must be at the same position.
+   (= (is_sim G) false)
+   (< Cmd_after Before)
+   (> Cmd_before After)
+[]
+   ; Inject the fact that the command was executed.
+   (inj []
+      (fact Command (+ After 20ms) Before 1 1)
+      [SYNC_ONCE After 1 1 stdin nil]
+   )
+   (inj [Next_state:(mk.val e1 emulator_state [sphere_1 Pos_h Orien_h Pos_cube_1 Orien_cube_1 Pos_sphere_1 Orien_sphere_1 Pos_cyl_1 Orien_cyl_1 Pos_cube_2 Orien_cube_2 Pos_cube_3 Orien_cube_3] 1) []])
+   (inj []
+      (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
+   )
+   (prb [1 "print" "pgm_cmd_grab_sphere_1 from command:" [Command]])
+1) |[]
+(ipgm pgm_cmd_grab_h_sphere_1 [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever emulator nil 1]
+
+pgm_cmd_grab_h_sphere_1_fail:(pgm [] []
+   (ptn (fact G:(goal (fact Command:(cmd grab_type1 [h] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Orien_h: Pos_cube_1: Orien_cube_1: Pos_sphere_1: Orien_sphere_1: Pos_cyl_1: Orien_cyl_1: Pos_cube_2: Orien_cube_2: Pos_cube_3: Orien_cube_3:] :) After: Before: ::) [])
+[]
+   (= Pos_h Pos_sphere_1)
+   (= (is_sim G) false)
+   (< Cmd_after Before)
+   (> Cmd_before After)
+[]
+   (inj [Command:(cmd grab_type1 [h] 1) []])
+   (inj []
+      (fact Command (+ After 20ms) Before 1 1)
+      [SYNC_ONCE After 1 1 stdin nil]
+   )
+   (inj [Next_state:(mk.val e1 emulator_state [nil Pos_h Orien_h Pos_cube_1 Orien_cube_1 Pos_sphere_1 Orien_sphere_1 Pos_cyl_1 Orien_cyl_1 Pos_cube_2 Orien_cube_2 Pos_cube_3 Orien_cube_3] 1) []])
+   (inj []
+      (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
+   )
+   (prb [1 "print" "pgm_cmd_grab_h_sphere_1_fail from command:" [Command]])
+1) |[]
+(ipgm pgm_cmd_grab_h_sphere_1_fail [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever emulator nil 1]
+
+pgm_cmd_grab_h_cyl_1:(pgm [] []
+   (ptn (fact G:(goal (fact Command:(cmd grab_type2 [h] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Orien_h: Pos_cube_1: Orien_cube_1: Pos_sphere_1: Orien_sphere_1: Pos_cyl_1: Orien_cyl_1: Pos_cube_2: Orien_cube_2: Pos_cube_3: Orien_cube_3:] :) After: Before: ::) [])
+[]
+   (= Pos_h Pos_cyl_1); For h to grab cyl_1, they must be at the same position.
+   (= (is_sim G) false)
+   (< Cmd_after Before)
+   (> Cmd_before After)
+[]
+   ; Inject the fact that the command was executed.
+   (inj []
+      (fact Command (+ After 20ms) Before 1 1)
+      [SYNC_ONCE After 1 1 stdin nil]
+   )
+   (inj [Next_state:(mk.val e1 emulator_state [cyl_1 Pos_h Orien_h Pos_cube_1 Orien_cube_1 Pos_sphere_1 Orien_sphere_1 Pos_cyl_1 Orien_cyl_1 Pos_cube_2 Orien_cube_2 Pos_cube_3 Orien_cube_3] 1) []])
+   (inj []
+      (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
+   )
+   (prb [1 "print" "pgm_cmd_grab_h_cyl_1 from command:" [Command]])
+1) |[]
+(ipgm pgm_cmd_grab_h_cyl_1 [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever emulator nil 1]
+
+pgm_cmd_grab_h_cyl_1_fail:(pgm [] []
+   (ptn (fact G:(goal (fact Command:(cmd grab_type1 [h] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Orien_h: Pos_cube_1: Orien_cube_1: Pos_sphere_1: Orien_sphere_1: Pos_cyl_1: Orien_cyl_1: Pos_cube_2: Orien_cube_2: Pos_cube_3: Orien_cube_3:] :) After: Before: ::) [])
+[]
+   (= Pos_h Pos_cyl_1)
+   (= (is_sim G) false)
+   (< Cmd_after Before)
+   (> Cmd_before After)
+[]
+   ; Inject the fact that the command was executed.
+   (inj []
+      (fact Command (+ After 20ms) Before 1 1)
+      [SYNC_ONCE After 1 1 stdin nil]
+   )
+   (inj [Next_state:(mk.val e1 emulator_state [nil Pos_h Orien_h Pos_cube_1 Orien_cube_1 Pos_sphere_1 Orien_sphere_1 Pos_cyl_1 Orien_cyl_1 Pos_cube_2 Orien_cube_2 Pos_cube_3 Orien_cube_3] 1) []])
+   (inj []
+      (fact Next_state (+ After sampling_period) (+ Before sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After sampling_period) 1 1 emulator nil]
+   )
+   (prb [1 "print" "pgm_cmd_grab_h_cyl_1_fail from command:" [Command]])
+1) |[]
+(ipgm pgm_cmd_grab_h_cyl_1_fail [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever emulator nil 1]
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; Match the emulator state and inject individual mk.val at the same time for each of
+; the state variables as needed.
+pgm_inject_mk_vals_holding:(pgm [] []
+   (ptn (fact (mk.val e1 emulator_state [Holding_obj: Pos_h: Orien_h: Pos_cube_1: Orien_cube_1: Pos_sphere_1: Orien_sphere_1: Pos_cyl_1: Orien_cyl_1: Pos_cube_2: Orien_cube_2: Pos_cube_3: Orien_cube_3:] :) After: Before: ::) [])
+[]
+   (<> Holding_obj nil)
+[]
+   (inj [Val_holding:(mk.val h holding [Holding_obj] 1) []])
+   (inj []
+      (fact Val_holding After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_pos_h:(mk.val h position Pos_h 1) []])
+   (inj []
+      (fact Val_pos_h After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_orien_h:(mk.val h orientation Orien_h 1) []])
+   (inj []
+      (fact Val_orien_h After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_pos_cube_1:(mk.val cube_1 position Pos_cube_1 1) []])
+   (inj []
+      (fact Val_pos_cube_1 After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_orien_cube_1:(mk.val cube_1 orientation Orien_cube_1 1) []])
+   (inj []
+      (fact Val_orien_cube_1 After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_pos_sphere_1:(mk.val sphere_1 position Pos_sphere_1 1) []])
+   (inj []
+      (fact Val_pos_sphere_1 After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_orien_sphere_1:(mk.val sphere_1 orientation Orien_sphere_1 1) []])
+   (inj []
+      (fact Val_orien_sphere_1 After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_pos_cyl_1:(mk.val cyl_1 position Pos_cyl_1 1) []])
+   (inj []
+      (fact Val_pos_cyl_1 After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_orien_cyl_1:(mk.val cyl_1 orientation Orien_cyl_1 1) []])
+   (inj []
+      (fact Val_orien_cyl_1 After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_pos_cube_2:(mk.val cube_2 position Pos_cube_2 1) []])
+   (inj []
+      (fact Val_pos_cube_2 After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_orien_cube_2:(mk.val cube_2 orientation Orien_cube_2 1) []])
+   (inj []
+      (fact Val_orien_cube_2 After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_pos_cube_3:(mk.val cube_3 position Pos_cube_3 1) []])
+   (inj []
+      (fact Val_pos_cube_3 After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_orien_cube_3:(mk.val cube_3 orientation Orien_cube_3 1) []])
+   (inj []
+      (fact Val_orien_cube_3 After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+1) |[]
+(ipgm pgm_inject_mk_vals_holding [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever emulator nil 1]
+
+; The same as pgm_inject_mk_vals_holding for the case when not holding.
+pgm_inject_mk_vals_not_holding:(pgm [] []
+   (ptn (fact (mk.val e1 emulator_state [nil Pos_h: Orien_h: Pos_cube_1: Orien_cube_1: Pos_sphere_1: Orien_sphere_1: Pos_cyl_1: Orien_cyl_1: Pos_cube_2: Orien_cube_2: Pos_cube_3: Orien_cube_3:] :) After: Before: ::) [])
+|[]
+[]
+   (inj [Val_holding:(mk.val h holding [] 1) []])
+   (inj []
+      (fact Val_holding After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_pos_h:(mk.val h position Pos_h 1) []])
+   (inj []
+      (fact Val_pos_h After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_orien_h:(mk.val h orientation Orien_h 1) []])
+   (inj []
+      (fact Val_orien_h After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_pos_cube_1:(mk.val cube_1 position Pos_cube_1 1) []])
+   (inj []
+      (fact Val_pos_cube_1 After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_orien_cube_1:(mk.val cube_1 orientation Orien_cube_1 1) []])
+   (inj []
+      (fact Val_orien_cube_1 After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_pos_sphere_1:(mk.val sphere_1 position Pos_sphere_1 1) []])
+   (inj []
+      (fact Val_pos_sphere_1 After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_orien_sphere_1:(mk.val sphere_1 orientation Orien_sphere_1 1) []])
+   (inj []
+      (fact Val_orien_sphere_1 After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_pos_cyl_1:(mk.val cyl_1 position Pos_cyl_1 1) []])
+   (inj []
+      (fact Val_pos_cyl_1 After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_orien_cyl_1:(mk.val cyl_1 orientation Orien_cyl_1 1) []])
+   (inj []
+      (fact Val_orien_cyl_1 After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_pos_cube_2:(mk.val cube_2 position Pos_cube_2 1) []])
+   (inj []
+      (fact Val_pos_cube_2 After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_orien_cube_2:(mk.val cube_2 orientation Orien_cube_2 1) []])
+   (inj []
+      (fact Val_orien_cube_2 After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_pos_cube_3:(mk.val cube_3 position Pos_cube_3 1) []])
+   (inj []
+      (fact Val_pos_cube_3 After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [Val_orien_cube_3:(mk.val cube_3 orientation Orien_cube_3 1) []])
+   (inj []
+      (fact Val_orien_cube_3 After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+1) |[]
+(ipgm pgm_inject_mk_vals_not_holding [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever emulator nil 1]
