@@ -1205,6 +1205,9 @@ DONE. Fix Arash's analogy example in Webots. https://github.com/IIIM-IS/AERA/com
 * DONE. Demo Visualizer: Multiple solutions
 * DONE. "Nixon" example: He voted for war but he's a quaker. Make it causal. Show argument for sampling the environment.
 
+2024-05-23
+* DONE. Implement "blocks" example in abagraph, show similar attacks.
+
 next meeting
 * Cook up an example where backward chaining for a counterexample finds the same information as forward chaining from the current state (friend has brought dinner)
 * Cook up an argumention example showing multiple levels of competing goals, and constructivist levels.
@@ -1212,7 +1215,6 @@ next meeting
   * Make AERA take experimenting actions to test candidate PTPX models (instead of seed commands).
   * Try to get GTPX to learn mdl_displace_hand by making it a goal to not be at a position and observe what achieves it.
     * In abduce, ignore negative match of the RHS.
-  * Represent sphere position without direct I/O input.
 * Webots
   * Make pull request to align Webots aera_us with AERA time (after testing in real time mode). [Jeff]
   * Reset aera_us when resetting the environment.
