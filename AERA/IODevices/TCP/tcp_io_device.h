@@ -86,20 +86,7 @@
 #ifndef tcp_io_device_h
 #define tcp_io_device_h
 
-#pragma comment (lib, "Ws2_32.lib")
-
-#define PROTOBUF_USE_DLLS
-
 #include "../r_exec/mem.h"
-#include <map>
-#include <windows.h>
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#include <string>
-#include <stdlib.h>
-#include <stdio.h>
-#include <thread>
-#include <bitset>
 
 #ifndef ENABLE_PROTOBUF
 
@@ -123,6 +110,20 @@ namespace tcp_io_device {
 }
 
 #else
+
+#pragma comment (lib, "Ws2_32.lib")
+
+#define PROTOBUF_USE_DLLS
+
+#include <map>
+#include <windows.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <string>
+#include <stdlib.h>
+#include <stdio.h>
+#include <thread>
+#include <bitset>
 
 #include "AERA_Protobuf/tcp_connection.h"
 
