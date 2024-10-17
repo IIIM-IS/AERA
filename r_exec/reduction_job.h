@@ -85,7 +85,6 @@
 #ifndef reduction_job_h
 #define reduction_job_h
 
-#include "controller.h"
 #include "object.h"
 #include "mem_output.h"
 
