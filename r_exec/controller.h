@@ -82,87 +82,92 @@
 //_/_/ 
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
-#ifndef reduction_job_h
-#define reduction_job_h
+#ifndef controller_h
+#define controller_h
 
-#include "controller.h"
-#include "object.h"
+#include "../submodules/CoreLibrary/CoreLibrary/base.h"
+#include "../submodules/CoreLibrary/CoreLibrary/utils.h"
+#include "../r_code/object.h"
 #include "mem_output.h"
+#include "dll.h"
 
+using r_code::Atom;
 
 namespace r_exec {
 
-class r_exec_dll _ReductionJob :
+class Overlay;
+class View;
+
+// Upon invocation of take_input() the overlays older than tsc are killed, assuming stc>0; otherwise, overlays live unitl the ipgm dies.
+// Controllers are built at loading time and at the view's injection time.
+// Derived classes must expose a function: void reduce(r_code::_View*input); (called by reduction jobs).
+class r_exec_dll Controller :
   public _Object {
 protected:
-  _ReductionJob();
-public:
-  Timestamp ijt_; // time of injection of the job in the pipe.
-  virtual bool update(Timestamp now) = 0; // return false to shutdown the reduction core.
-  virtual void debug() {}
-  uint32 get_job_id() const { return job_id_; }
-private:
-  static uint32 job_count_;
-  int job_id_;
-};
+  volatile uint32 invalidated_; // 32 bit alignment.
+  volatile uint32 activated_; // 32 bit alignment.
 
-template<class _P> class ReductionJob :
-  public _ReductionJob {
-public:
-  P<View> input_;
-  P<_P> processor_;
-  ReductionJob(View *input, _P *processor) : _ReductionJob(), input_(input), processor_(processor) {}
-  bool update(Timestamp now) override {
+  std::chrono::microseconds time_scope_;
 
-    _Mem::Get()->register_reduction_job_latency(now - ijt_);
+  r_code::_View* view_;
+
+  CriticalSection reductionCS_;
+
+  virtual void take_input(r_exec::View* /* input */) {}
+  template<class C> void __take_input(r_exec::View* input) { // utility: to be called by sub-classes.
+
+    ReductionJob<C>* j = new ReductionJob<C>(input, (C*)this);
 #ifdef WITH_DETAIL_OID
-    OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(now) << " ReductionJob " << get_job_id() <<
-      ": controller(" << processor_->get_detail_oid() << ")->reduce(View(fact_" << 
-      input_->object_->get_oid() << "))");
+    OUTPUT_LINE((TraceLevel)0, "  make ReductionJob " << j->get_job_id() <<
+      "(" << j->get_detail_oid() << "): controller(" << get_detail_oid() << ")->reduce(View(fact_" <<
+      input->object_->get_oid() << ")) for " << get_core_object()->get_oid());
 #endif
-    processor_->reduce(input_);
-    return true;
+    _Mem::Get()->push_reduction_job(j);
   }
-  void debug() override {
 
-    processor_->debug(input_);
-  }
-};
-
-template<class _P, class T, class C> class BatchReductionJob :
-  public _ReductionJob {
+  Controller(r_code::_View* view);
 public:
-  P<_P> processor_; // the controller that will process the job.
-  P<T> trigger_; // the event that triggered the job.
-  P<C> controller_; // the controller that produced the job.
-  BatchReductionJob(_P *processor, T *trigger, C *controller) : _ReductionJob(), processor_(processor), trigger_(trigger), controller_(controller) {}
-  bool update(Timestamp now) override {
+  virtual ~Controller();
 
-    _Mem::Get()->register_reduction_job_latency(now - ijt_);
-#ifdef WITH_DETAIL_OID
-    OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(now) << " BatchReductionJob " << get_job_id() <<
-      ": controller(" << controller_->get_detail_oid() << "), trigger fact(" << 
-      trigger_->get_detail_oid() << ")");
-#endif
-    processor_->reduce_batch(trigger_, controller_);
-    return true;
-  }
+  std::chrono::microseconds get_tsc() { return time_scope_; }
+
+  virtual void invalidate() { invalidated_ = 1; }
+  bool is_invalidated() { return invalidated_ == 1; };
+  void activate(bool a) { activated_ = (a ? 1 : 0); }
+  bool is_activated() const { return activated_ == 1; }
+  bool is_alive() const { return invalidated_ == 0 && activated_ == 1; }
+
+  virtual r_code::Code* get_core_object() const = 0;
+
+  r_code::Code* get_object() const { return view_->object_; } // return the reduction object (e.g. ipgm, icpp_pgm, cst, mdl).
+  r_exec::View* get_view() const { return (r_exec::View*)view_; } // return the reduction object's view.
+
+  void _take_input(r_exec::View* input); // called by the rMem at update time and at injection time.
+
+  virtual void gain_activation() { activate(true); }
+  virtual void lose_activation() { activate(false); }
+
+  void set_view(View* view);
+
+  void debug(View* /* input */) {}
 };
 
-class r_exec_dll ShutdownReductionCore :
-  public _ReductionJob {
+class r_exec_dll OController :
+  public Controller {
+protected:
+  r_code::list<P<Overlay> > overlays_;
+
+  OController(r_code::_View* view);
 public:
-  bool update(Timestamp now) override;
+  virtual ~OController();
 };
 
-class r_exec_dll AsyncInjectionJob :
-  public _ReductionJob {
+template<class T> class CriticalSectionList {
 public:
-  P<View> input_;
-  AsyncInjectionJob(View *input) : _ReductionJob(), input_(input) {}
-  bool update(Timestamp now) override;
+  CriticalSection CS_;
+  r_code::list<T> list_;
 };
+
 }
-
 
 #endif

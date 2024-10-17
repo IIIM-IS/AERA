@@ -85,6 +85,7 @@
 #ifndef pgm_controller_h
 #define pgm_controller_h
 
+#include "controller.h"
 #include "pgm_overlay.h"
 
 

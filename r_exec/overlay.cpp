@@ -83,6 +83,7 @@
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
 #include "overlay.h"
+#include "controller.h"
 #include "mem.h"
 
 using namespace std::chrono;
@@ -116,6 +117,9 @@ Overlay::~Overlay() {
   if (code_)
     delete[] code_;
 }
+
+Code* Overlay::get_object() const { return ((Controller*)controller_)->get_object(); }
+r_exec::View* Overlay::get_view() const { return ((Controller*)controller_)->get_view(); }
 
 inline Code *Overlay::get_core_object() const {
 

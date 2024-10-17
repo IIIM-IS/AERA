@@ -86,7 +86,7 @@
 #define view_h
 
 #include "../r_code/object.h"
-#include "overlay.h"
+#include "controller.h"
 #include "dll.h"
 
 

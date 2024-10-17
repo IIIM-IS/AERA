@@ -209,6 +209,7 @@
     <ClInclude Include="binding_map.h" />
     <ClInclude Include="callbacks.h" />
     <ClInclude Include="context.h" />
+    <ClInclude Include="controller.h" />
     <ClInclude Include="cpp_programs.h" />
     <ClInclude Include="cst_controller.h" />
     <ClInclude Include="dll.h" />
@@ -222,6 +223,7 @@
     <ClInclude Include="init.h" />
     <ClInclude Include="mdl_controller.h" />
     <ClInclude Include="mem.h" />
+    <ClInclude Include="mem_output.h" />
     <ClInclude Include="model_base.h" />
     <ClInclude Include="monitor.h" />
     <ClInclude Include="object.h" />
