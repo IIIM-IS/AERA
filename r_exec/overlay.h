@@ -117,7 +117,7 @@ typedef enum {
  * used without including mem.h, which causes dependency loops if an inline header 
  * method needs to use it.
  */
-std::ostream __declspec(dllexport) &_Mem_Output(TraceLevel l);
+std::ostream dll_export &_Mem_Output(TraceLevel l);
 
  /**
   * This similar to "_Mem_Output(level) << vals << endl", where vals can be "x << y << z". Except

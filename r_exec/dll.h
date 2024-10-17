@@ -87,10 +87,10 @@
 
 
 #if defined EXECUTIVE_EXPORTS
-#define r_exec_dll __declspec(dllexport)
+#define r_exec_dll dll_export
 #define r_exec_tpl
 #else
-#define r_exec_dll __declspec(dllimport)
+#define r_exec_dll dll_import
 #define r_exec_tpl extern
 #endif
 

@@ -266,7 +266,7 @@ public:
  * This copies the map.
  * \return True for success, false if the opcode names have already been set.
  */
-bool __declspec(dllexport) SetOpcodeNames(const std::unordered_map<uint16, std::set<std::string>>& opcode_names);
+bool dll_export SetOpcodeNames(const std::unordered_map<uint16, std::set<std::string>>& opcode_names);
 
 /**
  * Get the name or set of names of the opcode. (The same opcode can be
