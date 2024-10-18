@@ -89,7 +89,7 @@ template<class C, class U> Object<C, U>::Object() : C(), hash_value_(0), invalid
 
 template<class C, class U> Object<C, U>::Object(r_code::Mem* /* mem */) : C(), hash_value_(0), invalidated_(0) {
 
-  set_oid(UNDEFINED_OID);
+  C::set_oid(UNDEFINED_OID);
 }
 
 template<class C, class U> Object<C, U>::~Object() {
@@ -112,13 +112,13 @@ template<class C, class U> bool Object<C, U>::invalidate() {
   views_.clear();
   rel_views();
 
-  if (code(0).getDescriptor() == Atom::MARKER) {
+  if (C::code(0).getDescriptor() == Atom::MARKER) {
 
-    for (uint16 i = 0; i < references_size(); ++i)
-      get_reference(i)->remove_marker(this);
+    for (uint16 i = 0; i < C::references_size(); ++i)
+      C::get_reference(i)->remove_marker(this);
   }
 
-  if (is_registered())
+  if (C::is_registered())
     r_code::Mem::Get()->delete_object(this);
 
   return false;
@@ -126,41 +126,41 @@ template<class C, class U> bool Object<C, U>::invalidate() {
 
 template<class C, class U> void Object<C, U>::compute_hash_value() {
 
-  hash_value_ = code(0).asOpcode() << 20; // 12 bits for the opcode.
-  hash_value_ |= (code_size() & 0x00000FFF) << 8; // 12 bits for the code size.
-  hash_value_ |= references_size() & 0x000000FF; // 8 bits for the reference set size.
+  hash_value_ = C::code(0).asOpcode() << 20; // 12 bits for the opcode.
+  hash_value_ |= (C::code_size() & 0x00000FFF) << 8; // 12 bits for the code size.
+  hash_value_ |= C::references_size() & 0x000000FF; // 8 bits for the reference set size.
 }
 
 template<class C, class U> float32 Object<C, U>::get_psln_thr() {
 
   psln_thrCS_.enter();
-  float32 r = code(code(0).getAtomCount()).asFloat(); // psln is always the last member of an object.
+  float32 r = C::code(C::code(0).getAtomCount()).asFloat(); // psln is always the last member of an object.
   psln_thrCS_.leave();
   return r;
 }
 
 template<class C, class U> void Object<C, U>::mod(uint16 member_index, float32 value) {
 
-  if (member_index != code_size() - 1)
+  if (member_index != C::code_size() - 1)
     return;
-  float32 v = code(member_index).asFloat() + value;
+  float32 v = C::code(member_index).asFloat() + value;
   if (v < 0)
     v = 0;
   else if (v > 1)
     v = 1;
 
   psln_thrCS_.enter();
-  code(member_index) = Atom::Float(v);
+  C::code(member_index) = Atom::Float(v);
   psln_thrCS_.leave();
 }
 
 template<class C, class U> void Object<C, U>::set(uint16 member_index, float32 value) {
 
-  if (member_index != code_size() - 1)
+  if (member_index != C::code_size() - 1)
     return;
 
   psln_thrCS_.enter();
-  code(member_index) = Atom::Float(value);
+  C::code(member_index) = Atom::Float(value);
   psln_thrCS_.leave();
 }
 

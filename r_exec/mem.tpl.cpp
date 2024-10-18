@@ -100,7 +100,7 @@ template<class O, class S> MemExec<O, S>::MemExec() : S() {
 template<class O, class S> MemExec<O, S>::~MemExec() {
 
   if (state_ == RUNNING)
-    stop();
+    S::stop();
   deleted_ = true;
   objects_.clear();
 }
@@ -214,6 +214,6 @@ template<class O, class S> r_code::Code *MemExec<O, S>::check_existence(r_code::
 template<class O, class S> void MemExec<O, S>::inject(O *object, View *view) {
 
   view->set_object(object);
-  inject_new_object(view);
+  S::inject_new_object(view);
 }
 }
