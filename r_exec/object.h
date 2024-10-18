@@ -135,7 +135,7 @@ public:
 
   r_code::_View *build_view(r_code::SysView *source) override {
 
-    return Code::build_view<r_exec::View>(source);
+    return r_code::Code::build_view<r_exec::View>(source);
   }
 
   bool is_invalidated() override;
