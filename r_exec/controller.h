@@ -121,8 +121,10 @@ protected:
       "(" << j->get_detail_oid() << "): controller(" << get_detail_oid() << ")->reduce(View(fact_" <<
       input->object_->get_oid() << ")) for " << get_core_object()->get_oid());
 #endif
-    _Mem::Get()->push_reduction_job(j);
+    push_reduction_job(j);
   }
+
+  static void push_reduction_job(_ReductionJob* j);
 
   Controller(r_code::_View* view);
 public:

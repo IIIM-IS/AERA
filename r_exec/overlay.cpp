@@ -230,6 +230,11 @@ void Controller::_take_input(r_exec::View *input) { // called by groups at updat
     take_input(input);
 }
 
+// Put this in the cpp file to avoid an include loop between controller.h and mem.h.
+void Controller::push_reduction_job(_ReductionJob* j) {
+  _Mem::Get()->push_reduction_job(j);
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 OController::OController(_View *view) : Controller(view) {
