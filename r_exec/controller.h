@@ -160,12 +160,6 @@ public:
   virtual ~OController();
 };
 
-template<class T> class CriticalSectionList {
-public:
-  CriticalSection CS_;
-  r_code::list<T> list_;
-};
-
 }
 
 #endif

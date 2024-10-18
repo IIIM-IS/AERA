@@ -179,6 +179,12 @@ private:
   volatile uint32 invalidated_; // 32 bit alignment.
 };
 
+template<class T> class CriticalSectionList {
+public:
+  CriticalSection CS_;
+  r_code::list<T> list_;
+};
+
 }
 
 
