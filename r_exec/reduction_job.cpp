@@ -95,6 +95,10 @@ _ReductionJob::_ReductionJob() : _Object() {
   job_id_ = ++job_count_;
 }
 
+void _ReductionJob::register_latency(Timestamp now) {
+  _Mem::Get()->register_reduction_job_latency(now - ijt_);
+}
+
 ////////////////////////////////////////////////////////////
 
 bool ShutdownReductionCore::update(Timestamp now) {

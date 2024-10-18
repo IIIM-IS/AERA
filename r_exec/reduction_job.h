@@ -96,6 +96,7 @@ class r_exec_dll _ReductionJob :
   public _Object {
 protected:
   _ReductionJob();
+  void register_latency(Timestamp now);
 public:
   Timestamp ijt_; // time of injection of the job in the pipe.
   virtual bool update(Timestamp now) = 0; // return false to shutdown the reduction core.
@@ -114,7 +115,7 @@ public:
   ReductionJob(View *input, _P *processor) : _ReductionJob(), input_(input), processor_(processor) {}
   bool update(Timestamp now) override {
 
-    _Mem::Get()->register_reduction_job_latency(now - ijt_);
+    register_latency(now);
 #ifdef WITH_DETAIL_OID
     OUTPUT_LINE((TraceLevel)0, r_code::Utils::RelativeTime(now) << " ReductionJob " << get_job_id() <<
       ": controller(" << processor_->get_detail_oid() << ")->reduce(View(fact_" << 
@@ -138,7 +139,7 @@ public:
   BatchReductionJob(_P *processor, T *trigger, C *controller) : _ReductionJob(), processor_(processor), trigger_(trigger), controller_(controller) {}
   bool update(Timestamp now) override {
 
-    _Mem::Get()->register_reduction_job_latency(now - ijt_);
+    register_latency(now);
 #ifdef WITH_DETAIL_OID
     OUTPUT_LINE((TraceLevel)0, r_code::Utils::RelativeTime(now) << " BatchReductionJob " << get_job_id() <<
       ": controller(" << controller_->get_detail_oid() << "), trigger fact(" << 
