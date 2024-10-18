@@ -91,8 +91,6 @@
 #include "reduction_job.h"
 #include "dll.h"
 
-using r_code::Atom;
-
 namespace r_exec {
 
 class _Context;
@@ -148,7 +146,7 @@ public:
   r_exec::View* get_view() const;
 
   r_code::Code *build_object(r_code::Atom head) const;
-  const Atom* values() const { return &values_[0]; }
+  const r_code::Atom* values() const { return &values_[0]; }
 };
 
 /**

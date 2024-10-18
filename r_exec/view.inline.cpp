@@ -88,6 +88,8 @@
 
 namespace r_exec {
 
+using r_code::Atom;
+
 inline View::View() : r_code::_View(), controller_(NULL) {
 
   code_[VIEW_OID].atom_ = GetOID();

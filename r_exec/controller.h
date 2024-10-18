@@ -91,8 +91,6 @@
 #include "mem_output.h"
 #include "dll.h"
 
-using r_code::Atom;
-
 namespace r_exec {
 
 class Overlay;

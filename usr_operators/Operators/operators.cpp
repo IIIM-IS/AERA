@@ -95,6 +95,8 @@ static uint16 QuatOpcode;
 
 namespace usr_operators {
 
+using r_code::Atom;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 bool add(const r_exec::Context &context) {

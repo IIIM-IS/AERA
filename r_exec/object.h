@@ -98,7 +98,7 @@ namespace r_exec {
 static inline bool IsNotification(r_code::Code *object) {
 
   switch (object->code(0).getDescriptor()) {
-  case Atom::MARKER:
+  case r_code::Atom::MARKER:
     return object->code(0).asOpcode() == Opcodes::MkActChg ||
       object->code(0).asOpcode() == Opcodes::MkHighAct ||
       object->code(0).asOpcode() == Opcodes::MkHighSln ||
