@@ -164,7 +164,7 @@ template<class C, class U> void Object<C, U>::set(uint16 member_index, float32 v
   psln_thrCS_.leave();
 }
 
-template<class C, class U> View *Object<C, U>::get_view(r_code::Code *group, bool lock) {
+template<class C, class U> r_code::_View *Object<C, U>::get_view(r_code::Code *group, bool lock) {
 
   if (lock)
     acq_views();

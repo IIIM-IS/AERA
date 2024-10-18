@@ -154,7 +154,7 @@ public:
   void set(uint16 member_index, float32 value) override;
   void mod(uint16 member_index, float32 value) override;
 
-  View *get_view(r_code::Code *group, bool lock) override; // returns the found view if any, NULL otherwise.
+  r_code::_View *get_view(r_code::Code *group, bool lock) override; // returns the found view if any, NULL otherwise.
 
   class Hash {
   public:
