@@ -88,6 +88,7 @@
 #include "../submodules/CoreLibrary/CoreLibrary/base.h"
 #include "../submodules/CoreLibrary/CoreLibrary/utils.h"
 #include "../r_code/object.h"
+#include "controller.h"
 #include "reduction_job.h"
 #include "dll.h"
 

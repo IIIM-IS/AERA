@@ -82,6 +82,7 @@
 //_/_/ 
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
+#include "controller.h"
 #include "view.h"
 #include "../submodules/CoreLibrary/CoreLibrary/utils.h"
 #include "group.h"
@@ -99,6 +100,12 @@ namespace r_exec {
 CriticalSection OIDCS;
 
 uint32 View::lastOID_ = 0;
+
+View::~View() {
+
+  if (!!controller_)
+    controller_->invalidate();
+}
 
 uint32 View::GetOID() {
 

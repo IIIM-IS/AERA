@@ -85,6 +85,7 @@
 #ifndef binding_map_h
 #define binding_map_h
 
+#include "controller.h"
 #include "object.h"
 #include "dll.h"
 

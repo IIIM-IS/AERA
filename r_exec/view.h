@@ -86,7 +86,6 @@
 #define view_h
 
 #include "../r_code/object.h"
-#include "controller.h"
 #include "dll.h"
 
 
@@ -94,6 +93,7 @@ namespace r_exec {
 
 class Group;
 class LObject;
+class Controller;
 
 // OID is hidden at code_[VIEW_OID].
 // Shared resources:

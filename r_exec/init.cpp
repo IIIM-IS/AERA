@@ -83,6 +83,7 @@
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
 #include "init.h"
+#include "controller.h"
 #include "object.h"
 #include "operator.h"
 #include "cpp_programs.h"

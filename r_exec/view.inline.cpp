@@ -163,12 +163,6 @@ inline void View::init(SyncMode sync,
   set_object(object);
 }
 
-inline View::~View() {
-
-  if (!!controller_)
-    controller_->invalidate();
-}
-
 inline void View::reset() {
 
   reset_ctrl_values();

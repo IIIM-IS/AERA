@@ -89,6 +89,7 @@
 #include <unordered_map>
 
 #include "../submodules/CoreLibrary/CoreLibrary/utils.h"
+#include "controller.h"
 #include "object.h"
 #include "view.h"
 
