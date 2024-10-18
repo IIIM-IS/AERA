@@ -85,6 +85,8 @@
 #ifndef time_job_h
 #define time_job_h
 
+#include "../r_code/utils.h"
+#include "init.h"
 #include "group.h"
 #include "pgm_overlay.h"
 
@@ -210,13 +212,13 @@ public:
 #ifdef WITH_DETAIL_OID
     OUTPUT_LINE((TraceLevel)0, "  make MonitoringJob::TimeJob " << get_job_id() <<
       "(" << get_detail_oid() << ") for monitor(" << monitor_->get_detail_oid() << "), deadline " <<
-      Utils::RelativeTime(deadline));
+      r_code::Utils::RelativeTime(deadline));
 #endif
   }
   bool update(Timestamp &next_target) override {
 
 #ifdef WITH_DETAIL_OID
-    OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(Now()) << " MonitoringJob::TimeJob " << get_job_id() <<
+    OUTPUT_LINE((TraceLevel)0, r_code::Utils::RelativeTime(r_exec::Now()) << " MonitoringJob::TimeJob " << get_job_id() <<
       ": monitor(" << monitor_->get_detail_oid() << ")->update()");
 #endif
     monitor_->update(next_target);

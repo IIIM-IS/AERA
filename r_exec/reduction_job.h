@@ -85,6 +85,7 @@
 #ifndef reduction_job_h
 #define reduction_job_h
 
+#include "../r_code/utils.h"
 #include "object.h"
 #include "mem_output.h"
 
@@ -115,7 +116,7 @@ public:
 
     _Mem::Get()->register_reduction_job_latency(now - ijt_);
 #ifdef WITH_DETAIL_OID
-    OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(now) << " ReductionJob " << get_job_id() <<
+    OUTPUT_LINE((TraceLevel)0, r_code::Utils::RelativeTime(now) << " ReductionJob " << get_job_id() <<
       ": controller(" << processor_->get_detail_oid() << ")->reduce(View(fact_" << 
       input_->object_->get_oid() << "))");
 #endif
@@ -139,7 +140,7 @@ public:
 
     _Mem::Get()->register_reduction_job_latency(now - ijt_);
 #ifdef WITH_DETAIL_OID
-    OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(now) << " BatchReductionJob " << get_job_id() <<
+    OUTPUT_LINE((TraceLevel)0, r_code::Utils::RelativeTime(now) << " BatchReductionJob " << get_job_id() <<
       ": controller(" << controller_->get_detail_oid() << "), trigger fact(" << 
       trigger_->get_detail_oid() << ")");
 #endif

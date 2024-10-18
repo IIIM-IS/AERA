@@ -90,6 +90,7 @@
 #include "../r_code/object.h"
 #include "mem_output.h"
 #include "dll.h"
+#include "reduction_job.h"
 
 namespace r_exec {
 
