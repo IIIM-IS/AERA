@@ -188,7 +188,8 @@ template<class I> void Image<I>::trace() const {
     for (; i < I::data(j) + 5 + object_code_size; ++i) {
 
       std::cout << i << " ";
-      ((Atom *)&I::data(i))->trace();
+      Atom::TraceContext context;
+      ((Atom *)&I::data(i))->trace(context, std::cout);
       std::cout << std::endl;
     }
 
@@ -215,7 +216,8 @@ template<class I> void Image<I>::trace() const {
       for (l = 0; l < view_code_size; ++i, ++l) {
 
         std::cout << i << " ";
-        ((Atom *)&I::data(i))->trace();
+        Atom::TraceContext context;
+        ((Atom *)&I::data(i))->trace(context, std::cout);
         std::cout << std::endl;
       }
 
