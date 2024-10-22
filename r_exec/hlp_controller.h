@@ -89,6 +89,7 @@
 #include "binding_map.h"
 #include "g_monitor.h"
 #include "group.h"
+#include "init.h"
 
 
 namespace r_exec {
@@ -144,7 +145,7 @@ protected:
     E e(evidence);
     cache->CS_.enter();
     auto now = Now();
-    r_code::list<E>::const_iterator _e;
+    typename r_code::list<E>::const_iterator _e;
     for (_e = cache->list_.begin(); _e != cache->list_.end();) {
 
       if ((*_e).evidence_ == e.evidence_) {
