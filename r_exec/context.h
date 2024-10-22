@@ -90,6 +90,7 @@
 #include "object.h"
 #include "_context.h"
 #include "pgm_overlay.h"
+#include "operator.h"
 
 
 namespace r_exec {
