@@ -89,6 +89,7 @@
 #include <istream>
 #include <sstream>
 #include <fstream>
+#include <list>
 
 namespace r_comp {
 
