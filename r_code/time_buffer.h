@@ -111,19 +111,19 @@ public:
     int32 cell_;
     iterator(time_buffer *b, int32 c) : buffer_(b), cell_(c) {}
   public:
-    iterator() : buffer_(NULL), cell_(null_) {}
+    iterator() : buffer_(NULL), cell_(list<T>::null_) {}
     T &operator *() const { return buffer_->cells_[cell_].data_; }
     T *operator ->() const { return &(buffer_->cells_[cell_].data_); }
     iterator &operator ++() { // moves to the next time-compliant cell and erase old cells met in the process.
 
       cell_ = buffer_->cells_[cell_].next_;
-      if (cell_ != null_) {
+      if (cell_ != list<T>::null_) {
 
         IsInvalidated i;
       check: if (i(buffer_->cells_[cell_].data_, buffer_->time_reference_, buffer_->thz_)) {
 
         cell_ = buffer_->_erase(cell_);
-        if (cell_ != null_)
+        if (cell_ != list<T>::null_)
           goto check;
       }
       }
@@ -138,7 +138,7 @@ public:
   iterator begin(Timestamp time_reference) {
 
     time_reference_ = time_reference;
-    return iterator(this, used_cells_head_);
+    return iterator(this, list<T>::used_cells_head_);
   }
   iterator &end() { return end_iterator_; }
   iterator find(Timestamp time_reference, const T &t) {
@@ -153,9 +153,9 @@ public:
   }
   iterator find(const T &t) {
 
-    for (int32 c = used_cells_head_; c != null_; c = cells_[c].next_) {
+    for (int32 c = list<T>::used_cells_head_; c != list<T>::null_; c = list<T>::cells_[c].next_) {
 
-      if (cells_[c].data_ == t)
+      if (list<T>::cells_[c].data_ == t)
         return iterator(this, c);
     }
     return end_iterator_;
