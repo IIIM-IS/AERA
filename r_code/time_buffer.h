@@ -100,7 +100,7 @@ protected:
   std::chrono::microseconds thz_; // time horizon.
   Timestamp time_reference_;
 public:
-  time_buffer() : list(), thz_(Utils::MaxTHZ) {}
+  time_buffer() : thz_(Utils::MaxTHZ) {}
 
   void set_thz(std::chrono::microseconds thz) { thz_ = thz; }
 
