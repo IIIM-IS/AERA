@@ -2223,7 +2223,7 @@ bool Compiler::read_node(bool &indented, bool enforce, const Class *p, uint16 wr
   if (hex(h) && Atom(h).getDescriptor() == Atom::NODE) {
 
     if (write)
-      current_object_->code_[write_index] = Atom::Atom(h);
+      current_object_->code_[write_index] = Atom(h);
     return true;
   }
   in_stream_->seekg(i);
@@ -2257,7 +2257,7 @@ bool Compiler::read_device(bool &indented, bool enforce, const Class *p, uint16 
   if (hex(h) && Atom(h).getDescriptor() == Atom::DEVICE) {
 
     if (write)
-      current_object_->code_[write_index] = Atom::Atom(h);
+      current_object_->code_[write_index] = Atom(h);
     return true;
   }
   in_stream_->seekg(i);
