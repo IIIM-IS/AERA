@@ -345,7 +345,7 @@ public:
    * \param group The group of the view, such as get_stdin().
    * \return The created View.
    */
-  View* _Mem::inject_marker_value_from_io_device(
+  View* inject_marker_value_from_io_device(
     r_code::Code* obj, r_code::Code* prop, std::vector<Atom> val, Timestamp after, Timestamp before,
     View::SyncMode sync_mode, r_code::Code* group);
 
