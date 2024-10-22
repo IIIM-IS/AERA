@@ -321,8 +321,8 @@ private:
     }
   }
 
-  void IPGMContext::copy_structure_to_value_array(bool prefix, uint16 write_index, uint16 &extent_index, bool dereference_cptr);
-  void IPGMContext::copy_member_to_value_array(uint16 child_index, bool prefix, uint16 write_index, uint16 &extent_index, bool dereference_cptr);
+  void copy_structure_to_value_array(bool prefix, uint16 write_index, uint16 &extent_index, bool dereference_cptr);
+  void copy_member_to_value_array(uint16 child_index, bool prefix, uint16 write_index, uint16 &extent_index, bool dereference_cptr);
 public:
   static IPGMContext GetContextFromInput(View *input, InputLessPGMOverlay *overlay) { return IPGMContext(input->object_, input, &input->object_->code(0), 0, overlay, REFERENCE); }
 
