@@ -109,7 +109,7 @@ template<class C, class U> bool Object<C, U>::invalidate() {
   invalidated_ = 1;
 
   acq_views();
-  views_.clear();
+  C::views_.clear();
   rel_views();
 
   if (C::code(0).getDescriptor() == Atom::MARKER) {
@@ -172,8 +172,8 @@ template<class C, class U> r_code::_View *Object<C, U>::get_view(r_code::Code *g
   r_code::_View probe;
   probe.references_[0] = group;
 
-  std::unordered_set<r_code::_View *, r_code::_View::Hash, r_code::_View::Equal>::const_iterator v = views_.find(&probe);
-  if (v != views_.end()) {
+  std::unordered_set<r_code::_View *, r_code::_View::Hash, r_code::_View::Equal>::const_iterator v = C::views_.find(&probe);
+  if (v != C::views_.end()) {
 
     if (lock)
       rel_views();
