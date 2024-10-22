@@ -95,7 +95,9 @@
 #include "../r_comp/decompiler.h"
 #include "../r_comp/preprocessor.h"
 
+#ifdef WINDOWS
 #include <process.h>
+#endif
 
 using namespace std;
 using namespace std::chrono;
@@ -240,6 +242,7 @@ PipeOStream PipeOStream::NullStream_;
 
 void PipeOStream::Open(uint8 count) {
 
+#ifdef WINDOWS
   for (uint8 i = 0; i < count; ++i) {
 
     PipeOStream *p = new PipeOStream();
@@ -247,25 +250,35 @@ void PipeOStream::Open(uint8 count) {
 
     Streams_.push_back(p);
   }
+#endif
 }
 
 void PipeOStream::Close() {
 
+#ifdef WINDOWS
   for (uint8 i = 0; i < Streams_.size(); ++i)
     delete Streams_[i];
   Streams_.clear();
+#endif
 }
 
 PipeOStream &PipeOStream::Get(uint8 id) {
 
+#ifdef WINDOWS
   if (id < Streams_.size())
     return *Streams_[id];
+#endif
   return NullStream_;
 }
 
-PipeOStream::PipeOStream() : std::ostream(NULL), pipe_read_(0), pipe_write_(0) {
+PipeOStream::PipeOStream() : std::ostream(NULL)
+#ifdef WINDOWS
+  , pipe_read_(0), pipe_write_(0)
+#endif
+{
 }
 
+#ifdef WINDOWS
 void PipeOStream::init() {
 
   SECURITY_ATTRIBUTES saAttr;
@@ -298,9 +311,11 @@ void PipeOStream::init() {
     &si, // pointer to STARTUPINFO structure
     &pi); // pointer to PROCESS_INFORMATION structure
 }
+#endif
 
 PipeOStream::~PipeOStream() {
 
+#ifdef WINDOWS
   if (pipe_read_ == 0)
     return;
 
@@ -308,10 +323,12 @@ PipeOStream::~PipeOStream() {
   *this << stop;
   CloseHandle(pipe_read_);
   CloseHandle(pipe_write_);
+#endif
 }
 
 PipeOStream &PipeOStream::operator <<(std::string &s) {
 
+#ifdef WINDOWS // TODO: Implement for non-WINDOWS
   if (pipe_read_ == 0)
     return *this;
 
@@ -319,12 +336,14 @@ PipeOStream &PipeOStream::operator <<(std::string &s) {
   uint32 written;
 
   WriteFile(pipe_write_, s.c_str(), to_write, &written, NULL);
+#endif
 
   return *this;
 }
 
 PipeOStream& PipeOStream::operator <<(const char *s) {
 
+#ifdef WINDOWS
   if (pipe_read_ == 0)
     return *this;
 
@@ -332,6 +351,7 @@ PipeOStream& PipeOStream::operator <<(const char *s) {
   uint32 written;
 
   WriteFile(pipe_write_, s, to_write, &written, NULL);
+#endif
 
   return *this;
 }

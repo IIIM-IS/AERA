@@ -155,10 +155,12 @@ private:
   static std::vector<PipeOStream *> Streams_;
   static PipeOStream NullStream_;
 
+#ifdef WINDOWS
   HANDLE pipe_read_;
   HANDLE pipe_write_;
 
   void init(); // create one child process and a pipe.
+#endif
   PipeOStream();
 public:
   static void Open(uint8 count); // open count streams.
