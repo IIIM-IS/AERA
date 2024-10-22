@@ -561,10 +561,10 @@ template<class O, class S> thread_ret thread_function_call
 TestMem<O, S>::timeTickRun(void *args) {
   TestMem<O, S>* self = (TestMem *)args;
 
-  auto sampling_period = MemExec::Get()->get_sampling_period();
+  auto sampling_period = _Mem::Get()->get_sampling_period();
   auto tickTime = r_exec::Now();
   // Call on_time_tick at the sampling period.
-  while (self->state_ == RUNNING) {
+  while (self->state_ == S::RUNNING) {
     self->on_time_tick();
 
     tickTime += sampling_period;
