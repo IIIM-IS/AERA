@@ -147,17 +147,17 @@ template<class O, class S> bool TestMem<O, S>::load
   move_y_minus_opcode_ = r_exec::GetOpcode("move_y_minus");
 
   // Find the objects we need.
-  position_property_ = find_object(objects, "position");
-  position_y_property_ = find_object(objects, "position_y");
-  velocity_y_property_ = find_object(objects, "velocity_y");
-  force_y_property_ = find_object(objects, "force_y");
-  theta_y_property_ = find_object(objects, "theta_y");
-  omega_y_property_ = find_object(objects, "omega_y");
-  primary_group_ = find_object(objects, "primary");
+  position_property_ = S::find_object(objects, "position");
+  position_y_property_ = S::find_object(objects, "position_y");
+  velocity_y_property_ = S::find_object(objects, "velocity_y");
+  force_y_property_ = S::find_object(objects, "force_y");
+  theta_y_property_ = S::find_object(objects, "theta_y");
+  omega_y_property_ = S::find_object(objects, "omega_y");
+  primary_group_ = S::find_object(objects, "primary");
 
   // Find the entities we need.
   for (int i = 0; i <= 9; ++i)
-    yEnt_[i] = find_object(objects, ("y" + to_string(i)).c_str());
+    yEnt_[i] = S::find_object(objects, ("y" + to_string(i)).c_str());
 
   return true;
 }
@@ -403,7 +403,7 @@ template<class O, class S> Code* TestMem<O, S>::eject(Code *command) {
 
 template<class O, class S> void TestMem<O, S>::on_time_tick() {
   auto now = r_exec::Now();
-  if (now <= lastInjectTime_ + get_sampling_period() * 8 / 10)
+  if (now <= lastInjectTime_ + S::get_sampling_period() * 8 / 10)
     // Not enough time has elapsed to inject a new position.
     return;
 
@@ -418,12 +418,12 @@ template<class O, class S> void TestMem<O, S>::on_time_tick() {
     lastInjectTime_ = now;
     // Inject the velocity and position.
     // It seems that velocity_y needs SYNC_HOLD for building models.
-    inject_marker_value_from_io_device(
+    S::inject_marker_value_from_io_device(
       position_y_obj_, velocity_y_property_, Atom::Float(velocity_y_),
-      now, now + get_sampling_period(), r_exec::View::SYNC_HOLD);
-    inject_marker_value_from_io_device(
+      now, now + S::get_sampling_period(), r_exec::View::SYNC_HOLD);
+    S::inject_marker_value_from_io_device(
       position_y_obj_, position_y_property_, Atom::Float(position_y_),
-      now, now + get_sampling_period());
+      now, now + S::get_sampling_period());
   }
   if (cart_position_y_obj_) {
     // We are updating the cart position_y_.
@@ -470,28 +470,28 @@ template<class O, class S> void TestMem<O, S>::on_time_tick() {
     lastInjectTime_ = now;
 
 
-    inject_marker_value_from_io_device(
+    S::inject_marker_value_from_io_device(
       cart_position_y_obj_, force_y_property_, Atom::Float(force_y_),
-      now, now + get_sampling_period());
-    inject_marker_value_from_io_device(
+      now, now + S::get_sampling_period());
+    S::inject_marker_value_from_io_device(
       cart_position_y_obj_, velocity_y_property_, Atom::Float(next_velocity_y_),
-      now, now + get_sampling_period());
-    inject_marker_value_from_io_device(
+      now, now + S::get_sampling_period());
+    S::inject_marker_value_from_io_device(
       cart_position_y_obj_, position_y_property_, Atom::Float(next_position_y_),
-      now, now + get_sampling_period());
-    inject_marker_value_from_io_device(
+      now, now + S::get_sampling_period());
+    S::inject_marker_value_from_io_device(
       cart_position_y_obj_, theta_y_property_, Atom::Float(next_theta_y_),
-      now, now + get_sampling_period());
-    inject_marker_value_from_io_device(
+      now, now + S::get_sampling_period());
+    S::inject_marker_value_from_io_device(
       cart_position_y_obj_, omega_y_property_, Atom::Float(next_omega_y_),
-      now, now + get_sampling_period());
+      now, now + S::get_sampling_period());
 
     ofs << next_theta_y_ << "," << next_omega_y_ << "," << next_position_y_ << "," << next_velocity_y_ << "," << force_y_ << endl;
   }
   if (discretePositionObj_) {
     // We are updating the discretePosition_.
     if (nextDiscretePosition_ &&
-        now >= lastCommandTime_ + get_sampling_period() * 4 / 10) {
+        now >= lastCommandTime_ + S::get_sampling_period() * 4 / 10) {
       // Enough time has elapsed from the move command to update the position.
       discretePosition_ = nextDiscretePosition_;
       // Clear nextDiscretePosition_ to allow another move command.
@@ -499,9 +499,9 @@ template<class O, class S> void TestMem<O, S>::on_time_tick() {
     }
 
     lastInjectTime_ = now;
-    inject_marker_value_from_io_device(
+    S::inject_marker_value_from_io_device(
       discretePositionObj_, position_property_, discretePosition_,
-      now, now + get_sampling_period());
+      now, now + S::get_sampling_period());
 
     const microseconds babbleStopTime(3700000);
     const int maxBabblePosition = 9;
@@ -535,17 +535,17 @@ template<class O, class S> void TestMem<O, S>::on_time_tick() {
       cmd->code(5) = Atom::RPointer(0); // obj
       cmd->set_reference(0, discretePositionObj_);
 
-      auto after = now + get_sampling_period() + 2 * Utils::GetTimeTolerance();
-      r_exec::Fact* factCmd = new r_exec::Fact(cmd, after, now + 2 * get_sampling_period(), 1, 1);
-      r_exec::Goal* goal = new r_exec::Goal(factCmd, get_self(), NULL, 1);
-      inject_fact_from_io_device(goal, after, now + get_sampling_period(), primary_group_);
+      auto after = now + S::get_sampling_period() + 2 * Utils::GetTimeTolerance();
+      r_exec::Fact* factCmd = new r_exec::Fact(cmd, after, now + 2 * S::get_sampling_period(), 1, 1);
+      r_exec::Goal* goal = new r_exec::Goal(factCmd, S::get_self(), NULL, 1);
+      S::inject_fact_from_io_device(goal, after, now + S::get_sampling_period(), primary_group_);
     }
   }
 }
 
 template<class O, class S> void
 TestMem<O, S>::startTimeTickThread() {
-  if (reduction_core_count_ == 0 && time_core_count_ == 0)
+  if (S::reduction_core_count_ == 0 && S::time_core_count_ == 0)
     // We don't need a timeTickThread for diagnostic time.
     return;
   if (timeTickThread_)
