@@ -522,11 +522,10 @@ bool match(const IPGMContext &input, const IPGMContext &pattern) { // in red, pa
 
 bool match(const IPGMContext &input, const IPGMContext &pattern, const IPGMContext &productions, vector<uint16> &production_indices) {
 
-  IPGMContext &skeleton = IPGMContext();
   uint16 last_patch_index;
   if (pattern[0].asOpcode() == Opcodes::Ptn) {
 
-    skeleton = pattern.get_child_deref(1);
+    auto skeleton = pattern.get_child_deref(1);
     if (!skeleton.match(input))
       return false;
     last_patch_index = pattern.get_last_patch_index();
@@ -538,7 +537,7 @@ bool match(const IPGMContext &input, const IPGMContext &pattern, const IPGMConte
 
   if (pattern[0].asOpcode() == Opcodes::AntiPtn) {
 
-    skeleton = pattern.get_child_deref(1);
+    auto skeleton = pattern.get_child_deref(1);
     if (skeleton.match(input))
       return false;
     last_patch_index = pattern.get_last_patch_index();
