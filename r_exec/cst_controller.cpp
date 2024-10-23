@@ -82,6 +82,7 @@
 //_/_/ 
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
+#include <algorithm>
 #include "cst_controller.h"
 #include "mem.h"
 #include "hlp_context.h"
