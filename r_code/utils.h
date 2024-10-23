@@ -180,7 +180,7 @@ public:
    */
   static void SetTimestampStruct(Code *object, uint16 index, Timestamp timestamp); // Expands object->code to allocate atoms.
 
-  static const uint64 MaxTHZ = 0xFFFFFFFF;
+  static constexpr uint64 MaxTHZ = 0xFFFFFFFF;
 
   template<class O> static bool HasTimestamp(const O *object, uint16 index) {
     if (object->code_size() <= index)
