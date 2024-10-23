@@ -95,7 +95,7 @@ template<class O, class S> bool VideoScreenIoDevice<O, S>::load
   move_opcode_ = r_exec::GetOpcode("move");
 
   // Find the objects we need.
-  fovea_pattern_property_ = find_object(objects, "fovea_pattern");
+  fovea_pattern_property_ = S::find_object(objects, "fovea_pattern");
 
   return true;
 }
@@ -193,7 +193,7 @@ template<class O, class S> Code* VideoScreenIoDevice<O, S>::eject(Code *command)
 
 template<class O, class S> void VideoScreenIoDevice<O, S>::on_time_tick() {
   auto now = r_exec::Now();
-  if (now <= lastInjectTime_ + get_sampling_period() * 8 / 10)
+  if (now <= lastInjectTime_ + S::get_sampling_period() * 8 / 10)
     // Not enough time has elapsed to inject a new measurement.
     return;
 
@@ -208,9 +208,9 @@ template<class O, class S> void VideoScreenIoDevice<O, S>::on_time_tick() {
 
     lastInjectTime_ = now;
     // Inject the fovea value.
-    inject_marker_value_from_io_device(
+    S::inject_marker_value_from_io_device(
       eye_obj_, fovea_pattern_property_, video_screen_->get_fovea_pattern(),
-      now, now + get_sampling_period());
+      now, now + S::get_sampling_period());
   }
 }
 
