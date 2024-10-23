@@ -90,6 +90,7 @@
 #include "hlp_controller.h"
 #include "p_monitor.h"
 #include "factory.h"
+#include "mem.h"
 
 
 namespace r_exec {
@@ -255,7 +256,7 @@ protected:
 
     cache->CS_.enter();
     auto now = Now();
-    r_code::list<E>::const_iterator _e;
+    typename r_code::list<E>::const_iterator _e;
     for (_e = cache->list_.begin(); _e != cache->list_.end();) {
 
       if ((*_e).is_too_old(now)) // garbage collection.
