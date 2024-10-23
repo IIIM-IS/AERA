@@ -3,6 +3,9 @@
 !/**/
 !*.*
 
+# Emacs temp files
+*~
+
 # Release folders
 /Release/*
 */Release/*
@@ -20,6 +23,9 @@
 *.user
 *.sdf
 *.suo
+
+# Cmake build folder
+/build
 
 # Ignore log files
 *.log
