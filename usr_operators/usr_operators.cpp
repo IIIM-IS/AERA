@@ -208,35 +208,35 @@ void GetCallbackName(char *callback_name) {
 
 void* GetUserOperatorFunction(const char* function_name) {
   if (strcmp(function_name, "Init") == 0)
-    return &Init;
+    return (void*)&Init;
   else if (strcmp(function_name, "GetOperatorCount") == 0)
-    return &GetOperatorCount;
+    return (void*)&GetOperatorCount;
   else if (strcmp(function_name, "GetOperatorName") == 0)
-    return &GetOperatorName;
+    return (void*)&GetOperatorName;
   else if (strcmp(function_name, "add") == 0)
-    return &usr_operators::add;
+    return (void*)&usr_operators::add;
   else if (strcmp(function_name, "sub") == 0)
-    return &usr_operators::sub;
+    return (void*)&usr_operators::sub;
   else if (strcmp(function_name, "mul") == 0)
-    return &usr_operators::mul;
+    return (void*)&usr_operators::mul;
   else if (strcmp(function_name, "div") == 0)
-    return &usr_operators::div;
+    return (void*)&usr_operators::div;
   else if (strcmp(function_name, "dis") == 0)
-    return &usr_operators::dis;
+    return (void*)&usr_operators::dis;
   else if (strcmp(function_name, "GetProgramCount") == 0)
-    return &GetProgramCount;
+    return (void*)&GetProgramCount;
   else if (strcmp(function_name, "GetProgramName") == 0)
-    return &GetProgramName;
+    return (void*)&GetProgramName;
   else if (strcmp(function_name, "test_program") == 0)
-    return &test_program;
+    return (void*)&test_program;
   else if (strcmp(function_name, "auto_focus") == 0)
-    return &auto_focus;
+    return (void*)&auto_focus;
   else if (strcmp(function_name, "GetCallbackCount") == 0)
-    return &GetCallbackCount;
+    return (void*)&GetCallbackCount;
   else if (strcmp(function_name, "GetCallbackName") == 0)
-    return &GetCallbackName;
+    return (void*)&GetCallbackName;
   else if (strcmp(function_name, "print") == 0)
-    return &usr_operators::print;
+    return (void*)&usr_operators::print;
   else
     return NULL;
 }
