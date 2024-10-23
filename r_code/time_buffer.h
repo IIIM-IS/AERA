@@ -161,7 +161,7 @@ public:
     }
     return end_iterator_;
   }
-  iterator erase(iterator &i) { return iterator(this, _erase(i.cell_)); }
+  iterator erase(iterator &i) { return iterator(this, list<T>::_erase(i.cell_)); }
 };
 
 template<typename T, class IsInvalidated> typename time_buffer<T, IsInvalidated>::iterator time_buffer<T, IsInvalidated>::end_iterator_;
