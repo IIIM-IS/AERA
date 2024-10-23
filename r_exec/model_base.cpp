@@ -182,8 +182,8 @@ bool ModelBase::MEntry::match(const MEntry &e) const { // at this point both mod
     return true;
 
   // Get the unpacked models.
-  Code* mdl_0 = (packed_ ? mdl_->get_reference(mdl_->references_size() - MDL_HIDDEN_REFS) : mdl_);
-  Code* mdl_1 = (e.packed_ ? e.mdl_->get_reference(e.mdl_->references_size() - MDL_HIDDEN_REFS) : e.mdl_);
+  Code* mdl_0 = (packed_ ? mdl_->get_reference(mdl_->references_size() - MDL_HIDDEN_REFS) : (Code*)mdl_);
+  Code* mdl_1 = (e.packed_ ? e.mdl_->get_reference(e.mdl_->references_size() - MDL_HIDDEN_REFS) : (Code*)e.mdl_);
 
   if (mdl_0->code_size() != mdl_1->code_size())
     return false;
