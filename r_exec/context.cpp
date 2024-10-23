@@ -623,13 +623,13 @@ bool IPGMContext::Red(const IPGMContext &context) {
 
   vector<uint16> production_indices; // list of productions built upon successful matches.
 
+  uint16 input_count = input_set.get_children_count();
   if (input_set[0].getDescriptor() != Atom::SET &&
     input_set[0].getDescriptor() != Atom::S_SET &&
     positive_section[0].getDescriptor() != Atom::SET &&
     negative_section[0].getDescriptor() != Atom::SET)
     goto failure;
 
-  uint16 input_count = input_set.get_children_count();
   if (!input_count)
     goto failure;
 
