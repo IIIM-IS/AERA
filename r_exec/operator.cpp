@@ -94,6 +94,7 @@
 #include <math.h>
 #include "hlp_context.h"
 
+using namespace std;
 using namespace std::chrono;
 using namespace r_code;
 
