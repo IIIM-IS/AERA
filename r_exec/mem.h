@@ -94,6 +94,7 @@
 
 #include <list>
 #include <deque>
+#include <atomic>
 
 #include "../r_code/list.h"
 #include "../r_comp/segments.h"
@@ -953,7 +954,7 @@ public:
 class r_exec_dll MemVolatile :
   public _Mem {
 private:
-  volatile int32 last_oid_;
+  std::atomic_int32_t last_oid_;
   uint32 get_oid();
   void bind(View *view) override; // assigns an oid (atomic operation).
   void set_last_oid(int32 oid) override;

@@ -1502,7 +1502,7 @@ MemVolatile::~MemVolatile() {
 
 uint32 MemVolatile::get_oid() {
 
-  return Atomic::Increment32(&last_oid_);
+  return ++last_oid_;
 }
 
 void MemVolatile::set_last_oid(int32 oid) {
