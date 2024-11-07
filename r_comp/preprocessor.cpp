@@ -215,7 +215,7 @@ int32 RepliStruct::parse(std::istream *stream, const std::string& file_path, uin
     case 13:
       // remain inComment?
       if (in_comment) {
-        if ((lastc == ' ') || ((lastc == '.') && (lastcc == '.')))
+        if ((lastc == '.') && (lastcc == '.'))
           continue; // continue comment on next line
         else
           in_comment = false; // end comment
