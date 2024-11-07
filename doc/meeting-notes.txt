@@ -1214,10 +1214,22 @@ DONE. Fix Arash's analogy example in Webots. https://github.com/IIIM-IS/AERA/com
   * DONE. Demo hand-grab-sphere working (kinda)
   * DONE. Review/merge pull request to use std::atomic https://github.com/IIIM-IS/CoreLibrary/pull/8
 
+2024-11-07
+* AERA in Ubuntu
+  * DONE. Fix replicode parsing error in Linux. Review/merge PR to not treat trailing space as comment continuation https://github.com/IIIM-IS/AERA/pull/292
+    * DONE. Open issue to implement comment continuation of line ending in " .." https://github.com/IIIM-IS/AERA/issues/293
+
 next meeting
 * AERA in Ubuntu
-  * Need to parse .replicode files with Unix newlines
   * Need to fix Linux CriticalSection. (Use C++11 std::mutex?)
+* Open issues from Leonard
+  * Is allowed_shared_timing_vars still necessary? https://github.com/IIIM-IS/AERA/pull/110#issuecomment-1734308936
+  * Standardization of ready command https://github.com/IIIM-IS/AERA/issues/155
+  * Include possibility to inject multi-dimensional marker values https://github.com/IIIM-IS/AERA/issues/254
+  * Zombie code found https://github.com/IIIM-IS/AERA/issues/273
+  * Delta calculation for matching of delta in CTPX should be done with context operators https://github.com/IIIM-IS/AERA/issues/275
+  * Matching in binding maps should be done on structures if possible https://github.com/IIIM-IS/AERA/issues/276
+* Improve Arash's demo video https://www.youtube.com/watch?v=JXgdSjU-7OI  https://www.youtube.com/watch?v=ceYjyiyBBsU
 * Next meeting with Francesca et al
   * Need help with extending abagraph with preferences
   * Need help with "exclusive" operator
