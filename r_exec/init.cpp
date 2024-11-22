@@ -191,6 +191,9 @@ thread_ret TDecompiler::Decompile(void *args) {
     PipeOStream::Get(_this->ostream_id_ - 1) << decompiled_code.str();
   }
 
+  if (!_this->thread_)
+    // We're running in diagnostic time without a thread. Just return.
+    return 0;
   thread_ret_val(0);
 }
 
