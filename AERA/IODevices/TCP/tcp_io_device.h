@@ -116,9 +116,6 @@ namespace tcp_io_device {
 #define PROTOBUF_USE_DLLS
 
 #include <map>
-#include <windows.h>
-#include <winsock2.h>
-#include <ws2tcpip.h>
 #include <string>
 #include <stdlib.h>
 #include <stdio.h>
