@@ -1223,10 +1223,14 @@ DONE. Fix Arash's analogy example in Webots. https://github.com/IIIM-IS/AERA/com
 * AERA in Ubuntu
   * DONE. Make hand-grab-sphere work. https://github.com/IIIM-IS/AERA/commit/d5efd7699f59bd4198371a971f503a32b0796e19
 
+2024-12-05
+* AERA in Ubuntu
+  * DONE. Make hand-grab-sphere-learn work. https://github.com/IIIM-IS/AERA/commit/21e7ed601b65e4caf0237a8579cfdf69d8808f3a
+
 next meeting
 * AERA in Ubuntu
-  * Make hand-grab-sphere-learn work.
-  * Need to fix Linux CriticalSection. (Use C++11 std::mutex?)
+  * Make TCP/Webots work. 
+  * Fix Linux CriticalSection. (Use C++11 std::mutex?)
 * Open issues from Leonard
   * Is allowed_shared_timing_vars still necessary? https://github.com/IIIM-IS/AERA/pull/110#issuecomment-1734308936
   * Standardization of ready command https://github.com/IIIM-IS/AERA/issues/155
