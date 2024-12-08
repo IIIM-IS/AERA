@@ -355,6 +355,8 @@ bool GMonitor::reduce(_Fact *input) { // executed by a reduction core; invalidat
       return false;
     }
   }
+
+  return false;
 }
 
 void GMonitor::update(Timestamp &next_target) { // executed by a time core.
@@ -559,6 +561,8 @@ bool SGMonitor::reduce(_Fact *input) {
   case MATCH_FAILURE:
     return false;
   }
+
+  return false;
 }
 
 void SGMonitor::update(Timestamp &next_target) { // executed by a time core.

@@ -150,6 +150,8 @@ bool PMonitor::reduce(_Fact *input) { // input is always an actual fact.
       return false;
     }
   }
+
+  return false;
 }
 
 void PMonitor::update(Timestamp &next_target) { // executed by a time core, upon reaching the expected time of occurrence of the target of the prediction.

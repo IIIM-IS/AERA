@@ -699,6 +699,8 @@ Overlay *PGMOverlay::reduce(r_exec::View *input) {
   case IMPOSSIBLE:
     return NULL;
   }
+
+  return NULL;
 }
 
 PGMOverlay::MatchResult PGMOverlay::match(r_exec::View *input, uint16 &input_index) {
@@ -839,5 +841,7 @@ Overlay *AntiPGMOverlay::reduce(r_exec::View *input) {
   case IMPOSSIBLE:
     return NULL;
   }
+
+  return NULL;
 }
 }

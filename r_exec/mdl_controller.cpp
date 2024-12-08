@@ -210,6 +210,8 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
   case MATCH_FAILURE:
     return false;
   }
+
+  return false;
 }
 
 bool PrimaryMDLOverlay::check_simulated_chaining(const HLPBindingMap *bm, Fact *f_imdl, Pred *prediction, vector<BindingResult >& results) {
@@ -291,6 +293,8 @@ bool SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *
   case MATCH_FAILURE:
     return false;
   }
+
+  return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
