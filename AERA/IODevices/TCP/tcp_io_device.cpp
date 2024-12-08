@@ -217,14 +217,14 @@ namespace tcp_io_device {
     // Load entities
     cout << "> Loading entities:" << endl;
     for (auto it = entities_.begin(); it != entities_.end(); ++it) {
-      it->second = find_object(objects, &((it->first)[0]));
+      it->second = _Mem::find_object(objects, &((it->first)[0]));
       cout << it->first << ":\t" << it->second->get_oid() << endl;
     }
 
     // Load objects
     cout << "> Loading objects:" << endl;
     for (auto it = objects_.begin(); it != objects_.end(); ++it) {
-      it->second = find_object(objects, &((it->first)[0]));
+      it->second = _Mem::find_object(objects, &((it->first)[0]));
       cout << it->first << ":\t" << it->second->get_oid() << endl;
     }
 
@@ -425,13 +425,13 @@ namespace tcp_io_device {
   void TcpIoDevice<O, S>::on_time_tick()
   {
     auto now = r_exec::Now();
-    if (now < lastInjectTime_ + get_sampling_period() * 8 / 10) {
+    if (now < lastInjectTime_ + _Mem::get_sampling_period() * 8 / 10) {
       return;
     }
     // Dequeue a msg from the receive_queue_.
     auto msg = std::move(receive_queue_->dequeue());
     // If in diagnostic mode wait for a new message to be received.
-    if (reduction_core_count_ == 0 && time_core_count_ == 0 && started_) {
+    if (_Mem::reduction_core_count_ == 0 && _Mem::time_core_count_ == 0 && started_) {
       while (!msg) {
         msg = std::move(receive_queue_->dequeue());
       }
@@ -458,7 +458,7 @@ namespace tcp_io_device {
     sendMessage(std::move(msg));
     started_ = true;
 
-    if (reduction_core_count_ == 0 && time_core_count_ == 0) {
+    if (_Mem::reduction_core_count_ == 0 && _Mem::time_core_count_ == 0) {
       // We don't need a timeTickThread for diagnostic time.
       return;
     }
@@ -478,10 +478,10 @@ namespace tcp_io_device {
   {
     TcpIoDevice<O, S>* self = (TcpIoDevice*)args;
 
-    auto sampling_period = MemExec::Get()->get_sampling_period();
+    auto sampling_period = _Mem::Get()->get_sampling_period();
     auto tickTime = r_exec::Now();
     // Call on_time_tick at the sampling period.
-    while (self->state_ == RUNNING) {
+    while (self->state_ == _Mem::RUNNING) {
       self->on_time_tick();
 
       tickTime += sampling_period;
@@ -592,13 +592,13 @@ namespace tcp_io_device {
           }
           value.push_back(entities_[object_entity]);
         }
-        inject_marker_value_from_io_device(entity, obj, value, now, now + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
+        _Mem::inject_marker_value_from_io_device(entity, obj, value, now, now + _Mem::get_sampling_period(), r_exec::View::SYNC_PERIODIC, _Mem::get_stdin());
         continue;
       }
       else if (var.getMetaData().getType() == VariableDescription_DataType_STRING) {
         /** @todo multidimensionality not working, yet*/
         std::string val = var.getData<std::string>()[0];
-        inject_marker_value_from_io_device(entity, obj, val, now, now + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
+        _Mem::inject_marker_value_from_io_device(entity, obj, val, now, now + _Mem::get_sampling_period(), r_exec::View::SYNC_PERIODIC, _Mem::get_stdin());
         
       }
     }
@@ -609,12 +609,12 @@ namespace tcp_io_device {
   void TcpIoDevice<O, S>::injectDefault(r_code::Code* entity, r_code::Code* object, std::vector<V> vals, core::Timestamp time) {
     if (vals.size() == 0) {
       // std::cout << "[]" << std::endl;
-      inject_marker_value_from_io_device(entity, object, std::vector<r_code::Code*>(), time, time + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
+      _Mem::inject_marker_value_from_io_device(entity, object, std::vector<r_code::Code*>(), time, time + _Mem::get_sampling_period(), r_exec::View::SYNC_PERIODIC, _Mem::get_stdin());
       return;
     }
     if (vals.size() == 1) {
       // std::cout << vals[0] << std::endl;
-      inject_marker_value_from_io_device(entity, object, Atom::Float(vals[0]), time, time + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
+      _Mem::inject_marker_value_from_io_device(entity, object, Atom::Float(vals[0]), time, time + _Mem::get_sampling_period(), r_exec::View::SYNC_PERIODIC, _Mem::get_stdin());
       return;
     }
     injectSet<V>(entity, object, vals, time);
@@ -623,11 +623,11 @@ namespace tcp_io_device {
   template<class O, class S>
   void TcpIoDevice<O, S>::injectDefault(r_code::Code* entity, r_code::Code* object, std::vector<r_code::Code*> vals, core::Timestamp time) {
     if (vals.size() == 0) {
-      inject_marker_value_from_io_device(entity, object, std::vector<r_code::Code*>(), time, time + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
+      _Mem::inject_marker_value_from_io_device(entity, object, std::vector<r_code::Code*>(), time, time + _Mem::get_sampling_period(), r_exec::View::SYNC_PERIODIC, _Mem::get_stdin());
       return;
     }
     if (vals.size() == 1) {
-      inject_marker_value_from_io_device(entity, object, vals[0], time, time + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
+      _Mem::inject_marker_value_from_io_device(entity, object, vals[0], time, time + _Mem::get_sampling_period(), r_exec::View::SYNC_PERIODIC, _Mem::get_stdin());
       return;
     }
     injectSet(entity, object, vals, time);
@@ -641,12 +641,12 @@ namespace tcp_io_device {
       // std::cout << *it << std::endl;
       atom_vals.push_back(Atom::Float(*it));
     }
-    inject_marker_value_from_io_device(entity, object, atom_vals, time, time + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
+    _Mem::inject_marker_value_from_io_device(entity, object, atom_vals, time, time + _Mem::get_sampling_period(), r_exec::View::SYNC_PERIODIC, _Mem::get_stdin());
   }
 
   template<class O, class S>
   void TcpIoDevice<O, S>::injectSet(r_code::Code* entity, r_code::Code* object, std::vector<r_code::Code*> vals, core::Timestamp time) {
-    inject_marker_value_from_io_device(entity, object, vals, time, time + get_sampling_period(), r_exec::View::SYNC_PERIODIC, get_stdin());
+    _Mem::inject_marker_value_from_io_device(entity, object, vals, time, time + _Mem::get_sampling_period(), r_exec::View::SYNC_PERIODIC, _Mem::get_stdin());
   }
 
   template<class O, class S>
@@ -662,7 +662,7 @@ namespace tcp_io_device {
       // std::cout << *it << std::endl;
       atom_vals.push_back(Atom::Float(*it));
     }
-    inject_marker_value_from_io_device(entity, object, op_code, atom_vals, time, time);
+    _Mem::inject_marker_value_from_io_device(entity, object, op_code, atom_vals, time, time);
   }
 
   template<class O, class S>
