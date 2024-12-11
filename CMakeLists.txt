@@ -7,7 +7,7 @@ project(aera
 include_directories(AERA AERA/IODevices/TCP AERA/IODevices/TCP/AERA_Protobuf
   submodules/CoreLibrary/CoreLibrary r_code r_comp r_exec
   usr_operators usr_operators/Operators usr_operators/Callbacks)
-add_compile_definitions(EXECUTIVE_EXPORTS CORELIBRARY_EXPORTS WITH_DETAIL_OID)
+add_compile_definitions(EXECUTIVE_EXPORTS CORELIBRARY_EXPORTS ENABLE_PROTOBUF)
 add_compile_options()
 add_executable(aera
   AERA/AERA_main.cpp
@@ -78,4 +78,5 @@ add_executable(aera
   usr_operators/TestProgram/test_program.cpp
 )
 set_target_properties(aera PROPERTIES COMPILE_OPTIONS "-m32" LINK_FLAGS "-m32")
-target_link_libraries(aera stdc++fs)
+link_directories(/usr/lib/i386-linux-gnu)
+target_link_libraries(aera stdc++fs libprotobuf.a)
