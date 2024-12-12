@@ -1227,9 +1227,13 @@ DONE. Fix Arash's analogy example in Webots. https://github.com/IIIM-IS/AERA/com
 * AERA in Ubuntu
   * DONE. Make hand-grab-sphere-learn work. https://github.com/IIIM-IS/AERA/commit/21e7ed601b65e4caf0237a8579cfdf69d8808f3a
 
+2024-12-12
+* AERA in Ubuntu
+  * DONE. Make AERA_Protobuf pull request to support TCP Unix sockets (for Webots). https://github.com/IIIM-IS/AERA_Protobuf/pull/3
+
 next meeting
 * AERA in Ubuntu
-  * Make TCP/Webots work. 
+  * CMake configuration for ENABLE_PROTOBUF+libprotobuf.a
   * Fix Linux CriticalSection. (Use C++11 std::mutex?)
 * Open issues from Leonard
   * Is allowed_shared_timing_vars still necessary? https://github.com/IIIM-IS/AERA/pull/110#issuecomment-1734308936
