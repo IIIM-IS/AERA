@@ -23,6 +23,7 @@
 *.user
 *.sdf
 *.suo
+.vscode
 
 # Cmake build folder
 /build
