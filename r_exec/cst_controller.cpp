@@ -391,6 +391,13 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
   bool bound_pattern_is_axiom;
   _Fact *bound_pattern = bind_pattern(input_object, bm, predictionSimulation, bound_pattern_is_axiom);
   if (bound_pattern) {
+#if 0 // Debug: Show making overlays.
+    string debug_inputs_info;
+    for (uint32 i = 0; i < axiom_inputs_.size(); ++i)
+      debug_inputs_info += " " + to_string(axiom_inputs_[i]->get_oid());
+    for (uint32 i = 0; i < non_axiom_inputs_.size(); ++i)
+      debug_inputs_info += " " + to_string(non_axiom_inputs_[i]->get_oid());
+#endif
     if (axiom_patterns_.size() + non_axiom_patterns_.size() == 1) { // last match.
 
       if (!code_) {
@@ -411,6 +418,12 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
         }
       } else { // guards already evaluated, full match.
         offspring = get_offspring(bm, (_Fact *)input->object_, bound_pattern_is_axiom);
+#if 0 // Debug: Show making overlays.
+        OUTPUT_LINE((TraceLevel)0, "Debug: For " << get_object()->get_oid() <<
+          (predictionSimulation ? " Sim(" + to_string(predictionSimulation->get_detail_oid()) + ")" : "") << ": CSTOverlay(" <<
+          get_detail_oid() << ") [" << debug_inputs_info << "]: Add " << input->object_->get_oid() <<
+          " (final) after making offspring CSTOverlay(" << offspring->get_detail_oid() << ")");
+#endif
         inject_production(input);
         invalidate();
         store_evidence(input->object_, prediction, is_simulation);
@@ -418,6 +431,12 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
       }
     } else {
       offspring = get_offspring(bm, (_Fact *)input->object_, bound_pattern_is_axiom, bound_pattern);
+#if 0 // Debug: Show making overlays.
+      OUTPUT_LINE((TraceLevel)0, "Debug: For " << get_object()->get_oid() <<
+        (predictionSimulation ? " Sim(" + to_string(predictionSimulation->get_detail_oid()) + ")" : "") << ": CSTOverlay(" <<
+        get_detail_oid() << ") [" << debug_inputs_info << "]: Add " << input->object_->get_oid() <<
+        " after making offspring CSTOverlay(" << offspring->get_detail_oid() << ")");
+#endif
       store_evidence(input->object_, prediction, is_simulation);
       return true;
     }
@@ -599,6 +618,10 @@ void CSTController::abduce_simulated(HLPBindingMap *bm, Fact *f_super_goal) {
     if (((CSTOverlay*)(*o))->is_simulated())
       // Skip overlays that were produced during simulated forward chaining.
       continue;
+#if 0 // Debug: Don't use inputs.
+    if (!(((CSTOverlay*)(*o))->non_axiom_inputs_.size() == 0 && ((CSTOverlay*)(*o))->axiom_patterns_.size() == 0))
+      continue;
+#endif
 
     HLPBindingMap bm_copy(bm);
     // TODO: this is inefficient. We want to merge (*o)->binding_ into bm_copy, but use an icst.
@@ -639,6 +662,12 @@ void CSTController::abduce(HLPBindingMap *bm, Fact *f_super_goal) {
     _Fact *evidence;
     if (opposite)
       bound_pattern->set_opposite();
+#if 0 // Debug: Don't check evidences for simulated goals.
+    if (f_super_goal->get_goal()->is_simulation()) {
+      inject_goal(bm, f_super_goal, bound_pattern, sub_sim, now, confidence, host); // all sub-goals share the same sim.
+      continue;
+    }
+#endif
     switch (check_evidences(bound_pattern, evidence)) {
     case MATCH_SUCCESS_POSITIVE: // positive evidence, no need to produce a sub-goal: skip.
       break;
