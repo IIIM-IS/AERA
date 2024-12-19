@@ -1231,6 +1231,9 @@ DONE. Fix Arash's analogy example in Webots. https://github.com/IIIM-IS/AERA/com
 * AERA in Ubuntu
   * DONE. Make AERA_Protobuf pull request to support TCP Unix sockets (for Webots). https://github.com/IIIM-IS/AERA_Protobuf/pull/3
 
+2024-12-19
+  * DONE. Test/merge AERA Visualizer PR to update Qt and fix build errors. https://github.com/IIIM-IS/AERA_Visualizer/pull/56
+
 next meeting
 * AERA in Ubuntu
   * CMake configuration for ENABLE_PROTOBUF+libprotobuf.a
