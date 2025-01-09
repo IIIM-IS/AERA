@@ -1234,7 +1234,21 @@ DONE. Fix Arash's analogy example in Webots. https://github.com/IIIM-IS/AERA/com
 2024-12-19
   * DONE. Test/merge AERA Visualizer PR to update Qt and fix build errors. https://github.com/IIIM-IS/AERA_Visualizer/pull/56
 
+2025-01-09
+* DONE. AERA Visualizer: Menu item to save the main window image.
+* DONE. Initial implementation of "exclusive" operator.
+* blocks example
+  * DONE. Update to use exclusive operator.
+  * DONE. Change cmd("move", X, L1, L2) to the more "AERA-like" cmd("move", X, DeltaP)
+* Discuss: Types of knowledge which can't come from sensory/motor experience and can't be tested with experiment. (Need other ways to learn/represent/improve this knowledge):
+  * An object doesn't exist.
+  * It's impossible for any event to cause state S.
+  * Action A will prevent any future inference (terminal event, termination of any further processing).
+
 next meeting
+* Indiginous people from the forest in the desert.
+* Update copyright year.
+* Release dev to master branch.
 * AERA in Ubuntu
   * CMake configuration for ENABLE_PROTOBUF+libprotobuf.a
   * Fix Linux CriticalSection. (Use C++11 std::mutex?)
@@ -1251,7 +1265,6 @@ next meeting
   * Need help with "is X a member of set S" with unbound constraint variables
   * Need help with incremental graph updates on all of the above
 * blocks example
-  * Change cmd("move", L1, L2) to the more "AERA-like" cmd("move", deltaP)
   * Use var for timestamps and T2 = T0 + 100. Remove "succ" relation.
   * Demonstrate multiple solutions if there are more intermediate positions.
 
