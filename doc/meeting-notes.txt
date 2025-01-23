@@ -1245,10 +1245,11 @@ DONE. Fix Arash's analogy example in Webots. https://github.com/IIIM-IS/AERA/com
   * It's impossible for any event to cause state S.
   * Action A will prevent any future inference (terminal event, termination of any further processing).
 
+2025-01-23
+* DONE. Update copyright year.
+* DONE. Make PR to release dev to master branch. https://github.com/IIIM-IS/AERA/pull/295
+
 next meeting
-* Indiginous people from the forest in the desert.
-* Update copyright year.
-* Release dev to master branch.
 * AERA in Ubuntu
   * CMake configuration for ENABLE_PROTOBUF+libprotobuf.a
   * Fix Linux CriticalSection. (Use C++11 std::mutex?)
