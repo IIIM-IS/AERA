@@ -318,6 +318,10 @@ template&lt;class C &gt; </td></tr>
 <tr class="memitem:a291a01000a15d1e24b5b5a0603bfe2a2 inherit pro_methods_classr__exec_1_1_controller"><td class="memItemLeft" align="right" valign="top"><a id="a291a01000a15d1e24b5b5a0603bfe2a2"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Controller</b> (<a class="el" href="classr__code_1_1___view.html">r_code::_View</a> *view)</td></tr>
 <tr class="separator:a291a01000a15d1e24b5b5a0603bfe2a2 inherit pro_methods_classr__exec_1_1_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_static_methods_classr__exec_1_1_controller"><td colspan="2" onclick="javascript:toggleInherit('pro_static_methods_classr__exec_1_1_controller')"><img src="closed.png" alt="-"/>&#160;Static Protected Member Functions inherited from <a class="el" href="classr__exec_1_1_controller.html">r_exec::Controller</a></td></tr>
+<tr class="memitem:a3e873692a1960a060c44778fba828ebb inherit pro_static_methods_classr__exec_1_1_controller"><td class="memItemLeft" align="right" valign="top"><a id="a3e873692a1960a060c44778fba828ebb"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>push_reduction_job</b> (<a class="el" href="classr__exec_1_1___reduction_job.html">_ReductionJob</a> *j)</td></tr>
+<tr class="separator:a3e873692a1960a060c44778fba828ebb inherit pro_static_methods_classr__exec_1_1_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classr__exec_1_1_m_d_l_controller"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classr__exec_1_1_m_d_l_controller')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classr__exec_1_1_m_d_l_controller.html">r_exec::MDLController</a></td></tr>
 <tr class="memitem:a85e02e9d5719b8e0f0054d00b4e80ae1 inherit pro_attribs_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a85e02e9d5719b8e0f0054d00b4e80ae1"></a>
 <a class="el" href="classr__exec_1_1_m_d_l_controller_1_1_requirement_cache.html">RequirementCache</a>&#160;</td><td class="memItemRight" valign="bottom"><b>requirements_</b></td></tr>
@@ -395,9 +399,9 @@ std::chrono::microseconds&#160;</td><td class="memItemRight" valign="bottom"><b>
 <a class="el" href="classcore_1_1_critical_section.html">CriticalSection</a>&#160;</td><td class="memItemRight" valign="bottom"><b>reductionCS_</b></td></tr>
 <tr class="separator:ada86ac20f77db6a9fc44001248c8cc2c inherit pro_attribs_classr__exec_1_1_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classcore_1_1___object"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classcore_1_1___object')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classcore_1_1___object.html">core::_Object</a></td></tr>
-<tr class="memitem:a78942b476c06f3f3cab6c8fb0dba30e4 inherit pro_attribs_classcore_1_1___object"><td class="memItemLeft" align="right" valign="top"><a id="a78942b476c06f3f3cab6c8fb0dba30e4"></a>
-int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</b></td></tr>
-<tr class="separator:a78942b476c06f3f3cab6c8fb0dba30e4 inherit pro_attribs_classcore_1_1___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8a8ee727ee2e8e69a4ce13a3a6eccff inherit pro_attribs_classcore_1_1___object"><td class="memItemLeft" align="right" valign="top"><a id="ac8a8ee727ee2e8e69a4ce13a3a6eccff"></a>
+std::atomic_int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</b></td></tr>
+<tr class="separator:ac8a8ee727ee2e8e69a4ce13a3a6eccff inherit pro_attribs_classcore_1_1___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_static_attribs_classr__exec_1_1_m_d_l_controller"><td colspan="2" onclick="javascript:toggleInherit('pro_static_attribs_classr__exec_1_1_m_d_l_controller')"><img src="closed.png" alt="-"/>&#160;Static Protected Attributes inherited from <a class="el" href="classr__exec_1_1_m_d_l_controller.html">r_exec::MDLController</a></td></tr>
 <tr class="memitem:a35b8f37dc279faa647000320f392ba88 inherit pro_static_attribs_classr__exec_1_1_m_d_l_controller"><td class="memItemLeft" align="right" valign="top"><a id="a35b8f37dc279faa647000320f392ba88"></a>
 static const uint32&#160;</td><td class="memItemRight" valign="bottom"><b>LHSController</b> = 0</td></tr>
@@ -408,7 +412,7 @@ static const uint32&#160;</td><td class="memItemRight" valign="bottom"><b>RHSCon
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="mdl__controller_8h_source.html#l00528">528</a> of file <a class="el" href="mdl__controller_8h_source.html">mdl_controller.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mdl__controller_8h_source.html#l00529">529</a> of file <a class="el" href="mdl__controller_8h_source.html">mdl_controller.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a32df86300af052c8871ae86445668f78"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a32df86300af052c8871ae86445668f78">&#9670;&nbsp;</a></span>store_requirement()</h2>
@@ -459,7 +463,7 @@ static const uint32&#160;</td><td class="memItemRight" valign="bottom"><b>RHSCon
 
 <p>Implements <a class="el" href="classr__exec_1_1_m_d_l_controller.html#aab92aaa6a8d241c796bd5d3f25f316bd">r_exec::MDLController</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="mdl__controller_8cpp_source.html#l02806">2806</a> of file <a class="el" href="mdl__controller_8cpp_source.html">mdl_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mdl__controller_8cpp_source.html#l02810">2810</a> of file <a class="el" href="mdl__controller_8cpp_source.html">mdl_controller.cpp</a>.</p>
 
 </div>
 </div>

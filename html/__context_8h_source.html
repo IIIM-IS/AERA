@@ -74,9 +74,9 @@ $(function() {
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//_/_/ AERA</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//_/_/ Autocatalytic Endogenous Reflective Architecture</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//_/_/ </span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Jeff Thompson</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Kristinn R. Thorisson</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Icelandic Institute for Intelligent Machines</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2025 Jeff Thompson</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//_/_/ http://www.iiim.is</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//_/_/ </span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//_/_/ Copyright (c) 2010-2012 Eric Nivel</span></div>
@@ -200,17 +200,17 @@ $(function() {
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;  <span class="keywordtype">void</span> commit()<span class="keyword"> const </span>{ overlay_-&gt;commit(); }</div>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;  <span class="keywordtype">void</span> rollback()<span class="keyword"> const </span>{ overlay_-&gt;rollback(); }</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;  <span class="keywordtype">void</span> patch_code(uint16 location, <a class="code" href="classr__code_1_1_atom.html">Atom</a> value)<span class="keyword"> const </span>{ overlay_-&gt;patch_code(location, value); }</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;  <span class="keywordtype">void</span> patch_code(uint16 location, Atom value)<span class="keyword"> const </span>{ overlay_-&gt;patch_code(location, value); }</div>
 <div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;  <span class="keywordtype">void</span> unpatch_code(uint16 patch_index)<span class="keyword"> const </span>{ overlay_-&gt;unpatch_code(patch_index); }</div>
 <div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;  uint16 get_last_patch_index()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> overlay_-&gt;get_last_patch_index(); }</div>
 <div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160; </div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;  <span class="keywordtype">void</span> setAtomicResult(<a class="code" href="classr__code_1_1_atom.html">Atom</a> a) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;  <span class="keywordtype">void</span> setAtomicResult(Atom a) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;  <span class="keywordtype">void</span> setTimestampResult(Timestamp t) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;  <span class="keywordtype">void</span> setDurationResult(std::chrono::microseconds d) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160; </div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;  uint16 setCompoundResultHead(<a class="code" href="classr__code_1_1_atom.html">Atom</a> a) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;  uint16 setCompoundResultHead(Atom a) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160; </div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;  <span class="keywordtype">void</span> addCompoundResultPart(<a class="code" href="classr__code_1_1_atom.html">Atom</a> a) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;  <span class="keywordtype">void</span> addCompoundResultPart(Atom a) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;  <span class="keywordtype">void</span> trace(std::ostream&amp; out) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;};</div>
@@ -219,7 +219,7 @@ $(function() {
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclassr__exec_1_1_overlay_html"><div class="ttname"><a href="classr__exec_1_1_overlay.html">r_exec::Overlay</a></div><div class="ttdef"><b>Definition:</b> <a href="overlay_8h_source.html#l00191">overlay.h:192</a></div></div>
+<div class="ttc" id="aclassr__exec_1_1_overlay_html"><div class="ttname"><a href="classr__exec_1_1_overlay.html">r_exec::Overlay</a></div><div class="ttdef"><b>Definition:</b> <a href="overlay_8h_source.html#l00103">overlay.h:104</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_atom_html"><div class="ttname"><a href="classr__code_1_1_atom.html">r_code::Atom</a></div><div class="ttdef"><b>Definition:</b> <a href="atom_8h_source.html#l00104">atom.h:104</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1___context_html_ab753a21e948d0e7d17c3cb2d4a75f909"><div class="ttname"><a href="classr__exec_1_1___context.html#ab753a21e948d0e7d17c3cb2d4a75f909">r_exec::_Context::dereference_new</a></div><div class="ttdeci">virtual _Context * dereference_new() const =0</div></div>
 <div class="ttc" id="aclassr__exec_1_1___context_html_a9fcefa7d7369ed1a9b195f9f0f91d136"><div class="ttname"><a href="classr__exec_1_1___context.html#a9fcefa7d7369ed1a9b195f9f0f91d136">r_exec::_Context::get_child_new</a></div><div class="ttdeci">virtual _Context * get_child_new(uint16 index) const =0</div></div>

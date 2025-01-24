@@ -87,10 +87,14 @@ Inheritance diagram for tcp_io_device::VariableDescription:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a8a8f8d5f3c516ec890bf04d80dea4f38"><td class="memItemLeft" align="right" valign="top"><a id="a8a8f8d5f3c516ec890bf04d80dea4f38"></a>enum &#160;</td><td class="memItemRight" valign="bottom">: int { <b>kDimensionsFieldNumber</b> = 4, 
+<tr class="memitem:a8a8f8d5f3c516ec890bf04d80dea4f38"><td class="memItemLeft" align="right" valign="top"><a id="a8a8f8d5f3c516ec890bf04d80dea4f38"></a>enum &#160;</td><td class="memItemRight" valign="bottom">: int { <br />
+&#160;&#160;<b>kDimensionsFieldNumber</b> = 4, 
+<b>kOpcodeStringHandleFieldNumber</b> = 5, 
 <b>kEntityIDFieldNumber</b> = 1, 
 <b>kIDFieldNumber</b> = 2, 
-<b>kDataTypeFieldNumber</b> = 3
+<br />
+&#160;&#160;<b>kDataTypeFieldNumber</b> = 3
+<br />
  }</td></tr>
 <tr class="separator:a8a8f8d5f3c516ec890bf04d80dea4f38"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac112d2787de65b639e875d4ecc972cf7"><td class="memItemLeft" align="right" valign="top"><a id="ac112d2787de65b639e875d4ecc972cf7"></a>
@@ -174,6 +178,25 @@ const ::PROTOBUF_NAMESPACE_ID::RepeatedField&lt; uint64_t &gt; &amp;&#160;</td><
 <tr class="memitem:a9ac8d54deb6da39aef258a00dbb16349"><td class="memItemLeft" align="right" valign="top"><a id="a9ac8d54deb6da39aef258a00dbb16349"></a>
 ::PROTOBUF_NAMESPACE_ID::RepeatedField&lt; uint64_t &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>mutable_dimensions</b> ()</td></tr>
 <tr class="separator:a9ac8d54deb6da39aef258a00dbb16349"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b67a83c4aca5678f57085432e73e8c0"><td class="memItemLeft" align="right" valign="top"><a id="a7b67a83c4aca5678f57085432e73e8c0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>clear_opcode_string_handle</b> ()</td></tr>
+<tr class="separator:a7b67a83c4aca5678f57085432e73e8c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c71aded215c78d15dec7f37c301021b"><td class="memItemLeft" align="right" valign="top"><a id="a0c71aded215c78d15dec7f37c301021b"></a>
+const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>opcode_string_handle</b> () const</td></tr>
+<tr class="separator:a0c71aded215c78d15dec7f37c301021b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7216ea52f9106c6675495bdd02422e5f"><td class="memTemplParams" colspan="2"><a id="a7216ea52f9106c6675495bdd02422e5f"></a>
+template&lt;typename ArgT0  = const std::string&amp;, typename... ArgT&gt; </td></tr>
+<tr class="memitem:a7216ea52f9106c6675495bdd02422e5f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>set_opcode_string_handle</b> (ArgT0 &amp;&amp;arg0, ArgT... args)</td></tr>
+<tr class="separator:a7216ea52f9106c6675495bdd02422e5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af56795092076922da7fceb4502839637"><td class="memItemLeft" align="right" valign="top"><a id="af56795092076922da7fceb4502839637"></a>
+std::string *&#160;</td><td class="memItemRight" valign="bottom"><b>mutable_opcode_string_handle</b> ()</td></tr>
+<tr class="separator:af56795092076922da7fceb4502839637"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06bca9558a2d996d68ffb36ba60e4123"><td class="memItemLeft" align="right" valign="top"><a id="a06bca9558a2d996d68ffb36ba60e4123"></a>
+PROTOBUF_NODISCARD std::string *&#160;</td><td class="memItemRight" valign="bottom"><b>release_opcode_string_handle</b> ()</td></tr>
+<tr class="separator:a06bca9558a2d996d68ffb36ba60e4123"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af732157dc11eeda7cc1f83f4eb2de67e"><td class="memItemLeft" align="right" valign="top"><a id="af732157dc11eeda7cc1f83f4eb2de67e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>set_allocated_opcode_string_handle</b> (std::string *opcode_string_handle)</td></tr>
+<tr class="separator:af732157dc11eeda7cc1f83f4eb2de67e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa00bc972114010e68e503bbfddb0936b"><td class="memItemLeft" align="right" valign="top"><a id="aa00bc972114010e68e503bbfddb0936b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>clear_entityid</b> ()</td></tr>
 <tr class="separator:aa00bc972114010e68e503bbfddb0936b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -201,6 +224,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>clear_datatype</b> ()
 <tr class="memitem:aaaa90ef5d14adc0d6387b1f3521beb85"><td class="memItemLeft" align="right" valign="top"><a id="aaaa90ef5d14adc0d6387b1f3521beb85"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>set_datatype</b> (::tcp_io_device::VariableDescription_DataType value)</td></tr>
 <tr class="separator:aaaa90ef5d14adc0d6387b1f3521beb85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a990da9e998c68d0a556500b91521412f"><td class="memTemplParams" colspan="2"><a id="a990da9e998c68d0a556500b91521412f"></a>
+template&lt;typename ArgT0 , typename... ArgT&gt; </td></tr>
+<tr class="memitem:a990da9e998c68d0a556500b91521412f"><td class="memTemplItemLeft" align="right" valign="top">PROTOBUF_ALWAYS_INLINE void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>set_opcode_string_handle</b> (ArgT0 &amp;&amp;arg0, ArgT... args)</td></tr>
+<tr class="separator:a990da9e998c68d0a556500b91521412f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -250,6 +277,8 @@ static const ClassData&#160;</td><td class="memItemRight" valign="bottom"><b>_cl
 <tr class="separator:a97c45949ba12411a86daa0cbbe339bf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d8ecb0c34651ecb591ec7a84d835d3b"><td class="memItemLeft" align="right" valign="top">static constexpr DataType&#160;</td><td class="memItemRight" valign="bottom"><b>BYTES</b></td></tr>
 <tr class="separator:a8d8ecb0c34651ecb591ec7a84d835d3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1eaa0f305ef8573748afa6542800d23e"><td class="memItemLeft" align="right" valign="top">static constexpr DataType&#160;</td><td class="memItemRight" valign="bottom"><b>COMMUNICATION_ID</b></td></tr>
+<tr class="separator:a1eaa0f305ef8573748afa6542800d23e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a94fa1112815d62076cc830ca807d2c90"><td class="memItemLeft" align="right" valign="top">static constexpr DataType&#160;</td><td class="memItemRight" valign="bottom"><b>DataType_MIN</b></td></tr>
 <tr class="separator:a94fa1112815d62076cc830ca807d2c90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0516e04b08b5126f687c830092a5388e"><td class="memItemLeft" align="right" valign="top">static constexpr DataType&#160;</td><td class="memItemRight" valign="bottom"><b>DataType_MAX</b></td></tr>
@@ -281,7 +310,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>swap</b> (<a class="e
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l01369">1369</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l01442">1442</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a8347691969ecad70cac08ec99f5a55bb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8347691969ecad70cac08ec99f5a55bb">&#9670;&nbsp;</a></span>BOOL</h2>
@@ -305,7 +334,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>swap</b> (<a class="e
 <b>Initial value:</b><div class="fragment"><div class="line">=</div>
 <div class="line">    VariableDescription_DataType_BOOL</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l01492">1492</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l01565">1565</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
 
 </div>
 </div>
@@ -331,7 +360,33 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>swap</b> (<a class="e
 <b>Initial value:</b><div class="fragment"><div class="line">=</div>
 <div class="line">    VariableDescription_DataType_BYTES</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l01496">1496</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l01569">1569</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
+
+</div>
+</div>
+<a id="a1eaa0f305ef8573748afa6542800d23e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1eaa0f305ef8573748afa6542800d23e">&#9670;&nbsp;</a></span>COMMUNICATION_ID</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr DataType tcp_io_device::VariableDescription::COMMUNICATION_ID</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">    VariableDescription_DataType_COMMUNICATION_ID</div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l01571">1571</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
 
 </div>
 </div>
@@ -357,7 +412,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>swap</b> (<a class="e
 <b>Initial value:</b><div class="fragment"><div class="line">=</div>
 <div class="line">    VariableDescription_DataType_DataType_ARRAYSIZE</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l01505">1505</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l01580">1580</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
 
 </div>
 </div>
@@ -383,7 +438,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>swap</b> (<a class="e
 <b>Initial value:</b><div class="fragment"><div class="line">=</div>
 <div class="line">    VariableDescription_DataType_DataType_MAX</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l01503">1503</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l01578">1578</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
 
 </div>
 </div>
@@ -409,7 +464,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>swap</b> (<a class="e
 <b>Initial value:</b><div class="fragment"><div class="line">=</div>
 <div class="line">    VariableDescription_DataType_DataType_MIN</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l01501">1501</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l01576">1576</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
 
 </div>
 </div>
@@ -435,7 +490,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>swap</b> (<a class="e
 <b>Initial value:</b><div class="fragment"><div class="line">=</div>
 <div class="line">    VariableDescription_DataType_DOUBLE</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l01488">1488</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l01561">1561</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
 
 </div>
 </div>
@@ -461,7 +516,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>swap</b> (<a class="e
 <b>Initial value:</b><div class="fragment"><div class="line">=</div>
 <div class="line">    VariableDescription_DataType_INT64</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l01490">1490</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l01563">1563</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
 
 </div>
 </div>
@@ -487,7 +542,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>swap</b> (<a class="e
 <b>Initial value:</b><div class="fragment"><div class="line">=</div>
 <div class="line">    9</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l01416">1416</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l01489">1489</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
 
 </div>
 </div>
@@ -513,7 +568,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>swap</b> (<a class="e
 <b>Initial value:</b><div class="fragment"><div class="line">=</div>
 <div class="line">    VariableDescription_DataType_STRING</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l01494">1494</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l01567">1567</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
 
 </div>
 </div>

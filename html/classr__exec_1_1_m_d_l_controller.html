@@ -411,9 +411,9 @@ std::chrono::microseconds&#160;</td><td class="memItemRight" valign="bottom"><b>
 <a class="el" href="classcore_1_1_critical_section.html">CriticalSection</a>&#160;</td><td class="memItemRight" valign="bottom"><b>reductionCS_</b></td></tr>
 <tr class="separator:ada86ac20f77db6a9fc44001248c8cc2c inherit pro_attribs_classr__exec_1_1_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classcore_1_1___object"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classcore_1_1___object')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classcore_1_1___object.html">core::_Object</a></td></tr>
-<tr class="memitem:a78942b476c06f3f3cab6c8fb0dba30e4 inherit pro_attribs_classcore_1_1___object"><td class="memItemLeft" align="right" valign="top"><a id="a78942b476c06f3f3cab6c8fb0dba30e4"></a>
-int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</b></td></tr>
-<tr class="separator:a78942b476c06f3f3cab6c8fb0dba30e4 inherit pro_attribs_classcore_1_1___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8a8ee727ee2e8e69a4ce13a3a6eccff inherit pro_attribs_classcore_1_1___object"><td class="memItemLeft" align="right" valign="top"><a id="ac8a8ee727ee2e8e69a4ce13a3a6eccff"></a>
+std::atomic_int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</b></td></tr>
+<tr class="separator:ac8a8ee727ee2e8e69a4ce13a3a6eccff inherit pro_attribs_classcore_1_1___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-attribs"></a>
 Static Protected Attributes</h2></td></tr>
@@ -423,6 +423,13 @@ static const uint32&#160;</td><td class="memItemRight" valign="bottom"><b>LHSCon
 <tr class="memitem:ad7db6ca5b1babb2acd146e975e777571"><td class="memItemLeft" align="right" valign="top"><a id="ad7db6ca5b1babb2acd146e975e777571"></a>
 static const uint32&#160;</td><td class="memItemRight" valign="bottom"><b>RHSController</b> = 1</td></tr>
 <tr class="separator:ad7db6ca5b1babb2acd146e975e777571"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_static_methods_classr__exec_1_1_controller"><td colspan="2" onclick="javascript:toggleInherit('pro_static_methods_classr__exec_1_1_controller')"><img src="closed.png" alt="-"/>&#160;Static Protected Member Functions inherited from <a class="el" href="classr__exec_1_1_controller.html">r_exec::Controller</a></td></tr>
+<tr class="memitem:a3e873692a1960a060c44778fba828ebb inherit pro_static_methods_classr__exec_1_1_controller"><td class="memItemLeft" align="right" valign="top"><a id="a3e873692a1960a060c44778fba828ebb"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>push_reduction_job</b> (<a class="el" href="classr__exec_1_1___reduction_job.html">_ReductionJob</a> *j)</td></tr>
+<tr class="separator:a3e873692a1960a060c44778fba828ebb inherit pro_static_methods_classr__exec_1_1_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classr__exec_1_1_requirements.html">Requirements</a> don't monitor their predictions: they don't inject any; instead, they store a f-&gt;imdl in the controlled model controllers (both primary and secondary), thus, no success injected for the productions of requirements. Models controlled by requirements maintain for each prediction they make, a list of all the controllers of the requirements having allowed/inhibited said prediction. P-monitors (associated to non-requirement models) propagate the outcome to the controllers associated with the prediction they monitor.</p>
@@ -431,7 +438,7 @@ static const uint32&#160;</td><td class="memItemRight" valign="bottom"><b>RHSCon
 <p>Successes and failures are injected only in output groups.</p>
 <p>If forward chaining is inhibited (by strong reqs with better cfd than weak reqs), predictions are still produced, but not injected (no mk.rdx): this is to allow the rating of the requirements. </p>
 
-<p class="definition">Definition at line <a class="el" href="mdl__controller_8h_source.html#l00186">186</a> of file <a class="el" href="mdl__controller_8h_source.html">mdl_controller.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mdl__controller_8h_source.html#l00187">187</a> of file <a class="el" href="mdl__controller_8h_source.html">mdl_controller.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a9afc89f432d17e0b95aace62c1ca133d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9afc89f432d17e0b95aace62c1ca133d">&#9670;&nbsp;</a></span>get_imdl_template_timings()</h2>
@@ -496,7 +503,7 @@ static const uint32&#160;</td><td class="memItemRight" valign="bottom"><b>RHSCon
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True for success, otherwise false if there are not enough template parameters, or if the value is some type other than a timestamp (such as an unbound variable). </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="mdl__controller_8cpp_source.html#l01098">1098</a> of file <a class="el" href="mdl__controller_8cpp_source.html">mdl_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mdl__controller_8cpp_source.html#l01102">1102</a> of file <a class="el" href="mdl__controller_8cpp_source.html">mdl_controller.cpp</a>.</p>
 
 </div>
 </div>
@@ -524,7 +531,7 @@ static const uint32&#160;</td><td class="memItemRight" valign="bottom"><b>RHSCon
 </div><div class="memdoc">
 <p>Get the success rate from the mdl object. </p><dl class="section return"><dt>Returns</dt><dd>The success rate. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="mdl__controller_8cpp_source.html#l00361">361</a> of file <a class="el" href="mdl__controller_8cpp_source.html">mdl_controller.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mdl__controller_8cpp_source.html#l00365">365</a> of file <a class="el" href="mdl__controller_8cpp_source.html">mdl_controller.cpp</a>.</p>
 
 </div>
 </div>

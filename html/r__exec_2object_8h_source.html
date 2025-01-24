@@ -74,9 +74,9 @@ $(function() {
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//_/_/ AERA</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//_/_/ Autocatalytic Endogenous Reflective Architecture</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//_/_/ </span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Jeff Thompson</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Kristinn R. Thorisson</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Icelandic Institute for Intelligent Machines</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2025 Jeff Thompson</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//_/_/ http://www.iiim.is</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//_/_/ </span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//_/_/ Copyright (c) 2010-2012 Eric Nivel</span></div>
@@ -169,7 +169,7 @@ $(function() {
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">bool</span> IsNotification(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *<span class="keywordtype">object</span>) {</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;  <span class="keywordflow">switch</span> (object-&gt;code(0).getDescriptor()) {</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;  <span class="keywordflow">case</span> Atom::MARKER:</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;  <span class="keywordflow">case</span> r_code::Atom::MARKER:</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordflow">return</span> <span class="keywordtype">object</span>-&gt;code(0).asOpcode() == Opcodes::MkActChg ||</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;      <span class="keywordtype">object</span>-&gt;code(0).asOpcode() == Opcodes::MkHighAct ||</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;      <span class="keywordtype">object</span>-&gt;code(0).asOpcode() == Opcodes::MkHighSln ||</div>
@@ -206,7 +206,7 @@ $(function() {
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;  <a class="code" href="classr__code_1_1___view.html">r_code::_View</a> *build_view(<a class="code" href="classr__code_1_1_sys_view.html">r_code::SysView</a> *source)<span class="keyword"> override </span>{</div>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    <span class="keywordflow">return</span> Code::build_view&lt;r_exec::View&gt;(source);</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    <span class="keywordflow">return</span> r_code::Code::build_view&lt;r_exec::View&gt;(source);</div>
 <div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;  }</div>
 <div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
 <div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;  <span class="keywordtype">bool</span> is_invalidated() <span class="keyword">override</span>;</div>
@@ -225,7 +225,7 @@ $(function() {
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;  <span class="keywordtype">void</span> set(uint16 member_index, float32 value) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;  <span class="keywordtype">void</span> mod(uint16 member_index, float32 value) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;  <a class="code" href="classr__exec_1_1_view.html">View</a> *get_view(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *group, <span class="keywordtype">bool</span> lock) <span class="keyword">override</span>; <span class="comment">// returns the found view if any, NULL otherwise.</span></div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;  <a class="code" href="classr__code_1_1___view.html">r_code::_View</a> *get_view(<a class="code" href="classr__code_1_1_code.html">r_code::Code</a> *group, <span class="keywordtype">bool</span> lock) <span class="keyword">override</span>; <span class="comment">// returns the found view if any, NULL otherwise.</span></div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160; </div>
 <div class="line"><a name="l00159"></a><span class="lineno"><a class="line" href="classr__exec_1_1_object_1_1_hash.html">  159</a></span>&#160;  <span class="keyword">class </span><a class="code" href="classr__exec_1_1_object_1_1_hash.html">Hash</a> {</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;  <span class="keyword">public</span>:</div>
@@ -285,8 +285,7 @@ $(function() {
 <div class="ttc" id="aclassr__code_1_1_sys_object_html"><div class="ttname"><a href="classr__code_1_1_sys_object.html">r_code::SysObject</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00135">r_code/object.h:136</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_l_object_html"><div class="ttname"><a href="classr__exec_1_1_l_object.html">r_exec::LObject</a></div><div class="ttdef"><b>Definition:</b> <a href="r__exec_2object_8h_source.html#l00194">r_exec/object.h:195</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_code_html"><div class="ttname"><a href="classr__code_1_1_code.html">r_code::Code</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00223">r_code/object.h:224</a></div></div>
-<div class="ttc" id="aclasscore_1_1_critical_section_html"><div class="ttname"><a href="classcore_1_1_critical_section.html">core::CriticalSection</a></div><div class="ttdef"><b>Definition:</b> <a href="submodules_2_core_library_2_core_library_2utils_8h_source.html#l00234">submodules/CoreLibrary/CoreLibrary/utils.h:234</a></div></div>
-<div class="ttc" id="aclassr__exec_1_1_view_html"><div class="ttname"><a href="classr__exec_1_1_view.html">r_exec::View</a></div><div class="ttdef"><b>Definition:</b> <a href="view_8h_source.html#l00101">view.h:102</a></div></div>
+<div class="ttc" id="aclasscore_1_1_critical_section_html"><div class="ttname"><a href="classcore_1_1_critical_section.html">core::CriticalSection</a></div><div class="ttdef"><b>Definition:</b> <a href="submodules_2_core_library_2_core_library_2utils_8h_source.html#l00233">submodules/CoreLibrary/CoreLibrary/utils.h:233</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_mem_html"><div class="ttname"><a href="classr__code_1_1_mem.html">r_code::Mem</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00420">r_code/object.h:420</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_object_1_1_hash_html"><div class="ttname"><a href="classr__exec_1_1_object_1_1_hash.html">r_exec::Object::Hash</a></div><div class="ttdef"><b>Definition:</b> <a href="r__exec_2object_8h_source.html#l00159">r_exec/object.h:159</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_object_html"><div class="ttname"><a href="classr__exec_1_1_object.html">r_exec::Object</a></div><div class="ttdef"><b>Definition:</b> <a href="r__exec_2object_8h_source.html#l00120">r_exec/object.h:121</a></div></div>

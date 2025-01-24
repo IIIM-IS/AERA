@@ -68,6 +68,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-static-methods">Static Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classr__exec_1_1_controller-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -168,6 +169,12 @@ template&lt;class C &gt; </td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Controller</b> (<a class="el" href="classr__code_1_1___view.html">r_code::_View</a> *view)</td></tr>
 <tr class="separator:a291a01000a15d1e24b5b5a0603bfe2a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-methods"></a>
+Static Protected Member Functions</h2></td></tr>
+<tr class="memitem:a3e873692a1960a060c44778fba828ebb"><td class="memItemLeft" align="right" valign="top"><a id="a3e873692a1960a060c44778fba828ebb"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>push_reduction_job</b> (<a class="el" href="classr__exec_1_1___reduction_job.html">_ReductionJob</a> *j)</td></tr>
+<tr class="separator:a3e873692a1960a060c44778fba828ebb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:af78ca31cdbf053453cb617522d1ebcd7"><td class="memItemLeft" align="right" valign="top"><a id="af78ca31cdbf053453cb617522d1ebcd7"></a>
@@ -186,15 +193,15 @@ std::chrono::microseconds&#160;</td><td class="memItemRight" valign="bottom"><b>
 <a class="el" href="classcore_1_1_critical_section.html">CriticalSection</a>&#160;</td><td class="memItemRight" valign="bottom"><b>reductionCS_</b></td></tr>
 <tr class="separator:ada86ac20f77db6a9fc44001248c8cc2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classcore_1_1___object"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classcore_1_1___object')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classcore_1_1___object.html">core::_Object</a></td></tr>
-<tr class="memitem:a78942b476c06f3f3cab6c8fb0dba30e4 inherit pro_attribs_classcore_1_1___object"><td class="memItemLeft" align="right" valign="top"><a id="a78942b476c06f3f3cab6c8fb0dba30e4"></a>
-int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</b></td></tr>
-<tr class="separator:a78942b476c06f3f3cab6c8fb0dba30e4 inherit pro_attribs_classcore_1_1___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8a8ee727ee2e8e69a4ce13a3a6eccff inherit pro_attribs_classcore_1_1___object"><td class="memItemLeft" align="right" valign="top"><a id="ac8a8ee727ee2e8e69a4ce13a3a6eccff"></a>
+std::atomic_int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</b></td></tr>
+<tr class="separator:ac8a8ee727ee2e8e69a4ce13a3a6eccff inherit pro_attribs_classcore_1_1___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="overlay_8h_source.html#l00136">136</a> of file <a class="el" href="overlay_8h_source.html">overlay.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="controller_8h_source.html#l00103">103</a> of file <a class="el" href="controller_8h_source.html">controller.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
-<li><a class="el" href="overlay_8h_source.html">overlay.h</a></li>
+<li><a class="el" href="controller_8h_source.html">controller.h</a></li>
 <li><a class="el" href="overlay_8cpp_source.html">overlay.cpp</a></li>
 </ul>
 </div><!-- contents -->

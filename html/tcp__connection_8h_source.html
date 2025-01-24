@@ -61,7 +61,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_fe6eb5064d42f9f773e90d3512fafa25.html">submodules</a></li><li class="navelem"><a class="el" href="dir_1e141255ad39831268f400e8e061c781.html">AERA</a></li><li class="navelem"><a class="el" href="dir_563b4417c18ebea5ad2ab695d0ed614a.html">AERA</a></li><li class="navelem"><a class="el" href="dir_3b2cf3346668519073fca8d1102c0510.html">IODevices</a></li><li class="navelem"><a class="el" href="dir_35c407fc821c59495cb9c8ed67dff5de.html">TCP</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_fe6eb5064d42f9f773e90d3512fafa25.html">submodules</a></li><li class="navelem"><a class="el" href="dir_1e141255ad39831268f400e8e061c781.html">AERA</a></li><li class="navelem"><a class="el" href="dir_563b4417c18ebea5ad2ab695d0ed614a.html">AERA</a></li><li class="navelem"><a class="el" href="dir_3b2cf3346668519073fca8d1102c0510.html">IODevices</a></li><li class="navelem"><a class="el" href="dir_35c407fc821c59495cb9c8ed67dff5de.html">TCP</a></li><li class="navelem"><a class="el" href="dir_554266278be06217b5261803e27c268e.html">AERA_Protobuf</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -74,10 +74,10 @@ $(function() {
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//_/_/ AERA</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//_/_/ Autocatalytic Endogenous Reflective Architecture</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//_/_/ </span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Jeff Thompson</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//_/_/ Copyright (c) 2021 Leonard Eberding</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2025 Jeff Thompson</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//_/_/ Copyright (c) 2021-2025 Leonard Eberding</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//_/_/ http://www.iiim.is</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//_/_/</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">//_/_/ --- Open-Source BSD License, with CADIA Clause v 1.0 ---</span></div>
@@ -131,146 +131,170 @@ $(function() {
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="preprocessor">#include &lt;queue&gt;</span></div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor">#include &lt;mutex&gt;</span></div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="preprocessor">#include &lt;condition_variable&gt;</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#include &lt;winsock2.h&gt;</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#include &lt;windows.h&gt;</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="preprocessor">#include &lt;ws2tcpip.h&gt;</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">#include &lt;stdio.h&gt;</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="preprocessor">#include &lt;thread&gt;</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">#include &lt;bitset&gt;</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="preprocessor">#include&quot;../r_exec/init.h&quot;</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#if defined(_WIN32)</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#include &lt;winsock2.h&gt;</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="preprocessor">#include &lt;windows.h&gt;</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="preprocessor">#include &lt;ws2tcpip.h&gt;</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">#include &lt;stdio.h&gt;</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="preprocessor">#include &lt;thread&gt;</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="preprocessor">#include &lt;bitset&gt;</span></div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor">#include &quot;Proto/tcp_data_message.pb.h&quot;</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="keyword">namespace </span>tcp_io_device {</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_safe_queue.html">   81</a></span>&#160;  <span class="keyword">class </span><a class="code" href="classtcp__io__device_1_1_safe_queue.html">SafeQueue</a></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;  {</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00087"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_safe_queue.html#ac6fe734cedc04c27d57ac19fcd0a7bb0">   87</a></span>&#160;    <a class="code" href="classtcp__io__device_1_1_safe_queue.html#ac6fe734cedc04c27d57ac19fcd0a7bb0">SafeQueue</a>()</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;      : queue_()</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;      , mutex_()</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    {</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;      max_elements_ = 1;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    }</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00098"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_safe_queue.html#a0e5621427a6575c7d72f8f4fe29ed0d4">   98</a></span>&#160;    <a class="code" href="classtcp__io__device_1_1_safe_queue.html#a0e5621427a6575c7d72f8f4fe29ed0d4">SafeQueue</a>(<span class="keywordtype">int</span> max_elements)</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;      : queue_()</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;      , mutex_()</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    {</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;      max_elements_ = max_elements;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    }</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    ~<a class="code" href="classtcp__io__device_1_1_safe_queue.html">SafeQueue</a>()</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    {}</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
-<div class="line"><a name="l00112"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_safe_queue.html#a7e098a08d9a9403bf0fea4a7030eb024">  112</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classtcp__io__device_1_1_safe_queue.html#a7e098a08d9a9403bf0fea4a7030eb024">enqueue</a>(std::unique_ptr&lt;TCPMessage&gt; t)</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    {</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;      std::lock_guard&lt;std::recursive_mutex&gt; lock(mutex_);</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;      <span class="keywordflow">while</span> (queue_.size() &gt;= max_elements_) {</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        <span class="keywordflow">if</span> (queue_.front()-&gt;messagetype() == TCPMessage_Type_DATA) {</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;          queue_.front()-&gt;release_datamessage();</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        }</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        queue_.pop();</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;      }</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;      queue_.push(std::move(t));</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    }</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor">#include &quot;tcp_data_message.pb.h&quot;</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="keyword">namespace </span>tcp_io_device {</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_safe_queue.html">   82</a></span>&#160;  <span class="keyword">class </span><a class="code" href="classtcp__io__device_1_1_safe_queue.html">SafeQueue</a></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;  {</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00088"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_safe_queue.html#ac6fe734cedc04c27d57ac19fcd0a7bb0">   88</a></span>&#160;    <a class="code" href="classtcp__io__device_1_1_safe_queue.html#ac6fe734cedc04c27d57ac19fcd0a7bb0">SafeQueue</a>()</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;      : queue_()</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;      , mutex_()</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    {</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;      max_elements_ = 1;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    }</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00099"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_safe_queue.html#a0e5621427a6575c7d72f8f4fe29ed0d4">   99</a></span>&#160;    <a class="code" href="classtcp__io__device_1_1_safe_queue.html#a0e5621427a6575c7d72f8f4fe29ed0d4">SafeQueue</a>(<span class="keywordtype">int</span> max_elements)</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;      : queue_()</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;      , mutex_()</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    {</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;      max_elements_ = max_elements;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    }</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    ~<a class="code" href="classtcp__io__device_1_1_safe_queue.html">SafeQueue</a>()</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    {}</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_safe_queue.html#a7e098a08d9a9403bf0fea4a7030eb024">  113</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classtcp__io__device_1_1_safe_queue.html#a7e098a08d9a9403bf0fea4a7030eb024">enqueue</a>(std::unique_ptr&lt;TCPMessage&gt; t)</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    {</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;      std::lock_guard&lt;std::recursive_mutex&gt; lock(mutex_);</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;      <span class="keywordflow">while</span> (queue_.size() &gt;= max_elements_) {</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="keywordflow">if</span> (queue_.front()-&gt;messagetype() == TCPMessage_Type_DATA) {</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;          queue_.front()-&gt;release_datamessage();</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        }</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        queue_.pop();</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;      }</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;      queue_.push(std::move(t));</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    }</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
-<div class="line"><a name="l00129"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_safe_queue.html#a800a8c8740d552b5574e59cdd9403f60">  129</a></span>&#160;    std::unique_ptr&lt;TCPMessage&gt; <a class="code" href="classtcp__io__device_1_1_safe_queue.html#a800a8c8740d552b5574e59cdd9403f60">dequeue</a>()</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    {</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;      std::lock_guard&lt;std::recursive_mutex&gt; lock(mutex_);</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;      <span class="keywordflow">if</span> (queue_.empty()) {</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        <span class="keywordflow">return</span> NULL;</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;      }</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;      std::unique_ptr&lt;TCPMessage&gt; val = std::move(queue_.front());</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;      queue_.pop();</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;      <span class="keywordflow">return</span> val;</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    }</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
-<div class="line"><a name="l00143"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_safe_queue.html#a8b74e42d87bda80d8b7c791223464ec6">  143</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classtcp__io__device_1_1_safe_queue.html#a8b74e42d87bda80d8b7c791223464ec6">clear</a>() {</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;      std::lock_guard&lt;std::recursive_mutex&gt; lock(mutex_);</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;      <span class="keywordflow">while</span> (queue_.size() &gt; 0) {</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        <span class="keywordflow">if</span> (queue_.front()-&gt;messagetype() == TCPMessage_Type_DATA) {</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;          queue_.front()-&gt;release_datamessage();</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        }</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        queue_.pop();</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;      }</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    }</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160; </div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
+<div class="line"><a name="l00130"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_safe_queue.html#a800a8c8740d552b5574e59cdd9403f60">  130</a></span>&#160;    std::unique_ptr&lt;TCPMessage&gt; <a class="code" href="classtcp__io__device_1_1_safe_queue.html#a800a8c8740d552b5574e59cdd9403f60">dequeue</a>()</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    {</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;      std::lock_guard&lt;std::recursive_mutex&gt; lock(mutex_);</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;      <span class="keywordflow">if</span> (queue_.empty()) {</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        <span class="keywordflow">return</span> NULL;</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;      }</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;      std::unique_ptr&lt;TCPMessage&gt; val = std::move(queue_.front());</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;      queue_.pop();</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;      <span class="keywordflow">return</span> val;</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    }</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
+<div class="line"><a name="l00144"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_safe_queue.html#a8b74e42d87bda80d8b7c791223464ec6">  144</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classtcp__io__device_1_1_safe_queue.html#a8b74e42d87bda80d8b7c791223464ec6">clear</a>() {</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;      std::lock_guard&lt;std::recursive_mutex&gt; lock(mutex_);</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;      <span class="keywordflow">while</span> (queue_.size() &gt; 0) {</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;        <span class="keywordflow">if</span> (queue_.front()-&gt;messagetype() == TCPMessage_Type_DATA) {</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;          queue_.front()-&gt;release_datamessage();</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        }</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        queue_.pop();</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;      }</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    }</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160; </div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;  <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    std::queue&lt;std::unique_ptr&lt;TCPMessage&gt;&gt; queue_;</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    <span class="keyword">mutable</span> std::recursive_mutex mutex_;</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    <span class="keywordtype">int</span> max_elements_;</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;  };</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; </div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    std::queue&lt;std::unique_ptr&lt;TCPMessage&gt;&gt; queue_;</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    <span class="keyword">mutable</span> std::recursive_mutex mutex_;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <span class="keywordtype">int</span> max_elements_;</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;  };</div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
-<div class="line"><a name="l00166"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_t_c_p_connection.html">  166</a></span>&#160;  <span class="keyword">class </span><a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html">TCPConnection</a></div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;  {</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
-<div class="line"><a name="l00176"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_t_c_p_connection.html#a90c7d0bf43dc11d7c2e18963e1a04365">  176</a></span>&#160;    <a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html#a90c7d0bf43dc11d7c2e18963e1a04365">TCPConnection</a>(std::shared_ptr&lt;SafeQueue&gt; receive_queue, std::shared_ptr&lt;SafeQueue&gt; send_queue, uint64_t msg_length_buf_size);</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    ~<a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html">TCPConnection</a>();</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160; </div>
-<div class="line"><a name="l00183"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_t_c_p_connection.html#a9f1eecfabb9eaca78c02413fc15544ba">  183</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html#a9f1eecfabb9eaca78c02413fc15544ba">establishConnection</a>(std::string port);</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160; </div>
-<div class="line"><a name="l00188"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_t_c_p_connection.html#a420506b904a4034a930ea55f4954c710">  188</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html#a420506b904a4034a930ea55f4954c710">start</a>();</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160; </div>
-<div class="line"><a name="l00193"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_t_c_p_connection.html#a29140209448c2cfb7d4ceb1eccb78f32">  193</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html#a29140209448c2cfb7d4ceb1eccb78f32">stop</a>();</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160; </div>
-<div class="line"><a name="l00199"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_t_c_p_connection.html#ad967048c1a74c3149ca75b6d83855aac">  199</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html#ad967048c1a74c3149ca75b6d83855aac">isRunning</a>() { <span class="keywordflow">return</span> state_ == RUNNING; }</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160; </div>
-<div class="line"><a name="l00206"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_t_c_p_connection.html#aa6800760a32112a7ed906a209a0134bd">  206</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html#aa6800760a32112a7ed906a209a0134bd">receiveIsReady</a>(SOCKET fd);</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; </div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;  <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160; </div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">enum</span> {</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;      NOT_STARTED = 0,</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;      RUNNING = 1,</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;      STOPPED = 2,</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;    }State;</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160; </div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;    State state_;</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160; </div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160; </div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;    std::shared_ptr&lt;std::thread&gt; tcp_background_thread_;</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160; </div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;    SOCKET tcp_client_socket_;</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160; </div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    uint64_t msg_buf_size_;</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;    uint64_t msg_length_buf_size_;</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160; </div>
+<div class="line"><a name="l00167"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_t_c_p_connection.html">  167</a></span>&#160;  <span class="keyword">class </span><a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html">TCPConnection</a> {</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160; </div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    <span class="keyword">static</span> std::map&lt;int, std::string&gt; type_to_name_map_;</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160; </div>
+<div class="line"><a name="l00179"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_t_c_p_connection.html#a90c7d0bf43dc11d7c2e18963e1a04365">  179</a></span>&#160;    <a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html#a90c7d0bf43dc11d7c2e18963e1a04365">TCPConnection</a>(std::shared_ptr&lt;SafeQueue&gt; receive_queue, std::shared_ptr&lt;SafeQueue&gt; send_queue, uint64_t msg_length_buf_size);</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    ~<a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html">TCPConnection</a>();</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160; </div>
+<div class="line"><a name="l00187"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_t_c_p_connection.html#affc88dcbc7459ee2910d9cb764a8b92b">  187</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html#affc88dcbc7459ee2910d9cb764a8b92b">listenAndAwaitConnection</a>(std::string port);</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160; </div>
+<div class="line"><a name="l00195"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_t_c_p_connection.html#a4791e088add9ed62137c27e73d1b78c2">  195</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html#a4791e088add9ed62137c27e73d1b78c2">establishConnection</a>(std::string host, std::string port);</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160; </div>
+<div class="line"><a name="l00200"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_t_c_p_connection.html#a420506b904a4034a930ea55f4954c710">  200</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html#a420506b904a4034a930ea55f4954c710">start</a>();</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160; </div>
+<div class="line"><a name="l00205"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_t_c_p_connection.html#a29140209448c2cfb7d4ceb1eccb78f32">  205</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html#a29140209448c2cfb7d4ceb1eccb78f32">stop</a>();</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160; </div>
+<div class="line"><a name="l00211"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_t_c_p_connection.html#ad967048c1a74c3149ca75b6d83855aac">  211</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html#ad967048c1a74c3149ca75b6d83855aac">isRunning</a>() { <span class="keywordflow">return</span> state_ == RUNNING; }</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160; </div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;<span class="preprocessor">#if defined(_WIN32)</span></div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html#ab33d3b7979092445d468e61e406d140d">receiveIsReady</a>(SOCKET fd);</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00221"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_t_c_p_connection.html#ab33d3b7979092445d468e61e406d140d">  221</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html#ab33d3b7979092445d468e61e406d140d">receiveIsReady</a>(<span class="keywordtype">int</span> fd);</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160; </div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;  <span class="keyword">protected</span>:</div>
 <div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160; </div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    std::shared_ptr&lt;SafeQueue&gt; incoming_queue_;</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    std::shared_ptr&lt;SafeQueue&gt; outgoing_queue_;</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160; </div>
-<div class="line"><a name="l00234"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_t_c_p_connection.html#ad1eda9dea3bc1c47d3a226c7a210994e">  234</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html#ad1eda9dea3bc1c47d3a226c7a210994e">tcpBackgroundHandler</a>();</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160; </div>
-<div class="line"><a name="l00240"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_t_c_p_connection.html#aaf0663da349d650a0b286446e3bb40c7">  240</a></span>&#160;    std::unique_ptr&lt;TCPMessage&gt; <a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html#aaf0663da349d650a0b286446e3bb40c7">receiveMessage</a>();</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">enum</span> {</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;      NOT_STARTED = 0,</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;      RUNNING = 1,</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;      STOPPED = 2,</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    }State;</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160; </div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">enum</span> {</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;      CLIENT = 0,</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;      SERVER = 1,</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;    }SocketType;</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160; </div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    State state_;</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    SocketType socket_type_;</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160; </div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    std::shared_ptr&lt;std::thread&gt; tcp_background_thread_;</div>
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160; </div>
-<div class="line"><a name="l00247"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_t_c_p_connection.html#a5426be925c05c29e55fdd3b57330a5f5">  247</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html#a5426be925c05c29e55fdd3b57330a5f5">sendMessage</a>(std::unique_ptr&lt;TCPMessage&gt; msg);</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;  };</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;<span class="preprocessor">#if defined(_WIN32)</span></div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    SOCKET tcp_socket_;</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    SOCKET server_listen_socket_;</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    <span class="keywordtype">int</span> tcp_socket_;</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    <span class="keywordtype">int</span> server_listen_socket_;</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160; </div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;} <span class="comment">// namespace tcp_io_device</span></div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;    uint64_t msg_buf_size_;</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    uint64_t msg_length_buf_size_;</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160; </div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;    std::shared_ptr&lt;SafeQueue&gt; incoming_queue_;</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    std::shared_ptr&lt;SafeQueue&gt; outgoing_queue_;</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160; </div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    std::string host_;</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    std::string port_;</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160; </div>
+<div class="line"><a name="l00264"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_t_c_p_connection.html#ad1eda9dea3bc1c47d3a226c7a210994e">  264</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html#ad1eda9dea3bc1c47d3a226c7a210994e">tcpBackgroundHandler</a>();</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160; </div>
+<div class="line"><a name="l00270"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_t_c_p_connection.html#aaf0663da349d650a0b286446e3bb40c7">  270</a></span>&#160;    std::unique_ptr&lt;TCPMessage&gt; <a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html#aaf0663da349d650a0b286446e3bb40c7">receiveMessage</a>();</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160; </div>
+<div class="line"><a name="l00277"></a><span class="lineno"><a class="line" href="classtcp__io__device_1_1_t_c_p_connection.html#a5426be925c05c29e55fdd3b57330a5f5">  277</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classtcp__io__device_1_1_t_c_p_connection.html#a5426be925c05c29e55fdd3b57330a5f5">sendMessage</a>(std::unique_ptr&lt;TCPMessage&gt; msg);</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;  };</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160; </div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;} <span class="comment">// namespace tcp_io_device</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclasstcp__io__device_1_1_safe_queue_html"><div class="ttname"><a href="classtcp__io__device_1_1_safe_queue.html">tcp_io_device::SafeQueue</a></div><div class="ttdef"><b>Definition:</b> <a href="tcp__connection_8h_source.html#l00081">tcp_connection.h:82</a></div></div>
-<div class="ttc" id="aclasstcp__io__device_1_1_t_c_p_connection_html_ad967048c1a74c3149ca75b6d83855aac"><div class="ttname"><a href="classtcp__io__device_1_1_t_c_p_connection.html#ad967048c1a74c3149ca75b6d83855aac">tcp_io_device::TCPConnection::isRunning</a></div><div class="ttdeci">bool isRunning()</div><div class="ttdef"><b>Definition:</b> <a href="tcp__connection_8h_source.html#l00199">tcp_connection.h:199</a></div></div>
+<div class="ttc" id="aclasstcp__io__device_1_1_safe_queue_html"><div class="ttname"><a href="classtcp__io__device_1_1_safe_queue.html">tcp_io_device::SafeQueue</a></div><div class="ttdef"><b>Definition:</b> <a href="tcp__connection_8h_source.html#l00082">tcp_connection.h:83</a></div></div>
+<div class="ttc" id="aclasstcp__io__device_1_1_t_c_p_connection_html_ad967048c1a74c3149ca75b6d83855aac"><div class="ttname"><a href="classtcp__io__device_1_1_t_c_p_connection.html#ad967048c1a74c3149ca75b6d83855aac">tcp_io_device::TCPConnection::isRunning</a></div><div class="ttdeci">bool isRunning()</div><div class="ttdef"><b>Definition:</b> <a href="tcp__connection_8h_source.html#l00211">tcp_connection.h:211</a></div></div>
+<div class="ttc" id="aclasstcp__io__device_1_1_t_c_p_connection_html_ab33d3b7979092445d468e61e406d140d"><div class="ttname"><a href="classtcp__io__device_1_1_t_c_p_connection.html#ab33d3b7979092445d468e61e406d140d">tcp_io_device::TCPConnection::receiveIsReady</a></div><div class="ttdeci">static int receiveIsReady(int fd)</div></div>
 <div class="ttc" id="aclasstcp__io__device_1_1_t_c_p_connection_html_a5426be925c05c29e55fdd3b57330a5f5"><div class="ttname"><a href="classtcp__io__device_1_1_t_c_p_connection.html#a5426be925c05c29e55fdd3b57330a5f5">tcp_io_device::TCPConnection::sendMessage</a></div><div class="ttdeci">int sendMessage(std::unique_ptr&lt; TCPMessage &gt; msg)</div></div>
-<div class="ttc" id="aclasstcp__io__device_1_1_safe_queue_html_a800a8c8740d552b5574e59cdd9403f60"><div class="ttname"><a href="classtcp__io__device_1_1_safe_queue.html#a800a8c8740d552b5574e59cdd9403f60">tcp_io_device::SafeQueue::dequeue</a></div><div class="ttdeci">std::unique_ptr&lt; TCPMessage &gt; dequeue()</div><div class="ttdef"><b>Definition:</b> <a href="tcp__connection_8h_source.html#l00129">tcp_connection.h:129</a></div></div>
-<div class="ttc" id="aclasstcp__io__device_1_1_safe_queue_html_a7e098a08d9a9403bf0fea4a7030eb024"><div class="ttname"><a href="classtcp__io__device_1_1_safe_queue.html#a7e098a08d9a9403bf0fea4a7030eb024">tcp_io_device::SafeQueue::enqueue</a></div><div class="ttdeci">void enqueue(std::unique_ptr&lt; TCPMessage &gt; t)</div><div class="ttdef"><b>Definition:</b> <a href="tcp__connection_8h_source.html#l00112">tcp_connection.h:112</a></div></div>
+<div class="ttc" id="aclasstcp__io__device_1_1_safe_queue_html_a800a8c8740d552b5574e59cdd9403f60"><div class="ttname"><a href="classtcp__io__device_1_1_safe_queue.html#a800a8c8740d552b5574e59cdd9403f60">tcp_io_device::SafeQueue::dequeue</a></div><div class="ttdeci">std::unique_ptr&lt; TCPMessage &gt; dequeue()</div><div class="ttdef"><b>Definition:</b> <a href="tcp__connection_8h_source.html#l00130">tcp_connection.h:130</a></div></div>
+<div class="ttc" id="aclasstcp__io__device_1_1_safe_queue_html_a7e098a08d9a9403bf0fea4a7030eb024"><div class="ttname"><a href="classtcp__io__device_1_1_safe_queue.html#a7e098a08d9a9403bf0fea4a7030eb024">tcp_io_device::SafeQueue::enqueue</a></div><div class="ttdeci">void enqueue(std::unique_ptr&lt; TCPMessage &gt; t)</div><div class="ttdef"><b>Definition:</b> <a href="tcp__connection_8h_source.html#l00113">tcp_connection.h:113</a></div></div>
 <div class="ttc" id="aclasstcp__io__device_1_1_t_c_p_connection_html_a90c7d0bf43dc11d7c2e18963e1a04365"><div class="ttname"><a href="classtcp__io__device_1_1_t_c_p_connection.html#a90c7d0bf43dc11d7c2e18963e1a04365">tcp_io_device::TCPConnection::TCPConnection</a></div><div class="ttdeci">TCPConnection(std::shared_ptr&lt; SafeQueue &gt; receive_queue, std::shared_ptr&lt; SafeQueue &gt; send_queue, uint64_t msg_length_buf_size)</div></div>
-<div class="ttc" id="aclasstcp__io__device_1_1_safe_queue_html_ac6fe734cedc04c27d57ac19fcd0a7bb0"><div class="ttname"><a href="classtcp__io__device_1_1_safe_queue.html#ac6fe734cedc04c27d57ac19fcd0a7bb0">tcp_io_device::SafeQueue::SafeQueue</a></div><div class="ttdeci">SafeQueue()</div><div class="ttdef"><b>Definition:</b> <a href="tcp__connection_8h_source.html#l00087">tcp_connection.h:87</a></div></div>
-<div class="ttc" id="aclasstcp__io__device_1_1_t_c_p_connection_html_aa6800760a32112a7ed906a209a0134bd"><div class="ttname"><a href="classtcp__io__device_1_1_t_c_p_connection.html#aa6800760a32112a7ed906a209a0134bd">tcp_io_device::TCPConnection::receiveIsReady</a></div><div class="ttdeci">static int receiveIsReady(SOCKET fd)</div></div>
+<div class="ttc" id="aclasstcp__io__device_1_1_safe_queue_html_ac6fe734cedc04c27d57ac19fcd0a7bb0"><div class="ttname"><a href="classtcp__io__device_1_1_safe_queue.html#ac6fe734cedc04c27d57ac19fcd0a7bb0">tcp_io_device::SafeQueue::SafeQueue</a></div><div class="ttdeci">SafeQueue()</div><div class="ttdef"><b>Definition:</b> <a href="tcp__connection_8h_source.html#l00088">tcp_connection.h:88</a></div></div>
 <div class="ttc" id="aclasstcp__io__device_1_1_t_c_p_connection_html_a29140209448c2cfb7d4ceb1eccb78f32"><div class="ttname"><a href="classtcp__io__device_1_1_t_c_p_connection.html#a29140209448c2cfb7d4ceb1eccb78f32">tcp_io_device::TCPConnection::stop</a></div><div class="ttdeci">void stop()</div></div>
-<div class="ttc" id="aclasstcp__io__device_1_1_safe_queue_html_a8b74e42d87bda80d8b7c791223464ec6"><div class="ttname"><a href="classtcp__io__device_1_1_safe_queue.html#a8b74e42d87bda80d8b7c791223464ec6">tcp_io_device::SafeQueue::clear</a></div><div class="ttdeci">void clear()</div><div class="ttdef"><b>Definition:</b> <a href="tcp__connection_8h_source.html#l00143">tcp_connection.h:143</a></div></div>
-<div class="ttc" id="aclasstcp__io__device_1_1_safe_queue_html_a0e5621427a6575c7d72f8f4fe29ed0d4"><div class="ttname"><a href="classtcp__io__device_1_1_safe_queue.html#a0e5621427a6575c7d72f8f4fe29ed0d4">tcp_io_device::SafeQueue::SafeQueue</a></div><div class="ttdeci">SafeQueue(int max_elements)</div><div class="ttdef"><b>Definition:</b> <a href="tcp__connection_8h_source.html#l00098">tcp_connection.h:98</a></div></div>
-<div class="ttc" id="aclasstcp__io__device_1_1_t_c_p_connection_html_a9f1eecfabb9eaca78c02413fc15544ba"><div class="ttname"><a href="classtcp__io__device_1_1_t_c_p_connection.html#a9f1eecfabb9eaca78c02413fc15544ba">tcp_io_device::TCPConnection::establishConnection</a></div><div class="ttdeci">int establishConnection(std::string port)</div></div>
+<div class="ttc" id="aclasstcp__io__device_1_1_safe_queue_html_a8b74e42d87bda80d8b7c791223464ec6"><div class="ttname"><a href="classtcp__io__device_1_1_safe_queue.html#a8b74e42d87bda80d8b7c791223464ec6">tcp_io_device::SafeQueue::clear</a></div><div class="ttdeci">void clear()</div><div class="ttdef"><b>Definition:</b> <a href="tcp__connection_8h_source.html#l00144">tcp_connection.h:144</a></div></div>
+<div class="ttc" id="aclasstcp__io__device_1_1_safe_queue_html_a0e5621427a6575c7d72f8f4fe29ed0d4"><div class="ttname"><a href="classtcp__io__device_1_1_safe_queue.html#a0e5621427a6575c7d72f8f4fe29ed0d4">tcp_io_device::SafeQueue::SafeQueue</a></div><div class="ttdeci">SafeQueue(int max_elements)</div><div class="ttdef"><b>Definition:</b> <a href="tcp__connection_8h_source.html#l00099">tcp_connection.h:99</a></div></div>
+<div class="ttc" id="aclasstcp__io__device_1_1_t_c_p_connection_html_affc88dcbc7459ee2910d9cb764a8b92b"><div class="ttname"><a href="classtcp__io__device_1_1_t_c_p_connection.html#affc88dcbc7459ee2910d9cb764a8b92b">tcp_io_device::TCPConnection::listenAndAwaitConnection</a></div><div class="ttdeci">int listenAndAwaitConnection(std::string port)</div></div>
+<div class="ttc" id="aclasstcp__io__device_1_1_t_c_p_connection_html_a4791e088add9ed62137c27e73d1b78c2"><div class="ttname"><a href="classtcp__io__device_1_1_t_c_p_connection.html#a4791e088add9ed62137c27e73d1b78c2">tcp_io_device::TCPConnection::establishConnection</a></div><div class="ttdeci">int establishConnection(std::string host, std::string port)</div></div>
 <div class="ttc" id="aclasstcp__io__device_1_1_t_c_p_connection_html_a420506b904a4034a930ea55f4954c710"><div class="ttname"><a href="classtcp__io__device_1_1_t_c_p_connection.html#a420506b904a4034a930ea55f4954c710">tcp_io_device::TCPConnection::start</a></div><div class="ttdeci">void start()</div></div>
 <div class="ttc" id="aclasstcp__io__device_1_1_t_c_p_connection_html_ad1eda9dea3bc1c47d3a226c7a210994e"><div class="ttname"><a href="classtcp__io__device_1_1_t_c_p_connection.html#ad1eda9dea3bc1c47d3a226c7a210994e">tcp_io_device::TCPConnection::tcpBackgroundHandler</a></div><div class="ttdeci">void tcpBackgroundHandler()</div></div>
 <div class="ttc" id="aclasstcp__io__device_1_1_t_c_p_connection_html_aaf0663da349d650a0b286446e3bb40c7"><div class="ttname"><a href="classtcp__io__device_1_1_t_c_p_connection.html#aaf0663da349d650a0b286446e3bb40c7">tcp_io_device::TCPConnection::receiveMessage</a></div><div class="ttdeci">std::unique_ptr&lt; TCPMessage &gt; receiveMessage()</div></div>
-<div class="ttc" id="aclasstcp__io__device_1_1_t_c_p_connection_html"><div class="ttname"><a href="classtcp__io__device_1_1_t_c_p_connection.html">tcp_io_device::TCPConnection</a></div><div class="ttdef"><b>Definition:</b> <a href="tcp__connection_8h_source.html#l00166">tcp_connection.h:167</a></div></div>
+<div class="ttc" id="aclasstcp__io__device_1_1_t_c_p_connection_html"><div class="ttname"><a href="classtcp__io__device_1_1_t_c_p_connection.html">tcp_io_device::TCPConnection</a></div><div class="ttdef"><b>Definition:</b> <a href="tcp__connection_8h_source.html#l00167">tcp_connection.h:167</a></div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

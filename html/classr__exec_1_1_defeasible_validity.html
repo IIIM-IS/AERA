@@ -103,14 +103,14 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>decRef</b> ()
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_attribs_classcore_1_1___object"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classcore_1_1___object')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classcore_1_1___object.html">core::_Object</a></td></tr>
-<tr class="memitem:a78942b476c06f3f3cab6c8fb0dba30e4 inherit pro_attribs_classcore_1_1___object"><td class="memItemLeft" align="right" valign="top"><a id="a78942b476c06f3f3cab6c8fb0dba30e4"></a>
-int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</b></td></tr>
-<tr class="separator:a78942b476c06f3f3cab6c8fb0dba30e4 inherit pro_attribs_classcore_1_1___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8a8ee727ee2e8e69a4ce13a3a6eccff inherit pro_attribs_classcore_1_1___object"><td class="memItemLeft" align="right" valign="top"><a id="ac8a8ee727ee2e8e69a4ce13a3a6eccff"></a>
+std::atomic_int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</b></td></tr>
+<tr class="separator:ac8a8ee727ee2e8e69a4ce13a3a6eccff inherit pro_attribs_classcore_1_1___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A <a class="el" href="classr__exec_1_1_defeasible_validity.html">DefeasibleValidity</a> is an object this is attached to a defeasible prediction and copied to each later prediction in forward chaining. If a new fact defeats the grounds of the original prediction, then call <a class="el" href="classr__exec_1_1_defeasible_validity.html#ae4c982e0066fac0d99061937b464e530">invalidate()</a> to invalidate the defeasible prediction and all predictions which followed from it. (The is_invalidate() method of <a class="el" href="classr__exec_1_1_pred.html">Pred</a> checks its set of <a class="el" href="classr__exec_1_1_defeasible_validity.html">DefeasibleValidity</a> and invalidates the <a class="el" href="classr__exec_1_1_pred.html">Pred</a> if a <a class="el" href="classr__exec_1_1_defeasible_validity.html">DefeasibleValidity</a> is invalidated.) </p>
 
-<p class="definition">Definition at line <a class="el" href="overlay_8h_source.html#l00264">264</a> of file <a class="el" href="overlay_8h_source.html">overlay.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="overlay_8h_source.html#l00160">160</a> of file <a class="el" href="overlay_8h_source.html">overlay.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a0d77634b5c4520ac1a92e9146e08c6cc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0d77634b5c4520ac1a92e9146e08c6cc">&#9670;&nbsp;</a></span>DefeasibleValidity()</h2>
@@ -136,7 +136,7 @@ int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</
 </div><div class="memdoc">
 <p>Create a <a class="el" href="classr__exec_1_1_defeasible_validity.html">DefeasibleValidity</a> that is not invalidated. </p>
 
-<p class="definition">Definition at line <a class="el" href="overlay_8h_source.html#l00270">270</a> of file <a class="el" href="overlay_8h_source.html">overlay.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="overlay_8h_source.html#l00166">166</a> of file <a class="el" href="overlay_8h_source.html">overlay.h</a>.</p>
 
 </div>
 </div>
@@ -165,7 +165,7 @@ int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</
 </div><div class="memdoc">
 <p>Set this to invalidated so that <a class="el" href="classr__exec_1_1_defeasible_validity.html#a57587b4ba75b212ca799fa03dcf185e3">is_invalidated()</a> returns true. </p>
 
-<p class="definition">Definition at line <a class="el" href="overlay_8h_source.html#l00281">281</a> of file <a class="el" href="overlay_8h_source.html">overlay.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="overlay_8h_source.html#l00177">177</a> of file <a class="el" href="overlay_8h_source.html">overlay.h</a>.</p>
 
 </div>
 </div>
@@ -193,7 +193,7 @@ int32 volatile&#160;</td><td class="memItemRight" valign="bottom"><b>refCount_</
 </div><div class="memdoc">
 <p>Check if this is invalidated </p><dl class="section return"><dt>Returns</dt><dd>True if this is invalidated. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="overlay_8h_source.html#l00276">276</a> of file <a class="el" href="overlay_8h_source.html">overlay.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="overlay_8h_source.html#l00172">172</a> of file <a class="el" href="overlay_8h_source.html">overlay.h</a>.</p>
 
 </div>
 </div>

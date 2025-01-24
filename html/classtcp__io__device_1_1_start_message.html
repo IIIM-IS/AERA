@@ -87,9 +87,13 @@ Inheritance diagram for tcp_io_device::StartMessage:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a8fc4c81bc30c37a8338f5892481c6b1b"><td class="memItemLeft" align="right" valign="top"><a id="a8fc4c81bc30c37a8338f5892481c6b1b"></a>enum &#160;</td><td class="memItemRight" valign="bottom">: int { <b>kDiagnosticModeFieldNumber</b> = 1
+<tr class="memitem:a8fc4c81bc30c37a8338f5892481c6b1b"><td class="memItemLeft" align="right" valign="top"><a id="a8fc4c81bc30c37a8338f5892481c6b1b"></a>enum &#160;</td><td class="memItemRight" valign="bottom">: int { <b>kDiagnosticModeFieldNumber</b> = 1, 
+<b>kReconnectionTypeFieldNumber</b> = 2
  }</td></tr>
 <tr class="separator:a8fc4c81bc30c37a8338f5892481c6b1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05f0cd8ab728d5cb409c13b2a670e03e"><td class="memItemLeft" align="right" valign="top"><a id="a05f0cd8ab728d5cb409c13b2a670e03e"></a>
+typedef StartMessage_ReconnectionType&#160;</td><td class="memItemRight" valign="bottom"><b>ReconnectionType</b></td></tr>
+<tr class="separator:a05f0cd8ab728d5cb409c13b2a670e03e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -156,6 +160,15 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>diagnosticmode</b> ()
 <tr class="memitem:a6424e385c92823c987346122787f806d"><td class="memItemLeft" align="right" valign="top"><a id="a6424e385c92823c987346122787f806d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>set_diagnosticmode</b> (bool value)</td></tr>
 <tr class="separator:a6424e385c92823c987346122787f806d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a771bf474729dd9035c57b69d749424e1"><td class="memItemLeft" align="right" valign="top"><a id="a771bf474729dd9035c57b69d749424e1"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>clear_reconnectiontype</b> ()</td></tr>
+<tr class="separator:a771bf474729dd9035c57b69d749424e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34bbfb38406c65a65a26f29af334ce67"><td class="memItemLeft" align="right" valign="top"><a id="a34bbfb38406c65a65a26f29af334ce67"></a>
+::tcp_io_device::StartMessage_ReconnectionType&#160;</td><td class="memItemRight" valign="bottom"><b>reconnectiontype</b> () const</td></tr>
+<tr class="separator:a34bbfb38406c65a65a26f29af334ce67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c9726ba41b0ece4c781a429d8df0f20"><td class="memItemLeft" align="right" valign="top"><a id="a2c9726ba41b0ece4c781a429d8df0f20"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>set_reconnectiontype</b> (::tcp_io_device::StartMessage_ReconnectionType value)</td></tr>
+<tr class="separator:a2c9726ba41b0ece4c781a429d8df0f20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -174,6 +187,19 @@ static const <a class="el" href="classtcp__io__device_1_1_start_message.html">St
 <tr class="memitem:a204d63abdca76f96a339f507dc9603f4"><td class="memItemLeft" align="right" valign="top"><a id="a204d63abdca76f96a339f507dc9603f4"></a>
 static const <a class="el" href="classtcp__io__device_1_1_start_message.html">StartMessage</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>internal_default_instance</b> ()</td></tr>
 <tr class="separator:a204d63abdca76f96a339f507dc9603f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac7161268e9527c2619eea2e56467f9d"><td class="memItemLeft" align="right" valign="top"><a id="aac7161268e9527c2619eea2e56467f9d"></a>
+static bool&#160;</td><td class="memItemRight" valign="bottom"><b>ReconnectionType_IsValid</b> (int value)</td></tr>
+<tr class="separator:aac7161268e9527c2619eea2e56467f9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a66457eac00160cbd13209cb7af7e8f"><td class="memItemLeft" align="right" valign="top"><a id="a2a66457eac00160cbd13209cb7af7e8f"></a>
+static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor *&#160;</td><td class="memItemRight" valign="bottom"><b>ReconnectionType_descriptor</b> ()</td></tr>
+<tr class="separator:a2a66457eac00160cbd13209cb7af7e8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac42e7a8cd2612ffd9f248d85960b96e1"><td class="memTemplParams" colspan="2"><a id="ac42e7a8cd2612ffd9f248d85960b96e1"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ac42e7a8cd2612ffd9f248d85960b96e1"><td class="memTemplItemLeft" align="right" valign="top">static const std::string &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>ReconnectionType_Name</b> (T enum_t_value)</td></tr>
+<tr class="separator:ac42e7a8cd2612ffd9f248d85960b96e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec8f3c005eb14baaaa1ddf3f3ccd1391"><td class="memItemLeft" align="right" valign="top"><a id="aec8f3c005eb14baaaa1ddf3f3ccd1391"></a>
+static bool&#160;</td><td class="memItemRight" valign="bottom"><b>ReconnectionType_Parse</b> (::PROTOBUF_NAMESPACE_ID::ConstStringParam name, ReconnectionType *value)</td></tr>
+<tr class="separator:aec8f3c005eb14baaaa1ddf3f3ccd1391"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -182,6 +208,18 @@ Static Public Attributes</h2></td></tr>
 <tr class="memitem:a70ece5117d89fd0f1321536e2207fb56"><td class="memItemLeft" align="right" valign="top"><a id="a70ece5117d89fd0f1321536e2207fb56"></a>
 static const ClassData&#160;</td><td class="memItemRight" valign="bottom"><b>_class_data_</b></td></tr>
 <tr class="separator:a70ece5117d89fd0f1321536e2207fb56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef84627defbd5a54a97cf2ebad0fa8ea"><td class="memItemLeft" align="right" valign="top">static constexpr ReconnectionType&#160;</td><td class="memItemRight" valign="bottom"><b>RE_INIT</b></td></tr>
+<tr class="separator:aef84627defbd5a54a97cf2ebad0fa8ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08a5947f3198ba251a0ffb06535264a5"><td class="memItemLeft" align="right" valign="top">static constexpr ReconnectionType&#160;</td><td class="memItemRight" valign="bottom"><b>RE_SETUP</b></td></tr>
+<tr class="separator:a08a5947f3198ba251a0ffb06535264a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab25cceb9687d1d2e903724595e414604"><td class="memItemLeft" align="right" valign="top">static constexpr ReconnectionType&#160;</td><td class="memItemRight" valign="bottom"><b>NONE</b></td></tr>
+<tr class="separator:ab25cceb9687d1d2e903724595e414604"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79f377468482ceecc2fffd1b6f681f29"><td class="memItemLeft" align="right" valign="top">static constexpr ReconnectionType&#160;</td><td class="memItemRight" valign="bottom"><b>ReconnectionType_MIN</b></td></tr>
+<tr class="separator:a79f377468482ceecc2fffd1b6f681f29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae72c8ca55b61a99476271df1f44d8aaf"><td class="memItemLeft" align="right" valign="top">static constexpr ReconnectionType&#160;</td><td class="memItemRight" valign="bottom"><b>ReconnectionType_MAX</b></td></tr>
+<tr class="separator:ae72c8ca55b61a99476271df1f44d8aaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26d9041b6f697d08ded6ca5de0ce40a7"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>ReconnectionType_ARRAYSIZE</b></td></tr>
+<tr class="separator:a26d9041b6f697d08ded6ca5de0ce40a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -207,7 +245,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>swap</b> (<a class="e
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l00455">455</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l00485">485</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a400aed84ca09b7af667bcffc8a175884"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a400aed84ca09b7af667bcffc8a175884">&#9670;&nbsp;</a></span>kIndexInFileMessages</h2>
@@ -231,7 +269,163 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>swap</b> (<a class="e
 <b>Initial value:</b><div class="fragment"><div class="line">=</div>
 <div class="line">    1</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l00502">502</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l00532">532</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
+
+</div>
+</div>
+<a id="ab25cceb9687d1d2e903724595e414604"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab25cceb9687d1d2e903724595e414604">&#9670;&nbsp;</a></span>NONE</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr ReconnectionType tcp_io_device::StartMessage::NONE</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">    StartMessage_ReconnectionType_NONE</div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l00608">608</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
+
+</div>
+</div>
+<a id="aef84627defbd5a54a97cf2ebad0fa8ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef84627defbd5a54a97cf2ebad0fa8ea">&#9670;&nbsp;</a></span>RE_INIT</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr ReconnectionType tcp_io_device::StartMessage::RE_INIT</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">    StartMessage_ReconnectionType_RE_INIT</div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l00604">604</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
+
+</div>
+</div>
+<a id="a08a5947f3198ba251a0ffb06535264a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08a5947f3198ba251a0ffb06535264a5">&#9670;&nbsp;</a></span>RE_SETUP</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr ReconnectionType tcp_io_device::StartMessage::RE_SETUP</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">    StartMessage_ReconnectionType_RE_SETUP</div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l00606">606</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
+
+</div>
+</div>
+<a id="a26d9041b6f697d08ded6ca5de0ce40a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26d9041b6f697d08ded6ca5de0ce40a7">&#9670;&nbsp;</a></span>ReconnectionType_ARRAYSIZE</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr int tcp_io_device::StartMessage::ReconnectionType_ARRAYSIZE</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">    StartMessage_ReconnectionType_ReconnectionType_ARRAYSIZE</div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l00617">617</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
+
+</div>
+</div>
+<a id="ae72c8ca55b61a99476271df1f44d8aaf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae72c8ca55b61a99476271df1f44d8aaf">&#9670;&nbsp;</a></span>ReconnectionType_MAX</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr ReconnectionType tcp_io_device::StartMessage::ReconnectionType_MAX</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">    StartMessage_ReconnectionType_ReconnectionType_MAX</div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l00615">615</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
+
+</div>
+</div>
+<a id="a79f377468482ceecc2fffd1b6f681f29"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79f377468482ceecc2fffd1b6f681f29">&#9670;&nbsp;</a></span>ReconnectionType_MIN</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr ReconnectionType tcp_io_device::StartMessage::ReconnectionType_MIN</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">    StartMessage_ReconnectionType_ReconnectionType_MIN</div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="tcp__data__message_8pb_8h_source.html#l00613">613</a> of file <a class="el" href="tcp__data__message_8pb_8h_source.html">tcp_data_message.pb.h</a>.</p>
 
 </div>
 </div>

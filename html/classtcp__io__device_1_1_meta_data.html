@@ -75,12 +75,14 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_proto_2utils_8h_source.html">utils.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html">utils.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a7b888fb0c02311018762c4c0ed0fd031"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtcp__io__device_1_1_meta_data.html#a7b888fb0c02311018762c4c0ed0fd031">MetaData</a> (const <a class="el" href="classtcp__io__device_1_1_variable_description.html">VariableDescription</a> *meta_data)</td></tr>
 <tr class="separator:a7b888fb0c02311018762c4c0ed0fd031"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e8ace18f48f010dfc71f31a8cd84eab"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtcp__io__device_1_1_meta_data.html#a6e8ace18f48f010dfc71f31a8cd84eab">MetaData</a> (int entity_id, int name_id, VariableDescription_DataType t, std::vector&lt; uint64_t &gt; dimensions, std::string opcode_handle=&quot;&quot;)</td></tr>
+<tr class="separator:a6e8ace18f48f010dfc71f31a8cd84eab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec43ca125436ce35db532d82a6753d2a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtcp__io__device_1_1_meta_data.html#aec43ca125436ce35db532d82a6753d2a">getEntityID</a> ()</td></tr>
 <tr class="separator:aec43ca125436ce35db532d82a6753d2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a48725deef692e8991381e468c1ea4e27"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtcp__io__device_1_1_meta_data.html#a48725deef692e8991381e468c1ea4e27">getID</a> ()</td></tr>
@@ -93,8 +95,16 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a41c1cf659b5e69dabe30c2e43d560edb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff783a1c45a6405edc16ee2a8daf3290"><td class="memItemLeft" align="right" valign="top">VariableDescription_DataType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtcp__io__device_1_1_meta_data.html#aff783a1c45a6405edc16ee2a8daf3290">getType</a> ()</td></tr>
 <tr class="separator:aff783a1c45a6405edc16ee2a8daf3290"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:accd928f022a7e68ca403de98d29711c1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtcp__io__device_1_1_meta_data.html#accd928f022a7e68ca403de98d29711c1">setMetaData</a> (int entity_id, int id, VariableDescription_DataType t, std::vector&lt; uint64_t &gt; d)</td></tr>
-<tr class="separator:accd928f022a7e68ca403de98d29711c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72a7dce2c0aa73281c091648a7e870e4"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtcp__io__device_1_1_meta_data.html#a72a7dce2c0aa73281c091648a7e870e4">getOpCodeHandle</a> ()</td></tr>
+<tr class="separator:a72a7dce2c0aa73281c091648a7e870e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe733c4d3711f28bda5eeb61c6c73e0a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtcp__io__device_1_1_meta_data.html#afe733c4d3711f28bda5eeb61c6c73e0a">setMetaData</a> (int entity_id, int id, VariableDescription_DataType t, std::vector&lt; uint64_t &gt; d, std::string opcode_handle=&quot;&quot;)</td></tr>
+<tr class="separator:afe733c4d3711f28bda5eeb61c6c73e0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2128dc022d9c26079477d63af56d9622"><td class="memItemLeft" align="right" valign="top"><a id="a2128dc022d9c26079477d63af56d9622"></a>
+<a class="el" href="classtcp__io__device_1_1_variable_description.html">VariableDescription</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toVariableDescription</b> ()</td></tr>
+<tr class="separator:a2128dc022d9c26079477d63af56d9622"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2333c9d9d8f6a5741ab9b4690081bbe4"><td class="memItemLeft" align="right" valign="top"><a id="a2333c9d9d8f6a5741ab9b4690081bbe4"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>toMutableVariableDescription</b> (<a class="el" href="classtcp__io__device_1_1_variable_description.html">VariableDescription</a> *mutable_variable_description)</td></tr>
+<tr class="separator:a2333c9d9d8f6a5741ab9b4690081bbe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -119,20 +129,26 @@ uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>data_length_</b> 
 <tr class="memitem:abe2d0c557cccd9c64ae4b727a6243b71"><td class="memItemLeft" align="right" valign="top"><a id="abe2d0c557cccd9c64ae4b727a6243b71"></a>
 std::vector&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>dimensions_</b></td></tr>
 <tr class="separator:abe2d0c557cccd9c64ae4b727a6243b71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8a0f0e13e55357c09629b37901d3430"><td class="memItemLeft" align="right" valign="top"><a id="ae8a0f0e13e55357c09629b37901d3430"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>opcode_handle_</b></td></tr>
+<tr class="separator:ae8a0f0e13e55357c09629b37901d3430"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
 <tr class="memitem:a9dc2f486da5dce1031621478746a1233"><td class="memItemLeft" align="right" valign="top"><a id="a9dc2f486da5dce1031621478746a1233"></a>
 class&#160;</td><td class="memItemRight" valign="bottom"><b>MsgData</b></td></tr>
 <tr class="separator:a9dc2f486da5dce1031621478746a1233"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a469d9ef71c86ef7e4baa65c70e1adb1d"><td class="memItemLeft" align="right" valign="top"><a id="a469d9ef71c86ef7e4baa65c70e1adb1d"></a>
+std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;output, const <a class="el" href="classtcp__io__device_1_1_meta_data.html">MetaData</a> &amp;meta_data)</td></tr>
+<tr class="separator:a469d9ef71c86ef7e4baa65c70e1adb1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classtcp__io__device_1_1_meta_data.html">MetaData</a> is a class to store the meta-data of messages. Especially used for storing of available commands and their descriptions. Additionally gives access to convenience funtions, like <a class="el" href="classtcp__io__device_1_1_variable_description.html">VariableDescription</a> message parsing. </p>
 
-<p class="definition">Definition at line <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_proto_2utils_8h_source.html#l00065">65</a> of file <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_proto_2utils_8h_source.html">AERA/IODevices/TCP/Proto/utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html#l00069">69</a> of file <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html">AERA/IODevices/TCP/AERA_Protobuf/utils.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a7b888fb0c02311018762c4c0ed0fd031"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b888fb0c02311018762c4c0ed0fd031">&#9670;&nbsp;</a></span>MetaData()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b888fb0c02311018762c4c0ed0fd031">&#9670;&nbsp;</a></span>MetaData() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -161,7 +177,72 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>MsgData</b></td></tr
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_proto_2utils_8h_source.html#l00082">82</a> of file <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_proto_2utils_8h_source.html">AERA/IODevices/TCP/Proto/utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html#l00090">90</a> of file <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html">AERA/IODevices/TCP/AERA_Protobuf/utils.h</a>.</p>
+
+</div>
+</div>
+<a id="a6e8ace18f48f010dfc71f31a8cd84eab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e8ace18f48f010dfc71f31a8cd84eab">&#9670;&nbsp;</a></span>MetaData() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">tcp_io_device::MetaData::MetaData </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>entity_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>name_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VariableDescription_DataType&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; uint64_t &gt;&#160;</td>
+          <td class="paramname"><em>dimensions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>opcode_handle</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Constructor for <a class="el" href="classtcp__io__device_1_1_meta_data.html">MetaData</a> objects. Best only used to create the objects when first initializing the communicaiton. To parse incoming messages please see the other constructor. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>An identifier describing the entity to which this <a class="el" href="classtcp__io__device_1_1_meta_data.html">MetaData</a> objects is related. </td></tr>
+    <tr><td class="paramname">name</td><td>An identifier for the name of the data. </td></tr>
+    <tr><td class="paramname">t</td><td>The VariableDescription_DataType of the data. </td></tr>
+    <tr><td class="paramname">dimensions</td><td>The dimensionality of the data associated with this <a class="el" href="classtcp__io__device_1_1_meta_data.html">MetaData</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html#l00106">106</a> of file <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html">AERA/IODevices/TCP/AERA_Protobuf/utils.h</a>.</p>
 
 </div>
 </div>
@@ -190,7 +271,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>MsgData</b></td></tr
 </div><div class="memdoc">
 <p>Returns the full length of the data assigned to this <a class="el" href="classtcp__io__device_1_1_meta_data.html">MetaData</a> object Number of data parts (e.g. double values) * the data size of each part (e.g. 8) </p>
 
-<p class="definition">Definition at line <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_proto_2utils_8h_source.html#l00107">107</a> of file <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_proto_2utils_8h_source.html">AERA/IODevices/TCP/Proto/utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html#l00128">128</a> of file <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html">AERA/IODevices/TCP/AERA_Protobuf/utils.h</a>.</p>
 
 </div>
 </div>
@@ -218,7 +299,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>MsgData</b></td></tr
 </div><div class="memdoc">
 <p>Returns the number of bytes used to store a data object (e.g. 8 for double) </p>
 
-<p class="definition">Definition at line <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_proto_2utils_8h_source.html#l00112">112</a> of file <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_proto_2utils_8h_source.html">AERA/IODevices/TCP/Proto/utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html#l00133">133</a> of file <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html">AERA/IODevices/TCP/AERA_Protobuf/utils.h</a>.</p>
 
 </div>
 </div>
@@ -246,7 +327,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>MsgData</b></td></tr
 </div><div class="memdoc">
 <p>Returns the dimensions of the data. E.g. [1920, 1080] for a full HD image. </p>
 
-<p class="definition">Definition at line <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_proto_2utils_8h_source.html#l00117">117</a> of file <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_proto_2utils_8h_source.html">AERA/IODevices/TCP/Proto/utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html#l00138">138</a> of file <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html">AERA/IODevices/TCP/AERA_Protobuf/utils.h</a>.</p>
 
 </div>
 </div>
@@ -274,7 +355,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>MsgData</b></td></tr
 </div><div class="memdoc">
 <p>Returns the id of the entity for which this description is used. </p>
 
-<p class="definition">Definition at line <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_proto_2utils_8h_source.html#l00092">92</a> of file <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_proto_2utils_8h_source.html">AERA/IODevices/TCP/Proto/utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html#l00113">113</a> of file <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html">AERA/IODevices/TCP/AERA_Protobuf/utils.h</a>.</p>
 
 </div>
 </div>
@@ -302,7 +383,35 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>MsgData</b></td></tr
 </div><div class="memdoc">
 <p>Returns the id of the property for which this description is used. </p>
 
-<p class="definition">Definition at line <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_proto_2utils_8h_source.html#l00099">99</a> of file <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_proto_2utils_8h_source.html">AERA/IODevices/TCP/Proto/utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html#l00120">120</a> of file <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html">AERA/IODevices/TCP/AERA_Protobuf/utils.h</a>.</p>
+
+</div>
+</div>
+<a id="a72a7dce2c0aa73281c091648a7e870e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72a7dce2c0aa73281c091648a7e870e4">&#9670;&nbsp;</a></span>getOpCodeHandle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string tcp_io_device::MetaData::getOpCodeHandle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the opcode handle of the corresponding message. </p>
+
+<p class="definition">Definition at line <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html#l00148">148</a> of file <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html">AERA/IODevices/TCP/AERA_Protobuf/utils.h</a>.</p>
 
 </div>
 </div>
@@ -330,12 +439,12 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>MsgData</b></td></tr
 </div><div class="memdoc">
 <p>Returns the type of the corresponding message. </p>
 
-<p class="definition">Definition at line <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_proto_2utils_8h_source.html#l00122">122</a> of file <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_proto_2utils_8h_source.html">AERA/IODevices/TCP/Proto/utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html#l00143">143</a> of file <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html">AERA/IODevices/TCP/AERA_Protobuf/utils.h</a>.</p>
 
 </div>
 </div>
-<a id="accd928f022a7e68ca403de98d29711c1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#accd928f022a7e68ca403de98d29711c1">&#9670;&nbsp;</a></span>setMetaData()</h2>
+<a id="afe733c4d3711f28bda5eeb61c6c73e0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe733c4d3711f28bda5eeb61c6c73e0a">&#9670;&nbsp;</a></span>setMetaData()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -365,7 +474,13 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>MsgData</b></td></tr
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::vector&lt; uint64_t &gt;&#160;</td>
-          <td class="paramname"><em>d</em>&#160;</td>
+          <td class="paramname"><em>d</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>opcode_handle</em> = <code>&quot;&quot;</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -389,12 +504,12 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>MsgData</b></td></tr
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_proto_2utils_8h_source.html#l00132">132</a> of file <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_proto_2utils_8h_source.html">AERA/IODevices/TCP/Proto/utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html#l00158">158</a> of file <a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html">AERA/IODevices/TCP/AERA_Protobuf/utils.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li><a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_proto_2utils_8h_source.html">AERA/IODevices/TCP/Proto/utils.h</a></li>
+<li><a class="el" href="_a_e_r_a_2_i_o_devices_2_t_c_p_2_a_e_r_a___protobuf_2utils_8h_source.html">AERA/IODevices/TCP/AERA_Protobuf/utils.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

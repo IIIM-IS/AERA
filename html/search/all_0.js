@@ -13,6 +13,5 @@ var searchData=
   ['_5freductionjob_10',['_ReductionJob',['../classr__exec_1_1___reduction_job.html',1,'r_exec']]],
   ['_5fthread_11',['_Thread',['../class_test_mem_1_1___thread.html',1,'TestMem']]],
   ['_5ftpx_12',['_TPX',['../classr__exec_1_1___t_p_x.html',1,'r_exec']]],
-  ['_5fview_13',['_View',['../classr__code_1_1___view.html',1,'r_code']]],
-  ['inject_5fmarker_5fvalue_5ffrom_5fio_5fdevice_14',['inject_marker_value_from_io_device',['../classr__exec_1_1___mem.html#a38beb0bf6e62911de3fb5786e366a265',1,'r_exec::_Mem']]]
+  ['_5fview_13',['_View',['../classr__code_1_1___view.html',1,'r_code']]]
 ];

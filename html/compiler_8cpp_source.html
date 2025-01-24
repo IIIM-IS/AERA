@@ -74,9 +74,9 @@ $(function() {
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//_/_/ AERA</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//_/_/ Autocatalytic Endogenous Reflective Architecture</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//_/_/ </span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Jeff Thompson</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Kristinn R. Thorisson</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Icelandic Institute for Intelligent Machines</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2025 Jeff Thompson</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//_/_/ http://www.iiim.is</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//_/_/ </span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//_/_/ Copyright (c) 2010-2012 Eric Nivel</span></div>
@@ -2289,7 +2289,7 @@ $(function() {
 <div class="line"><a name="l02223"></a><span class="lineno"> 2223</span>&#160;  <span class="keywordflow">if</span> (hex(h) &amp;&amp; <a class="code" href="classr__code_1_1_atom.html">Atom</a>(h).getDescriptor() == Atom::NODE) {</div>
 <div class="line"><a name="l02224"></a><span class="lineno"> 2224</span>&#160; </div>
 <div class="line"><a name="l02225"></a><span class="lineno"> 2225</span>&#160;    <span class="keywordflow">if</span> (write)</div>
-<div class="line"><a name="l02226"></a><span class="lineno"> 2226</span>&#160;      current_object_-&gt;code_[write_index] = Atom::Atom(h);</div>
+<div class="line"><a name="l02226"></a><span class="lineno"> 2226</span>&#160;      current_object_-&gt;code_[write_index] = <a class="code" href="classr__code_1_1_atom.html">Atom</a>(h);</div>
 <div class="line"><a name="l02227"></a><span class="lineno"> 2227</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l02228"></a><span class="lineno"> 2228</span>&#160;  }</div>
 <div class="line"><a name="l02229"></a><span class="lineno"> 2229</span>&#160;  in_stream_-&gt;seekg(i);</div>
@@ -2323,7 +2323,7 @@ $(function() {
 <div class="line"><a name="l02257"></a><span class="lineno"> 2257</span>&#160;  <span class="keywordflow">if</span> (hex(h) &amp;&amp; <a class="code" href="classr__code_1_1_atom.html">Atom</a>(h).getDescriptor() == Atom::DEVICE) {</div>
 <div class="line"><a name="l02258"></a><span class="lineno"> 2258</span>&#160; </div>
 <div class="line"><a name="l02259"></a><span class="lineno"> 2259</span>&#160;    <span class="keywordflow">if</span> (write)</div>
-<div class="line"><a name="l02260"></a><span class="lineno"> 2260</span>&#160;      current_object_-&gt;code_[write_index] = Atom::Atom(h);</div>
+<div class="line"><a name="l02260"></a><span class="lineno"> 2260</span>&#160;      current_object_-&gt;code_[write_index] = <a class="code" href="classr__code_1_1_atom.html">Atom</a>(h);</div>
 <div class="line"><a name="l02261"></a><span class="lineno"> 2261</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l02262"></a><span class="lineno"> 2262</span>&#160;  }</div>
 <div class="line"><a name="l02263"></a><span class="lineno"> 2263</span>&#160;  in_stream_-&gt;seekg(i);</div>
@@ -2594,185 +2594,186 @@ $(function() {
 <div class="line"><a name="l02529"></a><span class="lineno"> 2529</span>&#160; </div>
 <div class="line"><a name="l02530"></a><span class="lineno"> 2530</span>&#160;    <span class="keywordflow">if</span> (state_.pattern_lvl || allow_variables_and_wildcards_outside_pattern_skeleton_) {</div>
 <div class="line"><a name="l02531"></a><span class="lineno"> 2531</span>&#160; </div>
-<div class="line"><a name="l02532"></a><span class="lineno"> 2532</span>&#160;      <span class="keywordflow">if</span> (in_hlp_) {</div>
-<div class="line"><a name="l02533"></a><span class="lineno"> 2533</span>&#160; </div>
-<div class="line"><a name="l02534"></a><span class="lineno"> 2534</span>&#160;        uint8 variable_index = add_hlp_reference(v);</div>
-<div class="line"><a name="l02535"></a><span class="lineno"> 2535</span>&#160;        <span class="keywordflow">if</span> (write)</div>
-<div class="line"><a name="l02536"></a><span class="lineno"> 2536</span>&#160;          current_object_-&gt;code_[write_index] = Atom::VLPointer(variable_index);</div>
-<div class="line"><a name="l02537"></a><span class="lineno"> 2537</span>&#160;      } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l02538"></a><span class="lineno"> 2538</span>&#160; </div>
-<div class="line"><a name="l02539"></a><span class="lineno"> 2539</span>&#160;        addLocalReference(v, write_index, p);</div>
-<div class="line"><a name="l02540"></a><span class="lineno"> 2540</span>&#160;        <span class="keywordflow">if</span> (write)</div>
-<div class="line"><a name="l02541"></a><span class="lineno"> 2541</span>&#160;          current_object_-&gt;code_[write_index] = Atom::Wildcard(p.atom_.asOpcode()); <span class="comment">// useless in skeleton expressions (already filled up in expression_head); usefull when the skeleton itself is a variable</span></div>
-<div class="line"><a name="l02542"></a><span class="lineno"> 2542</span>&#160;      }</div>
-<div class="line"><a name="l02543"></a><span class="lineno"> 2543</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l02544"></a><span class="lineno"> 2544</span>&#160;    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l02545"></a><span class="lineno"> 2545</span>&#160; </div>
-<div class="line"><a name="l02546"></a><span class="lineno"> 2546</span>&#160;      set_error(<span class="stringliteral">&quot; error: no variables allowed outside a pattern skeleton&quot;</span>);</div>
-<div class="line"><a name="l02547"></a><span class="lineno"> 2547</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l02548"></a><span class="lineno"> 2548</span>&#160;    }</div>
-<div class="line"><a name="l02549"></a><span class="lineno"> 2549</span>&#160;  }</div>
-<div class="line"><a name="l02550"></a><span class="lineno"> 2550</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l02551"></a><span class="lineno"> 2551</span>&#160;}</div>
-<div class="line"><a name="l02552"></a><span class="lineno"> 2552</span>&#160; </div>
-<div class="line"><a name="l02553"></a><span class="lineno"> 2553</span>&#160;<span class="keywordtype">bool</span> Compiler::read_reference(uint16 write_index, uint16 &amp;extent_index, <span class="keywordtype">bool</span> write, <span class="keyword">const</span> ReturnType t) {</div>
-<div class="line"><a name="l02554"></a><span class="lineno"> 2554</span>&#160; </div>
-<div class="line"><a name="l02555"></a><span class="lineno"> 2555</span>&#160;  uint16 index;</div>
-<div class="line"><a name="l02556"></a><span class="lineno"> 2556</span>&#160;  <span class="keywordflow">if</span> ((t == ANY || (t != ANY &amp;&amp; current_class_.type == t)) &amp;&amp; this_()) {</div>
-<div class="line"><a name="l02557"></a><span class="lineno"> 2557</span>&#160; </div>
-<div class="line"><a name="l02558"></a><span class="lineno"> 2558</span>&#160;    <span class="keywordflow">if</span> (write)</div>
-<div class="line"><a name="l02559"></a><span class="lineno"> 2559</span>&#160;      current_object_-&gt;code_[write_index] = Atom::This();</div>
-<div class="line"><a name="l02560"></a><span class="lineno"> 2560</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l02561"></a><span class="lineno"> 2561</span>&#160;  }</div>
-<div class="line"><a name="l02562"></a><span class="lineno"> 2562</span>&#160;  <span class="keywordflow">if</span> (local_reference(index, t)) {</div>
-<div class="line"><a name="l02563"></a><span class="lineno"> 2563</span>&#160; </div>
-<div class="line"><a name="l02564"></a><span class="lineno"> 2564</span>&#160;    <span class="keywordflow">if</span> (write)</div>
-<div class="line"><a name="l02565"></a><span class="lineno"> 2565</span>&#160;      current_object_-&gt;code_[write_index] = Atom::CodeVLPointer(index); <span class="comment">// local references are always pointing to the value array</span></div>
-<div class="line"><a name="l02566"></a><span class="lineno"> 2566</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l02567"></a><span class="lineno"> 2567</span>&#160;  }</div>
-<div class="line"><a name="l02568"></a><span class="lineno"> 2568</span>&#160;  <span class="keywordflow">if</span> (global_reference(index, t)) { <span class="comment">// index is the index held by a reference pointer</span></div>
-<div class="line"><a name="l02569"></a><span class="lineno"> 2569</span>&#160; </div>
-<div class="line"><a name="l02570"></a><span class="lineno"> 2570</span>&#160;    <span class="keywordflow">if</span> (write)</div>
-<div class="line"><a name="l02571"></a><span class="lineno"> 2571</span>&#160;      current_object_-&gt;code_[write_index] = Atom::RPointer(index);</div>
-<div class="line"><a name="l02572"></a><span class="lineno"> 2572</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l02573"></a><span class="lineno"> 2573</span>&#160;  }</div>
-<div class="line"><a name="l02574"></a><span class="lineno"> 2574</span>&#160;  vector&lt;int16&gt; v;</div>
-<div class="line"><a name="l02575"></a><span class="lineno"> 2575</span>&#160;  <span class="keywordflow">if</span> (this_indirection(v, t)) {</div>
-<div class="line"><a name="l02576"></a><span class="lineno"> 2576</span>&#160; </div>
-<div class="line"><a name="l02577"></a><span class="lineno"> 2577</span>&#160;    <span class="keywordflow">if</span> (write) {</div>
-<div class="line"><a name="l02578"></a><span class="lineno"> 2578</span>&#160; </div>
-<div class="line"><a name="l02579"></a><span class="lineno"> 2579</span>&#160;      current_object_-&gt;code_[write_index] = Atom::IPointer(extent_index);</div>
-<div class="line"><a name="l02580"></a><span class="lineno"> 2580</span>&#160;      current_object_-&gt;code_[extent_index++] = Atom::CPointer(v.size() + 1);</div>
-<div class="line"><a name="l02581"></a><span class="lineno"> 2581</span>&#160;      current_object_-&gt;code_[extent_index++] = Atom::This();</div>
-<div class="line"><a name="l02582"></a><span class="lineno"> 2582</span>&#160;      <span class="keywordflow">for</span> (uint16 i = 0; i &lt; v.size(); ++i) {</div>
-<div class="line"><a name="l02583"></a><span class="lineno"> 2583</span>&#160; </div>
-<div class="line"><a name="l02584"></a><span class="lineno"> 2584</span>&#160;        <span class="keywordflow">switch</span> (v[i]) {</div>
-<div class="line"><a name="l02585"></a><span class="lineno"> 2585</span>&#160;        <span class="keywordflow">case</span> -1:</div>
-<div class="line"><a name="l02586"></a><span class="lineno"> 2586</span>&#160;          current_object_-&gt;code_[extent_index++] = Atom::View();</div>
-<div class="line"><a name="l02587"></a><span class="lineno"> 2587</span>&#160;          <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l02588"></a><span class="lineno"> 2588</span>&#160;        <span class="keywordflow">case</span> -2:</div>
-<div class="line"><a name="l02589"></a><span class="lineno"> 2589</span>&#160;          current_object_-&gt;code_[extent_index++] = Atom::Mks();</div>
-<div class="line"><a name="l02590"></a><span class="lineno"> 2590</span>&#160;          <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l02591"></a><span class="lineno"> 2591</span>&#160;        <span class="keywordflow">case</span> -3:</div>
-<div class="line"><a name="l02592"></a><span class="lineno"> 2592</span>&#160;          current_object_-&gt;code_[extent_index++] = Atom::Vws();</div>
-<div class="line"><a name="l02593"></a><span class="lineno"> 2593</span>&#160;          <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l02594"></a><span class="lineno"> 2594</span>&#160;        <span class="keywordflow">default</span>:</div>
-<div class="line"><a name="l02595"></a><span class="lineno"> 2595</span>&#160;          current_object_-&gt;code_[extent_index++] = Atom::IPointer(v[i]);</div>
-<div class="line"><a name="l02596"></a><span class="lineno"> 2596</span>&#160;          <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l02597"></a><span class="lineno"> 2597</span>&#160;        }</div>
-<div class="line"><a name="l02598"></a><span class="lineno"> 2598</span>&#160;      }</div>
-<div class="line"><a name="l02599"></a><span class="lineno"> 2599</span>&#160;    }</div>
-<div class="line"><a name="l02600"></a><span class="lineno"> 2600</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l02601"></a><span class="lineno"> 2601</span>&#160;  }</div>
-<div class="line"><a name="l02602"></a><span class="lineno"> 2602</span>&#160;  uint16 cast_opcode;</div>
-<div class="line"><a name="l02603"></a><span class="lineno"> 2603</span>&#160;  <span class="keywordflow">if</span> (local_indirection(v, t, cast_opcode)) {</div>
-<div class="line"><a name="l02604"></a><span class="lineno"> 2604</span>&#160; </div>
-<div class="line"><a name="l02605"></a><span class="lineno"> 2605</span>&#160;    <span class="keywordflow">if</span> (write) {</div>
-<div class="line"><a name="l02606"></a><span class="lineno"> 2606</span>&#160; </div>
-<div class="line"><a name="l02607"></a><span class="lineno"> 2607</span>&#160;      current_object_-&gt;code_[write_index] = Atom::IPointer(extent_index);</div>
-<div class="line"><a name="l02608"></a><span class="lineno"> 2608</span>&#160;      current_object_-&gt;code_[extent_index++] = Atom::CPointer(v.size());</div>
-<div class="line"><a name="l02609"></a><span class="lineno"> 2609</span>&#160;      current_object_-&gt;code_[extent_index++] = Atom::CodeVLPointer(v[0], cast_opcode);</div>
-<div class="line"><a name="l02610"></a><span class="lineno"> 2610</span>&#160;      <span class="keywordflow">for</span> (uint16 i = 1; i &lt; v.size(); ++i) {</div>
-<div class="line"><a name="l02611"></a><span class="lineno"> 2611</span>&#160; </div>
-<div class="line"><a name="l02612"></a><span class="lineno"> 2612</span>&#160;        <span class="keywordflow">switch</span> (v[i]) {</div>
-<div class="line"><a name="l02613"></a><span class="lineno"> 2613</span>&#160;        <span class="keywordflow">case</span> -1:</div>
-<div class="line"><a name="l02614"></a><span class="lineno"> 2614</span>&#160;          current_object_-&gt;code_[extent_index++] = Atom::View();</div>
-<div class="line"><a name="l02615"></a><span class="lineno"> 2615</span>&#160;          <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l02616"></a><span class="lineno"> 2616</span>&#160;        <span class="keywordflow">case</span> -2:</div>
-<div class="line"><a name="l02617"></a><span class="lineno"> 2617</span>&#160;          current_object_-&gt;code_[extent_index++] = Atom::Mks();</div>
-<div class="line"><a name="l02618"></a><span class="lineno"> 2618</span>&#160;          <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l02619"></a><span class="lineno"> 2619</span>&#160;        <span class="keywordflow">case</span> -3:</div>
-<div class="line"><a name="l02620"></a><span class="lineno"> 2620</span>&#160;          current_object_-&gt;code_[extent_index++] = Atom::Vws();</div>
-<div class="line"><a name="l02621"></a><span class="lineno"> 2621</span>&#160;          <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l02622"></a><span class="lineno"> 2622</span>&#160;        <span class="keywordflow">default</span>:</div>
-<div class="line"><a name="l02623"></a><span class="lineno"> 2623</span>&#160;          current_object_-&gt;code_[extent_index++] = Atom::IPointer(v[i]);</div>
-<div class="line"><a name="l02624"></a><span class="lineno"> 2624</span>&#160;          <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l02625"></a><span class="lineno"> 2625</span>&#160;        }</div>
-<div class="line"><a name="l02626"></a><span class="lineno"> 2626</span>&#160;      }</div>
-<div class="line"><a name="l02627"></a><span class="lineno"> 2627</span>&#160;    }</div>
-<div class="line"><a name="l02628"></a><span class="lineno"> 2628</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l02629"></a><span class="lineno"> 2629</span>&#160;  }</div>
-<div class="line"><a name="l02630"></a><span class="lineno"> 2630</span>&#160;  <span class="keywordflow">if</span> (global_indirection(v, t)) { <span class="comment">// v[0] is the index held by a reference pointer</span></div>
-<div class="line"><a name="l02631"></a><span class="lineno"> 2631</span>&#160; </div>
-<div class="line"><a name="l02632"></a><span class="lineno"> 2632</span>&#160;    <span class="keywordflow">if</span> (write) {</div>
-<div class="line"><a name="l02633"></a><span class="lineno"> 2633</span>&#160; </div>
-<div class="line"><a name="l02634"></a><span class="lineno"> 2634</span>&#160;      current_object_-&gt;code_[write_index] = Atom::IPointer(extent_index);</div>
-<div class="line"><a name="l02635"></a><span class="lineno"> 2635</span>&#160;      current_object_-&gt;code_[extent_index++] = Atom::CPointer(v.size());</div>
-<div class="line"><a name="l02636"></a><span class="lineno"> 2636</span>&#160;      current_object_-&gt;code_[extent_index++] = Atom::RPointer(v[0]);</div>
-<div class="line"><a name="l02637"></a><span class="lineno"> 2637</span>&#160;      <span class="keywordflow">for</span> (uint16 i = 1; i &lt; v.size(); ++i) {</div>
-<div class="line"><a name="l02638"></a><span class="lineno"> 2638</span>&#160; </div>
-<div class="line"><a name="l02639"></a><span class="lineno"> 2639</span>&#160;        <span class="keywordflow">switch</span> (v[i]) {</div>
-<div class="line"><a name="l02640"></a><span class="lineno"> 2640</span>&#160;        <span class="keywordflow">case</span> -2:</div>
-<div class="line"><a name="l02641"></a><span class="lineno"> 2641</span>&#160;          current_object_-&gt;code_[extent_index++] = Atom::Mks();</div>
-<div class="line"><a name="l02642"></a><span class="lineno"> 2642</span>&#160;          <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l02643"></a><span class="lineno"> 2643</span>&#160;        <span class="keywordflow">case</span> -3:</div>
-<div class="line"><a name="l02644"></a><span class="lineno"> 2644</span>&#160;          current_object_-&gt;code_[extent_index++] = Atom::Vws();</div>
-<div class="line"><a name="l02645"></a><span class="lineno"> 2645</span>&#160;          <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l02646"></a><span class="lineno"> 2646</span>&#160;        <span class="keywordflow">default</span>:</div>
-<div class="line"><a name="l02647"></a><span class="lineno"> 2647</span>&#160;          current_object_-&gt;code_[extent_index++] = Atom::IPointer(v[i]);</div>
-<div class="line"><a name="l02648"></a><span class="lineno"> 2648</span>&#160;          <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l02649"></a><span class="lineno"> 2649</span>&#160;        }</div>
-<div class="line"><a name="l02650"></a><span class="lineno"> 2650</span>&#160;      }</div>
-<div class="line"><a name="l02651"></a><span class="lineno"> 2651</span>&#160;    }</div>
-<div class="line"><a name="l02652"></a><span class="lineno"> 2652</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l02653"></a><span class="lineno"> 2653</span>&#160;  }</div>
-<div class="line"><a name="l02654"></a><span class="lineno"> 2654</span>&#160;  <span class="keywordflow">if</span> (hlp_reference(index)) {</div>
-<div class="line"><a name="l02655"></a><span class="lineno"> 2655</span>&#160; </div>
-<div class="line"><a name="l02656"></a><span class="lineno"> 2656</span>&#160;    <span class="keywordflow">if</span> (write)</div>
-<div class="line"><a name="l02657"></a><span class="lineno"> 2657</span>&#160;      current_object_-&gt;code_[write_index] = Atom::VLPointer(index);</div>
-<div class="line"><a name="l02658"></a><span class="lineno"> 2658</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l02659"></a><span class="lineno"> 2659</span>&#160;  }</div>
-<div class="line"><a name="l02660"></a><span class="lineno"> 2660</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l02661"></a><span class="lineno"> 2661</span>&#160;}</div>
-<div class="line"><a name="l02662"></a><span class="lineno"> 2662</span>&#160; </div>
-<div class="line"><a name="l02663"></a><span class="lineno"> 2663</span>&#160;<span class="keywordtype">bool</span> Compiler::read_wildcard(uint16 write_index, uint16 &amp;extent_index, <span class="keywordtype">bool</span> write) {</div>
-<div class="line"><a name="l02664"></a><span class="lineno"> 2664</span>&#160; </div>
-<div class="line"><a name="l02665"></a><span class="lineno"> 2665</span>&#160;  <span class="keywordflow">if</span> (wildcard()) {</div>
-<div class="line"><a name="l02666"></a><span class="lineno"> 2666</span>&#160; </div>
-<div class="line"><a name="l02667"></a><span class="lineno"> 2667</span>&#160;    <span class="keywordflow">if</span> (state_.pattern_lvl || allow_variables_and_wildcards_outside_pattern_skeleton_) {</div>
-<div class="line"><a name="l02668"></a><span class="lineno"> 2668</span>&#160; </div>
-<div class="line"><a name="l02669"></a><span class="lineno"> 2669</span>&#160;      <span class="keywordflow">if</span> (write)</div>
-<div class="line"><a name="l02670"></a><span class="lineno"> 2670</span>&#160;        current_object_-&gt;code_[write_index] = Atom::Wildcard();</div>
-<div class="line"><a name="l02671"></a><span class="lineno"> 2671</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l02672"></a><span class="lineno"> 2672</span>&#160;    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l02673"></a><span class="lineno"> 2673</span>&#160; </div>
-<div class="line"><a name="l02674"></a><span class="lineno"> 2674</span>&#160;      set_error(<span class="stringliteral">&quot; error: no wildcards allowed outside a pattern skeleton&quot;</span>);</div>
-<div class="line"><a name="l02675"></a><span class="lineno"> 2675</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l02676"></a><span class="lineno"> 2676</span>&#160;    }</div>
-<div class="line"><a name="l02677"></a><span class="lineno"> 2677</span>&#160;  }</div>
-<div class="line"><a name="l02678"></a><span class="lineno"> 2678</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l02679"></a><span class="lineno"> 2679</span>&#160;}</div>
-<div class="line"><a name="l02680"></a><span class="lineno"> 2680</span>&#160; </div>
-<div class="line"><a name="l02681"></a><span class="lineno"> 2681</span>&#160;<span class="keywordtype">bool</span> Compiler::read_tail_wildcard(uint16 write_index, uint16 &amp;extent_index, <span class="keywordtype">bool</span> write) {</div>
-<div class="line"><a name="l02682"></a><span class="lineno"> 2682</span>&#160; </div>
-<div class="line"><a name="l02683"></a><span class="lineno"> 2683</span>&#160;  <span class="keywordflow">if</span> (tail_wildcard()) {</div>
-<div class="line"><a name="l02684"></a><span class="lineno"> 2684</span>&#160; </div>
-<div class="line"><a name="l02685"></a><span class="lineno"> 2685</span>&#160;    <span class="keywordflow">if</span> (state_.pattern_lvl) {</div>
-<div class="line"><a name="l02686"></a><span class="lineno"> 2686</span>&#160; </div>
-<div class="line"><a name="l02687"></a><span class="lineno"> 2687</span>&#160;      <span class="keywordflow">if</span> (write)</div>
-<div class="line"><a name="l02688"></a><span class="lineno"> 2688</span>&#160;        current_object_-&gt;code_[write_index] = Atom::TailWildcard();</div>
-<div class="line"><a name="l02689"></a><span class="lineno"> 2689</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l02690"></a><span class="lineno"> 2690</span>&#160;    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l02691"></a><span class="lineno"> 2691</span>&#160; </div>
-<div class="line"><a name="l02692"></a><span class="lineno"> 2692</span>&#160;      set_error(<span class="stringliteral">&quot; error: no wildcards allowed outside a pattern skeleton&quot;</span>);</div>
-<div class="line"><a name="l02693"></a><span class="lineno"> 2693</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l02694"></a><span class="lineno"> 2694</span>&#160;    }</div>
-<div class="line"><a name="l02695"></a><span class="lineno"> 2695</span>&#160;  }</div>
-<div class="line"><a name="l02696"></a><span class="lineno"> 2696</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l02697"></a><span class="lineno"> 2697</span>&#160;}</div>
-<div class="line"><a name="l02698"></a><span class="lineno"> 2698</span>&#160; </div>
-<div class="line"><a name="l02699"></a><span class="lineno"> 2699</span>&#160;std::string Compiler::getObjectName(<span class="keyword">const</span> uint16 index)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l02700"></a><span class="lineno"> 2700</span>&#160; </div>
-<div class="line"><a name="l02701"></a><span class="lineno"> 2701</span>&#160;  unordered_map&lt;std::string, Reference&gt;::const_iterator r;</div>
-<div class="line"><a name="l02702"></a><span class="lineno"> 2702</span>&#160;  <span class="keywordflow">for</span> (r = global_references_.begin(); r != global_references_.end(); ++r) {</div>
-<div class="line"><a name="l02703"></a><span class="lineno"> 2703</span>&#160; </div>
-<div class="line"><a name="l02704"></a><span class="lineno"> 2704</span>&#160;    <span class="keywordflow">if</span> (r-&gt;second.index_ == index)</div>
-<div class="line"><a name="l02705"></a><span class="lineno"> 2705</span>&#160;      <span class="keywordflow">return</span> r-&gt;first;</div>
-<div class="line"><a name="l02706"></a><span class="lineno"> 2706</span>&#160;  }</div>
-<div class="line"><a name="l02707"></a><span class="lineno"> 2707</span>&#160;  std::string s;</div>
-<div class="line"><a name="l02708"></a><span class="lineno"> 2708</span>&#160;  <span class="keywordflow">return</span> s;</div>
-<div class="line"><a name="l02709"></a><span class="lineno"> 2709</span>&#160;}</div>
+<div class="line"><a name="l02532"></a><span class="lineno"> 2532</span>&#160;      <span class="keywordflow">if</span> (in_hlp_ ||</div>
+<div class="line"><a name="l02533"></a><span class="lineno"> 2533</span>&#160;          (allow_variables_and_wildcards_outside_pattern_skeleton_ &amp;&amp; current_class_.str_opcode != <span class="stringliteral">&quot;pgm&quot;</span>)) {</div>
+<div class="line"><a name="l02534"></a><span class="lineno"> 2534</span>&#160; </div>
+<div class="line"><a name="l02535"></a><span class="lineno"> 2535</span>&#160;        uint8 variable_index = add_hlp_reference(v);</div>
+<div class="line"><a name="l02536"></a><span class="lineno"> 2536</span>&#160;        <span class="keywordflow">if</span> (write)</div>
+<div class="line"><a name="l02537"></a><span class="lineno"> 2537</span>&#160;          current_object_-&gt;code_[write_index] = Atom::VLPointer(variable_index);</div>
+<div class="line"><a name="l02538"></a><span class="lineno"> 2538</span>&#160;      } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l02539"></a><span class="lineno"> 2539</span>&#160; </div>
+<div class="line"><a name="l02540"></a><span class="lineno"> 2540</span>&#160;        addLocalReference(v, write_index, p);</div>
+<div class="line"><a name="l02541"></a><span class="lineno"> 2541</span>&#160;        <span class="keywordflow">if</span> (write)</div>
+<div class="line"><a name="l02542"></a><span class="lineno"> 2542</span>&#160;          current_object_-&gt;code_[write_index] = Atom::Wildcard(p.atom_.asOpcode()); <span class="comment">// useless in skeleton expressions (already filled up in expression_head); usefull when the skeleton itself is a variable</span></div>
+<div class="line"><a name="l02543"></a><span class="lineno"> 2543</span>&#160;      }</div>
+<div class="line"><a name="l02544"></a><span class="lineno"> 2544</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l02545"></a><span class="lineno"> 2545</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l02546"></a><span class="lineno"> 2546</span>&#160; </div>
+<div class="line"><a name="l02547"></a><span class="lineno"> 2547</span>&#160;      set_error(<span class="stringliteral">&quot; error: no variables allowed outside a pattern skeleton&quot;</span>);</div>
+<div class="line"><a name="l02548"></a><span class="lineno"> 2548</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l02549"></a><span class="lineno"> 2549</span>&#160;    }</div>
+<div class="line"><a name="l02550"></a><span class="lineno"> 2550</span>&#160;  }</div>
+<div class="line"><a name="l02551"></a><span class="lineno"> 2551</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l02552"></a><span class="lineno"> 2552</span>&#160;}</div>
+<div class="line"><a name="l02553"></a><span class="lineno"> 2553</span>&#160; </div>
+<div class="line"><a name="l02554"></a><span class="lineno"> 2554</span>&#160;<span class="keywordtype">bool</span> Compiler::read_reference(uint16 write_index, uint16 &amp;extent_index, <span class="keywordtype">bool</span> write, <span class="keyword">const</span> ReturnType t) {</div>
+<div class="line"><a name="l02555"></a><span class="lineno"> 2555</span>&#160; </div>
+<div class="line"><a name="l02556"></a><span class="lineno"> 2556</span>&#160;  uint16 index;</div>
+<div class="line"><a name="l02557"></a><span class="lineno"> 2557</span>&#160;  <span class="keywordflow">if</span> ((t == ANY || (t != ANY &amp;&amp; current_class_.type == t)) &amp;&amp; this_()) {</div>
+<div class="line"><a name="l02558"></a><span class="lineno"> 2558</span>&#160; </div>
+<div class="line"><a name="l02559"></a><span class="lineno"> 2559</span>&#160;    <span class="keywordflow">if</span> (write)</div>
+<div class="line"><a name="l02560"></a><span class="lineno"> 2560</span>&#160;      current_object_-&gt;code_[write_index] = Atom::This();</div>
+<div class="line"><a name="l02561"></a><span class="lineno"> 2561</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l02562"></a><span class="lineno"> 2562</span>&#160;  }</div>
+<div class="line"><a name="l02563"></a><span class="lineno"> 2563</span>&#160;  <span class="keywordflow">if</span> (local_reference(index, t)) {</div>
+<div class="line"><a name="l02564"></a><span class="lineno"> 2564</span>&#160; </div>
+<div class="line"><a name="l02565"></a><span class="lineno"> 2565</span>&#160;    <span class="keywordflow">if</span> (write)</div>
+<div class="line"><a name="l02566"></a><span class="lineno"> 2566</span>&#160;      current_object_-&gt;code_[write_index] = Atom::CodeVLPointer(index); <span class="comment">// local references are always pointing to the value array</span></div>
+<div class="line"><a name="l02567"></a><span class="lineno"> 2567</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l02568"></a><span class="lineno"> 2568</span>&#160;  }</div>
+<div class="line"><a name="l02569"></a><span class="lineno"> 2569</span>&#160;  <span class="keywordflow">if</span> (global_reference(index, t)) { <span class="comment">// index is the index held by a reference pointer</span></div>
+<div class="line"><a name="l02570"></a><span class="lineno"> 2570</span>&#160; </div>
+<div class="line"><a name="l02571"></a><span class="lineno"> 2571</span>&#160;    <span class="keywordflow">if</span> (write)</div>
+<div class="line"><a name="l02572"></a><span class="lineno"> 2572</span>&#160;      current_object_-&gt;code_[write_index] = Atom::RPointer(index);</div>
+<div class="line"><a name="l02573"></a><span class="lineno"> 2573</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l02574"></a><span class="lineno"> 2574</span>&#160;  }</div>
+<div class="line"><a name="l02575"></a><span class="lineno"> 2575</span>&#160;  vector&lt;int16&gt; v;</div>
+<div class="line"><a name="l02576"></a><span class="lineno"> 2576</span>&#160;  <span class="keywordflow">if</span> (this_indirection(v, t)) {</div>
+<div class="line"><a name="l02577"></a><span class="lineno"> 2577</span>&#160; </div>
+<div class="line"><a name="l02578"></a><span class="lineno"> 2578</span>&#160;    <span class="keywordflow">if</span> (write) {</div>
+<div class="line"><a name="l02579"></a><span class="lineno"> 2579</span>&#160; </div>
+<div class="line"><a name="l02580"></a><span class="lineno"> 2580</span>&#160;      current_object_-&gt;code_[write_index] = Atom::IPointer(extent_index);</div>
+<div class="line"><a name="l02581"></a><span class="lineno"> 2581</span>&#160;      current_object_-&gt;code_[extent_index++] = Atom::CPointer(v.size() + 1);</div>
+<div class="line"><a name="l02582"></a><span class="lineno"> 2582</span>&#160;      current_object_-&gt;code_[extent_index++] = Atom::This();</div>
+<div class="line"><a name="l02583"></a><span class="lineno"> 2583</span>&#160;      <span class="keywordflow">for</span> (uint16 i = 0; i &lt; v.size(); ++i) {</div>
+<div class="line"><a name="l02584"></a><span class="lineno"> 2584</span>&#160; </div>
+<div class="line"><a name="l02585"></a><span class="lineno"> 2585</span>&#160;        <span class="keywordflow">switch</span> (v[i]) {</div>
+<div class="line"><a name="l02586"></a><span class="lineno"> 2586</span>&#160;        <span class="keywordflow">case</span> -1:</div>
+<div class="line"><a name="l02587"></a><span class="lineno"> 2587</span>&#160;          current_object_-&gt;code_[extent_index++] = Atom::View();</div>
+<div class="line"><a name="l02588"></a><span class="lineno"> 2588</span>&#160;          <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l02589"></a><span class="lineno"> 2589</span>&#160;        <span class="keywordflow">case</span> -2:</div>
+<div class="line"><a name="l02590"></a><span class="lineno"> 2590</span>&#160;          current_object_-&gt;code_[extent_index++] = Atom::Mks();</div>
+<div class="line"><a name="l02591"></a><span class="lineno"> 2591</span>&#160;          <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l02592"></a><span class="lineno"> 2592</span>&#160;        <span class="keywordflow">case</span> -3:</div>
+<div class="line"><a name="l02593"></a><span class="lineno"> 2593</span>&#160;          current_object_-&gt;code_[extent_index++] = Atom::Vws();</div>
+<div class="line"><a name="l02594"></a><span class="lineno"> 2594</span>&#160;          <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l02595"></a><span class="lineno"> 2595</span>&#160;        <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l02596"></a><span class="lineno"> 2596</span>&#160;          current_object_-&gt;code_[extent_index++] = Atom::IPointer(v[i]);</div>
+<div class="line"><a name="l02597"></a><span class="lineno"> 2597</span>&#160;          <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l02598"></a><span class="lineno"> 2598</span>&#160;        }</div>
+<div class="line"><a name="l02599"></a><span class="lineno"> 2599</span>&#160;      }</div>
+<div class="line"><a name="l02600"></a><span class="lineno"> 2600</span>&#160;    }</div>
+<div class="line"><a name="l02601"></a><span class="lineno"> 2601</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l02602"></a><span class="lineno"> 2602</span>&#160;  }</div>
+<div class="line"><a name="l02603"></a><span class="lineno"> 2603</span>&#160;  uint16 cast_opcode;</div>
+<div class="line"><a name="l02604"></a><span class="lineno"> 2604</span>&#160;  <span class="keywordflow">if</span> (local_indirection(v, t, cast_opcode)) {</div>
+<div class="line"><a name="l02605"></a><span class="lineno"> 2605</span>&#160; </div>
+<div class="line"><a name="l02606"></a><span class="lineno"> 2606</span>&#160;    <span class="keywordflow">if</span> (write) {</div>
+<div class="line"><a name="l02607"></a><span class="lineno"> 2607</span>&#160; </div>
+<div class="line"><a name="l02608"></a><span class="lineno"> 2608</span>&#160;      current_object_-&gt;code_[write_index] = Atom::IPointer(extent_index);</div>
+<div class="line"><a name="l02609"></a><span class="lineno"> 2609</span>&#160;      current_object_-&gt;code_[extent_index++] = Atom::CPointer(v.size());</div>
+<div class="line"><a name="l02610"></a><span class="lineno"> 2610</span>&#160;      current_object_-&gt;code_[extent_index++] = Atom::CodeVLPointer(v[0], cast_opcode);</div>
+<div class="line"><a name="l02611"></a><span class="lineno"> 2611</span>&#160;      <span class="keywordflow">for</span> (uint16 i = 1; i &lt; v.size(); ++i) {</div>
+<div class="line"><a name="l02612"></a><span class="lineno"> 2612</span>&#160; </div>
+<div class="line"><a name="l02613"></a><span class="lineno"> 2613</span>&#160;        <span class="keywordflow">switch</span> (v[i]) {</div>
+<div class="line"><a name="l02614"></a><span class="lineno"> 2614</span>&#160;        <span class="keywordflow">case</span> -1:</div>
+<div class="line"><a name="l02615"></a><span class="lineno"> 2615</span>&#160;          current_object_-&gt;code_[extent_index++] = Atom::View();</div>
+<div class="line"><a name="l02616"></a><span class="lineno"> 2616</span>&#160;          <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l02617"></a><span class="lineno"> 2617</span>&#160;        <span class="keywordflow">case</span> -2:</div>
+<div class="line"><a name="l02618"></a><span class="lineno"> 2618</span>&#160;          current_object_-&gt;code_[extent_index++] = Atom::Mks();</div>
+<div class="line"><a name="l02619"></a><span class="lineno"> 2619</span>&#160;          <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l02620"></a><span class="lineno"> 2620</span>&#160;        <span class="keywordflow">case</span> -3:</div>
+<div class="line"><a name="l02621"></a><span class="lineno"> 2621</span>&#160;          current_object_-&gt;code_[extent_index++] = Atom::Vws();</div>
+<div class="line"><a name="l02622"></a><span class="lineno"> 2622</span>&#160;          <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l02623"></a><span class="lineno"> 2623</span>&#160;        <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l02624"></a><span class="lineno"> 2624</span>&#160;          current_object_-&gt;code_[extent_index++] = Atom::IPointer(v[i]);</div>
+<div class="line"><a name="l02625"></a><span class="lineno"> 2625</span>&#160;          <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l02626"></a><span class="lineno"> 2626</span>&#160;        }</div>
+<div class="line"><a name="l02627"></a><span class="lineno"> 2627</span>&#160;      }</div>
+<div class="line"><a name="l02628"></a><span class="lineno"> 2628</span>&#160;    }</div>
+<div class="line"><a name="l02629"></a><span class="lineno"> 2629</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l02630"></a><span class="lineno"> 2630</span>&#160;  }</div>
+<div class="line"><a name="l02631"></a><span class="lineno"> 2631</span>&#160;  <span class="keywordflow">if</span> (global_indirection(v, t)) { <span class="comment">// v[0] is the index held by a reference pointer</span></div>
+<div class="line"><a name="l02632"></a><span class="lineno"> 2632</span>&#160; </div>
+<div class="line"><a name="l02633"></a><span class="lineno"> 2633</span>&#160;    <span class="keywordflow">if</span> (write) {</div>
+<div class="line"><a name="l02634"></a><span class="lineno"> 2634</span>&#160; </div>
+<div class="line"><a name="l02635"></a><span class="lineno"> 2635</span>&#160;      current_object_-&gt;code_[write_index] = Atom::IPointer(extent_index);</div>
+<div class="line"><a name="l02636"></a><span class="lineno"> 2636</span>&#160;      current_object_-&gt;code_[extent_index++] = Atom::CPointer(v.size());</div>
+<div class="line"><a name="l02637"></a><span class="lineno"> 2637</span>&#160;      current_object_-&gt;code_[extent_index++] = Atom::RPointer(v[0]);</div>
+<div class="line"><a name="l02638"></a><span class="lineno"> 2638</span>&#160;      <span class="keywordflow">for</span> (uint16 i = 1; i &lt; v.size(); ++i) {</div>
+<div class="line"><a name="l02639"></a><span class="lineno"> 2639</span>&#160; </div>
+<div class="line"><a name="l02640"></a><span class="lineno"> 2640</span>&#160;        <span class="keywordflow">switch</span> (v[i]) {</div>
+<div class="line"><a name="l02641"></a><span class="lineno"> 2641</span>&#160;        <span class="keywordflow">case</span> -2:</div>
+<div class="line"><a name="l02642"></a><span class="lineno"> 2642</span>&#160;          current_object_-&gt;code_[extent_index++] = Atom::Mks();</div>
+<div class="line"><a name="l02643"></a><span class="lineno"> 2643</span>&#160;          <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l02644"></a><span class="lineno"> 2644</span>&#160;        <span class="keywordflow">case</span> -3:</div>
+<div class="line"><a name="l02645"></a><span class="lineno"> 2645</span>&#160;          current_object_-&gt;code_[extent_index++] = Atom::Vws();</div>
+<div class="line"><a name="l02646"></a><span class="lineno"> 2646</span>&#160;          <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l02647"></a><span class="lineno"> 2647</span>&#160;        <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l02648"></a><span class="lineno"> 2648</span>&#160;          current_object_-&gt;code_[extent_index++] = Atom::IPointer(v[i]);</div>
+<div class="line"><a name="l02649"></a><span class="lineno"> 2649</span>&#160;          <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l02650"></a><span class="lineno"> 2650</span>&#160;        }</div>
+<div class="line"><a name="l02651"></a><span class="lineno"> 2651</span>&#160;      }</div>
+<div class="line"><a name="l02652"></a><span class="lineno"> 2652</span>&#160;    }</div>
+<div class="line"><a name="l02653"></a><span class="lineno"> 2653</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l02654"></a><span class="lineno"> 2654</span>&#160;  }</div>
+<div class="line"><a name="l02655"></a><span class="lineno"> 2655</span>&#160;  <span class="keywordflow">if</span> (hlp_reference(index)) {</div>
+<div class="line"><a name="l02656"></a><span class="lineno"> 2656</span>&#160; </div>
+<div class="line"><a name="l02657"></a><span class="lineno"> 2657</span>&#160;    <span class="keywordflow">if</span> (write)</div>
+<div class="line"><a name="l02658"></a><span class="lineno"> 2658</span>&#160;      current_object_-&gt;code_[write_index] = Atom::VLPointer(index);</div>
+<div class="line"><a name="l02659"></a><span class="lineno"> 2659</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l02660"></a><span class="lineno"> 2660</span>&#160;  }</div>
+<div class="line"><a name="l02661"></a><span class="lineno"> 2661</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l02662"></a><span class="lineno"> 2662</span>&#160;}</div>
+<div class="line"><a name="l02663"></a><span class="lineno"> 2663</span>&#160; </div>
+<div class="line"><a name="l02664"></a><span class="lineno"> 2664</span>&#160;<span class="keywordtype">bool</span> Compiler::read_wildcard(uint16 write_index, uint16 &amp;extent_index, <span class="keywordtype">bool</span> write) {</div>
+<div class="line"><a name="l02665"></a><span class="lineno"> 2665</span>&#160; </div>
+<div class="line"><a name="l02666"></a><span class="lineno"> 2666</span>&#160;  <span class="keywordflow">if</span> (wildcard()) {</div>
+<div class="line"><a name="l02667"></a><span class="lineno"> 2667</span>&#160; </div>
+<div class="line"><a name="l02668"></a><span class="lineno"> 2668</span>&#160;    <span class="keywordflow">if</span> (state_.pattern_lvl || allow_variables_and_wildcards_outside_pattern_skeleton_) {</div>
+<div class="line"><a name="l02669"></a><span class="lineno"> 2669</span>&#160; </div>
+<div class="line"><a name="l02670"></a><span class="lineno"> 2670</span>&#160;      <span class="keywordflow">if</span> (write)</div>
+<div class="line"><a name="l02671"></a><span class="lineno"> 2671</span>&#160;        current_object_-&gt;code_[write_index] = Atom::Wildcard();</div>
+<div class="line"><a name="l02672"></a><span class="lineno"> 2672</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l02673"></a><span class="lineno"> 2673</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l02674"></a><span class="lineno"> 2674</span>&#160; </div>
+<div class="line"><a name="l02675"></a><span class="lineno"> 2675</span>&#160;      set_error(<span class="stringliteral">&quot; error: no wildcards allowed outside a pattern skeleton&quot;</span>);</div>
+<div class="line"><a name="l02676"></a><span class="lineno"> 2676</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l02677"></a><span class="lineno"> 2677</span>&#160;    }</div>
+<div class="line"><a name="l02678"></a><span class="lineno"> 2678</span>&#160;  }</div>
+<div class="line"><a name="l02679"></a><span class="lineno"> 2679</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l02680"></a><span class="lineno"> 2680</span>&#160;}</div>
+<div class="line"><a name="l02681"></a><span class="lineno"> 2681</span>&#160; </div>
+<div class="line"><a name="l02682"></a><span class="lineno"> 2682</span>&#160;<span class="keywordtype">bool</span> Compiler::read_tail_wildcard(uint16 write_index, uint16 &amp;extent_index, <span class="keywordtype">bool</span> write) {</div>
+<div class="line"><a name="l02683"></a><span class="lineno"> 2683</span>&#160; </div>
+<div class="line"><a name="l02684"></a><span class="lineno"> 2684</span>&#160;  <span class="keywordflow">if</span> (tail_wildcard()) {</div>
+<div class="line"><a name="l02685"></a><span class="lineno"> 2685</span>&#160; </div>
+<div class="line"><a name="l02686"></a><span class="lineno"> 2686</span>&#160;    <span class="keywordflow">if</span> (state_.pattern_lvl) {</div>
+<div class="line"><a name="l02687"></a><span class="lineno"> 2687</span>&#160; </div>
+<div class="line"><a name="l02688"></a><span class="lineno"> 2688</span>&#160;      <span class="keywordflow">if</span> (write)</div>
+<div class="line"><a name="l02689"></a><span class="lineno"> 2689</span>&#160;        current_object_-&gt;code_[write_index] = Atom::TailWildcard();</div>
+<div class="line"><a name="l02690"></a><span class="lineno"> 2690</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l02691"></a><span class="lineno"> 2691</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l02692"></a><span class="lineno"> 2692</span>&#160; </div>
+<div class="line"><a name="l02693"></a><span class="lineno"> 2693</span>&#160;      set_error(<span class="stringliteral">&quot; error: no wildcards allowed outside a pattern skeleton&quot;</span>);</div>
+<div class="line"><a name="l02694"></a><span class="lineno"> 2694</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l02695"></a><span class="lineno"> 2695</span>&#160;    }</div>
+<div class="line"><a name="l02696"></a><span class="lineno"> 2696</span>&#160;  }</div>
+<div class="line"><a name="l02697"></a><span class="lineno"> 2697</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l02698"></a><span class="lineno"> 2698</span>&#160;}</div>
+<div class="line"><a name="l02699"></a><span class="lineno"> 2699</span>&#160; </div>
+<div class="line"><a name="l02700"></a><span class="lineno"> 2700</span>&#160;std::string Compiler::getObjectName(<span class="keyword">const</span> uint16 index)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l02701"></a><span class="lineno"> 2701</span>&#160; </div>
+<div class="line"><a name="l02702"></a><span class="lineno"> 2702</span>&#160;  unordered_map&lt;std::string, Reference&gt;::const_iterator r;</div>
+<div class="line"><a name="l02703"></a><span class="lineno"> 2703</span>&#160;  <span class="keywordflow">for</span> (r = global_references_.begin(); r != global_references_.end(); ++r) {</div>
+<div class="line"><a name="l02704"></a><span class="lineno"> 2704</span>&#160; </div>
+<div class="line"><a name="l02705"></a><span class="lineno"> 2705</span>&#160;    <span class="keywordflow">if</span> (r-&gt;second.index_ == index)</div>
+<div class="line"><a name="l02706"></a><span class="lineno"> 2706</span>&#160;      <span class="keywordflow">return</span> r-&gt;first;</div>
+<div class="line"><a name="l02707"></a><span class="lineno"> 2707</span>&#160;  }</div>
+<div class="line"><a name="l02708"></a><span class="lineno"> 2708</span>&#160;  std::string s;</div>
+<div class="line"><a name="l02709"></a><span class="lineno"> 2709</span>&#160;  <span class="keywordflow">return</span> s;</div>
 <div class="line"><a name="l02710"></a><span class="lineno"> 2710</span>&#160;}</div>
+<div class="line"><a name="l02711"></a><span class="lineno"> 2711</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassr__code_1_1_atom_html"><div class="ttname"><a href="classr__code_1_1_atom.html">r_code::Atom</a></div><div class="ttdef"><b>Definition:</b> <a href="atom_8h_source.html#l00104">atom.h:104</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_sys_view_html"><div class="ttname"><a href="classr__code_1_1_sys_view.html">r_code::SysView</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00118">r_code/object.h:119</a></div></div>

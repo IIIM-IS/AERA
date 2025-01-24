@@ -68,6 +68,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="#pro-types">Protected Types</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
@@ -83,8 +84,10 @@ $(function() {
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a90c7d0bf43dc11d7c2e18963e1a04365"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtcp__io__device_1_1_t_c_p_connection.html#a90c7d0bf43dc11d7c2e18963e1a04365">TCPConnection</a> (std::shared_ptr&lt; <a class="el" href="classtcp__io__device_1_1_safe_queue.html">SafeQueue</a> &gt; receive_queue, std::shared_ptr&lt; <a class="el" href="classtcp__io__device_1_1_safe_queue.html">SafeQueue</a> &gt; send_queue, uint64_t msg_length_buf_size)</td></tr>
 <tr class="separator:a90c7d0bf43dc11d7c2e18963e1a04365"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f1eecfabb9eaca78c02413fc15544ba"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtcp__io__device_1_1_t_c_p_connection.html#a9f1eecfabb9eaca78c02413fc15544ba">establishConnection</a> (std::string port)</td></tr>
-<tr class="separator:a9f1eecfabb9eaca78c02413fc15544ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affc88dcbc7459ee2910d9cb764a8b92b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtcp__io__device_1_1_t_c_p_connection.html#affc88dcbc7459ee2910d9cb764a8b92b">listenAndAwaitConnection</a> (std::string port)</td></tr>
+<tr class="separator:affc88dcbc7459ee2910d9cb764a8b92b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4791e088add9ed62137c27e73d1b78c2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtcp__io__device_1_1_t_c_p_connection.html#a4791e088add9ed62137c27e73d1b78c2">establishConnection</a> (std::string host, std::string port)</td></tr>
+<tr class="separator:a4791e088add9ed62137c27e73d1b78c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a420506b904a4034a930ea55f4954c710"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtcp__io__device_1_1_t_c_p_connection.html#a420506b904a4034a930ea55f4954c710">start</a> ()</td></tr>
 <tr class="separator:a420506b904a4034a930ea55f4954c710"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29140209448c2cfb7d4ceb1eccb78f32"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtcp__io__device_1_1_t_c_p_connection.html#a29140209448c2cfb7d4ceb1eccb78f32">stop</a> ()</td></tr>
@@ -94,8 +97,14 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:aa6800760a32112a7ed906a209a0134bd"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtcp__io__device_1_1_t_c_p_connection.html#aa6800760a32112a7ed906a209a0134bd">receiveIsReady</a> (SOCKET fd)</td></tr>
-<tr class="separator:aa6800760a32112a7ed906a209a0134bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab33d3b7979092445d468e61e406d140d"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtcp__io__device_1_1_t_c_p_connection.html#ab33d3b7979092445d468e61e406d140d">receiveIsReady</a> (int fd)</td></tr>
+<tr class="separator:ab33d3b7979092445d468e61e406d140d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a829d3f2a83399ae66237d476dd7abf67"><td class="memItemLeft" align="right" valign="top"><a id="a829d3f2a83399ae66237d476dd7abf67"></a>
+static std::map&lt; int, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>type_to_name_map_</b></td></tr>
+<tr class="separator:a829d3f2a83399ae66237d476dd7abf67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
 Protected Types</h2></td></tr>
@@ -104,6 +113,10 @@ Protected Types</h2></td></tr>
 <b>STOPPED</b> = 2
  }</td></tr>
 <tr class="separator:ad36fd2eddc1fd02b82d948345b18c4f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af01e4bb84f884aa132cda98b6de0c28f"><td class="memItemLeft" align="right" valign="top"><a id="af01e4bb84f884aa132cda98b6de0c28f"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>SocketType</b> { <b>CLIENT</b> = 0, 
+<b>SERVER</b> = 1
+ }</td></tr>
+<tr class="separator:af01e4bb84f884aa132cda98b6de0c28f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -119,12 +132,18 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:acc8eaee6906558378e45246b8bb75cba"><td class="memItemLeft" align="right" valign="top"><a id="acc8eaee6906558378e45246b8bb75cba"></a>
 State&#160;</td><td class="memItemRight" valign="bottom"><b>state_</b></td></tr>
 <tr class="separator:acc8eaee6906558378e45246b8bb75cba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12f3585790fb6f84f2c07bd72562dfac"><td class="memItemLeft" align="right" valign="top"><a id="a12f3585790fb6f84f2c07bd72562dfac"></a>
+SocketType&#160;</td><td class="memItemRight" valign="bottom"><b>socket_type_</b></td></tr>
+<tr class="separator:a12f3585790fb6f84f2c07bd72562dfac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe0393e880fd03cc642d9d966e0da044"><td class="memItemLeft" align="right" valign="top"><a id="abe0393e880fd03cc642d9d966e0da044"></a>
 std::shared_ptr&lt; std::thread &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>tcp_background_thread_</b></td></tr>
 <tr class="separator:abe0393e880fd03cc642d9d966e0da044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf0fbf55ab83996b9c7585c8b8764442"><td class="memItemLeft" align="right" valign="top"><a id="adf0fbf55ab83996b9c7585c8b8764442"></a>
-SOCKET&#160;</td><td class="memItemRight" valign="bottom"><b>tcp_client_socket_</b></td></tr>
-<tr class="separator:adf0fbf55ab83996b9c7585c8b8764442"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab03004aca896b07842d4b943e61cb186"><td class="memItemLeft" align="right" valign="top"><a id="ab03004aca896b07842d4b943e61cb186"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>tcp_socket_</b></td></tr>
+<tr class="separator:ab03004aca896b07842d4b943e61cb186"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30cddf1b89fdb48a5bfeff9a983cf149"><td class="memItemLeft" align="right" valign="top"><a id="a30cddf1b89fdb48a5bfeff9a983cf149"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>server_listen_socket_</b></td></tr>
+<tr class="separator:a30cddf1b89fdb48a5bfeff9a983cf149"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1302a0bd62e671f954b97b679ad16c5e"><td class="memItemLeft" align="right" valign="top"><a id="a1302a0bd62e671f954b97b679ad16c5e"></a>
 uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>msg_buf_size_</b></td></tr>
 <tr class="separator:a1302a0bd62e671f954b97b679ad16c5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -137,11 +156,17 @@ std::shared_ptr&lt; <a class="el" href="classtcp__io__device_1_1_safe_queue.html
 <tr class="memitem:aa4c0cb84bfd96abb48ac4a3625b57331"><td class="memItemLeft" align="right" valign="top"><a id="aa4c0cb84bfd96abb48ac4a3625b57331"></a>
 std::shared_ptr&lt; <a class="el" href="classtcp__io__device_1_1_safe_queue.html">SafeQueue</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>outgoing_queue_</b></td></tr>
 <tr class="separator:aa4c0cb84bfd96abb48ac4a3625b57331"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab239bc21576865cbd20293f7cd97b3b8"><td class="memItemLeft" align="right" valign="top"><a id="ab239bc21576865cbd20293f7cd97b3b8"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>host_</b></td></tr>
+<tr class="separator:ab239bc21576865cbd20293f7cd97b3b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3facd5d69e653f4bace9b19c99caef5a"><td class="memItemLeft" align="right" valign="top"><a id="a3facd5d69e653f4bace9b19c99caef5a"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>port_</b></td></tr>
+<tr class="separator:a3facd5d69e653f4bace9b19c99caef5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classtcp__io__device_1_1_t_c_p_connection.html">TCPConnection</a> is used to pass data using Win-Sockets between the environment simulation and the <a class="el" href="classtcp__io__device_1_1_tcp_io_device.html">TcpIoDevice</a> object. It runs in a different thread and uses SafeQueues to pass data between the IODevice and the socket connection. </p>
 
-<p class="definition">Definition at line <a class="el" href="tcp__connection_8h_source.html#l00166">166</a> of file <a class="el" href="tcp__connection_8h_source.html">tcp_connection.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tcp__connection_8h_source.html#l00167">167</a> of file <a class="el" href="tcp__connection_8h_source.html">tcp_connection.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a90c7d0bf43dc11d7c2e18963e1a04365"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a90c7d0bf43dc11d7c2e18963e1a04365">&#9670;&nbsp;</a></span>TCPConnection()</h2>
@@ -186,8 +211,8 @@ std::shared_ptr&lt; <a class="el" href="classtcp__io__device_1_1_safe_queue.html
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a9f1eecfabb9eaca78c02413fc15544ba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9f1eecfabb9eaca78c02413fc15544ba">&#9670;&nbsp;</a></span>establishConnection()</h2>
+<a id="a4791e088add9ed62137c27e73d1b78c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4791e088add9ed62137c27e73d1b78c2">&#9670;&nbsp;</a></span>establishConnection()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -196,17 +221,29 @@ std::shared_ptr&lt; <a class="el" href="classtcp__io__device_1_1_safe_queue.html
           <td class="memname">int tcp_io_device::TCPConnection::establishConnection </td>
           <td>(</td>
           <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>port</em></td><td>)</td>
+          <td class="paramname"><em>host</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>port</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>Opens a socket to connect to a client on the passed port. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">port</td><td>The port used to communicate with the client. </td></tr>
+    <tr><td class="paramname">host</td><td>The host address used to communicate with the server. </td></tr>
+    <tr><td class="paramname">port</td><td>The port used to communicate with the server. </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>0 for success, nonzero for error. </dd></dl>
 
 </div>
 </div>
@@ -234,12 +271,37 @@ std::shared_ptr&lt; <a class="el" href="classtcp__io__device_1_1_safe_queue.html
 </div><div class="memdoc">
 <p>Returns true if the <a class="el" href="classtcp__io__device_1_1_t_c_p_connection.html">TCPConnection</a> is running. </p><dl class="section return"><dt>Returns</dt><dd>true if running, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tcp__connection_8h_source.html#l00199">199</a> of file <a class="el" href="tcp__connection_8h_source.html">tcp_connection.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tcp__connection_8h_source.html#l00211">211</a> of file <a class="el" href="tcp__connection_8h_source.html">tcp_connection.h</a>.</p>
 
 </div>
 </div>
-<a id="aa6800760a32112a7ed906a209a0134bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa6800760a32112a7ed906a209a0134bd">&#9670;&nbsp;</a></span>receiveIsReady()</h2>
+<a id="affc88dcbc7459ee2910d9cb764a8b92b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affc88dcbc7459ee2910d9cb764a8b92b">&#9670;&nbsp;</a></span>listenAndAwaitConnection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tcp_io_device::TCPConnection::listenAndAwaitConnection </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>port</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Listen on the passed port and wait for a client to connect. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">port</td><td>The port used to communicate with the client. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 for success, nonzero for error. </dd></dl>
+
+</div>
+</div>
+<a id="ab33d3b7979092445d468e61e406d140d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab33d3b7979092445d468e61e406d140d">&#9670;&nbsp;</a></span>receiveIsReady()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -250,7 +312,7 @@ std::shared_ptr&lt; <a class="el" href="classtcp__io__device_1_1_safe_queue.html
         <tr>
           <td class="memname">static int tcp_io_device::TCPConnection::receiveIsReady </td>
           <td>(</td>
-          <td class="paramtype">SOCKET&#160;</td>
+          <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>fd</em></td><td>)</td>
           <td></td>
         </tr>
@@ -344,7 +406,7 @@ std::shared_ptr&lt; <a class="el" href="classtcp__io__device_1_1_safe_queue.html
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Starts the communication between environment simulation (client) and the <a class="el" href="classtcp__io__device_1_1_t_c_p_connection.html">TCPConnection</a> (server). </p>
+<p>Starts the communication between environment simulation and the AERA <a class="el" href="classtcp__io__device_1_1_t_c_p_connection.html">TCPConnection</a>. </p>
 
 </div>
 </div>

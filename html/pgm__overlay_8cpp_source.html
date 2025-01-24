@@ -74,9 +74,9 @@ $(function() {
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//_/_/ AERA</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//_/_/ Autocatalytic Endogenous Reflective Architecture</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//_/_/ </span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Jeff Thompson</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Kristinn R. Thorisson</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2023 Icelandic Institute for Intelligent Machines</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2025 Jeff Thompson</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">//_/_/ Copyright (c) 2018 Thor Tomasarson</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">//_/_/ http://www.iiim.is</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//_/_/ </span></div>
@@ -769,155 +769,159 @@ $(function() {
 <div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;  <span class="keywordflow">case</span> IMPOSSIBLE:</div>
 <div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;    <span class="keywordflow">return</span> NULL;</div>
 <div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;  }</div>
-<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;}</div>
-<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160; </div>
-<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;PGMOverlay::MatchResult PGMOverlay::match(<a class="code" href="classr__exec_1_1_view.html">r_exec::View</a> *input, uint16 &amp;input_index) {</div>
+<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160; </div>
+<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;  <span class="keywordflow">return</span> NULL;</div>
+<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;}</div>
 <div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160; </div>
-<div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160;  input_views_.push_back(input);</div>
-<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160;  <span class="keywordtype">bool</span> failed = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;  <a class="code" href="classr__code_1_1list_1_1const__iterator.html">r_code::list&lt;uint16&gt;::const_iterator</a> it;</div>
-<div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;  <span class="keywordflow">for</span> (it = input_pattern_indices_.begin(); it != input_pattern_indices_.end(); ++it) {</div>
-<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160; </div>
-<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;    MatchResult r = _match(input, *it);</div>
-<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;    <span class="keywordflow">switch</span> (r) {</div>
-<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;    <span class="keywordflow">case</span> SUCCESS:</div>
-<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;      input_index = *it;</div>
-<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;      input_pattern_indices_.erase(it);</div>
-<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;      <span class="keywordflow">return</span> r;</div>
-<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;    <span class="keywordflow">case</span> FAILURE:</div>
-<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;      failed = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;      rollback(); <span class="comment">// to try another pattern on a clean basis.</span></div>
-<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;    <span class="keywordflow">case</span> IMPOSSIBLE:</div>
-<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;      <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160;    }</div>
-<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;  }</div>
-<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;  input_views_.pop_back();</div>
-<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;  <span class="keywordflow">return</span> failed ? FAILURE : IMPOSSIBLE;</div>
-<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;}</div>
-<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160; </div>
-<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;PGMOverlay::MatchResult PGMOverlay::_match(<a class="code" href="classr__exec_1_1_view.html">r_exec::View</a> *input, uint16 pattern_index) {</div>
+<div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160;PGMOverlay::MatchResult PGMOverlay::match(<a class="code" href="classr__exec_1_1_view.html">r_exec::View</a> *input, uint16 &amp;input_index) {</div>
+<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160; </div>
+<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;  input_views_.push_back(input);</div>
+<div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;  <span class="keywordtype">bool</span> failed = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;  <a class="code" href="classr__code_1_1list_1_1const__iterator.html">r_code::list&lt;uint16&gt;::const_iterator</a> it;</div>
+<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;  <span class="keywordflow">for</span> (it = input_pattern_indices_.begin(); it != input_pattern_indices_.end(); ++it) {</div>
+<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160; </div>
+<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;    MatchResult r = _match(input, *it);</div>
+<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;    <span class="keywordflow">switch</span> (r) {</div>
+<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;    <span class="keywordflow">case</span> SUCCESS:</div>
+<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;      input_index = *it;</div>
+<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;      input_pattern_indices_.erase(it);</div>
+<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;      <span class="keywordflow">return</span> r;</div>
+<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;    <span class="keywordflow">case</span> FAILURE:</div>
+<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;      failed = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;      rollback(); <span class="comment">// to try another pattern on a clean basis.</span></div>
+<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160;    <span class="keywordflow">case</span> IMPOSSIBLE:</div>
+<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;      <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;    }</div>
+<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;  }</div>
+<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;  input_views_.pop_back();</div>
+<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;  <span class="keywordflow">return</span> failed ? FAILURE : IMPOSSIBLE;</div>
+<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;}</div>
 <div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160; </div>
-<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;  <span class="keywordflow">if</span> (code_[pattern_index].asOpcode() == Opcodes::AntiPtn) {</div>
+<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;PGMOverlay::MatchResult PGMOverlay::_match(<a class="code" href="classr__exec_1_1_view.html">r_exec::View</a> *input, uint16 pattern_index) {</div>
 <div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160; </div>
-<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;    IPGMContext input_object = IPGMContext::GetContextFromInput(input, <span class="keyword">this</span>);</div>
-<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;    IPGMContext pattern_skeleton(get_object()-&gt;get_reference(0), get_view(), code_, code_[pattern_index + 1].asIndex(), <span class="keyword">this</span>); <span class="comment">// pgm_code[pattern_index] is the first atom of the pattern; pgm_code[pattern_index+1] is an iptr to the skeleton.</span></div>
-<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;    <span class="keywordflow">if</span> (!pattern_skeleton.match(input_object))</div>
-<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;      <span class="keywordflow">return</span> SUCCESS;</div>
-<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;    MatchResult r = <a class="code" href="classr__exec_1_1_p_g_m_overlay.html#ae3772dd287706c90aadf130136437aff">__match</a>(input, pattern_index);</div>
-<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;    <span class="keywordflow">switch</span> (r) {</div>
-<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;    <span class="keywordflow">case</span> IMPOSSIBLE:</div>
-<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;    <span class="keywordflow">case</span> FAILURE:</div>
-<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;      <span class="keywordflow">return</span> SUCCESS;</div>
-<div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;    <span class="keywordflow">case</span> SUCCESS:</div>
-<div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160;      <span class="keywordflow">return</span> FAILURE;</div>
-<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;    }</div>
-<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (code_[pattern_index].asOpcode() == Opcodes::Ptn) {</div>
-<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160; </div>
-<div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160;    IPGMContext input_object = IPGMContext::GetContextFromInput(input, <span class="keyword">this</span>);</div>
-<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;    IPGMContext pattern_skeleton(get_object()-&gt;get_reference(0), get_view(), code_, code_[pattern_index + 1].asIndex(), <span class="keyword">this</span>); <span class="comment">// pgm_code[pattern_index] is the first atom of the pattern; pgm_code[pattern_index+1] is an iptr to the skeleton.</span></div>
-<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;    <span class="keywordflow">if</span> (!pattern_skeleton.match(input_object))</div>
-<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;      <span class="keywordflow">return</span> IMPOSSIBLE;</div>
-<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classr__exec_1_1_p_g_m_overlay.html#ae3772dd287706c90aadf130136437aff">__match</a>(input, pattern_index);</div>
-<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;  }</div>
-<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;  <span class="keywordflow">return</span> IMPOSSIBLE;</div>
-<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;}</div>
-<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160; </div>
-<div class="line"><a name="l00755"></a><span class="lineno"><a class="line" href="classr__exec_1_1_p_g_m_overlay.html#ae3772dd287706c90aadf130136437aff">  755</a></span>&#160;PGMOverlay::MatchResult <a class="code" href="classr__exec_1_1_p_g_m_overlay.html#ae3772dd287706c90aadf130136437aff">PGMOverlay::__match</a>(<a class="code" href="classr__exec_1_1_view.html">r_exec::View</a> *input, uint16 pattern_index) {</div>
-<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;  <span class="comment">// The input has just been pushed on input_views_ (see match).</span></div>
-<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;  <span class="comment">// pgm_code[pattern_index+1].asIndex() is the structure pointed by the pattern&#39;s skeleton.</span></div>
-<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;  patch_input_code(code_[pattern_index + 1].asIndex(), input_views_.size() - 1, 0);</div>
-<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;  <span class="comment">// match: evaluate the set of guards.</span></div>
-<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;  uint16 guard_set_index = code_[pattern_index + 2].asIndex();</div>
-<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;  <span class="comment">// Get the IPGMContext like in InputLessPGMOverlay::evaluate.</span></div>
-<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;  <a class="code" href="classr__exec_1_1_i_p_g_m_context.html">IPGMContext</a> c(get_object()-&gt;get_reference(0), get_view(), code_, guard_set_index, <span class="keyword">this</span>);</div>
-<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;  <span class="keywordflow">if</span> (!c.evaluate())</div>
-<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;    <span class="keywordflow">return</span> FAILURE;</div>
-<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;  <span class="keywordflow">if</span> (c.dereference()[0].isBooleanFalse())</div>
-<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;    <span class="comment">// The boolean guard is false.</span></div>
-<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;    <span class="keywordflow">return</span> FAILURE;</div>
-<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;  <span class="keywordflow">return</span> SUCCESS;</div>
-<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160;}</div>
-<div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160; </div>
-<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;<span class="keywordtype">bool</span> PGMOverlay::check_guards() {</div>
+<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;  <span class="keywordflow">if</span> (code_[pattern_index].asOpcode() == Opcodes::AntiPtn) {</div>
+<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160; </div>
+<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;    IPGMContext input_object = IPGMContext::GetContextFromInput(input, <span class="keyword">this</span>);</div>
+<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;    IPGMContext pattern_skeleton(get_object()-&gt;get_reference(0), get_view(), code_, code_[pattern_index + 1].asIndex(), <span class="keyword">this</span>); <span class="comment">// pgm_code[pattern_index] is the first atom of the pattern; pgm_code[pattern_index+1] is an iptr to the skeleton.</span></div>
+<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;    <span class="keywordflow">if</span> (!pattern_skeleton.match(input_object))</div>
+<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;      <span class="keywordflow">return</span> SUCCESS;</div>
+<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;    MatchResult r = <a class="code" href="classr__exec_1_1_p_g_m_overlay.html#ae3772dd287706c90aadf130136437aff">__match</a>(input, pattern_index);</div>
+<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;    <span class="keywordflow">switch</span> (r) {</div>
+<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;    <span class="keywordflow">case</span> IMPOSSIBLE:</div>
+<div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;    <span class="keywordflow">case</span> FAILURE:</div>
+<div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160;      <span class="keywordflow">return</span> SUCCESS;</div>
+<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;    <span class="keywordflow">case</span> SUCCESS:</div>
+<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;      <span class="keywordflow">return</span> FAILURE;</div>
+<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;    }</div>
+<div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160;  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (code_[pattern_index].asOpcode() == Opcodes::Ptn) {</div>
+<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160; </div>
+<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;    IPGMContext input_object = IPGMContext::GetContextFromInput(input, <span class="keyword">this</span>);</div>
+<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;    IPGMContext pattern_skeleton(get_object()-&gt;get_reference(0), get_view(), code_, code_[pattern_index + 1].asIndex(), <span class="keyword">this</span>); <span class="comment">// pgm_code[pattern_index] is the first atom of the pattern; pgm_code[pattern_index+1] is an iptr to the skeleton.</span></div>
+<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;    <span class="keywordflow">if</span> (!pattern_skeleton.match(input_object))</div>
+<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;      <span class="keywordflow">return</span> IMPOSSIBLE;</div>
+<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classr__exec_1_1_p_g_m_overlay.html#ae3772dd287706c90aadf130136437aff">__match</a>(input, pattern_index);</div>
+<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;  }</div>
+<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;  <span class="keywordflow">return</span> IMPOSSIBLE;</div>
+<div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;}</div>
+<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160; </div>
+<div class="line"><a name="l00757"></a><span class="lineno"><a class="line" href="classr__exec_1_1_p_g_m_overlay.html#ae3772dd287706c90aadf130136437aff">  757</a></span>&#160;PGMOverlay::MatchResult <a class="code" href="classr__exec_1_1_p_g_m_overlay.html#ae3772dd287706c90aadf130136437aff">PGMOverlay::__match</a>(<a class="code" href="classr__exec_1_1_view.html">r_exec::View</a> *input, uint16 pattern_index) {</div>
+<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;  <span class="comment">// The input has just been pushed on input_views_ (see match).</span></div>
+<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;  <span class="comment">// pgm_code[pattern_index+1].asIndex() is the structure pointed by the pattern&#39;s skeleton.</span></div>
+<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;  patch_input_code(code_[pattern_index + 1].asIndex(), input_views_.size() - 1, 0);</div>
+<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;  <span class="comment">// match: evaluate the set of guards.</span></div>
+<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;  uint16 guard_set_index = code_[pattern_index + 2].asIndex();</div>
+<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;  <span class="comment">// Get the IPGMContext like in InputLessPGMOverlay::evaluate.</span></div>
+<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;  <a class="code" href="classr__exec_1_1_i_p_g_m_context.html">IPGMContext</a> c(get_object()-&gt;get_reference(0), get_view(), code_, guard_set_index, <span class="keyword">this</span>);</div>
+<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;  <span class="keywordflow">if</span> (!c.evaluate())</div>
+<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;    <span class="keywordflow">return</span> FAILURE;</div>
+<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;  <span class="keywordflow">if</span> (c.dereference()[0].isBooleanFalse())</div>
+<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;    <span class="comment">// The boolean guard is false.</span></div>
+<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160;    <span class="keywordflow">return</span> FAILURE;</div>
+<div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160;  <span class="keywordflow">return</span> SUCCESS;</div>
+<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;}</div>
 <div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160; </div>
-<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;  uint16 guard_set_index = code_[PGM_GUARDS].asIndex();</div>
-<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;  uint16 guard_count = code_[guard_set_index].getAtomCount();</div>
-<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;  <span class="keywordflow">for</span> (uint16 i = 1; i &lt;= guard_count; ++i) {</div>
-<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160; </div>
-<div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160;    <span class="comment">// Get the IPGMContext like in InputLessPGMOverlay::evaluate.</span></div>
-<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;    <a class="code" href="classr__exec_1_1_i_p_g_m_context.html">IPGMContext</a> c(get_object()-&gt;get_reference(0), get_view(), code_, guard_set_index + i, <span class="keyword">this</span>);</div>
-<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;    <span class="keywordflow">if</span> (!c.evaluate())</div>
-<div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;    <span class="keywordflow">if</span> (c.dereference()[0].isBooleanFalse())</div>
-<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;      <span class="comment">// The boolean guard is false.</span></div>
-<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;  }</div>
-<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;}</div>
-<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160; </div>
-<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160;<a class="code" href="classr__code_1_1_code.html">Code</a> *PGMOverlay::get_mk_rdx(uint16 &amp;extent_index)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;<span class="keywordtype">bool</span> PGMOverlay::check_guards() {</div>
+<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160; </div>
+<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;  uint16 guard_set_index = code_[PGM_GUARDS].asIndex();</div>
+<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160;  uint16 guard_count = code_[guard_set_index].getAtomCount();</div>
+<div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160;  <span class="keywordflow">for</span> (uint16 i = 1; i &lt;= guard_count; ++i) {</div>
+<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160; </div>
+<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;    <span class="comment">// Get the IPGMContext like in InputLessPGMOverlay::evaluate.</span></div>
+<div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;    <a class="code" href="classr__exec_1_1_i_p_g_m_context.html">IPGMContext</a> c(get_object()-&gt;get_reference(0), get_view(), code_, guard_set_index + i, <span class="keyword">this</span>);</div>
+<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;    <span class="keywordflow">if</span> (!c.evaluate())</div>
+<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;    <span class="keywordflow">if</span> (c.dereference()[0].isBooleanFalse())</div>
+<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;      <span class="comment">// The boolean guard is false.</span></div>
+<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;  }</div>
+<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;  <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160;}</div>
 <div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160; </div>
-<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160;  uint16 write_index = 0;</div>
-<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;  extent_index = MK_RDX_ARITY + 1;</div>
-<div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160; </div>
-<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160;  <a class="code" href="classr__code_1_1_code.html">Code</a> *mk_rdx = <span class="keyword">new</span> <a class="code" href="classr__exec_1_1_l_object.html">r_exec::LObject</a>(_Mem::Get());</div>
+<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160;<a class="code" href="classr__code_1_1_code.html">Code</a> *PGMOverlay::get_mk_rdx(uint16 &amp;extent_index)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160; </div>
+<div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160;  uint16 write_index = 0;</div>
+<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160;  extent_index = MK_RDX_ARITY + 1;</div>
 <div class="line"><a name="l00794"></a><span class="lineno">  794</span>&#160; </div>
-<div class="line"><a name="l00795"></a><span class="lineno">  795</span>&#160;  mk_rdx-&gt;code(write_index++) = Atom::Marker(Opcodes::MkRdx, MK_RDX_ARITY);</div>
-<div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160;  mk_rdx-&gt;code(write_index++) = Atom::RPointer(0); <span class="comment">// code.</span></div>
-<div class="line"><a name="l00797"></a><span class="lineno">  797</span>&#160;  mk_rdx-&gt;add_reference(get_object());</div>
-<div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160;  mk_rdx-&gt;code(write_index++) = Atom::IPointer(extent_index); <span class="comment">// inputs.</span></div>
-<div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160;  mk_rdx-&gt;code(extent_index++) = Atom::Set(input_views_.size());</div>
-<div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160;  <span class="keywordflow">for</span> (uint16 i = 0; i &lt; input_views_.size(); ++i) {</div>
-<div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160; </div>
-<div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160;    mk_rdx-&gt;code(extent_index++) = Atom::RPointer(i + 1);</div>
-<div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160;    mk_rdx-&gt;add_reference(input_views_[i]-&gt;object_);</div>
-<div class="line"><a name="l00804"></a><span class="lineno">  804</span>&#160;  }</div>
-<div class="line"><a name="l00805"></a><span class="lineno">  805</span>&#160;  mk_rdx-&gt;code(write_index++) = Atom::IPointer(extent_index); <span class="comment">// productions.</span></div>
-<div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160;  mk_rdx-&gt;code(write_index++) = Atom::Float(1); <span class="comment">// psln_thr.</span></div>
-<div class="line"><a name="l00807"></a><span class="lineno">  807</span>&#160; </div>
-<div class="line"><a name="l00808"></a><span class="lineno">  808</span>&#160;  <span class="keywordflow">return</span> mk_rdx;</div>
-<div class="line"><a name="l00809"></a><span class="lineno">  809</span>&#160;}</div>
-<div class="line"><a name="l00810"></a><span class="lineno">  810</span>&#160; </div>
+<div class="line"><a name="l00795"></a><span class="lineno">  795</span>&#160;  <a class="code" href="classr__code_1_1_code.html">Code</a> *mk_rdx = <span class="keyword">new</span> <a class="code" href="classr__exec_1_1_l_object.html">r_exec::LObject</a>(_Mem::Get());</div>
+<div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160; </div>
+<div class="line"><a name="l00797"></a><span class="lineno">  797</span>&#160;  mk_rdx-&gt;code(write_index++) = Atom::Marker(Opcodes::MkRdx, MK_RDX_ARITY);</div>
+<div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160;  mk_rdx-&gt;code(write_index++) = Atom::RPointer(0); <span class="comment">// code.</span></div>
+<div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160;  mk_rdx-&gt;add_reference(get_object());</div>
+<div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160;  mk_rdx-&gt;code(write_index++) = Atom::IPointer(extent_index); <span class="comment">// inputs.</span></div>
+<div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160;  mk_rdx-&gt;code(extent_index++) = Atom::Set(input_views_.size());</div>
+<div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160;  <span class="keywordflow">for</span> (uint16 i = 0; i &lt; input_views_.size(); ++i) {</div>
+<div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160; </div>
+<div class="line"><a name="l00804"></a><span class="lineno">  804</span>&#160;    mk_rdx-&gt;code(extent_index++) = Atom::RPointer(i + 1);</div>
+<div class="line"><a name="l00805"></a><span class="lineno">  805</span>&#160;    mk_rdx-&gt;add_reference(input_views_[i]-&gt;object_);</div>
+<div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160;  }</div>
+<div class="line"><a name="l00807"></a><span class="lineno">  807</span>&#160;  mk_rdx-&gt;code(write_index++) = Atom::IPointer(extent_index); <span class="comment">// productions.</span></div>
+<div class="line"><a name="l00808"></a><span class="lineno">  808</span>&#160;  mk_rdx-&gt;code(write_index++) = Atom::Float(1); <span class="comment">// psln_thr.</span></div>
+<div class="line"><a name="l00809"></a><span class="lineno">  809</span>&#160; </div>
+<div class="line"><a name="l00810"></a><span class="lineno">  810</span>&#160;  <span class="keywordflow">return</span> mk_rdx;</div>
+<div class="line"><a name="l00811"></a><span class="lineno">  811</span>&#160;}</div>
 <div class="line"><a name="l00812"></a><span class="lineno">  812</span>&#160; </div>
-<div class="line"><a name="l00813"></a><span class="lineno">  813</span>&#160;AntiPGMOverlay::~AntiPGMOverlay() {</div>
-<div class="line"><a name="l00814"></a><span class="lineno">  814</span>&#160;}</div>
-<div class="line"><a name="l00815"></a><span class="lineno">  815</span>&#160; </div>
-<div class="line"><a name="l00816"></a><span class="lineno">  816</span>&#160;Overlay *AntiPGMOverlay::reduce(<a class="code" href="classr__exec_1_1_view.html">r_exec::View</a> *input) {</div>
+<div class="line"><a name="l00814"></a><span class="lineno">  814</span>&#160; </div>
+<div class="line"><a name="l00815"></a><span class="lineno">  815</span>&#160;AntiPGMOverlay::~AntiPGMOverlay() {</div>
+<div class="line"><a name="l00816"></a><span class="lineno">  816</span>&#160;}</div>
 <div class="line"><a name="l00817"></a><span class="lineno">  817</span>&#160; </div>
-<div class="line"><a name="l00818"></a><span class="lineno">  818</span>&#160;  uint16 input_index;</div>
-<div class="line"><a name="l00819"></a><span class="lineno">  819</span>&#160;  <span class="keywordflow">switch</span> (match(input, input_index)) {</div>
-<div class="line"><a name="l00820"></a><span class="lineno">  820</span>&#160;  <span class="keywordflow">case</span> SUCCESS:</div>
-<div class="line"><a name="l00821"></a><span class="lineno">  821</span>&#160;    <span class="keywordflow">if</span> (input_pattern_indices_.size() == 0) { <span class="comment">// all patterns matched.</span></div>
-<div class="line"><a name="l00822"></a><span class="lineno">  822</span>&#160; </div>
-<div class="line"><a name="l00823"></a><span class="lineno">  823</span>&#160;      <span class="keywordflow">if</span> (check_guards()) {</div>
+<div class="line"><a name="l00818"></a><span class="lineno">  818</span>&#160;Overlay *AntiPGMOverlay::reduce(<a class="code" href="classr__exec_1_1_view.html">r_exec::View</a> *input) {</div>
+<div class="line"><a name="l00819"></a><span class="lineno">  819</span>&#160; </div>
+<div class="line"><a name="l00820"></a><span class="lineno">  820</span>&#160;  uint16 input_index;</div>
+<div class="line"><a name="l00821"></a><span class="lineno">  821</span>&#160;  <span class="keywordflow">switch</span> (match(input, input_index)) {</div>
+<div class="line"><a name="l00822"></a><span class="lineno">  822</span>&#160;  <span class="keywordflow">case</span> SUCCESS:</div>
+<div class="line"><a name="l00823"></a><span class="lineno">  823</span>&#160;    <span class="keywordflow">if</span> (input_pattern_indices_.size() == 0) { <span class="comment">// all patterns matched.</span></div>
 <div class="line"><a name="l00824"></a><span class="lineno">  824</span>&#160; </div>
-<div class="line"><a name="l00825"></a><span class="lineno">  825</span>&#160;        ((AntiPGMController *)controller_)-&gt;restart();</div>
-<div class="line"><a name="l00826"></a><span class="lineno">  826</span>&#160;        <span class="keywordflow">return</span> NULL;</div>
-<div class="line"><a name="l00827"></a><span class="lineno">  827</span>&#160;      } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00828"></a><span class="lineno">  828</span>&#160;        rollback();</div>
-<div class="line"><a name="l00829"></a><span class="lineno">  829</span>&#160;        <span class="keywordflow">return</span> NULL;</div>
-<div class="line"><a name="l00830"></a><span class="lineno">  830</span>&#160;      }</div>
-<div class="line"><a name="l00831"></a><span class="lineno">  831</span>&#160;    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00832"></a><span class="lineno">  832</span>&#160; </div>
-<div class="line"><a name="l00833"></a><span class="lineno">  833</span>&#160;      AntiPGMOverlay *offspring = <span class="keyword">new</span> AntiPGMOverlay(<span class="keyword">this</span>, input_index, value_commit_index_);</div>
-<div class="line"><a name="l00834"></a><span class="lineno">  834</span>&#160;      commit();</div>
-<div class="line"><a name="l00835"></a><span class="lineno">  835</span>&#160;      <span class="keywordflow">return</span> offspring;</div>
-<div class="line"><a name="l00836"></a><span class="lineno">  836</span>&#160;    }</div>
-<div class="line"><a name="l00837"></a><span class="lineno">  837</span>&#160;  <span class="keywordflow">case</span> FAILURE: <span class="comment">// just rollback: let the overlay match other inputs.</span></div>
-<div class="line"><a name="l00838"></a><span class="lineno">  838</span>&#160;    rollback();</div>
-<div class="line"><a name="l00839"></a><span class="lineno">  839</span>&#160;  <span class="keywordflow">case</span> IMPOSSIBLE:</div>
-<div class="line"><a name="l00840"></a><span class="lineno">  840</span>&#160;    <span class="keywordflow">return</span> NULL;</div>
-<div class="line"><a name="l00841"></a><span class="lineno">  841</span>&#160;  }</div>
-<div class="line"><a name="l00842"></a><span class="lineno">  842</span>&#160;}</div>
-<div class="line"><a name="l00843"></a><span class="lineno">  843</span>&#160;}</div>
+<div class="line"><a name="l00825"></a><span class="lineno">  825</span>&#160;      <span class="keywordflow">if</span> (check_guards()) {</div>
+<div class="line"><a name="l00826"></a><span class="lineno">  826</span>&#160; </div>
+<div class="line"><a name="l00827"></a><span class="lineno">  827</span>&#160;        ((AntiPGMController *)controller_)-&gt;restart();</div>
+<div class="line"><a name="l00828"></a><span class="lineno">  828</span>&#160;        <span class="keywordflow">return</span> NULL;</div>
+<div class="line"><a name="l00829"></a><span class="lineno">  829</span>&#160;      } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00830"></a><span class="lineno">  830</span>&#160;        rollback();</div>
+<div class="line"><a name="l00831"></a><span class="lineno">  831</span>&#160;        <span class="keywordflow">return</span> NULL;</div>
+<div class="line"><a name="l00832"></a><span class="lineno">  832</span>&#160;      }</div>
+<div class="line"><a name="l00833"></a><span class="lineno">  833</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00834"></a><span class="lineno">  834</span>&#160; </div>
+<div class="line"><a name="l00835"></a><span class="lineno">  835</span>&#160;      AntiPGMOverlay *offspring = <span class="keyword">new</span> AntiPGMOverlay(<span class="keyword">this</span>, input_index, value_commit_index_);</div>
+<div class="line"><a name="l00836"></a><span class="lineno">  836</span>&#160;      commit();</div>
+<div class="line"><a name="l00837"></a><span class="lineno">  837</span>&#160;      <span class="keywordflow">return</span> offspring;</div>
+<div class="line"><a name="l00838"></a><span class="lineno">  838</span>&#160;    }</div>
+<div class="line"><a name="l00839"></a><span class="lineno">  839</span>&#160;  <span class="keywordflow">case</span> FAILURE: <span class="comment">// just rollback: let the overlay match other inputs.</span></div>
+<div class="line"><a name="l00840"></a><span class="lineno">  840</span>&#160;    rollback();</div>
+<div class="line"><a name="l00841"></a><span class="lineno">  841</span>&#160;  <span class="keywordflow">case</span> IMPOSSIBLE:</div>
+<div class="line"><a name="l00842"></a><span class="lineno">  842</span>&#160;    <span class="keywordflow">return</span> NULL;</div>
+<div class="line"><a name="l00843"></a><span class="lineno">  843</span>&#160;  }</div>
+<div class="line"><a name="l00844"></a><span class="lineno">  844</span>&#160; </div>
+<div class="line"><a name="l00845"></a><span class="lineno">  845</span>&#160;  <span class="keywordflow">return</span> NULL;</div>
+<div class="line"><a name="l00846"></a><span class="lineno">  846</span>&#160;}</div>
+<div class="line"><a name="l00847"></a><span class="lineno">  847</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassr__code_1_1list_1_1const__iterator_html"><div class="ttname"><a href="classr__code_1_1list_1_1const__iterator.html">r_code::list::const_iterator</a></div><div class="ttdef"><b>Definition:</b> <a href="list_8h_source.html#l00265">list.h:266</a></div></div>
-<div class="ttc" id="aclassr__exec_1_1_i_p_g_m_context_html"><div class="ttname"><a href="classr__exec_1_1_i_p_g_m_context.html">r_exec::IPGMContext</a></div><div class="ttdef"><b>Definition:</b> <a href="context_8h_source.html#l00100">context.h:101</a></div></div>
+<div class="ttc" id="aclassr__exec_1_1_i_p_g_m_context_html"><div class="ttname"><a href="classr__exec_1_1_i_p_g_m_context.html">r_exec::IPGMContext</a></div><div class="ttdef"><b>Definition:</b> <a href="context_8h_source.html#l00101">context.h:102</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_input_less_p_g_m_overlay_html_a25115de274d7af71529569eced7a0dc2"><div class="ttname"><a href="classr__exec_1_1_input_less_p_g_m_overlay.html#a25115de274d7af71529569eced7a0dc2">r_exec::InputLessPGMOverlay::evaluate</a></div><div class="ttdeci">bool evaluate(uint16 index)</div><div class="ttdef"><b>Definition:</b> <a href="pgm__overlay_8cpp_source.html#l00164">pgm_overlay.cpp:164</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_atom_html"><div class="ttname"><a href="classr__code_1_1_atom.html">r_code::Atom</a></div><div class="ttdef"><b>Definition:</b> <a href="atom_8h_source.html#l00104">atom.h:104</a></div></div>
-<div class="ttc" id="aclassr__exec_1_1_p_g_m_overlay_html_ae3772dd287706c90aadf130136437aff"><div class="ttname"><a href="classr__exec_1_1_p_g_m_overlay.html#ae3772dd287706c90aadf130136437aff">r_exec::PGMOverlay::__match</a></div><div class="ttdeci">MatchResult __match(r_exec::View *input, uint16 pattern_index)</div><div class="ttdef"><b>Definition:</b> <a href="pgm__overlay_8cpp_source.html#l00755">pgm_overlay.cpp:755</a></div></div>
+<div class="ttc" id="aclassr__exec_1_1_p_g_m_overlay_html_ae3772dd287706c90aadf130136437aff"><div class="ttname"><a href="classr__exec_1_1_p_g_m_overlay.html#ae3772dd287706c90aadf130136437aff">r_exec::PGMOverlay::__match</a></div><div class="ttdeci">MatchResult __match(r_exec::View *input, uint16 pattern_index)</div><div class="ttdef"><b>Definition:</b> <a href="pgm__overlay_8cpp_source.html#l00757">pgm_overlay.cpp:757</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_l_object_html"><div class="ttname"><a href="classr__exec_1_1_l_object.html">r_exec::LObject</a></div><div class="ttdef"><b>Definition:</b> <a href="r__exec_2object_8h_source.html#l00194">r_exec/object.h:195</a></div></div>
-<div class="ttc" id="aclasscore_1_1_p_html"><div class="ttname"><a href="classcore_1_1_p.html">core::P</a></div><div class="ttdef"><b>Definition:</b> <a href="base_8h_source.html#l00102">base.h:102</a></div></div>
+<div class="ttc" id="aclasscore_1_1_p_html"><div class="ttname"><a href="classcore_1_1_p.html">core::P</a></div><div class="ttdef"><b>Definition:</b> <a href="base_8h_source.html#l00103">base.h:103</a></div></div>
 <div class="ttc" id="aclassr__code_1_1_code_html"><div class="ttname"><a href="classr__code_1_1_code.html">r_code::Code</a></div><div class="ttdef"><b>Definition:</b> <a href="r__code_2object_8h_source.html#l00223">r_code/object.h:224</a></div></div>
 <div class="ttc" id="aclassr__exec_1_1_view_html"><div class="ttname"><a href="classr__exec_1_1_view.html">r_exec::View</a></div><div class="ttdef"><b>Definition:</b> <a href="view_8h_source.html#l00101">view.h:102</a></div></div>
 <!-- start footer part -->
