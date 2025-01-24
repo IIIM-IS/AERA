@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -146,7 +146,7 @@ uint32 SysView::get_size() const {
   return 2 + code_.size() + references_.size();
 }
 
-void SysView::trace(std::ostream& out) {
+void SysView::trace(std::ostream& out) const {
 
   out << " code size: " << code_.size() << std::endl;
   out << " reference set size: " << references_.size() << std::endl;
@@ -259,7 +259,7 @@ uint32 SysObject::get_size() {
   return 5 + code_.size() + references_.size() + markers_.size() + view_set_size;
 }
 
-void SysObject::trace(std::ostream& out) {
+void SysObject::trace(std::ostream& out) const {
 
   out << "\n---object---\n";
   out << oid_ << std::endl;
@@ -301,7 +301,30 @@ void SysObject::trace(std::ostream& out) {
   }
 }
 
-void SysObject::trace() { trace(std::cout); }
+void SysObject::trace() const { trace(std::cout); }
+
+void Code::r_trace(ostream& out) const {
+  trace(out);
+
+  if (references_size() < 1)
+    // Done recursing.
+    return;
+
+  auto obj = get_reference(0);
+  if (obj->code_size() <= 2)
+    // Assume this is an ent or ont.
+    return;
+
+  switch (obj->code(0).getDescriptor()) {
+  case Atom::MODEL:
+  case Atom::COMPOSITE_STATE:
+    // Don't trace these big structures.
+    return;
+  }
+
+  out << endl;
+  obj->r_trace(out);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

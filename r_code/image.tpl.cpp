@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -130,53 +130,53 @@ template<class I> Image<I>::~Image() {
 
 template<class I> uint32 Image<I>::get_size() const {
 
-  return map_size() + code_size() + names_size();
+  return I::map_size() + I::code_size() + I::names_size();
 }
 
 template<class I> uint32 Image<I>::getObjectCount() const {
 
-  return map_size();
+  return I::map_size();
 }
 
 template<class I> word32 *Image<I>::get_object(uint32 i) {
 
-  return data() + data(i);
+  return I::data() + I::data(i);
 }
 
 template<class I> word32 *Image<I>::getCodeSegment() {
 
-  return data() + map_size();
+  return I::data() + I::map_size();
 }
 
 template<class I> uint32 Image<I>::getCodeSegmentSize() const {
 
-  return code_size();
+  return I::code_size();
 }
 
 template<class I> void Image<I>::trace() const {
 
   std::cout << "---Image---\n";
   std::cout << "Size: " << get_size() << std::endl;
-  std::cout << "Object Map Size: " << map_size() << std::endl;
-  std::cout << "Code Segment Size: " << code_size() << std::endl;
-  std::cout << "Names Size: " << names_size() << std::endl;
+  std::cout << "Object Map Size: " << I::map_size() << std::endl;
+  std::cout << "Code Segment Size: " << I::code_size() << std::endl;
+  std::cout << "Names Size: " << I::names_size() << std::endl;
 
   uint32 i = 0;
 
   std::cout << "===Object Map===" << std::endl;
-  for (; i < map_size(); ++i)
-    std::cout << i << " " << data(i) << std::endl;
+  for (; i < I::map_size(); ++i)
+    std::cout << i << " " << I::data(i) << std::endl;
 
   // at this point, i is at the first word32 of the first object in the code segment
   std::cout << "===Code Segment===" << std::endl;
-  uint32 code_start = map_size();
+  uint32 code_start = I::map_size();
   for (uint32 j = 0; j < code_start; ++j) { // read object map: data[data[j]] is the first word32 of an object, data[data[j]+5] is the first atom
 
-    uint32 object_axiom = data(data(j));
-    uint32 object_code_size = data(data(j) + 1);
-    uint32 object_reference_set_size = data(data(j) + 2);
-    uint32 object_marker_set_size = data(data(j) + 3);
-    uint32 object_view_set_size = data(data(j) + 4);
+    uint32 object_axiom = I::data(I::data(j));
+    uint32 object_code_size = I::data(I::data(j) + 1);
+    uint32 object_reference_set_size = I::data(I::data(j) + 2);
+    uint32 object_marker_set_size = I::data(I::data(j) + 3);
+    uint32 object_view_set_size = I::data(I::data(j) + 4);
     std::cout << "---object---\n";
     std::cout << i++;
     std::cout << i++ << " code size: " << object_code_size << std::endl;
@@ -185,26 +185,27 @@ template<class I> void Image<I>::trace() const {
     std::cout << i++ << " view set size: " << object_view_set_size << std::endl;
 
     std::cout << "---code---\n";
-    for (; i < data(j) + 5 + object_code_size; ++i) {
+    for (; i < I::data(j) + 5 + object_code_size; ++i) {
 
       std::cout << i << " ";
-      ((Atom *)&data(i))->trace();
+      Atom::TraceContext context;
+      ((Atom *)&I::data(i))->trace(context, std::cout);
       std::cout << std::endl;
     }
 
     std::cout << "---reference set---\n";
-    for (; i < data(j) + 5 + object_code_size + object_reference_set_size; ++i)
-      std::cout << i << " " << data(i) << std::endl;
+    for (; i < I::data(j) + 5 + object_code_size + object_reference_set_size; ++i)
+      std::cout << i << " " << I::data(i) << std::endl;
 
     std::cout << "---marker set---\n";
-    for (; i < data(j) + 5 + object_code_size + object_reference_set_size + object_marker_set_size; ++i)
-      std::cout << i << " " << data(i) << std::endl;
+    for (; i < I::data(j) + 5 + object_code_size + object_reference_set_size + object_marker_set_size; ++i)
+      std::cout << i << " " << I::data(i) << std::endl;
 
     std::cout << "---view set---\n";
     for (uint32 k = 0; k < object_view_set_size; ++k) {
 
-      uint32 view_code_size = data(i);
-      uint32 view_reference_set_size = data(i + 1);
+      uint32 view_code_size = I::data(i);
+      uint32 view_reference_set_size = I::data(i + 1);
 
       std::cout << "view[" << k << "]\n";
       std::cout << i++ << " code size: " << view_code_size << std::endl;
@@ -215,13 +216,14 @@ template<class I> void Image<I>::trace() const {
       for (l = 0; l < view_code_size; ++i, ++l) {
 
         std::cout << i << " ";
-        ((Atom *)&data(i))->trace();
+        Atom::TraceContext context;
+        ((Atom *)&I::data(i))->trace(context, std::cout);
         std::cout << std::endl;
       }
 
       std::cout << "---reference set---\n";
       for (l = 0; l < view_reference_set_size; ++i, ++l)
-        std::cout << i << " " << data(i) << std::endl;
+        std::cout << i << " " << I::data(i) << std::endl;
     }
   }
 }

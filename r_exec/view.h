@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -86,7 +86,6 @@
 #define view_h
 
 #include "../r_code/object.h"
-#include "overlay.h"
 #include "dll.h"
 
 
@@ -94,6 +93,7 @@ namespace r_exec {
 
 class Group;
 class LObject;
+class Controller;
 
 // OID is hidden at code_[VIEW_OID].
 // Shared resources:
@@ -213,7 +213,7 @@ class r_exec_dll NotificationView :
 public:
   NotificationView(r_code::Code *origin, r_code::Code *destination, r_code::Code *marker); // res=1, sln=1.
 
-  bool is_notification() const;
+  bool is_notification() const override;
 };
 }
 

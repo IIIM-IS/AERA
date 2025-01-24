@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -172,6 +172,8 @@ void Decompiler::init(r_comp::Metadata *metadata) {
     size_t p = class_name.find("mk.");
     if (p != std::string::npos)
       renderers_[i] = &Decompiler::write_marker;
+    else if (class_name == "pred")
+      renderers_[i] = &Decompiler::write_marker;
     else if (class_name == "grp")
       renderers_[i] = &Decompiler::write_group;
     else if (class_name == "ipgm" || class_name == "icpp_pgm")
@@ -268,6 +270,9 @@ uint32 Decompiler::decompile_references(r_comp::Image *image, unordered_map<uint
     unordered_map<uint32, std::string>::const_iterator n = image->object_names_.symbols_.find(sys_object->oid_);
     if (n != image->object_names_.symbols_.end())
       // Already set the user-defined name in the first pass.
+      continue;
+    if (object_names_.find(i) != object_names_.end())
+      // Already assigned by the passed-in object_names.
       continue;
 
     Class *c = metadata_->get_class(sys_object->code_[0].asOpcode());
@@ -509,6 +514,8 @@ void Decompiler::write_group(uint16 read_index) {
 
 void Decompiler::write_marker(uint16 read_index) {
 
+  if (!in_hlp_)
+    horizontal_set_ = true;
   if (closing_set_) {
 
     closing_set_ = false;
@@ -523,6 +530,8 @@ void Decompiler::write_marker(uint16 read_index) {
     write_indent(indents_);
   }
   *out_stream_ << ')';
+  if (!in_hlp_)
+    horizontal_set_ = false;
 }
 
 void Decompiler::write_pgm(uint16 read_index) {
@@ -586,7 +595,11 @@ void Decompiler::write_hlp(uint16 read_index) {
       if (closing_set_) {
 
         closing_set_ = false;
-        write_indent(indents_);
+        if (i == 1)
+          // Put the [] on the end of the same line.
+          *out_stream_ << ' ';
+        else
+          write_indent(indents_);
       }
 
       if (!(i == 0 || i == 1))
@@ -602,7 +615,7 @@ void Decompiler::write_hlp(uint16 read_index) {
       horizontal_set_ = save_horizontal_set;
 
       if (!closing_set_)
-        *out_stream_ << NEWLINE;
+        *out_stream_ << (i == 0 || i >= 4 ? ' ' : NEWLINE);
     }
   }
 
@@ -857,7 +870,8 @@ void Decompiler::write_any(uint16 read_index, bool &after_tail_wildcard, uint16 
     case Atom::SET:
     case Atom::S_SET:
       if (atom.readsAsNil())
-        out_stream_->push("|[]", read_index);
+        // In a horizontal set (where characters follow), we can write an empty set as [] .
+        out_stream_->push(horizontal_set_ ? "[]" : "|[]", read_index);
       else
         write_set(index, write_as_view_index);
       break;

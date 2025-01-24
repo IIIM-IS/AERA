@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -85,6 +85,8 @@
 #ifndef time_job_h
 #define time_job_h
 
+#include "../r_code/utils.h"
+#include "init.h"
 #include "group.h"
 #include "pgm_overlay.h"
 
@@ -125,7 +127,7 @@ class r_exec_dll UpdateJob :
 public:
   P<Group> group_;
   UpdateJob(Group *g, Timestamp ijt);
-  bool update(Timestamp &next_target);
+  bool update(Timestamp &next_target) override;
   void report(int64 lag) const;
 };
 
@@ -135,14 +137,14 @@ protected:
   SignalingJob(View *v, Timestamp ijt);
 public:
   P<View> view_;
-  bool is_alive() const;
+  bool is_alive() const override;
 };
 
 class r_exec_dll AntiPGMSignalingJob :
   public SignalingJob {
 public:
   AntiPGMSignalingJob(View *v, Timestamp ijt);
-  bool update(Timestamp &next_target);
+  bool update(Timestamp &next_target) override;
   void report(int64 lag) const;
 };
 
@@ -150,7 +152,7 @@ class r_exec_dll InputLessPGMSignalingJob :
   public SignalingJob {
 public:
   InputLessPGMSignalingJob(View *v, Timestamp ijt);
-  bool update(Timestamp &next_target);
+  bool update(Timestamp &next_target) override;
   void report(int64 lag) const;
 };
 
@@ -169,7 +171,7 @@ public:
    * This is only needed so that this will log the I/O device inject.
    */
   InjectionJob(View *v, Timestamp target_time, bool is_from_io_device);
-  bool update(Timestamp &next_target);
+  bool update(Timestamp &next_target) override;
   void report(int64 lag) const;
 
   bool is_from_io_device_;
@@ -180,7 +182,7 @@ class r_exec_dll EInjectionJob :
 public:
   P<View> view_;
   EInjectionJob(View *v, Timestamp ijt);
-  bool update(Timestamp &next_target);
+  bool update(Timestamp &next_target) override;
   void report(int64 lag) const;
 };
 
@@ -191,7 +193,7 @@ public:
   float32 sln_change_;
   float32 source_sln_thr_;
   SaliencyPropagationJob(r_code::Code *o, float32 sln_change, float32 source_sln_thr, Timestamp ijt);
-  bool update(Timestamp &next_target);
+  bool update(Timestamp &next_target) override;
   void report(int64 lag) const;
 };
 
@@ -199,7 +201,7 @@ class r_exec_dll ShutdownTimeCore :
   public TimeJob {
 public:
   ShutdownTimeCore();
-  bool update(Timestamp &next_target);
+  bool update(Timestamp &next_target) override;
 };
 
 template<class M> class MonitoringJob :
@@ -210,23 +212,23 @@ public:
 #ifdef WITH_DETAIL_OID
     OUTPUT_LINE((TraceLevel)0, "  make MonitoringJob::TimeJob " << get_job_id() <<
       "(" << get_detail_oid() << ") for monitor(" << monitor_->get_detail_oid() << "), deadline " <<
-      Utils::RelativeTime(deadline));
+      r_code::Utils::RelativeTime(deadline));
 #endif
   }
-  bool update(Timestamp &next_target) {
+  bool update(Timestamp &next_target) override {
 
 #ifdef WITH_DETAIL_OID
-    OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(Now()) << " MonitoringJob::TimeJob " << get_job_id() <<
+    OUTPUT_LINE((TraceLevel)0, r_code::Utils::RelativeTime(r_exec::Now()) << " MonitoringJob::TimeJob " << get_job_id() <<
       ": monitor(" << monitor_->get_detail_oid() << ")->update()");
 #endif
     monitor_->update(next_target);
     return true;
   }
-  bool is_alive() const {
+  bool is_alive() const override {
 
     return monitor_->is_alive();
   }
-  void report(std::chrono::microseconds lag) const {
+  void report(std::chrono::microseconds lag) const override {
 
     std::cout << "> late monitoring: " << lag.count() << " us behind." << std::endl;
   }
@@ -237,8 +239,8 @@ class r_exec_dll PerfSamplingJob :
 public:
   std::chrono::microseconds period_;
   PerfSamplingJob(Timestamp start, std::chrono::microseconds period);
-  bool is_alive() const;
-  bool update(Timestamp &next_target);
+  bool is_alive() const override;
+  bool update(Timestamp &next_target) override;
 };
 }
 

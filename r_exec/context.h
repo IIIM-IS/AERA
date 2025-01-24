@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -90,6 +90,7 @@
 #include "object.h"
 #include "_context.h"
 #include "pgm_overlay.h"
+#include "operator.h"
 
 
 namespace r_exec {
@@ -321,8 +322,8 @@ private:
     }
   }
 
-  void IPGMContext::copy_structure_to_value_array(bool prefix, uint16 write_index, uint16 &extent_index, bool dereference_cptr);
-  void IPGMContext::copy_member_to_value_array(uint16 child_index, bool prefix, uint16 write_index, uint16 &extent_index, bool dereference_cptr);
+  void copy_structure_to_value_array(bool prefix, uint16 write_index, uint16 &extent_index, bool dereference_cptr);
+  void copy_member_to_value_array(uint16 child_index, bool prefix, uint16 write_index, uint16 &extent_index, bool dereference_cptr);
 public:
   static IPGMContext GetContextFromInput(View *input, InputLessPGMOverlay *overlay) { return IPGMContext(input->object_, input, &input->object_->code(0), 0, overlay, REFERENCE); }
 
@@ -332,15 +333,15 @@ public:
   IPGMContext(r_code::Code *object, Data data) : _Context(&object->code(0), index_, NULL, data), object_(object), view_(NULL) {}
 
   // _Context implementation.
-  _Context *clone() { return new IPGMContext(*this); }
+  _Context *clone() override { return new IPGMContext(*this); }
 
-  bool equal(const _Context *c) const { return *this == *(IPGMContext *)c; }
+  bool equal(const _Context *c) const override { return *this == *(IPGMContext *)c; }
 
-  Atom &get_atom(uint16 i) const { return this->operator [](i); }
+  Atom &get_atom(uint16 i) const override { return this->operator [](i); }
 
-  uint16 get_object_code_size() const { return object_->code_size(); }
+  uint16 get_object_code_size() const override { return object_->code_size(); }
 
-  uint16 get_children_count() const {
+  uint16 get_children_count() const override {
 
     uint16 c;
     switch (data_) {
@@ -362,7 +363,7 @@ public:
   /**
    * Call get_child and return a new allocated copy of the child. The caller is responsible to delete it.
    */
-  _Context *get_child_new(uint16 index) const {
+  _Context *get_child_new(uint16 index) const override {
 
     IPGMContext *_c = new IPGMContext(get_child(index));
     return _c;
@@ -371,7 +372,7 @@ public:
   /**
    * Dereference this and return a new allocated copy. The caller is responsible to delete it.
    */
-  _Context *dereference_new() const {
+  _Context *dereference_new() const override {
 
     IPGMContext *_c = new IPGMContext(dereference());
     return _c;

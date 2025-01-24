@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -115,9 +115,9 @@ protected:
 
   bool evaluate_fwd_timings();
 
-  bool scan_bwd_guards();
-  bool scan_location(uint16 index);
-  bool scan_variable(uint16 index);
+  bool scan_bwd_guards() const;
+  bool scan_location(uint16 index, uint16 parent_guard_index) const;
+  bool scan_variable(uint16 index, uint16 parent_guard_index) const;
 
   void store_evidence(_Fact *evidence, bool prediction, bool is_simulation); // stores both actual and non-simulated predicted evidences.
 

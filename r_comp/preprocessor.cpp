@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ Copyright (c) 2018 Throstur Thorarensen
 //_/_/ http://www.iiim.is
 //_/_/ 
@@ -150,17 +150,17 @@ uint32 RepliStruct::getIndent(std::istream *stream) {
   return count / 3;
 }
 
-int32 RepliStruct::parse(std::istream *stream, const std::string& filePath, uint32 &curIndent, uint32 &prevIndent, int32 paramExpect) {
+int32 RepliStruct::parse(std::istream *stream, const std::string& file_path, uint32 &cur_indent, uint32 &prev_indent, int32 param_expect) {
 
   char c = 0, lastc = 0, lastcc, tc;
   std::string str, label;
-  RepliStruct* subStruct;
+  RepliStruct* sub_struct;
 
-  int32 paramCount = 0;
-  int32 returnIndent = 0;
+  int32 param_count = 0;
+  int32 return_indent = 0;
 
-  bool inComment = false;
-  bool expectSet = false;
+  bool in_comment = false;
+  bool expect_set = false;
 
   while (!stream->eof()) {
     lastcc = lastc;
@@ -168,7 +168,7 @@ int32 RepliStruct::parse(std::istream *stream, const std::string& filePath, uint
     c = stream->get();
     // printf("%c", c);
 
-    if (!inComment && c == '\"') {
+    if (!in_comment && c == '\"') {
       // Special case: Read until the end of the string.
       while (true) {
         str += c;
@@ -189,21 +189,21 @@ int32 RepliStruct::parse(std::istream *stream, const std::string& filePath, uint
 
     switch (c) {
     case '\t':
-      if (inComment) continue; // allow tabs in comments, does not matter anyway
+      if (in_comment) continue; // allow tabs in comments, does not matter anyway
       line_ = GlobalLine_;
       error_ += "Tabs chars are not permitted. ";
       return -1;
     case '!':
-      if (inComment) continue;
+      if (in_comment) continue;
       if (type_ == Root) {
-        subStruct = new RepliStruct(Directive);
-        subStruct->parent_ = this;
-        args_.push_back(subStruct);
-        if (!subStruct->parseDirective(stream, filePath, curIndent, prevIndent))
+        sub_struct = new RepliStruct(Directive);
+        sub_struct->parent_ = this;
+        args_.push_back(sub_struct);
+        if (!sub_struct->parseDirective(stream, file_path, cur_indent, prev_indent))
           return -1;
-        if (subStruct->cmd_.compare("!load") == 0)
+        if (sub_struct->cmd_.compare("!load") == 0)
           // Save the filePath of the containing file for later.
-          subStruct->filePath_ = filePath;
+          sub_struct->filePath_ = file_path;
       }
       else {
         error_ += "Directive not allowed inside a structure. ";
@@ -214,61 +214,61 @@ int32 RepliStruct::parse(std::istream *stream, const std::string& filePath, uint
       GlobalLine_++;
     case 13:
       // remain inComment?
-      if (inComment) {
-        if ((lastc == ' ') || ((lastc == '.') && (lastcc == '.')))
+      if (in_comment) {
+        if ((lastc == '.') && (lastcc == '.'))
           continue; // continue comment on next line
         else
-          inComment = false; // end comment
+          in_comment = false; // end comment
       }
       // skip all CR and LF
       while ((!stream->eof()) && (stream->peek() < 32))
         if (stream->get() == 10)
           GlobalLine_++;
       // get indents
-      prevIndent = curIndent;
-      curIndent = getIndent(stream);
+      prev_indent = cur_indent;
+      cur_indent = getIndent(stream);
       // Are we in a parenthesis or set
-      if (curIndent > prevIndent) {
+      if (cur_indent > prev_indent) {
         // Are we in a set
-        if (expectSet) {
+        if (expect_set) {
           // Add new sub structure
-          subStruct = new RepliStruct(Set);
-          subStruct->parent_ = this;
-          subStruct->label_ = label;
+          sub_struct = new RepliStruct(Set);
+          sub_struct->parent_ = this;
+          sub_struct->label_ = label;
           label = "";
-          args_.push_back(subStruct);
-          returnIndent = subStruct->parse(stream, filePath, curIndent, prevIndent);
-          expectSet = false;
-          if (returnIndent < 0)
+          args_.push_back(sub_struct);
+          return_indent = sub_struct->parse(stream, file_path, cur_indent, prev_indent);
+          expect_set = false;
+          if (return_indent < 0)
             return -1;
-          if ((paramExpect > 0) && (++paramCount == paramExpect))
+          if ((param_expect > 0) && (++param_count == param_expect))
             return 0;
-          if (returnIndent > 0)
-            return (returnIndent - 1);
+          if (return_indent > 0)
+            return (return_indent - 1);
         }
         // or a parenthesis
         else {
-          subStruct = new RepliStruct(Structure);
-          args_.push_back(subStruct);
-          returnIndent = subStruct->parse(stream, filePath, curIndent, prevIndent);
-          expectSet = false;
-          if (returnIndent < 0)
+          sub_struct = new RepliStruct(Structure);
+          args_.push_back(sub_struct);
+          return_indent = sub_struct->parse(stream, file_path, cur_indent, prev_indent);
+          expect_set = false;
+          if (return_indent < 0)
             return -1;
-          if ((paramExpect > 0) && (++paramCount == paramExpect))
+          if ((param_expect > 0) && (++param_count == param_expect))
             return 0;
-          if (returnIndent > 0)
-            return (returnIndent - 1);
+          if (return_indent > 0)
+            return (return_indent - 1);
         }
       }
-      else if (curIndent < prevIndent) {
+      else if (cur_indent < prev_indent) {
         if (str.size() > 0) {
           if ((cmd_.size() > 0) || (type_ == Set)) {
-            subStruct = new RepliStruct(Atom);
-            subStruct->parent_ = this;
-            args_.push_back(subStruct);
-            subStruct->cmd_ = str;
+            sub_struct = new RepliStruct(Atom);
+            sub_struct->parent_ = this;
+            args_.push_back(sub_struct);
+            sub_struct->cmd_ = str;
             str = "";
-            if ((paramExpect > 0) && (++paramCount == paramExpect))
+            if ((param_expect > 0) && (++param_count == param_expect))
               return 0;
           }
           else {
@@ -277,18 +277,18 @@ int32 RepliStruct::parse(std::istream *stream, const std::string& filePath, uint
           }
         }
         // current structure or set is complete
-        return prevIndent - curIndent - 1;
+        return prev_indent - cur_indent - 1;
       }
       else {
         // act as if we met a space
         if (str.size() > 0) {
           if ((cmd_.size() > 0) || (type_ == Set) || (type_ == Root)) {
-            subStruct = new RepliStruct(Atom);
-            subStruct->parent_ = this;
-            args_.push_back(subStruct);
-            subStruct->cmd_ = str;
+            sub_struct = new RepliStruct(Atom);
+            sub_struct->parent_ = this;
+            args_.push_back(sub_struct);
+            sub_struct->cmd_ = str;
             str = "";
-            if ((paramExpect > 0) && (++paramCount == paramExpect))
+            if ((param_expect > 0) && (++param_count == param_expect))
               return 0;
           }
           else {
@@ -299,19 +299,19 @@ int32 RepliStruct::parse(std::istream *stream, const std::string& filePath, uint
       }
       break;
     case ';':
-      inComment = true;
+      in_comment = true;
       break;
     case ' ':
-      if (inComment) continue;
+      if (in_comment) continue;
       // next string is ready
       if (str.size() > 0) {
         if ((cmd_.size() > 0) || (type_ == Set) || (type_ == Development)) { // Modification from Eric to have the Development treat tpl vars as atoms instead of a Development.cmd
-          subStruct = new RepliStruct(Atom);
-          subStruct->parent_ = this;
-          args_.push_back(subStruct);
-          subStruct->cmd_ = str;
+          sub_struct = new RepliStruct(Atom);
+          sub_struct->parent_ = this;
+          args_.push_back(sub_struct);
+          sub_struct->cmd_ = str;
           str = "";
-          if ((paramExpect > 0) && (++paramCount == paramExpect))
+          if ((param_expect > 0) && (++param_count == param_expect))
             return 0;
         }
         else {
@@ -321,7 +321,7 @@ int32 RepliStruct::parse(std::istream *stream, const std::string& filePath, uint
       }
       break;
     case '(':
-      if (inComment) continue;
+      if (in_comment) continue;
       // Check for scenario 'xxx('
       if (str.size() > 0) {
         if (lastc == ':') { // label:(xxx)
@@ -329,12 +329,12 @@ int32 RepliStruct::parse(std::istream *stream, const std::string& filePath, uint
           str = "";
         }
         else if ((cmd_.size() > 0) || (type_ == Set)) {
-          subStruct = new RepliStruct(Atom);
-          subStruct->parent_ = this;
-          args_.push_back(subStruct);
-          subStruct->cmd_ = str;
+          sub_struct = new RepliStruct(Atom);
+          sub_struct->parent_ = this;
+          args_.push_back(sub_struct);
+          sub_struct->cmd_ = str;
           str = "";
-          if ((paramExpect > 0) && (++paramCount == paramExpect))
+          if ((param_expect > 0) && (++param_count == param_expect))
             return 0;
         }
         else {
@@ -342,21 +342,21 @@ int32 RepliStruct::parse(std::istream *stream, const std::string& filePath, uint
           str = "";
         }
       }
-      subStruct = new RepliStruct(Structure);
-      subStruct->label_ = label;
+      sub_struct = new RepliStruct(Structure);
+      sub_struct->label_ = label;
       label = "";
-      subStruct->parent_ = this;
-      args_.push_back(subStruct);
-      returnIndent = subStruct->parse(stream, filePath, curIndent, prevIndent);
-      if (returnIndent < 0)
+      sub_struct->parent_ = this;
+      args_.push_back(sub_struct);
+      return_indent = sub_struct->parse(stream, file_path, cur_indent, prev_indent);
+      if (return_indent < 0)
         return -1;
-      if ((paramExpect > 0) && (++paramCount == paramExpect))
+      if ((param_expect > 0) && (++param_count == param_expect))
         return 0;
-      if (returnIndent > 0)
-        return (returnIndent - 1);
+      if (return_indent > 0)
+        return (return_indent - 1);
       break;
     case ')':
-      if (inComment) continue;
+      if (in_comment) continue;
       // Check for directive use of xxx):xxx or xxx):
       if (stream->peek() == ':') {
         // expect ':' or ':xxx'
@@ -366,12 +366,12 @@ int32 RepliStruct::parse(std::istream *stream, const std::string& filePath, uint
       // We met a boundary, act as ' '
       if (str.size() > 0) {
         if ((cmd_.size() > 0) || (type_ == Set)) {
-          subStruct = new RepliStruct(Atom);
-          subStruct->parent_ = this;
-          args_.push_back(subStruct);
-          subStruct->cmd_ = str;
+          sub_struct = new RepliStruct(Atom);
+          sub_struct->parent_ = this;
+          args_.push_back(sub_struct);
+          sub_struct->cmd_ = str;
           str = "";
-          if ((paramExpect > 0) && (++paramCount == paramExpect))
+          if ((param_expect > 0) && (++param_count == param_expect))
             return 0;
         }
         else {
@@ -381,7 +381,7 @@ int32 RepliStruct::parse(std::istream *stream, const std::string& filePath, uint
       }
       return 0;
     case '{':
-      if (inComment) continue;
+      if (in_comment) continue;
       // Check for scenario 'xxx{'
       if (str.size() > 0) {
         if (lastc == ':') { // label:{xxx}
@@ -389,12 +389,12 @@ int32 RepliStruct::parse(std::istream *stream, const std::string& filePath, uint
           str = "";
         }
         else if ((cmd_.size() > 0) || (type_ == Set)) {
-          subStruct = new RepliStruct(Atom);
-          subStruct->parent_ = this;
-          args_.push_back(subStruct);
-          subStruct->cmd_ = str;
+          sub_struct = new RepliStruct(Atom);
+          sub_struct->parent_ = this;
+          args_.push_back(sub_struct);
+          sub_struct->cmd_ = str;
           str = "";
-          if ((paramExpect > 0) && (++paramCount == paramExpect))
+          if ((param_expect > 0) && (++param_count == param_expect))
             return 0;
         }
         else {
@@ -402,21 +402,21 @@ int32 RepliStruct::parse(std::istream *stream, const std::string& filePath, uint
           str = "";
         }
       }
-      subStruct = new RepliStruct(Development);
-      subStruct->label_ = label;
+      sub_struct = new RepliStruct(Development);
+      sub_struct->label_ = label;
       label = "";
-      subStruct->parent_ = this;
-      args_.push_back(subStruct);
-      returnIndent = subStruct->parse(stream, filePath, curIndent, prevIndent);
-      if (returnIndent < 0)
+      sub_struct->parent_ = this;
+      args_.push_back(sub_struct);
+      return_indent = sub_struct->parse(stream, file_path, cur_indent, prev_indent);
+      if (return_indent < 0)
         return -1;
-      if ((paramExpect > 0) && (++paramCount == paramExpect))
+      if ((param_expect > 0) && (++param_count == param_expect))
         return 0;
-      if (returnIndent > 0)
-        return (returnIndent - 1);
+      if (return_indent > 0)
+        return (return_indent - 1);
       break;
     case '}':
-      if (inComment) continue;
+      if (in_comment) continue;
       // Check for directive use of xxx):xxx or xxx):
       if (stream->peek() == ':') {
         // expect ':' or ':xxx'
@@ -426,12 +426,12 @@ int32 RepliStruct::parse(std::istream *stream, const std::string& filePath, uint
       // We met a boundary, act as ' '
       if (str.size() > 0) {
         if ((cmd_.size() > 0) || (type_ == Set) || (type_ == Development)) { // Modification from Eric to have the Development treat tpl vars as atoms instead of a Development.cmd
-          subStruct = new RepliStruct(Atom);
-          subStruct->parent_ = this;
-          args_.push_back(subStruct);
-          subStruct->cmd_ = str;
+          sub_struct = new RepliStruct(Atom);
+          sub_struct->parent_ = this;
+          args_.push_back(sub_struct);
+          sub_struct->cmd_ = str;
           str = "";
-          if ((paramExpect > 0) && (++paramCount == paramExpect))
+          if ((param_expect > 0) && (++param_count == param_expect))
             return 0;
         }
         else {
@@ -441,7 +441,7 @@ int32 RepliStruct::parse(std::istream *stream, const std::string& filePath, uint
       }
       return 0;
     case '|':
-      if (inComment) continue;
+      if (in_comment) continue;
       if (stream->peek() == '[') {
         stream->get(); // read the [
         stream->get(); // read the ]
@@ -451,7 +451,7 @@ int32 RepliStruct::parse(std::istream *stream, const std::string& filePath, uint
         str += c;
       break;
     case '[': // set start
-      if (inComment) continue;
+      if (in_comment) continue;
       if (lastc == ':') { // label:[xxx]
         label = str;
         str = "";
@@ -460,7 +460,7 @@ int32 RepliStruct::parse(std::istream *stream, const std::string& filePath, uint
         stream->get(); // read the ]
         // if we have a <CR> or <LF> next we may have a line indent set
         if (((tc = stream->peek()) < 32) || (tc == ';'))
-          expectSet = true;
+          expect_set = true;
         else {
           // this could be a xxx:[] or xxx[]
           if ((lastc != ':') && (lastc > 32)) { // label[]
@@ -469,22 +469,22 @@ int32 RepliStruct::parse(std::istream *stream, const std::string& filePath, uint
             continue;
           }
           // create empty set
-          subStruct = new RepliStruct(Set);
-          subStruct->parent_ = this;
-          subStruct->label_ = label;
-          args_.push_back(subStruct);
+          sub_struct = new RepliStruct(Set);
+          sub_struct->parent_ = this;
+          sub_struct->label_ = label;
+          args_.push_back(sub_struct);
         }
       }
       else {
         // Check for scenario 'xxx['
         if (str.size() > 0) {
           if ((cmd_.size() > 0) || (type_ == Set)) {
-            subStruct = new RepliStruct(Atom);
-            subStruct->parent_ = this;
-            args_.push_back(subStruct);
-            subStruct->cmd_ = str;
+            sub_struct = new RepliStruct(Atom);
+            sub_struct->parent_ = this;
+            args_.push_back(sub_struct);
+            sub_struct->cmd_ = str;
             str = "";
-            if ((paramExpect > 0) && (++paramCount == paramExpect))
+            if ((param_expect > 0) && (++param_count == param_expect))
               return 0;
           }
           else {
@@ -492,31 +492,31 @@ int32 RepliStruct::parse(std::istream *stream, const std::string& filePath, uint
             str = "";
           }
         }
-        subStruct = new RepliStruct(Set);
-        subStruct->parent_ = this;
-        subStruct->label_ = label;
+        sub_struct = new RepliStruct(Set);
+        sub_struct->parent_ = this;
+        sub_struct->label_ = label;
         label = "";
-        args_.push_back(subStruct);
-        returnIndent = subStruct->parse(stream, filePath, curIndent, prevIndent);
-        if (returnIndent < 0)
+        args_.push_back(sub_struct);
+        return_indent = sub_struct->parse(stream, file_path, cur_indent, prev_indent);
+        if (return_indent < 0)
           return -1;
-        if ((paramExpect > 0) && (++paramCount == paramExpect))
+        if ((param_expect > 0) && (++param_count == param_expect))
           return 0;
-        if (returnIndent > 0)
-          return (returnIndent - 1);
+        if (return_indent > 0)
+          return (return_indent - 1);
       }
       break;
     case ']':
-      if (inComment) continue;
+      if (in_comment) continue;
       // We met a boundary, act as ' '
       if (str.size() > 0) {
         if ((cmd_.size() > 0) || (type_ == Set)) {
-          subStruct = new RepliStruct(Atom);
-          subStruct->parent_ = this;
-          args_.push_back(subStruct);
-          subStruct->cmd_ = str;
+          sub_struct = new RepliStruct(Atom);
+          sub_struct->parent_ = this;
+          args_.push_back(sub_struct);
+          sub_struct->cmd_ = str;
           str = "";
-          if ((paramExpect > 0) && (++paramCount == paramExpect))
+          if ((param_expect > 0) && (++param_count == param_expect))
             return 0;
         }
         else {
@@ -526,7 +526,7 @@ int32 RepliStruct::parse(std::istream *stream, const std::string& filePath, uint
       }
       return 0;
     default:
-      if (inComment) continue;
+      if (in_comment) continue;
       str += c;
       break;
     }
@@ -535,7 +535,7 @@ int32 RepliStruct::parse(std::istream *stream, const std::string& filePath, uint
 }
 
 
-bool RepliStruct::parseDirective(std::istream *stream, const std::string& filePath, uint32 &curIndent, uint32 &prevIndent) {
+bool RepliStruct::parseDirective(std::istream *stream, const std::string& file_path, uint32 &cur_indent, uint32 &prev_indent) {
 
   std::string str = "!";
   // RepliStruct* subStruct;
@@ -549,45 +549,45 @@ bool RepliStruct::parseDirective(std::istream *stream, const std::string& filePa
     return false;
   }
 
-  unsigned int paramCount = 0;
+  unsigned int param_count = 0;
 
   if (str.compare("!def") == 0) // () ()
-    paramCount = 2;
+    param_count = 2;
   else if (str.compare("!counter") == 0) // xxx val
-    paramCount = 2;
+    param_count = 2;
   else if (str.compare("!undef") == 0) // xxx
-    paramCount = 1;
+    param_count = 1;
   else if (str.compare("!ifdef") == 0) { // name
     type_ = Condition;
-    paramCount = 1;
+    param_count = 1;
   }
   else if (str.compare("!ifundef") == 0) { // name
     type_ = Condition;
-    paramCount = 1;
+    param_count = 1;
   }
   else if (str.compare("!else") == 0) { //
     type_ = Condition;
-    paramCount = 0;
+    param_count = 0;
   }
   else if (str.compare("!endif") == 0) { //
     type_ = Condition;
-    paramCount = 0;
+    param_count = 0;
   }
   else if (str.compare("!class") == 0) // ()
-    paramCount = 1;
+    param_count = 1;
   else if (str.compare("!op") == 0) // ():xxx
-    paramCount = 1;
+    param_count = 1;
   else if (str.compare("!dfn") == 0) // ()
-    paramCount = 1;
+    param_count = 1;
   else if (str.compare("!load") == 0) // xxx
-    paramCount = 1;
+    param_count = 1;
   else {
     error_ += "Unknown directive: '" + str + "'. ";
     return false;
   }
   cmd_ = str;
 
-  if (paramCount == 0) {
+  if (param_count == 0) {
     // read until end of line, including any comments
     while ((!stream->eof()) && (stream->peek() > 13))
       stream->get();
@@ -598,7 +598,7 @@ bool RepliStruct::parseDirective(std::istream *stream, const std::string& filePa
     return true;
   }
 
-  if (parse(stream, filePath, curIndent, prevIndent, paramCount) != 0) {
+  if (parse(stream, file_path, cur_indent, prev_indent, param_count) != 0) {
     error_ += "Error parsing the arguments for directive '" + cmd_ + "'. ";
     return false;
   }
@@ -610,10 +610,10 @@ bool RepliStruct::parseDirective(std::istream *stream, const std::string& filePa
 int32 RepliStruct::process() {
 
   int32 changes = 0, count;
-  RepliStruct *structure, *newStruct, *tempStruct;
+  RepliStruct *structure, *new_struct, *temp_struct;
   RepliMacro* macro;
   RepliCondition* cond;
-  std::string loadError;
+  std::string load_error;
 
   // expand Counters_ in all structures
   if (Counters_.find(cmd_) != Counters_.end()) {
@@ -625,10 +625,10 @@ int32 RepliStruct::process() {
   if (RepliMacros_.find(cmd_) != RepliMacros_.end()) {
     // expand the macro
     macro = RepliMacros_[cmd_];
-    newStruct = macro->expandMacro(this);
-    if (newStruct != NULL) {
-      *this = *newStruct;
-      delete(newStruct);
+    new_struct = macro->expandMacro(this);
+    if (new_struct != NULL) {
+      *this = *new_struct;
+      delete(new_struct);
       changes++;
     }
     else {
@@ -704,36 +704,36 @@ int32 RepliStruct::process() {
           loadPath = containingDirectory / loadPath;
         }
 
-        newStruct = loadReplicodeFile(loadPath.string());
-        if (newStruct == NULL) {
+        new_struct = loadReplicodeFile(loadPath.string());
+        if (new_struct == NULL) {
           structure->error_ += "Load: File '" + loadPath.string() + "' cannot be read! ";
           return -1;
         }
-        else if ((loadError = newStruct->printError()).size() > 0) {
-          structure->error_ = loadError;
-          delete(newStruct);
+        else if ((load_error = new_struct->printError()).size() > 0) {
+          structure->error_ = load_error;
+          delete(new_struct);
           return -1;
         }
         // Insert new data into current args
         // save location
-        tempStruct = (*iter);
+        temp_struct = (*iter);
         // insert new structures
-        args_.insert(++iter, newStruct->args_.begin(), newStruct->args_.end());
+        args_.insert(++iter, new_struct->args_.begin(), new_struct->args_.end());
         // The args have been copied out of newStruct. We are finished with it.
-        delete newStruct;
+        delete new_struct;
         // reinit iterator and find location again
         iter = args_.begin();
         iterEnd = args_.end();
-        while ((*iter) != tempStruct) iter++;
+        while ((*iter) != temp_struct) iter++;
         // we want to remove the !load line, so get the next line
         iter++;
-        args_.remove(tempStruct);
+        args_.remove(temp_struct);
         if (iter != iterEnd) {
           // and because we changed the list, repeat
-          tempStruct = (*iter);
+          temp_struct = (*iter);
           iter = args_.begin();
           iterEnd = args_.end();
-          while ((*iter) != tempStruct) iter++;
+          while ((*iter) != temp_struct) iter++;
         }
         // now we have replaced the !load line with the loaded lines
         changes++;
@@ -743,10 +743,10 @@ int32 RepliStruct::process() {
       if (RepliMacros_.find(structure->cmd_) != RepliMacros_.end()) {
         // expand the macro
         macro = RepliMacros_[structure->cmd_];
-        newStruct = macro->expandMacro(structure);
-        if (newStruct != NULL) {
-          *structure = *newStruct;
-          delete(newStruct);
+        new_struct = macro->expandMacro(structure);
+        if (new_struct != NULL) {
+          *structure = *new_struct;
+          delete(new_struct);
           changes++;
         }
         else {
@@ -782,37 +782,37 @@ int32 RepliStruct::process() {
 
 RepliStruct *RepliStruct::loadReplicodeFile(const std::string &filename) {
 
-  RepliStruct* newRoot = new RepliStruct(Root);
+  RepliStruct* new_root = new RepliStruct(Root);
   if (isFileLoaded(filename)) {
     // This file was already loaded. Skip it by returning an empty newRoot.
-    return newRoot;
+    return new_root;
   }
 
   // Mark this file as loaded.
   LoadedFilePaths_.push_back(filename);
 
-  std::ifstream loadStream(filename.c_str(), std::ios::binary | ios::in);
-  if (loadStream.bad() || loadStream.fail() || loadStream.eof()) {
-    newRoot->error_ += "Load: File '" + filename + "' cannot be read! ";
-    loadStream.close();
-    return newRoot;
+  std::ifstream load_stream(filename.c_str(), std::ios::binary | ios::in);
+  if (load_stream.bad() || load_stream.fail() || load_stream.eof()) {
+    new_root->error_ += "Load: File '" + filename + "' cannot be read! ";
+    load_stream.close();
+    return new_root;
   }
   // create new Root structure
   uint32 a = 0, b = 0;
-  if (newRoot->parse(&loadStream, filename, a, b) < 0) {
+  if (new_root->parse(&load_stream, filename, a, b) < 0) {
     // error is already recorded in newRoot
   }
-  if (!loadStream.eof())
-    newRoot->error_ = "Code structure error: Unmatched ) or ].\n";
-  loadStream.close();
-  return newRoot;
+  if (!load_stream.eof())
+    new_root->error_ = "Code structure error: Unmatched ) or ].\n";
+  load_stream.close();
+  return new_root;
 }
 
-bool RepliStruct::isFileLoaded(const std::string& filePath) {
-  for (auto loadedFilePath = LoadedFilePaths_.begin();
-    loadedFilePath != LoadedFilePaths_.end();
-    ++loadedFilePath) {
-    if (fs::equivalent(filePath, *loadedFilePath))
+bool RepliStruct::isFileLoaded(const std::string& file_path) {
+  for (auto loaded_file_path = LoadedFilePaths_.begin();
+    loaded_file_path != LoadedFilePaths_.end();
+    ++loaded_file_path) {
+    if (fs::equivalent(file_path, *loaded_file_path))
       return true;
   }
 
@@ -821,6 +821,11 @@ bool RepliStruct::isFileLoaded(const std::string& filePath) {
 
 std::string RepliStruct::print() const {
 
+#if 1 // Just use a stringstream.
+  ostringstream out;
+  out << *this;
+  return out.str();
+#else
   std::string str;
   switch (type_) {
   case Atom:
@@ -853,6 +858,7 @@ std::string RepliStruct::print() const {
     break;
   }
   return str;
+#endif
 }
 
 std::ostream &operator<<(std::ostream &os, RepliStruct *structure) {
@@ -905,21 +911,21 @@ std::ostream &operator<<(std::ostream &os, const RepliStruct &structure) {
 
 RepliStruct *RepliStruct::clone() const {
 
-  RepliStruct* newStruct = new RepliStruct(type_);
-  newStruct->cmd_ = cmd_;
-  newStruct->label_ = label_;
-  newStruct->tail_ = tail_;
-  newStruct->parent_ = parent_;
-  newStruct->error_ = error_;
-  newStruct->line_ = line_;
+  RepliStruct* new_struct = new RepliStruct(type_);
+  new_struct->cmd_ = cmd_;
+  new_struct->label_ = label_;
+  new_struct->tail_ = tail_;
+  new_struct->parent_ = parent_;
+  new_struct->error_ = error_;
+  new_struct->line_ = line_;
   for (std::list<RepliStruct*>::const_iterator iter(args_.begin()), iterEnd(args_.end()); iter != iterEnd; ++iter)
-    newStruct->args_.push_back((*iter)->clone());
-  return newStruct;
+    new_struct->args_.push_back((*iter)->clone());
+  return new_struct;
 }
 
 std::string RepliStruct::printError() const {
 
-  std::stringstream strError;
+  std::stringstream str_error;
   if (error_.size() > 0) {
     std::string com = cmd_;
     RepliStruct* structure = parent_;
@@ -928,16 +934,16 @@ std::string RepliStruct::printError() const {
       structure = structure->parent_;
     }
     if (com.size() == 0)
-      strError << "Error";
+      str_error << "Error";
     else
-      strError << "Error in structure '" << com << "'";
+      str_error << "Error in structure '" << com << "'";
     if (line_ > 0)
-      strError << " line " << line_;
-    strError << ": " << error_ << std::endl;
+      str_error << " line " << line_;
+    str_error << ": " << error_ << std::endl;
   }
   for (std::list<RepliStruct*>::const_iterator iter(args_.begin()), iterEnd(args_.end()); iter != iterEnd; ++iter)
-    strError << (*iter)->printError();
-  return strError.str();
+    str_error << (*iter)->printError();
+  return str_error.str();
 }
 
 RepliMacro::RepliMacro(const std::string &name, RepliStruct *src, RepliStruct *dest) {
@@ -961,7 +967,7 @@ uint32 RepliMacro::argCount() {
   return src_->args_.size();
 }
 
-RepliStruct *RepliMacro::expandMacro(RepliStruct *oldStruct) {
+RepliStruct *RepliMacro::expandMacro(RepliStruct *old_struct) {
 
   if (src_ == NULL) {
     error_ += "Macro '" + name_ + "' source not defined. ";
@@ -971,48 +977,48 @@ RepliStruct *RepliMacro::expandMacro(RepliStruct *oldStruct) {
     error_ += "Macro '" + name_ + "' destination not defined. ";
     return NULL;
   }
-  if (oldStruct == NULL) {
+  if (old_struct == NULL) {
     error_ += "Macro '" + name_ + "' cannot expand empty structure. ";
     return NULL;
   }
-  if (oldStruct->cmd_.compare(name_) != 0) {
-    error_ += "Macro '" + name_ + "' cannot expand structure with different name '" + oldStruct->cmd_ + "'. ";
+  if (old_struct->cmd_.compare(name_) != 0) {
+    error_ += "Macro '" + name_ + "' cannot expand structure with different name '" + old_struct->cmd_ + "'. ";
     return NULL;
   }
 
-  if ((src_->args_.size() > 0) && (src_->args_.size() != oldStruct->args_.size())) {
-    error_ += "Macro '" + name_ + "' requires " + std::to_string(src_->args_.size()) + " arguments, cannot expand structure with " + std::to_string(oldStruct->args_.size()) + " arguments. ";
+  if ((src_->args_.size() > 0) && (src_->args_.size() != old_struct->args_.size())) {
+    error_ += "Macro '" + name_ + "' requires " + std::to_string(src_->args_.size()) + " arguments, cannot expand structure with " + std::to_string(old_struct->args_.size()) + " arguments. ";
     return NULL;
   }
 
-  RepliStruct* newStruct;
+  RepliStruct* new_struct;
 
   // Special case of macros without args, just copy in the args from oldStruct
-  if ((src_->args_.size() == 0) && (oldStruct->args_.size() > 0)) {
-    newStruct = oldStruct->clone();
-    newStruct->cmd_ = dest_->cmd_;
-    newStruct->label_ = oldStruct->label_;
-    return newStruct;
+  if ((src_->args_.size() == 0) && (old_struct->args_.size() > 0)) {
+    new_struct = old_struct->clone();
+    new_struct->cmd_ = dest_->cmd_;
+    new_struct->label_ = old_struct->label_;
+    return new_struct;
   } else {
 
-    newStruct = dest_->clone();
-    newStruct->label_ = oldStruct->label_;
+    new_struct = dest_->clone();
+    new_struct->label_ = old_struct->label_;
   }
 
-  RepliStruct *findStruct;
+  RepliStruct *find_struct;
 
-  std::list<RepliStruct*>::const_iterator iOld(oldStruct->args_.begin());
-  for (std::list<RepliStruct*>::const_iterator iSrc(src_->args_.begin()), iSrcEnd(src_->args_.end()); iSrc != iSrcEnd; ++iSrc, ++iOld) {
+  std::list<RepliStruct*>::const_iterator i_old(old_struct->args_.begin());
+  for (std::list<RepliStruct*>::const_iterator i_src(src_->args_.begin()), i_src_end(src_->args_.end()); i_src != i_src_end; ++i_src, ++i_old) {
     // printf("looking for '%s'\n", (*iSrc)->cmd.c_str());
     // find the Atom inside newStruct with the name of iSrc->cmd
-    findStruct = newStruct->findAtom((*iSrc)->cmd_);
-    if (findStruct != NULL) {
+    find_struct = new_struct->findAtom((*i_src)->cmd_);
+    if (find_struct != NULL) {
       // overwrite data in findStruct with the matching one from old
-      *findStruct = *(*iOld);
+      *find_struct = *(*i_old);
     }
   }
 
-  return newStruct;
+  return new_struct;
 }
 
 RepliStruct *RepliStruct::findAtom(const std::string &name) {
@@ -1054,17 +1060,17 @@ void RepliCondition::reverse() {
   reversed_ = !reversed_;
 }
 
-bool RepliCondition::isActive(unordered_map<std::string, RepliMacro *> &repliMacros, unordered_map<std::string, int32> &counters) {
+bool RepliCondition::isActive(unordered_map<std::string, RepliMacro *> &repli_macros, unordered_map<std::string, int32> &counters) {
 
-  bool foundIt = (repliMacros.find(name_) != repliMacros.end());
+  bool found_it = (repli_macros.find(name_) != repli_macros.end());
 
-  if (!foundIt)
-    foundIt = (counters.find(name_) != counters.end());
+  if (!found_it)
+    found_it = (counters.find(name_) != counters.end());
 
   if (reversed_)
-    return (!foundIt);
+    return (!found_it);
   else
-    return foundIt;
+    return found_it;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1080,20 +1086,20 @@ Preprocessor::~Preprocessor() {
 }
 
 bool Preprocessor::process(std::istream *stream,
-  const std::string& filePath,
-  std::ostringstream *outstream,
+  const std::string& file_path,
+  std::ostringstream *out_stream,
   std::string &error,
   Metadata *metadata) {
 
   // Mark this file as loaded. We don't check if it is already loaded because
   // this is called from the top level Init (not from a !load directive) and we
   // assume that it won't call this twice for the same file.
-  RepliStruct::LoadedFilePaths_.push_back(filePath);
+  RepliStruct::LoadedFilePaths_.push_back(file_path);
 
   root_->reset(); // trims root from previously preprocessed objects.
 
   uint32 a = 0, b = 0;
-  if (root_->parse(stream, filePath, a, b) < 0) {
+  if (root_->parse(stream, file_path, a, b) < 0) {
 
     error = root_->printError();
     return false;
@@ -1120,7 +1126,7 @@ bool Preprocessor::process(std::istream *stream,
   }
   // printf("Replicode:\n\n%s\n",root->print().c_str());
 
-  *outstream << root_;
+  *out_stream << root_;
 
   if (metadata)
     initialize(metadata);

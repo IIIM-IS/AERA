@@ -3,6 +3,9 @@
 !/**/
 !*.*
 
+# Emacs temp files
+*~
+
 # Release folders
 /Release/*
 */Release/*
@@ -20,6 +23,10 @@
 *.user
 *.sdf
 *.suo
+.vscode
+
+# Cmake build folder
+/build
 
 # Ignore log files
 *.log
@@ -27,3 +34,8 @@
 /AERA/runtime_out.txt
 /AERA/decompiled_objects.txt
 /AERA/cart.out
+
+# Webots files
+*.exe
+*.o
+*.d

@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -93,6 +93,10 @@ uint32 _ReductionJob::job_count_ = 0;
 _ReductionJob::_ReductionJob() : _Object() {
   // Increment without thread lock. It's only for tracing.
   job_id_ = ++job_count_;
+}
+
+void _ReductionJob::register_latency(Timestamp now) {
+  _Mem::Get()->register_reduction_job_latency(now - ijt_);
 }
 
 ////////////////////////////////////////////////////////////

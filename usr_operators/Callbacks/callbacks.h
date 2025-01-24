@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -87,9 +87,10 @@
 
 #include "../types.h"
 
+namespace usr_operators {
 
-extern "C" {
-bool dll_export print(std::chrono::microseconds relative_time, bool suspended, const char *msg, uint8 object_count, r_code::Code **objects);
+bool print(std::chrono::microseconds relative_time, bool suspended, const char *msg, uint8 object_count, r_code::Code **objects);
+
 }
 
 

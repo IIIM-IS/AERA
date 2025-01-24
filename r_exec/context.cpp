@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -522,11 +522,10 @@ bool match(const IPGMContext &input, const IPGMContext &pattern) { // in red, pa
 
 bool match(const IPGMContext &input, const IPGMContext &pattern, const IPGMContext &productions, vector<uint16> &production_indices) {
 
-  IPGMContext &skeleton = IPGMContext();
   uint16 last_patch_index;
   if (pattern[0].asOpcode() == Opcodes::Ptn) {
 
-    skeleton = pattern.get_child_deref(1);
+    auto skeleton = pattern.get_child_deref(1);
     if (!skeleton.match(input))
       return false;
     last_patch_index = pattern.get_last_patch_index();
@@ -538,7 +537,7 @@ bool match(const IPGMContext &input, const IPGMContext &pattern, const IPGMConte
 
   if (pattern[0].asOpcode() == Opcodes::AntiPtn) {
 
-    skeleton = pattern.get_child_deref(1);
+    auto skeleton = pattern.get_child_deref(1);
     if (skeleton.match(input))
       return false;
     last_patch_index = pattern.get_last_patch_index();
@@ -624,13 +623,13 @@ bool IPGMContext::Red(const IPGMContext &context) {
 
   vector<uint16> production_indices; // list of productions built upon successful matches.
 
+  uint16 input_count = input_set.get_children_count();
   if (input_set[0].getDescriptor() != Atom::SET &&
     input_set[0].getDescriptor() != Atom::S_SET &&
     positive_section[0].getDescriptor() != Atom::SET &&
     negative_section[0].getDescriptor() != Atom::SET)
     goto failure;
 
-  uint16 input_count = input_set.get_children_count();
   if (!input_count)
     goto failure;
 

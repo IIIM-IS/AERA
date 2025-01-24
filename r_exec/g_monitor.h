@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -152,7 +152,7 @@ public:
   /**
    * If prediction->is_simulation(), then this is for a simulation.
    */
-  virtual bool signal(Pred* prediction) { return false; }
+  virtual bool signal(Pred* /* prediction */) { return false; }
 };
 
 /**
@@ -198,7 +198,7 @@ public:
     Fact *f_imdl,
     _Fact *predicted_evidence); // goal is f0->g->f1->object.
 
-  virtual bool reduce(_Fact *input); // returning true will remove the monitor form the controller.
+  bool reduce(_Fact *input) override; // returning true will remove the monitor form the controller.
   virtual void update(Timestamp &next_target);
 };
 
@@ -223,9 +223,9 @@ public:
     Fact *goal,
     Fact *f_imdl);
 
-  bool reduce(_Fact *input);
-  void update(Timestamp &next_target);
-  bool signal(Pred* prediction);
+  bool reduce(_Fact *input) override;
+  void update(Timestamp &next_target) override;
+  bool signal(Pred* prediction) override;
 };
 
 // Monitors simulated goals.
@@ -240,7 +240,7 @@ public:
     Fact *goal,
     Fact *f_imdl); // goal is f0->g->f1->object.
 
-  bool reduce(_Fact *input);
+  bool reduce(_Fact *input) override;
   void update(Timestamp &next_target);
 };
 
@@ -255,10 +255,10 @@ public:
     Fact *goal,
     Fact *f_imdl);
 
-  bool reduce(_Fact *input);
+  bool reduce(_Fact *input) override;
   void update(Timestamp &next_target);
 
-  bool signal(Pred* prediction);
+  bool signal(Pred* prediction) override;
 };
 
 // Case A: target==actual goal and target!=f_imdl: simulations have been produced for all sub-goals.

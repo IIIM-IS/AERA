@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ Copyright (c) 2018 Jacqueline Clare Mallett
 //_/_/ http://www.iiim.is
 //_/_/ 
@@ -182,8 +182,8 @@ bool ModelBase::MEntry::match(const MEntry &e) const { // at this point both mod
     return true;
 
   // Get the unpacked models.
-  Code* mdl_0 = (packed_ ? mdl_->get_reference(mdl_->references_size() - MDL_HIDDEN_REFS) : mdl_);
-  Code* mdl_1 = (e.packed_ ? e.mdl_->get_reference(e.mdl_->references_size() - MDL_HIDDEN_REFS) : e.mdl_);
+  Code* mdl_0 = (packed_ ? mdl_->get_reference(mdl_->references_size() - MDL_HIDDEN_REFS) : (Code*)mdl_);
+  Code* mdl_1 = (e.packed_ ? e.mdl_->get_reference(e.mdl_->references_size() - MDL_HIDDEN_REFS) : (Code*)e.mdl_);
 
   if (mdl_0->code_size() != mdl_1->code_size())
     return false;

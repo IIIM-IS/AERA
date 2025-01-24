@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -88,6 +88,8 @@
 
 namespace r_exec {
 
+using r_code::Atom;
+
 inline View::View() : r_code::_View(), controller_(NULL) {
 
   code_[VIEW_OID].atom_ = GetOID();
@@ -147,11 +149,11 @@ inline void View::init(SyncMode sync,
   code_[VIEW_OID].atom_ = GetOID();
   reset_ctrl_values();
 
-  code(VIEW_SYNC) = Atom::Float(sync);
+  code(VIEW_SYNC) = Atom::Float((float32)sync);
   code(VIEW_IJT) = Atom::IPointer(code(VIEW_OPCODE).getAtomCount() + 1);
   r_code::Utils::SetTimestamp<View>(this, VIEW_IJT, ijt);
   code(VIEW_SLN) = Atom::Float(sln);
-  code(VIEW_RES) = res < 0 ? Atom::PlusInfinity() : Atom::Float(res);
+  code(VIEW_RES) = res < 0 ? Atom::PlusInfinity() : Atom::Float((float32)res);
   code(VIEW_HOST) = Atom::RPointer(0);
   code(VIEW_ORG) = origin ? Atom::RPointer(1) : Atom::Nil();
 
@@ -159,12 +161,6 @@ inline void View::init(SyncMode sync,
   references_[1] = origin;
 
   set_object(object);
-}
-
-inline View::~View() {
-
-  if (!!controller_)
-    controller_->invalidate();
 }
 
 inline void View::reset() {

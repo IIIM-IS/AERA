@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -116,7 +116,7 @@ Value *UnboundValue::copy(BindingMap *map) const {
   return new UnboundValue(map, index_);
 }
 
-void UnboundValue::valuate(Code *destination, uint16 write_index, uint16 &extent_index) const {
+void UnboundValue::valuate(Code *destination, uint16 write_index, uint16& /* extent_index */) const {
 
   destination->code(write_index) = Atom::VLPointer(index_);
 }
@@ -166,7 +166,7 @@ Value *AtomValue::copy(BindingMap *map) const {
   return new AtomValue(map, atom_);
 }
 
-void AtomValue::valuate(Code *destination, uint16 write_index, uint16 &extent_index) const {
+void AtomValue::valuate(Code *destination, uint16 write_index, uint16& /* extent_index */) const {
 
   destination->code(write_index) = atom_;
 }
@@ -214,25 +214,11 @@ bool AtomValue::contains(const Atom a) const {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-StructureValue::StructureValue(BindingMap *map, const Code *structure) : BoundValue(map) {
+StructureValue::StructureValue(BindingMap *map, const Atom *source, uint16 structure_index) : BoundValue(map) {
 
   structure_ = new LocalObject();
-  for (uint16 i = 0; i < structure->code_size(); ++i)
-    structure_->code(i) = structure->code(i);
-}
-
-StructureValue::StructureValue(BindingMap *map, const Code *source, uint16 structure_index) : BoundValue(map) {
-
-  structure_ = new LocalObject();
-  for (uint16 i = 0; i <= source->code(structure_index).getAtomCount(); ++i)
-    structure_->code(i) = source->code(structure_index + i);
-}
-
-StructureValue::StructureValue(BindingMap *map, Atom *source, uint16 structure_index) : BoundValue(map) {
-
-  structure_ = new LocalObject();
-  for (uint16 i = 0; i <= source[structure_index].getAtomCount(); ++i)
-    structure_->code(i) = source[structure_index + i];
+  uint16 extent_index = 0;
+  copy_structure(structure_, extent_index, source, structure_index);
 }
 
 StructureValue::StructureValue(BindingMap *map, Timestamp time) : BoundValue(map) {
@@ -253,11 +239,23 @@ Value *StructureValue::copy(BindingMap *map) const {
   return new StructureValue(map, structure_);
 }
 
-void StructureValue::valuate(Code *destination, uint16 write_index, uint16 &extent_index) const {
+void StructureValue::copy_structure(
+  Code *destination, uint16 &extent_index, const Atom* source, uint16 source_index) {
 
-  destination->code(write_index) = Atom::IPointer(extent_index);
-  for (uint16 i = 0; i <= structure_->code(0).getAtomCount(); ++i)
-    destination->code(extent_index++) = structure_->code(i);
+  uint16 extent_start = extent_index;
+  uint8 atom_count = source[source_index].getAtomCount();
+  // Increment extent_index now in case we need to write more after the structure.
+  extent_index += (1 + atom_count);
+  for (uint16 i = 0; i <= atom_count; ++i) {
+    Atom a = source[source_index + i];
+    if (a.getDescriptor() == Atom::I_PTR) {
+      // Write an I_PTR and recurse to copy the the sub-structure.
+      destination->code(extent_start + i) = Atom::IPointer(extent_index);
+      copy_structure(destination, extent_index, source, a.asIndex());
+      continue;
+    }
+    destination->code(extent_start + i) = a;
+  }
 }
 
 bool StructureValue::match(const Code *object, uint16 index) {
@@ -306,7 +304,8 @@ bool StructureValue::contains(const Atom *s) const {
       continue;
 
     if (a.isFloat() && _a.isFloat())
-      return Utils::Equal(a.asFloat(), _a.asFloat());
+      if (Utils::Equal(a.asFloat(), _a.asFloat()))
+        continue;
 
     return false;
   }
@@ -324,7 +323,7 @@ Value *ObjectValue::copy(BindingMap *map) const {
   return new ObjectValue(map, object_);
 }
 
-void ObjectValue::valuate(Code *destination, uint16 write_index, uint16 &extent_index) const {
+void ObjectValue::valuate(Code *destination, uint16 write_index, uint16& /* extent_index */) const {
 
   destination->code(write_index) = Atom::RPointer(destination->references_size());
   destination->add_reference(object_);
@@ -367,7 +366,7 @@ bool ObjectValue::contains(const Code *o) const {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-_Fact *BindingMap::abstract_f_ihlp(_Fact *f_ihlp) const { // bindings are set already (coming from a mk.rdx caught by auto-focus).
+_Fact *BindingMap::abstract_f_ihlp(const _Fact *f_ihlp) { // bindings are set already (coming from a mk.rdx caught by auto-focus).
 
   uint16 opcode;
   Code *ihlp = f_ihlp->get_reference(0);
@@ -394,7 +393,7 @@ _Fact *BindingMap::abstract_f_ihlp(_Fact *f_ihlp) const { // bindings are set al
   _ihlp->code(extent_index) = Atom::Set(tpl_arg_count);
   for (uint16 i = 1; i <= tpl_arg_count; ++i)
     _ihlp->code(extent_index + i) = Atom::VLPointer(map_index++);
-  extent_index += tpl_arg_count;
+  extent_index += 1 + tpl_arg_count;
 
   uint16 arg_set_index = ihlp->code(I_HLP_EXPOSED_ARGS).asIndex();
   uint16 arg_count = ihlp->code(arg_set_index).getAtomCount();
@@ -403,29 +402,30 @@ _Fact *BindingMap::abstract_f_ihlp(_Fact *f_ihlp) const { // bindings are set al
   for (uint16 i = 1; i <= arg_count; ++i)
     _ihlp->code(extent_index + i) = Atom::VLPointer(map_index++);
 
+  _ihlp->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = ihlp->code(I_HLP_WEAK_REQUIREMENT_ENABLED);
   _ihlp->code(I_HLP_ARITY) = ihlp->code(I_HLP_ARITY);
 
-  _ihlp->add_reference(f_ihlp->get_reference(f_ihlp->code(I_HLP_OBJ).asIndex()));
+  _ihlp->add_reference(ihlp->get_reference(ihlp->code(I_HLP_OBJ).asIndex()));
 
   _f_ihlp->add_reference(_ihlp);
   return _f_ihlp;
 }
 
-_Fact *BindingMap::abstract_fact(_Fact *fact, _Fact *original, bool force_sync, bool allow_shared_timing_vars) { // abstract values as they are encountered.
+_Fact *BindingMap::abstract_fact(_Fact *fact, const _Fact *original, bool force_sync, int timing_vars_first_search_index) { // abstract values as they are encountered.
 
   if (fwd_after_index_ == -1)
     first_index_ = map_.size();
 
   uint16 extent_index = FACT_ARITY + 1;
-  abstract_member(original, FACT_OBJ, fact, FACT_OBJ, extent_index);
+  abstract_member(original, FACT_OBJ, fact, FACT_OBJ, extent_index, timing_vars_first_search_index);
   if (fwd_after_index_ != -1 && force_sync) {
 
     fact->code(FACT_AFTER) = Atom::VLPointer(fwd_after_index_);
     fact->code(FACT_BEFORE) = Atom::VLPointer(fwd_before_index_);
   } else {
 
-    abstract_member(original, FACT_AFTER, fact, FACT_AFTER, extent_index, allow_shared_timing_vars);
-    abstract_member(original, FACT_BEFORE, fact, FACT_BEFORE, extent_index, allow_shared_timing_vars);
+    abstract_member(original, FACT_AFTER, fact, FACT_AFTER, extent_index, timing_vars_first_search_index);
+    abstract_member(original, FACT_BEFORE, fact, FACT_BEFORE, extent_index, timing_vars_first_search_index);
   }
   fact->code(FACT_CFD) = Atom::Wildcard();
   fact->code(FACT_ARITY) = Atom::Wildcard();
@@ -440,15 +440,15 @@ _Fact *BindingMap::abstract_fact(_Fact *fact, _Fact *original, bool force_sync, 
   return fact;
 }
 
-Code *BindingMap::abstract_object(Code *object, bool force_sync, bool allow_shared_timing_vars) { // abstract values as they are encountered.
+Code *BindingMap::abstract_object(Code *object, bool force_sync, int timing_vars_first_search_index) { // abstract values as they are encountered.
 
   Code *abstracted_object = NULL;
 
   uint16 opcode = object->code(0).asOpcode();
   if (opcode == Opcodes::Fact)
-    return abstract_fact(new Fact(), (_Fact *)object, force_sync, allow_shared_timing_vars);
+    return abstract_fact(new Fact(), (_Fact *)object, force_sync, timing_vars_first_search_index);
   else if (opcode == Opcodes::AntiFact)
-    return abstract_fact(new AntiFact(), (_Fact *)object, force_sync, allow_shared_timing_vars);
+    return abstract_fact(new AntiFact(), (_Fact *)object, force_sync, timing_vars_first_search_index);
   else if (opcode == Opcodes::Cmd) {
 
     uint16 extent_index = CMD_ARITY + 1;
@@ -469,9 +469,10 @@ Code *BindingMap::abstract_object(Code *object, bool force_sync, bool allow_shar
     uint16 extent_index = I_HLP_ARITY + 1;
     abstracted_object = _Mem::Get()->build_object(object->code(0));
     abstract_member(object, I_HLP_OBJ, abstracted_object, I_HLP_OBJ, extent_index);
-    abstract_member(object, I_HLP_TPL_ARGS, abstracted_object, I_HLP_TPL_ARGS, extent_index);
-    // Set allow_shared_variable false because exposed args are "output values" which can't be assume to be the same as other values.
-    abstract_member(object, I_HLP_EXPOSED_ARGS, abstracted_object, I_HLP_EXPOSED_ARGS, extent_index, false);
+    // Set first_search_index to allow search to match with the model template args.
+    abstract_member(object, I_HLP_TPL_ARGS, abstracted_object, I_HLP_TPL_ARGS, extent_index, 0);
+    // Set first_search_index to not search because exposed args are "output values" which can't be assume to be the same as other values.
+    abstract_member(object, I_HLP_EXPOSED_ARGS, abstracted_object, I_HLP_EXPOSED_ARGS, extent_index, -1);
     abstracted_object->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Wildcard();
     abstracted_object->code(I_HLP_ARITY) = Atom::Wildcard();
   } else
@@ -479,7 +480,17 @@ Code *BindingMap::abstract_object(Code *object, bool force_sync, bool allow_shar
   return abstracted_object;
 }
 
-void BindingMap::abstract_member(Code *object, uint16 index, Code *abstracted_object, uint16 write_index, uint16 &extent_index, bool allow_shared_variable) {
+uint16 BindingMap::get_abstracted_ihlp_exposed_args_index(const Code* ihlp) {
+  if (!(ihlp->code(0).asOpcode() != Opcodes::IMdl || ihlp->code(0).asOpcode() != Opcodes::ICst))
+    // We don't expect this to happen.
+    return 0;
+
+  uint16 template_args_index = ihlp->code(I_HLP_TPL_ARGS).asIndex();
+  // The abstracted exposed args will start right after the template args.
+  return template_args_index + 1 + ihlp->code(template_args_index).getAtomCount();
+}
+
+void BindingMap::abstract_member(const Code *object, uint16 index, Code *abstracted_object, uint16 write_index, uint16 &extent_index, int first_search_index) {
 
   Atom a = object->code(index);
   uint16 ai = a.asIndex();
@@ -495,22 +506,25 @@ void BindingMap::abstract_member(Code *object, uint16 index, Code *abstracted_ob
     else { // abstract the reference.
 
       abstracted_object->code(write_index) = Atom::RPointer(abstracted_object->references_size());
-      abstracted_object->add_reference(abstract_object(reference, false));
+      abstracted_object->add_reference(abstract_object(reference, false, first_search_index));
     }
     break;
   }case Atom::I_PTR:
-    if (object->code(ai).getDescriptor() == Atom::SET) {
+    // If there is a SET or an OBJECT, then we use its structure.
+    if (hasUserDefinedOperators(object->code(ai).asOpcode()))
+      abstracted_object->code(write_index) = get_structure_variable(object, ai);
+    else if (object->code(ai).getDescriptor() == Atom::SET || object->code(ai).getDescriptor() == Atom::OBJECT) {
 
       abstracted_object->code(write_index) = Atom::IPointer(extent_index);
 
       uint16 element_count = object->code(ai).getAtomCount();
-      abstracted_object->code(extent_index) = Atom::Set(element_count);
+      abstracted_object->code(extent_index) = object->code(ai);
       uint16 _write_index = extent_index;
       extent_index += element_count + 1;
       for (uint16 i = 1; i <= element_count; ++i)
-        abstract_member(object, ai + i, abstracted_object, _write_index + i, extent_index, allow_shared_variable);
+        abstract_member(object, ai + i, abstracted_object, _write_index + i, extent_index, first_search_index);
     } else
-      abstracted_object->code(write_index) = get_structure_variable(object, ai, allow_shared_variable);
+      abstracted_object->code(write_index) = get_structure_variable(object, ai, first_search_index);
     break;
   default:
     abstracted_object->code(write_index) = get_atom_variable(a);
@@ -518,7 +532,7 @@ void BindingMap::abstract_member(Code *object, uint16 index, Code *abstracted_ob
   }
 }
 
-void BindingMap::init(Code *object, uint16 index) {
+void BindingMap::init(const Code *object, uint16 index) {
 
   Atom a = object->code(index);
   switch (a.getDescriptor()) {
@@ -553,18 +567,29 @@ Atom BindingMap::get_atom_variable(Atom a) {
   return Atom::VLPointer(size);
 }
 
-Atom BindingMap::get_structure_variable(Code *object, uint16 index, bool allow_shared_variable) {
+Atom BindingMap::get_structure_variable(const Code *object, uint16 index, int first_search_index) {
 
-  if (allow_shared_variable) {
-    for (uint32 i = 0; i < map_.size(); ++i) {
+  if (first_search_index >= 0 && map_.size() > 0) {
+    if (first_search_index > map_.size())
+      first_search_index = map_.size() - 1;
+
+    for (uint32 i = first_search_index; true;) {
 
       if (map_[i]->contains(&object->code(index)))
         return Atom::VLPointer(i);
+
+      ++i;
+      if (i >= map_.size())
+        // Wrap around.
+        i = 0;
+      if (i == first_search_index)
+        // We reached the starting point.
+        break;
     }
   }
 
   uint32 size = map_.size();
-  map_.push_back(new StructureValue(this, object, index));
+  map_.push_back(new StructureValue(this, &object->code(0), index));
   return Atom::VLPointer(size);
 }
 
@@ -581,7 +606,7 @@ Atom BindingMap::get_object_variable(Code *object) {
   return Atom::VLPointer(size);
 }
 
-BindingMap::BindingMap() : _Object(), fwd_after_index_(-1), fwd_before_index_(-1), unbound_values_(0) {
+BindingMap::BindingMap() : _Object(), first_index_(-1), fwd_after_index_(-1), fwd_before_index_(-1), unbound_values_(0) {
 }
 
 BindingMap::BindingMap(const BindingMap *source) : _Object() {
@@ -716,6 +741,22 @@ bool BindingMap::match_structure(const Code *object, uint16 o_base_index, uint16
     return true;
   if (o_atom.getDescriptor() == Atom::TIMESTAMP)
     return Utils::Synchronous(Utils::GetTimestamp(&object->code(o_full_index)), Utils::GetTimestamp(&pattern->code(p_index)));
+  if (p_atom == Atom::Object(Opcodes::TI, 2)) {
+    // This is a (ti : :). Check the args.
+    Atom after_atom = pattern->code(p_index + 1);
+    Atom before_atom = pattern->code(p_index + 2);
+    if (after_atom.getDescriptor() == Atom::VL_PTR && before_atom.getDescriptor() == Atom::VL_PTR &&
+        map_[after_atom.asIndex()]->get_code() != NULL && map_[before_atom.asIndex()]->get_code() != NULL) {
+      // Both args are variables pointing to a value.
+      if (Utils::HasTimestamp<Code>(object, o_full_index + 1) &&
+          Utils::HasTimestamp<Code>(object, o_full_index + 2))
+        // The object to match has timestamp values in its (ti After Before). Use the same "smart" match_timings
+        // method that match_fwd_timings, etc. use to match the time intervals of two facts.
+        return match_timings(
+          Utils::GetTimestamp<Code>(object, o_full_index + 1),
+          Utils::GetTimestamp<Code>(object, o_full_index + 2), after_atom.asIndex(), before_atom.asIndex());
+    }
+  }
   return match(object, o_base_index, o_index + 1, pattern, p_index + 1, arity);
 }
 
@@ -727,20 +768,28 @@ void BindingMap::reset_fwd_timings(_Fact *reference_fact) { // valuate at after_
     map_[fwd_before_index_] = new StructureValue(this, reference_fact, reference_fact->code(FACT_BEFORE).asIndex());
 }
 
-bool BindingMap::match_timings(Timestamp stored_after, Timestamp stored_before, Timestamp after, Timestamp before, uint32 destination_after_index, uint32 destination_before_index) {
+bool BindingMap::match_timings(Timestamp after, Timestamp before, uint32 after_index, uint32 before_index) {
+
+  Atom* after_code = map_[after_index]->get_code();
+  Atom* before_code = map_[before_index]->get_code();
+  if (after_code[0].getDescriptor() != Atom::TIMESTAMP ||
+      before_code[0].getDescriptor() != Atom::TIMESTAMP)
+    return false;
+  Timestamp stored_after = Utils::GetTimestamp(after_code);
+  Timestamp stored_before = Utils::GetTimestamp(before_code);
 
   if (stored_after <= after) {
 
     if (stored_before >= before) { // sa a b sb
 
-      Utils::SetTimestamp(map_[destination_after_index]->get_code(), after);
-      Utils::SetTimestamp(map_[destination_before_index]->get_code(), before);
+      Utils::SetTimestamp(after_code, after);
+      Utils::SetTimestamp(before_code, before);
       return true;
     } else {
 
       if (stored_before > after) { // sa a sb b
 
-        Utils::SetTimestamp(map_[destination_after_index]->get_code(), after);
+        Utils::SetTimestamp(after_code, after);
         return true;
       }
       return false;
@@ -751,7 +800,7 @@ bool BindingMap::match_timings(Timestamp stored_after, Timestamp stored_before, 
       return true;
     else if (stored_after < before) { // a sa b sb
 
-      Utils::SetTimestamp(map_[destination_before_index]->get_code(), before);
+      Utils::SetTimestamp(before_code, before);
       return true;
     }
     return false;
@@ -826,18 +875,22 @@ void BindingMap::bind_variable(Atom *code, uint8 id, uint16 value_index, Atom *i
   if (v_atom.isFloat())
     bind_variable(new AtomValue(this, v_atom), id);
   else switch (v_atom.getDescriptor()) {
+  case Atom::OBJECT:
+    // Assume this is an object literal like (vec3 -0.5 0 0).
+    bind_variable(new StructureValue(this, code, value_index), id);
+    break;
   case Atom::VALUE_PTR:
     bind_variable(new StructureValue(this, intermediate_results, v_atom.asIndex()), id);
     break;
   }
 }
 
-Atom *BindingMap::get_value_code(uint16 id) {
+Atom *BindingMap::get_value_code(uint16 id) const {
 
   return map_[id]->get_code();
 }
 
-uint16 BindingMap::get_value_code_size(uint16 id) {
+uint16 BindingMap::get_value_code_size(uint16 id) const {
 
   return map_[id]->get_code_size();
 }
@@ -849,7 +902,7 @@ bool BindingMap::scan_variable(uint16 id) const {
   return (map_[id]->get_code() != NULL);
 }
 
-bool BindingMap::intersect(BindingMap *bm) const {
+bool BindingMap::intersect(const BindingMap *bm) const {
 
   for (uint32 i = 0; i < map_.size();) {
 
@@ -927,59 +980,79 @@ void HLPBindingMap::load(const HLPBindingMap *source) {
   *this = *source;
 }
 
-void HLPBindingMap::init_from_pattern(const Code *source, int16 position) { // source is abstracted.
+void HLPBindingMap::add_unbound_values(const Code* hlp, uint16 structure_index) {
+  uint16 arg_count = hlp->code(structure_index).getAtomCount();
+  for (uint16 i = 1; i <= arg_count; ++i) {
 
-  bool set_fwd_timing_index = (position == 0);
-  bool set_bwd_timing_index = (position == 1);
-  for (uint16 i = 1; i < source->code_size(); ++i) {
-
-    Atom s = source->code(i);
-    switch (s.getDescriptor()) {
-    case Atom::VL_PTR: {
-      uint8 value_index = source->code(i).asIndex();
-      add_unbound_value(value_index);
-      if (set_fwd_timing_index && i == FACT_AFTER)
-        fwd_after_index_ = value_index;
-      else if (set_fwd_timing_index && i == FACT_BEFORE) {
-
-        fwd_before_index_ = value_index;
-        set_fwd_timing_index = false;
-      } else if (set_bwd_timing_index && i == FACT_AFTER)
-        bwd_after_index_ = value_index;
-      else if (set_bwd_timing_index && i == FACT_BEFORE) {
-
-        bwd_before_index_ = value_index;
-        set_bwd_timing_index = false;
-      }
-      break;
-    }default:
-      break;
-    }
-  }
-
-  for (uint16 i = 0; i < source->references_size(); ++i)
-    init_from_pattern(source->get_reference(i), -1);
-}
-
-void HLPBindingMap::init_from_hlp(const Code *hlp) { // hlp is cst or mdl.
-
-  uint16 tpl_arg_set_index = hlp->code(HLP_TPL_ARGS).asIndex();
-  uint16 tpl_arg_count = hlp->code(tpl_arg_set_index).getAtomCount();
-  for (uint16 i = 1; i <= tpl_arg_count; ++i) {
-
-    Atom a = hlp->code(tpl_arg_set_index + i);
+    Atom a = hlp->code(structure_index + i);
     if (a.getDescriptor() == Atom::VL_PTR)
       add_unbound_value(a.asIndex());
+    else if (a.getDescriptor() == Atom::I_PTR)
+      // Recurse into the structure.
+      add_unbound_values(hlp, hlp->code(structure_index + i).asIndex());
   }
+}
+
+void HLPBindingMap::init_from_hlp(const Code* hlp, const Code* packed_hlp) { // hlp is cst or mdl.
+
+  add_unbound_values(hlp, hlp->code(HLP_TPL_ARGS).asIndex());
 
   first_index_ = map_.size();
 
   uint16 obj_set_index = hlp->code(HLP_OBJS).asIndex();
   uint16 obj_count = hlp->code(obj_set_index).getAtomCount();
-  for (uint16 i = 1; i <= obj_count; ++i) {
+  if (obj_count >= 1)
+    init_timing_indexes(hlp->get_reference(hlp->code(obj_set_index + 1).asIndex()),
+      fwd_after_index_, fwd_before_index_);
+  if (obj_count >= 2)
+    init_timing_indexes(hlp->get_reference(hlp->code(obj_set_index + 2).asIndex()),
+      bwd_after_index_, bwd_before_index_);
 
-    _Fact *pattern = (_Fact *)hlp->get_reference(hlp->code(obj_set_index + i).asIndex());
-    init_from_pattern(pattern, i - 1);
+  // Use the packed hlp without recursion which has exactly the vars we need for the binding map.
+  // NOTE: If the hlp contains a string literal where a char looks like a VL_PTR, this won't work.
+  for (uint16 i = 1; i < packed_hlp->code_size(); ++i) {
+    Atom s = packed_hlp->code(i);
+    if (s.getDescriptor() == Atom::VL_PTR)
+      add_unbound_value(s.asIndex());
+  }
+}
+
+void HLPBindingMap::init_from_ihlp_args(
+  const Code* hlp, uint16 hlp_args_index, const Code* ihlp, uint16 ihlp_args_index) {
+  if (hlp->code(hlp_args_index) != ihlp->code(ihlp_args_index))
+    // The type of structure or the arity doesn't match.
+    return;
+
+  uint16 count = ihlp->code(ihlp_args_index).getAtomCount();
+  // valuate args.
+  for (uint16 i = 0; i < count; ++i) {
+
+    Atom hlp_atom = hlp->code(hlp_args_index + 1 + i);
+    Atom ihlp_atom = ihlp->code(ihlp_args_index + 1 + i);
+
+    if (hlp_atom.getDescriptor() == Atom::I_PTR) {
+      if (ihlp_atom.getDescriptor() != Atom::I_PTR)
+        // Can't get values from the ihlp
+        continue;
+      // Recurse into the structure.
+      init_from_ihlp_args(hlp, hlp_atom.asIndex(), ihlp, ihlp_atom.asIndex());
+      continue;
+    }
+    if (hlp_atom.getDescriptor() != Atom::VL_PTR)
+      // No variable to set.
+      continue;
+
+    switch (ihlp_atom.getDescriptor()) {
+    case Atom::R_PTR:
+      map_[hlp_atom.asIndex()] = new ObjectValue(this, ihlp->get_reference(ihlp_atom.asIndex()));
+      break;
+    case Atom::I_PTR:
+      map_[hlp_atom.asIndex()] = new StructureValue(this, ihlp, ihlp_atom.asIndex());
+      break;
+    default:
+      map_[hlp_atom.asIndex()] = new AtomValue(this, ihlp_atom);
+      break;
+    }
   }
 }
 
@@ -987,23 +1060,8 @@ void HLPBindingMap::init_from_f_ihlp(const _Fact *f_ihlp) { // source is f->icst
 
   Code *ihlp = f_ihlp->get_reference(0);
 
-  uint16 tpl_val_set_index = ihlp->code(I_HLP_TPL_ARGS).asIndex();
-  uint16 tpl_val_count = ihlp->code(tpl_val_set_index++).getAtomCount();
-  for (uint16 i = 0; i < tpl_val_count; ++i) { // valuate tpl args.
-
-    Atom atom = ihlp->code(tpl_val_set_index + i);
-    switch (atom.getDescriptor()) {
-    case Atom::R_PTR:
-      map_[i] = new ObjectValue(this, ihlp->get_reference(atom.asIndex()));
-      break;
-    case Atom::I_PTR:
-      map_[i] = new StructureValue(this, ihlp, atom.asIndex());
-      break;
-    default:
-      map_[i] = new AtomValue(this, atom);
-      break;
-    }
-  }
+  Code* hlp = ihlp->get_reference(0);
+  init_from_ihlp_args(hlp, hlp->code(HLP_TPL_ARGS).asIndex(), ihlp, ihlp->code(I_HLP_TPL_ARGS).asIndex());
 
   uint16 val_set_index = ihlp->code(I_HLP_EXPOSED_ARGS).asIndex() + 1;
   uint32 i = 0;
@@ -1039,6 +1097,34 @@ void HLPBindingMap::init_from_f_ihlp(const _Fact *f_ihlp) { // source is f->icst
   map_[fwd_before_index_] = new StructureValue(this, f_ihlp, f_ihlp->code(FACT_BEFORE).asIndex());
 }
 
+void HLPBindingMap::build_ihlp_structure(
+  const Code* hlp, uint16 hlp_structure_index, Code* ihlp, uint16& extent_index) const
+{
+  uint16 count = hlp->code(hlp_structure_index).getAtomCount();
+  ihlp->code(extent_index) = hlp->code(hlp_structure_index);
+  uint16 write_index = extent_index + 1;
+  extent_index = write_index + count;
+  bool is_ti = (hlp->code(hlp_structure_index) == Atom::Object(Opcodes::TI, 2));
+
+  // Copy from the HLP structure, valuating each VL_PTR.
+  for (uint16 i = 0; i < count; ++i) {
+    Atom a = hlp->code(hlp_structure_index + 1 + i);
+    // Leave the args of (ti After: Before:) as variables so that Match can "narrow" them.
+    if (a.getDescriptor() == Atom::VL_PTR && !is_ti)
+      // Valuate the arg.
+      map_[a.asIndex()]->valuate(ihlp, write_index, extent_index);
+    else if (a.getDescriptor() == Atom::I_PTR) {
+      ihlp->code(write_index) = Atom::IPointer(extent_index);
+      // Recurse into the structure.
+      build_ihlp_structure(hlp, a.asIndex(), ihlp, extent_index);
+    }
+    else
+      ihlp->code(write_index) = a;
+
+    ++write_index;
+  }
+}
+
 Fact *HLPBindingMap::build_f_ihlp(Code *hlp, uint16 opcode, bool wr_enabled) const {
 
   Code *ihlp = _Mem::Get()->build_object(Atom::Object(opcode, I_HLP_ARITY));
@@ -1047,21 +1133,15 @@ Fact *HLPBindingMap::build_f_ihlp(Code *hlp, uint16 opcode, bool wr_enabled) con
 
   uint16 tpl_arg_index = I_HLP_ARITY + 1;
   ihlp->code(I_HLP_TPL_ARGS) = Atom::IPointer(tpl_arg_index);
-  ihlp->code(tpl_arg_index) = Atom::Set(first_index_);
-  uint16 write_index = tpl_arg_index + 1;
-  uint16 extent_index = write_index + first_index_;
-  for (uint16 i = 0; i < first_index_; ++i) { // valuate tpl args.
-
-    map_[i]->valuate(ihlp, write_index, extent_index);
-    ++write_index;
-  }
+  uint16 extent_index = tpl_arg_index;
+  build_ihlp_structure(hlp, hlp->code(HLP_TPL_ARGS).asIndex(), ihlp, extent_index);
 
   ihlp->code(I_HLP_EXPOSED_ARGS) = Atom::IPointer(extent_index);
   uint16 exposed_arg_start = first_index_;
   uint16 exposed_arg_count = map_.size() - exposed_arg_start - 2; // -2: do not expose the first after/before timestamps.
   ihlp->code(extent_index) = Atom::Set(exposed_arg_count);
 
-  write_index = extent_index + 1;
+  uint16 write_index = extent_index + 1;
   extent_index = write_index + exposed_arg_count;
   for (uint16 i = exposed_arg_start; i < map_.size(); ++i) { // valuate args.
 
@@ -1082,6 +1162,28 @@ Fact *HLPBindingMap::build_f_ihlp(Code *hlp, uint16 opcode, bool wr_enabled) con
   map_[fwd_before_index_]->valuate(f_ihlp, FACT_BEFORE, extent_index);
   return f_ihlp;
 }
+
+int16 HLPBindingMap::get_ihlp_exposed_args_position(int16 index) const {
+  // Use the same logic as build_f_ihlp.
+  uint16 exposed_arg_start = first_index_;
+  if (index == fwd_after_index_ || index == fwd_before_index_ ||
+      index < exposed_arg_start || index >= map_.size())
+    return -1;
+
+  uint16 exposed_arg_count = map_.size() - exposed_arg_start - 2; // -2: do not expose the first after/before timestamps.
+  uint16 position = 0;
+  for (uint16 i = exposed_arg_start; i < map_.size(); ++i) {
+    if (i == fwd_after_index_ || i == fwd_before_index_)
+      continue;
+
+    if (i == index)
+      return position;
+    ++position;
+  }
+
+  return -1;
+}
+
 
 Code *HLPBindingMap::bind_pattern(Code *pattern) const {
 
@@ -1168,7 +1270,7 @@ void HLPBindingMap::reset_bwd_timings(_Fact *reference_fact) { // valuate at aft
 
 bool HLPBindingMap::match_bwd_timings(const _Fact *f_object, const _Fact *f_pattern) {
 
-  return match_timings(get_bwd_after(), get_bwd_before(), f_object->get_after(), f_object->get_before(), bwd_after_index_, bwd_before_index_);
+  return match_timings(f_object->get_after(), f_object->get_before(), bwd_after_index_, bwd_before_index_);
 }
 
 bool HLPBindingMap::match_bwd_strict(const _Fact *f_object, const _Fact *f_pattern) {

@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -125,7 +125,7 @@ protected:
 public:
   virtual ~InputLessPGMOverlay();
 
-  virtual void reset(); // reset to original state (pristine copy of the pgm code and empty value set).
+  void reset() override; // reset to original state (pristine copy of the pgm code and empty value set).
 
   bool inject_productions(); // return true upon successful evaluation; no existence check in simulation mode.
 };
@@ -161,9 +161,9 @@ protected:
   MatchResult __match(r_exec::View *input, uint16 pattern_index);
 
   r_code::Code *dereference_in_ptr(Atom a);
-  void patch_input_code(uint16 pgm_code_index, uint16 input_index, uint16 input_code_index, int16 parent_index = -1);
+  void patch_input_code(uint16 pgm_code_index, uint16 input_index, uint16 input_code_index, int16 parent_index = -1) override;
 
-  virtual r_code::Code *get_mk_rdx(uint16 &extent_index) const;
+  r_code::Code *get_mk_rdx(uint16 &extent_index) const override;
 
   void init();
 
@@ -172,7 +172,7 @@ protected:
 public:
   virtual ~PGMOverlay();
 
-  void reset() {
+  void reset() override {
     InputLessPGMOverlay::reset();
     patch_indices_.clear();
     input_views_.clear();
@@ -180,14 +180,14 @@ public:
     init();
   }
 
-  virtual Overlay *reduce(r_exec::View *input); // called upon the processing of a reduction job.
+  Overlay *reduce(r_exec::View *input) override; // called upon the processing of a reduction job.
 
   r_code::Code *getInputObject(uint16 i) const;
   r_code::_View *getInputView(uint16 i) const;
 
   Timestamp get_birth_time() const { return birth_time_; }
 
-  bool is_invalidated();
+  bool is_invalidated() override;
 };
 
 // Several ReductionCores can attempt to reduce the same overlay simultaneously (each with a different input).
@@ -203,7 +203,7 @@ private:
 public:
   ~AntiPGMOverlay();
 
-  Overlay *reduce(r_exec::View *input); // called upon the processing of a reduction job.
+  Overlay *reduce(r_exec::View *input) override; // called upon the processing of a reduction job.
 };
 }
 

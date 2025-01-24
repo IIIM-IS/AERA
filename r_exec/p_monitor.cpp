@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -94,7 +94,8 @@ namespace r_exec {
 PMonitor::PMonitor(MDLController *controller,
   BindingMap *bindings,
   Fact *prediction,
-  bool rate_failures) : Monitor(controller, bindings, prediction), rate_failures_(rate_failures) { // prediction is f0->pred->f1->obj; not simulated.
+  Code* mk_rdx,
+  bool rate_failures) : Monitor(controller, bindings, prediction, mk_rdx), rate_failures_(rate_failures) { // prediction is f0->pred->f1->obj; not simulated.
 
   prediction_target_ = prediction->get_pred()->get_target(); // f1.
   auto now = Now();
@@ -139,24 +140,31 @@ bool PMonitor::reduce(_Fact *input) { // input is always an actual fact.
     //uint32 oid=input->get_oid();
     switch (((Fact *)input)->is_evidence(prediction_target_)) {
     case MATCH_SUCCESS_POSITIVE:
-      controller_->register_pred_outcome(target_, true, input, input->get_cfd(), rate_failures_);
+      controller_->register_pred_outcome(target_, mk_rdx_, true, input, input->get_cfd(), rate_failures_);
       return true;
     case MATCH_SUCCESS_NEGATIVE:
       if (rate_failures_)
-        controller_->register_pred_outcome(target_, false, input, input->get_cfd(), rate_failures_);
+        controller_->register_pred_outcome(target_, mk_rdx_, false, input, input->get_cfd(), rate_failures_);
       return true;
     case MATCH_FAILURE:
       return false;
     }
   }
+
+  return false;
 }
 
 void PMonitor::update(Timestamp &next_target) { // executed by a time core, upon reaching the expected time of occurrence of the target of the prediction.
 
-  if (!target_->is_invalidated()) { // received nothing matching the target's object so far (neither positively nor negatively).
+  if (!target_->is_invalidated()) {
 
-    if (rate_failures_)
-      controller_->register_pred_outcome(target_, false, NULL, 1, rate_failures_);
+    // Received nothing matching the target's object so far (neither positively nor negatively).
+    // It is only a failure if the target is a fact. If the target is an anti-fact then reaching this
+    // point means that the object was not observed *as expected* (not a failure).
+    // TODO: If the model correctly predicts an anti-fact that the object won't be observed, then should we register
+    // a success for the model? If yes then what should "evidence" point? Maybe nil?
+    if (rate_failures_ && target_->get_pred()->get_target()->is_fact())
+      controller_->register_pred_outcome(target_, mk_rdx_, false, NULL, 1, rate_failures_);
   }
   controller_->remove_monitor(this);
   next_target = Timestamp(seconds(0));

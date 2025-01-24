@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -82,7 +82,9 @@
 //_/_/ 
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
+#include <algorithm>
 #include "init.h"
+#include "controller.h"
 #include "object.h"
 #include "operator.h"
 #include "cpp_programs.h"
@@ -94,7 +96,9 @@
 #include "../r_comp/decompiler.h"
 #include "../r_comp/preprocessor.h"
 
+#ifdef WINDOWS
 #include <process.h>
+#endif
 
 using namespace std;
 using namespace std::chrono;
@@ -111,8 +115,6 @@ unordered_map<std::string, uint16> _Opcodes;
 
 dll_export r_comp::Compiler Compiler;
 r_exec_dll r_comp::Preprocessor Preprocessor;
-
-SharedLibrary userOperatorLibrary;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -181,14 +183,17 @@ thread_ret TDecompiler::Decompile(void *args) {
 
   if (_this->ostream_id_ == 0) {
 
-    std::cout << _this->header_.c_str();
-    std::cout << decompiled_code.str().c_str();
+    std::cout << _this->header_;
+    std::cout << decompiled_code.str();
   } else {
 
-    PipeOStream::Get(_this->ostream_id_ - 1) << _this->header_.c_str();
-    PipeOStream::Get(_this->ostream_id_ - 1) << decompiled_code.str().c_str();
+    PipeOStream::Get(_this->ostream_id_ - 1) << _this->header_;
+    PipeOStream::Get(_this->ostream_id_ - 1) << decompiled_code.str();
   }
 
+  if (!_this->thread_)
+    // We're running in diagnostic time without a thread. Just return.
+    return 0;
   thread_ret_val(0);
 }
 
@@ -241,6 +246,7 @@ PipeOStream PipeOStream::NullStream_;
 
 void PipeOStream::Open(uint8 count) {
 
+#ifdef WINDOWS
   for (uint8 i = 0; i < count; ++i) {
 
     PipeOStream *p = new PipeOStream();
@@ -248,25 +254,35 @@ void PipeOStream::Open(uint8 count) {
 
     Streams_.push_back(p);
   }
+#endif
 }
 
 void PipeOStream::Close() {
 
+#ifdef WINDOWS
   for (uint8 i = 0; i < Streams_.size(); ++i)
     delete Streams_[i];
   Streams_.clear();
+#endif
 }
 
 PipeOStream &PipeOStream::Get(uint8 id) {
 
+#ifdef WINDOWS
   if (id < Streams_.size())
     return *Streams_[id];
+#endif
   return NullStream_;
 }
 
-PipeOStream::PipeOStream() : std::ostream(NULL), pipe_read_(0), pipe_write_(0) {
+PipeOStream::PipeOStream() : std::ostream(NULL)
+#ifdef WINDOWS
+  , pipe_read_(0), pipe_write_(0)
+#endif
+{
 }
 
+#ifdef WINDOWS
 void PipeOStream::init() {
 
   SECURITY_ATTRIBUTES saAttr;
@@ -299,9 +315,11 @@ void PipeOStream::init() {
     &si, // pointer to STARTUPINFO structure
     &pi); // pointer to PROCESS_INFORMATION structure
 }
+#endif
 
 PipeOStream::~PipeOStream() {
 
+#ifdef WINDOWS
   if (pipe_read_ == 0)
     return;
 
@@ -309,10 +327,12 @@ PipeOStream::~PipeOStream() {
   *this << stop;
   CloseHandle(pipe_read_);
   CloseHandle(pipe_write_);
+#endif
 }
 
 PipeOStream &PipeOStream::operator <<(std::string &s) {
 
+#ifdef WINDOWS // TODO: Implement for non-WINDOWS
   if (pipe_read_ == 0)
     return *this;
 
@@ -320,12 +340,14 @@ PipeOStream &PipeOStream::operator <<(std::string &s) {
   uint32 written;
 
   WriteFile(pipe_write_, s.c_str(), to_write, &written, NULL);
+#endif
 
   return *this;
 }
 
 PipeOStream& PipeOStream::operator <<(const char *s) {
 
+#ifdef WINDOWS
   if (pipe_read_ == 0)
     return *this;
 
@@ -333,6 +355,7 @@ PipeOStream& PipeOStream::operator <<(const char *s) {
   uint32 written;
 
   WriteFile(pipe_write_, s, to_write, &written, NULL);
+#endif
 
   return *this;
 }
@@ -374,6 +397,8 @@ bool InitOpcodes(const r_comp::Metadata& metadata) {
   Opcodes::View = _Opcodes.find("view")->second;
   Opcodes::PgmView = _Opcodes.find("pgm_view")->second;
   Opcodes::GrpView = _Opcodes.find("grp_view")->second;
+
+  Opcodes::TI = _Opcodes.find("ti")->second;
 
   Opcodes::Ent = _Opcodes.find("ent")->second;
   Opcodes::Ont = _Opcodes.find("ont")->second;
@@ -423,6 +448,7 @@ bool InitOpcodes(const r_comp::Metadata& metadata) {
   Opcodes::MkActChg = _Opcodes.find("mk.act_chg")->second;
 
   Opcodes::Sim = _Opcodes.find("sim")->second;
+  Opcodes::Id = _Opcodes.find("id")->second;
 
   // load executive function Opcodes.
   Opcodes::Inject = _Opcodes.find("_inj")->second;
@@ -436,10 +462,16 @@ bool InitOpcodes(const r_comp::Metadata& metadata) {
   Opcodes::Prb = _Opcodes.find("_prb")->second;
   Opcodes::Stop = _Opcodes.find("_stop")->second;
 
+  Opcodes::Gtr = _Opcodes.find("gtr")->second;
+  Opcodes::Lsr = _Opcodes.find("lsr")->second;
+  Opcodes::Gte = _Opcodes.find("gte")->second;
+  Opcodes::Lse = _Opcodes.find("lse")->second;
   Opcodes::Add = _Opcodes.find("add")->second;
   Opcodes::Sub = _Opcodes.find("sub")->second;
   Opcodes::Mul = _Opcodes.find("mul")->second;
   Opcodes::Div = _Opcodes.find("div")->second;
+
+  Opcodes::Var = _Opcodes.find("var")->second;
 
   // load std operators.
   uint16 operator_opcode = 0;
@@ -467,11 +499,12 @@ bool InitOpcodes(const r_comp::Metadata& metadata) {
   Operator::Register(operator_opcode++, is_sim);
   Operator::Register(operator_opcode++, minimum);
   Operator::Register(operator_opcode++, maximum);
+  Operator::Register(operator_opcode++, id);
 
   return true;
 }
 
-bool Init(const char *user_operator_library_path,
+static bool Init(FunctionLibrary* userOperatorLibrary,
           Timestamp (*time_base)()) {
 
   Now = time_base;
@@ -479,31 +512,29 @@ bool Init(const char *user_operator_library_path,
   if (!InitOpcodes(Metadata))
     return false;
 
-  if (!user_operator_library_path) // when no rMem is used.
+  if (!userOperatorLibrary) // when no rMem is used.
     return true;
 
   // load usr operators and c++ programs.
-  if (!(userOperatorLibrary.load(user_operator_library_path)))
-    exit(-1);
 
   // Operators.
   typedef uint16 (*OpcodeRetriever)(const char *);
-  typedef void (*UserInit)(OpcodeRetriever);
-  UserInit _Init = userOperatorLibrary.getFunction<UserInit>("Init");
+  typedef r_code::resized_vector<uint16> (*UserInit)(OpcodeRetriever);
+  auto _Init = (UserInit)userOperatorLibrary->getFunction("Init");
   if (!_Init)
     return false;
 
   typedef uint16 (*UserGetOperatorCount)();
-  UserGetOperatorCount GetOperatorCount = userOperatorLibrary.getFunction<UserGetOperatorCount>("GetOperatorCount");
+  auto GetOperatorCount = (UserGetOperatorCount)userOperatorLibrary->getFunction("GetOperatorCount");
   if (!GetOperatorCount)
     return false;
 
   typedef void (*UserGetOperatorName)(char *);
-  UserGetOperatorName GetOperatorName = userOperatorLibrary.getFunction<UserGetOperatorName>("GetOperatorName");
+  auto GetOperatorName = (UserGetOperatorName)userOperatorLibrary->getFunction("GetOperatorName");
   if (!GetOperatorName)
     return false;
 
-  _Init(RetrieveOpcode);
+  Metadata.usr_classes_ = _Init(RetrieveOpcode);
 
   typedef bool (*UserOperator)(const Context &);
 
@@ -520,7 +551,7 @@ bool Init(const char *user_operator_library_path,
       std::cerr << "Operator " << op_name << " is undefined" << std::endl;
       exit(-1);
     }
-    UserOperator op = userOperatorLibrary.getFunction<UserOperator>(op_name);
+    auto op = (UserOperator)userOperatorLibrary->getFunction(op_name);
     if (!op)
       return false;
 
@@ -529,12 +560,12 @@ bool Init(const char *user_operator_library_path,
 
   // C++ programs.
   typedef uint16 (*UserGetProgramCount)();
-  UserGetProgramCount GetProgramCount = userOperatorLibrary.getFunction<UserGetProgramCount>("GetProgramCount");
+  auto GetProgramCount = (UserGetProgramCount)userOperatorLibrary->getFunction("GetProgramCount");
   if (!GetProgramCount)
     return false;
 
   typedef void (*UserGetProgramName)(char *);
-  UserGetProgramName GetProgramName = userOperatorLibrary.getFunction<UserGetProgramName>("GetProgramName");
+  auto GetProgramName = (UserGetProgramName)userOperatorLibrary->getFunction("GetProgramName");
   if (!GetProgramName)
     return false;
 
@@ -549,7 +580,7 @@ bool Init(const char *user_operator_library_path,
 
     std::string _pgm_name = pgm_name;
 
-    UserProgram pgm = userOperatorLibrary.getFunction<UserProgram>(pgm_name);
+    auto pgm = (UserProgram)userOperatorLibrary->getFunction(pgm_name);
     if (!pgm)
       return false;
 
@@ -558,12 +589,12 @@ bool Init(const char *user_operator_library_path,
 
   // Callbacks.
   typedef uint16(*UserGetCallbackCount)();
-  UserGetCallbackCount GetCallbackCount = userOperatorLibrary.getFunction<UserGetCallbackCount>("GetCallbackCount");
+  auto GetCallbackCount = (UserGetCallbackCount)userOperatorLibrary->getFunction("GetCallbackCount");
   if (!GetCallbackCount)
     return false;
 
   typedef void(*UserGetCallbackName)(char *);
-  UserGetCallbackName GetCallbackName = userOperatorLibrary.getFunction<UserGetCallbackName>("GetCallbackName");
+  auto GetCallbackName = (UserGetCallbackName)userOperatorLibrary->getFunction("GetCallbackName");
   if (!GetCallbackName)
     return false;
 
@@ -578,19 +609,19 @@ bool Init(const char *user_operator_library_path,
 
     std::string _callback_name = callback_name;
 
-    UserCallback callback = userOperatorLibrary.getFunction<UserCallback>(callback_name);
+    auto callback = (UserCallback)userOperatorLibrary->getFunction(callback_name);
     if (!callback)
       return false;
 
     Callbacks::Register(_callback_name, callback);
   }
 
-  std::cout << "> user-defined operator library " << user_operator_library_path << " loaded" << std::endl;
+  std::cout << "> user-defined operator library loaded" << std::endl;
 
   return true;
 }
 
-bool Init(const char *user_operator_library_path,
+bool Init(FunctionLibrary* userOperatorLibrary,
   Timestamp (*time_base)(),
   const char *seed_path) {
 
@@ -601,10 +632,10 @@ bool Init(const char *user_operator_library_path,
     return false;
   }
 
-  return Init(user_operator_library_path, time_base);
+  return Init(userOperatorLibrary, time_base);
 }
 
-bool Init(const char *user_operator_library_path,
+bool Init(FunctionLibrary* userOperatorLibrary,
   Timestamp (*time_base)(),
   const r_comp::Metadata &metadata,
   const r_comp::Image &seed) {
@@ -612,7 +643,7 @@ bool Init(const char *user_operator_library_path,
   Metadata = metadata;
   Seed = seed;
 
-  return Init(user_operator_library_path, time_base);
+  return Init(userOperatorLibrary, time_base);
 }
 
 uint16 GetOpcode(const char *name) {
@@ -627,4 +658,17 @@ std::string GetAxiomName(const uint16 index) {
 
   return Compiler.getObjectName(index);
 }
+
+bool hasUserDefinedOperators(const uint16 opcode) {
+  const std::vector<uint16> *usr_defined_opcodes = Metadata.usr_classes_.as_std();
+  return std::find(usr_defined_opcodes->begin(), usr_defined_opcodes->end(), opcode) != usr_defined_opcodes->end();
+}
+
+bool hasUserDefinedOperators(const std::string class_name) {
+  if (_Opcodes.find(class_name) == _Opcodes.end()) {
+    return false;
+  }
+  return hasUserDefinedOperators(_Opcodes[class_name]);
+}
+
 }

@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -82,6 +82,7 @@
 //_/_/ 
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
+#include <algorithm>
 #include "cst_controller.h"
 #include "mem.h"
 #include "hlp_context.h"
@@ -306,8 +307,12 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
         // The actual input fact matches (positive or negative) a defeasible promoted fact, so invalidated it.
         predictionSimulation->defeating_facts_.push_back(input_object);
         d->defeasible_validity_->invalidate();
+        string defeasible_validity_info;
+#ifdef WITH_DETAIL_OID
+        defeasible_validity_info = " with DefeasibleValidity(" + to_string(d->defeasible_validity_->get_detail_oid()) + ")";
+#endif
         OUTPUT_LINE(CST_OUT, Utils::RelativeTime(now) << " promoted simulated fact " << d->promoted_fact_->get_oid() <<
-          " defeated by fact " << input->object_->get_oid());
+          defeasible_validity_info << " defeated by fact " << input->object_->get_oid());
         // We don't need this entry any more.
         d = predictionSimulation->defeasible_promoted_facts_.list_.erase(d);
       }
@@ -386,6 +391,13 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
   bool bound_pattern_is_axiom;
   _Fact *bound_pattern = bind_pattern(input_object, bm, predictionSimulation, bound_pattern_is_axiom);
   if (bound_pattern) {
+#if 0 // Debug: Show making overlays.
+    string debug_inputs_info;
+    for (uint32 i = 0; i < axiom_inputs_.size(); ++i)
+      debug_inputs_info += " " + to_string(axiom_inputs_[i]->get_oid());
+    for (uint32 i = 0; i < non_axiom_inputs_.size(); ++i)
+      debug_inputs_info += " " + to_string(non_axiom_inputs_[i]->get_oid());
+#endif
     if (axiom_patterns_.size() + non_axiom_patterns_.size() == 1) { // last match.
 
       if (!code_) {
@@ -406,6 +418,12 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
         }
       } else { // guards already evaluated, full match.
         offspring = get_offspring(bm, (_Fact *)input->object_, bound_pattern_is_axiom);
+#if 0 // Debug: Show making overlays.
+        OUTPUT_LINE((TraceLevel)0, "Debug: For " << get_object()->get_oid() <<
+          (predictionSimulation ? " Sim(" + to_string(predictionSimulation->get_detail_oid()) + ")" : "") << ": CSTOverlay(" <<
+          get_detail_oid() << ") [" << debug_inputs_info << "]: Add " << input->object_->get_oid() <<
+          " (final) after making offspring CSTOverlay(" << offspring->get_detail_oid() << ")");
+#endif
         inject_production(input);
         invalidate();
         store_evidence(input->object_, prediction, is_simulation);
@@ -413,6 +431,12 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
       }
     } else {
       offspring = get_offspring(bm, (_Fact *)input->object_, bound_pattern_is_axiom, bound_pattern);
+#if 0 // Debug: Show making overlays.
+      OUTPUT_LINE((TraceLevel)0, "Debug: For " << get_object()->get_oid() <<
+        (predictionSimulation ? " Sim(" + to_string(predictionSimulation->get_detail_oid()) + ")" : "") << ": CSTOverlay(" <<
+        get_detail_oid() << ") [" << debug_inputs_info << "]: Add " << input->object_->get_oid() <<
+        " after making offspring CSTOverlay(" << offspring->get_detail_oid() << ")");
+#endif
       store_evidence(input->object_, prediction, is_simulation);
       return true;
     }
@@ -594,6 +618,10 @@ void CSTController::abduce_simulated(HLPBindingMap *bm, Fact *f_super_goal) {
     if (((CSTOverlay*)(*o))->is_simulated())
       // Skip overlays that were produced during simulated forward chaining.
       continue;
+#if 0 // Debug: Don't use inputs.
+    if (!(((CSTOverlay*)(*o))->non_axiom_inputs_.size() == 0 && ((CSTOverlay*)(*o))->axiom_patterns_.size() == 0))
+      continue;
+#endif
 
     HLPBindingMap bm_copy(bm);
     // TODO: this is inefficient. We want to merge (*o)->binding_ into bm_copy, but use an icst.
@@ -634,6 +662,12 @@ void CSTController::abduce(HLPBindingMap *bm, Fact *f_super_goal) {
     _Fact *evidence;
     if (opposite)
       bound_pattern->set_opposite();
+#if 0 // Debug: Don't check evidences for simulated goals.
+    if (f_super_goal->get_goal()->is_simulation()) {
+      inject_goal(bm, f_super_goal, bound_pattern, sub_sim, now, confidence, host); // all sub-goals share the same sim.
+      continue;
+    }
+#endif
     switch (check_evidences(bound_pattern, evidence)) {
     case MATCH_SUCCESS_POSITIVE: // positive evidence, no need to produce a sub-goal: skip.
       break;
@@ -676,17 +710,9 @@ void CSTController::inject_goal(HLPBindingMap *bm,
   OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " cst " << get_object()->get_oid() << ": fact " <<
     f_super_goal->get_oid() << " super_goal -> fact " << sub_goal_f->get_oid() << " simulated goal");
 
-  if (sim->get_mode() == SIM_ROOT) { // no rdx for SIM_OPTIONAL or SIM_MANDATORY.
-
-    MkRdx *mk_rdx = new MkRdx(f_icst, f_super_goal, sub_goal, 1, bm);
-    uint16 out_group_count = get_out_group_count();
-    for (uint16 i = 0; i < out_group_count; ++i) {
-
-      Group *out_group = (Group *)get_out_group(i);
-      View *view = new NotificationView(group, out_group, mk_rdx);
-      _Mem::Get()->inject_notification(view, true);
-    }
-  }
+  // no rdx for SIM_OPTIONAL or SIM_MANDATORY.
+  if (sim->get_mode() == SIM_ROOT)
+    inject_notification_into_out_groups(group, new MkRdx(f_icst, f_super_goal, sub_goal, 1, bm));
 }
 
 Fact *CSTController::get_f_ihlp(HLPBindingMap *bindings, bool wr_enabled) const {

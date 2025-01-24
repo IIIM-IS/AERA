@@ -3,8 +3,8 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2022 Jeff Thompson
-//_/_/ Copyright (c) 2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2022-2025 Jeff Thompson
+//_/_/ Copyright (c) 2022-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/
 //_/_/ --- Open-Source BSD License, with CADIA Clause v 1.0 ---
@@ -78,7 +78,7 @@ public:
    * \param objects The objects array from load(), used to call find_object.
    * \return True for success, false if can't initialize.
    */
-  bool load(std::vector<r_code::Code *> *objects);
+  bool load(const std::vector<r_code::Code *> *objects);
 
   /**
    * Move the eye (and the fovea with it) by the given delta X and Y. Set the output

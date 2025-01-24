@@ -3,9 +3,10 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2023 Leonard M. Eberding
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -91,7 +92,9 @@
 #include "../submodules/CoreLibrary/CoreLibrary/utils.h"
 #include "../r_code/utils.h"
 #include <math.h>
+#include "hlp_context.h"
 
+using namespace std;
 using namespace std::chrono;
 using namespace r_code;
 
@@ -106,6 +109,90 @@ void Operator::Register(uint16 opcode, bool(*o)(const Context &)) {
   else
     Operators_[opcode] = Operator(o);
 }
+
+
+std::vector<r_code::Atom> OpContext::build_and_evaluate_expression(_Fact* q0, _Fact* q1, Atom op) {
+  if (q0->get_reference(0)->code(MK_VAL_VALUE).isFloat() && q1->get_reference(0)->code(MK_VAL_VALUE).isFloat()) {
+
+    float32 _q0 = q0->get_reference(0)->code(MK_VAL_VALUE).asFloat();
+    float32 _q1 = q1->get_reference(0)->code(MK_VAL_VALUE).asFloat();
+
+    Atom result;
+    auto opcode = op.asOpcode();
+    if (opcode == Opcodes::Gtr) { result = Atom::Boolean(_q1 > _q0); }
+    else if (opcode == Opcodes::Lsr) { result = Atom::Boolean(_q1 < _q0); }
+    else if (opcode == Opcodes::Gte) { result = Atom::Boolean(_q1 >= _q0); }
+    else if (opcode == Opcodes::Lse) { result = Atom::Boolean(_q1 <= _q0); }
+    else if (opcode == Opcodes::Add) { result = Atom::Float(_q1 + _q0); }
+    else if (opcode == Opcodes::Sub) { result = Atom::Float(_q1 - _q0); }
+    else if (opcode == Opcodes::Mul) { result = Atom::Float(_q1 * _q0); }
+    else if (opcode == Opcodes::Div) {
+      if (_q0 == 0)
+        return std::vector<r_code::Atom>();
+      result = Atom::Float(_q1 / _q0);
+    }
+    if (!result.isUndefined()) {
+      std::vector<r_code::Atom> out;
+      out.push_back(result);
+      return out;
+    }
+  }
+  P<r_code::LocalObject> expression = build_expression_object(q0, q1, op);
+  return evaluate_expression(expression);
+}
+
+P<r_code::LocalObject> OpContext::build_expression_object(_Fact* q0, _Fact* q1, Atom op) {
+
+  uint16 target_source_index = 0;
+  uint16 consequent_source_index = 0;
+
+  Atom target_val = q0->get_reference(0)->code(MK_VAL_VALUE);
+  Atom consequent_val = q1->get_reference(0)->code(MK_VAL_VALUE);
+
+  // Build the expression (op q1 q0), copying the code structure at q1 and q0. For example (- q1 q0) in the case of subtraction.
+  P<LocalObject> expression = new LocalObject();
+  uint16 extent_index = 1;
+  expression->code(0) = op;
+  Atom* copy_ptr = &consequent_val;
+  if (consequent_val.getDescriptor() == Atom::I_PTR) {
+    consequent_source_index = consequent_val.asIndex();
+    copy_ptr = &q1->get_reference(0)->code(0);
+    extent_index += 2;
+    expression->code(1) = Atom::IPointer(extent_index);
+  }
+  StructureValue::copy_structure(expression, extent_index, copy_ptr, consequent_source_index);
+
+  copy_ptr = &target_val;
+  if (target_val.getDescriptor() == Atom::I_PTR) {
+    target_source_index = target_val.asIndex();
+    copy_ptr = &q0->get_reference(0)->code(0);
+    expression->code(2) = Atom::IPointer(extent_index);
+  }
+  StructureValue::copy_structure(expression, extent_index, copy_ptr, target_source_index);
+
+  return expression;
+}
+
+std::vector<r_code::Atom> OpContext::evaluate_expression(r_code::LocalObject* expression) {
+  // Use HLPContext to evaluate the expression. The result goes in the OpContext's result array.
+  Overlay overlay((size_t)0);
+  HLPContext c(&expression->code(0), 0, (HLPOverlay*)&overlay);
+
+  uint16 atom_count = c.get_children_count();
+  for (uint16 i = 1; i <= atom_count; ++i) {
+
+    if (!c.get_child_deref(i).evaluate_no_dereference())
+      return std::vector<r_code::Atom>();
+  }
+
+  Operator op = Operator::Get(c[0].asOpcode());
+  HLPContext* _c = new HLPContext(c);
+  OpContext op_context(_c);
+  op(op_context);
+  return op_context.result();
+}
+
+
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -806,6 +893,20 @@ bool maximum(const Context &context) {
     context.setDurationResult(max(Utils::GetDuration(&lhs[0]), Utils::GetDuration(&rhs[0])));
     return true;
   }
+
+  context.setAtomicResult(Atom::Nil());
+  return false;
+}
+
+bool id(const Context& context) {
+  Context arg = *context.get_child(1);
+
+  if (arg[0].isFloat()) {
+
+    context.setAtomicResult(Atom::Float(arg[0].asFloat()));
+    return true;
+  }
+  // TODO: Support copying a structured object (with possible nested structures).
 
   context.setAtomicResult(Atom::Nil());
   return false;

@@ -82,6 +82,7 @@
 !op (is_sim :):bl
 !op (min : :):
 !op (max : :):
+!op (id :):
 
 ; operator aliases.
 !def now (_now)

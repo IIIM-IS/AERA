@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -270,23 +270,23 @@ public:
     const_iterator(const list *l, int32 c) : _iterator(c), list_(l) {}
   public:
     const_iterator() : _iterator(), list_(NULL) {}
-    const T &operator *() const { return list_->cells_[cell_].data_; }
-    const T *operator ->() const { return &(list_->cells_[cell_].data_); }
+    const T &operator *() const { return list_->cells_[_iterator::cell_].data_; }
+    const T *operator ->() const { return &(list_->cells_[_iterator::cell_].data_); }
     const_iterator &operator ++() {
 
-      cell_ = list_->cells_[cell_].next_;
+      _iterator::cell_ = list_->cells_[_iterator::cell_].next_;
       return *this;
     }
     const_iterator &operator =(const const_iterator &i) {
 
       list_ = i.list_;
-      cell_ = i.cell_;
+      _iterator::cell_ = i.cell_;
       return *this;
     }
     const_iterator &operator =(const iterator &i) {
 
       list_ = i.list_;
-      cell_ = i.cell_;
+      _iterator::cell_ = i.cell_;
       return *this;
     }
   };
@@ -300,17 +300,17 @@ public:
     iterator(list *l, int32 c) : _iterator(c), list_(l) {}
   public:
     iterator() : _iterator(), list_(NULL) {}
-    T &operator *() const { return list_->cells_[cell_].data_; }
-    T *operator ->() const { return &(list_->cells_[cell_].data_); }
+    T &operator *() const { return list_->cells_[_iterator::cell_].data_; }
+    T *operator ->() const { return &(list_->cells_[_iterator::cell_].data_); }
     iterator &operator ++() {
 
-      cell_ = list_->cells_[cell_].next_;
+      _iterator::cell_ = list_->cells_[_iterator::cell_].next_;
       return *this;
     }
     iterator &operator =(const iterator &i) {
 
       list_ = i.list_;
-      cell_ = i.cell_;
+      _iterator::cell_ = i.cell_;
       return *this;
     }
   };

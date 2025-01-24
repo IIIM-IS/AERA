@@ -3,8 +3,8 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2022 Jeff Thompson
-//_/_/ Copyright (c) 2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2022-2025 Jeff Thompson
+//_/_/ Copyright (c) 2022-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/
 //_/_/ --- Open-Source BSD License, with CADIA Clause v 1.0 ---
@@ -72,7 +72,7 @@ namespace video_screen {
   clear_screen();
 }
 
-bool VideoScreen::load(vector<Code*> *objects) {
+bool VideoScreen::load(const vector<Code*> *objects) {
   // Draw an initial objects.
   draw_paddle(3, 5);
   draw_ball(10, 10);

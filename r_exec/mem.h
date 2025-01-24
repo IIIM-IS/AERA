@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -93,6 +93,8 @@
 #include "dll.h"
 
 #include <list>
+#include <deque>
+#include <atomic>
 
 #include "../r_code/list.h"
 #include "../r_comp/segments.h"
@@ -153,7 +155,6 @@ protected:
   PipeNN<P<TimeJob>, 1024> *time_job_queue_;
   ReductionCore **reduction_cores_;
   TimeCore **time_cores_;
-  TimeJob::Compare time_job_compare_;
 
   // Performance stats.
   uint32 reduction_job_count_;
@@ -233,6 +234,7 @@ public:
     uint32 traces,
     bool keep_invalidated_objects);
 
+  State get_state() const { return state_;  }
   /**
    * Get the sampling period, which is 2 * base_period from settings.xml. This should
    * match sampling_period in user.classes.replicode.
@@ -248,9 +250,6 @@ public:
   std::chrono::microseconds get_max_sim_time_horizon() const { return max_sim_time_horizon_; }
   std::chrono::microseconds get_sim_time_horizon(std::chrono::microseconds horizon) const { 
     return std::chrono::microseconds((int64)(horizon.count() * sim_time_horizon_factor_)); 
-  }
-  std::chrono::microseconds get_sim_time_horizon(Timestamp::duration horizon) const { 
-    return get_sim_time_horizon(std::chrono::duration_cast<std::chrono::microseconds>(horizon));
   }
   std::chrono::microseconds get_tpx_time_horizon() const { return tpx_time_horizon_; }
   std::chrono::microseconds get_primary_thz() const { return primary_thz_; }
@@ -276,7 +275,7 @@ public:
   void start_core(); // called upon creation of a delegate.
   void shutdown_core(); // called upon completion of a delegate's task.
 
-  virtual bool load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid); // call before start; no mod/set/eje will be executed (only inj);
+  virtual bool load(const std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid); // call before start; no mod/set/eje will be executed (only inj);
                                                                                                                   // return false on error.
   Timestamp start(); // return the starting time.
 
@@ -330,6 +329,25 @@ public:
    */
   View* inject_marker_value_from_io_device(
     r_code::Code* obj, r_code::Code* prop, Atom val, Timestamp after, Timestamp before,
+    View::SyncMode sync_mode, r_code::Code* group);
+
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * [sync_mode after 1 1 group nil]
+   * where val is a set of Atoms.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param val The Atom value for the mk.val, such as Atom::Float(1).
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \param sync_mode The view sync mode, such as View::SYNC_PERIODIC.
+   * \param group The group of the view, such as get_stdin().
+   * \return The created View.
+   */
+  View* inject_marker_value_from_io_device(
+    r_code::Code* obj, r_code::Code* prop, std::vector<Atom> val, Timestamp after, Timestamp before,
     View::SyncMode sync_mode, r_code::Code* group);
 
   /**
@@ -480,6 +498,263 @@ public:
   }
 
   /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * [sync_mode after 1 1 group nil]
+   * where val is a string object.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param val The value for the mk.val, which is a string object. This will
+   * add it to the references of the mkval.
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \param sync_mode The view sync mode, such as View::SYNC_PERIODIC.
+   * \param group The group of the view, such as get_stdin().
+   * \return The created View.
+   */
+  View* inject_marker_value_from_io_device(
+    r_code::Code* obj, r_code::Code* prop, const std::string& val, Timestamp after, Timestamp before,
+    View::SyncMode sync_mode, r_code::Code* group);
+
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * [sync_mode after 1 1 stdin nil]
+   * where val is a string object.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param val The value for the mk.val, which is a string object. This will
+   * add it to the references of the mkval.
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \param sync_mode The view sync mode, such as View::SYNC_PERIODIC.
+   * \return The created View.
+   */
+  View* inject_marker_value_from_io_device(
+    r_code::Code* obj, r_code::Code* prop, const std::string& val, Timestamp after, Timestamp before,
+    View::SyncMode sync_mode)
+  {
+    return inject_marker_value_from_io_device(obj, prop, val, after, before, sync_mode, get_stdin());
+  }
+
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * [SYNC_PERIODIC after 1 1 group nil]
+   * where val is a string object.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param val The value for the mk.val, which is a string object. This will
+   * add it to the references of the mkval.
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \param group The group of the view, such as get_stdin().
+   * \return The created View.
+   */
+  View* inject_marker_value_from_io_device(
+    r_code::Code* obj, r_code::Code* prop, const std::string& val, Timestamp after, Timestamp before, r_code::Code* group)
+  {
+    return inject_marker_value_from_io_device(obj, prop, val, after, before, View::SYNC_PERIODIC, group);
+  }
+
+  /**
+   * Inject (fact (mk.val obj prop val 1) after before 1 1)
+   * [SYNC_PERIODIC after 1 1 stdin nil]
+   * where val is a string object.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param val The value for the mk.val, which is a string object. This will
+   * add it to the references of the mkval.
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \return The created View.
+   */
+  View* inject_marker_value_from_io_device(
+    r_code::Code* obj, r_code::Code* prop, const std::string& val, Timestamp after, Timestamp before)
+  {
+    return inject_marker_value_from_io_device(obj, prop, val, after, before, View::SYNC_PERIODIC, get_stdin());
+  }
+
+  /**
+   * Inject (fact (mk.val obj prop [o1 o2] 1) after before 1 1)
+   * [sync_mode after 1 1 group nil]
+   * where val is a set of referenced Code objects.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param val The value for the mk.val, which is set of existing Code object, possibly empty.
+   * This will add the objects to the references of the mkval.
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \param sync_mode The view sync mode, such as View::SYNC_PERIODIC.
+   * \param group The group of the view, such as get_stdin().
+   * \return The created View.
+   */
+  View* inject_marker_value_from_io_device(
+    r_code::Code* obj, r_code::Code* prop, const std::vector<r_code::Code*>& val,
+    Timestamp after, Timestamp before, View::SyncMode sync_mode, r_code::Code* group);
+
+  /**
+   * Inject (fact (mk.val obj prop [o1 o2] 1) after before 1 1)
+   * [sync_mode after 1 1 stdin nil]
+   * where val is a set of referenced Code objects.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param val The value for the mk.val, which is set of existing Code object, possibly empty.
+   * This will add the objects to the references of the mkval.
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \param sync_mode The view sync mode, such as View::SYNC_PERIODIC.
+   * \return The created View.
+   */
+  View* inject_marker_value_from_io_device(
+    r_code::Code* obj, r_code::Code* prop, const std::vector<r_code::Code*>& val,
+    Timestamp after, Timestamp before, View::SyncMode sync_mode)
+  {
+    return inject_marker_value_from_io_device(obj, prop, val, after, before, sync_mode, get_stdin());
+  }
+
+  /**
+   * Inject (fact (mk.val obj prop [o1 o2] 1) after before 1 1)
+   * [SYNC_PERIODIC after 1 1 group nil]
+   * where val is a set of referenced Code objects.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param val The value for the mk.val, which is set of existing Code object, possibly empty.
+   * This will add the objects to the references of the mkval.
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \param group The group of the view, such as get_stdin().
+   * \return The created View.
+   */
+  View* inject_marker_value_from_io_device(
+    r_code::Code* obj, r_code::Code* prop, const std::vector<r_code::Code*>& val,
+    Timestamp after, Timestamp before, r_code::Code* group)
+  {
+    return inject_marker_value_from_io_device(
+      obj, prop, val, after, before, View::SYNC_PERIODIC, group);
+  }
+
+  /**
+   * Inject (fact (mk.val obj prop [o1 o2] 1) after before 1 1)
+   * [SYNC_PERIODIC after 1 1 stdin nil]
+   * where val is a set of referenced Code objects.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param val The value for the mk.val, which is set of existing Code object, possibly empty.
+   * This will add the objects to the references of the mkval.
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \return The created View.
+   */
+  View* inject_marker_value_from_io_device(
+    r_code::Code* obj, r_code::Code* prop, const std::vector<r_code::Code*>& val,
+    Timestamp after, Timestamp before)
+  {
+    return inject_marker_value_from_io_device(
+      obj, prop, val, after, before, View::SYNC_PERIODIC, get_stdin());
+  }
+
+  /**
+   * Inject (fact (mk.val obj prop (opcode val1 val2 ...) 1) after before 1 1)
+   * [sync_mode after 1 1 group nil]
+   * where val1 val2 ... come from the vals Atom list.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param opcode The opcode for the value structure.
+   * \param vals The list of Atom for val1 val2 ....
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \param sync_mode The view sync mode, such as View::SYNC_PERIODIC.
+   * \param group The group of the view, such as get_stdin().
+   * \return The created View.
+   */
+  View* inject_marker_value_from_io_device(
+    r_code::Code* obj, r_code::Code* prop, uint16 opcode, const std::vector<r_code::Atom>& vals,
+    Timestamp after, Timestamp before, View::SyncMode sync_mode, r_code::Code* group);
+
+  /**
+   * Inject (fact (mk.val obj prop (opcode val1 val2 ...) 1) after before 1 1)
+   * [sync_mode after 1 1 stdin nil]
+   * where val1 val2 ... come from the vals Atom list.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param opcode The opcode for the value structure.
+   * \param vals The list of Atom for val1 val2 ....
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \param sync_mode The view sync mode, such as View::SYNC_PERIODIC.
+   * \return The created View.
+   */
+  View* inject_marker_value_from_io_device(
+    r_code::Code* obj, r_code::Code* prop, uint16 opcode, const std::vector<r_code::Atom>& vals,
+    Timestamp after, Timestamp before, View::SyncMode sync_mode)
+  {
+    return inject_marker_value_from_io_device(obj, prop, opcode, vals, after, before, sync_mode, get_stdin());
+  }
+
+  /**
+   * Inject (fact (mk.val obj prop (opcode val1 val2 ...) 1) after before 1 1)
+   * [SYNC_PERIODIC after 1 1 group nil]
+   * where val1 val2 ... come from the vals Atom list.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param opcode The opcode for the value structure.
+   * \param vals The list of Atom for val1 val2 ....
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \param group The group of the view, such as get_stdin().
+   * \return The created View.
+   */
+  View* inject_marker_value_from_io_device(
+    r_code::Code* obj, r_code::Code* prop, uint16 opcode, const std::vector<r_code::Atom>& vals,
+    Timestamp after, Timestamp before, r_code::Code* group)
+  {
+    return inject_marker_value_from_io_device(
+      obj, prop, opcode, vals, after, before, View::SYNC_PERIODIC, group);
+  }
+
+  /**
+   * Inject (fact (mk.val obj prop (opcode val1 val2 ...) 1) after before 1 1)
+   * [SYNC_PERIODIC after 1 1 stdin nil]
+   * where val1 val2 ... come from the vals Atom list.
+   * This is called from the I/O device to call the normal inject(view), then
+   * log the injection event.
+   * \param obj The object for the mk.val.
+   * \param prop The property for the mk.val.
+   * \param opcode The opcode for the value structure.
+   * \param vals The list of Atom for val1 val2 ....
+   * \param after The start of the fact time interval.
+   * \param before The end of the fact time interval.
+   * \return The created View.
+   */
+  View* inject_marker_value_from_io_device(
+    r_code::Code* obj, r_code::Code* prop, uint16 opcode, const std::vector<r_code::Atom>& vals,
+    Timestamp after, Timestamp before)
+  {
+    return inject_marker_value_from_io_device(
+      obj, prop, opcode, vals, after, before, View::SYNC_PERIODIC, get_stdin());
+  }
+
+  /**
    * Inject (fact object after before 1 1)
    * [sync_mode after 1 1 group nil]
    * This is called from the I/O device to call the normal inject(view), then
@@ -539,13 +814,7 @@ public:
 
   // Called by cores.
   void register_reduction_job_latency(std::chrono::microseconds latency);
-  void register_reduction_job_latency(Timestamp::duration latency) {
-    register_reduction_job_latency(std::chrono::duration_cast<std::chrono::microseconds>(latency));
-  };
   void register_time_job_latency(std::chrono::microseconds latency);
-  void register_time_job_latency(Timestamp::duration latency) {
-    register_time_job_latency(std::chrono::duration_cast<std::chrono::microseconds>(latency)); 
-  };
   void inject_perf_stats();
 
   // rMem to rMem.
@@ -584,7 +853,7 @@ public:
    * \return The object, or NULL if not found.
    */
   static r_code::Code* find_object(
-    std::vector<r_code::Code *> *objects, const char* name);
+    const std::vector<r_code::Code *> *objects, const char* name);
 
   r_code::Code *clone(r_code::Code *original) const; // shallow copy.
 
@@ -629,40 +898,74 @@ public:
   static std::ostream &Output(TraceLevel l);
 };
 
+/**
+ * DiagnosticTimeState holds the state of stepping in diagnostic time.
+ */
+class DiagnosticTimeState {
+public:
+  /**
+   * Initialize a DiagnosticTimeState and call mem_->on_diagnostic_time_tick() once
+   * to initialize it too.
+   * \param mem The main _Mem object.
+   * \param run_time The run time. See step().
+   */
+  DiagnosticTimeState(_Mem* mem, std::chrono::milliseconds run_time);
+
+  /**
+   * Do one step in diagnostic time. This runs one reduction job or one time job (or neither).
+   * \return True if finished (reached the run_time), false if you should call this again.
+   */
+  bool step();
+private:
+  _Mem* mem_;
+  std::chrono::milliseconds run_time_;
+  TimeJob::Compare time_job_compare_;
+  size_t n_reduction_jobs_this_sampling_period_;
+  std::vector<P<_ReductionJob>> reduction_job_queue_;
+  size_t reduction_job_queue_index_;
+  // Use a deque so we can efficiently remove from the front.
+  std::deque<P<TimeJob>> ordered_time_job_queue_;
+  Timestamp tick_time_;
+  Timestamp end_time_;
+  int pass_number_;
+  bool need_diagnostic_time_tick_;
+};
+
+
 // _Mem that stores the objects as long as they are not invalidated.
 class r_exec_dll MemStatic :
   public _Mem {
 private:
   CriticalSection objectsCS_; // protects last_oid_ and objects_.
   uint32 last_oid_;
-  void bind(View *view); // assigns an oid, stores view->object in objects if needed.
-  void set_last_oid(int32 oid);
+  void bind(View *view) override; // assigns an oid, stores view->object in objects if needed.
+  void set_last_oid(int32 oid) override;
 protected:
   MemStatic();
 public:
   virtual ~MemStatic();
 
-  void delete_object(r_code::Code *object); // erase the object from objects if needed.
+  void delete_object(r_code::Code *object) override; // erase the object from objects if needed.
   // return an image containing valid objects, or all objects if include_invalidated.
-  r_comp::Image *get_objects(bool include_invalidated = false);
+  r_comp::Image *get_objects(bool include_invalidated = false) override;
 };
 
 // _Mem that does not store objects.
 class r_exec_dll MemVolatile :
   public _Mem {
 private:
-  volatile int32 last_oid_;
+  std::atomic_int32_t last_oid_;
   uint32 get_oid();
-  void bind(View *view); // assigns an oid (atomic operation).
-  void set_last_oid(int32 oid);
+  void bind(View *view) override; // assigns an oid (atomic operation).
+  void set_last_oid(int32 oid) override;
 protected:
   MemVolatile();
 public:
   virtual ~MemVolatile();
 
-  void delete_object(r_code::Code *object) {}
+  void delete_object(r_code::Code* /* object */) override {}
 
-  r_comp::Image *get_objects(bool include_invalidated = false) { return NULL; }
+  r_comp::Image *get_objects(bool /* include_invalidated */) override { return NULL; }
 };
 
 /** O is the class of the objects held by the rMem (except groups and notifications):
@@ -679,15 +982,15 @@ public:
   virtual ~MemExec();
 
   // Called at load time.
-  r_code::Code *build_object(r_code::SysObject *source) const;
+  r_code::Code *build_object(r_code::SysObject *source) const override;
 
   // Called at runtime.
-  r_code::Code *_build_object(Atom head) const;
-  r_code::Code *build_object(Atom head) const;
+  r_code::Code *_build_object(Atom head) const override;
+  r_code::Code *build_object(Atom head) const override;
 
   // Executive device functions ////////////////////////////////////////////////////////
 
-  r_code::Code *check_existence(r_code::Code *object);
+  r_code::Code *check_existence(r_code::Code *object) override;
 
   // Called by the communication device (I/O).
   void inject(O *object, View *view);

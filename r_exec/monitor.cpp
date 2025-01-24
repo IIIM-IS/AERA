@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -86,15 +86,18 @@
 #include "mem.h"
 #include "mdl_controller.h"
 
+using namespace r_code;
 
 namespace r_exec {
 
 Monitor::Monitor(MDLController *controller,
   BindingMap *bindings,
-  Fact *target) : _Object(), controller_(controller) {
+  Fact *target,
+  Code* mk_rdx) : _Object(), controller_(controller) {
 
   bindings_ = bindings;
   target_ = target;
+  mk_rdx_ = mk_rdx;
 }
 
 bool Monitor::is_alive() const {

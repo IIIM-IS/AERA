@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ Copyright (c) 2018 Thor Tomasarson
 //_/_/ http://www.iiim.is
 //_/_/ 
@@ -93,6 +93,8 @@ using namespace std;
 using namespace std::chrono;
 using namespace r_code;
 
+namespace usr_operators {
+
 bool print(microseconds relative_time, bool suspended, const char *msg, uint8 object_count, Code **objects) { // return true to resume the executive (applies when called from a suspend call, i.e. suspended==true).
 
   ostringstream out;
@@ -103,4 +105,6 @@ bool print(microseconds relative_time, bool suspended, const char *msg, uint8 ob
   // Assume that printing a single string is more-or-less atomic.
   std::cout << out.str();
   return true;
+}
+
 }

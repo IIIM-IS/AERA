@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -180,13 +180,18 @@ public:
    */
   static void SetTimestampStruct(Code *object, uint16 index, Timestamp timestamp); // Expands object->code to allocate atoms.
 
-  static const uint64 MaxTHZ = 0xFFFFFFFF;
+  static constexpr uint64 MaxTHZ = 0xFFFFFFFF;
 
   template<class O> static bool HasTimestamp(const O *object, uint16 index) {
     if (object->code_size() <= index)
       return false;
-    uint16 t_index = object->code(index).asIndex();
-    return object->code_size() > t_index + 2;
+    Atom a = object->code(index);
+    if (a.getDescriptor() != Atom::I_PTR)
+      return false;
+    uint16 t_index = a.asIndex();
+    if (object->code_size() <= t_index + 2)
+      return false;
+    return object->code(t_index).getDescriptor() == Atom::TIMESTAMP;
   }
 
   /**
@@ -222,7 +227,7 @@ public:
    * Make a string from (timestamp - time_reference) in the form XXXs:YYYms:ZZZus, with a minus sign
    * if it is negative.
    * \param timestamp The time stamp.
-   * \param time_reference The reference time to subtract from timestamp, usuall the session start time.
+   * \param time_reference The reference time to subtract from timestamp, usually the session start time.
    * We do this because timestamp is seconds since 01/01/1970, so the seconds would be very large.
    * \return The formatted time string.
    */
@@ -335,9 +340,6 @@ public:
   }
 
   static int32 GetResilience(Timestamp now, std::chrono::microseconds time_to_live, uint64 upr); // ttl: us, upr: us.
-  static int32 GetResilience(Timestamp now, Timestamp::duration time_to_live, uint64 upr) {
-    return GetResilience(now, std::chrono::duration_cast<std::chrono::microseconds>(time_to_live), upr);
-  }
   static int32 GetResilience(float32 resilience, float32 origin_upr, float32 destination_upr); // express the res in destination group, given the res in origin group.
 
   static std::string RelativeTime(Timestamp t);
@@ -352,8 +354,7 @@ public:
 };
 
 // This is Timestamp::max() duration_cast to microseconds and used to initialize a Timestamp.
-// The result is a slightly different value from Timestamp::max(), but convertible to/from microseconds.
-const Timestamp Utils_MaxTime(std::chrono::microseconds(922337203685477580LL));
+const Timestamp Utils_MaxTime(std::chrono::microseconds(9223372036854775807LL));
 
 }
 

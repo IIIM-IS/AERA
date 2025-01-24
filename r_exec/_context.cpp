@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -97,23 +97,24 @@ void _Context::setAtomicResult(Atom a) const { // patch code with 32 bits data.
 void _Context::setTimestampResult(Timestamp t) const { // patch code with a VALUE_PTR
 
   overlay_->patch_code(index_, Atom::ValuePointer(overlay_->values_.size()));
-  overlay_->values_.as_std()->resize(overlay_->values_.size() + 3);
+  overlay_->values_.resize(overlay_->values_.size() + 3);
   uint16 value_index = overlay_->values_.size() - 3;
   Utils::SetTimestamp(&overlay_->values_[value_index], t);
 }
 
 void _Context::setDurationResult(microseconds d) const { // patch code with a VALUE_PTR
   overlay_->patch_code(index_, Atom::ValuePointer(overlay_->values_.size()));
-  overlay_->values_.as_std()->resize(overlay_->values_.size() + 3);
+  overlay_->values_.resize(overlay_->values_.size() + 3);
   uint16 value_index = overlay_->values_.size() - 3;
   Utils::SetDuration(&overlay_->values_[value_index], d);
 }
 
-void _Context::setCompoundResultHead(Atom a) const { // patch code with a VALUE_PTR.
+uint16 _Context::setCompoundResultHead(Atom a) const { // patch code with a VALUE_PTR.
 
   uint16 value_index = overlay_->values_.size();
   overlay_->patch_code(index_, Atom::ValuePointer(value_index));
   addCompoundResultPart(a);
+  return value_index;
 }
 
 void _Context::addCompoundResultPart(Atom a) const { // store result in the value array.

@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -83,6 +83,7 @@
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
 #include "overlay.h"
+#include "controller.h"
 #include "mem.h"
 
 using namespace std::chrono;
@@ -92,14 +93,21 @@ using namespace r_code;
 
 namespace r_exec {
 
-Overlay::Overlay() : _Object(), invalidated_(0) {
+Overlay::Overlay()
+  // MAX_VALUE_SIZE is the limit; if the array is resized later on, some contexts with data==VALUE_ARRAY
+  // may point to invalid adresses: case of embedded contexts with both data==VALUE_ARRAY.
+  : Overlay(MAX_VALUE_SIZE)
+{}
 
-  values_.as_std()->resize(MAX_VALUE_SIZE); // MAX_VALUE_SIZE is the limit; if the array is resized later on, some contexts with data==VALUE_ARRAY may point to invalid adresses: case of embedded contexts with both data==VALUE_ARRAY.
+Overlay::Overlay(size_t values_size) : _Object(), invalidated_(0) {
+
+  code_ = new r_code::Atom[1];
+  values_.resize(values_size);
 }
 
 Overlay::Overlay(Controller *c, bool load_code) : _Object(), controller_(c), value_commit_index_(0), code_(NULL), invalidated_(0) {
 
-  values_.as_std()->resize(128);
+  values_.resize(128);
   if (load_code)
     this->load_code();
 }
@@ -109,6 +117,9 @@ Overlay::~Overlay() {
   if (code_)
     delete[] code_;
 }
+
+Code* Overlay::get_object() const { return ((Controller*)controller_)->get_object(); }
+r_exec::View* Overlay::get_view() const { return ((Controller*)controller_)->get_view(); }
 
 inline Code *Overlay::get_core_object() const {
 
@@ -143,9 +154,9 @@ void Overlay::rollback() {
   if (value_commit_index_ != values_.size()) { // shrink the values down to the last commit index.
 
     if (value_commit_index_ > 0)
-      values_.as_std()->resize(value_commit_index_);
+      values_.resize(value_commit_index_);
     else
-      values_.as_std()->clear();
+      values_.clear();
     value_commit_index_ = values_.size();
   }
 }
@@ -217,6 +228,11 @@ void Controller::_take_input(r_exec::View *input) { // called by groups at updat
 
   if (is_alive() && !input->object_->is_invalidated())
     take_input(input);
+}
+
+// Put this in the cpp file to avoid an include loop between controller.h and mem.h.
+void Controller::push_reduction_job(_ReductionJob* j) {
+  _Mem::Get()->push_reduction_job(j);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

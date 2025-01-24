@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -84,7 +84,6 @@
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
 #include <algorithm>
-#include <deque>
 #include "mem.h"
 #include "mdl_controller.h"
 #include "model_base.h"
@@ -296,7 +295,7 @@ void _Mem::store(Code *object) {
   object->set_strorage_index(location);
 }
 
-bool _Mem::load(vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid) { // no cov at init time.
+bool _Mem::load(const vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid) { // no cov at init time.
 
   uint32 i;
   reduction_cores_ = new ReductionCore *[reduction_core_count_];
@@ -528,128 +527,162 @@ void _Mem::run_in_diagnostic_time(milliseconds run_time) {
     // This should only be called if there are no running core threads.
     return;
 
+  DiagnosticTimeState diagnostic_time_state(this, run_time);
+  // Step until we reach the run_time.
+  while (diagnostic_time_state.step()) {}
+}
+
+DiagnosticTimeState::DiagnosticTimeState(_Mem* mem, milliseconds run_time)
+  : mem_(mem),
+    run_time_(run_time),
+    n_reduction_jobs_this_sampling_period_(0),
+    reduction_job_queue_index_(0) {
+  tick_time_ = Now();
+  mem_->on_diagnostic_time_tick();
+  need_diagnostic_time_tick_ = false;
+  end_time_ = Now() + run_time_;
+  pass_number_ = 1;
+}
+
+bool DiagnosticTimeState::step() {
   // The maximum number of reduction jobs to run before trying a time job.
   // Average job time is 10us. 10000 jobs is 100000us, which is the sampling period.
   // Assume 8 threads (on 4 cores), so allow 10000 * 8 = 80000 jobs per cycle.
   const size_t max_reduction_jobs_per_cycle = 80000;
-  size_t n_reduction_jobs_this_sampling_period = 0;
-  vector<P<_ReductionJob>> reduction_job_queue;
-  // Use a deque so we can efficiently remove from the front.
-  std::deque<P<TimeJob>> ordered_time_job_queue;
 
-  auto tick_time = Now();
-  on_diagnostic_time_tick();
-  auto end_time = Now() + run_time;
+  if (mem_->get_state() == _Mem::STOPPED)
+    return false;
 
-  // Loop until the runTimeMilliseconds expires.
-  while (true) {
-    if (state_ == STOPPED)
-      break;
-
-    // Reduction jobs can add more reduction jobs, so make a few passes.
-    for (int pass_number = 1; pass_number <= 100; ++pass_number) {
+  // Reduction jobs can add more reduction jobs, so make a few passes.
+  if (pass_number_ <= 100) {
+    if (reduction_job_queue_index_ == 0) {
+      // We're ready to run the first reduction job for this pass.
       // Transfer all reduction jobs to a local queue and run only these.
       // Below, we only run one time job, so any extra jobs that these reduction
       // jobs add will be run on the next pass after running the time job.
       while (true) {
-        P<_ReductionJob> reduction_job = pop_reduction_job(false);
+        P<_ReductionJob> reduction_job = mem_->pop_reduction_job(false);
         if (reduction_job == NULL)
           // No more reduction jobs.
           break;
-        reduction_job_queue.push_back(reduction_job);
+        reduction_job_queue_.push_back(reduction_job);
       }
+    }
 
-      size_t n_jobs_to_run = min(reduction_job_queue.size(), max_reduction_jobs_per_cycle);
-      if (n_jobs_to_run == 0)
-        break;
-      for (size_t i = 0; i < n_jobs_to_run; ++i) {
-        reduction_job_queue[i]->update(Now());
-        reduction_job_queue[i] = NULL;
+    size_t n_jobs_to_run = min(reduction_job_queue_.size(), max_reduction_jobs_per_cycle);
+    if (n_jobs_to_run > 0) {
+      if (reduction_job_queue_index_ < n_jobs_to_run) {
+        // Add breakpoint here to check which reduction job leads to the failure.
+        reduction_job_queue_[reduction_job_queue_index_]->update(Now());
+        reduction_job_queue_[reduction_job_queue_index_] = NULL;
+        ++reduction_job_queue_index_;
+        // Try the next reduction job.
+        return true;
       }
-      n_reduction_jobs_this_sampling_period += n_jobs_to_run;
+      // We have done all the reduction jobs for this pass, so reset.
+      reduction_job_queue_index_ = 0;
 
-      if (reduction_job_queue.size() > max_reduction_jobs_per_cycle)
+      n_reduction_jobs_this_sampling_period_ += n_jobs_to_run;
+
+      if (reduction_job_queue_.size() > max_reduction_jobs_per_cycle)
         // There are remaining jobs to be run. Shift them to the front.
-        reduction_job_queue.erase(
-          reduction_job_queue.begin(), reduction_job_queue.begin() + max_reduction_jobs_per_cycle);
+        reduction_job_queue_.erase(
+          reduction_job_queue_.begin(), reduction_job_queue_.begin() + max_reduction_jobs_per_cycle);
       else
-        reduction_job_queue.clear();
+        reduction_job_queue_.clear();
 
-      if (n_reduction_jobs_this_sampling_period >= max_reduction_jobs_per_cycle)
-        // We have hit the limit of reduction jobs this sampling period.
-        break;
+      // Make sure we haven't hit the limit of reduction jobs this sampling period.
+      if (n_reduction_jobs_this_sampling_period_ < max_reduction_jobs_per_cycle) {
+        ++pass_number_;
+        // Try the next pass.
+        return true;
+      }
     }
-
-    // Transfer all time jobs to ordered_time_job_queue,
-    // sorted on target_time_.
-    while (true) {
-      P<TimeJob> time_job = pop_time_job(false);
-      if (time_job == NULL)
-        // No more time jobs.
-        break;
-
-      ordered_time_job_queue.insert(
-        upper_bound(ordered_time_job_queue.begin(),
-          ordered_time_job_queue.end(), time_job, time_job_compare_),
-        time_job);
-    }
-
-    if (Now() >= end_time)
-      // Finished.
-      break;
-
-    // The entry at the front is the earliest.
-    if (ordered_time_job_queue.size() == 0 ||
-      ordered_time_job_queue.front()->target_time_ >=
-        tick_time + get_sampling_period()) {
-      // There is no time job before the next tick time, so tick.
-      tick_time += get_sampling_period();
-      // Increase the diagnostic time to the tick time.
-      diagnostic_time_now_ = tick_time;
-      // We are beginning a new sampling period.
-      n_reduction_jobs_this_sampling_period = 0;
-      on_diagnostic_time_tick();
-
-      // Loop again in case on_diagnostic_time_tick() added a reduction job,
-      // or a reduction job will add more time jobs.
-      continue;
-    }
-
-    if (ordered_time_job_queue.size() == 0)
-      // No time jobs. Loop again in case a reduction job will add one.
-      continue;
-
-    if (ordered_time_job_queue.front()->target_time_ > Now())
-      // Increase the diagnostic time to the job's target time.
-      diagnostic_time_now_ = ordered_time_job_queue.front()->target_time_;
-
-    // Only process one job in case it adds more jobs.
-    P<TimeJob> time_job = ordered_time_job_queue.front();
-    ordered_time_job_queue.erase(ordered_time_job_queue.begin());
-
-    if (!time_job->is_alive()) {
-      time_job = NULL;
-      continue;
-    }
-
-    Timestamp next_target(seconds(0));
-    if (!time_job->update(next_target)) {
-      // update() says to stop running.
-      time_job = NULL;
-      break;
-    }
-
-    if (next_target.time_since_epoch().count() != 0) {
-      // The job wants to run again, so re-insert into the queue.
-      time_job->target_time_ = next_target;
-      ordered_time_job_queue.insert(
-        upper_bound(ordered_time_job_queue.begin(),
-          ordered_time_job_queue.end(), time_job, time_job_compare_),
-        time_job);
-    }
-    else
-      time_job = NULL;
   }
+
+  // We have done all the passes, so reset.
+  pass_number_ = 1;
+
+  // Transfer all time jobs to ordered_time_job_queue_,
+  // sorted on target_time_.
+  while (true) {
+    P<TimeJob> time_job = mem_->pop_time_job(false);
+    if (time_job == NULL)
+      // No more time jobs.
+      break;
+
+    ordered_time_job_queue_.insert(
+      upper_bound(ordered_time_job_queue_.begin(),
+        ordered_time_job_queue_.end(), time_job, time_job_compare_),
+      time_job);
+  }
+
+  if (Now() >= end_time_)
+    // Finished.
+    return false;
+
+  // The entry at the front is the earliest.
+  if (!need_diagnostic_time_tick_ &&
+      (ordered_time_job_queue_.size() == 0 ||
+       ordered_time_job_queue_.front()->target_time_ >=
+       tick_time_ + mem_->get_sampling_period())) {
+    // There is no time job before the next tick time, so tick.
+    tick_time_ += mem_->get_sampling_period();
+    // Increase the diagnostic time to the tick time.
+    _Mem::diagnostic_time_now_ = tick_time_;
+    // We are beginning a new sampling period.
+    n_reduction_jobs_this_sampling_period_ = 0;
+    need_diagnostic_time_tick_ = true;
+  }
+
+  // Call on_diagnostic_time_tick() only if there are no time jobs to run now.
+  if (need_diagnostic_time_tick_ &&
+      !(ordered_time_job_queue_.size() > 0 &&
+        ordered_time_job_queue_.front()->target_time_ <= tick_time_)) {
+    need_diagnostic_time_tick_ = false;
+    mem_->on_diagnostic_time_tick();
+
+    // Step again in case on_diagnostic_time_tick() added a reduction job,
+    // or a reduction job will add more time jobs.
+    return true;
+  }
+
+  if (ordered_time_job_queue_.size() == 0)
+    // No time jobs. Step again in case a reduction job will add one.
+    return true;
+
+  if (ordered_time_job_queue_.front()->target_time_ > Now())
+    // Increase the diagnostic time to the job's target time.
+    _Mem::diagnostic_time_now_ = ordered_time_job_queue_.front()->target_time_;
+
+  // Only process one job in case it adds more jobs.
+  P<TimeJob> time_job = ordered_time_job_queue_.front();
+  ordered_time_job_queue_.erase(ordered_time_job_queue_.begin());
+
+  if (!time_job->is_alive()) {
+    time_job = NULL;
+    return true;
+  }
+
+  Timestamp next_target(seconds(0));
+  if (!time_job->update(next_target)) {
+    // update() says to stop running.
+    time_job = NULL;
+    return true;
+  }
+
+  if (next_target.time_since_epoch().count() != 0) {
+    // The job wants to run again, so re-insert into the queue.
+    time_job->target_time_ = next_target;
+    ordered_time_job_queue_.insert(
+      upper_bound(ordered_time_job_queue_.begin(),
+        ordered_time_job_queue_.end(), time_job, time_job_compare_),
+      time_job);
+  }
+  else
+    time_job = NULL;
+
+  return true;
 }
 
 Timestamp _Mem::diagnostic_time_now_ = Timestamp(microseconds(1));
@@ -815,6 +848,33 @@ View* _Mem::inject_marker_value_from_io_device(
 }
 
 View* _Mem::inject_marker_value_from_io_device(
+  Code* obj, Code* prop, std::vector<Atom> val, Timestamp after, Timestamp before,
+  View::SyncMode sync_mode, Code* group)
+{
+  if (!obj || !prop)
+    // We don't expect this, but sanity check.
+    return NULL;
+
+  Code* object = new LObject(this);
+  uint16 extent_index = 4;
+  object->code(0) = Atom::Marker(GetOpcode("mk.val"), 4); // Caveat: arity does not include the opcode.
+  object->code(1) = Atom::RPointer(0); // obj
+  object->code(2) = Atom::RPointer(1); // prop
+  object->code(3) = Atom::IPointer(++extent_index);
+  object->code(4) = Atom::Float(1); // psln_thr.
+
+
+  object->set_reference(0, obj);
+  object->set_reference(1, prop);
+  object->code(extent_index) = Atom::Set(val.size());
+  for (uint16 i = 0; i < val.size(); ++i) {
+    object->code(++extent_index) = val[i];
+  }
+
+  return inject_fact_from_io_device(object, after, before, sync_mode, group);
+}
+
+View* _Mem::inject_marker_value_from_io_device(
   Code* obj, Code* prop, Code* val, Timestamp after, Timestamp before,
   View::SyncMode sync_mode, Code* group)
 {
@@ -832,6 +892,81 @@ View* _Mem::inject_marker_value_from_io_device(
   object->set_reference(0, obj);
   object->set_reference(1, prop);
   object->set_reference(2, val);
+
+  return inject_fact_from_io_device(object, after, before, sync_mode, group);
+}
+
+View* _Mem::inject_marker_value_from_io_device(
+  Code* obj, Code* prop, const std::string& val, Timestamp after, Timestamp before, View::SyncMode sync_mode, Code* group)
+{
+  if (!obj || !prop)
+    // We don't expect this, but sanity check.
+    return NULL;
+
+  Code* object = new LObject(this);
+  uint16 extent_index = 4;
+  object->code(0) = Atom::Marker(GetOpcode("mk.val"), 4); // Caveat: arity does not include the opcode.
+  object->code(1) = Atom::RPointer(0); // obj
+  object->set_reference(0, obj);
+  object->code(2) = Atom::RPointer(1); // prop
+  object->set_reference(1, prop);
+  object->code(3) = Atom::IPointer(++extent_index); // val
+  object->code(4) = Atom::Float(1); // psln_thr.
+
+  Utils::SetString<Code>(object, 3, val);
+
+  return inject_fact_from_io_device(object, after, before, sync_mode, group);
+}
+
+View* _Mem::inject_marker_value_from_io_device(
+  Code* obj, Code* prop, const vector<Code*>& val, Timestamp after, Timestamp before,
+  View::SyncMode sync_mode, Code* group)
+{
+  if (!obj || !prop)
+    // We don't expect this, but sanity check.
+    return NULL;
+
+  Code* object = new LObject(this);
+  uint16 extent_index = 4;
+  object->code(0) = Atom::Marker(GetOpcode("mk.val"), 4); // Caveat: arity does not include the opcode.
+  object->code(1) = Atom::RPointer(0); // obj
+  object->code(2) = Atom::RPointer(1); // prop
+  object->code(3) = Atom::IPointer(++extent_index); // val
+  object->code(4) = Atom::Float(1); // psln_thr.
+
+  object->set_reference(0, obj);
+  object->set_reference(1, prop);
+  object->code(extent_index) = Atom::Set(val.size());
+  for (uint16 i = 0; i < val.size(); ++i) {
+    object->code(++extent_index) = Atom::RPointer(object->references_size());
+    object->set_reference(object->references_size(), val[i]);
+  }
+
+  return inject_fact_from_io_device(object, after, before, sync_mode, group);
+}
+
+View* _Mem::inject_marker_value_from_io_device(
+  Code* obj, Code* prop, uint16 opcode, const vector<Atom>& vals, Timestamp after, Timestamp before,
+  View::SyncMode sync_mode, Code* group)
+{
+  if (!obj || !prop)
+    // We don't expect this, but sanity check.
+    return NULL;
+
+  Code* object = new LObject(this);
+  uint16 extent_index = 4;
+  object->code(0) = Atom::Marker(GetOpcode("mk.val"), 4); // Caveat: arity does not include the opcode.
+  object->code(1) = Atom::RPointer(0); // obj
+  object->set_reference(0, obj);
+  object->code(2) = Atom::RPointer(1); // prop
+  object->set_reference(1, prop);
+  object->code(3) = Atom::IPointer(++extent_index); // val
+  object->code(4) = Atom::Float(1); // psln_thr.
+
+  object->code(extent_index++) = Atom::Object(opcode, vals.size());
+  for (uint16 i = 0; i < vals.size(); ++i) {
+    object->code(extent_index++) = vals[i];
+  }
 
   return inject_fact_from_io_device(object, after, before, sync_mode, group);
 }
@@ -875,20 +1010,8 @@ void _Mem::inject(View *view, bool is_from_io_device) {
     }
   } else { // new object.
 
-    if (ijt <= now) {
+    if (ijt <= now)
       inject_new_object(view);
-
-      if (view->object_->code(0).asOpcode() == Opcodes::Fact) {
-        Goal *goal = ((_Fact *)view->object_)->get_goal();
-        if (goal && goal->is_drive())
-          // Log the injection of a drive, presumably from a program, possibly delayed by a TimeJob.
-          // The view injection time may be different than now, so log it too.
-          // In general, the problem is how to relate the reduction output event to the injection event
-          // which could be delayed.
-          OUTPUT_LINE(MDL_IN, Utils::RelativeTime(Now()) << " -> drive " <<
-            view->object_->get_oid() << ", ijt " << Utils::RelativeTime(view->get_ijt()));
-      }
-    }
     else {
 
       P<TimeJob> j = new InjectionJob(view, ijt, is_from_io_device);
@@ -1057,7 +1180,7 @@ void _Mem::unpack_hlp(Code *hlp) { // produces a new object (featuring a set of 
   uint16 invalid_zone_length = valid_point - invalid_point;
   for (uint16 i = valid_point; i < hlp->code_size(); ++i) { // shift the valid code upward; adjust i-ptrs.
 
-    Atom h_atom = hlp->code(i);
+    Atom h_atom = unpacked_hlp->code(i);
     switch (h_atom.getDescriptor()) {
     case Atom::I_PTR:
       unpacked_hlp->code(i - invalid_zone_length) = Atom::IPointer(h_atom.asIndex() - invalid_zone_length);
@@ -1260,7 +1383,7 @@ void _Mem::pack_fact_object(Code *fact_object, Code *hlp, uint16 &write_index, v
   }
 }
 
-Code* _Mem::find_object(vector<Code*> *objects, const char* name) {
+Code* _Mem::find_object(const vector<Code*> *objects, const char* name) {
   // Find the object OID.
   uint32 oid = Seed.object_names_.findSymbol(name);
   if (oid == UNDEFINED_OID)
@@ -1379,7 +1502,7 @@ MemVolatile::~MemVolatile() {
 
 uint32 MemVolatile::get_oid() {
 
-  return Atomic::Increment32(&last_oid_);
+  return ++last_oid_;
 }
 
 void MemVolatile::set_last_oid(int32 oid) {

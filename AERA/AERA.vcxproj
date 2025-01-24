@@ -18,7 +18,7 @@
     <ProjectGuid>{689F2DDD-1858-499D-BA79-72BA02D00D45}</ProjectGuid>
     <RootNamespace>Test</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
     <ProjectName>AERA</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -68,6 +68,9 @@
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <VcpkgConfiguration>Debug</VcpkgConfiguration>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -139,8 +142,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="IODevices\TCP\Proto\tcp_data_message.pb.cc" />
-    <ClCompile Include="IODevices\TCP\tcp_connection.cpp" />
+    <ClCompile Include="AERA_main.cpp" />
+    <ClCompile Include="IODevices\TCP\AERA_Protobuf\tcp_connection.cpp" />
+    <ClCompile Include="IODevices\TCP\AERA_Protobuf\tcp_data_message.pb.cc" />
     <ClCompile Include="IODevices\TCP\tcp_io_device.cpp" />
     <ClCompile Include="IODevices\video_screen\video_screen.cpp" />
     <ClCompile Include="IODevices\video_screen\video_screen_io_device.cpp" />
@@ -148,12 +152,13 @@
     <ClCompile Include="test_mem.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="IODevices\TCP\Proto\tcp_data_message.pb.h" />
-    <ClInclude Include="IODevices\TCP\Proto\utils.h" />
-    <ClInclude Include="IODevices\TCP\tcp_connection.h" />
+    <ClInclude Include="IODevices\TCP\AERA_Protobuf\tcp_connection.h" />
+    <ClInclude Include="IODevices\TCP\AERA_Protobuf\tcp_data_message.pb.h" />
+    <ClInclude Include="IODevices\TCP\AERA_Protobuf\utils.h" />
     <ClInclude Include="IODevices\TCP\tcp_io_device.h" />
     <ClInclude Include="IODevices\video_screen\video_screen.h" />
     <ClInclude Include="IODevices\video_screen\video_screen_io_device.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="test_mem.h" />
   </ItemGroup>
@@ -192,8 +197,8 @@
     <None Include="Demo1\std.replicode" />
     <None Include="Demo1\test.1.replicode" />
     <None Include="Demo1\user.classes.replicode" />
-    <None Include="IODevices\TCP\Proto\ReadMe.md" />
-    <None Include="IODevices\TCP\Proto\tcp_data_message.proto" />
+    <None Include="IODevices\TCP\AERA_Protobuf\README.md" />
+    <None Include="IODevices\TCP\AERA_Protobuf\tcp_data_message.proto" />
     <None Include="replicode_v1.1\helgi.replicode" />
     <None Include="replicode_v1.1\rgrp.user.classes.replicode" />
     <None Include="replicode_v1.1\std.replicode" />
@@ -231,7 +236,10 @@
     <None Include="replicode_v1.1\test.visualizer.replicode" />
     <None Include="replicode_v1.1\user.classes.replicode" />
     <None Include="replicode_v1.2\ball.goal.external.replicode" />
+    <None Include="replicode_v1.2\clcc-figure8.replicode" />
     <None Include="replicode_v1.2\drives.replicode" />
+    <None Include="replicode_v1.2\hand-grab-sphere-learn.external.replicode" />
+    <None Include="replicode_v1.2\hand-grab-sphere-learn.external.ur.replicode" />
     <None Include="replicode_v1.2\hand-grab-sphere-learn.replicode" />
     <None Include="replicode_v1.2\hand-grab-sphere.replicode" />
     <None Include="replicode_v1.2\helgi.replicode" />
@@ -257,6 +265,9 @@
     <None Include="replicode_v1.2\test.domain.replicode" />
     <None Include="replicode_v1.2\test_cmd.replicode" />
     <None Include="replicode_v1.2\user.classes.replicode" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="NatvisFile.natvis" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

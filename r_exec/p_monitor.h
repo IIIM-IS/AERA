@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -101,10 +101,11 @@ public:
   PMonitor(MDLController *controller,
     BindingMap *bindings,
     Fact *prediction, // f0->pred->f1->object.
+    r_code::Code* mk_rdx,
     bool rate_failures);
   ~PMonitor();
 
-  bool reduce(_Fact *input);
+  bool reduce(_Fact *input) override;
   void update(Timestamp &next_target);
 };
 }

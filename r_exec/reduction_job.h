@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -85,8 +85,9 @@
 #ifndef reduction_job_h
 #define reduction_job_h
 
-#include "overlay.h"
+#include "../r_code/utils.h"
 #include "object.h"
+#include "mem_output.h"
 
 
 namespace r_exec {
@@ -95,6 +96,7 @@ class r_exec_dll _ReductionJob :
   public _Object {
 protected:
   _ReductionJob();
+  void register_latency(Timestamp now);
 public:
   Timestamp ijt_; // time of injection of the job in the pipe.
   virtual bool update(Timestamp now) = 0; // return false to shutdown the reduction core.
@@ -111,18 +113,18 @@ public:
   P<View> input_;
   P<_P> processor_;
   ReductionJob(View *input, _P *processor) : _ReductionJob(), input_(input), processor_(processor) {}
-  bool update(Timestamp now) {
+  bool update(Timestamp now) override {
 
-    _Mem::Get()->register_reduction_job_latency(now - ijt_);
+    register_latency(now);
 #ifdef WITH_DETAIL_OID
-    OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(now) << " ReductionJob " << get_job_id() <<
+    OUTPUT_LINE((TraceLevel)0, r_code::Utils::RelativeTime(now) << " ReductionJob " << get_job_id() <<
       ": controller(" << processor_->get_detail_oid() << ")->reduce(View(fact_" << 
       input_->object_->get_oid() << "))");
 #endif
     processor_->reduce(input_);
     return true;
   }
-  void debug() {
+  void debug() override {
 
     processor_->debug(input_);
   }
@@ -135,11 +137,11 @@ public:
   P<T> trigger_; // the event that triggered the job.
   P<C> controller_; // the controller that produced the job.
   BatchReductionJob(_P *processor, T *trigger, C *controller) : _ReductionJob(), processor_(processor), trigger_(trigger), controller_(controller) {}
-  bool update(Timestamp now) {
+  bool update(Timestamp now) override {
 
-    _Mem::Get()->register_reduction_job_latency(now - ijt_);
+    register_latency(now);
 #ifdef WITH_DETAIL_OID
-    OUTPUT_LINE((TraceLevel)0, Utils::RelativeTime(now) << " BatchReductionJob " << get_job_id() <<
+    OUTPUT_LINE((TraceLevel)0, r_code::Utils::RelativeTime(now) << " BatchReductionJob " << get_job_id() <<
       ": controller(" << controller_->get_detail_oid() << "), trigger fact(" << 
       trigger_->get_detail_oid() << ")");
 #endif
@@ -151,7 +153,7 @@ public:
 class r_exec_dll ShutdownReductionCore :
   public _ReductionJob {
 public:
-  bool update(Timestamp now);
+  bool update(Timestamp now) override;
 };
 
 class r_exec_dll AsyncInjectionJob :
@@ -159,7 +161,7 @@ class r_exec_dll AsyncInjectionJob :
 public:
   P<View> input_;
   AsyncInjectionJob(View *input) : _ReductionJob(), input_(input) {}
-  bool update(Timestamp now);
+  bool update(Timestamp now) override;
 };
 }
 

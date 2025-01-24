@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -99,7 +99,8 @@ _GMonitor::_GMonitor(PMDLController *controller,
   Fact *goal,
   Fact *f_imdl) : Monitor(controller,
     bindings,
-    goal),
+    goal,
+    NULL),
   deadline_(deadline),
   sim_thz_timestamp_(sim_thz_timestamp),
   f_imdl_(f_imdl) { // goal is f0->g->f1->object.
@@ -342,6 +343,9 @@ bool GMonitor::reduce(_Fact *input) { // executed by a reduction core; invalidat
 
     switch (input->is_evidence(goal_target_)) {
     case MATCH_SUCCESS_POSITIVE:
+      if (input->is_fact() && goal_target_->is_anti_fact())
+        // This will be handled by GTPX::ack_pred_success, which will call register_goal_outcome.
+        return true;
       ((PMDLController *)controller_)->register_goal_outcome(target_, true, input); // report a success.
       return true;
     case MATCH_SUCCESS_NEGATIVE:
@@ -351,6 +355,8 @@ bool GMonitor::reduce(_Fact *input) { // executed by a reduction core; invalidat
       return false;
     }
   }
+
+  return false;
 }
 
 void GMonitor::update(Timestamp &next_target) { // executed by a time core.
@@ -555,6 +561,8 @@ bool SGMonitor::reduce(_Fact *input) {
   case MATCH_FAILURE:
     return false;
   }
+
+  return false;
 }
 
 void SGMonitor::update(Timestamp &next_target) { // executed by a time core.

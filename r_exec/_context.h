@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -142,7 +142,14 @@ public:
   void setAtomicResult(Atom a) const;
   void setTimestampResult(Timestamp t) const;
   void setDurationResult(std::chrono::microseconds d) const;
-  void setCompoundResultHead(Atom a) const;
+
+  /**
+   * Patch the code with a VALUE_PTR to the values array.
+   * \param a The Atom that is the head of the compound value.
+   * \return The index in the value array of the head.
+   */
+  uint16 setCompoundResultHead(Atom a) const;
+
   void addCompoundResultPart(Atom a) const;
 
   void trace(std::ostream& out) const;

@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -417,7 +417,7 @@ bool _Fact::CounterEvidence(const Code *lhs, const Code *rhs) {
       case Atom::R_PTR:
         return !MatchObject(lhs->get_reference(lhs->code(MK_VAL_VALUE).asIndex()), rhs->get_reference(rhs->code(MK_VAL_VALUE).asIndex()));
       case Atom::I_PTR:
-        return !MatchStructure(lhs, MK_VAL_VALUE, lhs_atom.asIndex(), rhs, rhs_atom.asIndex(), false);
+        return !MatchStructure(lhs, lhs_atom.asIndex(), 0, rhs, rhs_atom.asIndex(), false);
       default:
         return !MatchAtom(lhs_atom, rhs_atom);
       }
@@ -450,12 +450,13 @@ MatchResult _Fact::is_evidence(const _Fact *target) const {
 
     if (target->match_timings_overlap(this))
       return r;
-  } else if (target->code(0) == code(0)) { // check for a counter-evidence only if both the lhs and rhs are of the same kind of fact.
+  } else if (is_fact()) { // check for a counter-evidence only if the evidence is a fact.
 
     if (target->match_timings_inclusive(this)) { // check timings first as this is less expensive than the counter-evidence check.
 
       if (CounterEvidence(get_reference(0), target->get_reference(0)))
-        return MATCH_SUCCESS_NEGATIVE;
+        // If the target is an anti-fact, then counter-evidence is a positive success.
+        return target->is_anti_fact() ? MATCH_SUCCESS_POSITIVE : MATCH_SUCCESS_NEGATIVE;
     }
   }
   return MATCH_FAILURE;
@@ -472,10 +473,11 @@ MatchResult _Fact::is_timeless_evidence(const _Fact *target) const {
       r = MATCH_SUCCESS_NEGATIVE;
 
     return r;
-  } else if (target->code(0) == code(0)) { // check for a counter-evidence only if both the lhs and rhs are of the same kind of fact.
+  } else if (target->code(0) == code(0)) { // check for a counter-evidence only if the evidence is a fact.
 
     if (CounterEvidence(get_reference(0), target->get_reference(0)))
-      return MATCH_SUCCESS_NEGATIVE;
+      // If the target is an anti-fact, then counter-evidence is a positive success.
+      return target->is_anti_fact() ? MATCH_SUCCESS_POSITIVE : MATCH_SUCCESS_NEGATIVE;
   }
   return MATCH_FAILURE;
 }
@@ -823,35 +825,39 @@ MkRdx::MkRdx(Code *imdl_fact, Code *input, Code *output, float32 psln_thr, Bindi
 
   uint16 extent_index = MK_RDX_ARITY + 1;
   code(0) = Atom::Marker(Opcodes::MkRdx, MK_RDX_ARITY);
-  code(MK_RDX_CODE) = Atom::RPointer(0); // code.
+  code(MK_RDX_CODE) = Atom::RPointer(references_size()); // code.
   add_reference(imdl_fact);
   code(MK_RDX_INPUTS) = Atom::IPointer(extent_index); // inputs.
   code(MK_RDX_ARITY) = Atom::Float(psln_thr);
   code(extent_index++) = Atom::Set(1); // set of one input.
-  code(extent_index++) = Atom::RPointer(1);
+  code(extent_index++) = Atom::RPointer(references_size());
   add_reference(input);
   code(MK_RDX_PRODS) = Atom::IPointer(extent_index); // set of one production.
   code(extent_index++) = Atom::Set(1);
-  code(extent_index++) = Atom::RPointer(2);
+  code(extent_index++) = Atom::RPointer(references_size());
   add_reference(output);
 }
 
-MkRdx::MkRdx(Code *imdl_fact, Code *inpu1, Code *input2, Code *output, float32 psln_thr, BindingMap *binding_map) : LObject(), bindings_(binding_map) {
+MkRdx::MkRdx(Code *imdl_fact, Code *input1, Code *input2, Code *output, float32 psln_thr, BindingMap *binding_map) : LObject(), bindings_(binding_map) {
 
   uint16 extent_index = MK_RDX_ARITY + 1;
   code(0) = Atom::Marker(Opcodes::MkRdx, MK_RDX_ARITY);
-  code(MK_RDX_CODE) = Atom::RPointer(0); // code.
+  code(MK_RDX_CODE) = Atom::RPointer(references_size()); // code.
   add_reference(imdl_fact);
   code(MK_RDX_INPUTS) = Atom::IPointer(extent_index); // inputs.
   code(MK_RDX_ARITY) = Atom::Float(psln_thr);
   code(extent_index++) = Atom::Set(2); // set of two inputs.
-  code(extent_index++) = Atom::RPointer(1);
-  add_reference(inpu1);
-  code(extent_index++) = Atom::RPointer(2);
-  add_reference(input2);
+  code(extent_index++) = Atom::RPointer(references_size());
+  add_reference(input1);
+  if (input2) {
+    code(extent_index++) = Atom::RPointer(references_size());
+    add_reference(input2);
+  }
+  else
+    code(extent_index++) = Atom::Nil();
   code(MK_RDX_PRODS) = Atom::IPointer(extent_index); // set of one production.
   code(extent_index++) = Atom::Set(1);
-  code(extent_index++) = Atom::RPointer(3);
+  code(extent_index++) = Atom::RPointer(references_size());
   add_reference(output);
 }
 
@@ -860,18 +866,27 @@ MkRdx::MkRdx(Code *imdl_fact, Code *inpu1, Code *input2, Code *output, float32 p
 Success::Success() : LObject() {
 }
 
-Success::Success(_Fact *object, _Fact *evidence, float32 psln_thr) : LObject() {
+Success::Success(_Fact *object, _Fact *evidence, Code* object_mk_rdx, float32 psln_thr) : LObject() {
 
   code(0) = Atom::Object(Opcodes::Success, SUCCESS_ARITY);
-  code(SUCCESS_OBJ) = Atom::RPointer(0);
-  if (evidence)
-    code(SUCCESS_EVD) = Atom::RPointer(1);
+  code(SUCCESS_OBJ) = Atom::RPointer(references_size());
+  add_reference(object);
+
+  if (evidence) {
+    code(SUCCESS_EVD) = Atom::RPointer(references_size());
+    add_reference(evidence);
+  }
   else
     code(SUCCESS_EVD) = Atom::Nil();
+
+  if (object_mk_rdx) {
+    code(SUCCESS_OBJ_MK_RDX) = Atom::RPointer(references_size());
+    add_reference(object_mk_rdx);
+  }
+  else
+    code(SUCCESS_OBJ_MK_RDX) = Atom::Nil();
+
   code(SUCCESS_ARITY) = Atom::Float(psln_thr);
-  add_reference(object);
-  if (evidence)
-    add_reference(evidence);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -925,4 +940,19 @@ bool ICST::contains(const _Fact *component, uint16 &component_index) const {
 
   return false;
 }
+
+bool ICST::r_contains(const _Fact* component) const {
+
+  for (auto i = components_.begin(); i != components_.end(); ++i) {
+    if (*i == component)
+      return true;
+
+    if ((*i)->get_reference(0)->code(0).asOpcode() == Opcodes::ICst &&
+        ((ICST*)(*i)->get_reference(0))->r_contains(component))
+      return true;
+  }
+
+  return false;
+}
+
 }

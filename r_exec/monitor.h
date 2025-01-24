@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -99,12 +99,14 @@ class Monitor :
 protected:
   P<BindingMap> bindings_;
   P<Fact> target_; // f->g or f->p.
+  P<r_code::Code> mk_rdx_; // The reduction which make the target.
 
   MDLController *controller_;
 
   Monitor(MDLController *controller,
     BindingMap *bindings,
-    Fact *target); // fact.
+    Fact *target,
+    r_code::Code* mk_rdx);
 public:
   bool is_alive() const;
   virtual bool reduce(_Fact *input) = 0;

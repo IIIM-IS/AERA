@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -866,7 +866,9 @@ void Group::inject_hlps(vector<View *> &views) {
 #ifdef WITH_DETAIL_OID
       controllerInfo = ", MDLController(" + to_string(c->get_detail_oid()) + ")";
 #endif
-      OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " -> mdl " << (*view)->object_->get_oid() << controllerInfo);
+      OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " -> mdl " << (*view)->object_->get_oid() <<
+        " strength:" << (*view)->object_->code(MDL_STRENGTH).asFloat() << " cnt:" << 
+        (*view)->object_->code(MDL_CNT).asFloat() << " sr:" << (*view)->object_->code(MDL_SR).asFloat() << controllerInfo);
       break;
     }
     }

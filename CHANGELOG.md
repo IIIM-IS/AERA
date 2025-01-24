@@ -1,3 +1,31 @@
+AERA Diagnostic Mode v0.3 (2025-01-23)
+--------------------------------------
+
+A release optimized to run in "diagnostic time" which is now the default in settings.xml .
+This is a maintentance release from Diagnostic Mode v0.2 .
+
+Bug fixes
+* Use input_code_index when recursing structures. https://github.com/IIIM-IS/AERA/pull/232
+* Recursive copy of sub-structures. https://github.com/IIIM-IS/AERA/pull/257
+* BindingMap: Fix bug in abstract_f_ihlp template args. https://github.com/IIIM-IS/AERA/pull/262
+* In is_evidence, fix is evidence for anti fact target. https://github.com/IIIM-IS/AERA/pull/277
+* Don't use CTPX for anti-facts. https://github.com/IIIM-IS/AERA/pull/278
+* Bug when intersecting two binding maps. https://github.com/IIIM-IS/AERA/pull/288
+* Don't treat trailing space as comment continuation. https://github.com/IIIM-IS/AERA/pull/292
+* Other bug fixes. See https://github.com/IIIM-IS/AERA/pulls?q=is%3Apr+is%3Aclosed+label%3Abug
+
+Changes
+* Replicode syntax: Treat [] as an empty set if it is not at the end of a line. https://github.com/IIIM-IS/AERA/pull/229
+* Support model shared template variables. https://github.com/IIIM-IS/AERA/pull/240
+* Added support of sending entities to AERA. https://github.com/IIIM-IS/AERA/pull/247
+* PTPX: Accept a mk.val if it shares attribute/value with an accepted mk.val. https://github.com/IIIM-IS/AERA/pull/263
+* General guard builder for custom classes. https://github.com/IIIM-IS/AERA/pull/266
+* Multi value tcp io device. https://github.com/IIIM-IS/AERA/pull/267
+* Use microseconds for Timestamp period. https://github.com/IIIM-IS/AERA/pull/270
+* Add the identity operator (id X). https://github.com/IIIM-IS/AERA/pull/280
+* success object: Add optional obj_mk_rdx. https://github.com/IIIM-IS/AERA/pull/282
+* Other enhancements. Please see https://github.com/IIIM-IS/AERA/blob/master/doc/meeting-notes.txt
+
 AERA Diagnostic Mode v0.2 (2022-07-01)
 --------------------------------------
 

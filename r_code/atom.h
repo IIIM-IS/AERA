@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -266,7 +266,7 @@ public:
  * This copies the map.
  * \return True for success, false if the opcode names have already been set.
  */
-bool __declspec(dllexport) SetOpcodeNames(const std::unordered_map<uint16, std::set<std::string>>& opcode_names);
+bool dll_export SetOpcodeNames(const std::unordered_map<uint16, std::set<std::string>>& opcode_names);
 
 /**
  * Get the name or set of names of the opcode. (The same opcode can be

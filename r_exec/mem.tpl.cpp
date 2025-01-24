@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -100,7 +100,7 @@ template<class O, class S> MemExec<O, S>::MemExec() : S() {
 template<class O, class S> MemExec<O, S>::~MemExec() {
 
   if (state_ == RUNNING)
-    stop();
+    S::stop();
   deleted_ = true;
   objects_.clear();
 }
@@ -214,6 +214,6 @@ template<class O, class S> r_code::Code *MemExec<O, S>::check_existence(r_code::
 template<class O, class S> void MemExec<O, S>::inject(O *object, View *view) {
 
   view->set_object(object);
-  inject_new_object(view);
+  S::inject_new_object(view);
 }
 }

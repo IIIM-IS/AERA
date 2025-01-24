@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ Copyright (c) 2021 Leonard Eberding
 //_/_/ http://www.iiim.is
 //_/_/ 
@@ -86,19 +86,7 @@
 #ifndef tcp_io_device_h
 #define tcp_io_device_h
 
-#pragma comment (lib, "Ws2_32.lib")
-
-#define PROTOBUF_USE_DLLS
-
 #include "../r_exec/mem.h"
-#include <windows.h>
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#include <string>
-#include <stdlib.h>
-#include <stdio.h>
-#include <thread>
-#include <bitset>
 
 #ifndef ENABLE_PROTOBUF
 
@@ -110,19 +98,31 @@ namespace tcp_io_device {
   public:
 
     TcpIoDevice();
+    TcpIoDevice(int number_of_servers, int number_of_clients, std::vector<std::pair<std::string, std::string> > server_configurations, std::vector<std::string> client_configurations);
     ~TcpIoDevice();
 
     /**
     * Initialize the TCP connection and wait for a client to connect to it.
     * \param port the port in which the TCP/IP connection should be communicating with the environment simulation.
     */
-    int initTCP(std::string port);
+    int initTCP();
   };
 }
 
 #else
 
-#include "tcp_connection.h"
+#pragma comment (lib, "Ws2_32.lib")
+
+#define PROTOBUF_USE_DLLS
+
+#include <map>
+#include <string>
+#include <stdlib.h>
+#include <stdio.h>
+#include <thread>
+#include <bitset>
+
+#include "AERA_Protobuf/tcp_connection.h"
 
 namespace tcp_io_device {
 
@@ -140,19 +140,19 @@ namespace tcp_io_device {
 
   public:
 
-    TcpIoDevice();
+    TcpIoDevice(int number_of_servers, int number_of_clients, std::vector<std::pair<std::string, std::string> > server_configurations, std::vector<std::string> client_configurations);
     ~TcpIoDevice();
 
     /**
-    * Initialize the TCP connection and wait for a client to connect to it.
-    * \param port the port in which the TCP/IP connection should be communicating with the environment simulation.
+    * Initialize the TCP connections according to the TCPConfiguration in the settings.xml file.
+    * \return Error code. If return != 0, an error occured.
     */
-    int initTCP(std::string port);
+    int initTCP();
 
     /**
      * Call the parent class load(), then set up the objects for the external environment.
      */
-    virtual bool load(std::vector<r_code::Code*>* objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid);
+    virtual bool load(const std::vector<r_code::Code*>* objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid);
 
     /**
      * Override eject to check for (cmd set_velocity_y ...) and other implemented commands.
@@ -175,7 +175,13 @@ namespace tcp_io_device {
     class _Thread : public Thread {
     };
 
-    TCPConnection* tcp_connection_;
+    int number_of_servers_;
+    int number_of_clients_;
+
+    std::vector<std::pair<std::string, std::string> > server_configurations_;
+    std::vector<std::string> client_configurations_;
+
+    std::vector<TCPConnection*> tcp_connections_;
     std::shared_ptr<SafeQueue> receive_queue_;
     std::shared_ptr<SafeQueue> send_queue_;
 
@@ -217,9 +223,12 @@ namespace tcp_io_device {
     * \param cmd_identifier The identifier of the ejected command.
     * \param entity The name of the entity for which the command was ejected.
     * \param cmd the ejected r_code::Code*.
-    * \return The constructed TCPMessage which can be sent to the environment simulation.
+    * \return The constructed MsgData which can be sent to the environment simulation.
     */
-    std::unique_ptr< TCPMessage> constructMessageFromCommand(std::string cmd_identifier, std::string entity, r_code::Code* cmd);
+    tcp_io_device::MsgData constructMessageFromCommand(std::string cmd_identifier, std::string entity, r_code::Code* cmd);
+
+    template<class T>
+    std::vector<T> getDataVec(r_code::Code* cmd, int start_index, int end_index, tcp_io_device::VariableDescription_DataType type);
 
     /**
     * Message handler for incoming messages. Passes them on to specific handlers by the given TCPMessage_Type
@@ -234,11 +243,42 @@ namespace tcp_io_device {
     void handleDataMessage(std::unique_ptr<TCPMessage> data_msg);
 
     /**
+    * Injects numeric (i.e., int and double) variables without specified opcode_handle (i.e., empty string). Single dimensional variables are injected as is, empty and multi dimensional variables are injected as sets.
+    * \param var MsgData object to be injected.
+    */
+    template<class V>
+    void injectDefault(r_code::Code* entity, r_code::Code* object, std::vector<V> vals, core::Timestamp time);
+
+    void injectDefault(r_code::Code* entity, r_code::Code* object, std::vector<r_code::Code*> vals, core::Timestamp time);
+
+    /**
+    * Injects numeric (i.e., int and double) variables with either specified opcode_handle "set" (i.e. for single dimensional variables that are to be injected as sets), or multi dimensional variables injected through injectDefault().
+    * \param var MsgData object to be injected.
+    */
+    template<class V>
+    void injectSet(r_code::Code* entity, r_code::Code* object, std::vector<V> vals, core::Timestamp time);
+
+    void injectSet(r_code::Code* entity, r_code::Code* object, std::vector<r_code::Code*> vals, core::Timestamp time);
+
+    /**
+    * Injects numeric (i.e., int and double) variables with specified opcode_handle.
+    * \param var MsgData object to be injected.
+    */
+    template<class V>
+    void injectOpCode(r_code::Code* entity, r_code::Code* object, std::vector<V> vals, core::Timestamp time, std::string opcode_handle);
+
+    /**
     * Message handler for incoming setup messages. Fills the available entities_, objects_, and commands_ maps as well as
     * a mapping of id to string for fast access when receiving messages from the environment simulation.
     * \param setup_msg The incoming message.
     */
     void handleSetupMessage(std::unique_ptr<TCPMessage> setup_msg);
+
+    /**
+    * Handler to send messages. Transforms the MsgData object to a TCPMessage with type Data.
+    * \param msg_data MsgData object to send.
+    */
+    void sendDataMessage(tcp_io_device::MsgData msg_data);
 
     /**
     * Enqueues messages to the SafeQueues to pass them thread-safe to the TCPConnection which handles the actual sending of the message.

@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -139,6 +139,11 @@ protected:
 
   void _build(r_code::Code *mdl, uint16 q0, uint16 t0, uint16 t1, uint16 &write_index) const;
 public:
+  /**
+   * \param (optional) add_imdl_template_timings If true, assume that the lhs is an imdl and add
+   * backward guards similar to those added for t0 and t1, but assign the imdl template timings.
+   * If ommitted, use false.
+   */
   NoArgCmdGuardBuilder(std::chrono::microseconds period, std::chrono::microseconds offset, std::chrono::microseconds cmd_duration);
   ~NoArgCmdGuardBuilder();
 
@@ -220,6 +225,24 @@ public:
 
   void build(r_code::Code *mdl, _Fact *premise_pattern, _Fact *cause_pattern, uint16 &write_index) const override;
 };
+
+/**
+ * Use the timings of NoArgCmdGuardBuilder, but also add a backward guard to set the cmd arg to
+ * the constant value from the given original cause.
+ */
+class ConstBwdArgCmdGuardBuilder :
+  public TimingGuardBuilder {
+protected:
+  std::chrono::microseconds offset_;
+  uint16 cmd_arg_index_;
+  P<_Fact> cause_;
+public:
+  ConstBwdArgCmdGuardBuilder(std::chrono::microseconds period, std::chrono::microseconds offset, uint16 cmd_arg_index, _Fact* cause);
+  virtual ~ConstBwdArgCmdGuardBuilder();
+
+  void build(r_code::Code* mdl, _Fact* premise_pattern, _Fact* cause_pattern, uint16& write_index) const override;
+};
+
 }
 
 

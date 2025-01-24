@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -136,13 +136,16 @@ template<class U> void ASTController<U>::reduce(View *input) {
 
   Pred *prediction = input_object->get_pred();
   if (prediction) {
-    switch (prediction->get_target()->is_timeless_evidence(target_)) {
-    case MATCH_SUCCESS_POSITIVE:
-    case MATCH_SUCCESS_NEGATIVE: // a model predicted the next value of the target.
-      kill();
-      break;
-    case MATCH_FAILURE:
-      break;
+    // Don't cancel if a model made a prediction of an anti-fact.
+    if (prediction->get_target()->is_fact()) {
+      switch (prediction->get_target()->is_timeless_evidence(target_)) {
+      case MATCH_SUCCESS_POSITIVE:
+      case MATCH_SUCCESS_NEGATIVE: // a model predicted the next value of the target.
+        kill();
+        break;
+      case MATCH_FAILURE:
+        break;
+      }
     }
 
     reductionCS_.leave();

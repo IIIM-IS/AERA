@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ Copyright (c) 2018 Jacqueline Clare Mallett
 //_/_/ Copyright (c) 2018 Thor Tomasarson
 //_/_/ http://www.iiim.is
@@ -135,26 +135,20 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
     bool match = false;
     Fact *f_imdl = ((MDLController *)controller_)->get_f_ihlp(bm, false);
     RequirementsPair r_p;
-    Fact *ground = NULL;
+    vector<BindingResult> bind_results;
     bool wr_enabled = false;
-    ChainingStatus c_s = ((MDLController *)controller_)->retrieve_imdl_fwd(bm, f_imdl, r_p, ground, req_controller, wr_enabled);
+    ChainingStatus c_s = ((MDLController *)controller_)->retrieve_imdl_fwd(bm, f_imdl, r_p, bind_results, req_controller, wr_enabled);
     f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(wr_enabled);
-    // Use the timestamps in the template parameters that came from the prerequisite model.
-    Timestamp f_imdl_after, f_imdl_before;
-    if (((PrimaryMDLController *)controller_)->get_template_timings(bm, f_imdl_after, f_imdl_before)) {
-      Utils::SetTimestamp<Code>(f_imdl, FACT_AFTER, f_imdl_after);
-      Utils::SetTimestamp<Code>(f_imdl, FACT_BEFORE, f_imdl_before);
-    }
 
     bool chaining_allowed = (c_s >= WEAK_REQUIREMENT_ENABLED);
     bool did_check_simulated_chaining = false;
     bool check_simulated_chaining_result;
-    vector<BindingResult> bind_results;
     switch (c_s) {
     case WEAK_REQUIREMENT_DISABLED:
     case STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT: // silent monitoring of a prediction that will not be injected.
       if (is_simulation) { // if there is simulated imdl for the root of one sim in prediction, allow forward chaining.
 
+        bind_results.clear();
         check_simulated_chaining_result = check_simulated_chaining(bm, f_imdl, prediction, bind_results);
         did_check_simulated_chaining = true;
         if (check_simulated_chaining_result)
@@ -171,6 +165,7 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
       if (is_simulation) { // if there is simulated imdl for the root of one sim in prediction, allow forward chaining.
 
         if (!did_check_simulated_chaining) {
+          bind_results.clear();
           check_simulated_chaining_result = check_simulated_chaining(bm, f_imdl, prediction, bind_results);
           did_check_simulated_chaining = true;
         }
@@ -181,14 +176,22 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
       }
     case WEAK_REQUIREMENT_ENABLED:
       if (bind_results.size() == 0)
-        // check_simulated_chaining did not create any new bindings, so use the bm that we have been updating.
-        bind_results.push_back(BindingResult(bm, ground));
+        // retrieve_imdl_fwd doesn't add a result for status such as NO_REQUIREMENT, so use the bm that we created above.
+        bind_results.push_back(BindingResult(bm, NULL, NULL));
+      vector<P<_Fact> > already_predicted;
       for (size_t i = 0; i < bind_results.size(); ++i) {
         // evaluate_fwd_guards() uses bindings_, so set it to the binding map.
         bindings_ = bind_results[i].map_;
+        if (i > 0)
+          // During the previous iteration, evaluate_fwd_guards patched code_ in place, so restore.
+          load_code();
         if (evaluate_fwd_guards()) { // may update bindings_ .
-          f_imdl->set_reference(0, bindings_->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated binding map.
-          ((PrimaryMDLController *)controller_)->predict(bindings_, input, f_imdl, chaining_allowed, r_p, bind_results[i].ground_);
+          // Valuate f_imdl from updated binding map.
+          P<Fact> f_imdl_copy = new Fact(
+            bindings_->bind_pattern(f_imdl->get_reference(0)), f_imdl->get_after(), f_imdl->get_before(),
+            f_imdl->get_cfd(), f_imdl->get_psln_thr());
+          ((PrimaryMDLController*)controller_)->predict(bindings_, input, f_imdl_copy, chaining_allowed, r_p, bind_results[i].ground_,
+            bind_results[i].ground_mk_rdx_, already_predicted);
           match = true;
         }
       }
@@ -207,6 +210,8 @@ bool PrimaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *re
   case MATCH_FAILURE:
     return false;
   }
+
+  return false;
 }
 
 bool PrimaryMDLOverlay::check_simulated_chaining(const HLPBindingMap *bm, Fact *f_imdl, Pred *prediction, vector<BindingResult >& results) {
@@ -245,9 +250,9 @@ bool SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *
     bool match = false;
     Fact *f_imdl = ((MDLController *)controller_)->get_f_ihlp(bm, false);
     RequirementsPair r_p;
-    Fact *ground = f_p_f_imdl;
+    vector<BindingResult> bind_results;
     bool wr_enabled = false;
-    ChainingStatus c_s = ((MDLController *)controller_)->retrieve_imdl_fwd(bm, f_imdl, r_p, ground, req_controller, wr_enabled);
+    ChainingStatus c_s = ((MDLController *)controller_)->retrieve_imdl_fwd(bm, f_imdl, r_p, bind_results, req_controller, wr_enabled);
     f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(wr_enabled);
     bool chaining_allowed = (c_s >= NO_REQUIREMENT);
     switch (c_s) {
@@ -260,10 +265,22 @@ bool SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *
         f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(false);
     case STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT:
     case WEAK_REQUIREMENT_ENABLED:
-      if (evaluate_fwd_guards()) { // may update bindings.
-        f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
-        ((SecondaryMDLController *)controller_)->predict(bindings_, input, NULL, true, r_p, ground);
-        match = true;
+      if (bind_results.size() == 0)
+        // retrieve_imdl_fwd doesn't add a result for status such as NO_REQUIREMENT, so use the bm that we created above.
+        bind_results.push_back(BindingResult(bm, NULL, NULL));
+      vector<P<_Fact> > already_predicted;
+      for (size_t i = 0; i < bind_results.size(); ++i) {
+        // evaluate_fwd_guards() uses bindings_, so set it to the binding map.
+        bindings_ = bind_results[i].map_;
+        if (i > 0)
+          // During the previous iteration, evaluate_fwd_guards patched code_ in place, so restore.
+          load_code();
+        if (evaluate_fwd_guards()) { // may update bindings_ .
+          f_imdl->set_reference(0, bindings_->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated binding map.
+          ((SecondaryMDLController*)controller_)->predict(bindings_, input, NULL, true, r_p, bind_results[i].ground_,
+            bind_results[i].ground_mk_rdx_, already_predicted);
+          match = true;
+        }
       }
       break;
     }
@@ -276,6 +293,8 @@ bool SecondaryMDLOverlay::reduce(_Fact *input, Fact *f_p_f_imdl, MDLController *
   case MATCH_FAILURE:
     return false;
   }
+
+  return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -422,87 +441,6 @@ void MDLController::_store_requirement(r_code::list<RequirementEntry> *cache, Re
   requirements_.CS_.leave();
 }
 
-/**
- * TemplateTimingsUpdater is a helper class for retrieve_imdl_fwd, etc. to save an f_imdl template
- * timings and temporarily set them from another f_imdl. We won't need this if we implement
- * https://github.com/IIIM-IS/replicode/issues/137
- */
-class TemplateTimingsUpdater {
-public:
-  /**
-   * Create a TemplateTimingsUpdater and save the timings from f_imdl, then set them to the values from
-   * other_f_imdl so that Match will ignore any difference. The destructor will restore the values in f_imdl.
-   * \param f_imdl This updates the template timings in the imdl at f_imdl->get_reference(0).
-   * \param other_f_imdl Get the template timings in the imdl at other_f_imdl->get_reference(0).
-   * \param bm The binding map in case the timings in other_f_imdl are VL_PTR.
-   */
-  TemplateTimingsUpdater(_Fact *f_imdl, const _Fact *other_f_imdl, const HLPBindingMap *bm) {
-    f_imdl_ = f_imdl;
-    have_saved_template_timings_ = MDLController::get_imdl_template_timings(
-      f_imdl_->get_reference(0), save_template_after_, save_template_before_,
-      &template_after_ts_index_, &template_before_ts_index_);
-    if (!have_saved_template_timings_)
-      return;
-
-    // Temporarily make f_imdl_ template timings match the one from _f_imdl so that any difference is ignored.
-    auto other_imdl = other_f_imdl->get_reference(0);
-    auto other_template_set_index = other_imdl->code(I_HLP_TPL_ARGS).asIndex();
-    auto other_template_set_count = other_imdl->code(other_template_set_index).getAtomCount();
-    if (other_template_set_count < 2)
-      return;
-    auto other_template_after_index = other_template_set_index + (other_template_set_count - 1);
-    auto other_template_before_index = other_template_set_index + other_template_set_count;
-
-    Timestamp other_f_imdl_template_after, other_f_imdl_template_before;
-    if (!get_timestamp(
-        other_imdl, other_template_set_index + (other_template_set_count - 1), other_f_imdl_template_after, bm))
-      return;
-    if (!get_timestamp(other_imdl, other_template_set_index + other_template_set_count, 
-        other_f_imdl_template_before, bm))
-      return;
-
-    // When Match is updated with time interval comparison, it will do this test for strict overlap.
-    if (save_template_after_ < other_f_imdl_template_before && save_template_before_ > other_f_imdl_template_after) {
-      Utils::SetTimestampStruct(f_imdl_->get_reference(0), template_after_ts_index_, other_f_imdl_template_after);
-      Utils::SetTimestampStruct(f_imdl_->get_reference(0), template_before_ts_index_, other_f_imdl_template_before);
-    }
-  }
-
-  /**
-   * Restore the timings to the f_imdl given to the constructor.
-   */
-  ~TemplateTimingsUpdater() {
-    if (have_saved_template_timings_) {
-      Utils::SetTimestampStruct(f_imdl_->get_reference(0), template_after_ts_index_, save_template_after_);
-      Utils::SetTimestampStruct(f_imdl_->get_reference(0), template_before_ts_index_, save_template_before_);
-    }
-  }
-
-  /**
-   * If imdl->code(index) is a VL_PTR for a timestamp struct in bm, then set timestamp to it. Otherwise if
-   * imdl->code(index) is an I_PTR to a timestamp struct, then set timestamp to it.
-   * Return true if timestamp was set, otherwise false.
-   */
-  static bool get_timestamp(Code* imdl, int index, Timestamp& timestamp, const HLPBindingMap *bm) {
-    if (imdl->code(index).getDescriptor() == Atom::VL_PTR &&
-        bm->is_timestamp(imdl->code(index).asIndex())) {
-      timestamp = Utils::GetTimestamp(bm->get_code(imdl->code(index).asIndex()));
-      return true;
-    }
-    if (imdl->code(index).getDescriptor() == Atom::I_PTR) {
-      timestamp = Utils::GetTimestamp(imdl, index);
-      return true;
-    }
-
-    return false;
-  }
-
-  _Fact *f_imdl_;
-  Timestamp save_template_after_, save_template_before_;
-  uint16 template_after_ts_index_, template_before_ts_index_;
-  bool have_saved_template_timings_;
-};
-
 ChainingStatus MDLController::retrieve_simulated_imdl_fwd(const HLPBindingMap *bm, Fact *f_imdl, Sim* sim, vector<BindingResult>& results) {
 
   uint32 wr_count;
@@ -531,11 +469,10 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(const HLPBindingMap *b
           // Temporarily make f_imdl wr_enabled match the one from _f_imdl so that any difference is ignored.
           f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(
             _f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED).asBoolean());
-          TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
           if (_original.match_fwd_strict(_f_imdl, f_imdl)) { // tpl args will be valuated in bm, but not in f_imdl yet.
 
             r = WEAK_REQUIREMENT_ENABLED;
-            results.push_back(BindingResult(new HLPBindingMap(_original), (*e).evidence_));
+            results.push_back(BindingResult(new HLPBindingMap(_original), (*e).evidence_, (*e).mk_rdx_));
             // Loop again to check for more matches.
           }
         }
@@ -564,10 +501,9 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(const HLPBindingMap *b
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
             HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
-            TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
             if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) { // tpl args will be valuated in bm.
 
-              results.push_back(BindingResult(new HLPBindingMap(_original), NULL));
+              results.push_back(BindingResult(new HLPBindingMap(_original), NULL, NULL));
               requirements_.CS_.leave();
               return STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
             }
@@ -577,7 +513,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(const HLPBindingMap *b
       }
 
       requirements_.CS_.leave();
-      return WEAK_REQUIREMENT_ENABLED;
+      return NO_REQUIREMENT;
     } else { // some strong req. and some weak req.: true if among the entries complying with timings and bindings, the youngest |f->imdl is weaker than the youngest f->imdl.
 
       r = WEAK_REQUIREMENT_DISABLED;
@@ -597,7 +533,6 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(const HLPBindingMap *b
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
             HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
-            TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
             if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) {
 
               negative_cfd = (*e).confidence_;
@@ -622,7 +557,6 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(const HLPBindingMap *b
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
             HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
-            TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
             if (_original.match_fwd_strict(_f_imdl, f_imdl)) {
 
               bool strong_matches_weak =
@@ -631,7 +565,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(const HLPBindingMap *b
               if (!strong_matches_weak || (*e).confidence_ > negative_cfd) {
 
                 r = WEAK_REQUIREMENT_ENABLED;
-                results.push_back(BindingResult(new HLPBindingMap(_original), (*e).evidence_));
+                results.push_back(BindingResult(new HLPBindingMap(_original), (*e).evidence_, (*e).mk_rdx_));
                 // Loop again to check for more matches.
               } else {
                 // If we already got a WEAK_REQUIREMENT_ENABLED, don't return STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
@@ -648,7 +582,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_fwd(const HLPBindingMap *b
       }
 
       if (r == STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT || r == STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT)
-        results.push_back(BindingResult(new HLPBindingMap(strong_bm), ground));
+        results.push_back(BindingResult(new HLPBindingMap(strong_bm), ground, NULL));
 
       requirements_.CS_.leave();
       return r;
@@ -682,7 +616,6 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
 
           _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
           HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
-          TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
           // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
           if (_original.match_fwd_strict(_f_imdl, f_imdl)) { // tpl args will be valuated in bm, but not in f_imdl yet.
 
@@ -715,7 +648,6 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
             HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
-            TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
             // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
             if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) { // tpl args will be valuated in bm.
 
@@ -730,7 +662,7 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
       }
 
       requirements_.CS_.leave();
-      return WEAK_REQUIREMENT_ENABLED;
+      return NO_REQUIREMENT;
     } else { // some strong req. and some weak req.: true if among the entries complying with timings and bindings, the youngest |f->imdl is weaker than the youngest f->imdl.
 
       r = WEAK_REQUIREMENT_DISABLED;
@@ -749,7 +681,6 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
             HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
-            TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
             // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
             if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) {
 
@@ -775,7 +706,6 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
 
             _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
             HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
-            TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
             // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
             if (_original.match_fwd_strict(_f_imdl, f_imdl)) {
 
@@ -821,19 +751,19 @@ ChainingStatus MDLController::retrieve_simulated_imdl_bwd(HLPBindingMap *bm, Fac
   }
 }
 
-ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl, RequirementsPair &r_p, Fact *&ground, MDLController *req_controller, bool &wr_enabled) { // wr_enabled: true if there is at least one wr stronger than at least one sr.
+// wr_enabled: true if there is at least one wr stronger than at least one sr.
+ChainingStatus MDLController::retrieve_imdl_fwd(const HLPBindingMap *bm, Fact *f_imdl, RequirementsPair &r_p, std::vector<BindingResult>& results, MDLController *req_controller, bool &wr_enabled) {
 
   uint32 wr_count;
   uint32 sr_count;
   uint32 r_count = get_requirement_count(wr_count, sr_count);
-  ground = NULL;
+  wr_enabled = false;
   if (!r_count)
     return NO_REQUIREMENT;
   ChainingStatus r;
   if (!sr_count) { // no strong req., some weak req.: true if there is one f->imdl complying with timings and bindings.
 
-    wr_enabled = false;
-    // JTNote: We set ground = NULL above, so this is never true.
+#if 0 // JTNote: We set ground = NULL above, so (ground != NULL) is never true.
     if (ground != NULL) { // an imdl triggered the reduction of the cache.
 
       r_p.weak_requirements_.controllers.insert(req_controller);
@@ -841,6 +771,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
       r_p.weak_requirements_.chaining_was_allowed = true;
       return WEAK_REQUIREMENT_ENABLED;
     }
+#endif
 
     r = WEAK_REQUIREMENT_DISABLED;
     requirements_.CS_.enter();
@@ -865,11 +796,11 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
             f_imdl->get_reference(0)->get_reference(0)->get_oid() << " matches evidence fact (" <<
             _f_imdl->get_detail_oid() << ") imdl mdl " << _f_imdl->get_reference(0)->get_reference(0)->get_oid());
 #endif
-          if (r == WEAK_REQUIREMENT_DISABLED && (*e).chaining_was_allowed_) { // first match.
+          if ((*e).chaining_was_allowed_) {
 
             r = WEAK_REQUIREMENT_ENABLED;
-            bm->load(&_original);
-            ground = (*e).evidence_;
+            results.push_back(BindingResult(new HLPBindingMap(_original), (*e).evidence_, (*e).mk_rdx_));
+            // Loop again to check for more matches.
           }
 
           r_p.weak_requirements_.controllers.insert((*e).controller_);
@@ -886,8 +817,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
 
     if (!wr_count) { // some strong req., no weak req.: true if there is no |f->imdl complying with timings and bindings.
 
-      wr_enabled = false;
-      r = WEAK_REQUIREMENT_ENABLED;
+      r = NO_REQUIREMENT;
       requirements_.CS_.enter();
       auto now = Now();
       r_code::list<RequirementEntry>::const_iterator e;
@@ -903,7 +833,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
           HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
           if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) { // tpl args will be valuated in bm.
 
-            if (r == WEAK_REQUIREMENT_ENABLED && (*e).chaining_was_allowed_) // first match.
+            if (r == NO_REQUIREMENT && (*e).chaining_was_allowed_) // first match.
               r = STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
 
             r_p.strong_requirements_.controllers.insert((*e).controller_);
@@ -918,12 +848,13 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
       return r;
     } else { // some strong req. and some weak req.: true if among the entries complying with timings and bindings, the youngest |f->imdl is weaker than the youngest f->imdl.
 
-      r = NO_REQUIREMENT;
+      r = WEAK_REQUIREMENT_DISABLED;
       requirements_.CS_.enter();
       float32 negative_cfd = 0;
       auto now = Now();
 
       _Fact* strong_requirement_ground = NULL;
+      HLPBindingMap strong_bm;
       r_code::list<RequirementEntry>::const_iterator e;
       for (e = requirements_.negative_evidences_.begin(); e != requirements_.negative_evidences_.end();) {
 
@@ -937,10 +868,12 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
           HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
           if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) {
 
-            if (r == NO_REQUIREMENT && (*e).chaining_was_allowed_) { // first match.
+            if (r == WEAK_REQUIREMENT_DISABLED && (*e).chaining_was_allowed_) { // first match.
 
               negative_cfd = (*e).confidence_;
               r = STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
+              // We will update bm below.
+              strong_bm = _original;
               strong_requirement_ground = (*e).evidence_;
             }
 
@@ -952,7 +885,7 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
         }
       }
 
-      // JTNote: We set ground = NULL above, so this is never true.
+#if 0 // JTNote: We set ground = NULL above, so (ground != NULL) is never true.
       if (ground != NULL) { // an imdl triggered the reduction of the cache.
 
         requirements_.CS_.leave();
@@ -967,50 +900,53 @@ ChainingStatus MDLController::retrieve_imdl_fwd(HLPBindingMap *bm, Fact *f_imdl,
         }
         return r;
       }
-      else {
-        HLPBindingMap result_bm(bm);
+#endif
+      Fact* ground = NULL;
+      for (e = requirements_.positive_evidences_.begin(); e != requirements_.positive_evidences_.end();) {
 
-        for (e = requirements_.positive_evidences_.begin(); e != requirements_.positive_evidences_.end();) {
+        if ((*e).is_too_old(now)) // garbage collection.
+          e = requirements_.positive_evidences_.erase(e);
+        else if ((*e).is_out_of_range(now))
+          ++e;
+        else {
 
-          if ((*e).is_too_old(now)) // garbage collection.
-            e = requirements_.positive_evidences_.erase(e);
-          else if ((*e).is_out_of_range(now))
-            ++e;
-          else {
+          _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
+          HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
+          if (_original.match_fwd_strict(_f_imdl, f_imdl)) {
 
-            _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
-            HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
-            if (_original.match_fwd_strict(_f_imdl, f_imdl)) {
+            if ((*e).chaining_was_allowed_) {
 
-              if (r != WEAK_REQUIREMENT_ENABLED && (*e).chaining_was_allowed_) { // first siginificant match.
+              bool strong_matches_weak =
+                (strong_requirement_ground && HLPBindingMap(_original).match_fwd_lenient
+                  (_f_imdl, strong_requirement_ground->get_pred()->get_target()) == MATCH_SUCCESS_NEGATIVE);
+              if (!strong_matches_weak || (*e).confidence_ > negative_cfd) {
 
-                bool strong_matches_weak =
-                  (strong_requirement_ground && HLPBindingMap(_original).match_fwd_lenient
-                    (_f_imdl, strong_requirement_ground->get_pred()->get_target()) == MATCH_SUCCESS_NEGATIVE);
-                if (!strong_matches_weak || (*e).confidence_ > negative_cfd) {
+                r = WEAK_REQUIREMENT_ENABLED;
+                results.push_back(BindingResult(new HLPBindingMap(_original), (*e).evidence_, (*e).mk_rdx_));
+                // Loop again to check for more matches.
+                wr_enabled = strong_matches_weak;
+              } else {
 
-                  r = WEAK_REQUIREMENT_ENABLED;
+                // If we already got a WEAK_REQUIREMENT_ENABLED, don't return STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
+                if (r != WEAK_REQUIREMENT_ENABLED) {
+                  // For informational purposes, set ground in case this returns STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT.
                   ground = (*e).evidence_;
-                  wr_enabled = strong_matches_weak;
-                } else {
-
                   r = STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT;
                   wr_enabled = false;
                 }
-                // We may do another iteration, so don't update bm yet.
-                result_bm.load(&_original);
               }
-
-              r_p.weak_requirements_.controllers.insert((*e).controller_);
-              r_p.weak_requirements_.f_imdl = _f_imdl;
-              r_p.weak_requirements_.chaining_was_allowed = (*e).chaining_was_allowed_;
             }
-            ++e;
-          }
-        }
 
-        bm->load(&result_bm);
+            r_p.weak_requirements_.controllers.insert((*e).controller_);
+            r_p.weak_requirements_.f_imdl = _f_imdl;
+            r_p.weak_requirements_.chaining_was_allowed = (*e).chaining_was_allowed_;
+          }
+          ++e;
+        }
       }
+
+      if (r == STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT || r == STRONG_REQUIREMENT_DISABLED_WEAK_REQUIREMENT)
+        results.push_back(BindingResult(new HLPBindingMap(strong_bm), ground, NULL));
 
       requirements_.CS_.leave();
       return r;
@@ -1042,7 +978,6 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
 
         _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
         HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
-        TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
         // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
         if (_original.match_fwd_strict(_f_imdl, f_imdl)) { // tpl args will be valuated in bm, but not in f_imdl yet.
 
@@ -1074,7 +1009,6 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
 
           _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
           HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
-          TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
           // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
           if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) { // tpl args will be valuated in bm.
 
@@ -1087,7 +1021,7 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
       }
 
       requirements_.CS_.leave();
-      return WEAK_REQUIREMENT_ENABLED;
+      return NO_REQUIREMENT;
     } else { // some strong req. and some weak req.: true if among the entries complying with timings and bindings, the youngest |f->imdl is weaker than the youngest f->imdl.
 
       r = WEAK_REQUIREMENT_DISABLED;
@@ -1103,7 +1037,6 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
 
           _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
           HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
-          TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
           // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
           if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE) {
 
@@ -1124,7 +1057,6 @@ ChainingStatus MDLController::retrieve_imdl_bwd(HLPBindingMap *bm, Fact *f_imdl,
         else {
           _Fact *_f_imdl = (*e).evidence_->get_pred()->get_target();
           HLPBindingMap _original(bm); // matching updates the binding map; always start afresh.
-          TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
           // Use match_fwd because the f_imdl time interval matches the binding map's fwd_after and fwd_before from the model LHS.
           if (_original.match_fwd_strict(_f_imdl, f_imdl)) {
 
@@ -1171,19 +1103,20 @@ bool MDLController::get_imdl_template_timings(
     r_code::Code* imdl, Timestamp& after, Timestamp& before, uint16* after_ts_index, uint16* before_ts_index) {
   auto template_set_index = imdl->code(I_HLP_TPL_ARGS).asIndex();
   auto template_set_count = imdl->code(template_set_index).getAtomCount();
-  auto template_after_index = template_set_index + (template_set_count - 1);
-  auto template_before_index = template_set_index + template_set_count;
-  if (!(template_set_count >= 2 &&
-        imdl->code(template_after_index).getDescriptor() == Atom::I_PTR &&
-        imdl->code(template_before_index).getDescriptor() == Atom::I_PTR))
+  auto template_ti_index = template_set_index + template_set_count;
+  if (!(template_set_count >= 1 && imdl->code(template_ti_index).getDescriptor() == Atom::I_PTR &&
+        imdl->code(imdl->code(template_ti_index).asIndex()).asOpcode() == Opcodes::TI))
     return false;
+  auto ti_index = imdl->code(template_ti_index).asIndex();
+  auto after_index = ti_index + 1;
+  auto before_index = ti_index + 2;
 
-  after = Utils::GetTimestamp(imdl, template_after_index);
-  before = Utils::GetTimestamp(imdl, template_before_index);
+  after = Utils::GetTimestamp(imdl, after_index);
+  before = Utils::GetTimestamp(imdl, before_index);
   if (after_ts_index)
-    *after_ts_index = imdl->code(template_after_index).asIndex();
+    *after_ts_index = imdl->code(after_index).asIndex();
   if (before_ts_index)
-    *before_ts_index = imdl->code(template_before_index).asIndex();
+    *before_ts_index = imdl->code(before_index).asIndex();
 
   return true;
 }
@@ -1193,7 +1126,7 @@ bool MDLController::get_imdl_template_timings(
 MDLController::RequirementEntry::RequirementEntry() : PredictedEvidenceEntry(), controller_(NULL), chaining_was_allowed_(false) {
 }
 
-MDLController::RequirementEntry::RequirementEntry(_Fact *f_p_f_imdl, MDLController *c, bool chaining_was_allowed) : PredictedEvidenceEntry(f_p_f_imdl), controller_(c), chaining_was_allowed_(chaining_was_allowed) {
+MDLController::RequirementEntry::RequirementEntry(_Fact *f_p_f_imdl, MkRdx* mk_rdx, MDLController *c, bool chaining_was_allowed) : PredictedEvidenceEntry(f_p_f_imdl), mk_rdx_(mk_rdx), controller_(c), chaining_was_allowed_(chaining_was_allowed) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1240,14 +1173,7 @@ void PMDLController::inject_goal(HLPBindingMap *bm, Fact *goal, Fact *f_imdl) co
   _Mem::Get()->inject(view);
 
   MkRdx *mk_rdx = new MkRdx(f_imdl, goal->get_goal()->get_super_goal(), goal, 1, bm);
-
-  uint16 out_group_count = get_rdx_out_group_count();
-  for (uint16 i = 0; i < out_group_count; ++i) {
-
-    Group *out_group = (Group *)get_out_group(i);
-    View *view = new NotificationView(primary_grp, out_group, mk_rdx);
-    _Mem::Get()->inject_notification(view, true);
-  }
+  inject_notification_into_out_groups(primary_grp, mk_rdx);
 
   OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl "
     << f_imdl->get_reference(0)->get_reference(0)->get_oid() << " abduce -> mk.rdx " << mk_rdx->get_oid());
@@ -1332,7 +1258,7 @@ inline microseconds PMDLController::get_sim_thz(Timestamp now, Timestamp deadlin
 TopLevelMDLController::TopLevelMDLController(_View *view) : PMDLController(view) {
 }
 
-void TopLevelMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed) {
+void TopLevelMDLController::store_requirement(_Fact *f_p_f_imdl, MkRdx* mk_rdx, MDLController *controller, bool chaining_was_allowed) {
 }
 
 void TopLevelMDLController::take_input(r_exec::View *input) {
@@ -1348,7 +1274,7 @@ void TopLevelMDLController::reduce(r_exec::View *input) { // no lock.
     return;
 
   Goal *goal = ((_Fact *)input->object_)->get_goal();
-  if (goal && goal->is_drive()) {
+  if (goal && (goal->is_drive() || goal->is_imdl_drive())) {
 
     _Fact *goal_target = goal->get_target(); // goal_target is f->object.
     float32 confidence = get_success_rate() * goal_target->get_cfd(); // reading STRONG_REQUIREMENT is atomic.
@@ -1357,8 +1283,13 @@ void TopLevelMDLController::reduce(r_exec::View *input) { // no lock.
 
     P<HLPBindingMap> bm = new HLPBindingMap(bindings_);
     bm->reset_bwd_timings(goal_target);
-    if (bm->match_bwd_strict(goal_target, rhs_)) // the rhs of a top-level model is never a |fact, hence strict matching instead of lenient.
-      abduce(bm, (Fact *)input->object_, confidence);
+    if (bm->match_bwd_strict(goal_target, rhs_)) { // the rhs of a top-level model is never a |fact, hence strict matching instead of lenient.
+      // Log the injection of a drive, presumably from a program.
+      // The view injection time may be different than now, so log it too.
+      OUTPUT_LINE(MDL_IN, Utils::RelativeTime(Now()) << " -> drive " <<
+        input->object_->get_oid() << ", ijt " << Utils::RelativeTime(input->get_ijt()));
+      abduce(bm, (Fact*)input->object_, confidence);
+    }
     else if (!goal->is_requirement()) { // goal_target may be f->imdl and not a requirement: case of a reuse of the model, i.e. the goal target is for the model to make a prediction: this translates into making a sub-goal from the lhs.
 
       Code *imdl = goal_target->get_reference(0);
@@ -1367,6 +1298,10 @@ void TopLevelMDLController::reduce(r_exec::View *input) { // no lock.
         bm = new HLPBindingMap(bindings_);
         bm->reset_bwd_timings(goal_target);
         bm->init_from_f_ihlp(goal_target);
+        // Log the injection of a drive, presumably from a program.
+        // The view injection time may be different than now, so log it too.
+        OUTPUT_LINE(MDL_IN, Utils::RelativeTime(Now()) << " -> drive " <<
+          input->object_->get_oid() << ", ijt " << Utils::RelativeTime(input->get_ijt()));
         abduce(bm, (Fact *)input->object_, confidence);
       }
     }
@@ -1435,10 +1370,11 @@ void TopLevelMDLController::abduce_lhs(HLPBindingMap *bm,
     " goal [" << Utils::RelativeTime(sub_goal_target->get_after()) << "," << Utils::RelativeTime(sub_goal_target->get_before()) << "]");
 }
 
-void TopLevelMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground) { // no prediction here.
+void TopLevelMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground,
+  MkRdx* ground_mk_rdx, vector<P<_Fact> >& already_predicted) { // no prediction here.
 }
 
-void TopLevelMDLController::register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures) {
+void TopLevelMDLController::register_pred_outcome(Fact *f_pred, Code* mk_rdx, bool success, _Fact *evidence, float32 confidence, bool rate_failures) {
 }
 
 void TopLevelMDLController::register_goal_outcome(Fact *goal, bool success, _Fact *evidence) const {
@@ -1486,8 +1422,8 @@ void TopLevelMDLController::register_goal_outcome(Fact *goal, bool success, _Fac
   }
 
   register_drive_outcome(goal->get_goal()->get_sim()->get_f_super_goal(), success);
-  if (success) OUTPUT_LINE(GOAL_MON, Utils::RelativeTime(Now()) << " fact " << f_goal_success->get_oid() << ": " << goal->get_oid() << " goal success (TopLevel)");
-  else OUTPUT_LINE(GOAL_MON, Utils::RelativeTime(Now()) << " " << goal->get_oid() << " goal failure (TopLevel)");
+  OUTPUT_LINE(GOAL_MON, Utils::RelativeTime(Now()) << " fact " << f_goal_success->get_oid() << ": " << goal->get_oid() <<
+    " goal " << (success ? "success" : "failure") << " (TopLevel)");
 }
 
 void TopLevelMDLController::register_drive_outcome(Fact *drive, bool success) const {
@@ -1509,7 +1445,7 @@ void TopLevelMDLController::register_drive_outcome(Fact *drive, bool success) co
   _Mem::Get()->inject(view); // inject in the drives group (will be caught by the drive injectors).
 }
 
-void TopLevelMDLController::register_simulated_goal_outcome(Fact *goal, bool success, _Fact *evidence) const { // evidence is a simulated prediction.
+void PMDLController::inject_simulated_goal_success(Fact *goal, bool success, _Fact *evidence) const { // evidence is a simulated prediction.
 
   Code *success_object = new Success(goal, evidence, 1);
   Pred *evidence_pred = evidence->get_pred();
@@ -1533,12 +1469,17 @@ void TopLevelMDLController::register_simulated_goal_outcome(Fact *goal, bool suc
     evidence->get_oid() << " pred -> fact " << f_pred->get_oid() << " simulated pred");
 }
 
+void TopLevelMDLController::register_simulated_goal_outcome(Fact* goal, bool success, _Fact* evidence) const { // evidence is a simulated prediction.
+  inject_simulated_goal_success(goal, success, evidence);
+}
+
 void TopLevelMDLController::register_req_outcome(Fact *f_pred, bool success, bool rate_failures) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 PrimaryMDLController::PrimaryMDLController(_View *view) : PMDLController(view) {
+  inject_notification_into_out_groups(get_host(), new MkNew(_Mem::Get(), get_core_object()));
 }
 
 void PrimaryMDLController::set_secondary(SecondaryMDLController *secondary) {
@@ -1548,11 +1489,11 @@ void PrimaryMDLController::set_secondary(SecondaryMDLController *secondary) {
   secondary->add_requirement_to_rhs();
 }
 
-void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed) {
+void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MkRdx* mk_rdx, MDLController *controller, bool chaining_was_allowed) {
 
   bool is_simulation = f_p_f_imdl->get_pred()->is_simulation();
   _Fact *f_imdl = f_p_f_imdl->get_pred()->get_target();
-  RequirementEntry e(f_p_f_imdl, controller, chaining_was_allowed);
+  RequirementEntry e(f_p_f_imdl, mk_rdx, controller, chaining_was_allowed);
 
   // Store the requirement before signaling the monitor so that its target will match the requirement.
   if (f_imdl->is_fact()) {
@@ -1563,10 +1504,10 @@ void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *c
   }
   else {
     // Negative requirement.
-    if (!is_simulation)
-      _store_requirement(&requirements_.negative_evidences_, e);
-    else
+    if (is_simulation)
       _store_requirement(&simulated_requirements_.negative_evidences_, e);
+    else
+      _store_requirement(&requirements_.negative_evidences_, e);
   }
 
   // Check here if this new strong requirement disables a weak requirement which may have been used.
@@ -1588,9 +1529,9 @@ void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *c
           HLPBindingMap _original(bindings_);
           _original.reset_fwd_timings(f_imdl);
           // Use logic similar to retrieve_simulated_imdl_bwd.
-          TemplateTimingsUpdater timingsUpdater(f_imdl, _f_imdl, &_original);
           if (_original.match_fwd_lenient(_f_imdl, f_imdl) == MATCH_SUCCESS_NEGATIVE &&
               f_imdl->get_cfd() >= (*e).confidence_) {
+
             // The strong requirement disables the weak.
             (*e).evidence_->get_pred()->get_defeasible_consequence()->invalidate();
 #ifdef WITH_DETAIL_OID
@@ -1627,7 +1568,7 @@ void PrimaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *c
   }
 
   if (!is_simulation)
-    secondary_->store_requirement(f_p_f_imdl, controller, chaining_was_allowed);
+    secondary_->store_requirement(f_p_f_imdl, NULL, controller, chaining_was_allowed);
 }
 
 void PrimaryMDLController::take_input(r_exec::View *input) {
@@ -1640,9 +1581,17 @@ void PrimaryMDLController::take_input(r_exec::View *input) {
     Controller::__take_input<PrimaryMDLController>(input);
 }
 
-void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground) {
+void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground,
+  MkRdx* ground_mk_rdx, vector<P<_Fact> >& already_predicted) {
 
   _Fact *bound_rhs = (_Fact *)bm->bind_pattern(rhs_); // fact or |fact.
+  // TODO: Do we need a critical section?
+  for (auto i = already_predicted.begin(); i != already_predicted.end(); ++i) {
+    // bound_rhs confidence is a wildcard, so it will match any confidence.
+    if (_Fact::MatchObject(bound_rhs, *i, true))
+      // Already predicted.
+      return;
+  }
 
   bool is_simulation;
   float32 confidence;
@@ -1686,17 +1635,12 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
       // Another thread has invalidated this controller which clears the controllers.
       return;
     // In the Pred constructor, we already copied the simulations from prediction.
-    Code* mk_rdx = new MkRdx(f_imdl, (Code *)input, production, 1, bm);
-    uint16 out_group_count = get_rdx_out_group_count();
-    for (uint16 i = 0; i < out_group_count; ++i) {
-      Group *out_group = (Group *)get_out_group(i);
-      View *view = new NotificationView(get_host(), out_group, mk_rdx);
-      _Mem::Get()->inject_notification(view, true);
-    }
+    MkRdx* mk_rdx = new MkRdx(f_imdl, (Code *)input, production, 1, bm);
+    inject_notification_into_out_groups(get_host(), mk_rdx);
     OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << get_object()->get_oid() << " predict imdl -> mk.rdx " << mk_rdx->get_oid());
 
     PrimaryMDLController *c = (PrimaryMDLController *)controllers_[RHSController]; // rhs controller: in the same view.
-    c->store_requirement(production, this, chaining_was_allowed); // if not simulation, stores also in the secondary controller.
+    c->store_requirement(production, mk_rdx, this, chaining_was_allowed); // if not simulation, stores also in the secondary controller.
 #ifdef WITH_DETAIL_OID
     OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " fact (" << f_imdl->get_detail_oid() << ") imdl mdl " << get_object()->get_oid() <<
       ": " << input->get_oid() << " -> fact (" << production->get_detail_oid() << ") pred fact (" <<
@@ -1714,7 +1658,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
 
     if (!chaining_was_allowed) { // reaching this point in the code means that the input was not a prediction.
 
-      PMonitor *m = new PMonitor(this, bm, production, false); // the model will not be rated in case of a failure; the requirements will be rated in both cases (if their own chaining was allowed, else only in case of success and recurse).
+      PMonitor *m = new PMonitor(this, bm, production, NULL, false); // the model will not be rated in case of a failure; the requirements will be rated in both cases (if their own chaining was allowed, else only in case of success and recurse).
       MDLController::add_monitor(m);
     } else { // try to inject the prediction: if cfd too low, the prediction is not injected.
 
@@ -1726,6 +1670,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
         Fact *f_pred_f_imdl = new Fact(new Pred(f_imdl, 1), now, now, 1, 1);
         if (!inject_prediction(production, f_pred_f_imdl, confidence, before - now, NULL))
           return;
+        already_predicted.push_back(bound_rhs);
         string f_imdl_info;
 #ifdef WITH_DETAIL_OID
         f_imdl_info = " fact (" + to_string(f_imdl->get_detail_oid()) + ") imdl";
@@ -1737,11 +1682,11 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
 
         Code *mk_rdx;
         if (ground)
-          mk_rdx = new MkRdx(f_imdl, (Code *)input, ground, production, 1, bm);
+          mk_rdx = new MkRdx(f_imdl, (Code *)input, ground_mk_rdx, production, 1, bm);
         else
           mk_rdx = new MkRdx(f_imdl, (Code *)input, production, 1, bm);
         bool rate_failures = inject_prediction(production, f_imdl, confidence, before - now, mk_rdx);
-        PMonitor *m = new PMonitor(this, bm, production, rate_failures); // not-injected predictions are monitored for rating the model that produced them (successes only).
+        PMonitor *m = new PMonitor(this, bm, production, mk_rdx, rate_failures); // not-injected predictions are monitored for rating the model that produced them (successes only).
         MDLController::add_monitor(m);
         Group *secondary_host = secondary_->get_view()->get_host(); // inject f_imdl in secondary group.
         View *view = new View(View::SYNC_ONCE, now, confidence, 1, get_view()->get_host(), secondary_host, f_imdl); // SYNC_ONCE,res=resilience.
@@ -1771,6 +1716,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
     // In the Pred constructor, we already copied the simulations from prediction.
     if (!HLPController::inject_prediction(production, confidence)) // inject a simulated prediction in the primary group.
       return;
+    already_predicted.push_back(bound_rhs);
     string ground_info;
 #ifdef WITH_DETAIL_OID
     if (ground)
@@ -1804,16 +1750,8 @@ bool PrimaryMDLController::inject_prediction(Fact *prediction, Fact *f_imdl, flo
     view = new View(View::SYNC_ONCE, now, 1, 1, primary_host, primary_host, f_imdl); // SYNC_ONCE,res=resilience.
     _Mem::Get()->inject(view);
 
-    if (mk_rdx) {
-
-      uint16 out_group_count = get_out_group_count();
-      for (uint16 i = 0; i < out_group_count; ++i) {
-
-        Group *out_group = (Group *)get_out_group(i);
-        View *view = new NotificationView(primary_host, out_group, mk_rdx);
-        _Mem::Get()->inject_notification(view, true);
-      }
-    }
+    if (mk_rdx)
+      inject_notification_into_out_groups(primary_host, mk_rdx);
     return true;
   } else
     return false;
@@ -1881,8 +1819,16 @@ void PrimaryMDLController::reduce(r_exec::View *input) { // no lock.
 
     PrimaryMDLOverlay o(this, bindings_);
     bool match = o.reduce((_Fact *)input->object_, NULL, NULL);
-    if (!match && !monitor_predictions((_Fact *)input->object_) && !monitor_goals((_Fact *)input->object_))
+    bool matched_p_monitor = false;
+    bool matched_g_monitor = false;
+    if (!match)
+      matched_p_monitor = monitor_predictions((_Fact*)input->object_);
+    if (!matched_p_monitor)
+      // Monitor goals even if PrimaryMDLOverlay reduce sets match true, but not if a PMonitor matches.
+      matched_g_monitor = monitor_goals((_Fact*)input->object_);
+    if (!match && !matched_p_monitor && !matched_g_monitor)
       assume((_Fact *)input->object_);
+
     check_last_match_time(match);
   }
 }
@@ -1906,15 +1852,15 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
 
   P<Fact> f_imdl = get_f_ihlp(bm, false);
   Sim *sim = super_goal->get_goal()->get_sim();
-  auto sim_thz = sim->get_thz(); // 0 if super-goal had no time for simulation.
+  microseconds sim_thz(0);
+  if (sim)
+    sim_thz = sim->get_thz(); // 0 if super-goal had no time for simulation.
   auto min_sim_thz = _Mem::Get()->get_min_sim_time_horizon() / 2; // time allowance for the simulated predictions to flow upward.
 
   Sim *sub_sim;
   if (sim_thz > min_sim_thz) {
 
     sim_thz -= min_sim_thz;
-
-    f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
 
     auto now = Now();
     switch (sim->get_mode()) {
@@ -1967,6 +1913,9 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
       Fact *sim_ground;
       Fact *sim_strong_requirement_ground;
       ChainingStatus sim_c_s = retrieve_simulated_imdl_bwd(bm, f_imdl, sim, sim_ground, sim_strong_requirement_ground);
+      if (c_s == STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT && sim_c_s == NO_REQUIREMENT)
+        // There is no simulated weak requirement to override the non-simulated strong requirement.
+        sim_c_s = STRONG_REQUIREMENT_NO_WEAK_REQUIREMENT;
       switch (sim_c_s) {
       case WEAK_REQUIREMENT_ENABLED:
         f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(true);
@@ -2000,10 +1949,11 @@ void PrimaryMDLController::abduce(HLPBindingMap *bm, Fact *super_goal, bool oppo
 
     Fact *ground;
     Fact *strong_requirement_ground;
-    SimMode mode = sim->get_mode();
+    SimMode mode = SIM_ROOT;
+    if (sim)
+      mode = sim->get_mode();
     switch (mode) {
     case SIM_ROOT:
-      f_imdl->set_reference(0, bm->bind_pattern(f_imdl->get_reference(0))); // valuate f_imdl from updated bm.
       switch (retrieve_imdl_bwd(bm, f_imdl, ground, strong_requirement_ground)) {
       case WEAK_REQUIREMENT_ENABLED:
         f_imdl->get_reference(0)->code(I_HLP_WEAK_REQUIREMENT_ENABLED) = Atom::Boolean(true);
@@ -2406,7 +2356,7 @@ inline Fact* PrimaryMDLController::predict_simulated_evidence(_Fact *evidence, S
   return fact_pred;
 }
 
-void PrimaryMDLController::register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures) {
+void PrimaryMDLController::register_pred_outcome(Fact *f_pred, Code* mk_rdx, bool success, _Fact *evidence, float32 confidence, bool rate_failures) {
 
   f_pred->invalidate();
 
@@ -2420,7 +2370,7 @@ void PrimaryMDLController::register_pred_outcome(Fact *f_pred, bool success, _Fa
   if (!f_evidence) // failure: assert absence of the pred target.
     f_evidence = f_pred->get_pred()->get_target()->get_absentee();
 
-  Success *success_object = new Success(f_pred, f_evidence, 1);
+  Success *success_object = new Success(f_pred, f_evidence, mk_rdx, 1);
   Code *f_success_object;
   auto now = Now();
   // We print the result to the output below, after injecting f_success_object to get its OID.
@@ -2750,11 +2700,13 @@ bool PrimaryMDLController::get_template_timings(HLPBindingMap *bm, Timestamp& af
   Code* model = get_core_object();
   auto template_set_index = model->code(MDL_TPL_ARGS).asIndex();
   auto template_set_count = model->code(template_set_index).getAtomCount();
-  if (template_set_count < 2)
-    // Not enough template parameters.
+  auto template_ti_index = template_set_index + template_set_count;
+  if (!(template_set_count >= 1 && model->code(template_ti_index).getDescriptor() == Atom::I_PTR &&
+        model->code(model->code(template_ti_index).asIndex()).asOpcode() == Opcodes::TI))
     return false;
-  auto after_code_index = template_set_index + (template_set_count - 1);
-  auto before_code_index = template_set_index + template_set_count;
+  auto ti_index = model->code(template_ti_index).asIndex();
+  auto after_code_index = ti_index + 1;
+  auto before_code_index = ti_index + 2;
   if (model->code(after_code_index).getDescriptor() != Atom::VL_PTR ||
       model->code(before_code_index).getDescriptor() != Atom::VL_PTR)
     // Parameters are not variables.
@@ -2832,7 +2784,8 @@ void SecondaryMDLController::reduce_batch(Fact *f_p_f_imdl, MDLController *contr
   reduce_cache<PredictedEvidenceEntry>(&predicted_evidences_, f_p_f_imdl, controller);
 }
 
-void SecondaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground) { // predicitons are not injected: they are silently produced for rating purposes.
+void SecondaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl, bool chaining_was_allowed, RequirementsPair &r_p, Fact *ground,
+  MkRdx* ground_mk_rdx, vector<P<_Fact> >& already_predicted) { // predicitons are not injected: they are silently produced for rating purposes.
 
   _Fact *bound_rhs = (_Fact *)bm->bind_pattern(rhs_); // fact or |fact.
   Pred *_prediction = new Pred(bound_rhs, 1);
@@ -2846,17 +2799,17 @@ void SecondaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_im
     if (is_invalidated())
       // Another thread has invalidated this controller which clears the controllers.
       return;
-    ((MDLController *)controllers_[RHSController])->store_requirement(production, this, chaining_was_allowed);
+    ((MDLController *)controllers_[RHSController])->store_requirement(production, NULL, this, chaining_was_allowed);
     return;
   }
 
-  PMonitor *m = new PMonitor(this, bm, production, false); // predictions are monitored for rating (successes only); no injection.
+  PMonitor *m = new PMonitor(this, bm, production, NULL, false); // predictions are monitored for rating (successes only); no injection.
   add_monitor(m);
 }
 
-void SecondaryMDLController::store_requirement(_Fact *f_p_f_imdl, MDLController *controller, bool chaining_was_allowed) {
+void SecondaryMDLController::store_requirement(_Fact *f_p_f_imdl, MkRdx* mk_rdx, MDLController *controller, bool chaining_was_allowed) {
 
-  RequirementEntry e(f_p_f_imdl, controller, chaining_was_allowed);
+  RequirementEntry e(f_p_f_imdl, NULL, controller, chaining_was_allowed);
   if (((_Fact*)f_p_f_imdl->get_reference(0)->get_reference(0))->is_fact()) {
 
     _store_requirement(&requirements_.positive_evidences_, e);
@@ -2907,7 +2860,7 @@ void SecondaryMDLController::rate_model() { // acknowledge successes only; the p
     OUTPUT_LINE(MDL_REV, Utils::RelativeTime(Now()) << " mdl " << model->get_oid() << " phased in");
 }
 
-void SecondaryMDLController::register_pred_outcome(Fact *f_pred, bool success, _Fact *evidence, float32 confidence, bool rate_failures) { // success==false means executed in the thread of a time core; otherwise, executed in the same thread as for Controller::reduce().
+void SecondaryMDLController::register_pred_outcome(Fact *f_pred, Code* mk_rdx, bool success, _Fact *evidence, float32 confidence, bool rate_failures) { // success==false means executed in the thread of a time core; otherwise, executed in the same thread as for Controller::reduce().
 
   register_req_outcome(f_pred, success, rate_failures);
 }

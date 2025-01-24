@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -155,10 +155,12 @@ private:
   static std::vector<PipeOStream *> Streams_;
   static PipeOStream NullStream_;
 
+#ifdef WINDOWS
   HANDLE pipe_read_;
   HANDLE pipe_write_;
 
   void init(); // create one child process and a pipe.
+#endif
   PipeOStream();
 public:
   static void Open(uint8 count); // open count streams.
@@ -180,14 +182,55 @@ public:
  */
 bool r_exec_dll InitOpcodes(const r_comp::Metadata& metadata);
 
-// Initialize Now, compile user.classes.replicode, builds the Seed and loads the user-defined operators.
+/**
+ * Library is an abstract base class for a shared or static library with getFunction.
+ */
+class FunctionLibrary {
+public:
+  /**
+   * Return the function with function_name or NULL if not found.
+   */
+  virtual void* getFunction(const char* function_name) = 0;
+};
+
+/**
+ * SharedFunctionLibrary extends FunctionLibrary to implement
+ * functionName using the SharedLibrary class.
+ */
+class SharedFunctionLibrary : public FunctionLibrary {
+public:
+  SharedFunctionLibrary() : getUserOperatorFunction_(0) {}
+
+  SharedLibrary* load(const char* file_name) { 
+    SharedLibrary* library = sharedLibrary_.load(file_name);
+    getUserOperatorFunction_ = (void* (*)(const char*))sharedLibrary_.getFunction("GetUserOperatorFunction");
+    return library;
+  }
+
+  void* getFunction(const char* function_name) override {
+    if (getUserOperatorFunction_) {
+      // Try GetUserOperatorFunction first.
+      void* result = getUserOperatorFunction_(function_name);
+      if (result)
+        return result;
+    }
+
+    // Fall back to searching for the function in the shared library global name space.
+    return sharedLibrary_.getFunction(function_name);
+  }
+private:
+  SharedLibrary sharedLibrary_;
+  void* (*getUserOperatorFunction_)(const char* function_name);
+};
+
+// Initialize Now, compile userOperatorLibrary, builds the Seed and loads the user-defined operators.
 // Return false in case of a problem (e.g. file not found, operator not found, etc.).
-bool r_exec_dll Init(const char *user_operator_library_path,
+bool r_exec_dll Init(FunctionLibrary* userOperatorLibrary,
   Timestamp (*time_base)(),
   const char *seed_path);
 
 // Alternate taking a ready-made metadata and seed (will be copied into Metadata and Seed).
-bool r_exec_dll Init(const char *user_operator_library_path,
+bool r_exec_dll Init(FunctionLibrary* userOperatorLibrary,
   Timestamp (*time_base)(),
   const r_comp::Metadata &metadata,
   const r_comp::Image &seed);
@@ -195,6 +238,10 @@ bool r_exec_dll Init(const char *user_operator_library_path,
 uint16 r_exec_dll GetOpcode(const char *name); // classes, operators and functions.
 
 std::string r_exec_dll GetAxiomName(const uint16 index); // for constant objects (ex: self, position, and other axioms).
+
+bool r_exec_dll hasUserDefinedOperators(const std::string class_name);
+
+bool r_exec_dll hasUserDefinedOperators(const uint16 opcode);
 }
 
 

@@ -3,8 +3,8 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2022 Jeff Thompson
-//_/_/ Copyright (c) 2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2022-2025 Jeff Thompson
+//_/_/ Copyright (c) 2022-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/
 //_/_/ --- Open-Source BSD License, with CADIA Clause v 1.0 ---
@@ -69,7 +69,7 @@ public:
   /**
    * Call the parent class load(), then set up the objects to emulate the environment.
    */
-  virtual bool load(std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid);
+  bool load(const std::vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 stdout_oid, uint32 self_oid) override;
 
   /**
    * Override eject to check for implemented commands.
@@ -79,13 +79,13 @@ public:
    * inject it as the efferent copy. However, if the command is not executed, then return NULL
    * and the program controller will put an anti-fact of the command in the mk.rdx reduction.
    */
-  virtual r_code::Code* eject(r_code::Code *command);
+  r_code::Code* eject(r_code::Code *command) override;
 
   /**
    * This is called when run_in_diagnostic_time() updates the tickTime. Just call
    * on_time_tick(), because there is no real - time timer thread to call it.
    */
-  virtual void on_diagnostic_time_tick() { on_time_tick(); }
+  void on_diagnostic_time_tick() override { on_time_tick(); }
 
 private:
   void on_time_tick();

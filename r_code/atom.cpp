@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -165,7 +165,7 @@ void Atom::trace(TraceContext& context, std::ostream& out) const {
   case S_SET: out << "s_set: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.members_to_go_ = getAtomCount(); return;
   case MARKER: out << "mk: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.members_to_go_ = getAtomCount(); return;
   case OPERATOR: out << "op: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.members_to_go_ = getAtomCount(); return;
-  case STRING: out << "st: " << std::dec << (uint16)getAtomCount(); context.members_to_go_ = context.string_data_ = getAtomCount(); context.char_count_ = (atom_ & 0x000000FF); return;
+  case STRING: out << "st: " << std::dec << (uint16)getAtomCount() << " " << (atom_ & 0x000000FF); context.members_to_go_ = context.string_data_ = getAtomCount(); context.char_count_ = (atom_ & 0x000000FF); return;
   case TIMESTAMP: out << "ts"; context.members_to_go_ = context.timestamp_data_ = 2; return;
   case DURATION: out << "us"; context.members_to_go_ = context.duration_data_ = 2; return;
   case GROUP: out << "grp: " << std::dec << asOpcode() << " (" << GetOpcodeName(asOpcode()).c_str() << ") " << (uint16)getAtomCount(); context.members_to_go_ = getAtomCount(); return;

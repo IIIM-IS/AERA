@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -110,7 +110,7 @@ public:
 
   virtual void write(word32 *data) = 0;
   virtual void read(word32 *data) = 0;
-  virtual void trace(std::ostream& out) = 0;
+  virtual void trace(std::ostream& out) const = 0;
 };
 
 class _View;
@@ -121,10 +121,10 @@ public:
   SysView();
   SysView(_View *source);
 
-  void write(word32 *data);
-  void read(word32 *data);
+  void write(word32 *data) override;
+  void read(word32 *data) override;
   uint32 get_size() const;
-  void trace(std::ostream& out);
+  void trace(std::ostream& out) const override;
 #ifdef WITH_DETAIL_OID
   int detail_oid_;
 #endif
@@ -149,11 +149,11 @@ public:
   SysObject(Code *source);
   ~SysObject();
 
-  void write(word32 *data);
-  void read(word32 *data);
+  void write(word32 *data) override;
+  void read(word32 *data) override;
   uint32 get_size();
-  void trace(std::ostream& out);
-  void trace();
+  void trace(std::ostream& out)const override;
+  void trace() const;
 };
 
 // Interfaces for r_exec classes ////////////////////////////////////////////////////////////////////////
@@ -247,9 +247,16 @@ public:
   virtual void set_oid(uint32 oid) = 0;
 
   virtual Atom &code(uint16 i) = 0;
-  virtual Atom &code(uint16 i) const = 0;
+  virtual const Atom &code(uint16 i) const = 0;
   virtual uint16 code_size() const = 0;
   virtual void resize_code(uint16 new_size) = 0;
+  bool includes(Atom a) const {
+    for (uint16 i = 0; i < code_size(); ++i) {
+      if (code(i) == a)
+        return true;
+    }
+    return false;
+  }
   virtual void set_reference(uint16 i, Code *object) = 0;
   virtual Code *get_reference(uint16 i) const = 0;
   virtual uint16 references_size() const = 0;
@@ -275,10 +282,10 @@ public:
   Code() : storage_index_(null_storage_index) { markers_.reserve(CodeMarkersInitialSize); }
   virtual ~Code() {}
 
-  virtual void mod(uint16 member_index, float32 value) {};
-  virtual void set(uint16 member_index, float32 value) {};
-  virtual _View *get_view(Code *group, bool lock) { return NULL; }
-  virtual void add_reference(Code *object) const {} // called only on local objects.
+  virtual void mod(uint16 /* member_index */, float32 /* value */) {};
+  virtual void set(uint16 /* member_index */, float32 /* value */) {};
+  virtual _View *get_view(Code* /* group */, bool /* lock */) { return NULL; }
+  virtual void add_reference(Code* /* object */) {} // called only on local objects.
   void remove_marker(Code *m) {
 
     acq_markers();
@@ -290,7 +297,7 @@ public:
    * Print the trace of code(i) to the out stream, using the given TraceContext.
    */
   void trace(uint16 i, std::ostream& out, Atom::TraceContext& context) const {
-    Atom& atom = code(i);
+    Atom atom = code(i);
     atom.trace(context, out);
     if (atom.getDescriptor() == Atom::R_PTR) {
       if (atom.asIndex() < references_size()) {
@@ -327,7 +334,7 @@ public:
   void trace() const { trace(std::cout); }
 
   /**
-   * Return the trace as a string. For debugging purposes only(can be inefficient).
+   * Return the trace as a string. For debugging purposes only (can be inefficient).
    */
   std::string trace_string() const {
     std::ostringstream out;
@@ -342,6 +349,25 @@ public:
     Atom::TraceContext context;
     std::ostringstream out;
     trace(i, out, context);
+    return out.str();
+  }
+
+  /**
+   * Recursively call trace(out) to print the trace of this Code to the out stream, along
+   * the trace of each get_reference(0). (This doesn't print the trace of get_reference(0) if
+   * it is a mdl, cst, ent or ont.) This is useful, for example, to trace a fact as well as the
+   * mk.val it references.
+   */
+  void r_trace(std::ostream& out) const;
+
+  void r_trace() const { r_trace(std::cout); }
+
+  /**
+   * Return the r_trace as a string. For debugging purposes only (can be inefficient).
+   */
+  std::string r_trace_string() const {
+    std::ostringstream out;
+    r_trace(out);
     return out.str();
   }
 };
@@ -361,30 +387,34 @@ public:
   }
   virtual ~LocalObject() {}
 
-  _View *build_view(SysView *source) {
+  _View *build_view(SysView *source) override {
 
     return Code::build_view<_View>(source);
   }
 
-  uint32 get_oid() const { return oid_; }
-  void set_oid(uint32 oid) { oid_ = oid; }
+  uint32 get_oid() const override { return oid_; }
+  void set_oid(uint32 oid) override { oid_ = oid; }
 
-  Atom &code(uint16 i) { return code_[i]; }
-  Atom &code(uint16 i) const { return (*code_.as_std())[i]; }
-  uint16 code_size() const {
+  Atom &code(uint16 i) override { return code_[i]; }
+  const Atom &code(uint16 i) const override { return code_[i]; }
+  uint16 code_size() const override {
     // There can't be more than 65536 code bytes. Explicitly cast to the return type.
     return (uint16)code_.size();
   }
-  void resize_code(uint16 new_size) { code_.as_std()->resize(new_size); }
-  void set_reference(uint16 i, Code *object) { references_[i] = object; }
-  Code *get_reference(uint16 i) const { return (*references_.as_std())[i]; }
-  uint16 references_size() const {
+  void resize_code(uint16 new_size) override { code_.resize(new_size); }
+  void set_reference(uint16 i, Code *object) override { references_[i] = object; }
+  Code *get_reference(uint16 i) const override { return references_[i]; }
+  uint16 references_size() const override {
     // There can't be more than 65536 references. Explicitly cast to the return type.
     return (uint16)references_.size();
   }
-  void clear_references() { references_.as_std()->clear(); }
-  void set_references(std::vector<P<Code> > &new_references) { (*references_.as_std()) = new_references; }
-  void add_reference(Code *object) const { references_.as_std()->push_back(object); }
+  void clear_references() override { references_.clear(); }
+  void set_references(std::vector<P<Code> > &new_references) override {
+    references_.clear();
+    for (size_t i = 0; i < new_references.size(); ++i)
+      references_.push_back(new_references[i]);
+  }
+  void add_reference(Code *object) override { references_.push_back(object); }
 };
 
 class dll_export Mem {

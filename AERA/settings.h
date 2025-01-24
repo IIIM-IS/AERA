@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -143,6 +143,12 @@ public:
   bool write_models_;
   std::string models_path_;
   bool test_models_;
+
+  //TCPConfiguration
+  int number_of_servers_;
+  int number_of_clients_;
+  std::vector<std::pair<std::string, std::string> > server_configurations_;
+  std::vector<std::string> client_configurations_;
 
   bool load(const char *file_name) {
 
@@ -321,6 +327,65 @@ public:
       std::cerr << "> Error: Run section is unreadable" << std::endl;
       return false;
     }
+
+    core::XMLNode tcpConfiguration = mainNode.getChildNode("TCPConfiguration");
+
+    if (!tcpConfiguration) {
+
+      if (io_device_.compare("tcp_io_device") == 0) {
+
+        std::cerr << "> Error: Using IODevice tcp_io_device without specifying TCPConfiguration in settings.xml" << std::endl;
+        return false;
+      }
+
+      return true;
+    }
+
+    const char* number_of_servers = tcpConfiguration.getAttribute("number_of_servers");
+    const char* number_of_clients = tcpConfiguration.getAttribute("number_of_clients");
+
+    number_of_servers_ = atoi(number_of_servers);
+    number_of_clients_ = atoi(number_of_clients);
+
+    std::string server_configurations = tcpConfiguration.getAttribute("server_configurations");
+    std::string client_configurations = tcpConfiguration.getAttribute("client_configurations");
+
+    size_t last = 0;
+    size_t next = server_configurations.find(",", last);
+    do
+    {
+      std::string current;
+      if (next == std::string::npos) {
+        current = server_configurations.substr(last);
+      }
+      else
+      {
+        current = server_configurations.substr(last, next - last);
+      }
+      size_t colon = current.find(":", 0);
+      std::string ipAdress = current.substr(0, colon);
+      std::string port = current.substr(colon + 1);
+      server_configurations_.push_back(std::make_pair(ipAdress, port));
+      last = next + 1;
+    } while ((next = server_configurations.find(",", last)) != std::string::npos);
+
+
+
+    last = 0;
+    next = client_configurations.find(",", last);
+    do
+    {
+      std::string port;
+      if (next == std::string::npos) {
+        port = client_configurations.substr(last);
+      }
+      else
+      {
+        port = client_configurations.substr(last, next - last);
+      }
+      client_configurations_.push_back(port);
+      last = next + 1;
+    } while ((next = client_configurations.find(",", last)) != std::string::npos);
 
     return true;
   }

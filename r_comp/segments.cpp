@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -538,7 +538,7 @@ void Image::add_object(Code *object, bool include_invalidated) {
   }
 
   uint16 object_index;
-  ptrs_to_indices_[object] = object_index = code_segment_.objects_.as_std()->size();
+  ptrs_to_indices_[object] = object_index = code_segment_.objects_.size();
   SysObject *sys_object = new SysObject(object);
   add_sys_object(sys_object);
 
@@ -564,7 +564,7 @@ SysObject *Image::add_object(Code *object, vector<SysObject *> &imported_objects
     return code_segment_.objects_[it->second];
 
   uint16 object_index;
-  ptrs_to_indices_[object] = object_index = code_segment_.objects_.as_std()->size();
+  ptrs_to_indices_[object] = object_index = code_segment_.objects_.size();
   SysObject *sys_object = new SysObject(object);
   add_sys_object(sys_object);
 
@@ -626,7 +626,7 @@ void Image::build_references() {
 
   Code *object;
   SysObject *sys_object;
-  for (uint32 i = 0; i < code_segment_.objects_.as_std()->size(); ++i) {
+  for (uint32 i = 0; i < code_segment_.objects_.size(); ++i) {
 
     sys_object = code_segment_.objects_[i];
     // The memory address of the original object was stored in sys_object->references_, so recover it.
@@ -641,7 +641,7 @@ void Image::build_references() {
     _object |= ((uint64)(sys_object->references_[3]) << 48);
     object = (Code *)_object;
 #endif
-    sys_object->references_.as_std()->clear();
+    sys_object->references_.clear();
     build_references(sys_object, object);
   }
 }
@@ -698,17 +698,17 @@ void Image::unpack_objects(resized_vector<Code *> &ram_objects) {
     SysObject *sys_object = code_segment_.objects_[i];
     Code *ram_object = ram_objects[i];
 
-    for (uint16 j = 0; j < sys_object->views_.as_std()->size(); ++j) {
+    for (uint16 j = 0; j < sys_object->views_.size(); ++j) {
 
       SysView *sys_v = sys_object->views_[j];
       _View *v = ram_object->build_view(sys_v);
-      for (uint16 k = 0; k < sys_v->references_.as_std()->size(); ++k)
+      for (uint16 k = 0; k < sys_v->references_.size(); ++k)
         v->references_[k] = ram_objects[sys_v->references_[k]];
 
       ram_object->views_.insert(v);
     }
 
-    for (uint16 j = 0; j < sys_object->references_.as_std()->size(); ++j)
+    for (uint16 j = 0; j < sys_object->references_.size(); ++j)
       ram_object->set_reference(j, ram_objects[sys_object->references_[j]]);
   }
 }

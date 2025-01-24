@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -95,7 +95,7 @@ HLPController::HLPController(_View *view) : OController(view), strong_requiremen
   bindings_ = new HLPBindingMap();
 
   Code *object = get_unpacked_object();
-  bindings_->init_from_hlp(object); // init a binding map from the patterns.
+  bindings_->init_from_hlp(object, get_object()); // init a binding map from the patterns.
 
   has_tpl_args_ = object->code(object->code(HLP_TPL_ARGS).asIndex()).getAtomCount() > 0;
   ref_count_ = 0;
@@ -296,6 +296,16 @@ bool HLPController::is_orphan() {
     }
   }
   return false;
+}
+
+void HLPController::inject_notification_into_out_groups(Code* origin, Code* marker) const {
+  uint16 out_group_count = get_out_group_count();
+  for (uint16 i = 0; i < out_group_count; ++i) {
+
+    Group* out_group = (Group*)get_out_group(i);
+    View* view = new NotificationView(origin, out_group, marker);
+    _Mem::Get()->inject_notification(view, true);
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

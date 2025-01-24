@@ -3,9 +3,9 @@
 //_/_/ AERA
 //_/_/ Autocatalytic Endogenous Reflective Architecture
 //_/_/ 
-//_/_/ Copyright (c) 2018-2022 Jeff Thompson
-//_/_/ Copyright (c) 2018-2022 Kristinn R. Thorisson
-//_/_/ Copyright (c) 2018-2022 Icelandic Institute for Intelligent Machines
+//_/_/ Copyright (c) 2018-2025 Jeff Thompson
+//_/_/ Copyright (c) 2018-2025 Kristinn R. Thorisson
+//_/_/ Copyright (c) 2018-2025 Icelandic Institute for Intelligent Machines
 //_/_/ http://www.iiim.is
 //_/_/ 
 //_/_/ Copyright (c) 2010-2012 Eric Nivel
@@ -153,17 +153,16 @@ class Success;
 
 class r_exec_dll _Fact :
   public LObject {
-private:
-  static bool MatchAtom(Atom lhs, Atom rhs);
-  static bool MatchStructure(const r_code::Code *lhs, uint16 lhs_base_index, uint16 lhs_index, const r_code::Code *rhs, uint16 rhs_index, bool same_binding_state);
-  static bool Match(const r_code::Code *lhs, uint16 lhs_base_index, uint16 lhs_index, const r_code::Code *rhs, uint16 rhs_index, uint16 lhs_arity, bool same_binding_state);
-  static bool CounterEvidence(const r_code::Code *lhs, const r_code::Code *rhs);
 protected:
   _Fact();
   _Fact(r_code::SysObject *source);
   _Fact(_Fact *f);
   _Fact(uint16 opcode, r_code::Code *object, Timestamp after, Timestamp before, float32 confidence, float32 psln_thr);
 public:
+  static bool MatchAtom(Atom lhs, Atom rhs);
+  static bool MatchStructure(const r_code::Code* lhs, uint16 lhs_base_index, uint16 lhs_index, const r_code::Code* rhs, uint16 rhs_index, bool same_binding_state = false);
+  static bool Match(const r_code::Code* lhs, uint16 lhs_base_index, uint16 lhs_index, const r_code::Code* rhs, uint16 rhs_index, uint16 lhs_arity, bool same_binding_state = false);
+  static bool CounterEvidence(const r_code::Code* lhs, const r_code::Code* rhs);
   /**
    * Check if lhs matches rhs.
    * \param same_binding_state (optional) If false, then allow an unbound variable to match another
@@ -172,11 +171,11 @@ public:
    */
   static bool MatchObject(const r_code::Code *lhs, const r_code::Code *rhs, bool same_binding_state = false);
 
-  virtual bool is_invalidated();
+  bool is_invalidated() override;
 
   bool is_fact() const { return (code(0).asOpcode() == Opcodes::Fact); }
   bool is_anti_fact() const { return (code(0).asOpcode() == Opcodes::AntiFact); }
-  void set_opposite() const {
+  void set_opposite() {
     if (is_fact())
       code(0) = Atom::Object(Opcodes::AntiFact, FACT_ARITY);
     else
@@ -193,6 +192,24 @@ public:
 
   bool has_after() const { return r_code::Utils::HasTimestamp<r_code::Code>(this, FACT_AFTER); }
   bool has_before() const { return r_code::Utils::HasTimestamp<r_code::Code>(this, FACT_BEFORE); }
+  /**
+   * If the object at FACT_AFTER is (var v), then return v. Otherwise return -1.
+   */
+  int get_after_var() const {
+    uint16 v_index = code(FACT_AFTER).asIndex();
+    if (code(v_index) == Atom::Object(Opcodes::Var, 1))
+      return (int)code(v_index + 1).asFloat();
+    return -1;
+  }
+  /**
+   * If the object at FACT_BEFORE is (var v), then return v. Otherwise return -1.
+   */
+  int get_before_var() const {
+    uint16 v_index = code(FACT_BEFORE).asIndex();
+    if (code(v_index) == Atom::Object(Opcodes::Var, 1))
+      return (int)code(v_index + 1).asFloat();
+    return -1;
+  }
   Timestamp get_after() const;
   Timestamp get_before() const;
   float32 get_cfd() const { return code(FACT_CFD).asFloat(); }
@@ -234,8 +251,8 @@ public:
   // For SIM_MANDATORY or SIM_OPTIONAL, provide solution_controller, solution_cfd and solution_before. Otherwise, defaults for SIM_ROOT.
   // For SIM_ROOT, solution_before is unused so use Utils::GetTimeReference() which is 0s:0ms:0us in the decompiled output.
   Sim(SimMode mode, std::chrono::microseconds thz, Fact *super_goal, bool opposite, Controller *root, float32 psln_thr, Controller *solution_controller = NULL, float32 solution_cfd = 0, Timestamp solution_before = r_code::Utils::GetTimeReference());
-  bool invalidate();
-  bool is_invalidated();
+  bool invalidate() override;
+  bool is_invalidated() override;
   // If SIM_MANDATORY or SIM_OPTIONAL: qualifies a sub-goal of the branch's root.
   SimMode get_mode() const { return (SimMode)(int)code(SIM_MODE).asFloat(); }
   // simulation time allowance (this is not the goal deadline); 0 indicates no time for simulation.
@@ -421,7 +438,7 @@ public:
    * call invalidate() and return true.
    * \return true if this is invalidated.
    */
-  bool is_invalidated();
+  bool is_invalidated() override;
   bool grounds_invalidated(_Fact *evidence);
 
   _Fact *get_target() const { return (_Fact *)get_reference(0); }
@@ -503,14 +520,17 @@ public:
   Goal(r_code::SysObject *source);
   Goal(_Fact *target, r_code::Code *actor, Sim* sim, float32 psln_thr);
 
-  bool invalidate();
-  bool is_invalidated();
+  bool invalidate() override;
+  bool is_invalidated() override;
   bool ground_invalidated(_Fact *evidence);
 
   bool is_requirement() const;
 
   bool is_self_goal() const;
-  bool is_drive() const { return (!has_sim() && is_self_goal()); }
+  bool is_drive() const { return (!has_sim() && is_self_goal() && get_target()->get_reference(0)->code(0).asOpcode() == Opcodes::Ent); }
+  bool is_imdl_drive() const {
+    return (!has_sim() && is_self_goal() && get_target()->get_reference(0)->code(0).asOpcode() == Opcodes::IMdl);
+  }
 
   _Fact *get_target() const { return (_Fact *)get_reference(0); }
   _Fact *get_super_goal() const { return get_sim()->get_f_super_goal(); }
@@ -572,6 +592,14 @@ public:
   MkRdx(r_code::Code *imdl_fact, r_code::Code *input, r_code::Code *output, float32 psln_thr, BindingMap *binding_map); // for mdl.
   MkRdx(r_code::Code *imdl_fact, r_code::Code *input1, r_code::Code *input2, r_code::Code *output, float32 psln_thr, BindingMap *binding_map); // for mdl.
 
+  r_code::Code* get_first_input() {
+    return get_reference(code(code(MK_RDX_INPUTS).asIndex() + 1).asIndex());
+  }
+
+  r_code::Code* get_first_production() {
+    return get_reference(code(code(MK_RDX_PRODS).asIndex() + 1).asIndex());
+  }
+
   P<BindingMap> bindings_; // NULL when produced by programs.
 };
 
@@ -579,7 +607,8 @@ class r_exec_dll Success :
   public LObject {
 public:
   Success();
-  Success(_Fact *object, _Fact *evidence, float32 psln_thr);
+  Success(_Fact *object, _Fact *evidence, r_code::Code* object_mk_rdx, float32 psln_thr);
+  Success(_Fact* object, _Fact* evidence, float32 psln_thr): Success(object, evidence, NULL, psln_thr) {}
 
   /**
    * Get the object of this Success.
@@ -598,6 +627,21 @@ public:
    * \return The evidence object as a _Fact, or NULL if this Success does not have an evidence object.
    */
   _Fact* get_evidence() const { return has_evidence() ? (_Fact*)get_reference(code(SUCCESS_EVD).asIndex()) : NULL; }
+
+  /**
+   * Check if this Success has an object_mk_rdx object.
+   * \return True if this Success has an object_mk_rdx object, otherwise false.
+   */
+  bool has_object_mk_rdx() const {
+    return code(SUCCESS_OBJ_MK_RDX).getDescriptor() == Atom::R_PTR &&
+      get_reference(code(SUCCESS_OBJ_MK_RDX).asIndex())->code(0).asOpcode() == Opcodes::MkRdx;
+  }
+
+  /**
+   * Get the object_mk_rdx object.
+   * \return The object_mk_rdx object as a MkRdx, or NULL if this Success does not have an object_mk_rdx object.
+   */
+  MkRdx* get_object_mk_rdx() const { return has_object_mk_rdx() ? (MkRdx*)get_reference(code(SUCCESS_OBJ_MK_RDX).asIndex()) : NULL; }
 };
 
 class r_exec_dll Perf :
@@ -613,9 +657,23 @@ public:
   ICST();
   ICST(r_code::SysObject *source);
 
-  bool is_invalidated();
+  bool is_invalidated() override;
 
+  /**
+   * Check if the components_ contains the given component. This does not recurse.
+   * \param component The component to search for. This checks for the exact object (not a match).
+   * \param component_index If this returns true, set component_index to the index of the found component.
+   * \return True if found the component.
+   */
   bool contains(const _Fact *component, uint16 &component_index) const;
+
+  /**
+   * Check if the components_ or any sub icst contains the give component. (If a component is an f_icst, this
+   * recursively calls itself.)
+   * \param component The component to search for. This checks for the exact object (not a match).
+   * \return True if found the component.
+   */
+  bool r_contains(const _Fact* component) const;
 
   P<BindingMap> bindings_;
   std::vector<P<_Fact> > components_; // the inputs that triggered the building of the icst.

@@ -44,6 +44,9 @@
 !def SIM_OPTIONAL 1
 !def SIM_MANDATORY 2
 
+; A time interval to use as a template parameter, etc. Matching two ti objects is flexible.
+!class (ti after:ts before:ts)
+
 ; mapping high-level objects -> r-code.
 !class (mk.val (_obj {obj: attr:ont val:}))
 !class (mk.act (_obj {actr:ent cmd:cmd}))
@@ -55,11 +58,13 @@
 !class (imdl (_obj {mdl:mdl tpl_args:[] args:[] wr_e:bl}))
 !class (pred (_obj {obj: sims:[::sim]}))
 !class (goal (_obj {obj: actr:ent sim:}))
-!class (success (_obj {obj: evd:}))
+!class (success (_obj {obj: evd: obj_mk_val:})); evd and obj_mk_val can be nil.
 !class (mk.grp_pair (_obj {primary:grp secondary:grp}))
 
 ; performance counters (latencies).
 !class (perf (_obj {rj_ltcy:nb d_rj_ltcy:nb tj_ltcy:nb d_tj_ltcy:nb})); latencies and derivatives in us encoded as floats.
+
+!class (var v:nb)
 
 ; mapping operator opcodes -> r-atoms.
 !op (_now):ts
@@ -87,6 +92,7 @@
 !op (is_sim :):bl
 !op (min : :):
 !op (max : :):
+!op (id :):
 
 ; operator aliases.
 !def now (_now)
@@ -158,7 +164,7 @@
 !def RUN_ONCE false
 
 ; system internal constants.
-!def MAX_TIME 922337203685477580us; See Utils_MaxTime
+!def MAX_TIME 9223372036854775807us; See Utils_MaxTime
 ; EPOCH is used to convert between time stamp and duration.
 ; To convert a duration to a time stamp, use: (+ duration EPOCH)
 ; To convert a time stamp to a duration, use: (- timestamp EPOCH)
@@ -172,10 +178,10 @@
 !def (std_grp _upr _sln_thr _act_thr _vis_thr _ntf_grps) (grp _upr _sln_thr _act_thr _vis_thr 1 0 1 0 0 1 0 0 1 1 1 1 0 0 0 0 0 0 1 0 1 1 0 1 0 0 _ntf_grps 1); c-salient and c-active.
 root:(std_grp 0 0 0 0 [nil]) [[SYNC_ONCE now 0 forever nil nil COV_OFF 0]]
 
-primary:(std_grp 2 0 0.4 0 |[]) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]; ensure primary.upr=stdin.upr.
-secondary:(std_grp 2 0 0.3 0 |[]) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]; ensure secondary.upr=primary.upr.
+primary:(std_grp 2 0 0.4 0 []) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]; ensure primary.upr=stdin.upr.
+secondary:(std_grp 2 0 0.3 0 []) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]; ensure secondary.upr=primary.upr.
 grp_pair:(mk.grp_pair primary secondary 1) [[SYNC_ONCE now 0 forever root nil]]
-stdout:(std_grp 0 0 0 0 |[]) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]
+stdout:(std_grp 0 0 0 0 []) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]
 stdin:(std_grp 2 0 0 0 [stdout]) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]; ensure stdin.upr=sampling_period.
 drives:(std_grp 40 0 0 0 [stdout]) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]; holds pgm that inject drives periodically; drive priority=pgm.act; ensure ipgm.tsc>primary.upr.
 
@@ -183,6 +189,15 @@ drives:(std_grp 40 0 0 0 [stdout]) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]
 
 ; args: pass_through, ctpx_on, gtpx_on, ptpx_on, trace injections, decompile_models, primary group, other output groups.
 auto_focus:(icpp_pgm "auto_focus" [true true true true true true primary secondary] RUN_ALWAYS 0us VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+
+; These are the same as stdin, primary and secondary except the group update period is times 10.
+; If the sampling period is 100ms, this means that CTPX will have a time range more than 1 second.
+; (To increase the time range of PTPX, you may also increase tpx_time_horizon in settings.xml.)
+times10_stdin:(std_grp 20 0 0 0 [stdout]) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]
+times10_primary:(std_grp 20 0 0.4 0 []) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]
+times10_secondary:(std_grp 20 0 0.3 0 []) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]
+times10_grp_pair:(mk.grp_pair times10_primary times10_secondary 1) [[SYNC_ONCE now 0 forever root nil]]
+times10_auto_focus:(icpp_pgm "auto_focus" [true true true true true true times10_primary times10_secondary] RUN_ALWAYS 0us VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever times10_stdin nil 1]]
 
 ; initial application objects.
 
