@@ -1249,6 +1249,9 @@ DONE. Fix Arash's analogy example in Webots. https://github.com/IIIM-IS/AERA/com
 * DONE. Update copyright year.
 * DONE. Make PR to release dev to master branch. https://github.com/IIIM-IS/AERA/pull/295
 
+2025-01-31
+* DONE. Release AERA and AERA_Visualizer to master
+
 next meeting
 * AERA in Ubuntu
   * CMake configuration for ENABLE_PROTOBUF+libprotobuf.a
