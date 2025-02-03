@@ -99,10 +99,10 @@ template<class O, class S> MemExec<O, S>::MemExec() : S() {
 
 template<class O, class S> MemExec<O, S>::~MemExec() {
 
-  if (state_ == RUNNING)
+  if (S::state_ == S::RUNNING)
     S::stop();
-  deleted_ = true;
-  objects_.clear();
+  S::deleted_ = true;
+  S::objects_.clear();
 }
 
 ////////////////////////////////////////////////////////////////
