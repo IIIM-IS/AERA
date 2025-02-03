@@ -86,6 +86,7 @@
 #include "decompiler.h"
 #include "IODevices/TCP/tcp_io_device.h"
 #include "IODevices/video_screen/video_screen_io_device.h"
+#include "../usr_operators/usr_operators.h"
 #include "test_mem.h"
 #include "init.h"
 #include "image_impl.h"
