@@ -101,6 +101,22 @@ using namespace std::chrono;
 using namespace r_code;
 using namespace r_comp;
 
+// Comment out this definition to use statically-linked libraries.
+#define USE_SHARED_LIBRARIES
+
+#ifndef USE_SHARED_LIBRARIES
+/**
+ * UserOperatorLibrary extends FunctionLibrary to implement
+ * getFunction where the user operator functions are statically linked.
+ */
+class UserOperatorLibrary : public r_exec::FunctionLibrary {
+public:
+  void* getFunction(const char* function_name) override {
+    return GetUserOperatorFunction(function_name);
+  }
+};
+#endif
+
 r_exec::View *build_view(Timestamp time, Code* rstdin) { // this is application dependent WRT view->sync.
 
   r_exec::View *view = new r_exec::View();
@@ -280,9 +296,13 @@ int32 start_AERA(const char* file_name, const char* decompiled_file_name) {
   }
 
   std::cout << "> compiling ...\n";
+#ifdef USE_SHARED_LIBRARIES
   r_exec::SharedFunctionLibrary userOperatorLibrary;
   if (!userOperatorLibrary.load(settings.usr_operator_path_.c_str()))
     return 2;
+#else
+  UserOperatorLibrary userOperatorLibrary;
+#endif
 
   if (settings.reduction_core_count_ == 0 && settings.time_core_count_ == 0) {
     // Below, we will use run_in_diagnostic_time.
