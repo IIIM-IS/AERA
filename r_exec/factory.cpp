@@ -770,6 +770,28 @@ bool Sim::is_invalidated() {
   return false;
 }
 
+uint32 Sim::count_super_goal_chain() const {
+  Sim* super_goal_sim = get_f_super_goal()->get_goal()->get_sim();
+  if (super_goal_sim == NULL)
+    return 0;
+
+  return super_goal_sim->count_super_goal_chain() + 1;
+}
+
+float32 Sim::get_solution_mdl_count(Success* success) {
+  uint32 counter = 0;
+  auto found_mk_rdx = solution_graph_.find(success->get_evidence());
+  while (found_mk_rdx != solution_graph_.end()) {
+    P<MkRdx> mk_rdx = found_mk_rdx->second;
+    _Fact* code = (_Fact*)mk_rdx->get_reference(0);
+    auto is_imdl = code->get_reference(0)->code(0).asOpcode() == Opcodes::IMdl;
+    if (is_imdl)
+      counter++;
+    found_mk_rdx = solution_graph_.find(mk_rdx->get_first_input());
+  }
+  return counter;
+}
+
 Sim* Sim::get_root_sim()
 {
   Sim* result = this;

@@ -150,6 +150,7 @@ public:
 class Pred;
 class Goal;
 class Success;
+class MkRdx;
 
 class r_exec_dll _Fact :
   public LObject {
@@ -277,6 +278,14 @@ public:
   float32 get_solution_cfd() const { return code(SIM_SOLUTION_CFD).asFloat(); }
 
   /**
+  * Counts how long is the backward chain that led to this simulation by tracing back
+  * super goals up to the drive.
+  */
+  uint32 count_super_goal_chain() const;
+
+  float32 get_solution_mdl_count(Success* success);
+
+  /**
    * Get the  deadline of the solution goal.
    */
   Timestamp get_solution_before() const { return r_code::Utils::GetTimestamp<Code>(this, SIM_SOLUTION_BEFORE); }
@@ -348,6 +357,10 @@ public:
 
   // A list of (fact (pred (fact (cmd ::)))) to check if a command has already been signalled in this sim.
   std::vector<P<_Fact> > already_signalled_;
+
+  // The graph of predictions made in this simulation, referenced by their reduction markers.
+  // Keys are the outputs of the reductions, for tracing back from the success object.
+  std::unordered_map<r_code::Code*, P<MkRdx>> solution_graph_;
 
 private:
   std::vector<P<_Fact> > goalTargets_;

@@ -188,6 +188,10 @@ _Fact* CSTOverlay::inject_production(View* input) {
       // Propagate the accumulated of DefeasibleValidity from all the inputs to the new prediction.
       prediction->defeasible_validities_ = defeasible_validities_;
     Fact *f_p_f_icst = new Fact(prediction, now, now, 1, 1);
+    MkRdx* mk_rdx = new MkRdx(f_icst, input->object_, f_p_f_icst, 1, bindings_);
+    CSTController* controller = (CSTController*)controller_;
+    controller->inject_notification_into_out_groups(controller->get_host(), mk_rdx);
+    simulations_copy[0]->solution_graph_[f_p_f_icst] = mk_rdx;
     if (!((HLPController *)controller_)->inject_prediction(f_p_f_icst, lowest_cfd_)) // inject a simulated prediction in the main group.
       return NULL;
     OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " cst " << get_object()->get_oid() << ": fact " <<
@@ -368,6 +372,13 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
 
         Pred* p_promoted_fact = new Pred(promoted_fact, prediction, 1);
         Fact* f_p_promoted_fact = new Fact(p_promoted_fact, now, now, 1, 1);
+        if (is_simulation) {
+          Fact* f_icst = ((CSTController*)controller_)->get_f_icst(bindings_, &axiom_inputs_, &non_axiom_inputs_);
+          MkRdx* mk_rdx = new MkRdx(f_icst, input->object_, f_p_promoted_fact, 1, bindings_);
+          CSTController* controller = (CSTController*)controller_;
+          controller->inject_notification_into_out_groups(controller->get_host(), mk_rdx);
+          predictionSimulation->solution_graph_[f_p_promoted_fact] = mk_rdx;
+        }
 
         // The promoted fact may be defeated by a predicted fact for the same time interval, so make it defeasible.
         P<DefeasibleValidity> defeasible_validity = new DefeasibleValidity();

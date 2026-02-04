@@ -239,9 +239,12 @@ void GMonitor::commit() { // the purpose is to invalidate damaging simulations; 
     }
     else {
 
-      float32 s = (*solution).second->get_solution_cfd() / duration_cast<microseconds>((*solution).second->get_solution_before() - now).count();
-      float32 _s = best_solution->get_solution_cfd() / duration_cast<microseconds>(best_solution->get_solution_before() - now).count();
-      if (s > _s) {
+      //auto debug5 = Utils::RelativeTime(now);
+      //float32 best_count = best_solution->get_solution_mdl_count();
+      //float32 other_count = (*solution).second->get_solution_mdl_count();
+      float32 best_count = best_solution->get_solution_mdl_count(best_solution_f_p_f_success->get_pred()->get_target()->get_success());
+      float32 other_count = (*solution).second->get_solution_mdl_count((*solution).first->get_pred()->get_target()->get_success());
+      if (other_count < best_count) {
         best_solution_f_p_f_success = (*solution).first;
         best_solution = (*solution).second;
       }
