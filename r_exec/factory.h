@@ -283,7 +283,7 @@ public:
   */
   uint32 count_super_goal_chain() const;
 
-  float32 get_solution_mdl_count(Success* success);
+  std::pair<uint16, uint16> get_solution_mdl_count(_Fact* f_success);
 
   /**
    * Get the  deadline of the solution goal.
@@ -359,7 +359,7 @@ public:
   std::vector<P<_Fact> > already_signalled_;
 
   // The graph of predictions made in this simulation, referenced by their reduction markers.
-  // Keys are the outputs of the reductions, for tracing back from the success object.
+  // A reduction rdx1 is stored at key rdx1.out (the first production), the previous object in the chain is at rdx1.in (the first input).
   std::unordered_map<r_code::Code*, P<MkRdx>> solution_graph_;
 
 private:
@@ -690,6 +690,41 @@ public:
 
   P<BindingMap> bindings_;
   std::vector<P<_Fact> > components_; // the inputs that triggered the building of the icst.
+};
+
+class r_exec_dll Mdl :
+  public LObject {
+public:
+  Mdl();
+  Mdl(r_code::SysObject* source);
+
+  Mdl* get_lhs_mdl() const {
+    Code* lhs = get_reference(0);
+    if (lhs->code(0).asOpcode() == Opcodes::Mdl)
+      return (Mdl*)lhs;
+    return NULL;
+  }
+
+  Code* get_lhs_cmd() const { // TODO: Create Cmd class
+    Code* lhs = get_reference(0);
+    if (lhs->code(0).asOpcode() == Opcodes::Cmd)
+      return lhs;
+    return NULL;
+  }
+
+  ICST* get_lhs_icst() const {
+    Code* lhs = get_reference(0);
+    if (lhs->code(0).asOpcode() == Opcodes::ICst)
+      return (ICST*)lhs;
+    return NULL;
+  }
+};
+
+class r_exec_dll IMdl :
+  public LObject {
+public:
+  IMdl();
+  IMdl(r_code::SysObject* source);
 };
 }
 

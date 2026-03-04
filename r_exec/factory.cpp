@@ -778,18 +778,58 @@ uint32 Sim::count_super_goal_chain() const {
   return super_goal_sim->count_super_goal_chain() + 1;
 }
 
-float32 Sim::get_solution_mdl_count(Success* success) {
-  uint32 counter = 0;
-  auto found_mk_rdx = solution_graph_.find(success->get_evidence());
+std::pair<uint16, uint16> Sim::get_solution_mdl_count(_Fact* f_success) {
+  uint16 args_counter = 0;
+  uint16 mdl_counter = 0;
+  uint32 unbound_values = 0;
+  Timestamp before = f_success->get_before();
+  Timestamp after = f_success->get_after();
+
+  auto found_mk_rdx = solution_graph_.find(f_success->get_success()->get_evidence());
   while (found_mk_rdx != solution_graph_.end()) {
     P<MkRdx> mk_rdx = found_mk_rdx->second;
-    _Fact* code = (_Fact*)mk_rdx->get_reference(0);
-    auto is_imdl = code->get_reference(0)->code(0).asOpcode() == Opcodes::IMdl;
+    _Fact* f_imdl = (_Fact*)mk_rdx->get_reference(0); // Reduction source (imdl or icst)
+    auto is_imdl = f_imdl->get_reference(0)->code(0).asOpcode() == Opcodes::IMdl;
     if (is_imdl)
-      counter++;
+    {
+      mdl_counter++;
+
+      Mdl* mdl = (Mdl*)f_imdl->get_reference(0)->get_reference(0);
+      BindingMap bm = mk_rdx->bindings_;
+      unbound_values += bm.get_unbound_values();
+      
+      if (Mdl* lhs_mdl = mdl->get_lhs_mdl()) {
+        //Atom tpl_args = lhs_mdl->code(MDL_TPL_ARGS);
+        Atom patterns = lhs_mdl->code(MDL_OBJS);
+        //Atom fwd_guards = lhs_mdl->code(MDL_FWD_GUARDS);
+        //Atom strength = lhs_mdl->code(MDL_STRENGTH);
+
+        Atom inner_lhs = lhs_mdl->code(lhs_mdl->code(patterns.asIndex() + 1).asIndex() + 1);
+        auto debug = 0;
+      }
+
+      if (Code* lhs_cmd = mdl->get_lhs_cmd()) {
+        auto d = 0;
+      }
+
+      if (ICST* lhs_icst = mdl->get_lhs_icst()) {
+        auto d = 0;
+      }
+
+      Atom args_set = mdl->code(mdl->code(MDL_TPL_ARGS).asIndex());
+      args_counter += args_set.getAtomCount();
+    }
+
+    _Fact* prod_f = (_Fact*)mk_rdx->get_first_production();
+    after = prod_f->get_pred()->get_target()->get_after();
+
     found_mk_rdx = solution_graph_.find(mk_rdx->get_first_input());
   }
-  return counter;
+
+  milliseconds duration = duration_cast<milliseconds>(before - after);
+  //auto d_before = Utils::RelativeTime(before);
+  //auto d_after = Utils::RelativeTime(after);
+  return std::pair<uint16, uint16>(args_counter, mdl_counter);
 }
 
 Sim* Sim::get_root_sim()
@@ -977,6 +1017,20 @@ bool ICST::r_contains(const _Fact* component) const {
   }
 
   return false;
+}
+
+////////////////////////////////////////////////////////////////
+
+IMdl::IMdl() : LObject() {
+}
+
+IMdl::IMdl(SysObject* source) : LObject(source) {
+}
+
+Mdl::Mdl() : LObject() {
+}
+
+Mdl::Mdl(SysObject* source) : LObject(source) {
 }
 
 }
