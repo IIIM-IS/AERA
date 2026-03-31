@@ -1640,8 +1640,9 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
     // In the Pred constructor, we already copied the simulations from prediction.
     MkRdx* mk_rdx = new MkRdx(f_imdl, (Code *)input, production, 1, bm);
     inject_notification_into_out_groups(get_host(), mk_rdx);
-    if (is_simulation)
-      pred->get_simulation((uint16)0)->solution_graph_[production] = mk_rdx;
+    if (is_simulation) {
+      pred->get_simulation((uint16)0)->solution_->add_mk_rdx(mk_rdx);
+    }
     OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << get_object()->get_oid() << " predict imdl -> mk.rdx " << mk_rdx->get_oid());
 
     PrimaryMDLController *c = (PrimaryMDLController *)controllers_[RHSController]; // rhs controller: in the same view.
@@ -1723,7 +1724,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
       return;
     MkRdx* mk_rdx = new MkRdx(f_imdl, (Code*)input, production, 1, bm);
     inject_notification_into_out_groups(get_host(), mk_rdx);
-    pred->get_simulation((uint16)0)->solution_graph_[production] = mk_rdx;
+    pred->get_simulation((uint16)0)->solution_->add_mk_rdx(mk_rdx);
     already_predicted.push_back(bound_rhs);
     string ground_info;
 #ifdef WITH_DETAIL_OID
@@ -1742,7 +1743,7 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
         return;
       MkRdx* mk_rdx = new MkRdx(f_imdl, (Code*)input, f_pred_f_imdl, 1, bm);
       inject_notification_into_out_groups(get_host(), mk_rdx);
-      pred_f_imdl->get_simulation((uint16)0)->solution_graph_[f_pred_f_imdl] = mk_rdx;
+      pred_f_imdl->get_simulation((uint16)0)->solution_->add_mk_rdx(mk_rdx);
       OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << get_object()->get_oid() << ": fact " <<
         input->get_oid() << " pred -> fact " << f_pred_f_imdl->get_oid() << " simulated pred fact imdl" << ground_info);
     }
@@ -2179,8 +2180,9 @@ _Fact* PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super
           injected_lhs = fact_pred_bound_lhs;
           MkRdx* mk_rdx = new MkRdx(f_imdl, (Code*)ground, fact_pred_bound_lhs, 1, bm);
           inject_notification_into_out_groups(get_host(), mk_rdx);
-          if (pred->is_simulation())
-            pred->get_simulation((uint16)0)->solution_graph_[fact_pred_bound_lhs] = mk_rdx;
+          if (pred->is_simulation()) {
+            pred->get_simulation((uint16)0)->solution_->add_mk_rdx(mk_rdx);
+          }
 
           string ground_info;
 #ifdef WITH_DETAIL_OID
@@ -2212,9 +2214,13 @@ _Fact* PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super
           Fact* f_pred_bound_lhs = new Fact(pred_bound_lhs, forward_simulation_time, forward_simulation_time, 1, 1);
           inject_simulation(f_pred_bound_lhs, forward_simulation_time);
           injected_lhs = f_pred_bound_lhs;
+          
           MkRdx* mk_rdx = new MkRdx(f_imdl, (Code*)super_goal, f_pred_bound_lhs, 1, bm);
           inject_notification_into_out_groups(get_host(), mk_rdx);
-          sub_sim->solution_graph_[f_pred_bound_lhs] = mk_rdx;
+          Solution* solution = new Solution(super_goal);
+          solution->add_mk_rdx(mk_rdx);
+          sub_sim->solution_ = solution;
+
           string f_pred_bound_lhs_info;
           string ground_info;
 #ifdef WITH_DETAIL_OID

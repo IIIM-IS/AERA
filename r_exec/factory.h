@@ -278,14 +278,6 @@ public:
   float32 get_solution_cfd() const { return code(SIM_SOLUTION_CFD).asFloat(); }
 
   /**
-  * Counts how long is the backward chain that led to this simulation by tracing back
-  * super goals up to the drive.
-  */
-  uint32 count_super_goal_chain() const;
-
-  std::pair<uint16, uint16> get_solution_mdl_count(_Fact* f_success);
-
-  /**
    * Get the  deadline of the solution goal.
    */
   Timestamp get_solution_before() const { return r_code::Utils::GetTimestamp<Code>(this, SIM_SOLUTION_BEFORE); }
@@ -358,9 +350,7 @@ public:
   // A list of (fact (pred (fact (cmd ::)))) to check if a command has already been signalled in this sim.
   std::vector<P<_Fact> > already_signalled_;
 
-  // The graph of predictions made in this simulation, referenced by their reduction markers.
-  // A reduction rdx1 is stored at key rdx1.out (the first production), the previous object in the chain is at rdx1.in (the first input).
-  std::unordered_map<r_code::Code*, P<MkRdx>> solution_graph_;
+  Solution* solution_;
 
 private:
   std::vector<P<_Fact> > goalTargets_;
@@ -705,10 +695,17 @@ public:
     return NULL;
   }
 
-  Code* get_lhs_cmd() const { // TODO: Create Cmd class
+  Code* get_lhs_cmd() const {
     Code* lhs = get_reference(0);
     if (lhs->code(0).asOpcode() == Opcodes::Cmd)
       return lhs;
+
+    // Get unpacked model
+    lhs = get_reference(references_size() - MDL_HIDDEN_REFS)->get_reference(0);
+    if (lhs->code(0).asOpcode() == Opcodes::Fact 
+      && lhs->get_reference(0)->code(0).asOpcode() == Opcodes::Cmd)
+      return lhs->get_reference(0);
+    
     return NULL;
   }
 
@@ -725,6 +722,48 @@ class r_exec_dll IMdl :
 public:
   IMdl();
   IMdl(r_code::SysObject* source);
+
+  Mdl* get_mdl() const {
+    Code* mdl = get_reference(0); // Could use code(I_HLP_OBJ).asIndex()
+    if (mdl->code(0).asOpcode() == Opcodes::Mdl)
+      return (Mdl*)mdl;
+    return NULL;
+  }
+};
+
+
+class r_exec_dll Solution {
+public:
+  Solution(_Fact* source_goal);
+
+  void add_mk_rdx(P<MkRdx> mk_rdx) {
+    solution_graph_[mk_rdx->get_first_production()] = mk_rdx;
+  }
+
+  /**
+  * Returns the drive goal of this solution by following the chain from the source goal.
+  */
+  _Fact* get_drive() const {
+    _Fact* drive = source_goal_;
+    while (drive->get_goal()->get_super_goal()->get_goal()->has_sim()) {
+      drive = drive->get_goal()->get_super_goal();
+    }
+    return drive;
+  }
+
+  std::pair<uint16, uint16> get_complexity(_Fact* f_success);
+
+  void build_imdl_chain(_Fact* success_evidence);
+
+  // The sub-goal that started the forward chain for this solution (structured as f->g->f->obj).
+  _Fact* source_goal_;
+
+  // The graph of predictions that make up the solution, referenced by their reduction markers.
+  // A marker rdx1 is stored at key rdx1.out (the first production), the previous object in the chain is at rdx1.in (the first input).
+  std::unordered_map<r_code::Code*, P<MkRdx>> solution_graph_;
+
+  std::vector<P<MkRdx>> imdl_chain_;
+};
 };
 }
 

@@ -191,7 +191,7 @@ _Fact* CSTOverlay::inject_production(View* input) {
     MkRdx* mk_rdx = new MkRdx(f_icst, input->object_, f_p_f_icst, 1, bindings_);
     CSTController* controller = (CSTController*)controller_;
     controller->inject_notification_into_out_groups(controller->get_host(), mk_rdx);
-    simulations_copy[0]->solution_graph_[f_p_f_icst] = mk_rdx;
+    simulations_copy[0]->solution_->add_mk_rdx(mk_rdx);
     if (!((HLPController *)controller_)->inject_prediction(f_p_f_icst, lowest_cfd_)) // inject a simulated prediction in the main group.
       return NULL;
     OUTPUT_LINE(CST_OUT, Utils::RelativeTime(Now()) << " cst " << get_object()->get_oid() << ": fact " <<
@@ -377,7 +377,7 @@ bool CSTOverlay::reduce(View *input, CSTOverlay *&offspring) {
           MkRdx* mk_rdx = new MkRdx(f_icst, input->object_, f_p_promoted_fact, 1, bindings_);
           CSTController* controller = (CSTController*)controller_;
           controller->inject_notification_into_out_groups(controller->get_host(), mk_rdx);
-          predictionSimulation->solution_graph_[f_p_promoted_fact] = mk_rdx;
+          predictionSimulation->solution_->add_mk_rdx(mk_rdx);
         }
 
         // The promoted fact may be defeated by a predicted fact for the same time interval, so make it defeasible.
