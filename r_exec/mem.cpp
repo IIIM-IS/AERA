@@ -580,7 +580,10 @@ bool DiagnosticTimeState::step() {
     size_t n_jobs_to_run = min(reduction_job_queue_.size(), max_reduction_jobs_per_cycle);
     if (n_jobs_to_run > 0) {
       if (reduction_job_queue_index_ < n_jobs_to_run) {
-        // Add breakpoint here to check which reduction job leads to the failure.
+        // Add breakpoint here to check which reduction job leads to the failure, or return early to use the visualizer.
+        // Get job ID from runtime_out.txt
+        //if (reduction_job_queue_[reduction_job_queue_index_]->get_job_id() >= 92168)
+        //  return false;
         reduction_job_queue_[reduction_job_queue_index_]->update(Now());
         reduction_job_queue_[reduction_job_queue_index_] = NULL;
         ++reduction_job_queue_index_;

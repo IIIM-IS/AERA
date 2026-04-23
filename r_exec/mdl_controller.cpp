@@ -1461,6 +1461,8 @@ void PMDLController::inject_simulated_goal_success(Fact *goal, bool success, _Fa
   auto now = Now();
   Fact *f_pred = new Fact(pred, now, now, 1, 1);
 
+  pred->get_simulation((uint16)0)->solution_->before_ = f_success_object->get_before();
+
   Group *primary_host = get_host();
   int32 resilience = _Mem::Get()->get_goal_pred_success_res(primary_host, now, seconds(0));
   View *view = new View(View::SYNC_ONCE, now, 1, resilience, primary_host, primary_host, f_pred);
@@ -2219,6 +2221,7 @@ _Fact* PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super
           inject_notification_into_out_groups(get_host(), mk_rdx);
           Solution* solution = new Solution(super_goal);
           solution->add_mk_rdx(mk_rdx);
+          solution->after_ = bound_lhs->get_after();
           sub_sim->solution_ = solution;
 
           string f_pred_bound_lhs_info;

@@ -226,7 +226,7 @@ void GMonitor::commit() { // the purpose is to invalidate damaging simulations; 
 
   _Fact* best_solution_f_p_f_success = NULL;
   Sim *best_solution = NULL;
-  std::pair<uint16, uint16> best_solution_complexity;
+  float32 best_solution_complexity;
   // Find the best optional solution.
   for (solution = sim_successes_.optional_solutions.begin(); solution != sim_successes_.optional_solutions.end(); ++solution) {
 
@@ -237,12 +237,12 @@ void GMonitor::commit() { // the purpose is to invalidate damaging simulations; 
     if (!best_solution) {
       best_solution_f_p_f_success = (*solution).first;
       best_solution = (*solution).second;
-      best_solution_complexity = best_solution->solution_->get_complexity(best_solution_f_p_f_success->get_pred()->get_target());
+      best_solution_complexity = best_solution->solution_->get_imdl_complexity(best_solution_f_p_f_success->get_pred()->get_target());
     }
     else {
 
       //auto debug5 = Utils::RelativeTime(now);
-      auto other_solution_complexity = (*solution).second->solution_->get_complexity(best_solution_f_p_f_success->get_pred()->get_target());
+      auto other_solution_complexity = solution->second->solution_->get_imdl_complexity(solution->first->get_pred()->get_target());
       if (other_solution_complexity < best_solution_complexity) {
         best_solution_f_p_f_success = (*solution).first;
         best_solution = (*solution).second;

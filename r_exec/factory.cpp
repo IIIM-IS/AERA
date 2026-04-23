@@ -429,6 +429,8 @@ bool _Fact::CounterEvidence(const Code *lhs, const Code *rhs) {
     if (((ICST*)lhs)->components_.size() != ((ICST*)rhs)->components_.size())
       return false;
 
+    if (((ICST*)rhs)->components_.empty())
+      return false;
     for (uint32 i = 0; i < ((ICST *)lhs)->components_.size(); ++i) { // compare all components 2 by 2.
 
       // JTNote: This assumes that the components_ in the lhs and rhs are in the same order.
@@ -978,7 +980,7 @@ Mdl::Mdl(SysObject* source) : LObject(source) {
 
 ////////////////////////////////////////////////////////////////
 
-Solution::Solution(_Fact* source_goal) : solution_graph_(), imdl_chain_() {
+Solution::Solution(_Fact* source_goal) : solution_graph_() {
   source_goal_ = source_goal;
 }
 
@@ -1035,21 +1037,74 @@ std::pair<uint16, uint16> Solution::get_complexity(_Fact* f_success) {
 
   milliseconds duration = duration_cast<milliseconds>(before - after);
   float32 strength_avg = strength_sum / mdl_counter;
-  //auto d_before = Utils::RelativeTime(before);
-  //auto d_after = Utils::RelativeTime(after);
+
   return std::pair<uint16, uint16>(args_counter, mdl_counter);
 }
 
-void Solution::build_imdl_chain(_Fact* success_evidence) {
+float32 Solution::get_imdl_complexity(_Fact* f_success) {
+  //build_imdl_chain(f_success);
+
+  float32 score = 0.0f;
+  milliseconds total_duration = duration_cast<milliseconds>(before_ - after_);
+
+  //std::vector<P<MkRdx>>::const_reverse_iterator r_iter;
+  //for (r_iter = imdl_chain_.rbegin(); r_iter != imdl_chain_.rend(); r_iter++) {
+  //  //P<MkRdx> mk_rdx = (*r_iter);
+  //  _Fact* production = (_Fact*)(*r_iter)->get_first_production();
+  //  _Fact* target = production->get_pred()->get_target();
+  //  Mdl* mdl = target->get_imdl()->get_mdl();
+
+  //  Atom args_set = mdl->code(mdl->code(MDL_TPL_ARGS).asIndex());
+  //  uint16 args_count = args_set.getAtomCount() + 1; // + 1 is counting the model itself
+
+  //  milliseconds time_progress = duration_cast<milliseconds>(target->get_before() - after_);
+  //  auto time_weight = duration<float32>(time_progress).count() / duration<float32>(total_duration).count();
+
+  //  score += (args_count * time_weight) / mdl->code(MDL_STRENGTH).asFloat();
+  //}
+
+  _Fact* success_evidence = f_success->get_success()->get_evidence();
   auto found_mk_rdx = solution_graph_.find(success_evidence);
   while (found_mk_rdx != solution_graph_.end()) {
-  	P<MkRdx> mk_rdx = found_mk_rdx->second;
-  	_Fact* production = (_Fact*)mk_rdx->get_first_production();
-  	auto is_imdl = production->get_reference(0)->get_reference(0)->get_reference(0)->code(0).asOpcode() == Opcodes::IMdl;
-    if (is_imdl)
-      imdl_chain_.push_back(mk_rdx);
-  	found_mk_rdx = solution_graph_.find(mk_rdx->get_first_input());
+    P<MkRdx> mk_rdx = found_mk_rdx->second;
+    auto next_item = solution_graph_.find(mk_rdx->get_first_input());
+    
+    _Fact* production = (_Fact*)mk_rdx->get_first_production();
+    _Fact* target = production->get_pred()->get_target();
+    IMdl* imdl = target->get_imdl();
+
+    if (imdl) {
+      Mdl* mdl = imdl->get_mdl();
+      
+      if (mdl->get_lhs_cmd()) {
+        // It's a command model
+        Atom args_set = mdl->code(mdl->code(MDL_TPL_ARGS).asIndex());
+        uint16 args_count = args_set.getAtomCount() + 1; // + 1 is counting the model itself
+
+        milliseconds time_progress = duration_cast<milliseconds>(target->get_before() - after_);
+        auto time_weight = 1 - (duration<float32>(time_progress).count() / duration<float32>(total_duration).count());
+
+        score += (args_count * time_weight) / mdl->code(MDL_SR).asFloat();
+      }
+    }
+    else if (next_item == solution_graph_.end()) {
+      // This is the first prediction of the chain but wasn't an imdl, it's a cmd so get the imdl from 
+      // the "code" field of the mk.rdx
+      _Fact* f_imdl = (_Fact*)mk_rdx->get_reference(0);
+      Mdl* mdl = f_imdl->get_imdl()->get_mdl();
+
+      Atom args_set = mdl->code(mdl->code(MDL_TPL_ARGS).asIndex());
+      uint16 args_count = args_set.getAtomCount() + 1; // + 1 is counting the model itself
+
+      //milliseconds time_progress = duration_cast<milliseconds>(target->get_before() - after_);
+      //auto time_weight = 1 - (duration<float32>(time_progress).count() / duration<float32>(total_duration).count());
+
+      score += (args_count * 1) / mdl->code(MDL_SR).asFloat();
+    }
+    found_mk_rdx = next_item;
   }
+
+  return score;
 }
 
 }

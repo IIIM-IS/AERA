@@ -151,6 +151,8 @@ class Pred;
 class Goal;
 class Success;
 class MkRdx;
+class Solution;
+class IMdl;
 
 class r_exec_dll _Fact :
   public LObject {
@@ -233,6 +235,12 @@ public:
     Code *success = get_reference(0);
     if (success->code(0).asOpcode() == Opcodes::Success)
       return (Success *)success;
+    return NULL;
+  }
+  IMdl* get_imdl() const {
+    Code* imdl = get_reference(0);
+    if (imdl->code(0).asOpcode() == Opcodes::IMdl)
+      return (IMdl*)imdl;
     return NULL;
   }
 
@@ -752,8 +760,7 @@ public:
   }
 
   std::pair<uint16, uint16> get_complexity(_Fact* f_success);
-
-  void build_imdl_chain(_Fact* success_evidence);
+  float32 get_imdl_complexity(_Fact* f_success);
 
   // The sub-goal that started the forward chain for this solution (structured as f->g->f->obj).
   _Fact* source_goal_;
@@ -762,8 +769,10 @@ public:
   // A marker rdx1 is stored at key rdx1.out (the first production), the previous object in the chain is at rdx1.in (the first input).
   std::unordered_map<r_code::Code*, P<MkRdx>> solution_graph_;
 
-  std::vector<P<MkRdx>> imdl_chain_;
-};
+  // Set when the first prediction is added.
+  Timestamp after_;
+  // Set when a success is created.
+  Timestamp before_;
 };
 }
 
