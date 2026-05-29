@@ -294,9 +294,15 @@ int32 start_AERA(const char* file_name, const char* decompiled_file_name) {
   }
 
   std::cout << "> compiling ...\n";
-  r_exec::SharedFunctionLibrary userOperatorLibrary;
-  if (!userOperatorLibrary.load(settings.usr_operator_path_.c_str()))
-    return 2;
+  #if (defined(_WIN64) || defined(_WIN32))
+    r_exec::SharedFunctionLibrary userOperatorLibrary;
+    if (!userOperatorLibrary.load(settings.usr_operator_path_.c_str()))
+      return 2;
+  #else
+    std::cout << "> (!) Not running on Windows, reverting to statically-linked user operators" << std::endl;
+    std::cout << "> (!) Operators in " << settings.usr_operator_path_.c_str() << " will not be loaded" << std::endl;
+    UserOperatorLibrary userOperatorLibrary;
+  #endif
 
   if (settings.reduction_core_count_ == 0 && settings.time_core_count_ == 0) {
     // Below, we will use run_in_diagnostic_time.
