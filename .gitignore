@@ -28,6 +28,7 @@
 
 # Cmake build folder
 /build
+/out
 
 # Ignore log files
 *.log
