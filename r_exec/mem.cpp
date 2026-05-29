@@ -83,7 +83,10 @@
 //_/_/ 
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
-#include <conio.h>
+#if (defined(_WIN64) || defined(_WIN32))
+  #include <conio.h>  // Only available for Windows platforms
+#endif
+
 #include <algorithm>
 #include "mem.h"
 #include "mdl_controller.h"
@@ -533,10 +536,11 @@ void _Mem::run_in_diagnostic_time(milliseconds run_time) {
   DiagnosticTimeState diagnostic_time_state(this, run_time);
   // Step until we reach the run_time.
   while (diagnostic_time_state.step()) {
-    // Check console.
-    if (kbhit())
-      // Early termination.
-      break;
+    #if (defined(_WIN64) || defined(_WIN32))
+      // Check console for early termination. Only available on Windows platforms
+      if (kbhit())
+        break;
+    #endif
   }
 }
 
