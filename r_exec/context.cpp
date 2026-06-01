@@ -747,8 +747,8 @@ bool IPGMContext::Fvw(const IPGMContext &context) {
     context.setCompoundResultHead(v->code(0));
     for (uint16 i = 1; i < VIEW_CODE_MAX_SIZE; ++i)
       context.addCompoundResultPart(v->code(i));
-    context.addCompoundResultPart(Atom((uint32)v->references_[0]));
-    context.addCompoundResultPart(Atom((uint32)v->references_[1]));
+    context.addCompoundResultPart(Atom((uint64)v->references_[0]));
+    context.addCompoundResultPart(Atom((uint64)v->references_[1]));
     delete v;
     return true;
   }
