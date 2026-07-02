@@ -7,4 +7,4 @@
 ; ideally, you can manually check whether the perf objects are also non-zero.
 ; verifying it here would be unsafe since we can't tell how they look exactly in real-time mode.
 perf0:(perf
-perf19:(perf
+perf10:(perf
