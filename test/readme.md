@@ -25,6 +25,7 @@ To install it, right-click the Solution in Visual Studio and select **Restore Nu
 * **Manual Build Required:** By default, the `test` project is excluded from the global solution build to avoid forcing dependencies on other workflows. To compile it, right-click the `test` project explicitly and select **Build**.
 * **Target Configuration:** The test framework is configured to build using **Release** + **Win32**. If you need to use a different configuration, you must manually update the file paths defined at the top of `test_all.cpp`.
 * **Discovering & Running Tests:** Once the build is complete, all tests will be automatically discovered inside the Visual Studio *Test Explorer* window, where they can be run or debugged. 
+* **Running tests from command line:** Alternatively, you can execute the tests directly from the command line by running `Release/test.exe` (from the repository root directory, not within the `test` module folder). You can also apply filters to run specific tests, for example: `./Release/test.exe --gtest_filter=3_CUMULATIVE_LEARNING*`
 
 ---
 
