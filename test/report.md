@@ -287,8 +287,8 @@ Except for the final test, this section consists of basic tests for different no
 | mk-low-act | checks the notification mk.low_act | - |
 | mk-high-act | checks the notification mk.high_act | - |
 | mk-low-res | checks the notification mk.low_res | - |
-| mk-sln-chg | checks the notification mk.sln_chg | - |
-| mk-act-chg | checks the notification mk.act_chg | - |
+| mk-sln-chg | checks the notification mk.sln_chg | (R1) Expected results of this test are commented out due to inconsistent creation of mk.sln_chg objects |
+| mk-act-chg | checks the notification mk.act_chg | (R1) Expected results of this test are commented out due to inconsistent creation of mk.act_chg objects |
 | anything-as-input | checks that different objects (e.g.,  models, programs, act/sln/res notifications) can be used as input for models. | (R1) CSTs and ICSTs occasionally cause read-access violations. <br> (R2) Visualizer fails to parse icmd in models, even though this seems to work fine in the decompiled output.|
 
 ### 8.2 Self-programming
