@@ -1796,8 +1796,7 @@ void PrimaryMDLController::reduce(r_exec::View *input) { // no lock.
     MatchResult match_result = bm->match_bwd_lenient(goal_target, rhs_);
     switch (match_result) {
     case MATCH_SUCCESS_NEGATIVE:
-        // Don't allow negative match.
-        break;
+      opposite = true;
     case MATCH_SUCCESS_POSITIVE:
       abduce(bm, (Fact *)input->object_, opposite, confidence);
       break;
