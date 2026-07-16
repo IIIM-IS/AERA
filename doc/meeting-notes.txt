@@ -1309,6 +1309,9 @@ DONE. Fix Arash's analogy example in Webots. https://github.com/IIIM-IS/AERA/com
 * DONE. Visualizer: Check if simulated predicted command links to its actual requirement 
 * DONE. Visualizer: Update the Raw Data panel https://github.com/IIIM-IS/AERA_Visualizer/issues/63
 
+2026-07-16
+* DONE. Make PR so that Max's AERA_tests doesn't change core AERA code https://github.com/shmax13/AERA_tests/pull/1
+
 next meeting
 * Visualizer: Dynamically load protobuf.dll
 * Open issues from Leonard
