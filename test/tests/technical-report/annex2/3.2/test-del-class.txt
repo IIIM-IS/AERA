@@ -1,0 +1,9 @@
+56(67) pgm0:(pgm |[] |[] |[] []
+   (icmd _del_class [e1])
+   (icmd _del_class [o1])
+1) |[]
+
+57(68) ipgm0:(ipgm pgm0 |[] false 0s true true 1) |[]
+
+58(135) mk_rdx_58:(mk.rdx ipgm0 [] [0xffffffff 0xffffffff] 1) []
+   [0 0s:0ms:0us 1 1 stdout stdin]

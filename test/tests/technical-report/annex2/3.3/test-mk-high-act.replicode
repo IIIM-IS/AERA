@@ -1,0 +1,54 @@
+; Doc - Annex 2 - 3.2 - rMem's - Notifications
+
+; !class (mk.high_act (_obj obj:))
+
+;setup grp with custom params
+g1:(grp 
+1      ; upr - update-period
+0      ; sln_thr – saliency threshold
+0.4    ; act_thr – activation threshold
+0      ; vis_thr – visibility threshold
+1      ; c_sln – content saliency
+0      ; c_sln_thr – content saliency threshold
+1      ; c_act – content activation
+0      ; c_act_thr – content saliency threshold
+0      ; dcy_per – decay percentage
+1      ; dcy_tgt – decay target value
+0      ; dcy_prd - decay period
+0      ; dcy_auto - decay auto
+0.1      ; sln_chg_thr – threshold on saliency changes
+1      ; sln_chg_prd – saliency change monitoring period
+0.1      ; act_chg_thr – threshold on activation changes
+1      ; act_chg_prd – activation change monitoring period
+0      ; avg_sln – average saliency
+0      ; high_sln – highest saliency
+0      ; low_sln – lowest saliency
+0      ; avg_act – average activation
+0      ; high_act – highest activation
+0      ; low_act – lowest activation
+0.7      ; high_sln_thr – high saliency notification threshold
+0.3      ; low_sln_thr – low saliency notification threshold
+1      ; sln_ntf_prd – saliency notification period
+0.7      ; high_act_thr – high activation notification threshold
+0.3      ; low_act_thr – low activation notification threshol
+1      ; act_ntf_prd – activation notification period
+0      ; ntf_new - determines if new objects in group yield a notification
+0      ; low_res_thr – low resilience notification threshol
+[stdin stdout root]    ; ntf_grps – notification groups
+1      ; psln_thr - from _obj development
+)
+[]
+	[[SYNC_ONCE now 0 forever root nil COV_OFF 0]]
+
+
+; mod values
+pgm0:(pgm 
+|[]
+|[] 
+|[]
+[]
+   (mod [this.vw.act 0.3])
+1) |[]
+
+; view: sln res act
+ipgm0:(ipgm pgm0 |[] RUN_ONCE 100ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0.5 forever g1 nil 0.5]]

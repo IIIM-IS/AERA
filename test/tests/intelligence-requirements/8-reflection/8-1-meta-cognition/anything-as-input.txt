@@ -1,0 +1,96 @@
+; check if sub-goals have been created for each object
+
+mk_sln_chg0:(mk.sln_chg b -0.15 0) |[]
+fact1:(fact mk_sln_chg0 0s:0ms:0us 0s:100ms:0us 1 1) |[]
+goal1:(goal fact1 self sim0 1) |[]
+
+mk_val0:(mk.val b water_level 0 1) |[]
+fact3:(fact mk_val0 0s:0ms:0us 0s:100ms:0us 1 1) |[]
+goal2:(goal fact3 self sim1 1) |[]
+
+mk_new0:(mk.new b 0) |[]
+fact5:(fact mk_new0 0s:0ms:0us 0s:100ms:0us 1 1) |[]
+goal3:(goal fact5 self sim2 1) |[]
+
+mk_low_sln0:(mk.low_sln b 0) |[]
+fact7:(fact mk_low_sln0 0s:0ms:0us 0s:100ms:0us 1 1) |[]
+goal4:(goal fact7 self sim3 1) |[]
+
+mk_high_sln0:(mk.high_sln b 0) |[]
+fact9:(fact mk_high_sln0 0s:0ms:0us 0s:100ms:0us 1 1) |[]
+goal5:(goal fact9 self sim4 1) |[]
+
+mk_low_act0:(mk.low_act b 0) |[]
+fact11:(fact mk_low_act0 0s:0ms:0us 0s:100ms:0us 1 1) |[]
+goal6:(goal fact11 self sim5 1) |[]
+
+mk_high_act0:(mk.high_act b 0) |[]
+fact13:(fact mk_high_act0 0s:0ms:0us 0s:100ms:0us 1 1) |[]
+goal7:(goal fact13 self sim6 1) |[]
+
+mk_low_res0:(mk.low_res b 0) |[]
+fact15:(fact mk_low_res0 0s:0ms:0us 0s:100ms:0us 1 1) |[]
+goal8:(goal fact15 self sim7 1) |[]
+
+mk_act_chg0:(mk.act_chg b -0.15 0) |[]
+fact17:(fact mk_act_chg0 0s:0ms:0us 0s:100ms:0us 1 1) |[]
+goal9:(goal fact17 self sim8 1) |[]
+
+; =========================
+
+grp0:(grp 2 0 0.4 0 1 0 1 0 0 1 0 0 1 1 1 1 0 0 1 0 0 1 1 0 1 1 0 1 0 0 [stdin] 1) |[]
+fact19:(fact grp0 0s:0ms:0us 0s:100ms:0us 1 1) |[]
+goal10:(goal fact19 self sim9 1) |[]
+
+pgm0b:(pgm |[] |[] |[] |[] 1) |[]
+fact21:(fact pgm0b 0s:0ms:0us 0s:100ms:0us 1 1) |[]
+goal11:(goal fact21 self sim10 1) |[]
+
+anti_pgm0:(|pgm |[] |[] |[] |[] 1) |[]
+fact23:(fact anti_pgm0 0s:0ms:0us 0s:100ms:0us 1 1) |[]
+goal12:(goal fact23 self sim11 1) |[]
+
+ipgm0:(ipgm pgm0 |[] false 0s false true 1) |[]
+fact25:(fact ipgm0 0s:0ms:0us 0s:100ms:0us 1 1) |[]
+goal13:(goal fact25 self sim12 1) |[]
+
+; omit specific time in test
+fact27:(fact b_is_a_bathtub
+fact28:(fact fact27 0s:0ms:0us 0s:100ms:0us 1 1) |[]
+goal14:(goal fact28 self sim13 1) |[]
+
+; omit specific time in test
+anti_fact0:(|fact b_is_a_bathtub
+fact30:(fact anti_fact0 0s:0ms:0us 0s:100ms:0us 1 1) |[]
+goal15:(goal fact30 self sim14 1) |[]
+
+pred0:(pred b_is_a_bathtub [] 1) |[]
+fact32:(fact pred0 0s:0ms:0us 0s:100ms:0us 1 1) |[]
+goal16:(goal fact32 self sim15 1) |[]
+
+goal17:(goal b_is_a_bathtub self |[] 1) |[]
+fact34:(fact goal17 0s:0ms:0us 0s:100ms:0us 1 1) |[]
+goal18:(goal fact34 self sim16 1) |[]
+
+fact36:(fact m_drive_fact 0s:0ms:0us 0s:100ms:0us 1 1) |[]
+goal19:(goal fact36 self sim17 1) |[]
+
+imdl18:(imdl m_drive_fact [1 2] [(ptn v0: []) (ptn v1: [])] true 1) |[]
+fact38:(fact imdl18 0s:0ms:0us 0s:100ms:0us 1 1) |[]
+goal20:(goal fact38 self sim18 1) |[]
+
+cmd0:(cmd open_valve [b] 1) |[]
+fact40:(fact cmd0 0s:0ms:0us 0s:100ms:0us 1 1) |[]
+goal21:(goal fact40 self sim19 1) |[]
+
+ent0:(ent 1) |[]
+fact42:(fact ent0 0s:0ms:0us 0s:100ms:0us 1 1) |[]
+goal22:(goal fact42 self sim20 1) |[]
+
+ont0:(ont 1) |[]
+fact44:(fact ont0 0s:0ms:0us 0s:100ms:0us 1 1) |[]
+goal23:(goal fact44 self sim21 1) |[]
+
+perf0:(perf 0 0 0 0 1) |[]
+fact46:(fact perf0 0s:0ms:0us 0s:100ms:0us 1 1) |[]
+goal24:(goal fact46 self sim22 1) |[]

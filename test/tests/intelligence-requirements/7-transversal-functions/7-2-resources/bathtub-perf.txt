@@ -1,0 +1,10 @@
+; in addition to just checking for DECOMPILATION as in test-bathtub-real-time,
+; here we also check the values of several perf objects.
+; in diagnostic mode, these should always be (0 0 0 0).
+; in real-time mode, they should not.
+
+; the lines below check if there are perf objects.
+; ideally, you can manually check whether the perf objects are also non-zero.
+; verifying it here would be unsafe since we can't tell how they look exactly in real-time mode.
+perf0:(perf
+perf10:(perf

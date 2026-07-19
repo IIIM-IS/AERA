@@ -1,0 +1,3 @@
+person:(ont 1) []
+fruit:(ont 1) []
+vegetable:(ont 1) []

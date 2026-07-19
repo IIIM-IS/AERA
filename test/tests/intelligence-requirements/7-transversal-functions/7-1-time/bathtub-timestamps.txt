@@ -1,0 +1,14 @@
+; first, check that the OPEN_VALVE pgm was successfully executed (it should have taken 200ms)
+mk_val109:(mk.val b valve_status 1 1) |[]
+fact_502:(fact mk_val109 3s:200ms:0us 3s:300ms:0us 1 1) |[]
+success2:(success fact_481 fact_502 mk_rdx_483 1) |[]
+
+; then, check task completion
+mk_val168:(mk.val b water_level 50 1) |[]
+fact_873:(fact mk_val168 3s:700ms:0us 3s:800ms:0us 1 1) |[]
+success17:(success fact_865 fact_873 mk_rdx_867 1) |[]
+fact_877:(fact success17 3s:700ms:0us 3s:700ms:0us 1 1) []
+   [0 3s:700ms:0us 1 838 stdin primary]
+
+; finally, check AERA ran for 20s
+(fact b_is_a_bathtub 19s:900ms:0us 20s:0ms:0us 1 1) []

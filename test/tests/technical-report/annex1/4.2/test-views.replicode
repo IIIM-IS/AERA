@@ -1,0 +1,72 @@
+; Doc - Annex 1 - 4.2.2 - Object Classes - Views
+
+; !class (view[] sync:nb ijt:ts sln:nb res:nb grp:grp org:)
+
+; S Y N C
+a:(ont 1) [[SYNC_ONCE now 0 forever stdin nil]]
+b:(ont 1) [[SYNC_PERIODIC now 0 forever stdin nil]]
+c:(ont 1) [[SYNC_HOLD now 0 forever stdin nil]]
+d:(ont 1) [[SYNC_AXIOM now 0 forever stdin nil]]
+; these two are outdated in the docu:
+;e:(ont 1) [[SYNC_FRONT now 0 forever stdin nil]]
+;f:(ont 1) [[SYNC_STATE now 0 forever stdin nil]]
+; lets try a different number that shouldn't do anything
+; compiles but fine but might cause issues later?
+g:(ont 1) [[-1 now 0 forever stdin nil]]
+h:(ont 1) [[13 now 0 forever stdin nil]]
+
+
+; I J T - injection-time: a timestamp representing the creation
+; time of the object. 
+i:(ont 1) [[SYNC_ONCE now 0 forever stdin nil]]
+j:(ont 1) [[SYNC_ONCE 0s:0ms:0us 0 forever stdin nil]]
+k:(ont 1) [[SYNC_ONCE 1s:0ms:0us 0 forever stdin nil]]
+
+
+; S L N - saliency: a number in [0,1] representing the final saliency
+; value of the object.
+l:(ont 1) [[SYNC_ONCE now 0 forever stdin nil]]
+m:(ont 1) [[SYNC_ONCE now 0.5 forever stdin nil]]
+n:(ont 1) [[SYNC_ONCE now 1 forever stdin nil]]
+; saliency should be in [0, 1] according to docu.
+; compiles but fine but might cause issues later?
+o:(ont 1) [[SYNC_ONCE now -1 forever stdin nil]]
+p:(ont 1) [[SYNC_ONCE now 2 forever stdin nil]]
+
+
+; R E S - resilience: a number representing the remaining time to 
+; live of the object, in microseconds
+; docu is ambiguous here:
+; for resilience values the number is in {0, 2^24} U {forever}.      as well as 
+; for resilience values, a number in {-1, 2^24}, -1 specifying an infinite resilience. 
+; lets see what compiles...
+q:(ont 1) [[SYNC_ONCE now 0 forever stdin nil]]
+r:(ont 1) [[SYNC_ONCE now 0 0 stdin nil]]
+s:(ont 1) [[SYNC_ONCE now 0 10 stdin nil]]
+t:(ont 1) [[SYNC_ONCE now 0 16777216 stdin nil]]
+u:(ont 1) [[SYNC_ONCE now 0 -1 stdin nil]]
+v:(ont 1) [[SYNC_ONCE now 0 100 stdin nil]]
+w:(ont 1) [[SYNC_ONCE now 0 1000 stdin nil]]
+
+; G R P  group: a reference to the group the view lives in.
+; This value cannot be nil, i.e. no view can exist outside of a group
+x:(ont 1) [[SYNC_ONCE now 0 forever stdin nil]]
+y:(ont 1) [[SYNC_ONCE now 0 forever stdout nil]]
+z:(ont 1) [[SYNC_ONCE now 0 forever primary nil]]
+aa:(ont 1) [[SYNC_ONCE now 0 forever secondary nil]]
+; docu: This value cannot be nil. this actually fails to compile, so lets comment it out.
+;ab:(ont 1) [[SYNC_ONCE now 0 forever nil nil]]
+
+; O R G - origin: a reference to the group (if any) that produced the object 
+; locally (i.e. on the same computing node), or a
+; reference to the remote node that ejected the object.
+ac:(ont 1) [[SYNC_ONCE now 0 forever stdin stdin]]
+ad:(ont 1) [[SYNC_ONCE now 0 forever stdin stdout]]
+ae:(ont 1) [[SYNC_ONCE now 0 forever stdin primary]]
+af:(ont 1) [[SYNC_ONCE now 0 forever stdin secondary]]
+ag:(ont 1) [[SYNC_ONCE now 0 forever stdin nil]]
+ah:(ont 1) [[SYNC_ONCE now 0 forever root root]]
+
+; M U L T I P L E   V I E W S
+xx:(ont 1) [[SYNC_ONCE now 0 forever stdin nil] [SYNC_ONCE now 0 forever stdout nil]]
+xy:(ont 1) [[SYNC_ONCE now 0 forever stdin nil] [SYNC_ONCE now 0 forever stdout nil]]

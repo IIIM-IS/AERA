@@ -1,0 +1,27 @@
+;heart beat
+;primitive: inject new object regularly.
+;see test.15.replicode for a subtler version.
+
+hb:(pgm
+|[]
+|[]
+[]
+   (inj []
+      (string "beep" now 1)
+      [SYNC_FRONT now 1 forever root nil]
+   )
+1; propagation saliency threshold
+)
+|[]
+
+
+ihb:(ipgm
+hb; code
+|[]; args
+RUN_ALWAYS; run
+200000us; time scope
+NOTIFY; notify reduction flag
+1; propagation saliency threshold
+)
+[]
+   [SYNC_FRONT now 1 forever root nil 1]

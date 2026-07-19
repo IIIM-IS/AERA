@@ -1,0 +1,18 @@
+
+; color:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+; usage: (mk.val x color "green" 1) or (mk.val x color green 1) if green is defined as an entity.
+
+red:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
+blue:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
+green:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
+
+ruby:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
+sapphire:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
+emerald:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
+
+r:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
+s:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
+e:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
+
+r_is_a_ruby:(mk.val r essence ruby 1) |[]
+f1:(fact r_is_a_ruby 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]

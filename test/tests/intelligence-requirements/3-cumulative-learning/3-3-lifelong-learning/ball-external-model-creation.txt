@@ -1,0 +1,37 @@
+; check if new models are created from the observed facts
+
+mdl_90:(mdl [v0: (ti v1: v2:)] []
+   (fact (mk.val v3: velocity_y v4: :) v5: v6: : :)
+   (fact (mk.val v3: position_y v7: :) v8: v9: : :)
+[]
+   v8:(add v1 100ms)
+   v9:(add v2 100ms)
+   v7:(add v0 (mul v4 100ms))
+[]
+   v1:(sub v8 100ms)
+   v2:(sub v9 100ms)
+   v5:(sub v8 80ms)
+   v6:(sub v9 100ms)
+   v4:(div (sub v7 v0) 100ms)
+[stdin] 1 4 0.5 0.5 1 ) []
+   [0 0s:200ms:0us 0 forever secondary nil 0.4]
+   [0 0s:200ms:0us 0 forever primary nil 0.166667]
+
+mdl_91:(mdl [] []
+   (fact (icst ball_position [] [v0: v1:] : :) v2: v3: : :)
+   (fact (imdl mdl_90 [v1: (ti v2: v3:)] [v0: v4: v5: v6: v7:] : :) v2: v3: : :)
+|[]
+|[]
+[stdin] 1 4 0.5 0.5 1 ) []
+   [0 0s:200ms:0us 0 forever secondary nil 0.4]
+   [0 0s:200ms:0us 0 forever primary nil 0.166667]
+
+
+; let's also check a composite state
+cst_292:(cst [] []
+   (fact (mk.val v0: velocity_y v1: :) v2: v3: : :)
+   (fact (icst ball_position [] [v0: v4:] : :) v2: v3: : :)
+|[]
+|[]
+[stdin] 1 ) []
+   [0 0s:600ms:0us 0 forever primary nil 1]

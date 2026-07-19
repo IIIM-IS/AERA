@@ -1,0 +1,43 @@
+; check the increasing success rate (in form of the confidence value of predicted facts)
+
+; 0.45
+imdl36:(imdl M_WAIT [b v1: (ti v2: v3:)] [50 0s:400ms:0us 1s:200ms:0us] true 1) |[]
+fact85:(fact imdl36 0s:300ms:0us 1s:100ms:0us 0.45 1) |[]
+
+; 0.725
+imdl64:(imdl M_WAIT [b v1: (ti v2: v3:)] [50 0s:500ms:0us 1s:300ms:0us] true 1) |[]
+fact154:(fact imdl64 0s:400ms:0us 1s:200ms:0us 0.725 1) |[]
+
+; 0.816667
+imdl92:(imdl M_WAIT [b v1: (ti v2: v3:)] [50 0s:600ms:0us 1s:400ms:0us] true 1) |[]
+fact223:(fact imdl92 0s:500ms:0us 1s:300ms:0us 0.816667 1) |[]
+
+; 0.8625
+imdl120:(imdl M_WAIT [b v1: (ti v2: v3:)] [50 0s:700ms:0us 1s:500ms:0us] true 1) |[]
+fact292:(fact imdl120 0s:600ms:0us 1s:400ms:0us 0.8625 1) |[]
+
+; 0.89
+imdl148:(imdl M_WAIT [b v1: (ti v2: v3:)] [50 0s:800ms:0us 1s:600ms:0us] true 1) |[]
+fact361:(fact imdl148 0s:700ms:0us 1s:500ms:0us 0.89 1) |[]
+
+; now check the final model (should be marked as strong now)
+M_WAIT:(mdl [v0: v1: (ti v2: v3:)] []
+   (fact (cmd wait [v0:] :) v4: v5: : :)
+   (fact (mk.val v0: water_level v6: :) v7: v8: : :)
+[]
+   (lsr v1 100)
+   v6:(add v1 10)
+   v7:(add v2 100ms)
+   v8:(add v3 100ms)
+[]
+   (gtr v6 0)
+   v1:(sub v6 10)
+   v4:(sub v7 80ms)
+   v5:(sub v8 100ms)
+   v2:(sub v7 100ms)
+   v3:(sub v8 100ms)
+[stdin] 1 1 1 0.89 1 ) []
+   [0 0s:0ms:0us 0 forever secondary nil 0]
+   [0 0s:0ms:0us 0 forever primary nil 0.89]
+
+; [stdin] strength evidence_count success_rate success_rate_deviation 1 ) []

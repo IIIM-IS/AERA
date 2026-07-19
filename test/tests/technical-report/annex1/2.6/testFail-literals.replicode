@@ -1,0 +1,4 @@
+; Doc - Annex 1 - 2.6 - Pre-Processor Directives
+
+; Negative test for literal, used here as a counter name
+!counter __invalidLiteral! 0

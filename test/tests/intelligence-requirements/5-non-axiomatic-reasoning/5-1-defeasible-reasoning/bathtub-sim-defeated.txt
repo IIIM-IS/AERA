@@ -1,0 +1,30 @@
+; first, the promoted simulation prediction
+mk_val44:(mk.val b temperature 20 1) |[]
+fact66:(fact mk_val44 1s:100ms:0us 1s:200ms:0us 1 1) |[]
+pred25:(pred fact66 [sim15] 1) |[]
+fact_278:(fact pred25 0s:935ms:0us 0s:935ms:0us 1 1) |[]
+
+; then, the actual simulated prediction
+mk_val53:(mk.val b temperature 25 :) |[]
+fact62:(fact mk_val53 1s:100ms:0us 1s:200ms:0us 1 :) |[]
+pred21:(pred fact62 [sim15] 1) |[]
+fact_274:(fact pred21 0s:935ms:0us 0s:935ms:0us 1 1) |[]
+
+; not the conflicting facts at the same time interval.
+; Regarding this conflict, the visualizer states
+; "The promoted simulated prediction fact_278 was defeated by
+; actual simulated prediction fact_274. Further predictions disabled."
+
+
+; for safety, check another conflict
+; promoted
+mk_val53:(mk.val b temperature 25 :) |[]
+fact79:(fact mk_val53 1s:200ms:0us 1s:300ms:0us 1 1.50463e-36) |[]
+pred34:(pred fact79 [sim15] 1) |[]
+fact_287:(fact pred34 0s:935ms:0us 0s:935ms:0us 1 1) |[]
+
+; actual
+mk_val55:(mk.val b temperature 30 :) |[]
+fact77:(fact mk_val55 1s:200ms:0us 1s:300ms:0us 1 :) |[]
+pred32:(pred fact77 [sim15] 1) |[]
+fact_285:(fact pred32 0s:935ms:0us 0s:935ms:0us 1 1) |[]

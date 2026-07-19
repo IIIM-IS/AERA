@@ -1,0 +1,18 @@
+; Doc - Annex 1 - 4.2.2 - Object Classes - Anti-Programs
+
+; !class (perf (_obj {rj_ltcy:nb d_rj_ltcy:nb tj_ltcy:nb d_tj_ltcy:nb}))
+; latencies and derivatives in us encoded as floats.
+
+perf1:(perf
+-1 ; rj_ltcy - the delay between the time of injection of a reduction job and it's processing time, averaged over the perf_sampling_period
+0 ; d_rj_ltcy - the value above, at the last sampling time
+1 ; tj_ltcy - the delay a thread had to wait for processing the job, averaged over the sampling period
+13 ; d_tj_ltcy - the value above at the last sampling time
+1)
+[]
+   [SYNC_ONCE now 0 forever root nil]
+
+
+; trying to instantiate more than one performance counter results in a heap error!
+; "CRT detected that the application wrote to memory after end of heap buffer"
+;perf2:(perf 1 1 1 1 1) [[SYNC_ONCE now 0 forever root nil]]

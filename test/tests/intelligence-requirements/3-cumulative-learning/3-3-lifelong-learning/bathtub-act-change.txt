@@ -1,0 +1,25 @@
+; first, we verify that all OPEN_VALVE and WAIT commands were executed 
+
+; OPEN_VALVE (wl=0)
+cmd7:(cmd open_valve [b] :) |[]
+fact74:(fact cmd7 0s:300ms:0us 0s:400ms:0us 1 :) |[]
+goal8:(goal fact74 self sim8 1) |[]
+fact_172:(fact goal8 0s:360ms:0us 0s:360ms:0us 1 1) |[]
+
+; 1st WAIT (wl=10)
+cmd16:(cmd wait [b] :) |[]
+fact144:(fact cmd16 0s:400ms:0us 0s:500ms:0us 1 :) |[]
+goal14:(goal fact144 self sim14 1) |[]
+fact_240:(fact goal14 0s:460ms:0us 0s:460ms:0us 1 1) |[]
+
+; 2nd WAIT (wl=20)
+cmd25:(cmd wait [b] :) |[]
+fact213:(fact cmd25 0s:500ms:0us 0s:600ms:0us 1 :) |[]
+goal20:(goal fact213 self sim20 1) |[]
+fact_308:(fact goal20 0s:560ms:0us 0s:560ms:0us 1 1) |[]
+
+; PGM now has low activation! emulation stops! so our predictions should fail:
+anti_fact_312:(|fact cmd25 0s:500ms:0us 0s:600ms:0us 1 1) |[]
+success7:(success fact_308 anti_fact_312 nil 1) |[]
+anti_fact_311:(|fact success7 0s:600ms:0us 0s:600ms:0us 1 1) []
+   [0 0s:600ms:0us 1 997 stdin primary]

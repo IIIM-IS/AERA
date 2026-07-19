@@ -1,0 +1,27 @@
+; Doc - Annex 1 - 2.6 - Pre-Processor Directives
+
+; this section refers a lot to annex 2; 4.2.1; so more extensive class tests should go there.
+; but a few basic tests here that check if declaration works, from my current understanding:
+
+; test different class name literals
+!class (position x:nb y:nb)
+!class (fruit kcal:nb)
+!class (car speed:nb acceleration:nb handling:nb)
+
+; test different class member declarations (e.g. x:nb)
+!class (members1 number:nb timestamp:us boolean:bl)
+!class (members2 group_id:sid device_function_id:fid device_id:did)
+!class (members3 set:[] string:st)
+!class (fruit_salad ingredient1:fruit ingredient2:fruit)
+!class (any_type wildcard: )
+
+; test class templates
+!class (template :~ :~)
+!class (iTemplate {template nil })
+
+; iterative member declaration
+!class (iterative list_of_numbers ::nb)
+
+; forward class directive
+!class future
+!class (past x:future)

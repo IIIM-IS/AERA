@@ -1,0 +1,1 @@
+self:(ont <- error: redefinition of label `self`

@@ -1,0 +1,30 @@
+; first, we verify that all OPEN_VALVE and WAIT commands were executed 
+
+; OPEN_VALVE (wl=0)
+cmd7:(cmd open_valve [s] :) |[]
+fact67:(fact cmd7 0s:300ms:0us 0s:400ms:0us 1 :) |[]
+goal8:(goal fact67 self sim8 1) |[]
+fact_167:(fact goal8 0s:360ms:0us 0s:360ms:0us 1 1) |[]
+
+; 1st WAIT (wl=20)
+cmd15:(cmd wait [s] :) |[]
+fact122:(fact cmd15 0s:400ms:0us 0s:500ms:0us 1 :) |[]
+goal14:(goal fact122 self sim14 1) |[]
+fact_224:(fact goal14 0s:460ms:0us 0s:460ms:0us 1 1) |[]
+
+; 2nd WAIT (wl=40)
+cmd22:(cmd wait [s] :) |[]
+fact168:(fact cmd22 0s:500ms:0us 0s:600ms:0us 1 :) |[]
+goal20:(goal fact168 self sim20 1) |[]
+fact_275:(fact goal20 0s:560ms:0us 0s:560ms:0us 1 1) |[]
+
+; 3rd WAIT (wl=60)
+cmd28:(cmd wait [s] :) |[]
+fact206:(fact cmd28 0s:600ms:0us 0s:700ms:0us 1 :) |[]
+goal26:(goal fact206 self sim26 1) |[]
+fact_319:(fact goal26 0s:660ms:0us 0s:660ms:0us 1 1) |[]
+
+; then, we verify that the goal state was achieved
+mk_val43:(mk.val s water_level 60 1) |[]
+fact_330:(fact mk_val43 0s:700ms:0us 0s:800ms:0us 1 1) |[]
+success11:(success fact_322 fact_330 mk_rdx_324 1) |[]

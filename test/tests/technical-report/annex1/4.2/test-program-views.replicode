@@ -1,0 +1,24 @@
+; Doc - Annex 1 - 4.2.2 - Object Classes - Program Views
+
+; !class (pgm_view[] sync:nb ijt:ts sln:nb res:nb grp:grp org: act:nb)
+
+; SAMPLE PROGRAM
+pgm0:(pgm |[] |[] |[] []
+   (prb [1 "print" "hello world" |[]])
+1) |[]
+
+
+; A C T
+; first one doesnt output, as act=0. all with act>0 do, including act=2.
+ipgm0:(ipgm pgm0 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 0]]
+ipgm1:(ipgm pgm0 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 0.001]]
+ipgm2:(ipgm pgm0 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 0.5]]
+ipgm3:(ipgm pgm0 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+; some negative tests according to docu, but compile fine:
+ipgm4:(ipgm pgm0 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil -1]]
+ipgm5:(ipgm pgm0 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 2]]
+
+
+; note: Creation seems to work similar to other view classes, but
+; view objects only show up as |[] in decompiled_objects.txt.
+; seems like a bug somewhere...

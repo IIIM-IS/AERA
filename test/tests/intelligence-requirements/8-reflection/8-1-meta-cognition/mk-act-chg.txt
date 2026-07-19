@@ -1,0 +1,10 @@
+; (R1) Expected results of this test are commented out due to inconsistent
+; creation of mk.act_chg objects.
+
+;mk_act_chg_57:(mk.act_chg ipgm0 -0.15 0) |[]
+
+;mk_act_chg_58:(mk.act_chg ipgm0 -0.15 0) []
+;   [0 0s:150ms:0us 1 1 stdout g1]
+
+;mk_act_chg_59:(mk.act_chg ipgm0 -0.15 0) []
+;   [0 0s:150ms:0us 1 1 root g1]

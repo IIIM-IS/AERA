@@ -1,0 +1,18 @@
+; check first drive injection (at 300ms)
+fact0:(fact run 0s:300ms:0us 1s:400ms:0us 1 1) |[]
+goal0:(goal fact0 self nil 1) |[]
+fact_92:(fact goal0 0s:310ms:0us 0s:310ms:0us 1 1) []
+   [0 0s:310ms:0us 1 forever primary primary]
+
+
+; check injection of new knowledge / emulator state (at 600ms)
+mk_val10:(mk.val e1 emulator_state [0 0] 1) |[]
+fact_129:(fact mk_val10 0s:600ms:0us 0s:700ms:0us 1 1) |[]
+
+
+; check success
+mk_val86:(mk.val b water_level 50 1) |[]
+fact_591:(fact mk_val86 1s:200ms:0us 1s:300ms:0us 1 1) |[]
+success17:(success fact_583 fact_591 mk_rdx_585 1) |[]
+fact_595:(fact success17 1s:200ms:0us 1s:200ms:0us 1 1) []
+   [0 1s:200ms:0us 1 993 stdin primary]

@@ -1,0 +1,11 @@
+; Doc - Annex 1 - 4.3 - Semantics - Marker Classes
+
+; !class (mk.low_res (_obj obj:))
+
+; setup
+a:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
+
+; let's instantiate...
+mk1:(mk.low_res
+a  ; object - a reference to the object having reached a low resilience
+1) [[SYNC_ONCE now 0 forever root nil]]

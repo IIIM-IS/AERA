@@ -1,0 +1,48 @@
+; Doc - Annex 1 - 2.6 - Pre-Processor Directives
+
+; test macros - !def macro-name macro-replacement
+!def THREE 3
+!def MAX_RETRIES 5
+!def DEFAULT_TIMEOUT 1000ms
+!def PI 3.1415926535
+!def E 2.7182818284
+!def THIRTEEN 13
+!def |GOD 666
+!counter counter_seven 7
+
+; test macros - !def macro-expression macro-replacement
+!def (standard_group _upr _sln_thr _act_thr _vis_thr _ntf_grps) (grp _upr _sln_thr _act_thr _vis_thr counter_seven counter_seven counter_seven 0 0 1 0 0 1 1 1 1 0 0 0 0 0 0 1 0 1 1 0 1 0 0 _ntf_grps 1)
+g1:(standard_group THIRTEEN |GOD 0.4 counter_seven []) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]];
+
+; test undef - simple constant macros
+; TODO: this should work according to doc, but fails to compile, without relevant error log output!
+; therefore, commenting it out...
+;!undef THREE
+;!undef PI
+;!undef |GOD
+;!undef counter_seven
+;!undef standard_group
+
+; TODO: an attempt to redefine a macro causes AERA to run indefinitely.
+; so, also commenting this out...
+;!def THREE 5
+; for counters, redefining seems to work:
+!counter counter_seven 777
+g2:(standard_group THIRTEEN |GOD 0.4 counter_seven []) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]
+
+; TODO: the following should work according to docu, and it compiles, but:
+; anything afterwards fails to compile. therefore commenting it out...
+;!ifdef THREE
+;!def FOUR 4
+;!else
+;!def FIVE 5
+;!endif
+
+;!ifundef THREE
+;!def FOUR 4
+;!else
+;!def FIVE 5
+;!endif
+
+g3:(standard_group 1 THREE 0.4 1 []) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]
+

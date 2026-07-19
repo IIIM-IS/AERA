@@ -1,0 +1,23 @@
+; recall: 
+; !class (pgm_view[] sync:nb ijt:ts sln:nb res:nb grp:grp org: act:nb)
+
+; first, the act / sal changes
+ipgm0:(ipgm pgm0 |[] false 100ms true true 1) []
+   [1 0s:0ms:0us 0.1 forever g1 nil 0.1]
+ipgm1:(ipgm pgm1 |[] false 200ms true true 1) []
+   [1 0s:0ms:0us 0.7 forever g1 nil 0.7]
+ipgm2:(ipgm pgm2 |[] false 300ms true true 1) []
+   [1 0s:0ms:0us 0 forever g1 nil 0]
+ipgm3:(ipgm pgm3 |[] false 400ms true true 1) []
+   [1 0s:0ms:0us 1 forever g1 nil 1]
+
+; the mediated group: 0.1 + 0.7 + 0(rounded up) + 1(rounded down) / 4 = 0.45 
+g1:(grp 1 0 0 0 1 0 1 0 0 1 0 0 1 1 1 1 0.45 1 0 0.45 1 0 1 0 1 1 0 1 0 0 [nil] 1) []
+
+
+; now, resilience:
+ipgm4:(ipgm pgm4 |[] false 500ms true true 1) |[]
+
+ipgm5:(ipgm pgm5 |[] false 600ms true true 1) []
+   [1 0s:0ms:0us 0 2 g2 nil 1]
+

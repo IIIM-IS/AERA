@@ -1,0 +1,28 @@
+; here, we check four produced predictions and their respective confidence values.
+; remember that:
+; prediction_confidence = model_success_rate * input_fact_confidence
+; M_WAIT's success rate will increase with each correct prediction, thus increasing confidence values of later predictions
+
+; 1st one (M_WAIT confidence = 0.7)
+mk_val29:(mk.val b water_level 10 :) |[]
+fact147:(fact mk_val29 0s:500ms:0us 0s:600ms:0us 0.7 :) |[]
+pred92:(pred fact147 [] 1) |[]
+fact_243:(fact pred92 0s:460ms:0us 0s:460ms:0us 1 1) |[]
+
+; 2nd one (M_WAIT confidence = 0.85)
+mk_val40:(mk.val b water_level 20 :) |[]
+fact216:(fact mk_val40 0s:600ms:0us 0s:700ms:0us 0.85 :) |[]
+pred137:(pred fact216 [] 1) |[]
+fact_311:(fact pred137 0s:560ms:0us 0s:560ms:0us 1 1) |[]
+
+; 3rd one (M_WAIT confidence = 0.9)
+mk_val51:(mk.val b water_level 30 :) |[]
+fact285:(fact mk_val51 0s:700ms:0us 0s:800ms:0us 0.9 :) |[]
+pred182:(pred fact285 [] 1) |[]
+fact_378:(fact pred182 0s:660ms:0us 0s:660ms:0us 1 1) |[]
+
+; 4th one (M_WAIT confidence = 0.925)
+mk_val62:(mk.val b water_level 40 :) |[]
+fact354:(fact mk_val62 0s:800ms:0us 0s:900ms:0us 0.925 :) |[]
+pred227:(pred fact354 [] 1) |[]
+fact_446:(fact pred227 0s:760ms:0us 0s:760ms:0us 1 1) |[]

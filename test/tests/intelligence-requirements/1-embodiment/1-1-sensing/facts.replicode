@@ -1,0 +1,45 @@
+; REQUIREMENT:	1.1 - Sensing
+; PARAMETERS:	-
+; BASE TASK:	-
+; ACTIONS:		- 
+
+; Here, we test FACT syntax.
+; !class (fact (_fact nil))
+; !class (_fact (_obj {obj: after:ts before:ts cfd:nb :~}))
+
+; (R1) after: and before: use timestamps, not microseconds.
+
+; setup
+ball:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+b:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+b_is_a_ball:(mk.val b essence ball 1) |[]
+
+; creating a fact
+f1:(fact 
+b_is_a_ball     ; obj - a reference to an object
+0s:0ms:0us      ; after - timestamp 
+GIGASEC         ; before - timestamp
+1               ; cfd - confidence
+1) 
+[]
+   [SYNC_ONCE now 1 forever stdin nil]
+
+; note that seemingly invalid params also compile.
+f2:(fact
+b_is_a_ball     ; obj - a reference to an object
+GIGASEC         ; after - timestamp
+-1s:1ms:1us     ; before - timestamp
+-1              ; cfd - confidence
+1)
+[]
+   [SYNC_ONCE now 1 forever stdin nil]
+
+
+; below are some more examples.
+
+; Make b_is_a_ball a fact from now to the maximum time. 
+f_b_is_a_ball:(fact b_is_a_ball 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+; Make b_is_a_ball a fact from 300 to 400 ms
+f_b_is_a_ball_interval:(fact b_is_a_ball 0s:300ms:0us 0s:400ms:0us 1 1) [[SYNC_ONCE now 1 forever stdin nil]]
+; Make b_is_a_ball a fact with low confidence 
+f_b_is_a_ball_low_confidence:(fact b_is_a_ball 0s:0ms:0us GIGASEC 0.2 1) [[SYNC_ONCE now 1 forever stdin nil]]

@@ -1,0 +1,292 @@
+; REQUIREMENT:	7.2 - Transversal resources
+; PARAMETERS:	
+; base_period=250000 
+; max_sim_time_horizon=250000
+; reduction_core_count=6
+; time_core_count=2
+; run_time=5000
+; BASE TASK:	bathtub
+; ACTIONS:		open_valve / wait
+
+; For this task, we switch from diagnostic to real-time mode by changing to the following in settings.xml:
+; 	  reduction_core_count="6"
+;	  time_core_count="2"
+
+; Now, a remark:
+; (R1) If AERA does not complete planning in time, it does not commit to the deduction path it partially explored.
+; The above can be shown by simply running the default bathtub task (see 1.2) in real-time mode.
+
+; So we have to make several changes for the task to be achievable:
+; changes in settings.xml: (see top of file)
+;       base_period="250000"
+;       max_sim_time_horizon="250000"
+;       run_time="10000"
+
+; and then, we have to redefine the sampling period from user.classes.replicode to our new one:
+!def rt_sampling_period 500ms ; (used to be 100ms)
+
+
+; ============================
+; CONSTANTS
+; ============================
+!def WL_EMPTY 0             ; empty bathtub
+!def WL_FULL 100            ; full bathtub
+!def WL_PERFECT 50          ; the water level we want to achieve
+!def WL_DELTA 10            ; by how much the water level increases each sampling period
+
+!def V_CLOSED 0             ; valve closed
+!def V_OPEN 1               ; valve open
+
+!def DRIVE_START 500ms      ; when to start injecting the drive
+!def TIME_LIMIT 5000ms       ; how long the agent has to achieve the goal. minimum time for task success is 600ms.
+
+!def V_INIT V_CLOSED        ; initial value - valve
+!def WL_INIT WL_EMPTY       ; initial value - water level
+
+
+; ============================
+; ENTITIES & ONTOLOGIES
+; ============================
+bathtub:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+water_level:(ont 1) [[SYNC_ONCE now 0 forever root nil]];
+valve_status:(ont 1) [[SYNC_ONCE now 0 forever root nil]];
+
+; ============================
+; HEARTBEAT
+; ============================
+
+; This is used below in pgm_inject_drive, to continuously inject our goal
+
+b:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+b_is_a_bathtub:(mk.val b essence bathtub 1) |[]
+f_b_bathtub:(fact b_is_a_bathtub 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+
+; ============================
+; EMULATING THE TASK
+; ============================
+
+; As AERA is not interacting with the physical world in this test, we have to emulate it ourselves.
+; The e1 (emulator) entity keeps track of the state of the real world.
+; This works similarly in hand-grab-sphere.
+; Usage: (mk.val e1 emulator_state [waterLevel valveState])
+
+e1:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+emulator_state:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+; Inject the emulator state into the emulator group.
+emulator:(std_grp 2 0 0 0 []) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]
+
+; This program runs in the primary group to re-inject any (fact (goal (fact (cmd ::)))) into emulator.
+pgm_inject_in_emulator_group:(pgm [] []
+   (ptn f_G:(fact G:(goal (fact (cmd ::) ::) ::) ::) [])
+[]
+   ; Only re-inject non-simulation goals.
+   (= (is_sim G) false)
+[]
+   (inj [f_G [SYNC_ONCE (now) 1 1 emulator nil]])
+1) |[]
+(ipgm pgm_inject_in_emulator_group [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+; Initial conditions.
+start:(pgm [] [] [] []
+   (inj [State:(mk.val e1 emulator_state [WL_INIT V_INIT] 1) []]) ; waterlevel, valve
+   (inj []
+      (fact State After:(now) (+ After rt_sampling_period) 1 1)
+      [SYNC_PERIODIC now 1 1 emulator nil]
+   )
+1) |[]
+(ipgm start [] RUN_ONCE rt_sampling_period VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+
+; Match the emulator state and inject individual mk.val at the same time for each of the state variables as needed.
+pgm_inject_mk_vals_from_emulator:(pgm [] []
+   (ptn (fact (mk.val e1 emulator_state [waterLevel: valveState:] :) After: Before: ::) [])
+|[] ; guards
+[]
+   (inj [new_water_level:(mk.val b water_level waterLevel 1) []])
+   (inj []
+      (fact new_water_level After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+   (inj [new_valve_state:(mk.val b valve_status valveState 1) []])
+   (inj []
+      (fact new_valve_state After Before 1 1)
+      [SYNC_PERIODIC After 1 1 stdin nil]
+   )
+1) |[]
+(ipgm pgm_inject_mk_vals_from_emulator [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever emulator nil 1]
+
+; ============================
+; NEXT EMULATION STEPS
+; ============================
+
+; This is also part of emulating the real world. While AERA predicts what will happen through models,
+; here we actually inject facts into the system after specific commands as if we would observe 
+; reality reacting to our actions
+
+; Before DRIVE_START, just re-inject the same values.
+pgm_before_drive:(pgm [] []
+   (ptn (fact (mk.val e1 emulator_state [waterLevel: valveState:] :) After: Before: ::) [])
+[]
+   (< After (+ this.vw.ijt DRIVE_START))
+[]
+   ; All state variables keep the same value.
+   (inj [Next_state:(mk.val e1 emulator_state [waterLevel valveState] 1) []])
+   (inj []
+      (fact Next_state (+ After rt_sampling_period) (+ Before rt_sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After rt_sampling_period) 1 1 emulator nil]
+   )
+   (prb [1 "print" "next emulator state - before drive" []])
+1) |[]
+(ipgm pgm_before_drive [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever emulator nil 1]
+
+
+; next emulation steps if the agent performed the action OPEN VALVE.
+pgm_cmd_open_valve:(pgm [] []
+   (ptn (fact G:(goal (fact (cmd open_valve [b ] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact (mk.val e1 emulator_state [waterLevel: valveState:] :) After: Before: ::) [])
+[]
+   (= valveState V_CLOSED)
+   (= (is_sim G) false)
+   (< Cmd_after Before)
+   (> Cmd_before After)
+[]
+   ; Inject the fact that the command was executed.
+   (inj [Command:(cmd open_valve [b] 1) []])
+   (inj []
+      (fact Command (+ After 20ms) Before 1 1)
+      [SYNC_ONCE After 1 1 stdin nil]
+   )
+   ; open valve
+   (inj [Next_state:(mk.val e1 emulator_state [waterLevel V_OPEN] 1) []])
+   (inj []
+      (fact Next_state (+ After rt_sampling_period) (+ Before rt_sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After rt_sampling_period) 1 1 emulator nil]
+   )
+   (prb [1 "print" "pgm OPEN VALVE. new state:" [Next_state]])
+1) |[]
+(ipgm pgm_cmd_open_valve [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever emulator nil 1]
+
+
+; next emulation steps if the agent performed the action WAIT.
+pgm_cmd_wait:(pgm [] []
+   (ptn (fact G:(goal (fact (cmd wait [b ] ::) Cmd_after: Cmd_before: ::) ::) ::) [])
+   (ptn (fact (mk.val e1 emulator_state [waterLevel: valveState:] :) After: Before: ::) [])
+[]
+   (= valveState V_OPEN)
+   (= (is_sim G) false)
+   (< Cmd_after Before)
+   (> Cmd_before After)
+[]
+   ; Inject the fact that the command was executed.
+   (inj [Command:(cmd wait [b] 1) []])
+   (inj []
+      (fact Command (+ After 20ms) Before 1 1)
+      [SYNC_ONCE After 1 1 stdin nil]
+   )
+   ; increase water_level
+   (inj [Next_state:(mk.val e1 emulator_state [Next_water_level:(+ waterLevel WL_DELTA) V_OPEN] 1) []])
+   (inj []
+      (fact Next_state (+ After rt_sampling_period) (+ Before rt_sampling_period) 1 1)
+      [SYNC_PERIODIC (+ After rt_sampling_period) 1 1 emulator nil]
+   )
+   (prb [1 "print" "pgm WAIT. new state:" [Next_state]])
+1) |[]
+(ipgm pgm_cmd_wait [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever emulator nil 1]
+
+
+; ============================
+; MODELS
+; ============================
+
+; Bathtub B has valve status V at ti TO-T1.
+S0:(cst [] []
+   (fact (mk.val B: essence bathtub :) T0: T1: : :)
+   (fact (mk.val B: valve_status V: :) T0: T1: : :)
+   (fact (mk.val B: water_level WL: :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; When I open a bathtub's V_CLOSED valve, then that valve will be OPEN
+M_OPEN_VALVE:(mdl [B: (ti T0: T1:)] []
+   (fact (cmd open_valve [B:] :) T0_cmd: T1_cmd: : :)
+   (fact (mk.val B: valve_status V_OPEN :) T0_rhs: T1_rhs: : :)
+[]
+   T0_rhs:(+ T0 500ms)
+   T1_rhs:(+ T1 500ms)
+[]
+   T0_cmd:(- T0_rhs 80ms)
+   T1_cmd:(- T1_rhs 500ms)
+   T0:(- T0_rhs 500ms)
+   T1:(- T1_rhs 500ms)
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; If we observe S0 with CLOSED, then if M0 predicts OPEN, it will be right.
+M_OPEN_VALVE_PRECOND:(mdl [] []
+   (fact (icst S0 [] [B: V_CLOSED WL0:] : :) T0: T1: : :)
+   (fact (imdl M_OPEN_VALVE [B: (ti T0: T1:)] [T0_rhs: T1_rhs:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+
+; When I wait in the presence of an OPEN bathtub, then it will fill +10 next iteration
+M_WAIT:(mdl [B: WL0: (ti T0: T1:)] []
+   (fact (cmd wait [B:] :) T0_cmd: T1_cmd: : :)
+   (fact (mk.val B: water_level WL1: :) T0_rhs: T1_rhs: : :)
+[]
+   (< WL0 WL_FULL)
+   WL1:(+ WL0 WL_DELTA)
+   T0_rhs:(+ T0 500ms)
+   T1_rhs:(+ T1 500ms)
+[]
+   (> WL1 WL_EMPTY)
+   WL0:(- WL1 WL_DELTA)
+   T0_cmd:(- T0_rhs 80ms)
+   T1_cmd:(- T1_rhs 500ms)
+   T0:(- T0_rhs 500ms)
+   T1:(- T1_rhs 500ms)
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; If we observe S0 with OPEN, then if M0 predicts WAIT, it will be right.
+M_WAIT_PRECOND:(mdl [] []
+   (fact (icst S0 [] [B: V_OPEN WL0:] : :) T0: T1: : :)
+   (fact (imdl M_WAIT [B: WL0: (ti T0: T1:)] [WL1: T0_rhs: T1_rhs:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; ============================
+; DRIVE (aka GOAL)
+; ============================
+
+m_drive:(mdl [] []
+   ; The goal target timings are the same as the drive timings.
+   (fact (mk.val b water_level WL_PERFECT 1) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+pgm_inject_drive:(pgm [] []
+   ; This fact repeats periodically (bcs of SYNC_AXIOM in f1). We use it as a "heartbeat".
+   (ptn (fact (mk.val b essence bathtub :) After: Before: ::) [])
+[]
+   (>= After (+ this.vw.ijt DRIVE_START))
+[]
+   (inj [f_run:(fact run After (+ Before TIME_LIMIT) 1 1) []])
+   (inj [G:(goal f_run self nil 1) []])
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected drive" []])
+1) |[]
+(ipgm pgm_inject_drive [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]

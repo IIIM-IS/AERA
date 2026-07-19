@@ -1,0 +1,33 @@
+; here, we check several of the available solutions that AERA should have found during planning:
+
+; first, our main goal:
+mk_val9:(mk.val b water_level 60 1) |[]
+fact10:(fact mk_val9 0s:300ms:0us 1s:100ms:0us 1 1) |[]
+goal1:(goal fact10 self sim0 1) |[]
+fact_127:(fact goal1 0s:310ms:0us 0s:310ms:0us 1 1) |[]
+
+; now, several cases of simulation success:
+success0:(success fact_127 fact_164 nil 1) |[]
+mk_val17:(mk.val b water_level 60 :) |[]
+fact58:(fact mk_val17 0s:600ms:0us 0s:700ms:0us 1 :) |[]
+pred31:(pred fact58 [sim7] 1) |[]
+fact_164:(fact pred31 0s:335ms:0us 0s:335ms:0us 1 1) |[]
+
+mk_val18:(mk.val b water_level 60 :) |[]
+fact92:(fact mk_val18 0s:700ms:0us 0s:800ms:0us 1 :) |[]
+pred49:(pred fact92 [sim7] 1) |[]
+fact_182:(fact pred49 0s:335ms:0us 0s:335ms:0us 1 1) |[]
+success1:(success fact_127 fact_182 nil 1) |[]
+
+; (fact_250 and fact_2557 also refer to mk_val9)
+mk_val33:(mk.val b water_level 60 :) |[]
+fact223:(fact mk_val33 0s:700ms:0us 0s:800ms:0us 1 :) |[]
+pred122:(pred fact223 [sim15] 1) |[]
+fact_279:(fact pred122 0s:435ms:0us 0s:435ms:0us 1 1) |[]
+success4:(success fact_250 fact_279 nil 1) |[]
+
+mk_val360:(mk.val b water_level 60 :) |[]
+fact2874:(fact mk_val360 0s:700ms:0us 0s:800ms:0us 1 :) |[]
+pred1465:(pred fact2874 [sim33] 1) |[]
+fact_2565:(fact pred1465 0s:635ms:0us 0s:635ms:0us 1 1) |[]
+success309:(success fact_2557 fact_2565 nil 1) |[]

@@ -1,0 +1,34 @@
+; REQUIREMENT:	1.2 - Acting
+; PARAMETERS:	-
+; BASE TASK:	-
+; ACTIONS:		- 
+
+; This is a basic syntax test for the icmd PROBE.
+
+; P R O B E
+; !dfn (_prb :nb :st :st :[])
+; !def (prb args) (icmd _prb args)
+
+; (R1) This only ever been used with "print" - which works as expected.
+
+; create a program that prints sth
+pgm0:(pgm 
+|[]
+|[]
+|[]
+[]
+   (prb [1 "print" "hello world" []])
+1) |[]
+
+; same program, different text to print
+pgm1:(pgm 
+|[]
+|[]
+|[]
+[]
+   (prb [1 "print" "hello world later" []])
+1) |[]
+
+; instantiate with delay
+ipgm0:(ipgm pgm0 |[] RUN_ONCE 0ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+ipgm1:(ipgm pgm1 |[] RUN_ONCE 500ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 1 stdin nil 1]]

@@ -1,0 +1,64 @@
+; Doc - Annex 1 - 4.3 - Semantics - Marker Classes
+
+; !class (mk.rdx (_obj {code: inputs:[] prods:[]}))
+
+; setup
+pgm0:(pgm 
+|[] ; template arguments, a set of patterns
+|[] ; inputs, a set of patterns
+|[] ; guards, a set of expressions
+|[] ; prods
+1) |[]
+ipgm0:(ipgm pgm0 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+
+; let's instantiate...
+rdx1:(mk.rdx
+ipgm0 ; a reference to the instantiated program or model having performed the reduction
+|[]   ; a set containing references to the input objects that were reduced. Is emtpy in case of anti-programs and input-less programs
+|[]   ; a set containing the commands that result from the reduction
+1) 
+[]
+   [SYNC_ONCE now 0 forever root nil]
+
+
+; and again, now with a model
+; long setup:
+mdl2:(mdl 
+[a: b: param:] 
+[]
+   (ptn pos_x: |[])
+   (ptn pos_y: |[])
+[]
+   (= pos_x pos_y)
+   (>= param pos_x)
+   (<= param pos_y)
+   (<> 1 2)
+[]
+   (<> pos_x pos_y)
+   (<> param pos_x)
+   (<> param pos_y)
+   (<> 1 2)
+[]
+   ;primary
+   secondary
+   stdin
+   stdout
+-1   ; str – strength of the model, in [0,1]
+-1   ; cnt – number of evidences for a model (i.e. the number of times it predicted something)
+-1   ; sr – success rate of the model: number of times the model predicted well divided by cnt.
+-1   ; dsr – derivative of the success rate, i.e. the success rate as it was at the former to last evidence.
+1   ; psln_thr
+) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+
+; now lets instantiate...
+rdx2:(mk.rdx
+mdl2
+[]
+   self cube hand
+[]
+   cmd grab ["ball"] 1
+   cmd release ["ball"] 1
+1) 
+[]
+   [SYNC_ONCE now 0 forever root nil]

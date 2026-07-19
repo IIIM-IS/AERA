@@ -1,0 +1,25 @@
+54(65) mdl1:(mdl [] []
+   (ptn v0: |[])
+   (ptn v1: |[])
+|[]
+|[]
+[] 1 1 1 1 1 ) []
+   [0 0s:0ms:0us 0 forever stdin nil 1]
+
+55(66) mdl2:(mdl [v0: v1: v2:] []
+   (ptn v3: |[])
+   (ptn v4: |[])
+[]
+   (equ v3 v4)
+   (gte v2 v3)
+   (lse v2 v4)
+   (neq 1 2)
+[]
+   (neq v3 v4)
+   (neq v2 v3)
+   (neq v2 v4)
+   (neq 1 2)
+[secondary stdin stdout]
+-1 -1 -1 -1 1 ) []
+   [0 0s:0ms:0us 0 forever secondary nil 0]
+   [0 0s:0ms:0us 0 forever primary nil 1]

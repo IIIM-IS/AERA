@@ -1,0 +1,25 @@
+; Doc - Annex 2 - 3.2 - rMem's - Functions
+
+; P R O B E
+; !dfn (_prb :nb :st :st :[])
+; !def (prb args) (icmd _prb args)
+
+pgm0:(pgm 
+|[]
+|[]
+|[]
+[]
+   (prb [1 "print" "hello world" []])
+1) |[]
+
+pgm1:(pgm 
+|[]
+|[]
+|[]
+[]
+   (prb [1 "print" "hello world later" []])
+1) |[]
+
+
+ipgm0:(ipgm pgm0 |[] RUN_ONCE 0ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+ipgm1:(ipgm pgm1 |[] RUN_ONCE 500ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 1 stdin nil 1]]

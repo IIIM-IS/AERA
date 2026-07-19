@@ -1,0 +1,10 @@
+; Doc - Annex 1 - 4.2.2 - Object Classes - Patterns
+
+; !class ( ptn skel:xpr guards:[::xpr])
+; !class (|ptn skel:xpr guards:[::xpr])
+
+; successfully created as part of programs, but seems like patterns cannot exist
+; on their own. see test-programs.replicode for some tests.
+; but the above syntax is valid.
+
+; same for anti-patterns.

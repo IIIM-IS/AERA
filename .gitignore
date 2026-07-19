@@ -45,3 +45,8 @@
 *.bak
 *.obj
 
+# NuGet packages
+/packages/
+
+# temporary settings file for blackbox tests
+/test/tests/settings_filled.xml

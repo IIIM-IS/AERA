@@ -1,0 +1,20 @@
+; Doc - Annex 1 - 4.2.2 - Object Classes - Internal Commands
+
+; !class (icmd function:fid args:[])
+; remember: !dfn (_prb :nb :st :st :[])
+; remember: !def (prb args) (icmd _prb args)
+
+
+; try an invalid function id
+pgm0:(pgm 
+|[]
+|[]
+|[]
+[]
+   (icmd _invalid []
+      init_pos:(val (vec3 0 0 0) 1) |[]
+    )
+1) |[]
+
+
+ipgm0:(ipgm pgm0 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]

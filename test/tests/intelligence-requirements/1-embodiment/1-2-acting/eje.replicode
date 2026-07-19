@@ -1,0 +1,34 @@
+; REQUIREMENT:	1.2 - Acting
+; PARAMETERS:	-
+; BASE TASK:	-
+; ACTIONS:		- 
+
+; This is a basic syntax test for the icmd EJECT.
+
+; E J E
+; !dfn (_eje : : :nid)
+; !def (eje args) (icmd _eje args)
+
+; (R1) This is practically never used in existing replicode files, and I am unsure about how the :nid parameter is used.
+
+; setup group and object
+g1:(std_grp 0 0 0 0 [nil]) [[SYNC_ONCE now 0 forever stdin nil COV_ON 0]]
+e1:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
+
+; eject an object
+pgm0:(pgm 
+|[]
+|[]
+|[]
+[]
+   (eje []
+      e1                              ; object to eject
+      [SYNC_ONCE now 0 1 stdout nil]  ; accompanying view for the object
+      ;  e1.vw                        ; alternative different view for the object. was used like this in replicode_v1.1 tests.
+      0                               ; destination node
+   )
+1) |[]
+
+
+
+ipgm0:(ipgm pgm0 |[] RUN_ONCE 100ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 1 stdout nil 1]]

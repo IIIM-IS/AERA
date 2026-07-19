@@ -1,0 +1,46 @@
+; Doc - Annex 1 - 2.5 - Code Formatting
+
+; Replicode supports a CR + indent instead of an opening parenthesis, and a CR + back indent instead of closing parenthesis.
+; Let's test this...
+
+; default
+g1:(std_grp 2 0 0.4 0 []) []
+   [SYNC_ONCE now 0 forever root nil COV_OFF 0]
+
+; indent for the std_grp operator
+; works, but doesn't take into account that it should be the named group g2
+; instead, it just assigns it a the new id grp_13.
+g2:
+   std_grp 2 0 0.4 0 [g1] 
+[[SYNC_ONCE now 0 forever root nil COV_OFF 0]]
+
+; more complex construct with nested operators
+f1:(fact (mk.val g1 essence "group1" 1) now GIGASEC 1 1) [[SYNC_ONCE now 1 forever stdin nil]]
+
+; lets try to use indents instead of parentheses for the inner opcode
+f2:(fact 
+   mk.val g1 essence "group2" 1
+now GIGASEC 1 1) [[SYNC_ONCE now 1 forever stdin nil]]
+
+; now with more indent chars (seems like it has to be exactly 3 or 4)
+f3:(fact 
+    mk.val g1 essence "group3" 1
+now GIGASEC 1 1) [[SYNC_ONCE now 1 forever stdin nil]]
+
+; now lets try to indent also the outer opcode
+; works, but doesn't take into account that it should be the named fact f4.
+; instead, it just assigns it a the new id fact_17.
+f4:
+   fact (mk.val g1 essence "group4" 1) now GIGASEC 1 1
+[]
+   [SYNC_ONCE now 1 forever stdin nil]
+
+; finally, both indents:
+f5:
+   fact 
+      mk.val g1 essence "group5" 1
+   now GIGASEC 1 1
+[]
+   [SYNC_ONCE now 1 forever stdin nil]
+
+; as seen in output, f4 actually refers to what should be f5, which seems buggy.

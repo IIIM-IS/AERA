@@ -1,0 +1,112 @@
+; Doc - Annex 1 - 4.2.2 - Object Classes - Anti-Programs
+
+; !class (|pgm (_obj {tpl:[::ptn] inputs:[] guards:[::xpr] prods:}))
+
+
+; EMPTY PROGRAM
+apgm0:(|pgm 
+|[] ; template arguments, a set of patterns
+|[] ; inputs, a set of patterns
+|[] ; guards, a set of expressions
+|[] ; prods
+1) |[]
+
+; let's insert some values...
+
+apgm1:(|pgm 
+[(ptn pos: |[])] 
+|[] ; inputs, a set of patterns
+|[] ; guards, a set of expressions
+|[] ; prods
+1) |[]
+
+apgm2:(|pgm 
+[]
+   (ptn pos_x: |[])
+   (ptn pos_y: |[])
+|[] ; inputs, a set of patterns
+|[] ; guards, a set of expressions
+|[] ; prods
+1) |[]
+
+apgm3:(|pgm 
+|[]
+[(ptn pos: |[])]
+|[] ; guards, a set of expressions
+|[] ; prods
+1) |[]
+
+apgm4:(|pgm 
+|[]
+[]
+   (ptn pos_x: |[])
+   (ptn pos_y: |[])
+|[] ; guards, a set of expressions
+|[] ; prods
+1) |[]
+
+apgm5:(|pgm 
+[]
+   (ptn pos_x: |[])
+   (ptn pos_y: |[])
+[]
+   (ptn pos_x: |[])
+   (ptn pos_y: |[])
+|[] ; guards, a set of expressions
+|[] ; prods
+1) |[]
+
+apgm6:(|pgm 
+[]
+   (ptn param: |[])
+[]
+   (ptn pos_x: |[])
+   (ptn pos_y: |[])
+[]
+   (= pos_x pos_y)
+   (>= param pos_x)
+   (<= param pos_y)
+   (<> 1 2)
+|[] ; prods
+1) |[]
+
+
+apgm7:(|pgm 
+|[]
+|[]
+|[]
+[]
+   (prb [1 "print" "hello world" |[]])
+   (prb [1 "print" "hello carly" |[]])
+   (prb [1 "print" "hello rae" |[]])
+1) |[]
+
+
+apgm8:(|pgm 
+[]
+   (ptn param: |[])
+[]
+   (ptn pos_x: |[])
+   (ptn pos_y: |[])
+[]
+   (= pos_x pos_y)
+   (>= param pos_x)
+   (<= param pos_y)
+   (<> 1 2)
+[]
+   (prb [1 "print" "hello world" |[]])
+   (prb [1 "print" "hello carly" |[]])
+   (prb [1 "print" "hello rae" |[]])
+1) |[]
+
+
+; need to instantiate so compilation works
+ipgm0:(ipgm apgm0 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+ipgm1:(ipgm apgm1 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+ipgm2:(ipgm apgm2 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+ipgm3:(ipgm apgm3 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+ipgm4:(ipgm apgm4 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+ipgm5:(ipgm apgm5 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+ipgm6:(ipgm apgm6 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+ipgm7:(ipgm apgm7 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+ipgm8:(ipgm apgm8 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]

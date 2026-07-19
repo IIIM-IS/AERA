@@ -1,0 +1,6 @@
+goal1:(goal f1 b |[] 1) []
+   [0 0s:0ms:0us 0 forever stdin nil]
+goal2:(goal af1 b |[] 1) []
+   [0 0s:0ms:0us 0 forever stdin nil]
+goal3:(goal f1 self |[] 1) []
+   [0 0s:0ms:0us 0 forever stdin nil]

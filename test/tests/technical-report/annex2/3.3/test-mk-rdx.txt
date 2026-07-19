@@ -1,0 +1,28 @@
+70(168) mk_rdx_70:(mk.rdx ipgm0 [] [(icmd _inj [ent_69 [0 0s:0ms:0us 0 1 g1 nil]]
+)] 1) []
+   [0 0s:0ms:0us 1 1 stdout stdin]
+
+73(176) mk_rdx_73:(mk.rdx ipgm1 [] [(icmd _inj [ent_71 [0 0s:100ms:0us 0 1 g1 nil]]
+) (icmd _inj [ent_72 [0 0s:100ms:0us 0 1 g1 nil]]
+)] 1) []
+   [0 0s:100ms:0us 1 1 g1 g1]
+   
+74(184) mk_rdx_74:(mk.rdx ipgm2 [] [(icmd _inj [ent_80 [0 0s:300ms:0us 0 1 g1 nil]]
+) (icmd _inj [ent_75 [0 0s:200ms:1us 0 1 g1 nil]]
+) (icmd _inj [ent_82 [0 0s:400ms:0us 0 1 g1 nil]]
+) (icmd _inj [ent0 [0 13s:200ms:0us 0 1 g1 nil]]
+)] 1) []
+   [0 0s:200ms:0us 1 1 g2 g2]
+
+79(204) mk_rdx_79:(mk.rdx ipgm3 [] [(icmd _inj [ent_77 [0 0s:300ms:0us 0 1 g1 nil]]
+) (icmd _inj [ent_78 [0 0s:300ms:0us 0 1 g2 nil]]
+)] 1) []
+   [0 0s:300ms:0us 1 1 stdout stdin]
+
+81(211) mk_rdx_81:(mk.rdx ipgm4 [] [(icmd _inj [dupe [0 0s:400ms:0us 0 1 g1 nil]]
+)] 1) []
+   [0 0s:400ms:0us 1 1 g1 g1]
+
+83(218) mk_rdx_83:(mk.rdx ipgm5 [] [(icmd _inj [dupe [0 0s:500ms:0us 0 1 g1 nil]]
+)] 1) []
+   [0 0s:500ms:0us 1 1 g1 g1]

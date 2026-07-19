@@ -1,0 +1,73 @@
+; Doc - Annex 1 - 2.1 - Syntax - Atoms
+
+; test if different atoms exist
+pgm0:(pgm 
+[]
+   (ptn pos: |[])
+[]
+   (ptn x: |[])
+   (ptn y: |[])
+[]
+   (= x nil)   ; undefinded expression
+   (= x [])    ; set
+   (= x |[])   ; empty set
+   (= x [nil]) ; set containing 1 element (nil)
+   (= x |nb)   ; undefined number
+   (= x |ts)   ; undefined timestamp
+   (= x |did)  ; undefined device identifier
+   (= x |fid)  ; undefined device function identifier
+   (= x |nid)  ; undefined node identifier
+   (= x |bl)   ; undefined boolean
+   (= x |st)   ; undefined string
+   (= x forever)  ; time constant (infinite time)
+   (= x true)  ; boolean constant
+   (= x false) ; boolean constant
+|[] 
+1) |[]
+
+
+
+; a-name:an-expression - declaration of a label identifying the expression
+!class (vec2 x:nb y:nb)
+
+; a-name: - declaration of a named variable inside a program’s code
+; a-name#a-class-name: - declaration of a variable inside a program’s code with the indication of a cast to the specified class
+; :  - declaration of an unnamed wildcard inside a pattern.
+; :: - declaration of an unnamed wildcard tail inside a pattern
+; “a-character-string” - character string
+; this - reference to an instantiated program in the code of the program
+; this.a-member  - reference to a program's member (here: this.vw.ijt)
+; a-name.a-member - direct member access
+; a-member - a member in an object's structure
+; opcode - an operator or an object/marker class.
+pgm1:(pgm 
+[]
+   (ptn a-name: |[])
+   (ptn (mk.val self position a-name#vec3: ::) |[])
+[]
+   (ptn x: |[])
+   (ptn y: |[])
+[]
+   (>= 1 this.vw.ijt)
+[]
+   (prb [1 "print" "character-string" |[]])
+1) |[]
+
+
+; a-floating-point-number - a floating point number on 31 bits
+; a-floating-point-number|a-floating-point-number - an imprecise number. TODO: does not compile.
+g1:(std_grp 2 0 0.4 0 []) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]
+; g2:(std_grp 2 0 0.4|0.1 0 []) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]
+
+; a-timestamp
+; a-timestamp|a-timestamp - imprecise timestamps. TODO: does not compile.
+f1:(fact pgm0 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+; f2:(fact pgm0 1s:0ms:0us|0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+; identifier
+;!def exe 0xA1000000; the executive.
+
+
+; instantiate programs so compiling works
+ipgm0:(ipgm pgm0 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+ipgm1:(ipgm pgm1 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]

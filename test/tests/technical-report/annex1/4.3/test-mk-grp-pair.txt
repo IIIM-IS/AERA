@@ -1,0 +1,8 @@
+56(67) gpair1:(mk.grp_pair g1 g2 1) []
+   [0 0s:0ms:0us 0 forever root nil]
+
+57(68) gpair2:(mk.grp_pair primary secondary 1) []
+   [0 0s:0ms:0us 0 forever root nil]
+
+58(69) gpair3:(mk.grp_pair cube sphere 1) []
+   [0 0s:0ms:0us 0 forever root nil]

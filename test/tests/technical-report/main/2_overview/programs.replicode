@@ -1,0 +1,10 @@
+; Doc - Main - 2 - Overview
+
+; Programs react to incoming objects. A program defines a pattern of
+; time-constrained object sequences, including patterns and guards (conditions)
+; on the individual incoming objects and produces new objects built from the
+; incoming ones, said new objects being called productions. Programs are
+; reactive, i.e. they perform as described whenever incoming objects match the
+; time-pattern and guards. The transformation of inputs into productions is called
+; reduction.
+; Programs are state-less and have no side-effects.

@@ -1,0 +1,26 @@
+; REQUIREMENT:	1.2 - Acting
+; PARAMETERS:	-
+; BASE TASK:	-
+; ACTIONS:		- 
+
+; This is a basic syntax test for the icmd SWAP CODE.
+
+; S W P
+; !dfn (_swp :nb)
+; !def (swp args) (icmd _swp args)
+
+; (R1) This has never been used in any Replicode file, so this is merely a syntax test.
+
+pgm0:(pgm 
+|[]
+|[]
+|[]
+[]
+   (swp [0])
+   (swp [1])
+   (swp [-1]) ; (R2) Documentation states that only values in {0, 1} should be allowed as a parameter, but this is not the case.
+   (swp [3124134]) ; both of these lines compile. perhaps they would cause an exception later.
+1) |[]
+
+
+ipgm0:(ipgm pgm0 |[] RUN_ONCE 0ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 1 stdin nil 1]]

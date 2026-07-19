@@ -1,0 +1,55 @@
+; Doc - Annex 1 - 4.2.2 - Object Classes - Models
+
+; !class (mdl (_obj {tpl_args:[] objs:[] fwd_guards:[] bwd_guards:[] out_grps:[::grp]
+; str:nb cnt:nb sr:nb dsr:nb}))
+
+
+; EMPTY MODEL
+; model is a pair of patterns, so we have to specify at least these...
+mdl1:(mdl
+|[] ; tpl args (variables)
+[]
+   (ptn pos_x: |[])
+   (ptn pos_y: |[]) ; very elusive error if < 2 patterns provided, and no error if > 2, which seems like a bug
+|[] ; fwd guards (expressions)
+|[] ; bwd guards (expressions)
+|[] ; output groups (groups)
+1   ; str – strength of the model, in [0,1]
+1   ; cnt – number of evidences for a model (i.e. the number of times it predicted something)
+1   ; sr – success rate of the model: number of times the model predicted well divided by cnt.
+1   ; dsr – derivative of the success rate, i.e. the success rate as it was at the former to last evidence.
+1   ; psln_thr
+)
+[]
+   [SYNC_ONCE now 0 forever stdin nil 1] ; pgm view with 7 params
+
+; lets add more params:
+mdl2:(mdl 
+[a: b: param:] 
+[]
+   (ptn pos_x: |[])
+   (ptn pos_y: |[])
+[]
+   (= pos_x pos_y)
+   (>= param pos_x)
+   (<= param pos_y)
+   (<> 1 2)
+[]
+   (<> pos_x pos_y)
+   (<> param pos_x)
+   (<> param pos_y)
+   (<> 1 2)
+[]
+   ;primary
+   secondary
+   stdin
+   stdout
+-1   ; str – strength of the model, in [0,1]
+-1   ; cnt – number of evidences for a model (i.e. the number of times it predicted something)
+-1   ; sr – success rate of the model: number of times the model predicted well divided by cnt.
+-1   ; dsr – derivative of the success rate, i.e. the success rate as it was at the former to last evidence.
+1   ; psln_thr
+) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; TODO: weird behavior, mdl2's view group can't be stdin, and 'primary' needs to be commented out 
+; of output groups above...

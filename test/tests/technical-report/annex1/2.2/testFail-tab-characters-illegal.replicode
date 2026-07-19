@@ -1,0 +1,6 @@
+; Doc - Annex 1 - 2.2 - Separators
+
+; Replicode doesn't allow \t - Tab characters. 
+; The line below is the character 'a', followed by a tab --> should fail
+
+a	

@@ -1,0 +1,33 @@
+; check sub-goals of the plan for when the drive is first injected.
+; check that all available methods are used in concatenation,
+; to produce a backward chained plan from the goal state to the initial state.
+
+; first, M_DRIVE should inject the target fact (our first sub-goal)
+mk_val9:(mk.val b water_level 50 1) |[]
+fact10:(fact mk_val9 0s:300ms:0us 1s:100ms:0us 1 1) |[]
+goal1:(goal fact10 self sim0 1) |[]
+fact_121:(fact goal1 0s:310ms:0us 0s:310ms:0us 1 1) |[]
+
+; then, M_WAIT should use the above sub-goal to produce the sub-goal of being instantiated
+imdl7:(imdl M_WAIT [b v1: (ti v2: v3:)] [50 0s:300ms:0us 1s:100ms:0us] true 1) |[]
+fact12:(fact imdl7 0s:200ms:0us 1s:0ms:0us 1 1) |[]
+goal2:(goal fact12 self sim1 1) |[]
+fact_124:(fact goal2 0s:310ms:0us 0s:310ms:0us 1 1) |[]
+
+; to instantiate M_WAIT, we need to trigger M_WAIT_PRECOND, so the latter should produce a sub-goal to achieve its LHS CST
+icst3:(icst S0 [] [b 1 v1:] : :) |[]
+fact13:(fact icst3 0s:200ms:0us 1s:0ms:0us 1 :) |[]
+goal3:(goal fact13 self sim2 1) |[]
+fact_125:(fact goal3 0s:310ms:0us 0s:310ms:0us 1 1) |[]
+
+; then, M_OPEN_VALVE should produce a subgoal of being instantiated
+imdl8:(imdl M_OPEN_VALVE [b (ti v1: v2:)] [0s:200ms:0us 1s:0ms:0us] false 1) |[]
+fact15:(fact imdl8 0s:100ms:0us 0s:900ms:0us 1 1) |[]
+goal5:(goal fact15 self sim4 1) |[]
+fact_127:(fact goal5 0s:310ms:0us 0s:310ms:0us 1 1) |[]
+
+; finally, check plannening succeeded by checking the simulation commit to open the valve
+mk_val10:(mk.val b valve_status 1 :) |[]
+fact14:(fact mk_val10 0s:200ms:0us 1s:0ms:0us 1 :) |[]
+goal7:(goal fact14 self sim7 1) |[]
+fact75:(fact goal7 0s:310ms:0us 0s:310ms:0us 1 1) |[]

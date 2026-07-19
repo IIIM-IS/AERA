@@ -1,0 +1,85 @@
+; first, we check a CST + model induced as part of the PTPX at 0s:600ms:0us
+
+; the CST adds a velocity marker to the ball_position CST
+cst_295:(cst [] []
+   (fact (mk.val v0: velocity_y v1: :) v2: v3: : :)
+   (fact (icst ball_position [] [v0: v4:] : :) v2: v3: : :)
+|[]
+|[]
+[stdin] 1 ) []
+
+; the induced model serves as a strong requirement for mdl_90.
+; mdl_90 was induced via the CTPX. Unfortunately, it models an incorrect causation
+; so this can be thought of as trying to improve mdl_90
+; it specifies that mdl_90 will fail if the CST above exists.
+; Note its similarity to mdl_91, produced by the CTPX. 
+; It basically states the same, besides the small change in the CST and 
+; that this one is a strong requirement whereas mdl_91 is a weak requirement.
+mdl_296:(mdl [] []
+   (fact (icst cst_295 [] [v0: v1: v2:] : :) v3: v4: : :)
+   (|fact (imdl mdl_90 [v5: (ti v4: v6:)] [v0: v1: v7: v8: v9:] : :) v4: v6: : :)
+[]
+   v4:(add v3 80ms)
+   v6:(add v4 80ms)
+[]
+   v3:(sub v4 80ms)
+   v4:(sub v6 80ms)
+[stdin] 0 1 1 1 1 ) []
+   [0 0s:600ms:0us 0 forever secondary nil 0]
+   [0 0s:600ms:0us 0 forever primary nil 1]
+
+
+
+
+
+; the rest of this file highlights a problem:
+; (R1) The PTPX creates several duplicate composite states and models.
+; see the three CSTs below:
+cst_292:(cst [] []
+   (fact (mk.val v0: velocity_y v1: :) v2: v3: : :)
+   (fact (icst ball_position [] [v0: v4:] : :) v2: v3: : :)
+|[]
+|[]
+[stdin] 1 ) []
+   [0 0s:600ms:0us 0 forever primary nil 1]
+cst_295:(cst [] []
+   (fact (mk.val v0: velocity_y v1: :) v2: v3: : :)
+   (fact (icst ball_position [] [v0: v4:] : :) v2: v3: : :)
+|[]
+|[]
+[stdin] 1 ) []
+   [0 0s:600ms:0us 0 forever primary nil 1]
+cst_300:(cst [] []
+   (fact (mk.val v0: velocity_y v1: :) v2: v3: : :)
+   (fact (icst ball_position [] [v0: v4:] : :) v2: v3: : :)
+|[]
+|[]
+[stdin] 1 ) []
+   [0 0s:600ms:0us 0 forever primary nil 1]
+
+; and these two MDLs:
+mdl_296:(mdl [] []
+   (fact (icst cst_295 [] [v0: v1: v2:] : :) v3: v4: : :)
+   (|fact (imdl mdl_90 [v5: (ti v4: v6:)] [v0: v1: v7: v8: v9:] : :) v4: v6: : :)
+[]
+   v4:(add v3 80ms)
+   v6:(add v4 80ms)
+[]
+   v3:(sub v4 80ms)
+   v4:(sub v6 80ms)
+[stdin] 0 1 1 1 1 ) []
+   [0 0s:600ms:0us 0 forever secondary nil 0]
+   [0 0s:600ms:0us 0 forever primary nil 1]
+
+mdl_304:(mdl [] []
+   (fact (icst cst_303 [] [v0: v1: v2:] : :) v3: v4: : :)
+   (|fact (imdl mdl_90 [v5: (ti v4: v6:)] [v0: v1: v7: v8: v9:] : :) v4: v6: : :)
+[]
+   v4:(add v3 80ms)
+   v6:(add v4 80ms)
+[]
+   v3:(sub v4 80ms)
+   v4:(sub v6 80ms)
+[stdin] 0 1 1 1 1 ) []
+   [0 0s:600ms:0us 0 forever secondary nil 0]
+   [0 0s:600ms:0us 0 forever primary nil 1]

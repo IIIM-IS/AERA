@@ -1,0 +1,4 @@
+; Doc - Annex 1 - 4.4 - Semantics - Entities
+
+; test if self is already defined
+self:(ent 1) [[SYNC_ONCE now 0 forever root nil]]

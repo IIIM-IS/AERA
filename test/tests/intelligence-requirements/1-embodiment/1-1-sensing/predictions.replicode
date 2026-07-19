@@ -1,0 +1,41 @@
+; REQUIREMENT:	1.1 - Sensing
+; PARAMETERS:	-
+; BASE TASK:	-
+; ACTIONS:		- 
+
+; Here, we test PREDICTION syntaxe
+; !class (pred (_obj {obj: sims:[::sim]}))
+
+; (R1) The structure of the prediction class has changed, to now include sims:.
+
+; first, some setup:
+ball:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+b:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+; The statement that b is a ball.
+b_is_a_ball:(mk.val b essence ball 1) |[]
+; fact
+f1:(fact b_is_a_ball 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+; anti-fact
+af1:(|fact b_is_a_ball 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+
+; lets try to create a prediction from a fact:
+pred1:(pred 
+f1     ; obj - the predicted fact
+|[]    ; sims - list of simulations
+1      ; psln_thr
+) 
+[[SYNC_ONCE now 0 forever stdin nil]]
+
+
+; and from antifact:
+pred2:(pred 
+af1    ; obj - the predicted fact
+|[]    ; sims - list of simulations
+1      ; psln_thr
+) 
+[[SYNC_ONCE now 0 forever stdin nil]]
+
+
+; TODO: see also
+; !class (sim (_obj {mode:nb thz:us f_super_goal: opposite:bl root_model:mdl solution_model:mdl solution_cfd:nb solution_before:ts}))

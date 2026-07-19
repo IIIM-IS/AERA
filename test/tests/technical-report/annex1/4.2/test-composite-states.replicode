@@ -1,0 +1,43 @@
+; Doc - Annex 1 - 4.2.2 - Object Classes - Composite States
+
+; !class (cst (_obj {tpl_args:[] objs:[] fwd_guards:[] bwd_guards:[] out_grps:[::grp]}))
+
+
+; EMPTY CST
+cst1:(cst
+|[] ; tpl args (variables)
+|[] ; objs (patterns)
+|[] ; fwd guards (expressions)
+|[] ; bwd guards (expressions)
+|[] ; output groups (groups)
+1   ; psln_thr
+)
+[]
+   [SYNC_ONCE now 0 forever stdin nil 1] ; pgm view with 7 params
+
+
+; lets insert some values...
+cst2:(cst
+[a: b: param:]
+[]
+   (ptn pos_x: |[])
+   (ptn pos_y: |[])
+[]
+   (= pos_x pos_y)
+   (>= param pos_x)
+   (<= param pos_y)
+   (<> 1 2)
+[]
+   (<> pos_x pos_y)
+   (<> param pos_x)
+   (<> param pos_y)
+   (<> 1 2)
+[]
+   primary
+   secondary
+   stdin
+   stdout
+1  
+)
+[]
+   [SYNC_ONCE now 0 forever stdin nil 1]

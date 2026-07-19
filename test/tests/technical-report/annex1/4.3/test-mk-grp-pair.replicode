@@ -1,0 +1,22 @@
+; Doc - Annex 1 - 4.3 - Semantics - Marker Classes
+
+; !class (mk.grp_pair (_obj {primary:grp secondary:grp}))
+
+; setup
+g1:(std_grp 0 0 0 0 [nil]) [[SYNC_ONCE now 0 forever stdin nil COV_ON 0]]
+g2:(std_grp 0 0 0 0 [nil]) [[SYNC_ONCE now 0 forever stdin nil COV_OFF 0]]
+
+; let's instantiate...
+gpair1:(mk.grp_pair 
+g1  ; primary group
+g2  ; secondary group
+1) []
+   [SYNC_ONCE now 0 forever root nil]
+
+
+gpair2:(mk.grp_pair primary secondary 1) [[SYNC_ONCE now 0 forever root nil]]
+
+
+; TODO: below should fail - not group parameters!
+; but it compiles...
+gpair3:(mk.grp_pair cube sphere 1) [[SYNC_ONCE now 0 forever root nil]

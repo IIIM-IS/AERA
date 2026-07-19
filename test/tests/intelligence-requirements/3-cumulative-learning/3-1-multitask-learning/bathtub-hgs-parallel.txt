@@ -1,0 +1,33 @@
+; check the injected drive
+fact27:(fact run 0s:300ms:0us 1s:100ms:0us 1 1) |[]
+goal0:(goal fact27 self nil 1) |[]
+fact_247:(fact goal0 0s:310ms:0us 0s:310ms:0us 1 1) []
+   [0 0s:310ms:0us 1 forever primary primary]
+
+; check goal #1 (bathtub)
+mk_val24:(mk.val b water_level 50 1) |[]
+fact28:(fact mk_val24 0s:300ms:0us 1s:100ms:0us 1 1) |[]
+sim0:(sim 0 50ms fact_247 false m_drive nil 0 0s:0ms:0us 1) |[]
+goal1:(goal fact28 self sim0 1) |[]
+fact_248:(fact goal1 0s:310ms:0us 0s:310ms:0us 1 1) |[]
+
+; check goal #2 (hand-grab-sphere)
+mk_val25:(mk.val s position 15 1) |[]
+fact205:(fact mk_val25 0s:400ms:0us 1s:200ms:0us 1 1) |[]
+sim13:(sim 0 50ms fact_398 false m_drive_hgs nil 0 0s:0ms:0us 1) |[]
+goal14:(goal fact205 self sim13 1) |[]
+fact_402:(fact goal14 0s:410ms:0us 0s:410ms:0us 1 1) []
+   [0 0s:410ms:0us 1 995 primary primary]
+
+; check cmd #1 (bathtub)
+cmd7:(cmd open_valve [b] :) |[]
+fact194:(fact cmd7 0s:300ms:0us 0s:400ms:0us 1 :) |[]
+goal11:(goal fact194 self sim11 1) |[]
+fact_374:(fact goal11 0s:360ms:0us 0s:360ms:0us 1 1) |[]
+
+; check some planning step of task #2 (hand-grab-sphere)
+imdl80:(imdl M0 [s v1: (ti v2: v3:)] [v4: 15 0s:400ms:0us 1s:200ms:0us] false 1) |[]
+fact208:(fact imdl80 0s:320ms:0us 1s:100ms:0us 1 1) |[]
+goal16:(goal fact208 self sim15 1) |[]
+fact_406:(fact goal16 0s:410ms:0us 0s:410ms:0us 1 1) []
+   [0 0s:410ms:0us 1 995 primary primary]

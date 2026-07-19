@@ -1,0 +1,69 @@
+; Doc - Annex 1 - 3.1 - Built-In Constructs - Operators
+
+; now	; TODO: add a test that waits for a few milliseconds
+oNow:(ont 1) [[SYNC_ONCE now 0 forever primary nil]]
+
+; equ
+oEqu1:(ont (equ 1 1)) [[SYNC_ONCE now 0 forever root nil]]
+oEqu2:(ont (= 1 1)) [[SYNC_ONCE now 0 forever root nil]]
+
+; neq
+oNeq1:(ont (neq 1 1)) [[SYNC_ONCE now 0 forever root nil]]
+oNeq2:(ont (<> 1 1)) [[SYNC_ONCE now 0 forever root nil]]
+
+; gtr
+oGtr1:(ont (gtr 1 1)) [[SYNC_ONCE now 0 forever root nil]]
+oGtr2:(ont (> 1 1)) [[SYNC_ONCE now 0 forever root nil]]
+
+; lsr
+oLsr1:(ont (lsr 1 1)) [[SYNC_ONCE now 0 forever root nil]]
+oLsr2:(ont (< 1 1)) [[SYNC_ONCE now 0 forever root nil]]
+
+; gte
+oGte1:(ont (gte 1 1)) [[SYNC_ONCE now 0 forever root nil]]
+oGte2:(ont (>= 1 1)) [[SYNC_ONCE now 0 forever root nil]]
+
+; lse
+oLse1:(ont (lse 1 1)) [[SYNC_ONCE now 0 forever root nil]]
+oLse2:(ont (<= 1 1)) [[SYNC_ONCE now 0 forever root nil]]
+
+; add
+oAdd1:(ont (add 1 1)) [[SYNC_ONCE now 0 forever root nil]]
+oAdd2:(ont (+ 1 1)) [[SYNC_ONCE now 0 forever root nil]]
+
+; sub
+oSub1:(ont (sub 1 1)) [[SYNC_ONCE now 0 forever root nil]]
+oSub2:(ont (- 1 1)) [[SYNC_ONCE now 0 forever root nil]]
+
+; mul
+oMul1:(ont (mul 1 1)) [[SYNC_ONCE now 0 forever root nil]]
+oMul2:(ont (* 1 1)) [[SYNC_ONCE now 0 forever root nil]]
+
+; div
+oDiv1:(ont (div 1 1)) [[SYNC_ONCE now 0 forever root nil]]
+oDiv2:(ont (/ 1 1)) [[SYNC_ONCE now 0 forever root nil]]
+
+; dis
+oDis:(ont (dis 1 1)) [[SYNC_ONCE now 0 forever root nil]]
+
+; ln
+oLn:(ont (ln 1)) [[SYNC_ONCE now 0 forever root nil]]
+
+; exp
+oExp:(ont (exp 1)) [[SYNC_ONCE now 0 forever root nil]]
+
+; log
+oLog:(ont (log 1)) [[SYNC_ONCE now 0 forever root nil]]
+
+; e10
+oE10:(ont (e10 1)) [[SYNC_ONCE now 0 forever root nil]]
+
+; syn
+oSyn1:(ont (syn 1)) [[SYNC_ONCE now 0 forever root nil]]
+oSyn2:(ont (\ 1)) [[SYNC_ONCE now 0 forever root nil]]
+
+; rnd
+oRnd:(ont (rnd 100)) [[SYNC_ONCE now 0 forever root nil]]
+
+; ins, red, fvm, ...
+; see 4.1

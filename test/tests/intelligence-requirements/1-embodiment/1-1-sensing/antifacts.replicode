@@ -1,0 +1,18 @@
+; REQUIREMENT:	1.1 - Sensing
+; PARAMETERS:	-
+; BASE TASK:	-
+; ACTIONS:		- 
+
+; Here, we test ANTI-FACT syntax:
+; !class (|fact (_fact nil))
+; !class (_fact (_obj {obj: after:ts before:ts cfd:nb :~}))
+
+; (R1) after: and before: use timestamps, not microseconds.
+
+; first, some setup:
+ball:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+x:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+x_is_a_ball:(mk.val x essence ball 1) |[]
+
+; creating an anti fact
+af_x_is_a_ball:(|fact x_is_a_ball 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]

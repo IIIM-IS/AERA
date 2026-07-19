@@ -1,0 +1,110 @@
+54(65) a:(ont 1) []
+   [0 0s:0ms:0us 0 forever stdin nil]
+
+55(66) b:(ont 1) []
+   [1 0s:0ms:0us 0 forever stdin nil]
+
+56(67) c:(ont 1) []
+   [2 0s:0ms:0us 0 forever stdin nil]
+
+57(68) d:(ont 1) []
+   [3 0s:0ms:0us 0 forever stdin nil]
+
+58(69) g:(ont 1) []
+   [-1 0s:0ms:0us 0 forever stdin nil]
+
+59(70) h:(ont 1) []
+   [13 0s:0ms:0us 0 forever stdin nil]
+
+60(71) i:(ont 1) []
+   [0 0s:0ms:0us 0 forever stdin nil]
+
+61(72) j:(ont 1) []
+   [0 0s:0ms:0us 0 forever stdin nil]
+
+62(73) k:(ont 1) []
+   [0 0s:0ms:0us 0 forever stdin nil]
+
+63(74) l:(ont 1) []
+   [0 0s:0ms:0us 0 forever stdin nil]
+
+64(75) m:(ont 1) []
+   [0 0s:0ms:0us 0.5 forever stdin nil]
+
+65(76) n:(ont 1) []
+   [0 0s:0ms:0us 1 forever stdin nil]
+
+66(77) o:(ont 1) []
+   [0 0s:0ms:0us -1 forever stdin nil]
+
+67(78) p:(ont 1) []
+   [0 0s:0ms:0us 2 forever stdin nil]
+
+68(79) q:(ont 1) []
+   [0 0s:0ms:0us 0 forever stdin nil]
+
+69(80) r:(ont 1) |[]
+
+70(81) s:(ont 1) []
+   [0 0s:0ms:0us 0 1 stdin nil]
+
+71(82) t:(ont 1) []
+   [0 0s:0ms:0us 0 1.67772e+07 stdin nil]
+
+72(83) u:(ont 1) |[]
+
+73(84) v:(ont 1) []
+   [0 0s:0ms:0us 0 91 stdin nil]
+
+74(85) w:(ont 1) []
+   [0 0s:0ms:0us 0 991 stdin nil]
+
+75(86) x:(ont 1) []
+   [0 0s:0ms:0us 0 forever stdin nil]
+
+76(87) y:(ont 1) []
+   [0 0s:0ms:0us 0 forever stdout nil]
+
+77(88) z:(ont 1) []
+   [0 0s:0ms:0us 0 forever primary nil]
+
+78(89) aa:(ont 1) []
+   [0 0s:0ms:0us 0 forever secondary nil]
+
+79(90) ac:(ont 1) []
+   [0 0s:0ms:0us 0 forever stdin stdin]
+
+80(91) ad:(ont 1) []
+   [0 0s:0ms:0us 0 forever stdin stdout]
+
+81(92) ae:(ont 1) []
+   [0 0s:0ms:0us 0 forever stdin primary]
+
+82(93) af:(ont 1) []
+   [0 0s:0ms:0us 0 forever stdin secondary]
+
+83(94) ag:(ont 1) []
+   [0 0s:0ms:0us 0 forever stdin nil]
+
+84(95) ah:(ont 1) []
+   [0 0s:0ms:0us 0 forever root root]
+
+85(96) xx:(ont 1) []
+   [0 0s:0ms:0us 0 forever stdout nil]
+   [0 0s:0ms:0us 0 forever stdin nil]
+
+86(97) xy:(ont 1) []
+   [0 0s:0ms:0us 0 forever stdout nil]
+   [0 0s:0ms:0us 0 forever stdin nil]
+
+87(195) mk_low_sln_87:(mk.low_sln o 0) []
+   [0 0s:100ms:0us 1 1 stdout stdin]
+
+88(197) mk_high_sln_88:(mk.high_sln p 0) []
+   [0 0s:100ms:0us 1 1 stdout stdin]
+
+89(202) mk_low_sln_89:(mk.low_sln o 0) []
+   [0 0s:200ms:0us 1 1 stdout stdin]
+
+90(204) mk_high_sln_90:(mk.high_sln p 0) []
+   [0 0s:200ms:0us 1 1 stdout stdin]

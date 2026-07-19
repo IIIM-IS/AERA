@@ -1,0 +1,50 @@
+; Doc - Annex 1 - 4.2.2 - Object Classes - Instantiated Programs
+
+; !class (ipgm (_obj {code: args:[] run:bl tsc:us res:bl nfr:bl}))
+
+
+; EMPTY PROGRAMS
+pgm0:(pgm |[] |[] |[] |[] 1) |[]
+
+pgm1:(|pgm |[] |[] |[] |[] 1) |[]
+
+pgm2:(pgm 
+[]
+   (ptn pos_x: |[])
+   (ptn pos_y: |[])
+|[] ; inputs, a set of patterns
+|[] ; guards, a set of expressions
+|[] ; prods
+1) |[]
+
+
+; IPGMS
+ipgm0:(
+ipgm 
+pgm0     ; the instantiated code: either a program or an anti-program.
+|[]      ; the instantiation values: a set of expressions or references to objects
+RUN_ONCE ; RUN_ONCE or RUN_ALWAYS
+50ms     ; time scope
+VOLATILE ; VOLATILE or STATIC
+SILENT   ; notify flag, SILENT or NOTIFY
+1) [[SYNC_ONCE now 0 1 stdin nil 1]] 
+
+ipgm1:(
+ipgm
+pgm1
+|[]
+RUN_ONCE ; don't test RUN_ALWAYS here, causes AERA.exe to run indefinitely
+0ms
+STATIC
+NOTIFY
+1) [[SYNC_ONCE now 0 1 stdin nil 1]] 
+
+ipgm2:(
+ipgm
+pgm2
+[1 2 3]
+RUN_ONCE
+0ms
+STATIC
+NOTIFY
+1) [[SYNC_ONCE now 0 1 stdin nil 1]] 

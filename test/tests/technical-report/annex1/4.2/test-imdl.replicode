@@ -1,0 +1,34 @@
+; Doc - Annex 1 - 4.2.2 - Object Classes - Instantiated Models
+
+
+; !class (imdl (_obj {mdl:mdl tpl_args:[] args:[] wr_e:bl}))
+
+
+; some setup: empty MDL
+mdl1:(mdl |[] []
+   (ptn pos_x: |[])
+   (ptn pos_y: |[])
+|[] |[] |[] 1 1 1 1 1) [[SYNC_ONCE now 0 forever stdin nil 1]] ; pgm view with 7 params
+
+; EMPTY IMDL
+imdl1:(imdl 
+mdl1   ; model
+|[]    ; tpl_args - values
+|[]    ; args - values or variables
+false  ; TODO: whats wr_e?
+1      ; psln_thr
+)
+[[SYNC_ONCE now 0 forever stdin nil]] ; view with 6 params
+
+
+; FILLED IMDL
+imdl2:(imdl 
+mdl1 
+[1 2] 
+[]
+   (ptn pos_x: |[])
+   (ptn pos_y: |[]) 
+true 
+1   
+)
+[[SYNC_ONCE now 0 forever stdin nil]] ; view with 6 params

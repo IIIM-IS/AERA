@@ -1,0 +1,33 @@
+; here, we check the model induced as part of the GTPX at 0s:900ms:0us
+; It tries to explain why we achieved the goal of the hand NOT being at position 0 unexpectedly.
+
+; mdl_430 models the following:
+; If I want the hand to not be at position v0, then I have to move it to position 10.
+mdl_430:(mdl [v0: (ti v1: v2:)] []
+   (fact (cmd move [v3: v4:] :) v5: v6: : :)
+   (|fact (mk.val v3: position v0: :) v7: v8: : :)
+[]
+   v7:(add v1 100ms)
+   v8:(add v2 100ms)
+[]
+   v1:(sub v7 100ms)
+   v2:(sub v8 100ms)
+   v5:(sub v7 80ms)
+   v6:(sub v8 100ms)
+   v4:(id 10)
+[stdin] 0 1 1 1 1 ) []
+   [0 0s:900ms:0us 0 forever secondary nil 0]
+   [0 0s:900ms:0us 0 forever primary nil 1]
+
+
+
+; mdl_431 models the following:
+; The above model will work as long as long as the hand is at position v1.
+mdl_431:(mdl [] []
+   (fact (icst S0 [] [v0: v1:] : :) v2: v3: : :)
+   (fact (imdl mdl_430 [v1: (ti v2: v3:)] [v0: v4: v5: v6:] : :) v2: v3: : :)
+|[]
+|[]
+[stdin] 0 1 1 1 1 ) []
+   [0 0s:900ms:0us 0 forever secondary nil 0]
+   [0 0s:900ms:0us 0 forever primary nil 1]

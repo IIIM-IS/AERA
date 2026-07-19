@@ -1,0 +1,9 @@
+54(65) g0:(grp 2 0 0.4 0 1 0 1 0 0 1 0 0 1 1 1 1 0 0 1 0 0 1 1 0 1 1 0 1 0 0 []
+   stdin
+   stdout
+   root
+1) []
+   [0 0s:0ms:0us 0 forever root nil false 0]
+
+55(66) g1:(grp -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 |[] 1) []
+   [0 0s:0ms:0us 0 forever root nil false 0]

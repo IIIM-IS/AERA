@@ -1,0 +1,18 @@
+; Doc - Annex 1 - 2.2 - Separators
+
+; This is a comment.
+  ;So is this.
+	; And this ;
+; and also this tab character:				
+; And the above and the below
+;;;;;;;;
+; and this: ; person:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+
+
+; and also the valid code below followed by comments:
+person:(ont 1) [[SYNC_ONCE now 0 forever root nil]]; comment
+fruit:(ont 1) [[SYNC_ONCE now 0 forever root nil]] ; comment ;;;;
+vegetable:(ont 1) [[SYNC_ONCE now 0 forever root nil]];;;;;;;
+
+; and supposedly also multi-line comments separated like so: blank-space..carriage-return
+; but that doesnt seem to work //TODO

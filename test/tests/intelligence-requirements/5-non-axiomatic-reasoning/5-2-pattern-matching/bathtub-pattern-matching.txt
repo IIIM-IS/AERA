@@ -1,0 +1,62 @@
+; here, we check various instances of matched patterns during the bathtub test.
+; test cases are taken from the Visualizer's explanation log.
+
+; Input fact_97 matched the LHS of model M_OPEN_VALVE_PRECOND 
+; and the predicted instantiated model on the RHS is a
+; requirement for model M_OPEN_VALVE.
+icst0:(icst S0 [] [b 0 0] false 1) |[]
+fact_97:(fact icst0 0s:100ms:0us 0s:200ms:0us 1 1) |[]
+
+; Inputs fact_96, fact_92 and fact_94 matched composite state S0,
+; which made instantiated composite state fact_97
+mk_val1:(mk.val b water_level 0 1) |[]
+fact_92:(fact mk_val1 0s:100ms:0us 0s:200ms:0us 1 1) |[]
+mk_val2:(mk.val b valve_status 0 1) |[]
+fact_94:(fact mk_val2 0s:100ms:0us 0s:200ms:0us 1 1) |[]
+fact_96:(fact b_is_a_bathtub 0s:100ms:0us 0s:200ms:0us 1 1) |[]
+icst0:(icst S0 [] [b 0 0] false 1) |[]
+fact_97:(fact icst0 0s:100ms:0us 0s:200ms:0us 1 1) |[]
+
+; Input fact_174 matched the LHS of model M_OPEN_VALVE and the prediction 
+; is the RHS instantiated with values shown in imdl fact_176
+; and 
+; Input fact_174 matched the LHS of model M_OPEN_VALVE and
+; was instantiated with template values
+cmd8:(cmd open_valve [b] 1) |[]
+fact_174:(fact cmd8 0s:320ms:0us 0s:400ms:0us 1 1) |[]
+imdl32:(imdl M_OPEN_VALVE [b (ti 0s:300ms:0us 0s:400ms:0us)] [0s:400ms:0us 0s:500ms:0us] false 1) |[]
+fact_176:(fact imdl32 0s:320ms:0us 0s:400ms:0us 1 1) |[]
+mk_val18:(mk.val b valve_status 1 :) |[]
+fact77:(fact mk_val18 0s:400ms:0us 0s:500ms:0us 1 :) |[]
+pred46:(pred fact77 [] 1) |[]
+fact_175:(fact pred46 0s:360ms:0us 0s:360ms:0us 1 1) |[]
+
+; Input fact_185 was matched against prediction fact_175 with success.
+mk_val18:(mk.val b valve_status 1 :) |[]
+fact77:(fact mk_val18 0s:400ms:0us 0s:500ms:0us 1 :) |[]
+pred46:(pred fact77 [] 1) |[]
+fact_175:(fact pred46 0s:360ms:0us 0s:360ms:0us 1 1) |[]
+mk_val21:(mk.val b valve_status 1 1) |[]
+fact_185:(fact mk_val21 0s:400ms:0us 0s:500ms:0us 1 1) |[]
+success2:(success fact_175 fact_185 mk_rdx_177 1) |[]
+
+; Inputs fact_179, predicted fact_175 and fact_183 matched composite state S0,
+; which made predicted instantiated composite state fact78
+mk_val18:(mk.val b valve_status 1 :) |[]
+fact77:(fact mk_val18 0s:400ms:0us 0s:500ms:0us 1 :) |[]
+pred46:(pred fact77 [] 1) |[]
+fact_175:(fact pred46 0s:360ms:0us 0s:360ms:0us 1 1) |[]
+fact_179:(fact b_is_a_bathtub 0s:400ms:0us 0s:500ms:0us 1 1) |[]
+mk_val20:(mk.val b water_level 0 1) |[]
+fact_183:(fact mk_val20 0s:400ms:0us 0s:500ms:0us 1 1) |[]
+icst11:(icst S0 [] [b 1 0] false 1) |[]
+fact78:(fact icst11 0s:400ms:0us 0s:500ms:0us 1 1) |[]
+
+; Input fact_521 matched the LHS of model M_WAIT_PRECOND and the predicted 
+; instantiated model on the RHS is a requirement for model M_WAIT.
+icst51:(icst S0 [] [b 1 50] false 1) |[]
+fact_521:(fact icst51 0s:900ms:0us 1s:0ms:0us 1 1) []
+imdl171:(imdl M_WAIT [b 50 (ti 0s:900ms:0us 1s:0ms:0us)] [v4: v5: v6:] : :) |[]
+fact418:(fact imdl171 0s:900ms:0us 1s:0ms:0us 1 :) |[]
+pred268:(pred fact418 [] 1) |[]
+fact419:(fact pred268 0s:900ms:0us 0s:900ms:0us 1 1) |[]

@@ -1,0 +1,16 @@
+; Doc - Annex 1 - 2.6 - Pre-Processor Directives
+
+
+
+; operator directive
+!op (operator_name :nb :nb :us)
+!op (merge : :):
+!op (div :nb :nb):nb
+
+; device function directive
+!dfn (right :us :nb)
+!dfn (left :us :nb)
+
+; load directive
+!load test-counters.replicode
+oMisc:(ont __counter_zero) [[SYNC_ONCE now 0 forever root nil]]

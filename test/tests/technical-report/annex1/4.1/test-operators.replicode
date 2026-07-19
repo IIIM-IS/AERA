@@ -1,0 +1,100 @@
+; Doc - Annex 1 - 4.1 - Semantics - Operators
+
+; this only tests syntax, not semantics
+pgm0:(pgm 
+|[]
+[]
+   (ptn x: |[])
+   (ptn y: |[])
+[]
+   ; now - !op (_now):ts
+   (_now)
+
+   ; equ - !op (equ : :):
+   (= x y)
+   (equ x y)
+
+   ; neq - !op (neq : :):
+   (<> x y)
+   (neq x y)
+
+   ; gtr - !op (gtr : :):
+   (> x y)
+   (gtr x y)
+
+   ; lsr - !op (lsr : :):
+   (< x y)
+   (lsr x y)
+
+   ; gte - !op (gte : :):
+   (>= x y)
+   (gte x y)
+
+   ; lse - !op (lse : :):
+   (<= x y)
+   (lse x y)
+
+   ; add - !op (add : :):
+   (+ x y)
+   (add x y)
+
+   ; sub - !op (sub : :):
+   (- x y)
+   (sub x y)
+
+   ; mul - !op (mul : :):
+   (* x y)
+   (mul x y)
+
+   ; div - !op (div : :):
+   (/ x y)
+   (div x y)
+
+   ; dis - !op (dis : :):nb
+   (dis x y)
+
+   ; ln - !op (ln :nb):nb
+   (ln x)
+
+   ; exp - !op (exp :nb):nb
+   (exp x)
+
+   ; log - !op (log :nb):nb
+   (log x)
+
+   ; e10 - !op (e10 :nb):nb
+   (e10 x)
+
+   ; syn - !op (syn :):
+   (\ x)
+   (syn x)
+
+   ; ins - !op (ins : :[] :bl :us :bl :bl):
+   (ins x |[] true 0ms true true)
+
+   ; red - !op (red :[] :[] :[]):[]
+   (red |[] |[] |[])
+
+   ; rnd - !op (rnd :nb):nb
+   (rnd x)
+
+   ; fvw - !op (fvw : :):
+   (fvw x y)
+
+   ; is_sim - !op (is_sim :):bl
+   (is_sim x)
+
+   ; min - !op (min : :):
+   (min x y)
+
+   ; max - !op (max : :):
+   (max x y)
+
+   ; id - !op (id :):
+   (id x)
+
+|[] ; prods
+1) |[]
+
+; instantiate so compiling works
+ipgm0:(ipgm pgm0 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]

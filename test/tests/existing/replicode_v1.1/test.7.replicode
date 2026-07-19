@@ -1,0 +1,28 @@
+P1:(|pgm
+[]; tpl
+   (ptn tgv:(tagged_v vec: :) |[])
+[]; input
+   []
+      (ptn in:(ent ::) []
+         (> in.vw.res 2)
+         (= in.psln_thr 1)
+      )
+   |[]
+   |[]
+[]
+   (inj [(ent 1) [SYNC_FRONT now 1 forever stdout nil]])
+1; psln_thr
+)
+|[]
+
+iP1:(ipgm
+P1; code
+[]; args
+   (tagged_v (vec3 1 2 3) "vector 123")
+RUN_ALWAYS; run
+100000us; tsc
+NOTIFY; nfr
+1; psln_thr
+)
+[]
+   [SYNC_FRONT now 0 forever root nil 1]

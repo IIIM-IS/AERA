@@ -1,0 +1,2559 @@
+; ___
+; ___
+; ___
+pattern0:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; ___
+; ___
+pattern1:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; ___
+; ___
+pattern2:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; ___
+; ___
+pattern12:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; ___
+; ___
+pattern3:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; ___
+; ___
+pattern13:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; ___
+; ___
+pattern23:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; ___
+; ___
+pattern123:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; *__
+; ___
+pattern4:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; *__
+; ___
+pattern14:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; *__
+; ___
+pattern24:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; *__
+; ___
+pattern124:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; *__
+; ___
+pattern34:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; *__
+; ___
+pattern134:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; *__
+; ___
+pattern234:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; *__
+; ___
+pattern1234:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; _*_
+; ___
+pattern5:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; _*_
+; ___
+pattern15:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; _*_
+; ___
+pattern25:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; _*_
+; ___
+pattern125:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; _*_
+; ___
+pattern35:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; _*_
+; ___
+pattern135:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; _*_
+; ___
+pattern235:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; _*_
+; ___
+pattern1235:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; **_
+; ___
+pattern45:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; **_
+; ___
+pattern145:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; **_
+; ___
+pattern245:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; **_
+; ___
+pattern1245:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; **_
+; ___
+pattern345:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; **_
+; ___
+pattern1345:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; **_
+; ___
+pattern2345:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; **_
+; ___
+pattern12345:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; __*
+; ___
+pattern6:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; __*
+; ___
+pattern16:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; __*
+; ___
+pattern26:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; __*
+; ___
+pattern126:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; __*
+; ___
+pattern36:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; __*
+; ___
+pattern136:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; __*
+; ___
+pattern236:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; __*
+; ___
+pattern1236:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; *_*
+; ___
+pattern46:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; *_*
+; ___
+pattern146:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; *_*
+; ___
+pattern246:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; *_*
+; ___
+pattern1246:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; *_*
+; ___
+pattern346:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; *_*
+; ___
+pattern1346:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; *_*
+; ___
+pattern2346:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; *_*
+; ___
+pattern12346:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; _**
+; ___
+pattern56:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; _**
+; ___
+pattern156:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; _**
+; ___
+pattern256:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; _**
+; ___
+pattern1256:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; _**
+; ___
+pattern356:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; _**
+; ___
+pattern1356:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; _**
+; ___
+pattern2356:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; _**
+; ___
+pattern12356:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; ***
+; ___
+pattern456:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; ***
+; ___
+pattern1456:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; ***
+; ___
+pattern2456:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; ***
+; ___
+pattern12456:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; ***
+; ___
+pattern3456:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; ***
+; ___
+pattern13456:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; ***
+; ___
+pattern23456:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; ***
+; ___
+pattern123456:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; ___
+; *__
+pattern7:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; ___
+; *__
+pattern17:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; ___
+; *__
+pattern27:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; ___
+; *__
+pattern127:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; ___
+; *__
+pattern37:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; ___
+; *__
+pattern137:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; ___
+; *__
+pattern237:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; ___
+; *__
+pattern1237:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; *__
+; *__
+pattern47:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; *__
+; *__
+pattern147:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; *__
+; *__
+pattern247:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; *__
+; *__
+pattern1247:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; *__
+; *__
+pattern347:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; *__
+; *__
+pattern1347:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; *__
+; *__
+pattern2347:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; *__
+; *__
+pattern12347:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; _*_
+; *__
+pattern57:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; _*_
+; *__
+pattern157:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; _*_
+; *__
+pattern257:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; _*_
+; *__
+pattern1257:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; _*_
+; *__
+pattern357:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; _*_
+; *__
+pattern1357:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; _*_
+; *__
+pattern2357:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; _*_
+; *__
+pattern12357:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; **_
+; *__
+pattern457:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; **_
+; *__
+pattern1457:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; **_
+; *__
+pattern2457:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; **_
+; *__
+pattern12457:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; **_
+; *__
+pattern3457:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; **_
+; *__
+pattern13457:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; **_
+; *__
+pattern23457:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; **_
+; *__
+pattern123457:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; __*
+; *__
+pattern67:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; __*
+; *__
+pattern167:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; __*
+; *__
+pattern267:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; __*
+; *__
+pattern1267:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; __*
+; *__
+pattern367:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; __*
+; *__
+pattern1367:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; __*
+; *__
+pattern2367:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; __*
+; *__
+pattern12367:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; *_*
+; *__
+pattern467:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; *_*
+; *__
+pattern1467:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; *_*
+; *__
+pattern2467:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; *_*
+; *__
+pattern12467:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; *_*
+; *__
+pattern3467:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; *_*
+; *__
+pattern13467:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; *_*
+; *__
+pattern23467:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; *_*
+; *__
+pattern123467:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; _**
+; *__
+pattern567:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; _**
+; *__
+pattern1567:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; _**
+; *__
+pattern2567:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; _**
+; *__
+pattern12567:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; _**
+; *__
+pattern3567:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; _**
+; *__
+pattern13567:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; _**
+; *__
+pattern23567:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; _**
+; *__
+pattern123567:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; ***
+; *__
+pattern4567:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; ***
+; *__
+pattern14567:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; ***
+; *__
+pattern24567:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; ***
+; *__
+pattern124567:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; ***
+; *__
+pattern34567:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; ***
+; *__
+pattern134567:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; ***
+; *__
+pattern234567:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; ***
+; *__
+pattern1234567:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; ___
+; _*_
+pattern8:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; ___
+; _*_
+pattern18:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; ___
+; _*_
+pattern28:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; ___
+; _*_
+pattern128:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; ___
+; _*_
+pattern38:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; ___
+; _*_
+pattern138:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; ___
+; _*_
+pattern238:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; ___
+; _*_
+pattern1238:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; *__
+; _*_
+pattern48:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; *__
+; _*_
+pattern148:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; *__
+; _*_
+pattern248:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; *__
+; _*_
+pattern1248:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; *__
+; _*_
+pattern348:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; *__
+; _*_
+pattern1348:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; *__
+; _*_
+pattern2348:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; *__
+; _*_
+pattern12348:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; _*_
+; _*_
+pattern58:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; _*_
+; _*_
+pattern158:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; _*_
+; _*_
+pattern258:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; _*_
+; _*_
+pattern1258:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; _*_
+; _*_
+pattern358:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; _*_
+; _*_
+pattern1358:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; _*_
+; _*_
+pattern2358:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; _*_
+; _*_
+pattern12358:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; **_
+; _*_
+pattern458:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; **_
+; _*_
+pattern1458:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; **_
+; _*_
+pattern2458:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; **_
+; _*_
+pattern12458:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; **_
+; _*_
+pattern3458:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; **_
+; _*_
+pattern13458:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; **_
+; _*_
+pattern23458:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; **_
+; _*_
+pattern123458:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; __*
+; _*_
+pattern68:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; __*
+; _*_
+pattern168:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; __*
+; _*_
+pattern268:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; __*
+; _*_
+pattern1268:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; __*
+; _*_
+pattern368:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; __*
+; _*_
+pattern1368:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; __*
+; _*_
+pattern2368:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; __*
+; _*_
+pattern12368:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; *_*
+; _*_
+pattern468:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; *_*
+; _*_
+pattern1468:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; *_*
+; _*_
+pattern2468:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; *_*
+; _*_
+pattern12468:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; *_*
+; _*_
+pattern3468:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; *_*
+; _*_
+pattern13468:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; *_*
+; _*_
+pattern23468:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; *_*
+; _*_
+pattern123468:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; _**
+; _*_
+pattern568:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; _**
+; _*_
+pattern1568:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; _**
+; _*_
+pattern2568:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; _**
+; _*_
+pattern12568:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; _**
+; _*_
+pattern3568:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; _**
+; _*_
+pattern13568:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; _**
+; _*_
+pattern23568:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; _**
+; _*_
+pattern123568:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; ***
+; _*_
+pattern4568:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; ***
+; _*_
+pattern14568:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; ***
+; _*_
+pattern24568:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; ***
+; _*_
+pattern124568:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; ***
+; _*_
+pattern34568:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; ***
+; _*_
+pattern134568:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; ***
+; _*_
+pattern234568:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; ***
+; _*_
+pattern1234568:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; ___
+; **_
+pattern78:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; ___
+; **_
+pattern178:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; ___
+; **_
+pattern278:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; ___
+; **_
+pattern1278:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; ___
+; **_
+pattern378:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; ___
+; **_
+pattern1378:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; ___
+; **_
+pattern2378:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; ___
+; **_
+pattern12378:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; *__
+; **_
+pattern478:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; *__
+; **_
+pattern1478:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; *__
+; **_
+pattern2478:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; *__
+; **_
+pattern12478:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; *__
+; **_
+pattern3478:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; *__
+; **_
+pattern13478:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; *__
+; **_
+pattern23478:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; *__
+; **_
+pattern123478:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; _*_
+; **_
+pattern578:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; _*_
+; **_
+pattern1578:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; _*_
+; **_
+pattern2578:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; _*_
+; **_
+pattern12578:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; _*_
+; **_
+pattern3578:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; _*_
+; **_
+pattern13578:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; _*_
+; **_
+pattern23578:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; _*_
+; **_
+pattern123578:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; **_
+; **_
+pattern4578:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; **_
+; **_
+pattern14578:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; **_
+; **_
+pattern24578:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; **_
+; **_
+pattern124578:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; **_
+; **_
+pattern34578:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; **_
+; **_
+pattern134578:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; **_
+; **_
+pattern234578:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; **_
+; **_
+pattern1234578:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; __*
+; **_
+pattern678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; __*
+; **_
+pattern1678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; __*
+; **_
+pattern2678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; __*
+; **_
+pattern12678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; __*
+; **_
+pattern3678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; __*
+; **_
+pattern13678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; __*
+; **_
+pattern23678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; __*
+; **_
+pattern123678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; *_*
+; **_
+pattern4678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; *_*
+; **_
+pattern14678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; *_*
+; **_
+pattern24678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; *_*
+; **_
+pattern124678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; *_*
+; **_
+pattern34678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; *_*
+; **_
+pattern134678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; *_*
+; **_
+pattern234678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; *_*
+; **_
+pattern1234678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; _**
+; **_
+pattern5678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; _**
+; **_
+pattern15678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; _**
+; **_
+pattern25678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; _**
+; **_
+pattern125678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; _**
+; **_
+pattern35678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; _**
+; **_
+pattern135678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; _**
+; **_
+pattern235678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; _**
+; **_
+pattern1235678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; ***
+; **_
+pattern45678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; ***
+; **_
+pattern145678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; ***
+; **_
+pattern245678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; ***
+; **_
+pattern1245678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; ***
+; **_
+pattern345678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; ***
+; **_
+pattern1345678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; ***
+; **_
+pattern2345678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; ***
+; **_
+pattern12345678:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; ___
+; __*
+pattern9:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; ___
+; __*
+pattern19:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; ___
+; __*
+pattern29:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; ___
+; __*
+pattern129:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; ___
+; __*
+pattern39:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; ___
+; __*
+pattern139:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; ___
+; __*
+pattern239:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; ___
+; __*
+pattern1239:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; *__
+; __*
+pattern49:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; *__
+; __*
+pattern149:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; *__
+; __*
+pattern249:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; *__
+; __*
+pattern1249:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; *__
+; __*
+pattern349:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; *__
+; __*
+pattern1349:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; *__
+; __*
+pattern2349:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; *__
+; __*
+pattern12349:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; _*_
+; __*
+pattern59:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; _*_
+; __*
+pattern159:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; _*_
+; __*
+pattern259:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; _*_
+; __*
+pattern1259:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; _*_
+; __*
+pattern359:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; _*_
+; __*
+pattern1359:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; _*_
+; __*
+pattern2359:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; _*_
+; __*
+pattern12359:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; **_
+; __*
+pattern459:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; **_
+; __*
+pattern1459:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; **_
+; __*
+pattern2459:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; **_
+; __*
+pattern12459:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; **_
+; __*
+pattern3459:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; **_
+; __*
+pattern13459:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; **_
+; __*
+pattern23459:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; **_
+; __*
+pattern123459:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; __*
+; __*
+pattern69:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; __*
+; __*
+pattern169:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; __*
+; __*
+pattern269:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; __*
+; __*
+pattern1269:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; __*
+; __*
+pattern369:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; __*
+; __*
+pattern1369:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; __*
+; __*
+pattern2369:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; __*
+; __*
+pattern12369:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; *_*
+; __*
+pattern469:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; *_*
+; __*
+pattern1469:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; *_*
+; __*
+pattern2469:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; *_*
+; __*
+pattern12469:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; *_*
+; __*
+pattern3469:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; *_*
+; __*
+pattern13469:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; *_*
+; __*
+pattern23469:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; *_*
+; __*
+pattern123469:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; _**
+; __*
+pattern569:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; _**
+; __*
+pattern1569:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; _**
+; __*
+pattern2569:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; _**
+; __*
+pattern12569:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; _**
+; __*
+pattern3569:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; _**
+; __*
+pattern13569:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; _**
+; __*
+pattern23569:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; _**
+; __*
+pattern123569:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; ***
+; __*
+pattern4569:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; ***
+; __*
+pattern14569:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; ***
+; __*
+pattern24569:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; ***
+; __*
+pattern124569:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; ***
+; __*
+pattern34569:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; ***
+; __*
+pattern134569:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; ***
+; __*
+pattern234569:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; ***
+; __*
+pattern1234569:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; ___
+; *_*
+pattern79:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; ___
+; *_*
+pattern179:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; ___
+; *_*
+pattern279:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; ___
+; *_*
+pattern1279:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; ___
+; *_*
+pattern379:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; ___
+; *_*
+pattern1379:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; ___
+; *_*
+pattern2379:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; ___
+; *_*
+pattern12379:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; *__
+; *_*
+pattern479:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; *__
+; *_*
+pattern1479:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; *__
+; *_*
+pattern2479:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; *__
+; *_*
+pattern12479:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; *__
+; *_*
+pattern3479:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; *__
+; *_*
+pattern13479:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; *__
+; *_*
+pattern23479:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; *__
+; *_*
+pattern123479:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; _*_
+; *_*
+pattern579:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; _*_
+; *_*
+pattern1579:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; _*_
+; *_*
+pattern2579:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; _*_
+; *_*
+pattern12579:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; _*_
+; *_*
+pattern3579:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; _*_
+; *_*
+pattern13579:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; _*_
+; *_*
+pattern23579:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; _*_
+; *_*
+pattern123579:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; **_
+; *_*
+pattern4579:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; **_
+; *_*
+pattern14579:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; **_
+; *_*
+pattern24579:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; **_
+; *_*
+pattern124579:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; **_
+; *_*
+pattern34579:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; **_
+; *_*
+pattern134579:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; **_
+; *_*
+pattern234579:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; **_
+; *_*
+pattern1234579:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; __*
+; *_*
+pattern679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; __*
+; *_*
+pattern1679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; __*
+; *_*
+pattern2679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; __*
+; *_*
+pattern12679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; __*
+; *_*
+pattern3679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; __*
+; *_*
+pattern13679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; __*
+; *_*
+pattern23679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; __*
+; *_*
+pattern123679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; *_*
+; *_*
+pattern4679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; *_*
+; *_*
+pattern14679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; *_*
+; *_*
+pattern24679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; *_*
+; *_*
+pattern124679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; *_*
+; *_*
+pattern34679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; *_*
+; *_*
+pattern134679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; *_*
+; *_*
+pattern234679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; *_*
+; *_*
+pattern1234679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; _**
+; *_*
+pattern5679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; _**
+; *_*
+pattern15679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; _**
+; *_*
+pattern25679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; _**
+; *_*
+pattern125679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; _**
+; *_*
+pattern35679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; _**
+; *_*
+pattern135679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; _**
+; *_*
+pattern235679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; _**
+; *_*
+pattern1235679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; ***
+; *_*
+pattern45679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; ***
+; *_*
+pattern145679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; ***
+; *_*
+pattern245679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; ***
+; *_*
+pattern1245679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; ***
+; *_*
+pattern345679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; ***
+; *_*
+pattern1345679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; ***
+; *_*
+pattern2345679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; ***
+; *_*
+pattern12345679:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; ___
+; _**
+pattern89:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; ___
+; _**
+pattern189:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; ___
+; _**
+pattern289:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; ___
+; _**
+pattern1289:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; ___
+; _**
+pattern389:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; ___
+; _**
+pattern1389:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; ___
+; _**
+pattern2389:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; ___
+; _**
+pattern12389:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; *__
+; _**
+pattern489:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; *__
+; _**
+pattern1489:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; *__
+; _**
+pattern2489:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; *__
+; _**
+pattern12489:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; *__
+; _**
+pattern3489:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; *__
+; _**
+pattern13489:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; *__
+; _**
+pattern23489:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; *__
+; _**
+pattern123489:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; _*_
+; _**
+pattern589:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; _*_
+; _**
+pattern1589:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; _*_
+; _**
+pattern2589:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; _*_
+; _**
+pattern12589:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; _*_
+; _**
+pattern3589:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; _*_
+; _**
+pattern13589:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; _*_
+; _**
+pattern23589:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; _*_
+; _**
+pattern123589:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; **_
+; _**
+pattern4589:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; **_
+; _**
+pattern14589:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; **_
+; _**
+pattern24589:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; **_
+; _**
+pattern124589:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; **_
+; _**
+pattern34589:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; **_
+; _**
+pattern134589:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; **_
+; _**
+pattern234589:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; **_
+; _**
+pattern1234589:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; __*
+; _**
+pattern689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; __*
+; _**
+pattern1689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; __*
+; _**
+pattern2689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; __*
+; _**
+pattern12689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; __*
+; _**
+pattern3689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; __*
+; _**
+pattern13689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; __*
+; _**
+pattern23689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; __*
+; _**
+pattern123689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; *_*
+; _**
+pattern4689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; *_*
+; _**
+pattern14689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; *_*
+; _**
+pattern24689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; *_*
+; _**
+pattern124689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; *_*
+; _**
+pattern34689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; *_*
+; _**
+pattern134689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; *_*
+; _**
+pattern234689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; *_*
+; _**
+pattern1234689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; _**
+; _**
+pattern5689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; _**
+; _**
+pattern15689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; _**
+; _**
+pattern25689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; _**
+; _**
+pattern125689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; _**
+; _**
+pattern35689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; _**
+; _**
+pattern135689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; _**
+; _**
+pattern235689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; _**
+; _**
+pattern1235689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; ***
+; _**
+pattern45689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; ***
+; _**
+pattern145689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; ***
+; _**
+pattern245689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; ***
+; _**
+pattern1245689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; ***
+; _**
+pattern345689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; ***
+; _**
+pattern1345689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; ***
+; _**
+pattern2345689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; ***
+; _**
+pattern12345689:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; ___
+; ***
+pattern789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; ___
+; ***
+pattern1789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; ___
+; ***
+pattern2789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; ___
+; ***
+pattern12789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; ___
+; ***
+pattern3789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; ___
+; ***
+pattern13789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; ___
+; ***
+pattern23789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; ___
+; ***
+pattern123789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; *__
+; ***
+pattern4789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; *__
+; ***
+pattern14789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; *__
+; ***
+pattern24789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; *__
+; ***
+pattern124789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; *__
+; ***
+pattern34789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; *__
+; ***
+pattern134789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; *__
+; ***
+pattern234789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; *__
+; ***
+pattern1234789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; _*_
+; ***
+pattern5789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; _*_
+; ***
+pattern15789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; _*_
+; ***
+pattern25789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; _*_
+; ***
+pattern125789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; _*_
+; ***
+pattern35789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; _*_
+; ***
+pattern135789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; _*_
+; ***
+pattern235789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; _*_
+; ***
+pattern1235789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; **_
+; ***
+pattern45789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; **_
+; ***
+pattern145789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; **_
+; ***
+pattern245789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; **_
+; ***
+pattern1245789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; **_
+; ***
+pattern345789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; **_
+; ***
+pattern1345789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; **_
+; ***
+pattern2345789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; **_
+; ***
+pattern12345789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; __*
+; ***
+pattern6789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; __*
+; ***
+pattern16789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; __*
+; ***
+pattern26789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; __*
+; ***
+pattern126789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; __*
+; ***
+pattern36789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; __*
+; ***
+pattern136789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; __*
+; ***
+pattern236789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; __*
+; ***
+pattern1236789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; *_*
+; ***
+pattern46789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; *_*
+; ***
+pattern146789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; *_*
+; ***
+pattern246789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; *_*
+; ***
+pattern1246789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; *_*
+; ***
+pattern346789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; *_*
+; ***
+pattern1346789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; *_*
+; ***
+pattern2346789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; *_*
+; ***
+pattern12346789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; _**
+; ***
+pattern56789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; _**
+; ***
+pattern156789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; _**
+; ***
+pattern256789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; _**
+; ***
+pattern1256789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; _**
+; ***
+pattern356789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; _**
+; ***
+pattern1356789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; _**
+; ***
+pattern2356789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; _**
+; ***
+pattern12356789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ___
+; ***
+; ***
+pattern456789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *__
+; ***
+; ***
+pattern1456789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _*_
+; ***
+; ***
+pattern2456789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; **_
+; ***
+; ***
+pattern12456789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; __*
+; ***
+; ***
+pattern3456789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; *_*
+; ***
+; ***
+pattern13456789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; _**
+; ***
+; ***
+pattern23456789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; ***
+; ***
+; ***
+pattern123456789:(ent 1) [[SYNC_ONCE now 1 forever root nil]]

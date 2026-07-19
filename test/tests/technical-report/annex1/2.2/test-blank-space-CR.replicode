@@ -1,0 +1,40 @@
+; Doc - Annex 1 - 2.2 - Separators
+
+; More tests on Code Formatting should be in the folder for Annex 2, 2.5.
+
+
+; BLANK SPACES
+x:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+y:( ont 1 ) [      [SYNC_ONCE     now 0   forever   root nil ] ]
+
+
+
+; CARRIAGE RETURNS
+a:(ont 1)
+[[SYNC_ONCE now 0
+forever root nil]]
+
+b:(ont
+1)
+[[SYNC_ONCE
+now
+0
+forever
+root
+nil]]
+
+c:
+(
+ont
+1
+)
+[
+[
+SYNC_ONCE
+now
+0
+forever
+root
+nil
+]
+]

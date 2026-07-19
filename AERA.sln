@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2035
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36109.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AERA", "AERA\AERA.vcxproj", "{689F2DDD-1858-499D-BA79-72BA02D00D45}"
 EndProject
@@ -28,6 +28,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "output_window", "output_window\output_window.vcxproj", "{D6CF951E-F865-4A26-8CCC-D4D5C67EAF93}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CoreLibrary", "submodules\CoreLibrary\CoreLibrary\CoreLibrary.vcxproj", "{4F80B928-6CC8-45E2-A709-3CE78D226990}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\Tests.vcxproj", "{DB224593-5A14-4BC2-915D-07CA3462B13A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -106,6 +108,12 @@ Global
 		{4F80B928-6CC8-45E2-A709-3CE78D226990}.Release|Win32.Build.0 = Release|Win32
 		{4F80B928-6CC8-45E2-A709-3CE78D226990}.Release|x64.ActiveCfg = Release|x64
 		{4F80B928-6CC8-45E2-A709-3CE78D226990}.Release|x64.Build.0 = Release|x64
+		{DB224593-5A14-4BC2-915D-07CA3462B13A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DB224593-5A14-4BC2-915D-07CA3462B13A}.Debug|x64.ActiveCfg = Debug|x64
+		{DB224593-5A14-4BC2-915D-07CA3462B13A}.DebugVisualizer|Win32.ActiveCfg = Debug|Win32
+		{DB224593-5A14-4BC2-915D-07CA3462B13A}.DebugVisualizer|x64.ActiveCfg = Debug|x64
+		{DB224593-5A14-4BC2-915D-07CA3462B13A}.Release|Win32.ActiveCfg = Release|Win32
+		{DB224593-5A14-4BC2-915D-07CA3462B13A}.Release|x64.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,14 @@
+; first, verify we succeeded at the bathtub task
+mk_val101:(mk.val b water_level 50 :) |[]
+fact906:(fact mk_val101 0s:900ms:0us 1s:0ms:0us 1 :) |[]
+pred554:(pred fact906 [sim36] 1) |[]
+fact_1029:(fact pred554 0s:835ms:0us 0s:835ms:0us 1 1) |[]
+success15:(success fact_1023 fact_1029 nil 1) |[]
+
+
+; then, verify we later succeeded at hand-grab-sphere
+mk_val263:(mk.val s position 15 :) |[]
+fact2033:(fact mk_val263 1s:800ms:0us 1s:900ms:0us 1 :) |[]
+pred1229:(pred fact2033 [sim185] 1) |[]
+fact_2159:(fact pred1229 1s:735ms:0us 1s:735ms:0us 1 1) |[]
+success47:(success fact_2144 fact_2159 nil 1) |[]

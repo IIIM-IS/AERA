@@ -1,0 +1,23 @@
+!dfn (k :)
+
+a:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+b:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+c:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+; (mk.val a essence "a" 1)
+; (mk.val b essence "b" 1)
+; (mk.val c essence "c" 1)
+
+m_drive:(mdl |[] []
+   (fact (mk.val b essence : :) t0: t1: ::)
+   (fact run t0: t1: ::); drive.
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_run_k:(mdl |[] []
+   (fact (cmd grab_hand [arg1:] ::) t0: t1: ::)
+   (fact (mk.val b: essence arg1: :) t0: t1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]

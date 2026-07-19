@@ -1,0 +1,17 @@
+; Doc - Annex 1 - 2.4 - Expressions
+
+; inside the round brackets (), there is an expression, including an opcode and a list of elements
+g1:(std_grp 2 0 0.4 0 []) []
+   [SYNC_ONCE now 0 forever root nil COV_OFF 0]
+
+
+; Similar to 2.3: according to spec, elements should only be separated by exactly one separator. however,
+; the following also works (with blank space + CR) //TODO
+g2:(std_grp 
+  2 
+  0
+0.4
+
+0 
+
+[]) [[SYNC_ONCE now 0 forever root nil COV_OFF 0]]

@@ -1,0 +1,122 @@
+;;;;;;;;;;;;;;;;;;;
+;; Model Control ;;
+;; This example should demonstrate how a model can control the activation of another model
+;; See Replicode_A_constructivist_programming_paradigm_and_language_2013.pdf at page 31
+
+!load test.domain.replicode
+!load drives.replicode
+
+s0:(cst |[] []
+   (fact (mk.val h: position_z z0: :) t0: t1: ::)
+   (fact (mk.val h: essence hand :) t0: t1: ::)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m0:(mdl [p0: (ti t0: t1:)] []
+   (fact (cmd lift_hand [h: delta_z:] :) t2: t3: ::)
+   (fact (mk.val h: position_z p1: 1) t4: t5: : 1)
+[]; forward guards
+   p1:(+ p0 delta_z)
+   t4:(+ t0 sampling_period)
+   t5:(+ t1 sampling_period)
+[]; backward guards
+   t2:(- t4 sampling_period)
+   t3:(- t5 sampling_period)
+   delta_z:(- p1 p0)
+[stdin]; output groups
+1; strength of the model
+1; number of evidences
+1; success rate
+0; derivative of the success rate
+1; psln_tr
+) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m1:(mdl |[] []
+   (fact (icst s0 |[] [h: p0:] ::) t0: t1: ::)
+   (fact (imdl m0 [p0: (ti t0: t1:)] [h: delta_z: p1: : :] : 1) t0: t2: : 1)
+[]
+   t2:(+ t0 sampling_period); domain of validity of the lhs, as enforced by the input generators.
+[]
+   t1:(- t2 sampling_period)
+   t0:(- t0 sampling_period)
+[stdin] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+
+; top-level models.
+
+m_run_0:(mdl |[] []
+   (fact (mk.val self_right_hand position_z 10 :) t0: t1: ::)
+   (fact run t2: t3: ::)
+|[]
+[]
+   t0:(now)
+   t1:(+ t0 100ms)
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+
+; input generators.
+
+pgm0:(pgm |[] |[] |[] []
+   (inj []
+      p:(mk.val self_right_hand position_z 10 1)
+      |[]
+   )
+   (inj []
+      (fact p now (+ now sampling_period) 1 1)
+      [SYNC_PERIODIC now 1 1 stdin nil]
+   )
+   (prb [1 "print" "pgm0 running (set position)" |[]])
+1) |[]
+
+ipgm0:(ipgm pgm0 |[] RUN_ONCE sampling_period VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+
+pgm1:(pgm |[] |[] |[] []
+   (inj []
+      c:(cmd lift_hand [self_right_hand 2] 1)
+      |[]
+   )
+   (inj []
+      (fact c now (+ now 200ms) 1 1)
+      [SYNC_ONCE now 1 1 stdin nil]
+   )
+   (prb [1 "print" "pgm1 running (lifting hand)" |[]])
+1) |[]
+
+ipgm1:(ipgm pgm1 |[] RUN_ONCE 150ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+
+pgm2:(pgm |[] []
+   (ptn (fact (cmd lift_hand [h: z:] :) t0: t1: ::) |[])
+   (ptn p:(fact (mk.val h: position_z old_z: :) t2: t3: ::) |[])
+|[]
+[]
+   (inj []
+      new_p:(mk.val self_right_hand position_z (+ z old_z) 1)
+      |[]
+   )
+   (inj []
+      (fact new_p (+ t2 sampling_period) (+ t3 sampling_period) 1 1)
+      [SYNC_PERIODIC t3 1 1 stdin nil]
+   )
+   (prb [1 "print" "pgm2 running (updating position)" |[]])
+1) |[]
+
+ipgm2:(ipgm pgm2 |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+
+pgm3:(pgm |[] []
+   (ptn (fact (cmd lift_hand ::) ::) |[])
+|[]
+[]
+   (prb [1 "print" "pgm3 cmd->lift_hand" |[]])
+1) |[]
+
+ipgm3:(ipgm pgm3 |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+
+pgm4:(pgm |[] []
+   (ptn p:(fact (mk.val h: position_z ::) ::) |[])
+|[]
+[]
+   (prb [1 "print" "pgm4 mk.val" |[]])
+1) |[]
+
+ipgm4:(ipgm pgm4 |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]

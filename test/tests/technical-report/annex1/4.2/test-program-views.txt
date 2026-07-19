@@ -1,0 +1,11 @@
+55(66) ipgm0:(ipgm pgm0 |[] false 50ms true false 1) |[]
+
+56(67) ipgm1:(ipgm pgm0 |[] false 50ms true false 1) |[]
+
+57(68) ipgm2:(ipgm pgm0 |[] false 50ms true false 1) |[]
+
+58(69) ipgm3:(ipgm pgm0 |[] false 50ms true false 1) |[]
+
+59(70) ipgm4:(ipgm pgm0 |[] false 50ms true false 1) |[]
+
+60(71) ipgm5:(ipgm pgm0 |[] false 50ms true false 1) |[]

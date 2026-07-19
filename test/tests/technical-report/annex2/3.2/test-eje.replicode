@@ -1,0 +1,29 @@
+; Doc - Annex 2 - 3.2 - rMem's - Functions
+
+; E J E
+; !dfn (_eje : : :nid)
+; !def (eje args) (icmd _eje args)
+
+; TODO: this is practically never used in existing replicode files. 
+; Still unsure about :nid objects. Unable to write a proper test for this.
+
+; setup group and object
+g1:(std_grp 0 0 0 0 [nil]) [[SYNC_ONCE now 0 forever stdin nil COV_ON 0]]
+e1:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
+
+; inject an object
+pgm0:(pgm 
+|[]
+|[]
+|[]
+[]
+   (eje []
+      e1                              ; object to inject
+      [SYNC_ONCE now 0 1 stdout nil]  ; accompanying view for the object
+      0                               ; destination node
+   )
+1) |[]
+
+
+
+ipgm0:(ipgm pgm0 |[] RUN_ONCE 100ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 1 stdout nil 1]]

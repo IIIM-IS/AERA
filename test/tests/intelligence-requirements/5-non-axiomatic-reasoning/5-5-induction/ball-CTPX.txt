@@ -1,0 +1,81 @@
+; first, we check the models induced as part of the CTPX at 0s:200ms:0us
+; basically, they state that you can calculate the ball's next position using
+;  v7:(add v0 (mul v4 100ms))
+; where 
+; v7: next ball position
+; v0: current ball position
+; v4: current speed
+; now this seems to make sense so far, but note that v4 (current speed) is multiplied with a timestamp of 100ms.
+; this calculation yields 10. (as nb * us -> nb)
+; so this model will only hold as long as we don't modify the ball speed.
+; therefore, you can observe the decreased model success rate (0.5) below, after velocity is changed to 0.0006.
+
+mdl_90:(mdl [v0: (ti v1: v2:)] []
+   (fact (mk.val v3: velocity_y v4: :) v5: v6: : :)
+   (fact (mk.val v3: position_y v7: :) v8: v9: : :)
+[]
+   v8:(add v1 100ms)
+   v9:(add v2 100ms)
+   v7:(add v0 (mul v4 100ms))
+[]
+   v1:(sub v8 100ms)
+   v2:(sub v9 100ms)
+   v5:(sub v8 80ms)
+   v6:(sub v9 100ms)
+   v4:(div (sub v7 v0) 100ms)
+[stdin] 1 4 0.5 0.5 1 ) []
+   [0 0s:200ms:0us 0 forever secondary nil 0.4]
+   [0 0s:200ms:0us 0 forever primary nil 0.166667]
+
+mdl_91:(mdl [] []
+   (fact (icst ball_position [] [v0: v1:] : :) v2: v3: : :)
+   (fact (imdl mdl_90 [v1: (ti v2: v3:)] [v0: v4: v5: v6: v7:] : :) v2: v3: : :)
+|[]
+|[]
+[stdin] 1 4 0.5 0.5 1 ) []
+   [0 0s:200ms:0us 0 forever secondary nil 0.4]
+   [0 0s:200ms:0us 0 forever primary nil 0.166667]
+
+
+; now, we check the models induced as part of the CTPX at 0s:800ms:0us
+; they refer to the previously created cst_333, which adds a velocity marker to the ball_position CST.
+cst_333:(cst [] []
+   (fact (mk.val v0: velocity_y v1: :) v2: v3: : :)
+   (fact (icst ball_position [] [v0: v4:] : :) v2: v3: : :)
+|[]
+|[]
+[stdin] 1 ) []
+   [0 0s:600ms:0us 0 forever primary nil 1]
+
+; now, lets analyze the main model that was induced
+; v3: ball
+; v4: ball velocity
+; v0: current ball position
+; v6: next ball position
+; v6 is said to be calculated as v0 + v7*100ms.
+; (R2) v7*100ms seems to be (* ts nb), which according to the list of Gotchas shouldn't be allowed.
+mdl_707:(mdl [v0: (ti v1: v2:)] []
+   (fact (icst cst_333 [] [v3: v4: v0:] : :) v5: v2: : :)
+   (fact (mk.val v3: position_y v6: :) v2: v7: : :)
+[]
+   v2:(add v1 100ms)
+   v7:(add v2 100ms)
+   v6:(add v0 (mul v7 100ms))
+[]
+   v1:(sub v2 100ms)
+   v2:(sub v7 100ms)
+   v5:(sub v2 80ms)
+   v2:(sub v7 100ms)
+   v7:(div (sub v6 v0) 100ms)
+[stdin] 0 1 1 1 1 ) []
+   [0 0s:800ms:0us 0 forever secondary nil 0]
+   [0 0s:800ms:0us 0 forever primary nil 1]
+
+mdl_708:(mdl [] []
+   (fact (icst cst_333 [] [v0: v1: v2:] : :) v3: v4: : :)
+   (fact (imdl mdl_707 [v2: (ti v5: v4:)] [v0: v1: v6:] : :) v3: v4: : :)
+|[]
+|[]
+[stdin] 0 1 1 1 1 ) []
+   [0 0s:800ms:0us 0 forever secondary nil 0]
+   [0 0s:800ms:0us 0 forever primary nil 1]

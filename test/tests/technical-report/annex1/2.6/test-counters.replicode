@@ -1,0 +1,33 @@
+; Doc - Annex 1 - 2.6 - Pre-Processor Directives
+
+
+; Test if counter is initialized with 0 and correctly incremented
+!counter __counter_zero 0
+o0:(ont __counter_zero) [[SYNC_ONCE now 0 forever root nil]]
+o1:(ont __counter_zero) [[SYNC_ONCE now 0 forever root nil]]
+o2:(ont __counter_zero) [[SYNC_ONCE now 0 forever root nil]]
+o3:(ont __counter_zero) [[SYNC_ONCE now 0 forever root nil]]
+o4:(ont __counter_zero) [[SYNC_ONCE now 0 forever root nil]]
+
+; Test if counter is initialized with 13 and correctly incremented
+; TODO: doku says counter_name needs to start with two underscores. but it works with any literal
+!counter counter_thirteen 13
+o13:(ont counter_thirteen) [[SYNC_ONCE now 0 forever root nil]]
+o14:(ont counter_thirteen) [[SYNC_ONCE now 0 forever root nil]]
+o15:(ont counter_thirteen) [[SYNC_ONCE now 0 forever root nil]]
+o16:(ont counter_thirteen) [[SYNC_ONCE now 0 forever root nil]]
+o17:(ont counter_thirteen) [[SYNC_ONCE now 0 forever root nil]]
+
+; Test counter overflow (TODO: doku says its 16 bits, but it actually overflows at 32 bits)
+!counter __counter_max 2147483646
+omax0:(ont __counter_max) [[SYNC_ONCE now 0 forever root nil]]
+omax1:(ont __counter_max) [[SYNC_ONCE now 0 forever root nil]]
+omax2:(ont __counter_max) [[SYNC_ONCE now 0 forever root nil]]
+omax3:(ont __counter_max) [[SYNC_ONCE now 0 forever root nil]]
+
+; Test init counter with other counter
+!counter __counter_four __counter_zero ; TODO: i would assume the counter starts at the current state of counter_zero,
+; which would be 5. but it does not! it starts at 0.
+new_o5:(ont __counter_four) [[SYNC_ONCE now 0 forever root nil]]
+new_o6:(ont __counter_four) [[SYNC_ONCE now 0 forever root nil]]
+unincremented_o5:(ont __counter_zero) [[SYNC_ONCE now 0 forever root nil]]

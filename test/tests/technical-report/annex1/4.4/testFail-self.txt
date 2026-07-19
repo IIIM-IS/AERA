@@ -1,0 +1,1 @@
+error: redefinition of label `self`

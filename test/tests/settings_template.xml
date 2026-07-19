@@ -1,0 +1,113 @@
+<AERAConfiguration>
+	<IODevice
+		io_device="test_mem"
+  />
+	<Load
+	  usr_operator_path="./usr_operators.dll"
+	  usr_class_path="../test/tests/user.classes.replicode"
+	  source_file_name="../test/tests/{{SOURCE_FILE_NAME}}"
+  />
+	<Init
+	  base_period="{{BASE_PERIOD}}"
+	  reduction_core_count="{{REDUCTION_CORE_COUNT}}"
+	  time_core_count="{{TIME_CORE_COUNT}}"
+  />
+	<System
+	  mdl_inertia_sr_thr="0.9"
+	  mdl_inertia_cnt_thr="6"
+	  tpx_dsr_thr="0.1"
+	  min_sim_time_horizon="0"
+	  max_sim_time_horizon="{{MAX_SIM_TIME_HORIZON}}"
+	  sim_time_horizon_factor="0.3"
+	  tpx_time_horizon="300000"
+	  perf_sampling_period="250000"
+	  float_tolerance="0.00001"
+	  time_tolerance="10000"
+	  primary_thz="3600000"
+	  secondary_thz="7200000"
+  />
+	<Debug debug="yes" debug_windows="0" runtime_output_file_path="runtime_out.txt" trace_levels="FFFF">
+		<Resilience
+		  ntf_mk_resilience="1"
+		  goal_pred_success_resilience="1000"
+    />
+		<Objects
+		  get_objects="yes"
+		  keep_invalidated_objects="yes"
+		  decompile_objects="yes"
+		  decompile_to_file="yes"
+		  decompilation_file_path="decompiled_objects.txt"
+		  ignore_named_objects="no"
+		  write_objects="no"
+		  objects_path="../AERA/objects.replicode.image"
+		  test_objects="no"
+    />
+	</Debug>
+	<Run run_time="{{DURATION}}" probe_level="2">
+		<Models
+		  get_models="yes"
+		  decompile_models="yes"
+		  ignore_named_models="no"
+		  write_models="no"
+		  models_path="../AERA/models.replicode.image"
+		  test_models="no"
+    />
+	</Run>
+	<TCPConfiguration
+	  number_of_servers="1"
+	  number_of_clients="0"
+	  server_configurations="127.0.0.1:8080"
+	  client_configurations="8080"
+  />
+</AERAConfiguration>
+
+<!--Usage
+Init
+  base_period: in us.
+  reduction_core_count: number of threads processing reduction jobs.
+  time_core_count: number of thread processing update jobs.
+  (If reduction_core_count and time_core_count are zero, then run in "diagnostic time". See:
+   https://github.com/IIIM-IS/replicode/pull/30 )
+System
+  mdl_inertia_sr_thr: in [0,1].
+  mdl_inertia_cnt_thr: in instance count.
+  tpx_dsr_thr: in [0,1].
+  min_sim_time_horizon: in us.
+  max_sim_time_horizon: in us.
+  sim_time_horizon_factor: in [0,1]: factor of (before-now) allocated to simulation.
+  tpx_time_horizon: in us.
+  perf_sampling_prd: in us.
+  float_tolerance: in [0,1].
+  time_tolerance: in us.
+  primary_thz: time after which states/models that did not match are pushed down to secondary group (models) or sent to oblivion (states); in seconds.
+  secondary_thz: time after which states/models that did not match are sent to oblivion; in seconds.
+Debug
+  debug_windows: The number of debug windows to show created models. (Not to be confused with the runtime output below.)
+  runtime_output_file_path: The file path for the runtime output of the trace_levels selected below. If "" then use std::cout.
+  trace_levels: Hexadecimal ORed values of traces for the runtime output (numbers indicate the location from right to left):
+    0: cst inputs, 1: cst outputs, 2: mdl inputs, 3: mdl outputs, 4 prediction monitoring, 5: goal monitoring,
+      6: model revision, 7:mdl/cst injections, 8: I/O device injections/ejections, 9: auto focus.
+    e.g.: 3 means cst inputs and cst outputs, ignore others. FFFF enables all trace levels.
+  Resilience
+    ntf_mk_resilience: in upr (i.e. relative to the ntf group).
+    goal_pred_success_resilience: in upr (i.e. relative to the ntf group).
+  Objects
+    get_objects: yes or no.
+      If yes, then after the Mem shuts down the image will contain all valid objects, or all valid and invalid
+        objects if keep_invalidated_objects is also yes.
+      If no, ignore the rest of this section.
+    keep_invalidated_objects: yes or no; if yes, the image will contain all valid and invalidated objects after 
+      the Mem shuts down. Use with caution: Invalidated objects are not deleted at run-time, which can consume memory.
+    decompile_objects: yes or no.
+    decompile_to_file: yes or no.
+    decompilation_file_path: The path of the decompiled output file if decompile_to_file is yes
+    ignore_named_objects: yes or no; if yes, objects provided by the deveoper are not decompiled.
+    write_objects: yes or no.
+    objects_path: The path of the image file if write_objects is yes.
+    test_objects: yes or no (yes: reads back and decompiles).
+Run
+  run_time: in ms.
+  probe_level: any probe set to a level >= this level will not be executed. 0 means no probe will be executed.
+  Models
+    same as for Debug/Objects.
+-->

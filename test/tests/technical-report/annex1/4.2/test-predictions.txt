@@ -1,0 +1,5 @@
+59(72) pred1:(pred f1 [] 1) []
+   [0 0s:0ms:0us 0 forever stdin nil]
+
+60(73) pred2:(pred af1 [] 1) []
+   [0 0s:0ms:0us 0 forever stdin nil]

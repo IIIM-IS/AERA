@@ -1,0 +1,17 @@
+; Doc - Annex 2 - 3.2 - rMem's - Functions
+
+; S T O P
+; !dfn (_stop)
+; !def (stop args) (icmd _stop args)
+
+
+pgm0:(pgm 
+|[]
+|[]
+|[]
+[]
+   (stop [])
+1) |[]
+
+
+ipgm0:(ipgm pgm0 |[] RUN_ONCE 600ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 1 stdin nil 1]]

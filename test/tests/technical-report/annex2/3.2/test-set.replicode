@@ -1,0 +1,75 @@
+; Doc - Annex 2 - 3.2 - rMem's - Functions
+
+; S E T
+; !dfn (_set : :nb)
+; !def (set args) (icmd _set args)
+
+; setup
+g1:(std_grp 1 0 0.0 0 [nil]) [[SYNC_ONCE now 0 forever stdin nil COV_ON 0]] ; crucial to set 1st std_grp param != 0 here!
+g2:(std_grp 1 0 0.0 0 [nil]) [[SYNC_ONCE now 0 forever stdin nil COV_ON 0]] 
+
+; set values
+pgm0:(pgm 
+|[]
+|[] 
+|[]
+[]
+   (set [this.vw.act 0.1])
+   (set [this.vw.sln 0.1])
+1) |[]
+
+; set values again
+pgm1:(pgm 
+|[]
+|[] 
+|[]
+[]
+   (set [this.vw.act 0.7])
+   (set [this.vw.sln 0.7])
+1) |[]
+
+; set invalid values - negatives
+pgm2:(pgm 
+|[]
+|[] 
+|[]
+[]
+   (set [this.vw.act -0.7])
+   (set [this.vw.sln -0.7])
+1) |[]
+
+; set invalid values - >1  
+pgm3:(pgm 
+|[]
+|[] 
+|[]
+[]
+   (set [this.vw.act 1.5])
+   (set [this.vw.sln 1.5])
+1) |[]
+
+; res: stack overflow error was fixed
+pgm4:(pgm 
+|[]
+|[] 
+|[]
+[]
+   (set [this.vw.res 10]) ; 10 -> x times upr -> upr = 50 -> 500ms left to live. 
+1) |[]
+
+pgm5:(pgm 
+|[]
+|[] 
+|[]
+[]
+   (set [this.vw.res 10]) ; 10 -> x times upr -> upr = 50 -> 500ms left to live. 
+1) |[]
+
+
+; aggregating works! 0.1 + 0.7 + 0(rounded up) + 1(rounded down) / 4 = 0.45 
+ipgm0:(ipgm pgm0 |[] RUN_ONCE 100ms VOLATILE NOTIFY 1) [[SYNC_PERIODIC now 0 forever g1 nil 1]]
+ipgm1:(ipgm pgm1 |[] RUN_ONCE 200ms VOLATILE NOTIFY 1) [[SYNC_PERIODIC now 0 forever g1 nil 1]]
+ipgm2:(ipgm pgm2 |[] RUN_ONCE 300ms VOLATILE NOTIFY 1) [[SYNC_PERIODIC now 0 forever g1 nil 1]]
+ipgm3:(ipgm pgm3 |[] RUN_ONCE 400ms VOLATILE NOTIFY 1) [[SYNC_PERIODIC now 0 forever g1 nil 1]]
+ipgm4:(ipgm pgm4 |[] RUN_ONCE 500ms VOLATILE NOTIFY 1) [[SYNC_PERIODIC now 0 3000 g2 nil 1]]
+ipgm5:(ipgm pgm5 |[] RUN_ONCE 600ms VOLATILE NOTIFY 1) [[SYNC_PERIODIC now 0 3000 g2 nil 1]]

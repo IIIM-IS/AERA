@@ -1,0 +1,14 @@
+; Doc - Annex 1 - 4.3 - Semantics - Marker Classes
+
+; !class (mk.val (_obj {obj: attr:ont val:}))
+
+; setup
+ball:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
+weight:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+
+; let's instantiate...
+mk1:(mk.val
+ball   ; object
+weight ; ontology
+300    ; value
+1) [[SYNC_ONCE now 0 forever root nil]]

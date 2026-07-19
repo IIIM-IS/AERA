@@ -1,0 +1,54 @@
+; Doc - Annex 1 - 2.6 - Pre-Processor Directives
+
+; Test different literals that should be allowed (here, use them as counter names)
+; no output checks, successful parsing is enough
+!counter hello 0
+!counter TEST 0
+!counter User123 0
+!counter max_value_42 0
+!counter 2025 0
+!counter _ 0
+!counter ABCdef123_456XYZ789 0
+!counter data2025_backup 0
+!counter ID_0001 0
+!counter longCounterNameWithNumbers123456 0
+!counter Z 0
+!counter a 0
+!counter zzzzzzzzzz 0
+!counter Var_1_2_3_4 0
+!counter MIXEDcaseVALUE 0
+!counter value0 0
+!counter value1 0
+!counter value999999 0
+!counter Ultra_MAX_999 0
+!counter Test123_Test456 0
+!counter Version_2_0_1 0
+!counter COUNTER999999999 0
+!counter abc123XYZ789 0
+!counter number_000000000000 0
+!counter ____underscore____ 0
+!counter |start 0
+!counter |123 0
+!counter |ABC_xyz 0
+!counter |Backup2025 0
+!counter |Z 0
+
+; TODO: the following is not supposed to work according to docu, but does!
+!counter Z| 0
+!counter test@123 0
+!counter user#name 0
+!counter max-value 0
+!counter 2025$ 0
+!counter "counter" 0
+!counter abc|def 0
+!counter __123|456 0
+!counter ||start 0
+!counter start| 0
+!counter test\n 0
+!counter tab\t 0
+!counter ιόσ 0
+!counter #hashtag 0
+!counter name$123 0
+!counter 123^456 0
+!counter name@domain 0
+!counter good|bad 0

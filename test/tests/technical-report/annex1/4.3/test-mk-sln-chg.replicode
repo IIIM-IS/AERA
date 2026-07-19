@@ -1,0 +1,12 @@
+; Doc - Annex 1 - 4.3 - Semantics - Marker Classes
+
+; !class (mk.sln_chg (_obj {obj: chg:nb}))
+
+; setup
+a:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
+
+; let's instantiate...
+mk1:(mk.sln_chg a 0.5 1) [[SYNC_ONCE now 0 forever root nil]]
+
+; object - a reference to the object whose saliency changed
+; saliency change: a number in [0,1] representing the change of saliency

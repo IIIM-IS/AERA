@@ -1,0 +1,5 @@
+; since this task runs in real-time mode, we cannot test for specific lines, since each run might change slightly.
+; but just getting DECOMPILATION in the output log means that this test passed. 
+; It's equivalent to just checking if we have the following word in decompiled_objects.txt:
+
+success

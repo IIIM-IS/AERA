@@ -1,0 +1,11 @@
+; Doc - Annex 1 - 2.4 - Expressions
+
+; Report says the following:
+; N.B.: parentheses are useless since the arity
+; of the opcode is known, but are nevertheless part of the
+; language for improved readability – they are not optional.
+; Let's test that here...
+
+
+g1:std_grp 2 0 0.4 0 [] []
+   [SYNC_ONCE now 0 forever root nil COV_OFF 0]

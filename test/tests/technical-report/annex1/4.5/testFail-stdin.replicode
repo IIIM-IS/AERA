@@ -1,0 +1,4 @@
+; Doc - Annex 1 - 4.5 - Semantics - Groups
+
+; ensure stdin is defined
+stdin:(std_grp 0 0 0 0 [nil]) [[SYNC_ONCE now 0 forever stdin nil COV_ON 0]]

@@ -1,0 +1,18 @@
+; here, we check two produced sub-goals and their respective confidence values.
+; remember that:
+; sub_goal_confidence = model_success_rate * input_goal_confidence
+
+; first one (indirectly, through M_WAIT_PRECOND) states that we need to instantiate M_WAIT in order to achieve our plan.
+; confidence: 0.7 * 0.8 = 0.56
+mk_val10:(mk.val b valve_status 1 :) |[]
+fact14:(fact mk_val10 0s:200ms:0us 1s:0ms:0us 0.56 :) |[]
+goal4:(goal fact14 self sim3 1) |[]
+fact_126:(fact goal4 0s:310ms:0us 0s:310ms:0us 1 1) |[]
+
+; second one states that we need to instantiate M_OPEN_VALVE in order to achieve our plan.
+; this already ran through M_WAIT so confidence is lower.
+; confidence: 0.7 * 0.8 * 0.9 = 0.504
+imdl8:(imdl M_OPEN_VALVE [b (ti v1: v2:)] [0s:200ms:0us 1s:0ms:0us] false 1) |[]
+fact15:(fact imdl8 0s:100ms:0us 0s:900ms:0us 0.504 1) |[]
+goal5:(goal fact15 self sim4 1) |[]
+fact_127:(fact goal5 0s:310ms:0us 0s:310ms:0us 1 1) |[]

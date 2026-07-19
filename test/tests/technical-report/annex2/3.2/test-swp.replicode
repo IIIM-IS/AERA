@@ -1,0 +1,18 @@
+; Doc - Annex 2 - 3.2 - rMem's - Functions
+
+; S W P
+; !dfn (_swp :nb)
+; !def (swp args) (icmd _swp args)
+
+pgm0:(pgm 
+|[]
+|[]
+|[]
+[]
+   (swp [0])
+   (swp [1])
+   (swp [-1])
+1) |[]
+
+
+ipgm0:(ipgm pgm0 |[] RUN_ONCE 0ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 1 stdin nil 1]]

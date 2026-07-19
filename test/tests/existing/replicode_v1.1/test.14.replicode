@@ -1,0 +1,42 @@
+; simple number sequence generation.
+
+_start:(pgm
+|[]
+|[]
+[]
+   (inj []
+      (counter 0 1)
+      [SYNC_FRONT now 1 1 root nil]
+   )
+   (mod [this.vw.res (+ 1 (* -2 this.vw.res))]); N.B.: at each upr, res is decremented by the group.
+1
+)
+|[]
+
+i_start:(ipgm
+_start; code
+|[]; args
+RUN_ONCE
+80000us
+NOTIFY
+1; propagation saliency threshold
+)
+[]
+   [SYNC_FRONT now 0 10 root nil 1]
+
+count:(pgm
+|[]
+[]
+   []
+      (ptn c:(counter ::) |[])
+   |[]
+   |[]
+[]
+   (inj [(counter (+ 1 c.value) 1) [SYNC_FRONT now 1 1 root nil]])
+1
+)
+|[]
+
+icount:(ipgm count |[] RUN_ALWAYS 0us SILENT 1)
+[]
+   [SYNC_FRONT now 0 forever root nil 1]

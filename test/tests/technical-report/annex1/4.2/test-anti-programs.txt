@@ -1,0 +1,83 @@
+54(65) apgm0:(|pgm |[] |[] |[] |[] 1) |[]
+
+55(66) apgm1:(|pgm [(ptn : |[])] |[] |[] |[] 1) |[]
+
+56(67) apgm2:(|pgm []
+   (ptn : |[])
+   (ptn : |[])
+|[] |[] |[] 1) |[]
+
+57(68) apgm3:(|pgm |[] [(ptn : |[])] |[] |[] 1) |[]
+
+58(69) apgm4:(|pgm |[] []
+   (ptn : |[])
+   (ptn : |[])
+|[] |[] 1) |[]
+
+59(70) apgm5:(|pgm []
+   (ptn : |[])
+   (ptn : |[])
+[]
+   (ptn : |[])
+   (ptn : |[])
+|[] |[] 1) |[]
+
+60(71) apgm6:(|pgm [(ptn v2: |[])] []
+   (ptn v0: |[])
+   (ptn v1: |[])
+[]
+   (equ v0 v1)
+   (gte v2 v0)
+   (lse v2 v1)
+   (neq 1 2)
+|[] 1) |[]
+
+61(72) apgm7:(|pgm |[] |[] |[] []
+   (icmd _prb []
+      1
+      "print"
+      "hello world"
+      |[]
+   )
+   (icmd _prb []
+      1
+      "print"
+      "hello carly"
+      |[]
+   )
+   (icmd _prb []
+      1
+      "print"
+      "hello rae"
+      |[]
+   )
+1) |[]
+
+62(73) apgm8:(|pgm [(ptn v2: |[])] []
+   (ptn v0: |[])
+   (ptn v1: |[])
+[]
+   (equ v0 v1)
+   (gte v2 v0)
+   (lse v2 v1)
+   (neq 1 2)
+[]
+   (icmd _prb []
+      1
+      "print"
+      "hello world"
+      |[]
+   )
+   (icmd _prb []
+      1
+      "print"
+      "hello carly"
+      |[]
+   )
+   (icmd _prb []
+      1
+      "print"
+      "hello rae"
+      |[]
+   )
+1) |[]

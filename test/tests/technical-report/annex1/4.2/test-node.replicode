@@ -1,0 +1,9 @@
+; Doc - Annex 1 - 4.2.2 - Object Classes - Nodes
+
+; !class (nod (_obj id:nid))
+
+
+; TODO: (nid) is supposed to be a numberical identifier, but i can't get any of this to compile -
+; always yields error: expected a node id
+;a:(nod 137 1) [[SYNC_ONCE now 0 forever root nil]]
+;b:(nod 0x13 1) [[SYNC_ONCE now 0 forever root nil]]

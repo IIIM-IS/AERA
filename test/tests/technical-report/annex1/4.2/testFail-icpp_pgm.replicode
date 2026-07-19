@@ -1,0 +1,13 @@
+; Doc - Annex 1 - 4.2.2 - Object Classes - Instantiated C++ Programs
+
+; !class (icpp_pgm (_obj {code:st args:[] run:bl tsc:us res:bl nfr:bl}))
+
+
+iccp_pgm1:(icpp_pgm 
+"invalid_string" 
+[true true true true true true primary secondary]
+RUN_ALWAYS
+0us 
+VOLATILE 
+SILENT 
+1) [[SYNC_ONCE now 0 forever stdin nil 1]]

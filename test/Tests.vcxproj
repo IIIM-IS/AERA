@@ -1,0 +1,600 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{db224593-5a14-4bc2-915d-07ca3462b13a}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <ProjectName>test</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>C:\Users\shmax\source\repos\AERA_tests\usr_operators;C:\Users\shmax\source\repos\AERA_tests\r_exec;C:\Users\shmax\source\repos\AERA_tests\r_comp;C:\Users\shmax\source\repos\AERA_tests\r_code;C:\Users\shmax\source\repos\AERA_tests\output_window;C:\Users\shmax\source\repos\AERA_tests\AERA;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>X64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>X64;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="test_all.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="readme.md" />
+    <None Include="replicode_report_annotated.pdf" />
+    <None Include="tests\existing\replicode_v1.1\helgi.replicode" />
+    <None Include="tests\existing\replicode_v1.1\rgrp.user.classes.replicode" />
+    <None Include="tests\existing\replicode_v1.1\std.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.1.2011-04-13.v1_0.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.1.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.10.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.11.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.12.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.13.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.14.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.15.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.16.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.17.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.18.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.19.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.2.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.20.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.21.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.22.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.23.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.24.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.25.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.26.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.3.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.4.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.5.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.6.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.7.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.8.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.9.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.helgi.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.integration.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.pm.var.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.rgrp.1.replicode" />
+    <None Include="tests\existing\replicode_v1.1\test.visualizer.replicode" />
+    <None Include="tests\existing\replicode_v1.1\user.classes.replicode" />
+    <None Include="tests\existing\replicode_v1.2\ball.external.replicode" />
+    <None Include="tests\existing\replicode_v1.2\ball.goal.external.replicode" />
+    <None Include="tests\existing\replicode_v1.2\clcc-figure8.replicode" />
+    <None Include="tests\existing\replicode_v1.2\drives.replicode" />
+    <None Include="tests\existing\replicode_v1.2\fovea-patterns.replicode" />
+    <None Include="tests\existing\replicode_v1.2\hand-grab-sphere-learn.external.replicode" />
+    <None Include="tests\existing\replicode_v1.2\hand-grab-sphere-learn.external.ur.replicode" />
+    <None Include="tests\existing\replicode_v1.2\hand-grab-sphere-learn.replicode" />
+    <None Include="tests\existing\replicode_v1.2\hand-grab-sphere.replicode" />
+    <None Include="tests\existing\replicode_v1.2\helgi.replicode" />
+    <None Include="tests\existing\replicode_v1.2\hello.world.1.replicode" />
+    <None Include="tests\existing\replicode_v1.2\hello.world.2.replicode" />
+    <None Include="tests\existing\replicode_v1.2\hello.world.3.replicode" />
+    <None Include="tests\existing\replicode_v1.2\hello.world.replicode" />
+    <None Include="tests\existing\replicode_v1.2\main.replicode" />
+    <None Include="tests\existing\replicode_v1.2\pattern.replicode" />
+    <None Include="tests\existing\replicode_v1.2\pong.1.replicode" />
+    <None Include="tests\existing\replicode_v1.2\pong.2.replicode" />
+    <None Include="tests\existing\replicode_v1.2\pong.2.simplified.replicode" />
+    <None Include="tests\existing\replicode_v1.2\pong.3.replicode" />
+    <None Include="tests\existing\replicode_v1.2\pong.discrete.cmd.external.replicode" />
+    <None Include="tests\existing\replicode_v1.2\std.replicode" />
+    <None Include="tests\existing\replicode_v1.2\test.1.2011-04-13.v1_2.replicode" />
+    <None Include="tests\existing\replicode_v1.2\test.1.replicode" />
+    <None Include="tests\existing\replicode_v1.2\test.15.replicode" />
+    <None Include="tests\existing\replicode_v1.2\test.2.replicode" />
+    <None Include="tests\existing\replicode_v1.2\test.3.replicode" />
+    <None Include="tests\existing\replicode_v1.2\test.4.replicode" />
+    <None Include="tests\existing\replicode_v1.2\test.domain.replicode" />
+    <None Include="tests\existing\replicode_v1.2\test_cmd.replicode" />
+    <None Include="tests\existing\replicode_v1.2\user.classes.replicode" />
+    <None Include="tests\free-tests\colors.replicode" />
+    <None Include="tests\intelligence-requirements\1-embodiment\1-1-sensing\antifacts.replicode" />
+    <None Include="tests\intelligence-requirements\1-embodiment\1-1-sensing\ball-external.replicode" />
+    <None Include="tests\intelligence-requirements\1-embodiment\1-1-sensing\facts.replicode" />
+    <None Include="tests\intelligence-requirements\1-embodiment\1-1-sensing\goals.replicode" />
+    <None Include="tests\intelligence-requirements\1-embodiment\1-1-sensing\predictions.replicode" />
+    <None Include="tests\intelligence-requirements\1-embodiment\1-2-acting\bathtub.replicode" />
+    <None Include="tests\intelligence-requirements\1-embodiment\1-2-acting\cmd.replicode" />
+    <None Include="tests\intelligence-requirements\1-embodiment\1-2-acting\del-class.replicode" />
+    <None Include="tests\intelligence-requirements\1-embodiment\1-2-acting\eje.replicode" />
+    <None Include="tests\intelligence-requirements\1-embodiment\1-2-acting\inj.replicode" />
+    <None Include="tests\intelligence-requirements\1-embodiment\1-2-acting\ldc.replicode" />
+    <None Include="tests\intelligence-requirements\1-embodiment\1-2-acting\mod.replicode" />
+    <None Include="tests\intelligence-requirements\1-embodiment\1-2-acting\new-class.replicode" />
+    <None Include="tests\intelligence-requirements\1-embodiment\1-2-acting\prb.replicode" />
+    <None Include="tests\intelligence-requirements\1-embodiment\1-2-acting\set.replicode" />
+    <None Include="tests\intelligence-requirements\1-embodiment\1-2-acting\stop.replicode" />
+    <None Include="tests\intelligence-requirements\1-embodiment\1-2-acting\swp.replicode" />
+    <None Include="tests\free-tests\test-bathtub-two-valves.replicode" />
+    <None Include="tests\intelligence-requirements\3-cumulative-learning\3-1-multitask-learning\bathtub-hgs-parallel.replicode" />
+    <None Include="tests\intelligence-requirements\3-cumulative-learning\3-1-multitask-learning\bathtub-hgs-sequence.replicode" />
+    <None Include="tests\intelligence-requirements\3-cumulative-learning\3-1-multitask-learning\mediation-mod.replicode" />
+    <None Include="tests\intelligence-requirements\3-cumulative-learning\3-1-multitask-learning\mediation-set.replicode" />
+    <None Include="tests\intelligence-requirements\3-cumulative-learning\3-1-multitask-learning\models.replicode" />
+    <None Include="tests\intelligence-requirements\3-cumulative-learning\3-1-multitask-learning\programs.replicode" />
+    <None Include="tests\intelligence-requirements\3-cumulative-learning\3-2-online-learning\bathtub-new-knowledge.replicode" />
+    <None Include="tests\intelligence-requirements\3-cumulative-learning\3-3-lifelong-learning\ball-external-model-creation.replicode" />
+    <None Include="tests\intelligence-requirements\3-cumulative-learning\3-3-lifelong-learning\bathtub-act-change.replicode" />
+    <None Include="tests\intelligence-requirements\3-cumulative-learning\3-4-robust-knowledge-acquisition\bathtub-success-rate-decrease.replicode" />
+    <None Include="tests\intelligence-requirements\3-cumulative-learning\3-4-robust-knowledge-acquisition\bathtub-success-rate-increase.replicode" />
+    <None Include="tests\intelligence-requirements\3-cumulative-learning\3-4-robust-knowledge-acquisition\bathtub-success-rate-reliable.replicode" />
+    <None Include="tests\intelligence-requirements\3-cumulative-learning\3-5-transfer-learning\sink.replicode" />
+    <None Include="tests\intelligence-requirements\4-knowledge-of-causes\4-1-forward-chaining\bathtub-forward-chaining.replicode" />
+    <None Include="tests\intelligence-requirements\4-knowledge-of-causes\4-2-backward-chaining\bathtub-backward-chaining.replicode" />
+    <None Include="tests\intelligence-requirements\5-non-axiomatic-reasoning\5-1-defeasible-reasoning\bathtub-model-defeated.replicode" />
+    <None Include="tests\intelligence-requirements\5-non-axiomatic-reasoning\5-1-defeasible-reasoning\bathtub-sim-defeated.replicode" />
+    <None Include="tests\intelligence-requirements\5-non-axiomatic-reasoning\5-2-pattern-matching\bathtub-pattern-matching.replicode" />
+    <None Include="tests\intelligence-requirements\5-non-axiomatic-reasoning\5-2-pattern-matching\patterns.replicode" />
+    <None Include="tests\intelligence-requirements\5-non-axiomatic-reasoning\5-3-deduction\bathtub-deduction.replicode" />
+    <None Include="tests\intelligence-requirements\5-non-axiomatic-reasoning\5-4-abduction\bathtub-abduction.replicode" />
+    <None Include="tests\intelligence-requirements\5-non-axiomatic-reasoning\5-5-induction\ball-CTPX.replicode" />
+    <None Include="tests\intelligence-requirements\5-non-axiomatic-reasoning\5-5-induction\ball-PTPX.replicode" />
+    <None Include="tests\intelligence-requirements\5-non-axiomatic-reasoning\5-5-induction\hgs-GTPX.replicode" />
+    <None Include="tests\intelligence-requirements\6-generality\6-2-solution-diversity\solution-diversity.replicode" />
+    <None Include="tests\intelligence-requirements\7-transversal-functions\7-1-time\bathtub-timestamps.replicode" />
+    <None Include="tests\intelligence-requirements\7-transversal-functions\7-2-resources\bathtub-perf.replicode" />
+    <None Include="tests\intelligence-requirements\7-transversal-functions\7-2-resources\bathtub-real-time.replicode" />
+    <None Include="tests\intelligence-requirements\7-transversal-functions\7-3-preemptibility\bathtub-hgs-preemptibility.replicode" />
+    <None Include="tests\intelligence-requirements\8-reflection\8-1-meta-cognition\anything-as-input.replicode" />
+    <None Include="tests\intelligence-requirements\8-reflection\8-1-meta-cognition\mk-act-chg.replicode" />
+    <None Include="tests\intelligence-requirements\8-reflection\8-1-meta-cognition\mk-high-act.replicode" />
+    <None Include="tests\intelligence-requirements\8-reflection\8-1-meta-cognition\mk-high-sln.replicode" />
+    <None Include="tests\intelligence-requirements\8-reflection\8-1-meta-cognition\mk-low-act.replicode" />
+    <None Include="tests\intelligence-requirements\8-reflection\8-1-meta-cognition\mk-low-res.replicode" />
+    <None Include="tests\intelligence-requirements\8-reflection\8-1-meta-cognition\mk-low-sln.replicode" />
+    <None Include="tests\intelligence-requirements\8-reflection\8-1-meta-cognition\mk-new.replicode" />
+    <None Include="tests\intelligence-requirements\8-reflection\8-1-meta-cognition\mk-rdx.replicode" />
+    <None Include="tests\intelligence-requirements\8-reflection\8-1-meta-cognition\mk-sln-chg.replicode" />
+    <None Include="tests\intelligence-requirements\9-robustness\9-1-graceful-degradation\bathtub-hgs-ball-failure.replicode" />
+    <None Include="tests\std.replicode" />
+    <None Include="tests\technical-report\annex1\2.1\test-atoms.replicode" />
+    <None Include="tests\technical-report\annex1\2.1\test-misc.replicode" />
+    <None Include="tests\technical-report\annex1\2.2\test-blank-space-CR.replicode" />
+    <None Include="tests\technical-report\annex1\2.2\test-comments.replicode" />
+    <None Include="tests\technical-report\annex1\2.2\testFail-tab-characters-illegal.replicode" />
+    <None Include="tests\technical-report\annex1\2.3\test-sets.replicode" />
+    <None Include="tests\technical-report\annex1\2.3\testFail-sets.replicode" />
+    <None Include="tests\technical-report\annex1\2.4\test-expressions.replicode" />
+    <None Include="tests\technical-report\annex1\2.4\testFail-expressions.replicode" />
+    <None Include="tests\technical-report\annex1\2.5\test-code-formatting.replicode" />
+    <None Include="tests\technical-report\annex1\2.6\test-classes.replicode" />
+    <None Include="tests\technical-report\annex1\2.6\test-counters.replicode" />
+    <None Include="tests\technical-report\annex1\2.6\test-literals.replicode" />
+    <None Include="tests\technical-report\annex1\2.6\test-macros.replicode" />
+    <None Include="tests\technical-report\annex1\2.6\test-misc.replicode" />
+    <None Include="tests\technical-report\annex1\2.6\testFail-literals.replicode" />
+    <None Include="tests\technical-report\annex1\2.6\testFail_load.replicode" />
+    <None Include="tests\technical-report\annex1\3.1\test-operators.replicode" />
+    <None Include="tests\technical-report\annex1\3.5\testFail-entities.replicode" />
+    <None Include="tests\technical-report\annex1\3.6\test-groups.replicode" />
+    <None Include="tests\technical-report\annex1\3.6\testFail-groups.replicode" />
+    <None Include="tests\technical-report\annex1\4.1\test-operators.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-anti-programs.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-cmd.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-composite-states.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-device.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-entities.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-facts.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-goals.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-group-views.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-groups.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-icmd.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-icpp_pgm.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-icst.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-imdl.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-ipgm.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-models.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-node.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-object-classes-structure.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-ontologies.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-patterns.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-performance-counters.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-predictions.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-program-views.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-programs.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\test-views.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\testFail-cmd.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\testFail-icmd.replicode" />
+    <None Include="tests\technical-report\annex1\4.2\testFail-icpp_pgm.replicode" />
+    <None Include="tests\technical-report\annex1\4.3\test-mk-act-chg.replicode" />
+    <None Include="tests\technical-report\annex1\4.3\test-mk-act.replicode" />
+    <None Include="tests\technical-report\annex1\4.3\test-mk-grp-pair.replicode" />
+    <None Include="tests\technical-report\annex1\4.3\test-mk-high-act.replicode" />
+    <None Include="tests\technical-report\annex1\4.3\test-mk-high-sln.replicode" />
+    <None Include="tests\technical-report\annex1\4.3\test-mk-low-act.replicode" />
+    <None Include="tests\technical-report\annex1\4.3\test-mk-low-res.replicode" />
+    <None Include="tests\technical-report\annex1\4.3\test-mk-low-sln.replicode" />
+    <None Include="tests\technical-report\annex1\4.3\test-mk-new.replicode" />
+    <None Include="tests\technical-report\annex1\4.3\test-mk-rdx.replicode" />
+    <None Include="tests\technical-report\annex1\4.3\test-mk-sln-chg.replicode" />
+    <None Include="tests\technical-report\annex1\4.3\test-mk-val.replicode" />
+    <None Include="tests\technical-report\annex1\4.4\testFail-self.replicode" />
+    <None Include="tests\technical-report\annex1\4.5\testFail-stdin.replicode" />
+    <None Include="tests\technical-report\annex1\4.5\testFail-stdout.replicode" />
+    <None Include="tests\technical-report\annex1\4.6\test-exe.replicode" />
+    <None Include="tests\technical-report\annex2\3.2\test-del-class.replicode" />
+    <None Include="tests\technical-report\annex2\3.2\test-eje.replicode" />
+    <None Include="tests\technical-report\annex2\3.2\test-inj.replicode" />
+    <None Include="tests\technical-report\annex2\3.2\test-ldc.replicode" />
+    <None Include="tests\technical-report\annex2\3.2\test-mod.replicode" />
+    <None Include="tests\technical-report\annex2\3.2\test-new-class.replicode" />
+    <None Include="tests\technical-report\annex2\3.2\test-prb.replicode" />
+    <None Include="tests\technical-report\annex2\3.2\test-set.replicode" />
+    <None Include="tests\technical-report\annex2\3.2\test-stop.replicode" />
+    <None Include="tests\technical-report\annex2\3.2\test-swp.replicode" />
+    <None Include="tests\technical-report\annex2\3.3\test-mk-act-chg.replicode" />
+    <None Include="tests\technical-report\annex2\3.3\test-mk-high-act.replicode" />
+    <None Include="tests\technical-report\annex2\3.3\test-mk-high-sln.replicode" />
+    <None Include="tests\technical-report\annex2\3.3\test-mk-low-act.replicode" />
+    <None Include="tests\technical-report\annex2\3.3\test-mk-low-res.replicode" />
+    <None Include="tests\technical-report\annex2\3.3\test-mk-low-sln.replicode" />
+    <None Include="tests\technical-report\annex2\3.3\test-mk-new.replicode" />
+    <None Include="tests\technical-report\annex2\3.3\test-mk-rdx.replicode" />
+    <None Include="tests\technical-report\annex2\3.3\test-mk-sln-chg.replicode" />
+    <None Include="tests\technical-report\main\2_overview\programs.replicode" />
+    <None Include="tests\user.classes.replicode" />
+    <None Include="coverage_report\index.html" />
+    <None Include="coverage_report\Modules\shmax_tests.html" />
+    <None Include="coverage_report\Modules\shmax_tests\atom.inline.cpp.html" />
+    <None Include="coverage_report\Modules\shmax_tests\gtest-internal.h.html" />
+    <None Include="coverage_report\Modules\shmax_tests\gtest-message.h.html" />
+    <None Include="coverage_report\Modules\shmax_tests\gtest-port.h.html" />
+    <None Include="coverage_report\Modules\shmax_tests\gtest-printers.h.html" />
+    <None Include="coverage_report\Modules\shmax_tests\gtest.h.html" />
+    <None Include="coverage_report\Modules\shmax_tests\test_0_basics.cpp.html" />
+    <None Include="coverage_report\Modules\shmax_tests\test_1.cpp.html" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AERA\AERA.vcxproj">
+      <Project>{689f2ddd-1858-499d-ba79-72ba02d00d45}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\output_window\output_window.vcxproj">
+      <Project>{d6cf951e-f865-4a26-8ccc-d4d5c67eaf93}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\r_code\r_code.vcxproj">
+      <Project>{6f4e1695-bbef-46d1-b0c0-1b71a65fad66}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\r_comp\r_comp.vcxproj">
+      <Project>{345e47d7-90e9-482b-ad10-c11cc828e197}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\r_exec\r_exec.vcxproj">
+      <Project>{c36b96ec-ef72-4b21-87be-2130e997bda0}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\submodules\CoreLibrary\CoreLibrary\CoreLibrary.vcxproj">
+      <Project>{4f80b928-6cc8-45e2-a709-3ce78d226990}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\usr_operators\usr_operators.vcxproj">
+      <Project>{3de12b3f-d45e-46e1-b501-e294009ad4b9}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="tests\existing\replicode_v1.1\helgi.txt" />
+    <Text Include="tests\existing\replicode_v1.1\rgrp.user.classes.txt" />
+    <Text Include="tests\existing\replicode_v1.1\std.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.1.2011-04-13.v1_0.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.1.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.10.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.11.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.12.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.13.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.14.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.15.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.16.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.17.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.18.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.19.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.2.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.20.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.21.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.22.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.23.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.24.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.25.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.26.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.3.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.4.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.5.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.6.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.7.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.8.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.9.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.helgi.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.integration.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.pm.var.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.rgrp.1.txt" />
+    <Text Include="tests\existing\replicode_v1.1\test.visualizer.txt" />
+    <Text Include="tests\existing\replicode_v1.1\user.classes.txt" />
+    <Text Include="tests\existing\replicode_v1.2\ball.external.txt" />
+    <Text Include="tests\existing\replicode_v1.2\ball.goal.external.txt" />
+    <Text Include="tests\existing\replicode_v1.2\clcc-figure8.txt" />
+    <Text Include="tests\existing\replicode_v1.2\drives.txt" />
+    <Text Include="tests\existing\replicode_v1.2\fovea-patterns.txt" />
+    <Text Include="tests\existing\replicode_v1.2\hand-grab-sphere-learn.external.txt" />
+    <Text Include="tests\existing\replicode_v1.2\hand-grab-sphere-learn.external.ur.txt" />
+    <Text Include="tests\existing\replicode_v1.2\hand-grab-sphere-learn.txt" />
+    <Text Include="tests\existing\replicode_v1.2\hand-grab-sphere.txt" />
+    <Text Include="tests\existing\replicode_v1.2\helgi.txt" />
+    <Text Include="tests\existing\replicode_v1.2\hello.world.1.txt" />
+    <Text Include="tests\existing\replicode_v1.2\hello.world.2.txt" />
+    <Text Include="tests\existing\replicode_v1.2\hello.world.3.txt" />
+    <Text Include="tests\existing\replicode_v1.2\hello.world.txt" />
+    <Text Include="tests\existing\replicode_v1.2\main.txt" />
+    <Text Include="tests\existing\replicode_v1.2\pattern.txt" />
+    <Text Include="tests\existing\replicode_v1.2\pong.1.txt" />
+    <Text Include="tests\existing\replicode_v1.2\pong.2.simplified.txt" />
+    <Text Include="tests\existing\replicode_v1.2\pong.2.txt" />
+    <Text Include="tests\existing\replicode_v1.2\pong.3.txt" />
+    <Text Include="tests\existing\replicode_v1.2\pong.discrete.cmd.external.txt" />
+    <Text Include="tests\existing\replicode_v1.2\std.txt" />
+    <Text Include="tests\existing\replicode_v1.2\test.1.2011-04-13.v1_2.txt" />
+    <Text Include="tests\existing\replicode_v1.2\test.1.txt" />
+    <Text Include="tests\existing\replicode_v1.2\test.15.txt" />
+    <Text Include="tests\existing\replicode_v1.2\test.2.txt" />
+    <Text Include="tests\existing\replicode_v1.2\test.3.txt" />
+    <Text Include="tests\existing\replicode_v1.2\test.4.txt" />
+    <Text Include="tests\existing\replicode_v1.2\test.domain.txt" />
+    <Text Include="tests\existing\replicode_v1.2\test_cmd.txt" />
+    <Text Include="tests\existing\replicode_v1.2\user.classes.txt" />
+    <Text Include="tests\free-tests\colors.txt" />
+    <Text Include="tests\intelligence-requirements\1-embodiment\1-1-sensing\antifacts.txt" />
+    <Text Include="tests\intelligence-requirements\1-embodiment\1-1-sensing\ball-external.txt" />
+    <Text Include="tests\intelligence-requirements\1-embodiment\1-1-sensing\facts.txt" />
+    <Text Include="tests\intelligence-requirements\1-embodiment\1-1-sensing\goals.txt" />
+    <Text Include="tests\intelligence-requirements\1-embodiment\1-1-sensing\predictions.txt" />
+    <Text Include="tests\intelligence-requirements\1-embodiment\1-2-acting\bathtub.txt" />
+    <Text Include="tests\intelligence-requirements\1-embodiment\1-2-acting\cmd.txt" />
+    <Text Include="tests\intelligence-requirements\1-embodiment\1-2-acting\del-class.txt" />
+    <Text Include="tests\intelligence-requirements\1-embodiment\1-2-acting\eje.txt" />
+    <Text Include="tests\intelligence-requirements\1-embodiment\1-2-acting\inj.txt" />
+    <Text Include="tests\intelligence-requirements\1-embodiment\1-2-acting\ldc.txt" />
+    <Text Include="tests\intelligence-requirements\1-embodiment\1-2-acting\mod.txt" />
+    <Text Include="tests\intelligence-requirements\1-embodiment\1-2-acting\new-class.txt" />
+    <Text Include="tests\intelligence-requirements\1-embodiment\1-2-acting\prb.txt" />
+    <Text Include="tests\intelligence-requirements\1-embodiment\1-2-acting\set.txt" />
+    <Text Include="tests\intelligence-requirements\1-embodiment\1-2-acting\stop.txt" />
+    <Text Include="tests\intelligence-requirements\1-embodiment\1-2-acting\swp.txt" />
+    <Text Include="tests\free-tests\test-bathtub-two-valves.txt" />
+    <Text Include="tests\intelligence-requirements\2-constructivism\2-1-generate-knowledge-autonomously\note.txt" />
+    <Text Include="tests\intelligence-requirements\2-constructivism\2-2-manage-knowledge-autonomously\note.txt" />
+    <Text Include="tests\intelligence-requirements\2-constructivism\2-3-use-knowledge-autonomously\note.txt" />
+    <Text Include="tests\intelligence-requirements\3-cumulative-learning\3-1-multitask-learning\bathtub-hgs-parallel.txt" />
+    <Text Include="tests\intelligence-requirements\3-cumulative-learning\3-1-multitask-learning\bathtub-hgs-sequence.txt" />
+    <Text Include="tests\intelligence-requirements\3-cumulative-learning\3-1-multitask-learning\mediation-mod.txt" />
+    <Text Include="tests\intelligence-requirements\3-cumulative-learning\3-1-multitask-learning\mediation-set.txt" />
+    <Text Include="tests\intelligence-requirements\3-cumulative-learning\3-1-multitask-learning\models.txt" />
+    <Text Include="tests\intelligence-requirements\3-cumulative-learning\3-1-multitask-learning\programs.txt" />
+    <Text Include="tests\intelligence-requirements\3-cumulative-learning\3-2-online-learning\bathtub-new-knowledge.txt" />
+    <Text Include="tests\intelligence-requirements\3-cumulative-learning\3-3-lifelong-learning\ball-external-model-creation.txt" />
+    <Text Include="tests\intelligence-requirements\3-cumulative-learning\3-3-lifelong-learning\bathtub-act-change.txt" />
+    <Text Include="tests\intelligence-requirements\3-cumulative-learning\3-4-robust-knowledge-acquisition\bathtub-success-rate-decrease.txt" />
+    <Text Include="tests\intelligence-requirements\3-cumulative-learning\3-4-robust-knowledge-acquisition\bathtub-success-rate-increase.txt" />
+    <Text Include="tests\intelligence-requirements\3-cumulative-learning\3-4-robust-knowledge-acquisition\bathtub-success-rate-reliable.txt" />
+    <Text Include="tests\intelligence-requirements\3-cumulative-learning\3-5-transfer-learning\sink.txt" />
+    <Text Include="tests\intelligence-requirements\4-knowledge-of-causes\4-1-forward-chaining\bathtub-forward-chaining.txt" />
+    <Text Include="tests\intelligence-requirements\4-knowledge-of-causes\4-2-backward-chaining\bathtub-backward-chaining.txt" />
+    <Text Include="tests\intelligence-requirements\5-non-axiomatic-reasoning\5-1-defeasible-reasoning\bathtub-model-defeated.txt" />
+    <Text Include="tests\intelligence-requirements\5-non-axiomatic-reasoning\5-1-defeasible-reasoning\bathtub-sim-defeated.txt" />
+    <Text Include="tests\intelligence-requirements\5-non-axiomatic-reasoning\5-2-pattern-matching\bathtub-pattern-matching.txt" />
+    <Text Include="tests\intelligence-requirements\5-non-axiomatic-reasoning\5-2-pattern-matching\patterns.txt" />
+    <Text Include="tests\intelligence-requirements\5-non-axiomatic-reasoning\5-3-deduction\bathtub-deduction.txt" />
+    <Text Include="tests\intelligence-requirements\5-non-axiomatic-reasoning\5-4-abduction\bathtub-abduction.txt" />
+    <Text Include="tests\intelligence-requirements\5-non-axiomatic-reasoning\5-5-induction\ball-CTPX.txt" />
+    <Text Include="tests\intelligence-requirements\5-non-axiomatic-reasoning\5-5-induction\ball-PTPX.txt" />
+    <Text Include="tests\intelligence-requirements\5-non-axiomatic-reasoning\5-5-induction\hgs-GTPX.txt" />
+    <Text Include="tests\intelligence-requirements\5-non-axiomatic-reasoning\5-6-analogy\note.txt" />
+    <Text Include="tests\intelligence-requirements\6-generality\6-1-flexibility\note.txt" />
+    <Text Include="tests\intelligence-requirements\6-generality\6-2-solution-diversity\solution-diversity.txt" />
+    <Text Include="tests\intelligence-requirements\6-generality\6-3-constraint-diversity\note.txt" />
+    <Text Include="tests\intelligence-requirements\6-generality\6-4-goal-diversity\note.txt" />
+    <Text Include="tests\intelligence-requirements\7-transversal-functions\7-1-time\bathtub-timestamps.txt" />
+    <Text Include="tests\intelligence-requirements\7-transversal-functions\7-2-resources\bathtub-perf.txt" />
+    <Text Include="tests\intelligence-requirements\7-transversal-functions\7-2-resources\bathtub-real-time.txt" />
+    <Text Include="tests\intelligence-requirements\7-transversal-functions\7-3-preemptibility\bathtub-hgs-preemptibility.txt" />
+    <Text Include="tests\intelligence-requirements\8-reflection\8-1-meta-cognition\anything-as-input.txt" />
+    <Text Include="tests\intelligence-requirements\8-reflection\8-1-meta-cognition\mk-act-chg.txt" />
+    <Text Include="tests\intelligence-requirements\8-reflection\8-1-meta-cognition\mk-high-act.txt" />
+    <Text Include="tests\intelligence-requirements\8-reflection\8-1-meta-cognition\mk-high-sln.txt" />
+    <Text Include="tests\intelligence-requirements\8-reflection\8-1-meta-cognition\mk-low-act.txt" />
+    <Text Include="tests\intelligence-requirements\8-reflection\8-1-meta-cognition\mk-low-res.txt" />
+    <Text Include="tests\intelligence-requirements\8-reflection\8-1-meta-cognition\mk-low-sln.txt" />
+    <Text Include="tests\intelligence-requirements\8-reflection\8-1-meta-cognition\mk-new.txt" />
+    <Text Include="tests\intelligence-requirements\8-reflection\8-1-meta-cognition\mk-rdx.txt" />
+    <Text Include="tests\intelligence-requirements\8-reflection\8-1-meta-cognition\mk-sln-chg.txt" />
+    <Text Include="tests\intelligence-requirements\8-reflection\8-2-self-programming\note.txt" />
+    <Text Include="tests\intelligence-requirements\9-robustness\9-1-graceful-degradation\bathtub-hgs-ball-failure.txt" />
+    <Text Include="tests\intelligence-requirements\9-robustness\9-2-scalability\note.txt" />
+    <Text Include="tests\intelligence-requirements\9-robustness\9-3-predictability\note.txt" />
+    <Text Include="tests\intelligence-requirements\9-robustness\9-4-reliability\note.txt" />
+    <Text Include="tests\intelligence-requirements\9-robustness\9-5-trustworthiness\note.txt" />
+    <Text Include="tests\technical-report\annex1\2.1\test-atoms.txt" />
+    <Text Include="tests\technical-report\annex1\2.1\test-misc.txt" />
+    <Text Include="tests\technical-report\annex1\2.2\test-blank-space-CR.txt" />
+    <Text Include="tests\technical-report\annex1\2.2\test-comments.txt" />
+    <Text Include="tests\technical-report\annex1\2.2\testFail-tab-characters-illegal.txt" />
+    <Text Include="tests\technical-report\annex1\2.3\test-sets.txt" />
+    <Text Include="tests\technical-report\annex1\2.3\testFail-sets.txt" />
+    <Text Include="tests\technical-report\annex1\2.4\test-expressions.txt" />
+    <Text Include="tests\technical-report\annex1\2.4\testFail-expressions.txt" />
+    <Text Include="tests\technical-report\annex1\2.5\test-code-formatting.txt" />
+    <Text Include="tests\technical-report\annex1\2.6\test-classes.txt" />
+    <Text Include="tests\technical-report\annex1\2.6\test-counters.txt" />
+    <Text Include="tests\technical-report\annex1\2.6\test-literals.txt" />
+    <Text Include="tests\technical-report\annex1\2.6\test-macros.txt" />
+    <Text Include="tests\technical-report\annex1\2.6\test-misc.txt" />
+    <Text Include="tests\technical-report\annex1\2.6\testFail-literals.txt" />
+    <Text Include="tests\technical-report\annex1\2.6\testFail_load.txt" />
+    <Text Include="tests\technical-report\annex1\3.1\test-operators.txt" />
+    <Text Include="tests\technical-report\annex1\3.5\testFail-entities.txt" />
+    <Text Include="tests\technical-report\annex1\3.6\test-groups.txt" />
+    <Text Include="tests\technical-report\annex1\3.6\testFail-groups.txt" />
+    <Text Include="tests\technical-report\annex1\4.1\test-operators.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-anti-programs.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-cmd.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-composite-states.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-device.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-entities.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-facts.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-goals.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-group-views.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-groups.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-icmd.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-icpp_pgm.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-icst.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-imdl.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-ipgm.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-models.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-node.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-object-classes-structure.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-ontologies.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-patterns.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-performance-counters.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-predictions.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-program-views.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-programs.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\test-views.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\testFail-cmd.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\testFail-icmd.txt" />
+    <Text Include="tests\technical-report\annex1\4.2\testFail-icpp_pgm.txt" />
+    <Text Include="tests\technical-report\annex1\4.3\test-mk-act-chg.txt" />
+    <Text Include="tests\technical-report\annex1\4.3\test-mk-act.txt" />
+    <Text Include="tests\technical-report\annex1\4.3\test-mk-grp-pair.txt" />
+    <Text Include="tests\technical-report\annex1\4.3\test-mk-high-act.txt" />
+    <Text Include="tests\technical-report\annex1\4.3\test-mk-high-sln.txt" />
+    <Text Include="tests\technical-report\annex1\4.3\test-mk-low-act.txt" />
+    <Text Include="tests\technical-report\annex1\4.3\test-mk-low-res.txt" />
+    <Text Include="tests\technical-report\annex1\4.3\test-mk-low-sln.txt" />
+    <Text Include="tests\technical-report\annex1\4.3\test-mk-new.txt" />
+    <Text Include="tests\technical-report\annex1\4.3\test-mk-rdx.txt" />
+    <Text Include="tests\technical-report\annex1\4.3\test-mk-sln-chg.txt" />
+    <Text Include="tests\technical-report\annex1\4.3\test-mk-val.txt" />
+    <Text Include="tests\technical-report\annex1\4.4\testFail-self.txt" />
+    <Text Include="tests\technical-report\annex1\4.5\testFail-stdin.txt" />
+    <Text Include="tests\technical-report\annex1\4.5\testFail-stdout.txt" />
+    <Text Include="tests\technical-report\annex1\4.6\test-exe.txt" />
+    <Text Include="tests\technical-report\annex2\3.2\test-del-class.txt" />
+    <Text Include="tests\technical-report\annex2\3.2\test-eje.txt" />
+    <Text Include="tests\technical-report\annex2\3.2\test-inj.txt" />
+    <Text Include="tests\technical-report\annex2\3.2\test-ldc.txt" />
+    <Text Include="tests\technical-report\annex2\3.2\test-mod.txt" />
+    <Text Include="tests\technical-report\annex2\3.2\test-new-class.txt" />
+    <Text Include="tests\technical-report\annex2\3.2\test-prb.txt" />
+    <Text Include="tests\technical-report\annex2\3.2\test-set.txt" />
+    <Text Include="tests\technical-report\annex2\3.2\test-stop.txt" />
+    <Text Include="tests\technical-report\annex2\3.2\test-swp.txt" />
+    <Text Include="tests\technical-report\annex2\3.3\test-mk-act-chg.txt" />
+    <Text Include="tests\technical-report\annex2\3.3\test-mk-high-act.txt" />
+    <Text Include="tests\technical-report\annex2\3.3\test-mk-high-sln.txt" />
+    <Text Include="tests\technical-report\annex2\3.3\test-mk-low-act.txt" />
+    <Text Include="tests\technical-report\annex2\3.3\test-mk-low-res.txt" />
+    <Text Include="tests\technical-report\annex2\3.3\test-mk-low-sln.txt" />
+    <Text Include="tests\technical-report\annex2\3.3\test-mk-new.txt" />
+    <Text Include="tests\technical-report\annex2\3.3\test-mk-rdx.txt" />
+    <Text Include="tests\technical-report\annex2\3.3\test-mk-sln-chg.txt" />
+    <Text Include="tests\technical-report\main\2_overview\programs.txt" />
+    <Text Include="report.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="tests\settings_template.xml" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\gmock.1.11.0\build\native\gmock.targets" Condition="Exists('..\packages\gmock.1.11.0\build\native\gmock.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\gmock.1.11.0\build\native\gmock.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\gmock.1.11.0\build\native\gmock.targets'))" />
+  </Target>
+</Project>

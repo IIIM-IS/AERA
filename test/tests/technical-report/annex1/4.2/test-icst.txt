@@ -1,0 +1,5 @@
+56(67) icst1:(icst cst1 [] [] false 1) []
+   [0 0s:0ms:0us 0 forever stdin nil]
+
+57(68) icst2:(icst cst2 [1 2] [(ptn : []) (ptn : [])] true 1) []
+   [0 0s:0ms:0us 0 forever stdin nil]

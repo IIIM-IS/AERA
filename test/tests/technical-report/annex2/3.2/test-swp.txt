@@ -1,0 +1,10 @@
+54(65) pgm0:(pgm |[] |[] |[] []
+   (icmd _swp [0])
+   (icmd _swp [1])
+   (icmd _swp [-1])
+1) |[]
+
+55(66) ipgm0:(ipgm pgm0 |[] false 0s true true 1) |[]
+
+56(131) mk_rdx_56:(mk.rdx ipgm0 [] [0xffffffff 0xffffffff 0xffffffff] 1) []
+   [0 0s:0ms:0us 1 1 stdout stdin]

@@ -1,0 +1,112 @@
+;;;;;;;;;;;;;
+;; objects ;;
+p1:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+paddle:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+p1_is_a_paddle:(mk.val p1 essence paddle 1) |[]
+; Even though (fact p1_is_a_paddle ::) is not used in this file, the pattern extractor needs it.
+f_p1_is_a_paddle:(fact p1_is_a_paddle 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+; Make the discrete positions using ont instead of ent so that we don't need essence statements.
+y0:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+y1:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+y2:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+y3:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+y4:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+y5:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+y6:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+y7:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+y8:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+y9:(ont 1) [[SYNC_ONCE now 1 forever root nil]]
+
+!def inject_drive_time 4000ms
+
+m_run_position:(mdl |[] []
+   ; The goal target timings are the same as the drive timings.
+   (fact (mk.val p1 position y1 1) t0: t1: 1 1)
+   (fact run t0: t1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; input generators ;;
+
+start:(pgm |[] |[] |[] []
+   ; Issue the command directly to inject the initial position.
+   (cmd move_y_plus [p1] 1)
+   ; (fact (goal (fact (cmd move_y_plus [p1]))) ::)
+   (inj []
+      c:(cmd move_y_plus [p1] 1)
+      |[]
+   )
+   (inj []
+      f_c:(fact c after:(now) (+ after sampling_period) 1 1)
+      |[]
+   )
+   (inj []
+      g_f_c:(goal f_c self nil 1)
+      |[]
+   )
+   (inj []
+      (fact g_f_c after after 1 1)
+      [SYNC_PERIODIC after 1 1 stdin nil]
+   )
+   (prb [1 "print" "started..." |[]])
+1) |[]
+istart:(ipgm start |[] RUN_ONCE sampling_period VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+
+; This program intercepts a goal to run a command and directly
+; calls the command, which will call the override of _Mem::eject().
+pgm_cmd_move_y_plus:(pgm |[]
+[]
+   (ptn (fact g:(goal (fact (cmd move_y_plus [obj:] ::) ::) ::) ::) |[])
+[]
+   (= (is_sim g) false)
+[]
+   (cmd move_y_plus [obj] 1)
+   (prb [1 "print" "cmd move_y_plus..." |[]])
+1) |[]
+i_pgm_cmd_move_y_plus:(ipgm pgm_cmd_move_y_plus |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+; This program intercepts a goal to run a command and directly
+; calls the command, which will call the override of _Mem::eject().
+pgm_cmd_move_y_minus:(pgm |[]
+[]
+   (ptn (fact g:(goal (fact (cmd move_y_minus [obj:] ::) ::) ::) ::) |[])
+[]
+   (= (is_sim g) false)
+[]
+   (prb [1 "print" "cmd move_y_minus..." |[]])
+   (cmd move_y_minus [obj] 1)
+1) |[]
+i_pgm_cmd_move_y_minus:(ipgm pgm_cmd_move_y_minus |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+; Run repeatedly (when babbling is finished) to inject the drive that will abduce a goal in m_run_position.
+pgm_inject_drive:(pgm |[]
+[]
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val p1 essence paddle :) after: before: ::) |[])
+[]
+   (>= after (+ this.vw.ijt inject_drive_time))
+   (<= after (+ (+ this.vw.ijt inject_drive_time) 1150ms))
+[]
+   (inj []
+      ; The end of the time interval will be used in m_run_position as the end of the goal interval.
+      f_run:(fact run after (+ (+ this.vw.ijt inject_drive_time) 1000ms) 1 1)
+      |[]
+   )
+   (inj []
+      g:(goal f_run self nil 1)
+      |[]
+   )
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact g t1:(+ after 10ms) t1 1 1)
+      [SYNC_ONCE t1 1 forever primary nil]
+   )
+   (prb [1 "print" "injected drive" |[]])
+1) |[]
+i_pgm_inject_drive:(ipgm pgm_inject_drive |[] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]

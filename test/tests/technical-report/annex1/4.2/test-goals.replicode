@@ -1,0 +1,44 @@
+; Doc - Annex 1 - 4.2.2 - Object Classes - Goals
+
+; !class (goal (_obj {obj: actr:ent sim:}))
+
+; first, some setup:
+ball:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+b:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+; The statement that b is a ball.
+b_is_a_ball:(mk.val b essence ball 1) |[]
+; fact
+f1:(fact b_is_a_ball 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+; anti-fact
+af1:(|fact b_is_a_ball 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+
+; lets try to create a prediction from a fact:
+goal1:(goal 
+f1     ; obj - the target fact
+b      ; actor - the system pursuing the goal
+|[]    ; TODO: seems to be a list of simulations, but this is not in docu! find out whats is used for
+1      ; psln_thr
+) 
+[[SYNC_ONCE now 0 forever stdin nil]]
+
+
+; and from antifact:
+goal2:(goal 
+af1     ; obj - the target fact
+b      ; actor - the system pursuing the goal
+|[]    ; TODO: seems to be a list of simulations, but this is not in docu! find out whats is used for
+1      ; psln_thr
+) 
+[[SYNC_ONCE now 0 forever stdin nil]]
+
+; lets try the actor 'self':
+goal3:(goal f1 self |[] 1) [[SYNC_ONCE now 0 forever stdin nil]]
+
+; the below fails, as the provided actor is not an entity. commenting it out...
+;goal4:(goal af1 yyy |[] 1) [[SYNC_ONCE now 0 forever stdin nil]]
+
+
+
+; TODO: see also
+; !class (sim (_obj {mode:nb thz:us f_super_goal: opposite:bl root_model:mdl solution_model:mdl solution_cfd:nb solution_before:ts}))

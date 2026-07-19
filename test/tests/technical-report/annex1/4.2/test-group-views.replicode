@@ -1,0 +1,18 @@
+; Doc - Annex 1 - 4.2.2 - Object Classes - Group Views
+
+; !class (grp_view[] sync:nb ijt:ts sln:nb res:nb grp:grp org: cov:bl vis:nb)
+
+
+; C O V
+g1:(std_grp 0 0 0 0 [nil]) [[SYNC_ONCE now 0 forever stdin nil COV_ON 0]]
+g2:(std_grp 0 0 0 0 [nil]) [[SYNC_ONCE now 0 forever stdin nil COV_OFF 0]]
+
+
+; V I S
+g3:(std_grp 0 0 0 0 [nil]) [[SYNC_ONCE now 0 forever stdin nil COV_ON 0]]
+g4:(std_grp 0 0 0 0 [nil]) [[SYNC_ONCE now 0 forever stdin nil COV_ON 1]]
+g5:(std_grp 0 0 0 0 [nil]) [[SYNC_ONCE now 0 forever stdin nil COV_ON 0.5]]
+; and now, some negative tests, which compile fine, but aren't allowed according to docu:
+g6:(std_grp 0 0 0 0 [nil]) [[SYNC_ONCE now 0 forever stdin nil COV_ON -1]]
+g7:(std_grp 0 0 0 0 [nil]) [[SYNC_ONCE now 0 forever stdin nil COV_ON 2]]
+g8:(std_grp 0 0 0 0 [nil]) [[SYNC_ONCE now 0 forever stdin nil COV_ON 13]]

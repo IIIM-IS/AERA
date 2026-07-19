@@ -1,0 +1,8 @@
+54(65) a:(ent 1) []
+   [0 0s:0ms:0us 0 forever root nil]
+
+55(66) b:(ent 1) []
+   [0 0s:0ms:0us 0 forever root nil]
+
+56(67) c:(ent 1) []
+   [0 0s:0ms:0us 0 forever root nil]

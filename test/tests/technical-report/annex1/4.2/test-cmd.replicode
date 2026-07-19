@@ -1,0 +1,24 @@
+; Doc - Annex 1 - 4.2.2 - Object Classes - Commands
+
+; !class (cmd (_obj {function:fid args:[]}))
+
+pgm0:(pgm 
+|[]
+|[]
+|[]
+[]
+   (cmd grab ["ball"] 1)
+1) |[]
+
+pgm1:(pgm 
+|[]
+|[]
+|[]
+[]
+   (cmd release ["ball"] 1)
+1) |[]
+
+
+;instantiate
+ipgm0:(ipgm pgm0 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+ipgm1:(ipgm pgm1 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]

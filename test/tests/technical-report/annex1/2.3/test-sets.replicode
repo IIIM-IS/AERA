@@ -1,0 +1,20 @@
+; Doc - Annex 1 - 2.3 - Sets
+
+; not much to test here, see also tests for 2.2 and 2.5.
+
+; set, containing list elements
+x:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+
+; according to spec, elements should only be separated by exactly one separator. however,
+; the following also works (with blank space + CR) //TODO
+y:(ont 1) [[SYNC_ONCE  
+now 0 forever root nil]
+]
+
+; and even multiple CRs work:
+z:(ont 1) [ [ SYNC_ONCE   
+now   0
+
+
+forever root nil]
+]

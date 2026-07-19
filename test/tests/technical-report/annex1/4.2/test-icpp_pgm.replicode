@@ -1,0 +1,23 @@
+; Doc - Annex 1 - 4.2.2 - Object Classes - Instantiated C++ Programs
+
+; !class (icpp_pgm (_obj {code:st args:[] run:bl tsc:us res:bl nfr:bl}))
+; see usr.operators for available C++ programs!
+
+iccp_pgm1:(icpp_pgm 
+"auto_focus" ; the instantiated code - the name of a C++ program to load.
+[true true true true true true primary secondary] ; instantiation values
+RUN_ALWAYS ; RUN_ONCE or RUN_ALWAYS
+0us        ; time scope
+VOLATILE   ; VOLATILE or STATIC
+SILENT     ; notify flag, SILENT or NOTIFY
+1) [[SYNC_ONCE now 0 forever stdin nil 1]]
+
+
+iccp_pgm2:(icpp_pgm 
+"auto_focus" ; the instantiated code - the name of a C++ program to load.
+[true true true true true true primary secondary] ; instantiation values
+RUN_ONCE ; RUN_ONCE or RUN_ALWAYS
+50us        ; time scope
+STATIC   ; VOLATILE or STATIC
+NOTIFY     ; notify flag, SILENT or NOTIFY
+1) [[SYNC_ONCE now 0 forever stdin nil 1]]

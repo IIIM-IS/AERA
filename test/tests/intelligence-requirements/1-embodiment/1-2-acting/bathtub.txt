@@ -1,0 +1,44 @@
+; first, we verify that all OPEN_VALVE and WAIT commands were executed 
+
+; OPEN_VALVE (wl=0)
+cmd7:(cmd open_valve [b] :) |[]
+fact74:(fact cmd7 0s:300ms:0us 0s:400ms:0us 1 :) |[]
+goal8:(goal fact74 self sim8 1) |[]
+fact_172:(fact goal8 0s:360ms:0us 0s:360ms:0us 1 1) |[]
+
+; 1st WAIT (wl=10)
+cmd16:(cmd wait [b] :) |[]
+fact144:(fact cmd16 0s:400ms:0us 0s:500ms:0us 1 :) |[]
+goal14:(goal fact144 self sim14 1) |[]
+fact_240:(fact goal14 0s:460ms:0us 0s:460ms:0us 1 1) |[]
+
+; 2nd WAIT (wl=20)
+cmd25:(cmd wait [b] :) |[]
+fact213:(fact cmd25 0s:500ms:0us 0s:600ms:0us 1 :) |[]
+goal20:(goal fact213 self sim20 1) |[]
+fact_308:(fact goal20 0s:560ms:0us 0s:560ms:0us 1 1) |[]
+
+; 3rd WAIT (wl=30)
+cmd34:(cmd wait [b] :) |[]
+fact282:(fact cmd34 0s:600ms:0us 0s:700ms:0us 1 :) |[]
+goal26:(goal fact282 self sim26 1) |[]
+fact_375:(fact goal26 0s:660ms:0us 0s:660ms:0us 1 1) |[]
+
+; 4th WAIT (wl=40)
+cmd43:(cmd wait [b] :) |[]
+fact351:(fact cmd43 0s:700ms:0us 0s:800ms:0us 1 :) |[]
+goal32:(goal fact351 self sim32 1) |[]
+fact_443:(fact goal32 0s:760ms:0us 0s:760ms:0us 1 1) |[]
+
+; 5th WAIT (wl=50)
+cmd52:(cmd wait [b] :) |[]
+fact413:(fact cmd52 0s:800ms:0us 0s:900ms:0us 1 :) |[]
+goal38:(goal fact413 self sim38 1) |[]
+fact_505:(fact goal38 0s:860ms:0us 0s:860ms:0us 1 1) |[]
+
+
+; then, we verify that the goal state was achieved
+
+mk_val74:(mk.val b water_level 50 1) |[]
+fact_516:(fact mk_val74 0s:900ms:0us 1s:0ms:0us 1 1) []
+success17:(success fact_508 fact_516 mk_rdx_510 1) |[]

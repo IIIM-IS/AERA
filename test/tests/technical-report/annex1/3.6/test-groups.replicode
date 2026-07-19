@@ -1,0 +1,6 @@
+; Doc - Annex 1 - 3.6 - Built-In Constructs - Groups
+
+; test the 3 standard groups...
+oRoot:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+oStdin:(ont 1) [[SYNC_ONCE now 0 forever stdin nil]]
+oStdout:(ont 1) [[SYNC_ONCE now 0 forever stdout nil]]

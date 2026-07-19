@@ -1,0 +1,27 @@
+; here, we check drive injection and task failure for each task
+
+; bathtub
+fact36:(fact run_bathtub 0s:300ms:0us 0s:700ms:0us 1 1) |[]
+goal0:(goal fact36 self nil 1) |[]
+fact_275:(fact goal0 0s:310ms:0us 0s:310ms:0us 1 1) |[]
+
+mk_val24:(mk.val b water_level 50 1) |[]
+anti_fact_614:(|fact mk_val24 0s:700ms:0us 1s:100ms:0us 1 1) |[]
+
+
+; hgs
+fact299:(fact run_hgs 1s:300ms:0us 1s:700ms:0us 1 1) |[]
+goal88:(goal fact299 self nil 1) |[]
+fact_726:(fact goal88 1s:310ms:0us 1s:310ms:0us 1 1) |[]
+
+mk_val106:(mk.val s position 15 1) |[]
+anti_fact_938:(|fact mk_val106 1s:300ms:0us 1s:700ms:0us 1 1) |[]
+
+
+; ball
+fact709:(fact run_ball 2s:510ms:0us 2s:900ms:0us 1 1) |[]
+goal400:(goal fact709 self nil 1) |[]
+fact_1247:(fact goal400 2s:510ms:0us 2s:510ms:0us 1 1) |[]
+
+mk_val187:(mk.val o position_y 100 1) |[]
+anti_fact_1277:(|fact mk_val187 2s:510ms:0us 2s:900ms:0us 1 1) []

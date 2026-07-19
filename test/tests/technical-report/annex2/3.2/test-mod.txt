@@ -1,0 +1,120 @@
+54(65) g1:(grp 1 0 0 0 1 0 1 0 0 1 0 0 1 1 1 1 0.4 1 0 0.6 1 0 1 0 1 1 0 1 0 0 [nil] 1) []
+   [0 0s:0ms:0us 0 forever stdin nil true 0]
+
+55(66) g2:(grp 1 0 0 0 1 0 1 0 0 1 0 0 1 1 1 1 0 0 0 1 1 1 1 0 1 1 0 1 0 0 [nil] 1) []
+   [0 0s:0ms:0us 0 forever stdin nil true 0]
+
+56(67) pgm0:(pgm |[] |[] |[] []
+   (icmd _mod []
+      this.vw.act
+      -0.1
+   )
+   (icmd _mod []
+      this.vw.sln
+      0.1
+   )
+1) |[]
+
+57(68) pgm1:(pgm |[] |[] |[] []
+   (icmd _mod []
+      this.vw.act
+      -0.7
+   )
+   (icmd _mod []
+      this.vw.sln
+      0.7
+   )
+1) |[]
+
+58(69) pgm2:(pgm |[] |[] |[] []
+   (icmd _mod []
+      this.vw.act
+      -1.5
+   )
+   (icmd _mod []
+      this.vw.sln
+      1.5
+   )
+1) |[]
+
+59(70) pgm3:(pgm |[] |[] |[] []
+   (icmd _mod []
+      this.vw.act
+      1.5
+   )
+   (icmd _mod []
+      this.vw.sln
+      -1.5
+   )
+1) |[]
+
+60(71) pgm4:(pgm |[] |[] |[] []
+   (icmd _mod []
+      this.vw.act
+      -0.1
+   )
+   (icmd _mod []
+      this.vw.sln
+      0.1
+   )
+   (icmd _mod []
+      this.vw.act
+      -0.1
+   )
+   (icmd _mod []
+      this.vw.sln
+      0.1
+   )
+   (icmd _mod []
+      this.vw.act
+      -0.4
+   )
+   (icmd _mod []
+      this.vw.sln
+      0.4
+   )
+1) |[]
+
+61(72) pgm5:(pgm |[] |[] |[] [(icmd _mod []
+   this.vw.res
+   -10
+)] 1) |[]
+
+62(73) pgm6:(pgm |[] |[] |[] [(icmd _mod []
+   this.vw.res
+   0
+)] 1) |[]
+
+63(74) pgm7:(pgm |[] |[] |[] []
+   (icmd _mod []
+      this.vw.res
+      0
+   )
+   (icmd _mod []
+      this.vw.res
+      20
+   )
+1) |[]
+
+64(75) ipgm0:(ipgm pgm0 |[] false 100ms true true 1) []
+   [1 0s:0ms:0us 0.1 forever g1 nil 0.9]
+
+65(76) ipgm1:(ipgm pgm1 |[] false 200ms true true 1) []
+   [1 0s:0ms:0us 0.7 forever g1 nil 0.3]
+
+66(77) ipgm2:(ipgm pgm2 |[] false 300ms true true 1) []
+   [1 0s:0ms:0us 1 forever g1 nil 0]
+
+67(78) ipgm3:(ipgm pgm3 |[] false 400ms true true 1) []
+   [1 0s:0ms:0us 0 forever g1 nil 1]
+
+68(79) ipgm4:(ipgm pgm4 |[] false 500ms true true 1) []
+   [1 0s:0ms:0us 0.2 forever g1 nil 0.8]
+
+69(80) ipgm5:(ipgm pgm5 |[] false 500ms true true 1) |[]
+
+70(81) ipgm6:(ipgm pgm6 |[] false 500ms true true 1) []
+   [1 0s:0ms:0us 0 1 g2 nil 1]
+
+71(82) ipgm7:(ipgm pgm7 |[] false 500ms true true 1) []
+   [1 0s:0ms:0us 0 11 g2 nil 1]

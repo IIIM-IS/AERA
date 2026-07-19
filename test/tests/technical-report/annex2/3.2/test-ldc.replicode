@@ -1,0 +1,19 @@
+; Doc - Annex 2 - 3.2 - rMem's - Functions
+
+; L O A D   C O D E
+; !dfn (_ldc :st)
+; !def (ldc args) (icmd _ldc args)
+
+pgm0:(pgm 
+|[]
+|[]
+|[]
+[]
+   (ldc ["std.replicode"])
+   (ldc ["test-inj.replicode"])
+   (ldc ["1234"])
+   (ldc [1])
+1) |[]
+
+
+ipgm0:(ipgm pgm0 |[] RUN_ONCE 0ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 1 stdin nil 1]]

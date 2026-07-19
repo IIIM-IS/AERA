@@ -1,0 +1,38 @@
+54(65) pgm0:(pgm [(ptn : |[])] []
+   (ptn v0: |[])
+   (ptn : |[])
+[]
+   (equ v0 nil)
+   (equ v0 |[])
+   (equ v0 |[])
+   (equ v0 [nil])
+   (equ v0 1.0842e-19)
+   (equ v0 -0s:0ms:1us)
+   (equ v0 |did)
+   (equ v0 |fid)
+   (equ v0 |sid)
+   (equ v0 |bl)
+   (equ v0 0xc6ffffff)
+   (equ v0 forever)
+   (equ v0 true)
+   (equ v0 false)
+|[] 1) |[]
+
+55(66) pgm1:(pgm []
+   (ptn : |[])
+   (ptn (mk.val self position : ::) |[])
+[]
+   (ptn : |[])
+   (ptn : |[])
+[(gte 1 this.vw.ijt)] [(icmd _prb []
+   1
+   "print"
+   "character-string"
+   |[]
+)] 1) |[]
+
+56(67) g1:(grp 2 0 0.4 0 1 0 1 0 0 1 0 0 1 1 1 1 0 0 1 0 0 1 1 0 1 1 0 1 0 0 |[] 1) []
+   [0 0s:0ms:0us 0 forever root nil false 0]
+
+57(69) f1:(fact pgm0 0s:0ms:0us 1000000000s:0ms:0us 1 1) []
+   [3 0s:900ms:0us 1 forever stdin nil]

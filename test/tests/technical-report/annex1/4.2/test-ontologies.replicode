@@ -1,0 +1,12 @@
+; Doc - Annex 1 - 4.2.2 - Object Classes - Ontologies
+
+; !class (ont (_obj nil))
+
+a:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+b:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+
+c:(
+ont 
+1)
+[]
+   [SYNC_ONCE now 0 forever root nil]

@@ -1,0 +1,31 @@
+; Doc - Annex 1 - 4.2.2 - Object Classes - Instantiated Composite State
+
+; !class (icst (_obj {cst:cst tpl_args:[] args:[] wr_e:bl}))
+
+
+; some setup: empty CST
+cst1:(cst |[] |[] |[] |[] |[] 1) [[SYNC_ONCE now 0 forever stdin nil 1]] ; 7 view params
+cst2:(cst [a: b:] |[] |[] |[] |[] 1) [[SYNC_ONCE now 0 forever stdin nil 1]] ; 7 view params
+
+; EMPTY ICST
+icst1:(icst 
+cst1   ; cst
+|[]    ; tpl_args - values
+|[]    ; args - values or variables
+false  ; TODO: whats wr_e?
+1      ; psln_thr
+)
+[[SYNC_ONCE now 0 forever stdin nil]] ; view with 6 params
+
+
+; FILLED ICST
+icst2:(icst 
+cst2 
+[1 2] 
+[]
+   (ptn pos_x: |[])
+   (ptn pos_y: |[])
+true  
+1  
+)
+[[SYNC_ONCE now 0 forever stdin nil]] ; view with 6 params

@@ -1,0 +1,2 @@
+Directive not allowed inside a structure.
+Error parsing the arguments for directive '!counter'. 

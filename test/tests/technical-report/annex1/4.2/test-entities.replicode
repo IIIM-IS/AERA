@@ -1,0 +1,12 @@
+; Doc - Annex 1 - 4.2.2 - Object Classes - Entities
+
+; !class (ent (_obj nil))
+
+a:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
+b:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
+
+c:(
+ent 
+1)
+[]
+   [SYNC_ONCE now 0 forever root nil]

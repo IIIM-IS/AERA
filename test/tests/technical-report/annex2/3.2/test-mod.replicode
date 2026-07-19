@@ -1,0 +1,105 @@
+; Doc - Annex 2 - 3.2 - rMem's - Functions
+
+; M O D
+; !dfn (_mod : :nb)
+; !def (mod args) (icmd _mod args)
+
+; setup
+g1:(std_grp 1 0 0.0 0 [nil]) [[SYNC_ONCE now 0 forever stdin nil COV_ON 0]] ; crucial to set 1st std_grp param != 0 here!
+g2:(std_grp 1 0 0.0 0 [nil]) [[SYNC_ONCE now 0 forever stdin nil COV_ON 0]]
+
+; mod values
+pgm0:(pgm 
+|[]
+|[] 
+|[]
+[]
+   (mod [this.vw.act -0.1])
+   (mod [this.vw.sln 0.1])
+1) |[]
+
+; mod values again
+pgm1:(pgm 
+|[]
+|[] 
+|[]
+[]
+   (mod [this.vw.act -0.7])
+   (mod [this.vw.sln 0.7])
+1) |[]
+
+; mod invalid values - out of range
+pgm2:(pgm 
+|[]
+|[] 
+|[]
+[]
+   (mod [this.vw.act -1.5])
+   (mod [this.vw.sln 1.5])
+1) |[]
+
+; mod invalid values - >1  
+pgm3:(pgm 
+|[]
+|[] 
+|[]
+[]
+   (mod [this.vw.act 1.5])
+   (mod [this.vw.sln -1.5])
+1) |[]
+
+; concurrent mod calls
+pgm4:(pgm 
+|[]
+|[] 
+|[]
+[]
+   (mod [this.vw.act -0.1])
+   (mod [this.vw.sln 0.1])
+   (mod [this.vw.act -0.1])
+   (mod [this.vw.sln 0.1])
+   (mod [this.vw.act -0.4])
+   (mod [this.vw.sln 0.4])
+1) |[]
+
+; resilience
+pgm5:(pgm 
+|[]
+|[] 
+|[]
+[]
+   (mod [this.vw.res -10])
+1) |[]
+
+pgm6:(pgm 
+|[]
+|[] 
+|[]
+[]
+   (mod [this.vw.res 0])
+1) |[]
+
+pgm7:(pgm 
+|[]
+|[] 
+|[]
+[]
+   (mod [this.vw.res 0])
+   (mod [this.vw.res 20]) ; --> 0 and 20 -> should be 10
+1) |[]
+
+
+; init sln with 0, act with 1
+; calcs and aggregation works.
+ipgm0:(ipgm pgm0 |[] RUN_ONCE 100ms VOLATILE NOTIFY 1) [[SYNC_PERIODIC now 0 forever g1 nil 1]]
+ipgm1:(ipgm pgm1 |[] RUN_ONCE 200ms VOLATILE NOTIFY 1) [[SYNC_PERIODIC now 0 forever g1 nil 1]]
+ipgm2:(ipgm pgm2 |[] RUN_ONCE 300ms VOLATILE NOTIFY 1) [[SYNC_PERIODIC now 0 forever g1 nil 1]]
+ipgm3:(ipgm pgm3 |[] RUN_ONCE 400ms VOLATILE NOTIFY 1) [[SYNC_PERIODIC now 0 forever g1 nil 1]]
+; concurrent mod calls -> also work!
+ipgm4:(ipgm pgm4 |[] RUN_ONCE 500ms VOLATILE NOTIFY 1) [[SYNC_PERIODIC now 0 forever g1 nil 1]]
+
+; resilience
+ipgm5:(ipgm pgm5 |[] RUN_ONCE 500ms VOLATILE NOTIFY 1) [[SYNC_PERIODIC now 0 20 g2 nil 1]]
+ipgm6:(ipgm pgm6 |[] RUN_ONCE 500ms VOLATILE NOTIFY 1) [[SYNC_PERIODIC now 0 20 g2 nil 1]]
+ipgm7:(ipgm pgm7 |[] RUN_ONCE 500ms VOLATILE NOTIFY 1) [[SYNC_PERIODIC now 0 20 g2 nil 1]]
+

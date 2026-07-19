@@ -1,0 +1,6 @@
+; Doc - Annex 1 - 3.6 - Built-In Constructs - Groups
+
+; 3 standard groups - try to redefine
+;root:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+;stdin:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+stdout:(ont 1) [[SYNC_ONCE now 0 forever root nil]]

@@ -1,0 +1,21 @@
+54(65) cst1:(cst [] |[]
+|[]
+|[]
+[] 1 ) []
+   [0 0s:0ms:0us 0 forever stdin nil 1]
+
+55(66) cst2:(cst [v0: v1: v2:] []
+   (ptn v3: |[])
+   (ptn v4: |[])
+[]
+   (equ v3 v4)
+   (gte v2 v3)
+   (lse v2 v4)
+   (neq 1 2)
+[]
+   (neq v3 v4)
+   (neq v2 v3)
+   (neq v2 v4)
+   (neq 1 2)
+[primary secondary stdin stdout]
+1 ) |[]

@@ -1,0 +1,136 @@
+54(65) g1:(grp 0 0 0 0 1 0 1 0 0 1 0 0 1 1 1 1 0 0 0 0 0 0 1 0 1 1 0 1 0 0 [nil] 1) []
+   [0 0s:0ms:0us 0 forever stdin nil true 0]
+
+55(66) g2:(grp 0 0 0 0 1 0 1 0 0 1 0 0 1 1 1 1 0 0 0 0 0 0 1 0 1 1 0 1 0 0 [nil] 1) []
+   [0 0s:0ms:0us 0 forever stdin nil false 0]
+
+56(67) dupe:(ent 1) []
+   [0 0s:500ms:0us 0 1 g1 g1]
+   [0 0s:0ms:0us 0 forever root nil]
+
+57(68) pgm0:(pgm |[] |[] |[] [(icmd _inj []
+   (ent 1)
+   [0 (_now) 0 1 g1 nil]
+)] 1) |[]
+
+58(69) pgm1:(pgm |[] |[] |[] []
+   (icmd _inj []
+      (ent 1)
+      [0 (_now) 0 1 g1 nil]
+   )
+   (icmd _inj []
+      (ent 1)
+      [0 (_now) 0 1 g1 nil]
+   )
+1) |[]
+
+59(70) pgm2:(pgm |[] |[] |[] []
+   (icmd _inj []
+      (ent 1)
+      [0 (add (_now) 100000) 0 1 g1 nil]
+   )
+   (icmd _inj []
+      (ent 1)
+      [0 (add (_now) 1us) 0 1 g1 nil]
+   )
+   (icmd _inj []
+      (ent 1)
+      [0 (add (_now) 200ms) 0 1 g1 nil]
+   )
+   (icmd _inj []
+      (ent 1)
+      [0 (add (_now) 13s) 0 1 g1 nil]
+   )
+1) |[]
+
+60(71) pgm3:(pgm |[] |[] |[] []
+   (icmd _inj []
+      (ent 1)
+      [0 (_now) 0 1 g1 nil]
+   )
+   (icmd _inj []
+      (ent 1)
+      [0 (_now) 0 1 g2 nil]
+   )
+1) |[]
+
+61(72) pgm4:(pgm |[] |[] |[] [(icmd _inj []
+   dupe
+   [0 (_now) 0 1 g1 nil]
+)] 1) |[]
+
+62(73) pgm5:(pgm |[] |[] |[] [(icmd _inj []
+   dupe
+   [0 (_now) 0 1 g1 nil]
+)] 1) |[]
+
+63(74) ipgm0:(ipgm pgm0 |[] false 0s true true 1) |[]
+
+64(75) ipgm1:(ipgm pgm1 |[] false 100ms true true 1) []
+   [0 0s:0ms:0us 0 1 g1 nil 1]
+
+65(76) ipgm2:(ipgm pgm2 |[] false 200ms true true 1) []
+   [0 0s:0ms:0us 0 1 g2 nil 1]
+
+66(77) ipgm3:(ipgm pgm3 |[] false 300ms true true 1) |[]
+
+67(78) ipgm4:(ipgm pgm4 |[] false 400ms true true 1) []
+   [0 0s:0ms:0us 0 1 g1 nil 1]
+
+68(79) ipgm5:(ipgm pgm5 |[] false 500ms true true 1) []
+   [0 0s:0ms:0us 0 1 g1 nil 1]
+
+69(167) ent_69:(ent 1) []
+   [0 0s:0ms:0us 0 1 g1 stdin]
+
+70(168) mk_rdx_70:(mk.rdx ipgm0 [] [(icmd _inj [ent_69 [0 0s:0ms:0us 0 1 g1 nil]]
+)] 1) []
+   [0 0s:0ms:0us 1 1 stdout stdin]
+
+71(174) ent_71:(ent 1) []
+   [0 0s:100ms:0us 0 1 g1 g1]
+
+72(175) ent_72:(ent 1) []
+   [0 0s:100ms:0us 0 1 g1 g1]
+
+73(176) mk_rdx_73:(mk.rdx ipgm1 [] [(icmd _inj [ent_71 [0 0s:100ms:0us 0 1 g1 nil]]
+) (icmd _inj [ent_72 [0 0s:100ms:0us 0 1 g1 nil]]
+)] 1) []
+   [0 0s:100ms:0us 1 1 g1 g1]
+
+80(180) ent_80:(ent 1) []
+   [0 0s:300ms:0us 0 1 g1 g2]
+
+75(181) ent_75:(ent 1) []
+   [0 0s:200ms:1us 0 1 g1 g2]
+
+82(182) ent_82:(ent 1) []
+   [0 0s:400ms:0us 0 1 g1 g2]
+
+(183) ent0:(ent 1) |[]
+
+74(184) mk_rdx_74:(mk.rdx ipgm2 [] [(icmd _inj [ent_80 [0 0s:300ms:0us 0 1 g1 nil]]
+) (icmd _inj [ent_75 [0 0s:200ms:1us 0 1 g1 nil]]
+) (icmd _inj [ent_82 [0 0s:400ms:0us 0 1 g1 nil]]
+) (icmd _inj [ent0 [0 13s:200ms:0us 0 1 g1 nil]]
+)] 1) []
+   [0 0s:200ms:0us 1 1 g2 g2]
+
+77(202) ent_77:(ent 1) []
+   [0 0s:300ms:0us 0 1 g1 stdin]
+
+78(203) ent_78:(ent 1) []
+   [0 0s:300ms:0us 0 1 g2 stdin]
+
+79(204) mk_rdx_79:(mk.rdx ipgm3 [] [(icmd _inj [ent_77 [0 0s:300ms:0us 0 1 g1 nil]]
+) (icmd _inj [ent_78 [0 0s:300ms:0us 0 1 g2 nil]]
+)] 1) []
+   [0 0s:300ms:0us 1 1 stdout stdin]
+
+81(211) mk_rdx_81:(mk.rdx ipgm4 [] [(icmd _inj [dupe [0 0s:400ms:0us 0 1 g1 nil]]
+)] 1) []
+   [0 0s:400ms:0us 1 1 g1 g1]
+
+83(218) mk_rdx_83:(mk.rdx ipgm5 [] [(icmd _inj [dupe [0 0s:500ms:0us 0 1 g1 nil]]
+)] 1) []
+   [0 0s:500ms:0us 1 1 g1 g1]

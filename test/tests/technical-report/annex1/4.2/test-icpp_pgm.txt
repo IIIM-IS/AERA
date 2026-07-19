@@ -1,0 +1,23 @@
+54(65) iccp_pgm1:(icpp_pgm "auto_focus" []
+   true
+   true
+   true
+   true
+   true
+   true
+   primary
+   secondary
+true 0s true false 1) []
+   [0 0s:0ms:0us 0 forever stdin nil 1]
+
+55(66) iccp_pgm2:(icpp_pgm "auto_focus" []
+   true
+   true
+   true
+   true
+   true
+   true
+   primary
+   secondary
+false 50us false true 1) []
+   [0 0s:0ms:0us 0 forever stdin nil 1]

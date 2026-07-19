@@ -1,0 +1,14 @@
+; Doc - Annex 1 - 4.2.2 - Object Classes - Devices
+
+; !class (dev (_obj nil))
+
+
+
+a:(dev 1) [[SYNC_ONCE now 0 forever root nil]]
+b:(dev 1) [[SYNC_ONCE now 0 forever root nil]]
+
+c:(
+dev 
+1)
+[]
+   [SYNC_ONCE now 0 forever root nil]

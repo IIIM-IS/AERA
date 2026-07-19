@@ -1,0 +1,109 @@
+; Doc - Annex 2 - 3.2 - rMem's - Notifications
+
+; !class (mk.rdx (_obj {code: inputs:[] prods:[]}))
+
+; setup groups
+g1:(std_grp 0 0 0 0 [nil]) [[SYNC_ONCE now 0 forever stdin nil COV_ON 0]]
+g2:(std_grp 0 0 0 0 [nil]) [[SYNC_ONCE now 0 forever stdin nil COV_OFF 0]]
+
+; setup duplicates for later
+dupe:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
+
+; inject an object
+pgm0:(pgm 
+|[]
+|[]
+|[]
+[]
+   (inj []
+      e1:(ent 1)    ; object to inject
+      [SYNC_ONCE now 0 1 g1 nil]  ; accompanying view for the object
+   )
+1) |[]
+
+; inject two objects at once
+pgm1:(pgm 
+|[]
+|[]
+|[]
+[]
+   (inj []
+      e2:(ent 1)  
+      [SYNC_ONCE now 0 1 g1 nil] 
+   )
+   (inj []
+      e3:(ent 1)
+      [SYNC_ONCE now 0 1 g1 nil] 
+   )
+1) |[]
+
+; inject objects at later times, bounded by vw.ijt
+pgm2:(pgm 
+|[]
+|[]
+|[]
+[]
+   (inj []
+      e4:(ent 1)
+      [SYNC_ONCE (+ now 100000) 0 1 g1 nil]
+   )
+   (inj []
+      e5:(ent 1)
+      [SYNC_ONCE (+ now 1us) 0 1 g1 nil]
+   )
+   (inj []
+      e6:(ent 1)
+      [SYNC_ONCE (+ now 200ms) 0 1 g1 nil]
+   )
+   (inj []
+      e7:(ent 1)
+      [SYNC_ONCE (+ now 13s) 0 1 g1 nil]
+   )
+1) |[]
+
+; inject in different groups
+pgm3:(pgm 
+|[]
+|[]
+|[]
+[]
+   (inj []
+      e8:(ent 1)
+      [SYNC_ONCE now 0 1 g1 nil]
+   )
+   (inj []
+      e9:(ent 1)
+      [SYNC_ONCE now 0 1 g2 nil]
+   )
+1) |[]
+
+; try inj obj in group where it is not already present - should add this view to existing object "dupe".
+pgm4:(pgm 
+|[]
+|[]
+|[]
+[]
+   (inj []
+      dupe
+      [SYNC_ONCE now 0 1 g1 nil] 
+   )
+1) |[]
+; now, a true duplicate. should update view values to the highest among the 2 -> update vw.ijt!
+pgm5:(pgm 
+|[]
+|[]
+|[]
+[]
+   (inj []
+      dupe
+      [SYNC_ONCE now 0 1 g1 nil] 
+   )
+1) |[]
+
+
+ipgm0:(ipgm pgm0 |[] RUN_ONCE  0ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+ipgm1:(ipgm pgm1 |[] RUN_ONCE 100ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 1 g1 nil 1]]
+ipgm2:(ipgm pgm2 |[] RUN_ONCE 200ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 1 g2 nil 1]]
+ipgm3:(ipgm pgm3 |[] RUN_ONCE 300ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+ipgm4:(ipgm pgm4 |[] RUN_ONCE 400ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 1 g1 nil 1]]
+ipgm5:(ipgm pgm5 |[] RUN_ONCE 500ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 1 g1 nil 1]]

@@ -1,0 +1,47 @@
+; first check the two commands ejected TO the I/O device
+; ready
+cmd0:(cmd ready ["ball" b] 1) |[]
+fact_71:(fact cmd0 0s:120ms:0us 0s:200ms:0us 1 1) |[]
+mk_rdx_72:(mk.rdx istart [] [(cmd ready ["ball" b] 1) fact_71]
+
+; set_velocity_y
+cmd4:(cmd set_velocity_y [b 0.0006] 1) |[]
+fact_218:(fact cmd4 0s:560ms:0us 0s:600ms:0us 1 1) |[]
+mk_rdx_221:(mk.rdx fact_220 [fact_218 mk_rdx_177] [fact_219] 1) |[]
+
+; below, check all the commands injected FROM the I/O device
+; pos 0
+mk_val0:(mk.val b velocity_y 0.0001 1) |[]
+fact_74:(fact mk_val0 0s:100ms:0us 0s:200ms:0us 1 1) |[]
+mk_val1:(mk.val b position_y 0 1) |[]
+fact_75:(fact mk_val1 0s:100ms:0us 0s:200ms:0us 1 1) |[]
+
+; pos 10
+mk_val2:(mk.val b velocity_y 0.0001 1) |[]
+fact_83:(fact mk_val2 0s:200ms:0us 0s:300ms:0us 1 1) |[]
+mk_val3:(mk.val b position_y 10 1) |[]
+fact_84:(fact mk_val3 0s:200ms:0us 0s:300ms:0us 1 1) |[]
+
+; pos 20
+mk_val5:(mk.val b velocity_y 0.0001 1) |[]
+fact_104:(fact mk_val5 0s:300ms:0us 0s:400ms:0us 1 1) |[]
+mk_val6:(mk.val b position_y 20 1) |[]
+fact_105:(fact mk_val6 0s:300ms:0us 0s:400ms:0us 1 1) |[]
+
+; pos 30
+mk_val9:(mk.val b velocity_y 0.0001 1) |[]
+fact_127:(fact mk_val9 0s:400ms:0us 0s:500ms:0us 1 1) |[]
+mk_val10:(mk.val b position_y 30 1) |[]
+fact_128:(fact mk_val10 0s:400ms:0us 0s:500ms:0us 1 1) |[]
+
+; pos 40
+mk_val14:(mk.val b velocity_y 0.0001 1) |[]
+fact_158:(fact mk_val14 0s:500ms:0us 0s:600ms:0us 1 1) |[]
+mk_val15:(mk.val b position_y 40 1) |[]
+fact_159:(fact mk_val15 0s:500ms:0us 0s:600ms:0us 1 1) |[]
+
+; pos 100
+mk_val28:(mk.val b velocity_y 0.0006 1) |[]
+fact_248:(fact mk_val28 0s:600ms:0us 0s:700ms:0us 1 1) |[]
+mk_val29:(mk.val b position_y 100 1) |[]
+fact_249:(fact mk_val29 0s:600ms:0us 0s:700ms:0us 1 1) |[]

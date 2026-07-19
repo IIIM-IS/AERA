@@ -1,0 +1,7 @@
+; Doc - Annex 1 - 2.6 - Pre-Processor Directives
+
+; load something that works first
+!load test-misc.replicode
+
+; now, try to load itself. this is not in the docu, but i would expect it to fail...
+!load testFail-load.replicode

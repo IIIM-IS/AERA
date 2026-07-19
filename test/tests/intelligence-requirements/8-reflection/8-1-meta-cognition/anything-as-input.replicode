@@ -1,0 +1,261 @@
+; REQUIREMENT:	8.1 - Meta-cognition
+; PARAMETERS:   -
+; BASE TASK:	-
+; ACTIONS:		-
+
+; Here, we check if different objects can be used in models, to produce sub-goals.
+; This includes a drive for each of the following:
+
+; grp, pgm, |pgm, ipgm, fact, |fact, pred, goal, cst, icst, mdl, imdl, cmd, icmd, ent, ont, perf
+; mk.rdx, mk.new, mk.low_sln, mk.high_sln, mk.low_act, mk.high_act, mk.low_res, mk.sln_chg, mk.act_chg
+
+
+; ============================
+; SETUP
+; ============================
+bathtub:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+water_level:(ont 1) [[SYNC_ONCE now 0 forever root nil]];
+valve_status:(ont 1) [[SYNC_ONCE now 0 forever root nil]];
+
+; This is used below in pgm_inject_drive, to continuously inject our goal
+
+b:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+b_is_a_bathtub:(mk.val b essence bathtub 1) |[]
+f_b_bathtub:(fact b_is_a_bathtub 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+
+; empty pgm
+pgm0:(pgm 
+|[] ; template arguments, a set of patterns
+|[] ; inputs, a set of patterns
+|[] ; guards, a set of expressions
+|[] ; prods
+1) |[]
+
+; simple cst
+S0:(cst [] []
+   (fact (mk.val B: essence bathtub :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; ============================
+; DRIVES (aka GOAL)
+; ============================
+
+!def DRIVE_START 0ms      ; when to start injecting the drive
+
+; mk.rdx, mk.new, mk.low_sln, mk.high_sln, mk.low_act, mk.high_act, mk.low_res, mk.sln_chg, mk.act_chg
+
+m_drive_mk_val:(mdl [] []
+   (fact (mk.val b water_level 0 1) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive_mk_new:(mdl [] []
+   (fact (mk.new b 0) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive_mk_low_sln:(mdl [] []
+   (fact (mk.low_sln b 0) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive_mk_high_sln:(mdl [] []
+   (fact (mk.high_sln b 0) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive_mk_low_act:(mdl [] []
+   (fact (mk.low_act b 0) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive_mk_high_act:(mdl [] []
+   (fact (mk.high_act b 0) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive_mk_low_res:(mdl [] []
+   (fact (mk.low_res b 0) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive_mk_sln_chg:(mdl [] []
+   ; The goal target timings are the same as the drive timings.
+   (fact (mk.sln_chg b -0.15 0) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive_mk_act_chg:(mdl [] []
+   (fact (mk.act_chg b -0.15 0) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; =====================================
+
+; grp, pgm, |pgm, ipgm, fact, |fact, pred, goal, cst, icst, mdl, imdl, cmd, icmd, ent, ont, perf
+
+m_drive_grp:(mdl [] []
+   (fact (grp 2 0 0.4 0 1 0 1 0 0 1 0 0 1 1 1 1 0 0 1 0 0 1 1 0 1 1 0 1 0 0 [stdin] 1) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive_pgm:(mdl [] []
+   (fact (pgm |[] |[] |[] |[] 1) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive_anti_pgm:(mdl [] []
+   (fact (|pgm |[] |[] |[] |[] 1) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive_ipgm:(mdl [] []
+   (fact (ipgm pgm0 |[] RUN_ONCE 0ms STATIC NOTIFY 1) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive_fact:(mdl [] []
+   (fact (fact b_is_a_bathtub 0s:0ms:0us GIGASEC 1 1) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive_anti_fact:(mdl [] []
+   (fact (|fact b_is_a_bathtub 0s:0ms:0us GIGASEC 1 1) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive_pred:(mdl [] []
+   (fact (pred b_is_a_bathtub |[] 1) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive_goal:(mdl [] []
+   (fact (goal b_is_a_bathtub self |[] 1) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; (R1) CSTs and ICSTs occasionally cause read-access violations.
+; If they don't, then the Visualizer still fails to parse the decompiled output.
+; They are therefore commented out here.
+;m_drive_cst:(mdl [] []
+;   (fact (cst [] [b_is_a_bathtub] |[] |[] |[] 1) T0: T1: 1 1)
+;   (fact run T0: T1: ::)
+;|[]
+;|[]
+;[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+;m_drive_icst:(mdl [] []
+;   (fact (icst S0 |[] |[] false 1) T0: T1: 1 1)
+;   (fact run T0: T1: ::)
+;|[]
+;|[]
+;[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive_mdl:(mdl [] []
+   (fact m_drive_fact T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive_imdl:(mdl [] []
+   (fact (imdl m_drive_fact [1 2] [(ptn pos_x: |[]) (ptn pos_y: |[])] true 1) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive_cmd:(mdl [] []
+   (fact (cmd open_valve [b] 1) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; (R2) Visualizer fails to parse icmd in models, even though this seems to work fine in the decompiled output.
+; The model below is therefore commented out.
+;m_drive_icmd:(mdl [] []
+;   (fact (icmd _prb [1 "print" "hello world" |[]]) T0: T1: 1 1)
+;   (fact run T0: T1: ::)
+;|[]
+;|[]
+;[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive_ent:(mdl [] []
+   (fact (ent 1) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive_ont:(mdl [] []
+   (fact (ont 1) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+m_drive_perf:(mdl [] []
+   (fact (perf 0 0 0 0 1) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; =====================================
+
+
+pgm_inject_drive:(pgm [] []
+   ; This fact repeats periodically (bcs of SYNC_AXIOM in f1). We use it as a "heartbeat".
+   (ptn (fact (mk.val b essence bathtub :) After: Before: ::) [])
+[]
+   (>= After (+ this.vw.ijt DRIVE_START))
+[]
+   (inj [f_run:(fact run After Before 1 1) []])
+   (inj [G:(goal f_run self nil 1) []])
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected drive" []])
+1) |[]
+(ipgm pgm_inject_drive [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]

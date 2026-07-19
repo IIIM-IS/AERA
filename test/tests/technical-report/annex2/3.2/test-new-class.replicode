@@ -1,0 +1,24 @@
+; Doc - Annex 2 - 3.2 - rMem's - Functions
+
+; N E W   C L A S S
+; !dfn (_new_class :)
+; !def (new_class args) (icmd _new_class args)
+
+; setup
+e1:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
+o1:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+!class (unt (_obj nil))
+
+; create a new class
+pgm0:(pgm 
+|[]
+|[]
+|[]
+[]
+   (new_class [e1]) ; e1 - r-atom leading the definition of an object
+   (new_class [o1]) ; o1 - r-atom leading the definition of an object
+   ; (new_class [unt]) ; doesn't work
+1) |[]
+
+
+ipgm0:(ipgm pgm0 |[] RUN_ONCE 0ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 1 stdin nil 1]]

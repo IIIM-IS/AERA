@@ -1,0 +1,51 @@
+; Doc - Annex 1 - 4.2.2 - Object Classes - Internal Commands
+
+; !class (icmd function:fid args:[])
+; remember: !dfn (_prb :nb :st :st :[])
+; remember: !def (prb args) (icmd _prb args)
+
+; EMPTY ICMD
+pgm0:(pgm 
+|[]
+|[]
+|[]
+[]
+   (prb [1 "print" "hello world" |[]])
+1) |[]
+
+
+pgm1:(pgm 
+|[]
+|[]
+|[]
+[]
+   (icmd _prb [1 "print" "hello world" |[]])
+1) |[]
+
+
+pgm2:(pgm 
+|[]
+|[]
+|[]
+[]
+   (inj []
+      init_pos:(val (vec3 0 0 0) 1) |[]
+    )
+1) |[]
+
+pgm3:(pgm 
+|[]
+|[]
+|[]
+[]
+   (icmd _inj []
+      init_pos:(val (vec3 0 0 0) 1) |[]
+    )
+1) |[]
+
+
+; need to instantiate so compilation works
+ipgm0:(ipgm pgm0 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+ipgm1:(ipgm pgm1 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+ipgm2:(ipgm pgm2 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]
+ipgm3:(ipgm pgm3 |[] RUN_ONCE 50ms VOLATILE SILENT 1) [[SYNC_ONCE now 0 1 stdin nil 1]]

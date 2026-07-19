@@ -1,0 +1,176 @@
+!load ../Test/std.replicode
+
+!class (vec3 x:nb y:nb z:nb)
+!class (mk.tag (_obj {object: tag:st}))
+
+!class (tagged_v vector:vec3 string:st)
+
+!class (string (_obj {s:st id:us}))
+!class (str (_obj s:st))
+!class (counter (_obj value:nb))
+!class (Ping (_obj {object:}))
+!class (Pong (_obj {object:}))
+
+!dfn (sample_io_start :nb)
+!dfn (sample_io_stop)
+
+root:(grp
+1; upr
+0.5; sln_thr
+0.4; act_thr
+0; vis_thr
+1; c_sln
+0; c_sln_thr
+1; c_act
+0; c_act_thr
+0; dcy_per
+0; dcy_tgt
+1; dcy_prd
+0; dcy_auto
+1; sln_chg_thr
+1; sln_chg_prd
+1; act_chg_thr
+1; act_chg_prd
+0; avg_sln
+0; high_sln
+0; low_sln
+0; avg_act
+0; high_act
+0; low_act
+1; high_sln_thr
+0; low_sln_thr
+1; sln_ntf_prd
+1; high_act_thr
+0; low_act_thr
+1; act_ntf_prd
+0; ntf_new
+0; low_res_thr
+[nil]; ntf_grps
+1; psln_thr
+)
+[]
+   [SYNC_ONCE now 0 forever nil nil COV_OFF 0]
+
+g1:(grp
+1; upr
+1; sln_thr
+0; act-thr
+0; vis_thr
+1; c_sln
+0; c_sln_thr
+1; c_act
+0; c_act_thr
+-0.2; dcy_per
+0; dcy_tgt
+0; dcy_prd
+0; dcy_auto
+1; sln_chg_thr
+2; sln_chg_prd
+1; act_chg_thr
+1; act_chg_prd
+0; avg_sln
+0; high_sln
+0; low_sln
+0; avg_act
+0; high_act
+0; low_act
+1; high_sln_thr
+0; low_sln_thr
+1; sln_ntf_prd
+1; high_act_thr
+0; low_act_thr
+1; act_ntf_prd
+0; ntf_new
+0; low_res_thr
+[nil]; ntf_grps
+1; psln_thr
+)
+[]
+   [SYNC_ONCE now 0 forever root nil COV_OFF 0]
+
+stdin:(grp
+1; upr
+0; sln_thr
+0; act_thr
+0; vis_thr
+1; c_sln
+0; c_sln_thr
+1; c_act
+0; c_act_thr
+0; dcy_per
+1; dcy_tgt
+0; dcy_prd
+0; dcy_auto
+1; sln_chg_thr
+1; sln_chg_prd
+1; act_chg_thr
+1; act_chg_prd
+0; avg_sln
+0; high_sln
+0; low_sln
+0; avg_act
+0; high_act
+0; low_act
+1; high_sln_thr
+0; low_sln_thr
+1; sln_ntf_prd
+1; high_act_thr
+0; low_act_thr
+1; act_ntf_prd
+0; ntf_new
+0; low_res_thr
+[root]; ntf_grps
+1; psln_thr
+)
+[]
+   [SYNC_ONCE now 0 forever root nil COV_OFF 0]
+   [SYNC_ONCE now 0 forever g1 nil COV_ON 1]; last 2 members: cov and vis.
+
+stdout:(grp
+1; upr
+0; sln_thr
+0; act_thr
+0; vis_thr
+1; c_sln
+0; c_sln_thr
+1; c_act
+0; c_act_thr
+0; dcy_per
+0; dcy_tgt
+1; dcy_prd
+0; dcy_auto
+1; sln_chg_thr
+1; sln_chg_prd
+1; act_chg_thr
+1; act_chg_prd
+0; avg_sln
+0; high_sln
+0; low_sln
+0; avg_act
+0; high_act
+0; low_act
+1; high_sln_thr
+0; low_sln_thr
+1; sln_ntf_prd
+1; high_act_thr
+0; low_act_thr
+1; act_ntf_prd
+0; ntf_new
+0; low_res_thr
+[nil]; ntf_grps
+1; psln_thr
+)
+[]
+   [SYNC_ONCE now 0 forever root nil COV_OFF 0]
+
+self:(ent
+0.95; psln_thr
+)
+[]
+   [SYNC_ONCE now 0.6 forever root nil]
+
+position:(ent
+1; psln_thr
+)
+[]
+   [SYNC_ONCE now 1 forever root nil]

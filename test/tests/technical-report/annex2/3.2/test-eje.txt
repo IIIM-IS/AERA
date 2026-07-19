@@ -1,0 +1,14 @@
+56(67) pgm0:(pgm |[] |[] |[] [(icmd _eje []
+   e1
+   []
+      0
+      (_now)
+      0
+      1
+      stdout
+      nil
+   0
+)] 1) |[]
+
+57(68) ipgm0:(ipgm pgm0 |[] false 100ms true true 1) []
+   [0 0s:0ms:0us 0 1 stdout nil 1]

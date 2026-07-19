@@ -1,0 +1,12 @@
+; Doc - Annex 1 - 4.3 - Semantics - Marker Classes
+
+; !class (mk.act_chg (_obj {obj: chg:nb}))
+
+; setup
+a:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
+
+; let's instantiate...
+mk1:(mk.act_chg a 0.5 1) [[SYNC_ONCE now 0 forever root nil]]
+
+; object - a reference to the object whose activation changed
+; activation change: a number in [0,1] representing the change of activation

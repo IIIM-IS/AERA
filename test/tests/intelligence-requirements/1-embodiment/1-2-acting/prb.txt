@@ -1,0 +1,17 @@
+pgm0:(pgm |[] |[] |[] [(icmd _prb []
+   1
+   "print"
+   "hello world"
+   |[]
+)] 1) |[]
+
+pgm1:(pgm |[] |[] |[] [(icmd _prb []
+   1
+   "print"
+   "hello world later"
+   |[]
+)] 1) |[]
+
+ipgm0:(ipgm pgm0 |[] false 0s true true 1) |[]
+
+ipgm1:(ipgm pgm1 |[] false 500ms true true 1) |[]

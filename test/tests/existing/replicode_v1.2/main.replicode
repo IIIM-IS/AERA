@@ -1,0 +1,13 @@
+; debug
+
+!load hello.world.1.replicode
+; !load hello.world.2.replicode
+; !load hello.world.3.replicode
+; !load test.1.replicode
+; !load test.2.replicode
+; !load test.3.replicode
+; !load test.4.replicode
+; !load pong.1.replicode
+; !load pong.2.replicode
+; !load pong.3.replicode
+; !load pattern.replicode

@@ -1,0 +1,4 @@
+; Doc - Annex 1 - 3.5 - Built-In Constructs - Entities
+
+; self - try to redefine
+self:(ont 1) [[SYNC_ONCE now 0 forever root nil]]

@@ -1,0 +1,20 @@
+o0:(ont 0) []
+o1:(ont 1) []
+o2:(ont 2) []
+o3:(ont 3) []
+o4:(ont 4) []
+
+o13:(ont 13) []
+o14:(ont 14) []
+o15:(ont 15) []
+o16:(ont 16) []
+o17:(ont 17) []
+
+omax0:(ont 2.14748e+09) []
+omax1:(ont 2.14748e+09) []
+omax2:(ont -2.14748e+09) []
+omax3:(ont -2.14748e+09) []
+
+new_o5:(ont 0) []
+new_o6:(ont 1) []
+unincremented_o5:(ont 5) []

@@ -1,0 +1,29 @@
+; REQUIREMENT:	1.2 - Acting
+; PARAMETERS:	-
+; BASE TASK:	-
+; ACTIONS:		- 
+
+; This is a basic syntax test for the icmd DELETE CLASS.
+
+; D E L - C L A S S
+; !dfn (_del_class :)
+; !def (del_class args) (icmd _del_class args)
+
+; setup
+e1:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
+o1:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+
+; delete a class
+; (R1) This has never been used in existing Replicode files, and I wasn't able to reproduce all that the icmd should be able to do.
+pgm0:(pgm 
+|[]
+|[]
+|[]
+[]
+   (del_class [e1]) ; e1 - r-atom leading the definition of the object to be deleted
+   (del_class [o1]) ; o1 - r-atom leading the definition of the object to be deleted
+   ; (del_class [ent]) ; doesn't work
+1) |[]
+
+
+ipgm0:(ipgm pgm0 |[] RUN_ONCE 0ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 1 stdin nil 1]]

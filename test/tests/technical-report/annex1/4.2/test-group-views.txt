@@ -1,0 +1,23 @@
+54(65) g1:(grp 0 0 0 0 1 0 1 0 0 1 0 0 1 1 1 1 0 0 0 0 0 0 1 0 1 1 0 1 0 0 [nil] 1) []
+   [0 0s:0ms:0us 0 forever stdin nil true 0]
+
+55(66) g2:(grp 0 0 0 0 1 0 1 0 0 1 0 0 1 1 1 1 0 0 0 0 0 0 1 0 1 1 0 1 0 0 [nil] 1) []
+   [0 0s:0ms:0us 0 forever stdin nil false 0]
+
+56(67) g3:(grp 0 0 0 0 1 0 1 0 0 1 0 0 1 1 1 1 0 0 0 0 0 0 1 0 1 1 0 1 0 0 [nil] 1) []
+   [0 0s:0ms:0us 0 forever stdin nil true 0]
+
+57(68) g4:(grp 0 0 0 0 1 0 1 0 0 1 0 0 1 1 1 1 0 0 0 0 0 0 1 0 1 1 0 1 0 0 [nil] 1) []
+   [0 0s:0ms:0us 0 forever stdin nil true 1]
+
+58(69) g5:(grp 0 0 0 0 1 0 1 0 0 1 0 0 1 1 1 1 0 0 0 0 0 0 1 0 1 1 0 1 0 0 [nil] 1) []
+   [0 0s:0ms:0us 0 forever stdin nil true 0.5]
+
+59(70) g6:(grp 0 0 0 0 1 0 1 0 0 1 0 0 1 1 1 1 0 0 0 0 0 0 1 0 1 1 0 1 0 0 [nil] 1) []
+   [0 0s:0ms:0us 0 forever stdin nil true -1]
+
+60(71) g7:(grp 0 0 0 0 1 0 1 0 0 1 0 0 1 1 1 1 0 0 0 0 0 0 1 0 1 1 0 1 0 0 [nil] 1) []
+   [0 0s:0ms:0us 0 forever stdin nil true 2]
+
+61(72) g8:(grp 0 0 0 0 1 0 1 0 0 1 0 0 1 1 1 1 0 0 0 0 0 0 1 0 1 1 0 1 0 0 [nil] 1) []
+   [0 0s:0ms:0us 0 forever stdin nil true 13]

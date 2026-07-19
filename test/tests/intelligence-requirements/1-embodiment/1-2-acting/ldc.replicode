@@ -1,0 +1,25 @@
+; REQUIREMENT:	1.2 - Acting
+; PARAMETERS:	-
+; BASE TASK:	-
+; ACTIONS:		- 
+
+; This is a basic syntax test for the icmd LOAD CODE.
+
+; L O A D   C O D E
+; !dfn (_ldc :st)
+; !def (ldc args) (icmd _ldc args)
+
+; (R1) This has never been used in existing Replicode files, so this is merely a syntax test.
+pgm0:(pgm 
+|[]
+|[]
+|[]
+[]
+   (ldc ["std.replicode"])
+   (ldc ["test-inj.replicode"])
+   (ldc ["1234"])
+   (ldc [1])
+1) |[]
+
+
+ipgm0:(ipgm pgm0 |[] RUN_ONCE 0ms VOLATILE NOTIFY 1) [[SYNC_ONCE now 0 1 stdin nil 1]]

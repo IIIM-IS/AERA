@@ -1,0 +1,5 @@
+56(67) rdx1:(mk.rdx ipgm0 [] [] 1) []
+   [0 0s:0ms:0us 0 forever root nil]
+
+58(69) rdx2:(mk.rdx mdl2 [self cube hand] [0xc3001103 grab ["ball"] 1 0xc3001103 release ["ball"] 1] 1) []
+   [0 0s:0ms:0us 0 forever root nil]

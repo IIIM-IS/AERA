@@ -1,0 +1,68 @@
+;creating a group
+;injecting an object in that group
+;setting the sln and act of the ipgm
+
+P1:(pgm
+[]; tpl
+   (ptn tgv1:(tagged_v v: :) |[])
+   (ptn tgv2:(tagged_v ::) |[])
+|[]; input
+[]; productions
+   (inj []
+      g:(grp
+      1; upr
+      0.4; sln_thr
+      0.2; act_thr
+      0; vis_thr
+      1; c_sln
+      0; c_sln_thr
+      1; c_act
+      0; c_act_thr
+      0; dcy_per
+      0; dcy_tgt
+      1; dcy_prd
+      0; dcy_auto
+      1; sln_chg_thr
+      1; sln_chg_prd
+      1; act_chg_thr
+      1; act_chg_prd
+      0; avg_sln
+      0; high_sln
+      0; low_sln
+      0; avg_act
+      0; high_act
+      0; low_act
+      1; high_sln_thr
+      0; low_sln_thr
+      1; sln_ntf_prd
+      1; high_act_thr
+      0; low_act_thr
+      1; act_ntf_prd
+      0; ntf_new
+      0; low_res_thr
+      [nil]; ntf_grps
+      1; psln_thr
+      )
+      [SYNC_FRONT now 1 forever root nil COV_OFF 0]
+   )
+   (inj [(mk.val self position (- (vec3 v.x v.y v.z) tgv2.vector) 0) [SYNC_FRONT now 1 forever g nil]])
+   (mod [this.vw.sln (+ g.sln_thr 0.1)])
+   (set [this.vw.act (- g.act_thr 0.1)])
+0; psln_thr
+)
+
+|[]
+
+iP1:(ipgm
+P1; code
+[]; args
+   (tagged_v (vec3 1 2 3) "vector 123")
+   (tagged_v (vec3 3 4 5) "vector 345")
+RUN_ALWAYS
+50000us; tsc
+NOTIFY; nfr
+1; psln_thr
+)
+
+[]
+   [SYNC_FRONT now 0.2 forever root nil 1]
