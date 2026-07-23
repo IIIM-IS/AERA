@@ -106,6 +106,7 @@ extern r_exec_dll Timestamp (*Now)();
 // The latter contains all class definitions and all shared objects (e.g. ontology); does not contain any dynamic (res!=forever) objects.
 extern r_exec_dll r_comp::Metadata Metadata;
 extern r_exec_dll r_comp::Image Seed;
+extern r_exec_dll r_comp::Compiler Compiler;
 
 // A preprocessor and a compiler are maintained throughout the life of the dll to retain, respectively, macros and global references.
 // Both functions add the compiled object to Seed.code_image.
