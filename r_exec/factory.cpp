@@ -980,88 +980,14 @@ Mdl::Mdl(SysObject* source) : LObject(source) {
 
 ////////////////////////////////////////////////////////////////
 
-Solution::Solution(_Fact* source_goal) : solution_graph_() {
+Solution::Solution(_Fact* source_goal) : solution_graph_(), unique_mdls_ids_() {
   source_goal_ = source_goal;
 }
 
-std::pair<uint16, uint16> Solution::get_complexity(_Fact* f_success) {
-  uint16 args_counter = 0;
-  uint16 mdl_counter = 0;
-  uint32 unbound_values = 0;
-  float32 strength_sum = 0.0f;
-  Timestamp before = f_success->get_before();
-  Timestamp after = f_success->get_after();
-
-  auto found_mk_rdx = solution_graph_.find(f_success->get_success()->get_evidence());
-  while (found_mk_rdx != solution_graph_.end()) {
-    P<MkRdx> mk_rdx = found_mk_rdx->second;
-    _Fact* f_imdl = (_Fact*)mk_rdx->get_reference(0); // Reduction source (imdl or icst)
-    auto is_imdl = f_imdl->get_reference(0)->code(0).asOpcode() == Opcodes::IMdl;
-    if (is_imdl)
-    {
-      mdl_counter++;
-
-      Mdl* mdl = (Mdl*)f_imdl->get_reference(0)->get_reference(0);
-      BindingMap bm = mk_rdx->bindings_;
-      unbound_values += bm.get_unbound_values();
-
-      if (Mdl* lhs_mdl = mdl->get_lhs_mdl()) {
-        //Atom tpl_args = lhs_mdl->code(MDL_TPL_ARGS);
-        Atom patterns = lhs_mdl->code(MDL_OBJS);
-        //Atom fwd_guards = lhs_mdl->code(MDL_FWD_GUARDS);
-        //Atom strength = lhs_mdl->code(MDL_STRENGTH);
-
-        Atom inner_lhs = lhs_mdl->code(lhs_mdl->code(patterns.asIndex() + 1).asIndex() + 1);
-        auto debug = 0;
-      }
-
-      if (Code* lhs_cmd = mdl->get_lhs_cmd()) {
-        auto d = 0;
-      }
-
-      if (ICST* lhs_icst = mdl->get_lhs_icst()) {
-        auto d = 0;
-      }
-
-      Atom args_set = mdl->code(mdl->code(MDL_TPL_ARGS).asIndex());
-      args_counter += args_set.getAtomCount();
-
-      strength_sum += mdl->code(MDL_STRENGTH).asFloat();
-    }
-
-    _Fact* prod_f = (_Fact*)mk_rdx->get_first_production();
-    after = prod_f->get_pred()->get_target()->get_after();
-
-    found_mk_rdx = solution_graph_.find(mk_rdx->get_first_input());
-  }
-
-  milliseconds duration = duration_cast<milliseconds>(before - after);
-  float32 strength_avg = strength_sum / mdl_counter;
-
-  return std::pair<uint16, uint16>(args_counter, mdl_counter);
-}
-
-float32 Solution::get_imdl_complexity(_Fact* f_success) {
-  //build_imdl_chain(f_success);
-
+float32 Solution::get_solution_score(_Fact* f_success) {
+  unique_mdls_ids_.clear(); // Clear in case multiple successes were predicted in different branches of the same Sim
   float32 score = 0.0f;
-  milliseconds total_duration = duration_cast<milliseconds>(before_ - after_);
-
-  //std::vector<P<MkRdx>>::const_reverse_iterator r_iter;
-  //for (r_iter = imdl_chain_.rbegin(); r_iter != imdl_chain_.rend(); r_iter++) {
-  //  //P<MkRdx> mk_rdx = (*r_iter);
-  //  _Fact* production = (_Fact*)(*r_iter)->get_first_production();
-  //  _Fact* target = production->get_pred()->get_target();
-  //  Mdl* mdl = target->get_imdl()->get_mdl();
-
-  //  Atom args_set = mdl->code(mdl->code(MDL_TPL_ARGS).asIndex());
-  //  uint16 args_count = args_set.getAtomCount() + 1; // + 1 is counting the model itself
-
-  //  milliseconds time_progress = duration_cast<milliseconds>(target->get_before() - after_);
-  //  auto time_weight = duration<float32>(time_progress).count() / duration<float32>(total_duration).count();
-
-  //  score += (args_count * time_weight) / mdl->code(MDL_STRENGTH).asFloat();
-  //}
+  milliseconds total_duration = duration_cast<milliseconds>(f_success->get_before() - after_);
 
   _Fact* success_evidence = f_success->get_success()->get_evidence();
   auto found_mk_rdx = solution_graph_.find(success_evidence);
@@ -1071,40 +997,75 @@ float32 Solution::get_imdl_complexity(_Fact* f_success) {
     
     _Fact* production = (_Fact*)mk_rdx->get_first_production();
     _Fact* target = production->get_pred()->get_target();
-    IMdl* imdl = target->get_imdl();
 
+    IMdl* imdl = target->get_imdl();
     if (imdl) {
       Mdl* mdl = imdl->get_mdl();
-      
-      if (mdl->get_lhs_cmd()) {
-        // It's a command model
-        Atom args_set = mdl->code(mdl->code(MDL_TPL_ARGS).asIndex());
-        uint16 args_count = args_set.getAtomCount() + 1; // + 1 is counting the model itself
-
-        milliseconds time_progress = duration_cast<milliseconds>(target->get_before() - after_);
-        auto time_weight = 1 - (duration<float32>(time_progress).count() / duration<float32>(total_duration).count());
-
-        score += (args_count * time_weight) / mdl->code(MDL_SR).asFloat();
+      if (mdl->get_lhs()->code(0).asOpcode() == Opcodes::MkVal && mdl->get_rhs()->code(0).asOpcode() == Opcodes::MkVal) {
+        // This model describes something "automatic" that is happening, so don't count it
+        found_mk_rdx = next_item;
+        continue;
       }
+
+      unique_mdls_ids_.insert(mdl->get_oid());
+      
+      Atom args_set = imdl->code(imdl->code(I_HLP_TPL_ARGS).asIndex());
+      Atom exp_args_set = imdl->code(imdl->code(I_HLP_EXPOSED_ARGS).asIndex());
+
+      uint32 args_count = args_set.getAtomCount();
+      args_count += exp_args_set.getAtomCount();
+      //args_count += imdl->count_unbound_args(); // Unbound variables are counted twice
+
+      milliseconds time_progress = duration_cast<milliseconds>(target->get_before() - after_);
+      auto time_weight = 1 - (duration<float32>(time_progress).count() / duration<float32>(total_duration).count());
+
+      score += (args_count * time_weight) / mdl->code(MDL_SR).asFloat();
     }
-    else if (next_item == solution_graph_.end()) {
-      // This is the first prediction of the chain but wasn't an imdl, it's a cmd so get the imdl from 
-      // the "code" field of the mk.rdx
-      _Fact* f_imdl = (_Fact*)mk_rdx->get_reference(0);
-      Mdl* mdl = f_imdl->get_imdl()->get_mdl();
+    else if (imdl = ((_Fact*)mk_rdx->get_reference(0))->get_imdl()) {
+     // Sometimes imdls are not produced as facts but they are only used to make a prediction
+      Mdl* mdl = imdl->get_mdl();
+      if (mdl->get_lhs()->code(0).asOpcode() == Opcodes::MkVal && mdl->get_rhs()->code(0).asOpcode() == Opcodes::MkVal) {
+        // This model describes something "automatic" that is happening, so don't count it
+        found_mk_rdx = next_item;
+        continue;
+      }
 
-      Atom args_set = mdl->code(mdl->code(MDL_TPL_ARGS).asIndex());
-      uint16 args_count = args_set.getAtomCount() + 1; // + 1 is counting the model itself
+      unique_mdls_ids_.insert(mdl->get_oid());
 
-      //milliseconds time_progress = duration_cast<milliseconds>(target->get_before() - after_);
-      //auto time_weight = 1 - (duration<float32>(time_progress).count() / duration<float32>(total_duration).count());
+      Atom args_set = imdl->code(imdl->code(I_HLP_TPL_ARGS).asIndex());
+      Atom exp_args_set = imdl->code(imdl->code(I_HLP_EXPOSED_ARGS).asIndex());
 
-      score += (args_count * 1) / mdl->code(MDL_SR).asFloat();
+      uint32 args_count = args_set.getAtomCount();
+      args_count += exp_args_set.getAtomCount();
+      //args_count += imdl->count_unbound_args(); // Unbound variables are counted twice
+
+      milliseconds time_progress = duration_cast<milliseconds>(target->get_before() - after_);
+      auto time_weight = 1 - (duration<float32>(time_progress).count() / duration<float32>(total_duration).count());
+
+      score += (args_count * time_weight) / mdl->code(MDL_SR).asFloat();
     }
+  //  else if (next_item == solution_graph_.end()) {
+  //    // This is the first prediction of the chain but wasn't an imdl, it's a cmd so get the imdl from 
+  //    // the "code" field of the mk.rdx
+  //    _Fact* f_imdl = (_Fact*)mk_rdx->get_reference(0);
+  //    imdl = f_imdl->get_imdl();
+  //    Mdl* mdl = imdl->get_mdl();
+  //    unique_mdls_ids_.insert(mdl->get_oid());
+
+  //    Atom args_set = imdl->code(imdl->code(I_HLP_TPL_ARGS).asIndex());
+  //    Atom exp_args_set = imdl->code(imdl->code(I_HLP_EXPOSED_ARGS).asIndex());
+
+  //    uint32 args_count = args_set.getAtomCount();
+  //    args_count += exp_args_set.getAtomCount();
+  //    //args_count += imdl->count_unbound_args(); // Unbound variables are counted twice
+
+  //    score += (args_count * 1) / mdl->code(MDL_SR).asFloat();
+  //    score += imdl->count_unbound_args() * 1000; // Workaround to prevent executing commands with unbound variables
+  //  }
     found_mk_rdx = next_item;
   }
 
-  return score;
+  return score + unique_mdls_ids_.size();
 }
 
 }

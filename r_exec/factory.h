@@ -696,15 +696,41 @@ public:
   Mdl();
   Mdl(r_code::SysObject* source);
 
+  Code* get_lhs() const {
+    Code* unpacked_mdl = get_reference(references_size() - MDL_HIDDEN_REFS);
+    
+    if (unpacked_mdl->code(0).asOpcode() == Opcodes::Mdl) {
+      uint16 patterns_set_index = unpacked_mdl->code(MDL_OBJS).asIndex();
+      return unpacked_mdl->get_reference(unpacked_mdl->code(patterns_set_index + 1).asIndex());
+    }
+    else {
+      uint16 patterns_set_index = code(MDL_OBJS).asIndex();
+      return get_reference(code(patterns_set_index + 1).asIndex());
+    }
+  }
+
+  Code* get_rhs() const {
+    Code* unpacked_mdl = get_reference(references_size() - MDL_HIDDEN_REFS);
+
+    if (unpacked_mdl->code(0).asOpcode() == Opcodes::Mdl) {
+      uint16 patterns_set_index = unpacked_mdl->code(MDL_OBJS).asIndex();
+      return unpacked_mdl->get_reference(unpacked_mdl->code(patterns_set_index + 2).asIndex());
+    }
+    else {
+      uint16 patterns_set_index = code(MDL_OBJS).asIndex();
+      return get_reference(code(patterns_set_index + 2).asIndex());
+    }
+  }
+
   Mdl* get_lhs_mdl() const {
-    Code* lhs = get_reference(0);
+    Code* lhs = get_lhs();
     if (lhs->code(0).asOpcode() == Opcodes::Mdl)
       return (Mdl*)lhs;
     return NULL;
   }
 
   Code* get_lhs_cmd() const {
-    Code* lhs = get_reference(0);
+    Code* lhs = get_lhs();
     if (lhs->code(0).asOpcode() == Opcodes::Cmd)
       return lhs;
 
@@ -718,7 +744,7 @@ public:
   }
 
   ICST* get_lhs_icst() const {
-    Code* lhs = get_reference(0);
+    Code* lhs = get_lhs();
     if (lhs->code(0).asOpcode() == Opcodes::ICst)
       return (ICST*)lhs;
     return NULL;
@@ -736,6 +762,27 @@ public:
     if (mdl->code(0).asOpcode() == Opcodes::Mdl)
       return (Mdl*)mdl;
     return NULL;
+  }
+
+  uint32 count_unbound_args() const {
+    uint32 unbound_args_count = 0;
+
+    uint16 args_index = code(I_HLP_TPL_ARGS).asIndex();
+    uint16 exp_args_index = code(I_HLP_EXPOSED_ARGS).asIndex();
+    Atom args_set = code(args_index);
+    Atom exp_args_set = code(exp_args_index);
+
+    for (int i = 1; i < args_set.getAtomCount(); i++) {
+      if (code(args_index + i).getDescriptor() == Atom::VL_PTR)
+        unbound_args_count++;
+    }
+
+    for (int i = 1; i < exp_args_set.getAtomCount(); i++) {
+      if (code(exp_args_index + i).getDescriptor() == Atom::VL_PTR)
+        unbound_args_count++;
+    }
+
+    return unbound_args_count;
   }
 };
 
@@ -759,8 +806,7 @@ public:
     return drive;
   }
 
-  std::pair<uint16, uint16> get_complexity(_Fact* f_success);
-  float32 get_imdl_complexity(_Fact* f_success);
+  float32 get_solution_score(_Fact* f_success);
 
   // The sub-goal that started the forward chain for this solution (structured as f->g->f->obj).
   _Fact* source_goal_;
@@ -768,6 +814,8 @@ public:
   // The graph of predictions that make up the solution, referenced by their reduction markers.
   // A marker rdx1 is stored at key rdx1.out (the first production), the previous object in the chain is at rdx1.in (the first input).
   std::unordered_map<r_code::Code*, P<MkRdx>> solution_graph_;
+  // The IDs of the models in the solution
+  std::unordered_set<uint32> unique_mdls_ids_;
 
   // Set when the first prediction is added.
   Timestamp after_;
