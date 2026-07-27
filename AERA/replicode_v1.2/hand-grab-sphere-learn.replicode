@@ -57,19 +57,20 @@ S3:(cst [] []
 |[]
 [stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
-!def pH0 25
-!def pS0 0
+!def pH0 20
+!def pC0 10
+!def pS0 5
 !def pS1 15
 
 ; Execute babble pass A commands.
 !def DRIVE_PASS1_START 1300ms
-!def DRIVE_PASS1_END (+ DRIVE_PASS1_START 300ms)
+!def DRIVE_PASS1_END (+ DRIVE_PASS1_START 100ms)
 ; Execute experimenting pass A commands.
 !def DRIVE_PASS2_START (+ DRIVE_PASS1_END 600ms)
 
 ; Initial conditions.
 start:(pgm [] [] [] []
-   (inj [State:(mk.val e1 emulator_state [nil 20 10 5] 1) []])
+   (inj [State:(mk.val e1 emulator_state [nil pH0 pC0 pS0] 1) []])
    (inj []
       (fact State After:(now) (+ After sampling_period) 1 1)
       [SYNC_PERIODIC now 1 1 emulator nil]
