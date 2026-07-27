@@ -143,6 +143,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AERA_main.cpp" />
+    <ClCompile Include="open_door_io_device.cpp" />
+    <ClCompile Include="take_vehicles_io_device.cpp" />
     <ClCompile Include="IODevices\TCP\AERA_Protobuf\tcp_connection.cpp" />
     <ClCompile Include="IODevices\TCP\AERA_Protobuf\tcp_data_message.pb.cc" />
     <ClCompile Include="IODevices\TCP\tcp_io_device.cpp" />
@@ -150,8 +152,11 @@
     <ClCompile Include="IODevices\video_screen\video_screen_io_device.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="test_mem.cpp" />
+    <ClCompile Include="tower_of_hanoi_io_device.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="open_door_io_device.h" />
+    <ClInclude Include="take_vehicles_io_device.h" />
     <ClInclude Include="IODevices\TCP\AERA_Protobuf\tcp_connection.h" />
     <ClInclude Include="IODevices\TCP\AERA_Protobuf\tcp_data_message.pb.h" />
     <ClInclude Include="IODevices\TCP\AERA_Protobuf\utils.h" />
@@ -161,6 +166,7 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="test_mem.h" />
+    <ClInclude Include="tower_of_hanoi_io_device.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="settings.xml">

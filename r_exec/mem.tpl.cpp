@@ -125,6 +125,8 @@ template<class O, class S> r_code::Code *MemExec<O, S>::build_object(r_code::Sys
       return new Pred(source);
     else if (opcode == Opcodes::ICst)
       return new ICST(source);
+    else if (opcode == Opcodes::Mdl)
+      return new Mdl(source);
     else if (opcode == Opcodes::MkRdx)
       return new MkRdx(source);
     else if (opcode == Opcodes::MkActChg ||
@@ -170,6 +172,8 @@ template<class O, class S> r_code::Code *MemExec<O, S>::build_object(Atom head) 
       object = new Goal();
     else if (opcode == Opcodes::ICst)
       object = new ICST();
+    else if (opcode == Opcodes::Mdl)
+      object = new Mdl();
     else if (opcode == Opcodes::MkRdx)
       object = new MkRdx();
     else if (opcode == Opcodes::MkActChg ||
@@ -185,6 +189,8 @@ template<class O, class S> r_code::Code *MemExec<O, S>::build_object(Atom head) 
       object = new r_code::LocalObject();
     else if (O::RequiresPacking())
       object = new r_code::LocalObject(); // temporary sand box for assembling code; will be packed into an O at injection time.
+    //else if (opcode == Opcodes::IMdl)
+    //  object = new IMdl();
     else
       object = new O();
     break;

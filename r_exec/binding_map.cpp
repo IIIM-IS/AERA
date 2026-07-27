@@ -330,6 +330,11 @@ void ObjectValue::valuate(Code *destination, uint16 write_index, uint16& /* exte
 }
 
 bool ObjectValue::match(const Code *object, uint16 index) {
+  uint16 object_index = object->code(index).asIndex();
+  if (object_index >= object->references_size()) {
+    // Object at "index" is probably an I_PTR to a set
+    return map_->match_object(object->get_reference(object->code(object_index + 1).asIndex()), object_);
+  }
 
   return map_->match_object(object->get_reference(object->code(index).asIndex()), object_);
 }

@@ -226,6 +226,7 @@ void GMonitor::commit() { // the purpose is to invalidate damaging simulations; 
 
   _Fact* best_solution_f_p_f_success = NULL;
   Sim *best_solution = NULL;
+  float32 best_solution_score;
   // Find the best optional solution.
   for (solution = sim_successes_.optional_solutions.begin(); solution != sim_successes_.optional_solutions.end(); ++solution) {
 
@@ -236,14 +237,17 @@ void GMonitor::commit() { // the purpose is to invalidate damaging simulations; 
     if (!best_solution) {
       best_solution_f_p_f_success = (*solution).first;
       best_solution = (*solution).second;
+      best_solution_score = best_solution->solution_->get_solution_score(best_solution_f_p_f_success->get_pred()->get_target());
+      std::cout << "Score of solution for success " << best_solution_f_p_f_success->get_detail_oid() << " is " << best_solution_score << std::endl;
     }
     else {
-
-      float32 s = (*solution).second->get_solution_cfd() / duration_cast<microseconds>((*solution).second->get_solution_before() - now).count();
-      float32 _s = best_solution->get_solution_cfd() / duration_cast<microseconds>(best_solution->get_solution_before() - now).count();
-      if (s > _s) {
+      
+      auto other_solution_score = (*solution).second->solution_->get_solution_score((*solution).first->get_pred()->get_target());
+      std::cout << "Score of solution for success " << (*solution).first->get_detail_oid() << " is " << other_solution_score << std::endl;
+      if (other_solution_score < best_solution_score) {
         best_solution_f_p_f_success = (*solution).first;
         best_solution = (*solution).second;
+        best_solution_score = other_solution_score;
       }
     }
   }
@@ -251,6 +255,7 @@ void GMonitor::commit() { // the purpose is to invalidate damaging simulations; 
   invalidate_sim_outcomes(); // this stops any further propagation of the goal simulation.
 
   if (best_solution) {
+    std::cout << "Score of best solution for success " << best_solution_f_p_f_success->get_detail_oid() << " is " << best_solution_score << std::endl;
 
     ((PrimaryMDLController *)best_solution->solution_controller_)->abduce_no_simulation(
       best_solution->get_f_super_goal(), best_solution->get_opposite(), goal_target_->get_cfd(), best_solution_f_p_f_success);

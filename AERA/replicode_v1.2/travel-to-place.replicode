@@ -1,0 +1,473 @@
+; ==== Entities and ontologies ====
+you:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+car:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+garage_door:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+home:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+bus_stop_1:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+bus_stop_2:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+bus_stop_3:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+gas_station:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+destination:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+
+location:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+in_car:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+oil_checked:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+started:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+opened:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+
+in_bus:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+; on_foot:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+
+e_car:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+e_door:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+yourself:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+
+you_is_yourself:(mk.val you essence yourself 1) |[]
+(fact you_is_yourself 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+car_is_car:(mk.val car essence e_car 1) |[]
+(fact car_is_car 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+garage_door_is_door:(mk.val garage_door essence e_door 1) |[]
+(fact garage_door_is_door 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+
+; ==== CSTs ====
+; cst_ReadyToDrive:(cst [] []
+;    (fact (mk.val C: essence e_car :) T0: T1: : :)
+;    (fact (mk.val C: oil_checked true :) T0: T1: : :)
+;    (fact (mk.val C: started true :) T0: T1: : :)
+;    (fact (mk.val Y: in_car [C:] :) T0: T1: : :)
+;    (fact (mk.val G: essence e_door :) T0: T1: : :)
+;    (fact (mk.val G: opened true :) T0: T1: : :)
+; |[]
+; |[]
+; [stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+cst_YouPosition:(cst [] []
+   (fact (mk.val Y: essence yourself :) T0: T1: : :)
+   (fact (mk.val Y: position P: :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+cst_YouHome:(cst [] []
+   (fact (mk.val Y: essence yourself :) T0: T1: : :)
+   (fact (mk.val Y: position home :) T0: T1: : :)
+   (fact (mk.val C: essence e_car :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+cst_OilChecked:(cst [] []
+   (fact (mk.val C: essence e_car :) T0: T1: : :)
+   (fact (mk.val C: oil_checked true :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+cst_EngineStarted:(cst [] []
+   (fact (mk.val C: essence e_car :) T0: T1: : :)
+   (fact (mk.val C: started true :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+cst_InCar:(cst [] []
+   (fact (mk.val C: essence e_car :) T0: T1: : :)
+   (fact (mk.val Y: essence yourself :) T0: T1: : :)
+   (fact (mk.val Y: in_car [C:] :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+cst_InBus:(cst [] []
+   (fact (mk.val Y: essence yourself :) T0: T1: : :)
+   (fact (mk.val Y: in_bus true :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+cst_GarageDoorOpened:(cst [] []
+   (fact (mk.val G: essence e_door :) T0: T1: : :)
+   (fact (mk.val G: opened true :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+
+; ==== Models ====
+mdl_CheckOil:(mdl [C: (ti T0: T1:)] []
+   (fact (cmd check_oil [C:] :) T2: T1_cmd: : :)
+   (fact (mk.val C: oil_checked true :) T1_RHS: T3: : :)
+[]
+   T1_RHS:(+ T0 100ms)
+   T3:(+ T1 100ms)
+[]
+   T2:(- T1_RHS 80ms)
+   T1_cmd:(- T3 100ms)
+   T0:(- T1_RHS 100ms)
+   T1:(- T3 100ms)
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_CheckOil_req:(mdl [] []
+   (fact (icst cst_YouHome [] [Y: C:] : :) T0: T1: : :)
+   (fact (imdl mdl_CheckOil [C: (ti T0: T1:)] [T1_RHS: T3:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; mdl_CheckOil_anti1:(mdl [] []
+;    (fact (mk.val Y: in_bus true :) T0: T1: : :)
+;    (|fact (imdl mdl_CheckOil [C: (ti T0: T1:)] [T1_RHS: T3:] : :) T0: T1: : :)
+; |[]
+; |[]
+; [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_EnterCar:(mdl [C: (ti T0: T1:)] []
+   (fact (cmd enter_car [C:] :) T2: T1_cmd: : :)
+   (fact (mk.val Y: in_car [C:] :) T1_RHS: T3: : :)
+[]
+   T1_RHS:(+ T0 100ms)
+   T3:(+ T1 100ms)
+[]
+   T2:(- T1_RHS 80ms)
+   T1_cmd:(- T3 100ms)
+   T0:(- T1_RHS 100ms)
+   T1:(- T3 100ms)
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_EnterCar_req:(mdl [] []
+   (fact (icst cst_OilChecked [] [C:] : :) T0: T1: : :)
+   (fact (imdl mdl_EnterCar [C: (ti T0: T1:)] [Y: T1_RHS: T3:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_OpenGarage:(mdl [G: (ti T0: T1:)] []
+   (fact (cmd open_garage [G:] :) T2: T1_cmd: : :)
+   (fact (mk.val G: opened true :) T1_RHS: T3: : :)
+[]
+   T1_RHS:(+ T0 100ms)
+   T3:(+ T1 100ms)
+[]
+   T2:(- T1_RHS 80ms)
+   T1_cmd:(- T3 100ms)
+   T0:(- T1_RHS 100ms)
+   T1:(- T3 100ms)
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_OpenGarage_req:(mdl [] []
+   (fact (icst cst_InCar [] [Y: C:] : :) T0: T1: : :)
+   (fact (imdl mdl_OpenGarage [G: (ti T0: T1:)] [T1_RHS: T3:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_StartEngine:(mdl [C: (ti T0: T1:)] []
+   (fact (cmd start_engine [C:] :) T2: T1_cmd: : :)
+   (fact (mk.val C: started true :) T1_RHS: T3: : :)
+[]
+   T1_RHS:(+ T0 100ms)
+   T3:(+ T1 100ms)
+[]
+   T2:(- T1_RHS 80ms)
+   T1_cmd:(- T3 100ms)
+   T0:(- T1_RHS 100ms)
+   T1:(- T3 100ms)
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_StartEngine_req:(mdl [] []
+   (fact (icst cst_GarageDoorOpened [] [G:] : :) T0: T1: : :)
+   (fact (imdl mdl_StartEngine [C: (ti T0: T1:)] [T1_RHS: T3:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_Drive:(mdl [C: Dest: (ti T0: T1:)] []
+   (fact (cmd drive [C: Dest:] :) T2: T1_cmd: : :)
+   (fact (mk.val Y: position Dest: :) T1_RHS: T3: : :)
+[]
+   T1_RHS:(+ T0 300ms)
+   T3:(+ T1 300ms)
+[]
+   T2:(- T1_RHS 280ms)
+   T1_cmd:(- T3 300ms)
+   T0:(- T1_RHS 300ms)
+   T1:(- T3 300ms)
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_Drive_req:(mdl [] []
+   (fact (icst cst_EngineStarted [] [C:] : :) T0: T1: : :)
+   (fact (imdl mdl_Drive [C: Dest: (ti T0: T1:)] [Y: T1_RHS: T3:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_Drive_anti1:(mdl [] []
+   (fact (icst cst_InBus [] [Y:] : :) T0: T1: : :)
+   (|fact (imdl mdl_Drive [C: Dest: (ti T0: T1:)] [Y: T1_RHS: T3:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+
+mdl_Walk:(mdl [Dest: (ti T0: T1:)] []
+   (fact (cmd walk [Dest:] :) T2: T1_cmd: : :)
+   (fact (mk.val Y: position Dest: :) T1_RHS: T3: : :)
+[]
+   T1_RHS:(+ T0 300ms)
+   T3:(+ T1 300ms)
+[]
+   T2:(- T1_RHS 280ms)
+   T1_cmd:(- T3 300ms)
+   T0:(- T1_RHS 300ms)
+   T1:(- T3 300ms)
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_Walk_req1:(mdl [] []
+   (fact (icst cst_YouPosition [] [Y: home] : :) T0: T1: : :)
+   (fact (imdl mdl_Walk [bus_stop_1 (ti T0: T1:)] [Y: T1_RHS: T3:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_Walk_req2:(mdl [] []
+   (fact (icst cst_YouPosition [] [Y: bus_stop_1] : :) T0: T1: : :)
+   (fact (imdl mdl_Walk [bus_stop_2 (ti T0: T1:)] [Y: T1_RHS: T3:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_Walk_req3:(mdl [] []
+   (fact (icst cst_YouPosition [] [Y: bus_stop_2] : :) T0: T1: : :)
+   (fact (imdl mdl_Walk [bus_stop_3 (ti T0: T1:)] [Y: T1_RHS: T3:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_Walk_req4:(mdl [] []
+   (fact (icst cst_YouPosition [] [Y: bus_stop_3] : :) T0: T1: : :)
+   (fact (imdl mdl_Walk [destination (ti T0: T1:)] [Y: T1_RHS: T3:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_Walk_anti1:(mdl [] []
+   (fact (icst cst_InCar [] [Y: C:] : :) T0: T1: : :)
+   (|fact (imdl mdl_Walk [Dest: (ti T0: T1:)] [Y: T1_RHS: T3:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_Walk_anti2:(mdl [] []
+   (fact (icst cst_InBus [] [Y:] : :) T0: T1: : :)
+   (|fact (imdl mdl_Walk [Dest: (ti T0: T1:)] [Y: T1_RHS: T3:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; mdl_Walk_reuse1:(mdl [Dest: (ti T0: T1:)] []
+;    (fact (imdl mdl_Walk [Dest: (ti T0: T1:)] [Y: T1_RHS: T3:] : :) T0_cmd: T1_cmd: : :)
+;    (fact (mk.val Y: on_foot true :) T1_RHS: T3: : :)
+; []
+;    T1_RHS:(+ T0 100ms)
+;    T3:(+ T1 100ms)
+; []
+;    T0_cmd:(- T1_RHS 80ms)
+;    T1_cmd:(- T3 100ms)
+;    T0:(- T1_RHS 100ms)
+;    T1:(- T3 100ms)
+; [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+
+mdl_TakeBus:(mdl [Dest: (ti T0: T1:)] []
+   (fact (cmd take_bus [Dest:] :) T2: T1_cmd: : :)
+   (fact (mk.val Y: position Dest: :) T1_RHS: T3: : :)
+[]
+   T1_RHS:(+ T0 200ms)
+   T3:(+ T1 200ms)
+[]
+   T2:(- T1_RHS 180ms)
+   T1_cmd:(- T3 200ms)
+   T0:(- T1_RHS 200ms)
+   T1:(- T3 200ms)
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_TakeBus_req1:(mdl [] []
+   (fact (icst cst_YouPosition [] [Y: home] : :) T0: T1: : :)
+   (fact (imdl mdl_TakeBus [bus_stop_1 (ti T0: T1:)] [Y: T1_RHS: T3:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_TakeBus_req2:(mdl [] []
+   (fact (icst cst_YouPosition [] [Y: bus_stop_1] : :) T0: T1: : :)
+   (fact (imdl mdl_TakeBus [bus_stop_2 (ti T0: T1:)] [Y: T1_RHS: T3:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_TakeBus_req3:(mdl [] []
+   (fact (icst cst_YouPosition [] [Y: bus_stop_2] : :) T0: T1: : :)
+   (fact (imdl mdl_TakeBus [bus_stop_3 (ti T0: T1:)] [Y: T1_RHS: T3:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_TakeBus_req4:(mdl [] []
+   (fact (icst cst_YouPosition [] [Y: bus_stop_3] : :) T0: T1: : :)
+   (fact (imdl mdl_TakeBus [destination (ti T0: T1:)] [Y: T1_RHS: T3:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_TakeBus_anti1:(mdl [] []
+   (fact (icst cst_InCar [] [Y: C:] : :) T0: T1: : :)
+   (|fact (imdl mdl_TakeBus [Dest: (ti T0: T1:)] [Y: T1_RHS: T3:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_TakeBus_anti2:(mdl [] []
+   (fact (icst cst_InBus [] [Y:] : :) T0: T1: : :)
+   (|fact (imdl mdl_TakeBus [Dest: (ti T0: T1:)] [Y: T1_RHS: T3:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_TakeBus_reuse1:(mdl [Dest: (ti T0: T1:)] []
+   (fact (imdl mdl_TakeBus [Dest: (ti T0: T1:)] [Y: T2_RHS: T3_RHS:] : :) T0_cmd: T1_cmd: : :)
+   (fact (mk.val Y: in_bus true :) T1_RHS: T3: : :)
+[]
+   T1_RHS:(+ T0 100ms)
+   T3:(+ T1 100ms)
+[]
+   T0_cmd:(- T1_RHS 80ms)
+   T1_cmd:(- T3 100ms)
+   T0:(- T1_RHS 100ms)
+   T1:(- T3 100ms)
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+
+
+; ==== Drive ====
+m_drive:(mdl [] []
+    ; The goal target timings are the same as the drive timings.
+    (fact (mk.val you position destination :) T0: T1: : :)
+    (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+!def DRIVE_START 300ms
+!def DRIVE_START2 600ms
+
+pgm_inject_drive:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val you essence yourself :) After: Before: ::) [])
+[]
+   (>= After (+ this.vw.ijt DRIVE_START))
+[]
+   ; The end of the time interval will be used in m_drive as the end of the goal interval.
+   (inj [f_run:(fact run After (+ Before 1600ms) 1 1) []])
+   (inj [G:(goal f_run self nil 1) []])
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected drive" []])
+1) |[]
+(ipgm pgm_inject_drive [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+; pgm_inject_drive2:(pgm [] []
+;     ; This fact repeats periodically. We use it as a "heartbeat".
+;     (ptn (fact (mk.val you essence yourself :) After: Before: ::) [])
+; []
+;    (= After (+ this.vw.ijt DRIVE_START2))
+; []
+;    ; The end of the time interval will be used in m_drive as the end of the goal interval.
+;    (inj [f_run:(fact run After (+ Before 1100ms) 1 1) []])
+;    (inj [G:(goal f_run self nil 1) []])
+;    (inj []
+;       ; Delay a little to allow predictions for this sampling period before injecting the drive.
+;       (fact G T0:(+ After 10ms) T0 1 1)
+;       [SYNC_ONCE T0 1 forever primary nil]
+;    )
+;    (prb [1 "print" "injected drive" []])
+; 1) |[]
+; (ipgm pgm_inject_drive2 [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+;    [SYNC_ONCE now 0 forever primary nil 1]
+
+
+; ==== Eject programs ====
+pgm_eject_cmd_check_oil:(pgm [] []
+    (ptn (fact G:(goal (fact (cmd check_oil [C:] :) ::) ::) ::) [])
+[]
+    (= (is_sim G) false)
+[]
+    (cmd check_oil [C] 1)
+1) |[]
+(ipgm pgm_eject_cmd_check_oil [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_eject_cmd_enter_car:(pgm [] []
+    (ptn (fact G:(goal (fact (cmd enter_car [C:] :) ::) ::) ::) [])
+[]
+    (= (is_sim G) false)
+[]
+    (cmd enter_car [C] 1)
+1) |[]
+(ipgm pgm_eject_cmd_enter_car [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_eject_cmd_open_garage:(pgm [] []
+    (ptn (fact G:(goal (fact (cmd open_garage [Ga:] :) ::) ::) ::) [])
+[]
+    (= (is_sim G) false)
+[]
+    (cmd open_garage [Ga] 1)
+1) |[]
+(ipgm pgm_eject_cmd_open_garage [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_eject_cmd_start_engine:(pgm [] []
+    (ptn (fact G:(goal (fact (cmd start_engine [C:] :) ::) ::) ::) [])
+[]
+    (= (is_sim G) false)
+[]
+    (cmd start_engine [C] 1)
+1) |[]
+(ipgm pgm_eject_cmd_start_engine [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_eject_cmd_drive:(pgm [] []
+    (ptn (fact G:(goal (fact (cmd drive [C: Dest:] :) ::) ::) ::) [])
+[]
+    (= (is_sim G) false)
+[]
+    (cmd drive [C Dest] 1)
+1) |[]
+(ipgm pgm_eject_cmd_drive [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_eject_cmd_walk:(pgm [] []
+    (ptn (fact G:(goal (fact (cmd walk [Dest:] :) ::) ::) ::) [])
+[]
+    (= (is_sim G) false)
+[]
+    (cmd walk [Dest] 1)
+1) |[]
+(ipgm pgm_eject_cmd_walk [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_eject_cmd_take_bus:(pgm [] []
+    (ptn (fact G:(goal (fact (cmd take_bus [Dest:] :) ::) ::) ::) [])
+[]
+    (= (is_sim G) false)
+[]
+    (cmd take_bus [Dest] 1)
+1) |[]
+(ipgm pgm_eject_cmd_take_bus [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]

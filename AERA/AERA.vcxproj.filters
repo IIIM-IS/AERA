@@ -19,6 +19,15 @@
     <ClCompile Include="IODevices\TCP\AERA_Protobuf\tcp_connection.cpp">
       <Filter>IODevices\TCP\AERA_Protobuf</Filter>
     </ClCompile>
+    <ClCompile Include="tower_of_hanoi_io_device.cpp">
+      <Filter>IODevices\tower_of_hanoi</Filter>
+    </ClCompile>
+    <ClCompile Include="take_vehicles_io_device.cpp">
+      <Filter>IODevices\take_vehicles</Filter>
+    </ClCompile>
+    <ClCompile Include="open_door_io_device.cpp">
+      <Filter>IODevices\open_door</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="settings.h" />
@@ -41,6 +50,15 @@
     </ClInclude>
     <ClInclude Include="IODevices\TCP\AERA_Protobuf\tcp_connection.h">
       <Filter>IODevices\TCP\AERA_Protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="tower_of_hanoi_io_device.h">
+      <Filter>IODevices\tower_of_hanoi</Filter>
+    </ClInclude>
+    <ClInclude Include="take_vehicles_io_device.h">
+      <Filter>IODevices\take_vehicles</Filter>
+    </ClInclude>
+    <ClInclude Include="open_door_io_device.h">
+      <Filter>IODevices\open_door</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +88,15 @@
     </Filter>
     <Filter Include="IODevices\TCP\AERA_Protobuf">
       <UniqueIdentifier>{ce2ba5d1-fcef-4708-80fe-1d70bea0460c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IODevices\tower_of_hanoi">
+      <UniqueIdentifier>{154315f7-1369-4472-b55d-b4f1e43601db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IODevices\take_vehicles">
+      <UniqueIdentifier>{b0329e2a-cc74-4655-99ac-ddf93d42b13f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IODevices\open_door">
+      <UniqueIdentifier>{a0019123-562b-46b4-af8f-b332bee5b333}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

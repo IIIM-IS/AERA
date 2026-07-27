@@ -1461,12 +1461,17 @@ void PMDLController::inject_simulated_goal_success(Fact *goal, bool success, _Fa
   auto now = Now();
   Fact *f_pred = new Fact(pred, now, now, 1, 1);
 
+  pred->get_simulation((uint16)0)->solution_->before_ = f_success_object->get_before();
+
   Group *primary_host = get_host();
   int32 resilience = _Mem::Get()->get_goal_pred_success_res(primary_host, now, seconds(0));
   View *view = new View(View::SYNC_ONCE, now, 1, resilience, primary_host, primary_host, f_pred);
   _Mem::Get()->inject(view); // inject in the primary group.
   OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << get_object()->get_oid() << ": fact " <<
     evidence->get_oid() << " pred -> fact " << f_pred->get_oid() << " simulated pred");
+
+  //MkRdx* mk_rdx = new MkRdx(goal->get_goal()->get_target(), (Code*)evidence, f_success_object, 1, bm);
+  //inject_notification_into_out_groups(get_host(), mk_rdx);
 }
 
 void TopLevelMDLController::register_simulated_goal_outcome(Fact* goal, bool success, _Fact* evidence) const { // evidence is a simulated prediction.
@@ -1637,6 +1642,9 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
     // In the Pred constructor, we already copied the simulations from prediction.
     MkRdx* mk_rdx = new MkRdx(f_imdl, (Code *)input, production, 1, bm);
     inject_notification_into_out_groups(get_host(), mk_rdx);
+    if (is_simulation) {
+      pred->get_simulation((uint16)0)->solution_->add_mk_rdx(mk_rdx);
+    }
     OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << get_object()->get_oid() << " predict imdl -> mk.rdx " << mk_rdx->get_oid());
 
     PrimaryMDLController *c = (PrimaryMDLController *)controllers_[RHSController]; // rhs controller: in the same view.
@@ -1716,6 +1724,9 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
     // In the Pred constructor, we already copied the simulations from prediction.
     if (!HLPController::inject_prediction(production, confidence)) // inject a simulated prediction in the primary group.
       return;
+    MkRdx* mk_rdx = new MkRdx(f_imdl, (Code*)input, production, 1, bm);
+    inject_notification_into_out_groups(get_host(), mk_rdx);
+    pred->get_simulation((uint16)0)->solution_->add_mk_rdx(mk_rdx);
     already_predicted.push_back(bound_rhs);
     string ground_info;
 #ifdef WITH_DETAIL_OID
@@ -1727,9 +1738,14 @@ void PrimaryMDLController::predict(HLPBindingMap *bm, _Fact *input, Fact *f_imdl
 
     if (is_cmd() || is_reuse()) {
       // Inject the predicted imdl, in case other models are reusing this model.
-      Fact *f_pred_f_imdl = new Fact(new Pred(f_imdl, prediction, 1), now, now, 1, 1);
+      Pred* pred_f_imdl = new Pred(f_imdl, prediction, 1);
+      Fact *f_pred_f_imdl = new Fact(pred_f_imdl, now, now, 1, 1);
+
       if (!HLPController::inject_prediction(f_pred_f_imdl, confidence))
         return;
+      MkRdx* mk_rdx = new MkRdx(f_imdl, (Code*)input, f_pred_f_imdl, 1, bm);
+      inject_notification_into_out_groups(get_host(), mk_rdx);
+      pred_f_imdl->get_simulation((uint16)0)->solution_->add_mk_rdx(mk_rdx);
       OUTPUT_LINE(MDL_OUT, Utils::RelativeTime(Now()) << " mdl " << get_object()->get_oid() << ": fact " <<
         input->get_oid() << " pred -> fact " << f_pred_f_imdl->get_oid() << " simulated pred fact imdl" << ground_info);
     }
@@ -2090,7 +2106,7 @@ void PrimaryMDLController::abduce_imdl(HLPBindingMap *bm, Fact *super_goal, Fact
     Utils::RelativeTime(sub_goal->get_target()->get_after()) << "," << Utils::RelativeTime(sub_goal->get_target()->get_before()) << "]");
 }
 
-// goal is f->g->f->object or f->g->|f->object; called concurrently by redcue() and _GMonitor::update().
+// goal is f->g->f->object or f->g->|f->object; called concurrently by reduce() and _GMonitor::update().
 _Fact* PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super_goal, Fact *f_imdl, bool opposite, float32 confidence,
   Sim *sim, Fact *ground, Fact* goal_requirement) {
 
@@ -2164,6 +2180,11 @@ _Fact* PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super
 
           inject_simulation(fact_pred_bound_lhs, now);
           injected_lhs = fact_pred_bound_lhs;
+          MkRdx* mk_rdx = new MkRdx(f_imdl, (Code*)ground, fact_pred_bound_lhs, 1, bm);
+          inject_notification_into_out_groups(get_host(), mk_rdx);
+          if (pred->is_simulation()) {
+            pred->get_simulation((uint16)0)->solution_->add_mk_rdx(mk_rdx);
+          }
 
           string ground_info;
 #ifdef WITH_DETAIL_OID
@@ -2195,6 +2216,14 @@ _Fact* PrimaryMDLController::abduce_simulated_lhs(HLPBindingMap *bm, Fact *super
           Fact* f_pred_bound_lhs = new Fact(pred_bound_lhs, forward_simulation_time, forward_simulation_time, 1, 1);
           inject_simulation(f_pred_bound_lhs, forward_simulation_time);
           injected_lhs = f_pred_bound_lhs;
+          
+          MkRdx* mk_rdx = new MkRdx(f_imdl, (Code*)super_goal, f_pred_bound_lhs, 1, bm);
+          inject_notification_into_out_groups(get_host(), mk_rdx);
+          Solution* solution = new Solution(super_goal);
+          solution->add_mk_rdx(mk_rdx);
+          solution->after_ = bound_lhs->get_after();
+          sub_sim->solution_ = solution;
+
           string f_pred_bound_lhs_info;
           string ground_info;
 #ifdef WITH_DETAIL_OID
@@ -2283,7 +2312,7 @@ bool PrimaryMDLController::check_imdl(Fact *goal, HLPBindingMap *bm) { // goal i
 }
 
 // goal is f->g->f->imdl; called by sr-monitors.
-bool PrimaryMDLController::check_simulated_imdl(Fact *goal, HLPBindingMap *bm, Sim* prediction_sim) {
+bool PrimaryMDLController::check_simulated_imdl(Fact* goal, HLPBindingMap* bm, Sim* prediction_sim) {
 
   Goal *g = goal->get_goal();
   Fact *f_imdl = (Fact *)g->get_target();
@@ -2352,6 +2381,7 @@ inline Fact* PrimaryMDLController::predict_simulated_evidence(_Fact *evidence, S
 
   auto now = Now();
   Fact* fact_pred = new Fact(pred, now, now, 1, 1);
+  // TODO: This is never called in hand-grab-sphere, add mk.rdx here?
   inject_simulation(fact_pred, now);
   return fact_pred;
 }

@@ -1,0 +1,628 @@
+; ==== Entities and ontologies ====
+; big_block:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+medium_block:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+small_block:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+left_pole:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+center_pole:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+right_pole:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+size:(ont 1) [[SYNC_ONCE now 1 forever root nil]] ; Usage: (mk.val big_block size 3 1)
+has_blocks:(ont 1) [[SYNC_ONCE now 1 forever root nil]] ; Usage: (mk.val left_pole has_blocks [<blocks>] 1), order is bigger -> smaller
+pole:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+; "position" will be used as (mk.val big_block position left_pole 1)
+
+!dfn (move_block :); arg0: a block, arg1: target position (pole)
+
+
+; ==== Facts ====
+; big_block_is_big:(mk.val big_block size 3 1) |[]
+; (fact big_block_is_big 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+medium_block_is_medium:(mk.val medium_block size 2 1) |[]
+(fact medium_block_is_medium 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+small_block_is_small:(mk.val small_block size 1 1) |[]
+(fact small_block_is_small 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+left_pole_is_a_pole:(mk.val left_pole essence pole 1) |[]
+(fact left_pole_is_a_pole 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+center_pole_is_a_pole:(mk.val center_pole essence pole 1) |[]
+(fact center_pole_is_a_pole 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+right_pole_is_a_pole:(mk.val right_pole essence pole 1) |[]
+(fact right_pole_is_a_pole 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+; big_block_is_not_a_pole:(mk.val big_block essence pole 1) |[]
+; (|fact big_block_is_not_a_pole 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+medium_block_is_not_a_pole:(mk.val medium_block essence pole 1) |[]
+(|fact medium_block_is_not_a_pole 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+small_block_is_not_a_pole:(mk.val small_block essence pole 1) |[]
+(|fact small_block_is_not_a_pole 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+
+; ==== CSTs ====
+; B1 is bigger than B2
+S_BlockIsBigger:(cst [] []
+    (fact (mk.val B1: size S1: :) T0: T1: : :)
+    (fact (mk.val B2: size S2: :) T0: T1: : :)
+[]
+    (> S1 S2)
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+S_PoleIsEmpty:(cst [] []
+    (fact (mk.val P: essence pole :) T0: T1: : :)
+    (fact (mk.val P: has_blocks [] :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+S_PoleHasOneBlock:(cst [] []
+    (fact (mk.val P: essence pole :) T0: T1: : :)
+    (fact (mk.val P: has_blocks [B:] :) T0: T1: : :)
+    (|fact (mk.val B: essence pole :) T0: T1: : :)
+    (fact (mk.val B: size S: :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+S_PoleHasTwoBlocks:(cst [] []
+    (fact (mk.val P: essence pole :) T0: T1: : :)
+    (fact (mk.val P: has_blocks [B1: B2:] :) T0: T1: : :)
+    (fact (icst S_BlockIsBigger [] [B1: S1: B2: S2:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+;--------------------------------------------------------------------------
+
+cst_553:(cst [] []
+   (|fact (mk.val B: essence pole :) v1: v2: : :)
+   (fact (icst S_PoleHasTwoBlocks [] [P: B: B1: v5: v6:] : :) v1: v2: : :)
+   (fact (icst S_PoleIsEmpty [] [P1:] : :) v1: v2: : :)
+   (fact (icst S_PoleIsEmpty [] [P2:] : :) v1: v2: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+;--------------------------------------------------------------------------
+
+cst_495:(cst [] []
+   (fact (icst S_BlockIsBigger [] [B1: S1: B2: S2:] : :) v4: v5: : :)
+   (fact (icst S_PoleHasOneBlock [] [P1: B1: S1:] : :) v4: v5: : :)
+   (fact (icst S_PoleHasOneBlock [] [P2: B2: S2:] : :) v4: v5: : :)
+   (fact (icst S_PoleIsEmpty [] [P3:] : :) v4: v5: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+cst_500:(cst [] []
+   (|fact (mk.val B: essence pole :) v1: v2: : :)
+   (fact (icst S_PoleHasTwoBlocks [] [P: B: B1: v5: v6:] : :) v1: v2: : :)
+   (fact (icst S_PoleIsEmpty [] [P1:] : :) v1: v2: : :)
+   (fact (icst S_PoleIsEmpty [] [P2:] : :) v1: v2: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+cst_515:(cst [] []
+   (|fact (mk.val B: essence pole :) v1: v2: : :)
+   (|fact (mk.val B1: essence pole :) v1: v2: : :)
+   (fact (icst S_PoleHasTwoBlocks [] [P: B: B1: v5: v6:] : :) v1: v2: : :)
+   (fact (icst S_PoleIsEmpty [] [P1:] : :) v1: v2: : :)
+   (fact (icst S_PoleIsEmpty [] [P2:] : :) v1: v2: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+
+; ==== Models ====
+; After moving block B to pole P, another pole P1 will be empty
+mdl_174:(mdl [B: (ti v1: v2:)] []
+   (fact (cmd move_block [B: P:] :) v4: v5: : :)
+   (fact (mk.val P1: has_blocks [] :) v7: v8: : :)
+[]
+   v7:(add v1 100ms)
+   v8:(add v2 100ms)
+[]
+   v1:(sub v7 100ms)
+   v2:(sub v8 100ms)
+   v4:(sub v7 80ms)
+   v5:(sub v8 100ms)
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; If a pole has one block, the block can be moved and the pole will be empty
+mdl_175:(mdl [] []
+   (fact (icst S_PoleHasOneBlock [] [P: B: v2:] : :) v3: v4: : :)
+   (fact (imdl mdl_174 [B: (ti v3: v4:)] [v5: P: v6: v7:] : :) v3: v4: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; Moving a block to a pole will make the pole have the block
+mdl_178:(mdl [v0: (ti v1: v2:)] []
+   (fact (cmd move_block [B: P:] :) v5: v6: : :)
+   (fact (mk.val P: has_blocks [B:] :) v7: v8: : :)
+[]
+   v7:(add v1 100ms)
+   v8:(add v2 100ms)
+[]
+   v1:(sub v7 100ms)
+   v2:(sub v8 100ms)
+   v5:(sub v7 80ms)
+   v6:(sub v8 100ms)
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; If pole P is empty, a block can be moved to it
+mdl_179:(mdl [] []
+   (fact (icst S_PoleIsEmpty [] [P:] : :) v1: v2: : :)
+   (fact (imdl mdl_178 [[] (ti v1: v2:)] [v3: P: v4: v5:] : :) v1: v2: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; After block B1 has been moved and pole P1 is empty, pole P will have two blocks B and B1
+mdl_253:(mdl [B: (ti v1: v2:)] []
+   (fact (imdl mdl_174 [B1: (ti v1: v2:)] [P: P1: v6: v7:] : :) v8: v9: : :)
+   (fact (mk.val P: has_blocks [B: B1:] :) v6: v7: : :)
+[]
+   v6:(add v1 100ms)
+   v7:(add v2 100ms)
+[]
+   v1:(sub v6 100ms)
+   v2:(sub v7 100ms)
+   v8:(sub v6 80ms)
+   v9:(sub v7 100ms)
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; If pole P has block B, block B1 can be moved to P so P will have blocks B and B1
+mdl_254:(mdl [] []
+   (fact (icst S_PoleHasOneBlock [] [P: B: v2:] : :) v3: v4: : :)
+   (fact (imdl mdl_253 [B: (ti v3: v4:)] [B1: P: P1: v7: v8:] : :) v3: v4: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; Moving block B to pole P will make pole P have two blocks B1 and B
+mdl_257:(mdl [B1: (ti v1: v2:)] []
+   (fact (cmd move_block [B: P:] :) v5: v6: : :)
+   (fact (mk.val P: has_blocks [B1: B:] :) v7: v8: : :)
+[]
+   v7:(add v1 100ms)
+   v8:(add v2 100ms)
+[]
+   v1:(sub v7 100ms)
+   v2:(sub v8 100ms)
+   v5:(sub v7 80ms)
+   v6:(sub v8 100ms)
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; If pole P has one block B1, moving B to P will make P have two blocks B1 and B
+mdl_258:(mdl [] []
+   (fact (icst S_PoleHasOneBlock [] [P: B1: v2:] : :) v3: v4: : :)
+   (fact (imdl mdl_257 [B1: (ti v3: v4:)] [B: P: v6: v7:] : :) v3: v4: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; Moving block B to P will make P1 have one block B1
+mdl_299:(mdl [v0: (ti v1: v2:)] []
+   (fact (imdl mdl_178 [[] (ti v1: v2:)] [B: P: v5: v6:] : :) v7: v8: : :)
+   (fact (mk.val P1: has_blocks [B1:] :) v5: v6: : :)
+[]
+   v5:(add v1 100ms)
+   v6:(add v2 100ms)
+[]
+   v1:(sub v5 100ms)
+   v2:(sub v6 100ms)
+   v7:(sub v5 80ms)
+   v8:(sub v6 100ms)
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; If pole P1 has blocks B1 and B, moving block B to P will make P1 have only block B1
+mdl_300:(mdl [] []
+   (fact (icst S_PoleHasTwoBlocks [] [P1: B1: B: v3: v4:] : :) v5: v6: : :)
+   (fact (imdl mdl_299 [[P: P1:] (ti v5: v6:)] [B: P: v8: v9: P1: B1:] : :) v5: v6: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; Moving block B to pole P will make another pole P1 have one block B1
+mdl_303:(mdl [v0: (ti v1: v2:)] []
+   (fact (cmd move_block [B: P:] :) v5: v6: : :)
+   (fact (mk.val P1: has_blocks [B1:] :) v9: v10: : :)
+[]
+   v9:(add v1 100ms)
+   v10:(add v2 100ms)
+[]
+   v1:(sub v9 100ms)
+   v2:(sub v10 100ms)
+   v5:(sub v9 80ms)
+   v6:(sub v10 100ms)
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; If pole P1 has blocks B1 and B, moving block B to P will make P1 have only block B1
+mdl_304:(mdl [] []
+   (fact (icst S_PoleHasTwoBlocks [] [P1: B1: B: v3: v4:] : :) v5: v6: : :)
+   (fact (imdl mdl_303 [[P: P1:] (ti v5: v6:)] [B: P: P1: B1: v8: v9:] : :) v5: v6: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; ---- Don't move block that is under another one ----
+
+; If pole P has two blocks B and B1 and there are two empty poles P1 and P2, it's not possible to move B to pole P1
+mdl_554:(mdl [] []
+    (fact (icst cst_553 [] [B: P: B1: v3: v4: P1: P2:] : :) v7: v8: : :)
+    ; (fact (icst cst_515 [] [B: B1: P: v3: v4: P1: P2:] : :) v7: v8: : :)
+    (|fact (imdl mdl_178 [[] (ti v7: v8:)] [B: P1: v9: v10:] : :) v7: v8: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; If pole P has two blocks B and B1 and there are two empty poles P1 and P2, it's not possible to move B to pole P2
+mdl_554_bis:(mdl [] []
+    (fact (icst cst_553 [] [B: P: B1: v3: v4: P1: P2:] : :) v7: v8: : :)
+    ; (fact (icst cst_515 [] [B: B1: P: v3: v4: P1: P2:] : :) v7: v8: : :)
+    (|fact (imdl mdl_178 [[] (ti v7: v8:)] [B: P2: v9: v10:] : :) v7: v8: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; If pole P has two blocks B and B1 and there are two empty poles P1 and P2, B1 can be moved to P1
+M_CanMoveAnotherBlock:(mdl [] []
+    (fact (icst cst_553 [] [B: P: B1: v3: v4: P1: P2:] : :) v7: v8: : :)
+    ; (fact (icst cst_515 [] [B: B1: P: v3: v4: P1: P2:] : :) v7: v8: : :)
+    (fact (imdl mdl_178 [[] (ti v7: v8:)] [B1: P1: v9: v10:] : :) v7: v8: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; If pole P has two blocks B and B1 and there are two empty poles P1 and P2, B1 can be moved to P2
+M_CanMoveAnotherBlock_bis:(mdl [] []
+    (fact (icst cst_553 [] [B: P: B1: v3: v4: P1: P2:] : :) v7: v8: : :)
+    ; (fact (icst cst_515 [] [B: B1: P: v3: v4: P1: P2:] : :) v7: v8: : :)
+    (fact (imdl mdl_178 [[] (ti v7: v8:)] [B1: P2: v9: v10:] : :) v7: v8: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; ---- Don't move bigger block on smaller one ----
+
+; If pole P1 has block B1, pole P2 has block B2, B1 is bigger than B2 and P3 is empty, then it's not possible to move B1 to P2 (correct!)
+; mdl_496:(mdl [] []
+;    (fact (icst cst_495 [] [B1: v1: B2: v3: P1: P2: P3:] : :) v7: v8: : :)
+;    (|fact (imdl mdl_174 [B1: (ti v9: v10:)] [P2: P1: v11: v12:] : :) v9: v10: : :)
+; []
+;    v9:(add v7 200ms)
+;    v10:(add v8 200ms)
+; []
+;    v7:(sub v9 200ms)
+;    v8:(sub v10 200ms)
+; [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+;
+; ; If pole P1 has block B1, pole P2 has block B2, B1 is bigger than B2 and P3 is empty, then
+; ; it's not possible that, after B1 has been moved to pole P2, P1 will be empty and P2 will have blocks B2 and B1 (correct)
+; mdl_511:(mdl [] []
+;    (fact (icst cst_495 [] [B1: v1: B2: v3: P1: P2: P3:] : :) v7: v8: : :)
+;    (|fact (imdl mdl_253 [B2: (ti v9: v10:)] [B1: P2: P1: v11: v12:] : :) v9: v10: : :)
+; []
+;    v9:(add v7 200ms)
+;    v10:(add v8 200ms)
+; []
+;    v7:(sub v9 200ms)
+;    v8:(sub v10 200ms)
+; [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+;
+; ; If pole P1 has block B1, pole P2 has block B2, B1 is bigger than B2 and pole P3 is empty, then
+; ; it's not possible that moving B1 to another pole P2 will make P2 have two blocks B2 and B1 (correct)
+; mdl_526:(mdl [] []
+;    (fact (icst cst_495 [] [B1: v1: B2: v3: P1: P2: P3:] : :) v7: v8: : :)
+;    (|fact (imdl mdl_257 [B2: (ti v9: v10:)] [B1: P2: v11: v12:] : :) v9: v10: : :)
+; []
+;    v9:(add v7 200ms)
+;    v10:(add v8 200ms)
+; []
+;    v7:(sub v9 200ms)
+;    v8:(sub v10 200ms)
+; [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+;
+; ; If pole P1 has two blocks B and B1 (B > B1), it's not possible that moving B to another pole P will make P have two blocks B1 and B (technically correct)
+; mdl_528:(mdl [] []
+;    (fact (icst S_PoleHasTwoBlocks [] [P1: B: B1: v3: v4:] : :) v5: v6: : :)
+;    (|fact (imdl mdl_257 [B1: (ti v6: v7:)] [B: P: v9: v10:] : :) v6: v7: : :)
+; []
+;    v6:(add v5 100ms)
+;    v7:(add v6 100ms)
+; []
+;    v5:(sub v6 100ms)
+;    v6:(sub v7 100ms)
+; [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+;
+; ; If pole P has two blocks B and B1 (B > B1) and other poles P1 and P2 are empty,
+; ; it's not possible that moving B1 to another pole P1 will make P1 have two blocks B1 and B (B1 > B) (correct)
+; mdl_531:(mdl [] []
+;    (fact (icst cst_515 [] [B: B1: P: v3: v4: P1: P2:] : :) v7: v8: : :)
+;    (|fact (imdl mdl_257 [B1: (ti v8: v9:)] [B: P1: v10: v11:] : :) v8: v9: : :)
+; []
+;    v8:(add v7 100ms)
+;    v9:(add v8 100ms)
+; []
+;    v7:(sub v8 100ms)
+;    v8:(sub v9 100ms)
+; [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+;
+; ; After block B has been moved to pole P and P has block B, another pole P1 will be empty
+; mdl_610:(mdl [B: (ti v1: v2:)] []
+;    (fact (imdl mdl_178 [[] (ti v1: v2:)] [B: P: v4: v5:] : :) v6: v7: : :)
+;    (fact (mk.val P1: has_blocks [] :) v4: v5: : :)
+; []
+;    v4:(add v1 100ms)
+;    v5:(add v2 100ms)
+; []
+;    v1:(sub v4 100ms)
+;    v2:(sub v5 100ms)
+;    v6:(sub v4 80ms)
+;    v7:(sub v5 100ms)
+; [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+;
+; ; If pole P1 has one block B, moving B to pole P will make P have block B and P1 will be empty
+; mdl_611:(mdl [] []
+;    (fact (icst S_PoleHasOneBlock [] [P1: B: v2:] : :) v3: v4: : :)
+;    (fact (imdl mdl_610 [B: (ti v3: v4:)] [P: v6: v7: P1:] : :) v3: v4: : :)
+; |[]
+; |[]
+; [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+
+; ==== Drive ====
+m_drive:(mdl [] []
+    ; The goal target timings are the same as the drive timings.
+    (fact (mk.val right_pole has_blocks [medium_block small_block] :) T0: T1: : :)
+    ; (fact (icst S_PoleHasTwoBlocks [] [right_pole medium_block small_block 2 1] : :) T0: T1: : :)
+    ; (fact (icst S_Below [] [medium_block S1: right_pole small_block S2:] : :) T0: T1: : :)
+    (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+!def DRIVE_START 300ms
+
+pgm_inject_drive:(pgm [] []
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+   (>= After (+ this.vw.ijt DRIVE_START))
+[]
+   ; The end of the time interval will be used in m_drive as the end of the goal interval.
+   (inj [f_run:(fact run After (+ Before 700ms) 1 1) []])
+   (inj [G:(goal f_run self nil 1) []])
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected drive" []])
+1) |[]
+(ipgm pgm_inject_drive [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+
+; ==== Eject programs ====
+pgm_eject_cmd_move_block:(pgm [] []
+    (ptn (fact G:(goal (fact (cmd move_block [B: P:] :) ::) ::) ::) [])
+[]
+    (= (is_sim G) false)
+[]
+    (cmd move_block [B P] 1)
+1) |[]
+(ipgm pgm_eject_cmd_move_block [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+
+
+; ==== Duplicated or wrong CSTs and models ====
+; cst_505:(cst [] []
+;    (fact (icst S_BlockIsBigger [] [v0: v1: v2: v3:] : :) v4: v5: : :)
+;    (fact (icst S_PoleHasOneBlock [] [v6: v0: v1:] : :) v4: v5: : :)
+;    (fact (icst S_PoleHasOneBlock [] [v7: v2: v3:] : :) v4: v5: : :)
+;    (fact (icst S_PoleIsEmpty [] [v8:] : :) v4: v5: : :)
+; |[]
+; |[]
+; [stdin] 1 ) []
+;
+; cst_510:(cst [] []
+;    (fact (icst S_BlockIsBigger [] [v0: v1: v2: v3:] : :) v4: v5: : :)
+;    (fact (icst S_PoleHasOneBlock [] [v6: v0: v1:] : :) v4: v5: : :)
+;    (fact (icst S_PoleHasOneBlock [] [v7: v2: v3:] : :) v4: v5: : :)
+;    (fact (icst S_PoleIsEmpty [] [v8:] : :) v4: v5: : :)
+; |[]
+; |[]
+; [stdin] 1 ) []
+
+; cst_520:(cst [] []
+;    (fact (icst S_BlockIsBigger [] [v0: v1: v2: v3:] : :) v4: v5: : :)
+;    (fact (icst S_PoleHasOneBlock [] [v6: v0: v1:] : :) v4: v5: : :)
+;    (fact (icst S_PoleHasOneBlock [] [v7: v2: v3:] : :) v4: v5: : :)
+;    (fact (icst S_PoleIsEmpty [] [v8:] : :) v4: v5: : :)
+; |[]
+; |[]
+; [stdin] 1 ) []
+
+; cst_525:(cst [] []
+;    (fact (icst S_BlockIsBigger [] [v0: v1: v2: v3:] : :) v4: v5: : :)
+;    (fact (icst S_PoleHasOneBlock [] [v6: v0: v1:] : :) v4: v5: : :)
+;    (fact (icst S_PoleHasOneBlock [] [v7: v2: v3:] : :) v4: v5: : :)
+;    (fact (icst S_PoleIsEmpty [] [v8:] : :) v4: v5: : :)
+; |[]
+; |[]
+; [stdin] 1 ) []
+
+; cst_530:(cst [] []
+;    (|fact (mk.val v0: essence pole :) v1: v2: : :)
+;    (|fact (mk.val v3: essence pole :) v1: v2: : :)
+;    (fact (icst S_PoleHasTwoBlocks [] [v4: v0: v3: v5: v6:] : :) v1: v2: : :)
+;    (fact (icst S_PoleIsEmpty [] [v7:] : :) v1: v2: : :)
+;    (fact (icst S_PoleIsEmpty [] [v8:] : :) v1: v2: : :)
+; |[]
+; |[]
+; [stdin] 1 ) []
+
+; cst_535:(cst [] []
+;    (fact (icst S_BlockIsBigger [] [v0: v1: v2: v3:] : :) v4: v5: : :)
+;    (fact (icst S_PoleHasOneBlock [] [v6: v0: v1:] : :) v4: v5: : :)
+;    (fact (icst S_PoleHasOneBlock [] [v7: v2: v3:] : :) v4: v5: : :)
+;    (fact (icst S_PoleIsEmpty [] [v8:] : :) v4: v5: : :)
+; |[]
+; |[]
+; [stdin] 1 ) []
+
+
+; If pole P has two blocks B and B1, it's not possible to move B to another pole P1
+; mdl_541:(mdl [] []
+;    (fact (icst S_PoleHasTwoBlocks [] [P: B: B1: v3: v4:] : :) v5: v6: : :)
+;    (|fact (imdl mdl_178 [[] (ti v7: v8:)] [B: P1: v10: v11:] : :) v7: v8: : :)
+; []
+;    v7:(add v5 200ms)
+;    v8:(add v6 200ms)
+; []
+;    v5:(sub v7 200ms)
+;    v6:(sub v8 200ms)
+; [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; If pole P has two blocks B and B1 and there are two empty poles P1 and P2, it's not possible to move B to pole P1
+; mdl_544:(mdl [] []
+;    (fact (icst cst_543 [] [B: P: B1: v3: v4: P1: P2:] : :) v7: v8: : :)
+;    (|fact (imdl mdl_178 [[] (ti v9: v10:)] [B: P1: v11: v12:] : :) v9: v10: : :)
+; []
+;    v9:(add v7 200ms)
+;    v10:(add v8 200ms)
+; []
+;    v7:(sub v9 200ms)
+;    v8:(sub v10 200ms)
+; [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; If pole P has one block B, it's not possible to move B to pole P1 (wrong)
+; mdl_546:(mdl [] []
+;    (fact (icst S_PoleHasOneBlock [] [P: B: v2:] : :) v3: v4: : :)
+;    (|fact (imdl mdl_178 [[] (ti v4: v5:)] [B: P1: v7: v8:] : :) v4: v5: : :)
+; []
+;    v4:(add v3 100ms)
+;    v5:(add v4 100ms)
+; []
+;    v3:(sub v4 100ms)
+;    v4:(sub v5 100ms)
+; [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; If pole P has one block B and B is bigger than B1 and pole P1 is empty, it's not possible to move B to pole P1 (wrong)
+; mdl_549:(mdl [] []
+;    (fact (icst cst_548 [] [B: v1: B1: v3: P: P1:] : :) v6: v7: : :)
+;    (|fact (imdl mdl_178 [[] (ti v7: v8:)] [B: P1: v9: v10:] : :) v7: v8: : :)
+; []
+;    v7:(add v6 100ms)
+;    v8:(add v7 100ms)
+; []
+;    v6:(sub v7 100ms)
+;    v7:(sub v8 100ms)
+; [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; If pole P has two blocks B and B1, it's not possible to move B to another pole P1
+; mdl_551:(mdl [] []
+;     (fact (icst S_PoleHasTwoBlocks [] [P: B: B1: v3: v4:] : :) v5: v6: : :)
+;     (|fact (imdl mdl_178 [[] (ti v5: v6:)] [B: P1: v8: v9:] : :) v5: v6: : :)
+; |[]
+; |[]
+; [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+
+; If pole P has two blocks B1 and B2 (B1 > B2), moving B1 to another pole P1 will not make P be empty (useless?)
+; mdl_498:(mdl [] []
+;    (fact (icst S_PoleHasTwoBlocks [] [P: B1: B2: v3: v4:] : :) v5: v6: : :)
+;    (|fact (imdl mdl_174 [B1: (ti v6: v7:)] [P1: P: v9: v10:] : :) v6: v7: : :)
+; []
+;    v6:(add v5 100ms)
+;    v7:(add v6 100ms)
+; []
+;    v5:(sub v6 100ms)
+;    v6:(sub v7 100ms)
+; [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; If pole P has two blocks B and B1 and poles P1 and P2 are empty, moving B to P1 will not make P empty (useless?)
+; mdl_501:(mdl [] []
+;    (fact (icst cst_500 [] [B: P: B1: v3: v4: P1: P2:] : :) v7: v8: : :)
+;    (|fact (imdl mdl_174 [B: (ti v8: v9:)] [P1: P: v10: v11:] : :) v8: v9: : :)
+; []
+;    v8:(add v7 100ms)
+;    v9:(add v8 100ms)
+; []
+;    v7:(sub v8 100ms)
+;    v8:(sub v9 100ms)
+; [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; mdl_506:(mdl [] []
+;    (fact (icst cst_505 [] [v0: v1: v2: v3: v4: v5: v6:] : :) v7: v8: : :)
+;    (|fact (imdl mdl_174 [v0: (ti v7: v8:)] [v5: v4: v9: v10:] : :) v7: v8: : :)
+; |[]
+; |[]
+; [stdin] 0 1 1 1 1 ) []
+
+; If pole P1 has one block B1, it's not possible that, after B1 has been moved to pole P, P1 will be empty and P will have blocks B and B1 (wrong)
+; mdl_508:(mdl [] []
+;    (fact (icst S_PoleHasOneBlock [] [P1: B1: v2:] : :) v3: v4: : :)
+;    (|fact (imdl mdl_253 [B: (ti v6: v7:)] [B1: P: P1: v9: v10:] : :) v6: v7: : :)
+; []
+;    v6:(add v3 200ms)
+;    v7:(add v4 200ms)
+; []
+;    v3:(sub v6 200ms)
+;    v4:(sub v7 200ms)
+; [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; If pole P has two blocks B1 and B2, it's not possible that, after B1 has been moved to pole P1, P will be empty and P1 will have blocks B2 and B1 (useless?)
+; mdl_513:(mdl [] []
+;    (fact (icst S_PoleHasTwoBlocks [] [P: B1: B2: v3: v4:] : :) v5: v6: : :)
+;    (|fact (imdl mdl_253 [B2: (ti v6: v7:)] [B1: P1: P: v9: v10:] : :) v6: v7: : :)
+; []
+;    v6:(add v5 100ms)
+;    v7:(add v6 100ms)
+; []
+;    v5:(sub v6 100ms)
+;    v6:(sub v7 100ms)
+; [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; If pole P has two blocks B and B1 (B > B1) and other poles P1 and P2 are empty,
+; it's not possible that, after B has been moved to pole P1, P will be empty and P1 will have blocks B1 and B (already known?)
+; mdl_516:(mdl [] []
+;    (fact (icst cst_515 [] [B: B1: P: v3: v4: P1: P2:] : :) v7: v8: : :)
+;    (|fact (imdl mdl_253 [B1: (ti v8: v9:)] [B: P1: P: v10: v11:] : :) v8: v9: : :)
+; []
+;    v8:(add v7 100ms)
+;    v9:(add v8 100ms)
+; []
+;    v7:(sub v8 100ms)
+;    v8:(sub v9 100ms)
+; [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; mdl_521:(mdl [] []
+;    (fact (icst cst_520 [] [v0: v1: v2: v3: v4: v5: v6:] : :) v7: v8: : :)
+;    (|fact (imdl mdl_253 [v2: (ti v7: v8:)] [v0: v5: v4: v9: v10:] : :) v7: v8: : :)
+; |[]
+; |[]
+; [stdin] 0 1 1 1 1 ) []
+
+; If pole P1 has one block B, it's not possible that moving B to another pole P will make P have two blocks B1 and B (B1 > B) (wrong)
+; mdl_523:(mdl [] []
+;    (fact (icst S_PoleHasOneBlock [] [P1: B: v2:] : :) v3: v4: : :)
+;    (|fact (imdl mdl_257 [B1: (ti v6: v7:)] [B: P: v9: v10:] : :) v6: v7: : :)
+; []
+;    v6:(add v3 200ms)
+;    v7:(add v4 200ms)
+; []
+;    v3:(sub v6 200ms)
+;    v4:(sub v7 200ms)
+; [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; mdl_536:(mdl [] []
+;    (fact (icst cst_535 [] [v0: v1: v2: v3: v4: v5: v6:] : :) v7: v8: : :)
+;    (|fact (imdl mdl_257 [v2: (ti v7: v8:)] [v0: v5: v9: v10:] : :) v7: v8: : :)
+; |[]
+; |[]
+; [stdin] 0 1 1 1 1 ) []

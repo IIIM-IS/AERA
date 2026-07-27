@@ -627,7 +627,7 @@ void GTPX::ack_pred_success(Success* success) {
 
 void GTPX::reduce(r_exec::View *input) { // input->object: f->success.
 
-  _Fact *consequent = (_Fact *)input->object_->get_reference(0)->get_reference(1);
+  _Fact *consequent = (_Fact *)input->object_->get_reference(0)->get_reference(1); // RHS (the fact consequent to the input)
   P<BindingMap> consequent_bm = new BindingMap();
   {
     // Call abstract_object only to update the binding map.
