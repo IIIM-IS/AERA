@@ -12,13 +12,13 @@ c:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
 c_is_a_cube:(mk.val c essence cube 1) |[]
 (fact c_is_a_cube 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 c_is_a_hand:(mk.val c essence hand 1) |[]
-; This is needed for S3.
+; This is needed for cst_ObjectPos.
 (|fact c_is_a_hand 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 s:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
 s_is_a_sphere:(mk.val s essence sphere 1) |[]
 (fact s_is_a_sphere 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 s_is_a_hand:(mk.val s essence hand 1) |[]
-; This is needed for S3.
+; This is needed for cst_ObjectPos.
 (|fact s_is_a_hand 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
 
 ; Internal state used by the programs to emulate the environment.
@@ -41,7 +41,7 @@ pgm_inject_in_emulator_group:(pgm [] []
    [SYNC_ONCE now 0 forever primary nil 1]
 
 ; Hand H has position P.
-S0:(cst [] []
+cst_HandPos:(cst [] []
    (fact (mk.val H: essence hand :) T0: T1: : :); Changed X to hand.
    (fact (mk.val H: position P: :) T0: T1: : :)
 |[]
@@ -49,7 +49,7 @@ S0:(cst [] []
 [stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; When I move H by offset DeltaP, then H will be at position P1.
-M0:(mdl [H: P0: (ti T0: T1:)] []
+mdl_Move:(mdl [H: P0: (ti T0: T1:)] []
    (fact (cmd move [H: DeltaP:] :) T2: T1_cmd: : :); Change T1 to T1_cmd.
    (fact (mk.val H: position P1: :) T1_RHS: T3: : :); Change T1 to T1_RHS.
 []
@@ -65,58 +65,58 @@ M0:(mdl [H: P0: (ti T0: T1:)] []
    T1:(- T3 100ms)
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
-; If we observe state S0 (hand H has position P0), then if M0 predicts something (position P1) it will be right.
-M1:(mdl [] []
-   (fact (icst S0 [] [H: P0:] : :) T0: T1: : :)
-   (fact (imdl M0 [H: P0: (ti T0: T1:)] [DeltaP: P1: T1_RHS: T3:] : :) T0: T1: : :); T2: is not exposed from M0. T1_RHS is also exposed.
+; If we observe state cst_HandPos (hand H has position P0), then if mdl_Move predicts something (position P1) it will be right.
+mdl_Move_req:(mdl [] []
+   (fact (icst cst_HandPos [] [H: P0:] : :) T0: T1: : :)
+   (fact (imdl mdl_Move [H: P0: (ti T0: T1:)] [DeltaP: P1: T1_RHS: T3:] : :) T0: T1: : :); T2: is not exposed from mdl_Move. T1_RHS is also exposed.
 |[]
 |[]
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; A thing C of kind X occupies position P. (Modified to exclude when C is a hand.)
-S3:(cst [] []
+cst_ObjectPos:(cst [] []
    (fact (mk.val C: essence X: :) T0: T1: : :)
    (fact (mk.val C: position P: :) T0: T1: : :)
-   (|fact (mk.val C: essence hand :) T0: T1: : :); Don't duplicate S0, which is for hands.
+   (|fact (mk.val C: essence hand :) T0: T1: : :); Don't duplicate cst_HandPos, which is for hands.
 |[]
 |[]
 [stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; One hand H is at a position P and another thing C is at the same position and the hand is not holding anything.
-S1:(cst [] []
-   (fact (icst S0 [] [H: P:] : :) T0: T1: : :)
-   (fact (icst S3 [] [C: X: P:] : :) T0: T1: : :); X is also exposed from S3.
+cst_NotHolding:(cst [] []
+   (fact (icst cst_HandPos [] [H: P:] : :) T0: T1: : :)
+   (fact (icst cst_ObjectPos [] [C: X: P:] : :) T0: T1: : :); X is also exposed from cst_ObjectPos.
    (fact (mk.val H: holding [] :) T0: T1: : :); Change anti-fact to fact of holding [].
 |[]
 |[]
 [stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; When the hand H is asked to grab whatever, then H will be holding it.
-M2:(mdl [H: C: (ti T0: T1:)] []
+mdl_Grab:(mdl [H: C: (ti T0: T1:)] []
    (fact (cmd grab [H:] :) T2: T1_cmd: : :); Change T1 to T1_cmd.
    (fact (mk.val H: holding [C:] :) T1_RHS: T3: : :); Change T1 to T1_RHS.
 []
-   T1_RHS:(+ T0 100ms); Copy from M0.
-   T3:(+ T1 100ms);     Copy from M0.
+   T1_RHS:(+ T0 100ms); Copy from mdl_Move.
+   T3:(+ T1 100ms);     Copy from mdl_Move.
 []
-   T2:(- T1_RHS 80ms);  Copy from M0.
-   T1_cmd:(- T3 100ms); Copy from M0.
-   T0:(- T1_RHS 100ms); Copy from M0.
-   T1:(- T3 100ms);     Copy from M0.
+   T2:(- T1_RHS 80ms);  Copy from mdl_Move.
+   T1_cmd:(- T3 100ms); Copy from mdl_Move.
+   T0:(- T1_RHS 100ms); Copy from mdl_Move.
+   T1:(- T3 100ms);     Copy from mdl_Move.
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
-; M2 will work (hand H will be holding something) if it is at the same position as hand H and H is not already holding anything.
-M3:(mdl [] []
-   (fact (icst S1 [] [H: P: C: X:] : :) T0: T1: : :); X is also exposed from S1.
-   (fact (imdl M2 [H: C: (ti T0: T1:)] [T1_RHS: T3:] : :) T0: T1: : :); T2 is not exposed from M2. T1_RHS is also exposed.
+; mdl_Grab will work (hand H will be holding something) if it is at the same position as hand H and H is not already holding anything.
+mdl_Grab_req:(mdl [] []
+   (fact (icst cst_NotHolding [] [H: P: C: X:] : :) T0: T1: : :); X is also exposed from cst_NotHolding.
+   (fact (imdl mdl_Grab [H: C: (ti T0: T1:)] [T1_RHS: T3:] : :) T0: T1: : :); T2 is not exposed from mdl_Grab. T1_RHS is also exposed.
 |[]
 |[]
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; Hand H and object C are at the same position P and H is already holding C.
-S2:(cst [] []
-   (fact (icst S0 [] [H: P:] : :) T0: T1: : :)
-   (fact (icst S3 [] [C: X: P:] : :) T0: T1: : :); X is also exposed from S3.
+cst_Holding:(cst [] []
+   (fact (icst cst_HandPos [] [H: P:] : :) T0: T1: : :)
+   (fact (icst cst_ObjectPos [] [C: X: P:] : :) T0: T1: : :); X is also exposed from cst_ObjectPos.
    (fact (mk.val H: holding [C:] :) T0: T1: : :)
 []
    (<> C nil); Make sure the object C is not nil.
@@ -125,45 +125,45 @@ S2:(cst [] []
 [stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; When my hand H is holding a thing C and I release my hand, it is not holding anymore.
-M4:(mdl [H: C: T0: T1:] []
+mdl_Release:(mdl [H: C: T0: T1:] []
    (fact (cmd release [H:] :) T2: T1_cmd: : :); Change T1 to T1_cmd.
    (fact (mk.val H: holding [] :) T1_RHS: T3: : :); Change T1 to T1_RHS. Change anti-fact to fact of holding [].
 []
-   T1_RHS:(+ T0 100ms); Copy from M0.
-   T3:(+ T1 100ms);     Copy from M0.
+   T1_RHS:(+ T0 100ms); Copy from mdl_Move.
+   T3:(+ T1 100ms);     Copy from mdl_Move.
 []
-   T2:(- T1_RHS 80ms);  Copy from M0.
-   T1_cmd:(- T3 100ms); Copy from M0.
-   T0:(- T1_RHS 100ms); Copy from M0.
-   T1:(- T3 100ms);     Copy from M0.
+   T2:(- T1_RHS 80ms);  Copy from mdl_Move.
+   T1_cmd:(- T3 100ms); Copy from mdl_Move.
+   T0:(- T1_RHS 100ms); Copy from mdl_Move.
+   T1:(- T3 100ms);     Copy from mdl_Move.
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
-; M4 will work (hand H will not be holding some C) if it is at the same position as hand H and H is already holding it.
-M5:(mdl [] []
-   (fact (icst S2 [] [H: P: C: X:] : :) T0: T1: : :); X is also exposed from S2.
-   (fact (imdl M4 [H: C: T0: T1:] [T1_RHS: T3:] : :) T0: T1: : :); T2 is not exposed from M4. T1_RHS is also exposed.
+; mdl_Release will work (hand H will not be holding some C) if it is at the same position as hand H and H is already holding it.
+mdl_Release_req:(mdl [] []
+   (fact (icst cst_Holding [] [H: P: C: X:] : :) T0: T1: : :); X is also exposed from cst_Holding.
+   (fact (imdl mdl_Release [H: C: T0: T1:] [T1_RHS: T3:] : :) T0: T1: : :); T2 is not exposed from mdl_Release. T1_RHS is also exposed.
 |[]
 |[]
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
-; When model M0 fires the prediction of the next position P1 of hand H, something C will also be at the same position P1.
-M6:(mdl [H: C: P0: (ti T0: T1:)] []
-   (fact (imdl M0 [H: P0: (ti T0: T1:)] [DeltaP: P1: T1_RHS: T3:] : :) T0_cmd: T1_cmd: : :); Change timings from T1 T3 to T0_cmd T1_cmd. T2 is not exposed from M0. T1_RHS is also exposed.
+; When model mdl_Move fires the prediction of the next position P1 of hand H, something C will also be at the same position P1.
+mdl_MoveObject:(mdl [H: C: P0: (ti T0: T1:)] []
+   (fact (imdl mdl_Move [H: P0: (ti T0: T1:)] [DeltaP: P1: T1_RHS: T3:] : :) T0_cmd: T1_cmd: : :); Change timings from T1 T3 to T0_cmd T1_cmd. T2 is not exposed from mdl_Move. T1_RHS is also exposed.
    (fact (mk.val C: position P1: :) T1_RHS: T3: : :); Fix bug as explained: Change C to P1. Change T1 to T1_RHS.
 []
-   T1_RHS:(+ T0 100ms); Repeat from M0.
-   T3:(+ T1 100ms);     Repeat from M0.
+   T1_RHS:(+ T0 100ms); Repeat from mdl_Move.
+   T3:(+ T1 100ms);     Repeat from mdl_Move.
 []
-   T0_cmd:(- T1_RHS 80ms);  Copy from M0.
-   T1_cmd:(- T3 100ms);     Copy from M0.
-   T0:(- T1_RHS 100ms);     Copy from M0.
-   T1:(- T3 100ms);         Copy from M0.
+   T0_cmd:(- T1_RHS 80ms);  Copy from mdl_Move.
+   T1_cmd:(- T3 100ms);     Copy from mdl_Move.
+   T0:(- T1_RHS 100ms);     Copy from mdl_Move.
+   T1:(- T3 100ms);         Copy from mdl_Move.
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
 
 ; When hand H is holding some C and the hand moves to position P1, then C will also be at P1.
-M7:(mdl [] []
-   (fact (icst S2 [] [H: P: C: X:] : :) T0: T1: : :); X is also exposed from S2.
-   (fact (imdl M6 [H: C: P: (ti T0: T1:)] [DeltaP: P1: T1_RHS: T3:] : :) T0: T1: : :); M6 template needs P. T0_M0 T1_M0, DeltaP, P1 and T1_RHS are exposed. T2 is not exposed from M6.
+mdl_MoveObject_req:(mdl [] []
+   (fact (icst cst_Holding [] [H: P: C: X:] : :) T0: T1: : :); X is also exposed from cst_Holding.
+   (fact (imdl mdl_MoveObject [H: C: P: (ti T0: T1:)] [DeltaP: P1: T1_RHS: T3:] : :) T0: T1: : :); mdl_MoveObject template needs P. T0_mdl_Move T1_mdl_Move, DeltaP, P1 and T1_RHS are exposed. T2 is not exposed from mdl_MoveObject.
 |[]
 |[]
 [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
