@@ -1,0 +1,294 @@
+; ==== Entities and ontologies ====
+d:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+h:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+you:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+has_handle:(ont 1) [[SYNC_ONCE now 1 forever root nil]] ; Usage: (mk.val d has_handle h 1)
+type:(ont 1) [[SYNC_ONCE now 1 forever root nil]] ; Usage: (mk.val h type [<turning/t_push/t_pull>] 1)
+state:(ont 1) [[SYNC_ONCE now 1 forever root nil]] ; Usage: (mk.val d state <open/closed> 1)
+; position is used as (mk.val you position <door/room>)
+; move cmd is used as (cmd move [destination])
+
+; Door states
+open:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+closed:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+unlocked:(ont 1) [[SYNC_ONCE now 0 forever root nil]] ; After the handle has been turned
+
+; Handle types
+turning:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+t_push:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+t_pull:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+; unknown:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+
+start_point:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+at_door:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+room:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+
+; Essences
+door:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+handle:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+yourself:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+
+d_is_a_door:(mk.val d essence door 1) |[]
+(fact d_is_a_door 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+h_is_a_handle:(mk.val h essence handle 1) |[]
+(fact h_is_a_handle 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+you_is_yourself:(mk.val you essence yourself 1) |[]
+(fact you_is_yourself 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+d_has_handle_h:(mk.val d has_handle h 1) |[]
+(fact d_has_handle_h 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+
+; ==== CSTs ====
+cst_YouPosition:(cst [] []
+    (fact (mk.val Y: essence yourself :) T0: T1: : :)
+    (fact (mk.val Y: position P: :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+cst_DoorState:(cst [] []
+    (fact (mk.val D: essence door :) T0: T1: : :)
+    (fact (mk.val D: state S: :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+cst_HandleType:(cst [] []
+    (fact (mk.val H: essence handle :) T0: T1: : :)
+    (fact (mk.val H: type [T:] :) T0: T1: : :)
+    (fact (mk.val D: essence door :) T0: T1: : :)
+    (fact (mk.val D: has_handle H: :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+cst_HandleUnknownType:(cst [] []
+    (fact (mk.val H: essence handle :) T0: T1: : :)
+    (fact (mk.val H: type [] :) T0: T1: : :)
+    (fact (mk.val D: essence door :) T0: T1: : :)
+    (fact (mk.val D: has_handle H: :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+cst_TurningUnlocked:(cst [] []
+    (fact (icst cst_DoorState [] [D: unlocked] : :) v1: v2: : :)
+    (fact (icst cst_HandleType [] [H: turning D:] : :) v1: v2: : :)
+
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+
+; ==== Models ====
+mdl_Move:(mdl [Y: P: (ti v1: v2:)] []
+    (fact (cmd move [Y: P:] :) v4: v5: : :)
+    (fact (mk.val Y: position P: :) v7: v8: : :)
+[]
+    v7:(add v1 100ms)
+    v8:(add v2 100ms)
+[]
+    v1:(sub v7 100ms)
+    v2:(sub v8 100ms)
+    v4:(sub v7 80ms)
+    v5:(sub v8 100ms)
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_Move_req1:(mdl [] []
+    (fact (icst cst_YouPosition [] [Y: P:] : :) v1: v2: : :)
+    (fact (imdl mdl_Move [Y: P1: (ti v1: v2:)] [v4: v5:] : :) v1: v2: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_Move_req2:(mdl [] []
+    (fact (icst cst_DoorState [] [D: open] : :) v1: v2: : :)
+    (fact (imdl mdl_Move [Y: room (ti v1: v2:)] [v4: v5:] : :) v1: v2: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; Can't move to room if door is closed
+mdl_Move_anti1:(mdl [] []
+    (fact (icst cst_DoorState [] [D: closed] : :) v1: v2: : :)
+    (|fact (imdl mdl_Move [you room (ti v1: v2:)] [v4: v5:] : :) v1: v2: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; Can't move to room if door is unlocked (must be pushed first)
+mdl_Move_anti2:(mdl [] []
+    (fact (icst cst_DoorState [] [D: unlocked] : :) v1: v2: : :)
+    (|fact (imdl mdl_Move [you room (ti v1: v2:)] [v4: v5:] : :) v1: v2: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; Move to the door to get information about the type
+mdl_Move_reuse1:(mdl [Y: (ti v1: v2:)] []
+    (fact (imdl mdl_Move [Y: at_door (ti v1: v2:)] [v6: v7:] : :) v8: v9: : :)
+    (fact (mk.val H: type [T:] :) v6: v7: : :)
+[]
+   v6:(add v1 100ms)
+   v7:(add v2 100ms)
+[]
+   v1:(sub v6 100ms)
+   v2:(sub v7 100ms)
+   v8:(sub v6 80ms)
+   v9:(sub v7 100ms)
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_Move_reuse1_req1:(mdl [] []
+    (fact (icst cst_HandleUnknownType [] [H: D:] : :) v1: v2: : :)
+    (fact (imdl mdl_Move_reuse1 [you (ti v1: v2:)] [v4: v5: H: T:] : :) v1: v2: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+
+; Turning the handle unlocks the door
+mdl_Turn:(mdl [H: (ti v1: v2:)] []
+    (fact (cmd turn [H:] :) v4: v5: : :)
+    (fact (mk.val D: state unlocked :) v7: v8: : :)
+[]
+    v7:(add v1 100ms)
+    v8:(add v2 100ms)
+[]
+    v1:(sub v7 100ms)
+    v2:(sub v8 100ms)
+    v4:(sub v7 80ms)
+    v5:(sub v8 100ms)
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_Turn_req1:(mdl [] []
+    (fact (icst cst_HandleType [] [H: turning D:] : :) v1: v2: : :)
+    (fact (imdl mdl_Turn [H: (ti v1: v2:)] [D: v4: v5:] : :) v1: v2: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+
+mdl_Push:(mdl [D: (ti v1: v2:)] []
+    (fact (cmd push [D:] :) v4: v5: : :)
+    (fact (mk.val D: state open :) v7: v8: : :)
+[]
+    v7:(add v1 100ms)
+    v8:(add v2 100ms)
+[]
+    v1:(sub v7 100ms)
+    v2:(sub v8 100ms)
+    v4:(sub v7 80ms)
+    v5:(sub v8 100ms)
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_Push_req1:(mdl [] []
+    (fact (icst cst_HandleType [] [H: t_push D:] : :) v1: v2: : :)
+    (fact (imdl mdl_Push [D: (ti v1: v2:)] [v4: v5:] : :) v1: v2: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; If the door is unlocked and the handle is of type turning you can push
+mdl_Push_req2:(mdl [] []
+    (fact (icst cst_TurningUnlocked [] [D: H:] : :) v1: v2: : :)
+    (fact (imdl mdl_Push [D: (ti v1: v2:)] [v4: v5:] : :) v1: v2: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+
+mdl_Pull:(mdl [D: (ti v1: v2:)] []
+    (fact (cmd pull [D:] :) v4: v5: : :)
+    (fact (mk.val D: state open :) v7: v8: : :)
+[]
+    v7:(add v1 100ms)
+    v8:(add v2 100ms)
+[]
+    v1:(sub v7 100ms)
+    v2:(sub v8 100ms)
+    v4:(sub v7 80ms)
+    v5:(sub v8 100ms)
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+mdl_Pull_req1:(mdl [] []
+    (fact (icst cst_HandleType [] [H: t_pull D:] : :) v1: v2: : :)
+    (fact (imdl mdl_Pull [D: (ti v1: v2:)] [v4: v5:] : :) v1: v2: : :)
+|[]
+|[]
+[stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+
+; ==== Drive ====
+!def DRIVE_START 300ms
+
+m_drive:(mdl [] []
+   ; The goal target timings are the same as the drive timings.
+   (fact (mk.val you position room 1) T0: T1: 1 1)
+   (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+pgm_inject_drive:(pgm [] []
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val h essence handle :) After: Before: ::) [])
+[]
+   (>= After (+ this.vw.ijt DRIVE_START))
+[]
+   ; The end of the time interval will be used in m_drive as the end of the goal interval.
+   (inj [f_run:(fact run After (+ Before 400ms) 1 1) []])
+   (inj [G:(goal f_run self nil 1) []])
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected drive" []])
+1) |[]
+(ipgm pgm_inject_drive [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+
+; ==== Eject programs ====
+pgm_eject_cmd_move:(pgm [] []
+    (ptn (fact G:(goal (fact (cmd move [Y: P:] :) ::) ::) ::) [])
+[]
+    (= (is_sim G) false)
+[]
+    (cmd move [Y P] 1)
+1) |[]
+(ipgm pgm_eject_cmd_move [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_eject_cmd_turn:(pgm [] []
+    (ptn (fact G:(goal (fact (cmd turn [H:] :) ::) ::) ::) [])
+[]
+    (= (is_sim G) false)
+[]
+    (cmd turn [H] 1)
+1) |[]
+(ipgm pgm_eject_cmd_turn [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_eject_cmd_push:(pgm [] []
+    (ptn (fact G:(goal (fact (cmd push [D:] :) ::) ::) ::) [])
+[]
+    (= (is_sim G) false)
+[]
+    (cmd push [D] 1)
+1) |[]
+(ipgm pgm_eject_cmd_push [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_eject_cmd_pull:(pgm [] []
+    (ptn (fact G:(goal (fact (cmd pull [D:] :) ::) ::) ::) [])
+[]
+    (= (is_sim G) false)
+[]
+    (cmd pull [D] 1)
+1) |[]
+(ipgm pgm_eject_cmd_pull [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+

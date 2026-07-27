@@ -89,6 +89,7 @@
 #include "IODevices/video_screen/video_screen_io_device.h"
 #include "tower_of_hanoi_io_device.h"
 #include "take_vehicles_io_device.h"
+#include "open_door_io_device.h"
 #include "../usr_operators/usr_operators.h"
 #include "test_mem.h"
 #include "../r_exec/init.h"
@@ -367,6 +368,9 @@ int32 start_AERA(const char* file_name, const char* decompiled_file_name) {
     }
     else if (settings.io_device_.compare("take_vehicles") == 0) {
       mem = new take_vehicles::TakeVehiclesIODevice();
+    }
+    else if (settings.io_device_.compare("open_door") == 0) {
+      mem = new OpenDoorIODevice();
     }
     else {
       std::cout << "Unrecognized io_device \"" << settings.io_device_ << "\"" << std::endl;
