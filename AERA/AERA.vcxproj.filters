@@ -22,6 +22,9 @@
     <ClCompile Include="tower_of_hanoi_io_device.cpp">
       <Filter>IODevices\tower_of_hanoi</Filter>
     </ClCompile>
+    <ClCompile Include="take_vehicles_io_device.cpp">
+      <Filter>IODevices\take_vehicles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="settings.h" />
@@ -47,6 +50,9 @@
     </ClInclude>
     <ClInclude Include="tower_of_hanoi_io_device.h">
       <Filter>IODevices\tower_of_hanoi</Filter>
+    </ClInclude>
+    <ClInclude Include="take_vehicles_io_device.h">
+      <Filter>IODevices\take_vehicles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +85,9 @@
     </Filter>
     <Filter Include="IODevices\tower_of_hanoi">
       <UniqueIdentifier>{154315f7-1369-4472-b55d-b4f1e43601db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IODevices\take_vehicles">
+      <UniqueIdentifier>{b0329e2a-cc74-4655-99ac-ddf93d42b13f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

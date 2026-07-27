@@ -143,6 +143,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AERA_main.cpp" />
+    <ClCompile Include="take_vehicles_io_device.cpp" />
     <ClCompile Include="IODevices\TCP\AERA_Protobuf\tcp_connection.cpp" />
     <ClCompile Include="IODevices\TCP\AERA_Protobuf\tcp_data_message.pb.cc" />
     <ClCompile Include="IODevices\TCP\tcp_io_device.cpp" />
@@ -153,6 +154,7 @@
     <ClCompile Include="tower_of_hanoi_io_device.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="take_vehicles_io_device.h" />
     <ClInclude Include="IODevices\TCP\AERA_Protobuf\tcp_connection.h" />
     <ClInclude Include="IODevices\TCP\AERA_Protobuf\tcp_data_message.pb.h" />
     <ClInclude Include="IODevices\TCP\AERA_Protobuf\utils.h" />
