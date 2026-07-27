@@ -83,7 +83,10 @@
 //_/_/ 
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
-#include <conio.h>
+#if (defined(_WIN64) || defined(_WIN32))
+  #include <conio.h>  // Only available for Windows platforms
+#endif
+
 #include <algorithm>
 #include "mem.h"
 #include "mdl_controller.h"
@@ -317,7 +320,7 @@ bool _Mem::load(const vector<r_code::Code *> *objects, uint32 stdin_oid, uint32 
   uint32 highest_oid = 0;
   for (uint32 i = 0; i < objects->size(); ++i)
     highest_oid = max(highest_oid, (*objects)[i]->get_oid());
-  set_last_oid(max(highest_oid, objects->size() - 1));
+  set_last_oid(max((uint64)highest_oid, objects->size() - 1));
 
   for (uint32 i = 1; i < objects->size(); ++i) { // skip root as it has no initial views.
 
@@ -533,10 +536,11 @@ void _Mem::run_in_diagnostic_time(milliseconds run_time) {
   DiagnosticTimeState diagnostic_time_state(this, run_time);
   // Step until we reach the run_time.
   while (diagnostic_time_state.step()) {
-    // Check console.
-    if (kbhit())
-      // Early termination.
-      break;
+    #if (defined(_WIN64) || defined(_WIN32))
+      // Check console for early termination. Only available on Windows platforms
+      if (kbhit())
+        break;
+    #endif
   }
 }
 

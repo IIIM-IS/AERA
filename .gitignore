@@ -24,10 +24,11 @@
 *.user
 *.sdf
 *.suo
-.vscode
+!.vscode/launch.json
 
 # Cmake build folder
 /build
+/out
 
 # Ignore log files
 *.log

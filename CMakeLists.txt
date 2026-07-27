@@ -77,6 +77,6 @@ add_executable(aera
   usr_operators/Operators/operators.cpp
   usr_operators/TestProgram/test_program.cpp
 )
-set_target_properties(aera PROPERTIES COMPILE_OPTIONS "-m32" LINK_FLAGS "-m32")
-link_directories(/usr/lib/i386-linux-gnu)
+#set_target_properties(aera PROPERTIES COMPILE_OPTIONS "-m32" LINK_FLAGS "-m32")
+link_directories(/usr/lib/x86_64-linux-gnu)
 target_link_libraries(aera stdc++fs libprotobuf.a)

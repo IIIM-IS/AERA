@@ -110,11 +110,11 @@ uint32 ModelBase::MEntry::_ComputeHashCode(_Fact *component) { // 14 bits: [fact
     } else if (opcode == Opcodes::IMdl) { // type 3.
 
       hash_code |= 0x00000C00;
-      hash_code |= (((uint32)payload->get_reference(0)) & 0x000003FF); // data: address of the mdl.
+      hash_code |= (((uint64)payload->get_reference(0)) & 0x000003FF); // data: address of the mdl.
     } else if (opcode == Opcodes::ICst) { // type 4.
 
       hash_code |= 0x00001000;
-      hash_code |= (((uint32)payload->get_reference(0)) & 0x000003FF); // data: address of the cst.
+      hash_code |= (((uint64)payload->get_reference(0)) & 0x000003FF); // data: address of the cst.
     } else // type: 0.
       hash_code |= (opcode & 0x000003FF); // data: class id.
     break;
