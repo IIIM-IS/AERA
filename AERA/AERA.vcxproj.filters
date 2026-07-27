@@ -19,6 +19,9 @@
     <ClCompile Include="IODevices\TCP\AERA_Protobuf\tcp_connection.cpp">
       <Filter>IODevices\TCP\AERA_Protobuf</Filter>
     </ClCompile>
+    <ClCompile Include="tower_of_hanoi_io_device.cpp">
+      <Filter>IODevices\tower_of_hanoi</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="settings.h" />
@@ -41,6 +44,9 @@
     </ClInclude>
     <ClInclude Include="IODevices\TCP\AERA_Protobuf\tcp_connection.h">
       <Filter>IODevices\TCP\AERA_Protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="tower_of_hanoi_io_device.h">
+      <Filter>IODevices\tower_of_hanoi</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +76,9 @@
     </Filter>
     <Filter Include="IODevices\TCP\AERA_Protobuf">
       <UniqueIdentifier>{ce2ba5d1-fcef-4708-80fe-1d70bea0460c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IODevices\tower_of_hanoi">
+      <UniqueIdentifier>{154315f7-1369-4472-b55d-b4f1e43601db}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

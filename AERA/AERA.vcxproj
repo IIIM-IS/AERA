@@ -150,6 +150,7 @@
     <ClCompile Include="IODevices\video_screen\video_screen_io_device.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="test_mem.cpp" />
+    <ClCompile Include="tower_of_hanoi_io_device.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IODevices\TCP\AERA_Protobuf\tcp_connection.h" />
@@ -161,6 +162,7 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="test_mem.h" />
+    <ClInclude Include="tower_of_hanoi_io_device.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="settings.xml">

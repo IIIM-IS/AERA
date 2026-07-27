@@ -1,0 +1,681 @@
+; ==== Entities and ontologies ====
+big_block:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+medium_block:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+small_block:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+left_pole:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+center_pole:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+right_pole:(ent 1) [[SYNC_ONCE now 1 forever root nil]]
+
+size:(ont 1) [[SYNC_ONCE now 1 forever root nil]] ; Usage: (mk.val big_block size 3 1)
+has_blocks:(ont 1) [[SYNC_ONCE now 1 forever root nil]] ; Usage: (mk.val left_pole has_blocks [medium_block small_block] 1) or (mk.val left_pole has_blocks [] 1) order is bigger -> smaller
+pole:(ont 1) [[SYNC_ONCE now 0 forever root nil]]
+
+
+; ==== Facts ====
+big_block_is_big:(mk.val big_block size 3 1) |[]
+(fact big_block_is_big 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+medium_block_is_medium:(mk.val medium_block size 2 1) |[]
+(fact medium_block_is_medium 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+small_block_is_small:(mk.val small_block size 1 1) |[]
+(fact small_block_is_small 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+left_pole_is_a_pole:(mk.val left_pole essence pole 1) |[]
+(fact left_pole_is_a_pole 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+center_pole_is_a_pole:(mk.val center_pole essence pole 1) |[]
+(fact center_pole_is_a_pole 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+right_pole_is_a_pole:(mk.val right_pole essence pole 1) |[]
+(fact right_pole_is_a_pole 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+big_block_is_not_a_pole:(mk.val big_block essence pole 1) |[]
+(|fact big_block_is_not_a_pole 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+medium_block_is_not_a_pole:(mk.val medium_block essence pole 1) |[]
+(|fact medium_block_is_not_a_pole 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+small_block_is_not_a_pole:(mk.val small_block essence pole 1) |[]
+(|fact small_block_is_not_a_pole 0s:0ms:0us GIGASEC 1 1) [[SYNC_AXIOM now 1 forever stdin nil]]
+
+
+; ==== CSTs ====
+; B1 is bigger than B2
+S_BlockIsBigger:(cst [] []
+    (fact (mk.val B1: size S1: :) T0: T1: : :)
+    (fact (mk.val B2: size S2: :) T0: T1: : :)
+[]
+    (> S1 S2)
+[]
+    (> S1 S2)
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+S_PoleIsEmpty:(cst [] []
+    (fact (mk.val P: essence pole :) T0: T1: : :)
+    (fact (mk.val P: has_blocks [] :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+S_PoleHasOneBlock:(cst [] []
+    (fact (mk.val P: essence pole :) T0: T1: : :)
+    (fact (mk.val P: has_blocks [B:] :) T0: T1: : :)
+    (|fact (mk.val B: essence pole :) T0: T1: : :)
+    (fact (mk.val B: size S: :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+S_PoleHasTwoBlocks:(cst [] []
+    (fact (mk.val P: essence pole :) T0: T1: : :)
+    (fact (mk.val P: has_blocks [B1: B2:] :) T0: T1: : :)
+    (fact (icst S_BlockIsBigger [] [B1: S1: B2: S2:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+S_PoleHasThreeBlocks:(cst [] []
+    (fact (mk.val P: essence pole :) T0: T1: : :)
+    (fact (mk.val P: has_blocks [B1: B2: B3:] :) T0: T1: : :)
+    (fact (icst S_BlockIsBigger [] [B1: S1: B2: S2:] : :) T0: T1: : :)
+    (fact (icst S_BlockIsBigger [] [B2: S2: B3: S3:] : :) T0: T1: : :)
+|[]
+|[]
+[stdin] 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+
+; mdl_Size:(mdl [] []
+;    (fact (mk.val B: size S: :) v4: v5: : :)
+;    (fact (mk.val B: size S: :) v7: v8: : :)
+; []
+;    v7:(add v4 100ms)
+;    v8:(add v5 100ms)
+; []
+;    v4:(sub v7 100ms)
+;    v5:(sub v8 100ms)
+; [stdin] 1 1 1 1 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+
+; ==== Drive ====
+m_drive:(mdl [] []
+    ; The goal target timings are the same as the drive timings.
+    (fact (mk.val right_pole has_blocks [big_block medium_block small_block] :) T0: T1: : :)
+    (fact run T0: T1: ::)
+|[]
+|[]
+[stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+; anti_position_drive:(ent 1) [[SYNC_ONCE now 0 forever root nil]]
+; ; Goal will be to not have two blocks in the right pole
+; m_anti_position_drive:(mdl [P: B1: B2:] []
+;    (|fact (mk.val P: has_blocks [B1: B2:] 1) T0: T1: 1 1)
+;    (fact anti_position_drive T0: T1: ::)
+; |[]
+; |[]
+; [stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+;
+; m_yes_position_drive:(mdl [P: B1:] []
+;    (fact (mk.val P: has_blocks [B1:] 1) T0: T1: 1 1)
+;    (fact anti_position_drive T0: T1: ::)
+; |[]
+; |[]
+; [stdin drives] 1 1 1 0 1) [[SYNC_ONCE now 0 forever primary nil 1]]
+
+!def DRIVE_START 2400ms
+
+pgm_inject_drive:(pgm [] []
+   ; This fact repeats periodically. We use it as a "heartbeat".
+   (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+   (>= After (+ this.vw.ijt DRIVE_START))
+[]
+   ; The end of the time interval will be used in m_drive as the end of the goal interval.
+   (inj [f_run:(fact run After (+ Before 700ms) 1 1) []])
+   (inj [G:(goal f_run self nil 1) []])
+   (inj []
+      ; Delay a little to allow predictions for this sampling period before injecting the drive.
+      (fact G T0:(+ After 10ms) T0 1 1)
+      [SYNC_ONCE T0 1 forever primary nil]
+   )
+   (prb [1 "print" "injected drive" []])
+1) |[]
+(ipgm pgm_inject_drive [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+; ==== Babble programs ====
+; Initial state is left_pole:[small_block], center_pole:[big_block medium_block], right_pole:empty
+
+pgm_babbleA_1:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+    (>= After (+ this.vw.ijt 100ms))
+[]
+    ; Move the medium block to the right pole
+    (inj [Command:(cmd move_block [small_block right_pole] 1) []])
+    (inj [F_Command:(fact Command After Before 1 1) []])
+    (inj [G:(goal F_Command self nil 1) []])
+    (inj []
+        ; Delay a little to allow predictions for this sampling period before processing.
+        (fact G T0:(+ After 10ms) T0 1 1)
+        [SYNC_ONCE T0 1 forever primary nil]
+    )
+    (prb [1 "print" "injected (cmd move_block [small_block right_pole])" []])
+1) |[]
+(ipgm pgm_babbleA_1 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_2:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+    (>= After (+ this.vw.ijt 200ms))
+[]
+    ; Move the big block to the center pole
+    (inj [Command:(cmd move_block [medium_block left_pole] 1) []])
+    (inj [F_Command:(fact Command After Before 1 1) []])
+    (inj [G:(goal F_Command self nil 1) []])
+    (inj []
+        ; Delay a little to allow predictions for this sampling period before processing.
+        (fact G T0:(+ After 10ms) T0 1 1)
+        [SYNC_ONCE T0 1 forever primary nil]
+    )
+    (prb [1 "print" "injected (cmd move_block [medium_block left_pole])" []])
+1) |[]
+(ipgm pgm_babbleA_2 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_3:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+    (>= After (+ this.vw.ijt 300ms))
+[]
+    ; Move the small block on the medium one (right pole)
+    (inj [Command:(cmd move_block [small_block left_pole] 1) []])
+    (inj [F_Command:(fact Command After Before 1 1) []])
+    (inj [G:(goal F_Command self nil 1) []])
+    (inj []
+        ; Delay a little to allow predictions for this sampling period before processing.
+        (fact G T0:(+ After 10ms) T0 1 1)
+        [SYNC_ONCE T0 1 forever primary nil]
+    )
+    (prb [1 "print" "injected (cmd move_block [small_block left_pole])" []])
+1) |[]
+(ipgm pgm_babbleA_3 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_4:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+    (>= After (+ this.vw.ijt 400ms))
+[]
+    ; Move the small block back to the center pole
+    (inj [Command:(cmd move_block [big_block right_pole] 1) []])
+    (inj [F_Command:(fact Command After Before 1 1) []])
+    (inj [G:(goal F_Command self nil 1) []])
+    (inj []
+        ; Delay a little to allow predictions for this sampling period before processing.
+        (fact G T0:(+ After 10ms) T0 1 1)
+        [SYNC_ONCE T0 1 forever primary nil]
+    )
+    (prb [1 "print" "injected (cmd move_block [big_block right_pole])" []])
+1) |[]
+(ipgm pgm_babbleA_4 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_5:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+    (>= After (+ this.vw.ijt 500ms))
+[]
+    ; Move the small block back to the center pole
+    (inj [Command:(cmd move_block [small_block center_pole] 1) []])
+    (inj [F_Command:(fact Command After Before 1 1) []])
+    (inj [G:(goal F_Command self nil 1) []])
+    (inj []
+        ; Delay a little to allow predictions for this sampling period before processing.
+        (fact G T0:(+ After 10ms) T0 1 1)
+        [SYNC_ONCE T0 1 forever primary nil]
+    )
+    (prb [1 "print" "injected (cmd move_block [small_block center_pole])" []])
+1) |[]
+(ipgm pgm_babbleA_5 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_6:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+    (>= After (+ this.vw.ijt 600ms))
+[]
+    ; Move the medium block to the left pole
+    (inj [Command:(cmd move_block [medium_block right_pole] 1) []])
+    (inj [F_Command:(fact Command After Before 1 1) []])
+    (inj [G:(goal F_Command self nil 1) []])
+    (inj []
+        ; Delay a little to allow predictions for this sampling period before processing.
+        (fact G T0:(+ After 10ms) T0 1 1)
+        [SYNC_ONCE T0 1 forever primary nil]
+    )
+    (prb [1 "print" "injected (cmd move_block [medium_block right_pole])" []])
+1) |[]
+(ipgm pgm_babbleA_6 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_7:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+    (>= After (+ this.vw.ijt 700ms))
+[]
+    ; Move the small block on the medium one (left pole)
+    (inj [Command:(cmd move_block [small_block right_pole] 1) []])
+    (inj [F_Command:(fact Command After Before 1 1) []])
+    (inj [G:(goal F_Command self nil 1) []])
+    (inj []
+        ; Delay a little to allow predictions for this sampling period before processing.
+        (fact G T0:(+ After 10ms) T0 1 1)
+        [SYNC_ONCE T0 1 forever primary nil]
+    )
+    (prb [1 "print" "injected (cmd move_block [small_block right_pole])" []])
+1) |[]
+(ipgm pgm_babbleA_7 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_8:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+    (>= After (+ this.vw.ijt 800ms))
+[]
+    ; Move the small block back to the center pole
+    (inj [Command:(cmd move_block [small_block left_pole] 1) []])
+    (inj [F_Command:(fact Command After Before 1 1) []])
+    (inj [G:(goal F_Command self nil 1) []])
+    (inj []
+        ; Delay a little to allow predictions for this sampling period before processing.
+        (fact G T0:(+ After 10ms) T0 1 1)
+        [SYNC_ONCE T0 1 forever primary nil]
+    )
+    (prb [1 "print" "injected (cmd move_block [small_block left_pole])" []])
+1) |[]
+(ipgm pgm_babbleA_8 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_9fail:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+    (>= After (+ this.vw.ijt 900ms))
+[]
+    ; Move the big block to the center pole (fails because there is medium on top)
+    (inj [Command:(cmd move_block [big_block center_pole] 1) []])
+    (inj [F_Command:(fact Command After Before 1 1) []])
+    (inj [G:(goal F_Command self nil 1) []])
+    (inj []
+        ; Delay a little to allow predictions for this sampling period before processing.
+        (fact G T0:(+ After 10ms) T0 1 1)
+        [SYNC_ONCE T0 1 forever primary nil]
+    )
+    (prb [1 "print" "injected (cmd move_block [big_block center_pole])" []])
+1) |[]
+(ipgm pgm_babbleA_9fail [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_10:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+    (>= After (+ this.vw.ijt 1000ms))
+[]
+    ; (inj [Drive:(imdl m_anti_position_drive [right_pole big_block medium_block] [] false 1) []])
+    ; (inj [F_Drive:(fact Drive (+ After 100ms) (+ Before 100ms) 1 1) []])
+    ; (inj [G_F_Drive:(goal F_Drive self nil 1) []])
+    ; (inj []
+    ;     (fact G_F_Drive T0:(+ After 10ms) T0 1 1)
+    ;     [SYNC_ONCE T0 1 forever primary nil]
+    ; )
+    ; Move the medium block to the center
+    (inj [Command:(cmd move_block [medium_block center_pole] 1) []])
+    (inj [F_Command:(fact Command After Before 1 1) []])
+    (inj [G:(goal F_Command self nil 1) []])
+    (inj []
+        ; Delay a little to allow predictions for this sampling period before processing.
+        (fact G T0:(+ After 10ms) T0 1 1)
+        [SYNC_ONCE T0 1 forever primary nil]
+    )
+    (prb [1 "print" "injected (cmd move_block [medium_block center_pole])" []])
+1) |[]
+(ipgm pgm_babbleA_10 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_11:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+    (>= After (+ this.vw.ijt 1100ms))
+[]
+    ; Move the small block to the right pole
+    (inj [Command:(cmd move_block [small_block right_pole] 1) []])
+    (inj [F_Command:(fact Command After Before 1 1) []])
+    (inj [G:(goal F_Command self nil 1) []])
+    (inj []
+        ; Delay a little to allow predictions for this sampling period before processing.
+        (fact G T0:(+ After 10ms) T0 1 1)
+        [SYNC_ONCE T0 1 forever primary nil]
+    )
+    (prb [1 "print" "injected (cmd move_block [small_block right_pole])" []])
+1) |[]
+(ipgm pgm_babbleA_11 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_12:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+    (>= After (+ this.vw.ijt 1200ms))
+[]
+    ; Move the small block to the right pole
+    (inj [Command:(cmd move_block [medium_block left_pole] 1) []])
+    (inj [F_Command:(fact Command After Before 1 1) []])
+    (inj [G:(goal F_Command self nil 1) []])
+    (inj []
+        ; Delay a little to allow predictions for this sampling period before processing.
+        (fact G T0:(+ After 10ms) T0 1 1)
+        [SYNC_ONCE T0 1 forever primary nil]
+    )
+    (prb [1 "print" "injected (cmd move_block [medium_block left_pole])" []])
+1) |[]
+(ipgm pgm_babbleA_12 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_13:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+    (>= After (+ this.vw.ijt 1300ms))
+[]
+    ; Move the small block to the right pole
+    (inj [Command:(cmd move_block [small_block left_pole] 1) []])
+    (inj [F_Command:(fact Command After Before 1 1) []])
+    (inj [G:(goal F_Command self nil 1) []])
+    (inj []
+        ; Delay a little to allow predictions for this sampling period before processing.
+        (fact G T0:(+ After 10ms) T0 1 1)
+        [SYNC_ONCE T0 1 forever primary nil]
+    )
+    (prb [1 "print" "injected (cmd move_block [small_block left_pole])" []])
+1) |[]
+(ipgm pgm_babbleA_13 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_14fail:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+    (>= After (+ this.vw.ijt 1400ms))
+[]
+    ; Move the small block to the right pole
+    (inj [Command:(cmd move_block [medium_block center_pole] 1) []])
+    (inj [F_Command:(fact Command After Before 1 1) []])
+    (inj [G:(goal F_Command self nil 1) []])
+    (inj []
+        ; Delay a little to allow predictions for this sampling period before processing.
+        (fact G T0:(+ After 10ms) T0 1 1)
+        [SYNC_ONCE T0 1 forever primary nil]
+    )
+    (prb [1 "print" "injected (cmd move_block [medium_block center_pole])" []])
+1) |[]
+(ipgm pgm_babbleA_14fail [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_15:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+    (>= After (+ this.vw.ijt 1500ms))
+[]
+    ; Move the small block to the right pole
+    (inj [Command:(cmd move_block [small_block center_pole] 1) []])
+    (inj [F_Command:(fact Command After Before 1 1) []])
+    (inj [G:(goal F_Command self nil 1) []])
+    (inj []
+        ; Delay a little to allow predictions for this sampling period before processing.
+        (fact G T0:(+ After 10ms) T0 1 1)
+        [SYNC_ONCE T0 1 forever primary nil]
+    )
+    (prb [1 "print" "injected (cmd move_block [small_block center_pole])" []])
+1) |[]
+(ipgm pgm_babbleA_15 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_16:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+    (>= After (+ this.vw.ijt 1600ms))
+[]
+    ; Move the small block to the right pole
+    (inj [Command:(cmd move_block [small_block right_pole] 1) []])
+    (inj [F_Command:(fact Command After Before 1 1) []])
+    (inj [G:(goal F_Command self nil 1) []])
+    (inj []
+        ; Delay a little to allow predictions for this sampling period before processing.
+        (fact G T0:(+ After 10ms) T0 1 1)
+        [SYNC_ONCE T0 1 forever primary nil]
+    )
+    (prb [1 "print" "injected (cmd move_block [small_block right_pole])" []])
+1) |[]
+(ipgm pgm_babbleA_16 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_17:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+    (>= After (+ this.vw.ijt 1700ms))
+[]
+    ; Move the small block to the right pole
+    (inj [Command:(cmd move_block [medium_block center_pole] 1) []])
+    (inj [F_Command:(fact Command After Before 1 1) []])
+    (inj [G:(goal F_Command self nil 1) []])
+    (inj []
+        ; Delay a little to allow predictions for this sampling period before processing.
+        (fact G T0:(+ After 10ms) T0 1 1)
+        [SYNC_ONCE T0 1 forever primary nil]
+    )
+    (prb [1 "print" "injected (cmd move_block [medium_block center_pole])" []])
+1) |[]
+(ipgm pgm_babbleA_17 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_18:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+    (>= After (+ this.vw.ijt 1800ms))
+[]
+    ; Move the small block to the right pole
+    (inj [Command:(cmd move_block [small_block left_pole] 1) []])
+    (inj [F_Command:(fact Command After Before 1 1) []])
+    (inj [G:(goal F_Command self nil 1) []])
+    (inj []
+        ; Delay a little to allow predictions for this sampling period before processing.
+        (fact G T0:(+ After 10ms) T0 1 1)
+        [SYNC_ONCE T0 1 forever primary nil]
+    )
+    (prb [1 "print" "injected (cmd move_block [small_block left_pole])" []])
+1) |[]
+(ipgm pgm_babbleA_18 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_19:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+    (>= After (+ this.vw.ijt 1900ms))
+[]
+    ; Move the small block to the right pole
+    (inj [Command:(cmd move_block [medium_block right_pole] 1) []])
+    (inj [F_Command:(fact Command After Before 1 1) []])
+    (inj [G:(goal F_Command self nil 1) []])
+    (inj []
+        ; Delay a little to allow predictions for this sampling period before processing.
+        (fact G T0:(+ After 10ms) T0 1 1)
+        [SYNC_ONCE T0 1 forever primary nil]
+    )
+    (prb [1 "print" "injected (cmd move_block [medium_block right_pole])" []])
+1) |[]
+(ipgm pgm_babbleA_19 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_20:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+    (>= After (+ this.vw.ijt 2000ms))
+[]
+    ; Move the small block to the right pole
+    (inj [Command:(cmd move_block [small_block right_pole] 1) []])
+    (inj [F_Command:(fact Command After Before 1 1) []])
+    (inj [G:(goal F_Command self nil 1) []])
+    (inj []
+        ; Delay a little to allow predictions for this sampling period before processing.
+        (fact G T0:(+ After 10ms) T0 1 1)
+        [SYNC_ONCE T0 1 forever primary nil]
+    )
+    (prb [1 "print" "injected (cmd move_block [small_block right_pole])" []])
+1) |[]
+(ipgm pgm_babbleA_20 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_21:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+    (>= After (+ this.vw.ijt 2100ms))
+[]
+    ; Move the small block to the right pole
+    (inj [Command:(cmd move_block [small_block left_pole] 1) []])
+    (inj [F_Command:(fact Command After Before 1 1) []])
+    (inj [G:(goal F_Command self nil 1) []])
+    (inj []
+        ; Delay a little to allow predictions for this sampling period before processing.
+        (fact G T0:(+ After 10ms) T0 1 1)
+        [SYNC_ONCE T0 1 forever primary nil]
+    )
+    (prb [1 "print" "injected (cmd move_block [small_block left_pole])" []])
+1) |[]
+(ipgm pgm_babbleA_21 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_22:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+    (>= After (+ this.vw.ijt 2200ms))
+[]
+    ; Move the small block to the right pole
+    (inj [Command:(cmd move_block [medium_block center_pole] 1) []])
+    (inj [F_Command:(fact Command After Before 1 1) []])
+    (inj [G:(goal F_Command self nil 1) []])
+    (inj []
+        ; Delay a little to allow predictions for this sampling period before processing.
+        (fact G T0:(+ After 10ms) T0 1 1)
+        [SYNC_ONCE T0 1 forever primary nil]
+    )
+    (prb [1 "print" "injected (cmd move_block [medium_block center_pole])" []])
+1) |[]
+(ipgm pgm_babbleA_22 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+pgm_babbleA_23:(pgm [] []
+    ; This fact repeats periodically. We use it as a "heartbeat".
+    (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+[]
+    (>= After (+ this.vw.ijt 2300ms))
+[]
+    ; Move the small block to the right pole
+    (inj [Command:(cmd move_block [small_block right_pole] 1) []])
+    (inj [F_Command:(fact Command After Before 1 1) []])
+    (inj [G:(goal F_Command self nil 1) []])
+    (inj []
+        ; Delay a little to allow predictions for this sampling period before processing.
+        (fact G T0:(+ After 10ms) T0 1 1)
+        [SYNC_ONCE T0 1 forever primary nil]
+    )
+    (prb [1 "print" "injected (cmd move_block [small_block right_pole])" []])
+1) |[]
+(ipgm pgm_babbleA_23 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]
+
+; pgm_babbleA_24:(pgm [] []
+;     ; This fact repeats periodically. We use it as a "heartbeat".
+;     (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+; []
+;     (>= After (+ this.vw.ijt 2400ms))
+; []
+;     ; Move the small block to the right pole
+;     (inj [Command:(cmd move_block [small_block left_pole] 1) []])
+;     (inj [F_Command:(fact Command After Before 1 1) []])
+;     (inj [G:(goal F_Command self nil 1) []])
+;     (inj []
+;         ; Delay a little to allow predictions for this sampling period before processing.
+;         (fact G T0:(+ After 10ms) T0 1 1)
+;         [SYNC_ONCE T0 1 forever primary nil]
+;     )
+;     (prb [1 "print" "injected (cmd move_block [small_block left_pole])" []])
+; 1) |[]
+; (ipgm pgm_babbleA_24 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+;    [SYNC_ONCE now 0 forever primary nil 1]
+;
+; pgm_babbleA_25:(pgm [] []
+;     ; This fact repeats periodically. We use it as a "heartbeat".
+;     (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+; []
+;     (>= After (+ this.vw.ijt 2500ms))
+; []
+;     ; Move the small block to the right pole
+;     (inj [Command:(cmd move_block [medium_block right_pole] 1) []])
+;     (inj [F_Command:(fact Command After Before 1 1) []])
+;     (inj [G:(goal F_Command self nil 1) []])
+;     (inj []
+;         ; Delay a little to allow predictions for this sampling period before processing.
+;         (fact G T0:(+ After 10ms) T0 1 1)
+;         [SYNC_ONCE T0 1 forever primary nil]
+;     )
+;     (prb [1 "print" "injected (cmd move_block [medium_block right_pole])" []])
+; 1) |[]
+; (ipgm pgm_babbleA_25 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+;    [SYNC_ONCE now 0 forever primary nil 1]
+;
+; pgm_babbleA_26:(pgm [] []
+;     ; This fact repeats periodically. We use it as a "heartbeat".
+;     (ptn (fact (mk.val left_pole essence pole :) After: Before: ::) [])
+; []
+;     (>= After (+ this.vw.ijt 2600ms))
+; []
+;     ; Move the small block to the right pole
+;     (inj [Command:(cmd move_block [small_block right_pole] 1) []])
+;     (inj [F_Command:(fact Command After Before 1 1) []])
+;     (inj [G:(goal F_Command self nil 1) []])
+;     (inj []
+;         ; Delay a little to allow predictions for this sampling period before processing.
+;         (fact G T0:(+ After 10ms) T0 1 1)
+;         [SYNC_ONCE T0 1 forever primary nil]
+;     )
+;     (prb [1 "print" "injected (cmd move_block [small_block right_pole])" []])
+; 1) |[]
+; (ipgm pgm_babbleA_26 [] RUN_ONCE MAX_TIME VOLATILE NOTIFY 1) []
+;    [SYNC_ONCE now 0 forever primary nil 1]
+
+
+; ==== Eject programs ====
+pgm_eject_cmd_move_block:(pgm [] []
+    (ptn (fact G:(goal (fact (cmd move_block [B: P:] :) ::) ::) ::) [])
+[]
+    (= (is_sim G) false)
+[]
+    (cmd move_block [B P] 1)
+1) |[]
+(ipgm pgm_eject_cmd_move_block [] RUN_ALWAYS MAX_TIME VOLATILE NOTIFY 1) []
+   [SYNC_ONCE now 0 forever primary nil 1]

@@ -87,6 +87,7 @@
 #include "../r_comp/decompiler.h"
 #include "IODevices/TCP/tcp_io_device.h"
 #include "IODevices/video_screen/video_screen_io_device.h"
+#include "tower_of_hanoi_io_device.h"
 #include "../usr_operators/usr_operators.h"
 #include "test_mem.h"
 #include "../r_exec/init.h"
@@ -359,6 +360,9 @@ int32 start_AERA(const char* file_name, const char* decompiled_file_name) {
         mem = new video_screen::VideoScreenIoDevice<r_exec::LObject, r_exec::MemStatic>();
       else
         mem = new video_screen::VideoScreenIoDevice<r_exec::LObject, r_exec::MemVolatile>();
+    }
+    else if (settings.io_device_.compare("tower_of_hanoi") == 0) {
+      mem = new tower_of_hanoi::TowerOfHanoiIODevice(settings.source_file_name_);
     }
     else {
       std::cout << "Unrecognized io_device \"" << settings.io_device_ << "\"" << std::endl;
